@@ -36,7 +36,7 @@ The boundary follows the translingual line:
   becomes valid in every target after transformation): DSL module definitions, plus host-authored DSL
   helpers whose purpose is to *write* those definitions.
 - **`overlay/<lang>/<pkg>/`** — host-native, language-specific source that must ship but cannot be
-  translingual: primitive implementations (the actual Python/Java/Haskell bodies behind `hydra.lib.*`),
+  translingual: primitive implementations (the actual Python/Java/Haskell bodies behind `hydra.core.lib.*`),
   runtime data structures (`cons_list.py`, `PersistentMap.java`), test bridges (`test_env.py`), and
   third-party library integrations (see below).
 
@@ -45,22 +45,28 @@ in `packages/`; if it is inherently host-specific, it belongs in `overlay/`.*
 
 ## Namespace convention
 
-Overlay files use the `hydra.overlay.<lang>.*` namespace (e.g. `hydra.overlay.python.lib.chars`,
-`hydra.overlay.java.lib.Chars`, `Hydra.Overlay.Haskell.Lib.Chars`). This enforces a hard boundary:
+Overlay files use an `overlay.<lang>` namespace segment placed after the package root:
+`hydra.core.overlay.<lang>.*` for `hydra-kernel` overlays (e.g. `hydra.core.overlay.python.lib.chars`,
+`hydra.core.overlay.java.lib.chars.IsAlphaNum`, `Hydra.Core.Overlay.Haskell.Lib.Chars`), and
+`hydra.<root>.overlay.<lang>.*` for other packages' overlays (e.g. `hydra.pg.overlay.java.*`,
+`hydra.build.overlay.java.*`). The one exception is the Scheme kernel overlay, which stays at
+`hydra.overlay.scheme.*`. This enforces a hard boundary:
 
-- **`hydra.*`** (including `hydra.<lang>.*`, `hydra.dsl.*`, `hydra.lib.*`) is exclusively *translingual*
+- **`hydra.*`** outside an `overlay` segment (including `hydra.core.*`, `hydra.core.dsl.*`,
+  `hydra.core.lib.*`, and package roots such as `hydra.pg.*`) is exclusively *translingual*
   — every name is generated or derived from generated code.
-- **`hydra.overlay.<lang>.*`** is exclusively *host-native* — hand-written, under `overlay/`.
+- **`hydra.<root>.overlay.<lang>.*`** is exclusively *host-native* — hand-written, under `overlay/`.
 
 When folding host-specific source into an overlay, only the genuinely host-native classes move to
-`hydra.overlay.<lang>.*`; references to *generated* translingual types stay in `hydra.*`. For example,
-the Cypher parser overlay is `hydra.overlay.java.cypher.FromCypher`, but it imports the generated Cypher
-AST as `hydra.cypher.openCypher.*` and the query model as `hydra.pg.query.*` — those do **not** move.
+the overlay namespace; references to *generated* translingual types keep their generated names. For
+example, the Cypher parser overlay is `hydra.pg.overlay.java.cypher.FromCypher`, but it imports the
+generated Cypher AST as `hydra.pg.cypher.openCypher.*` and the query model as `hydra.pg.query.*` —
+those do **not** move.
 
 ### Bare primitive references: "implementation wins" (deferred: nullary undecidability)
 
-When overlay emission resolves a bare reference to a `hydra.lib.*` primitive, the host-native
-implementation (`hydra.overlay.<lang>.*`) takes precedence — "implementation wins."
+When overlay emission resolves a bare reference to a `hydra.core.lib.*` primitive, the host-native
+implementation (`hydra.core.overlay.<lang>.*`) takes precedence — "implementation wins."
 This is applied unconditionally: the overlay-namespace rewrite operates on namespace strings
 and performs no term-level applied-vs-nullary distinction.
 
@@ -84,10 +90,10 @@ relevant distribution package's overlay tree:
 
 | Former binding | Now folded into |
 |----------------|-----------------|
-| `hydra-rdf4j` (Eclipse rdf4j) | `overlay/java/hydra-rdf/` (`hydra.overlay.java.rdf`) |
-| `hydra-pg-dsl` (PG builders) | `overlay/java/hydra-pg/` (`hydra.overlay.java.pg.dsl`) |
-| `hydra-neo4j` (Cypher/GQL parsers) | `overlay/java/hydra-pg/` (`hydra.overlay.java.{cypher,gql,tools}`) |
-| `hydra-tinkerpop` (Gremlin bridge) | `overlay/{java,python}/hydra-pg/` (`hydra.overlay.{java,python}.tinkerpop`) |
+| `hydra-rdf4j` (Eclipse rdf4j) | `overlay/java/hydra-rdf/` (`hydra.rdf.overlay.java`) |
+| `hydra-pg-dsl` (PG builders) | `overlay/java/hydra-pg/` (`hydra.pg.overlay.java.dsl`) |
+| `hydra-neo4j` (Cypher/GQL parsers) | `overlay/java/hydra-pg/` (`hydra.pg.overlay.java.{cypher,gql,tools}`) |
+| `hydra-tinkerpop` (Gremlin bridge) | `overlay/{java,python}/hydra-pg/` (`hydra.pg.overlay.{java,python}.tinkerpop`) |
 
 The overlay tree carries the whole `src/` subtree — `src/main/<lang>/`, `src/main/antlr/` (ANTLR `.g4`
 grammars), `src/test/<lang>/`, and `src/test/resources/` — so grammars, tests, and resources are
@@ -102,18 +108,18 @@ plugins) that the generic per-package build does not provide. Overlays express t
 
 The on-disk `build.json` is *exactly* the canonical JSON encoding of a Hydra type:
 
-- **Java / Gradle:** `hydra.gradle.GradleBuildConfiguration` — `dependencies` (with `scope`:
+- **Java / Gradle:** `hydra.java.gradle.GradleBuildConfiguration` — `dependencies` (with `scope`:
   api/runtime/test/tool), `excludes`, `extraSourceDirs`, `plugins`, and an `antlr` block
   (`{arguments, outputDirectory}`) for grammar generation.
 - **Python / PEP 621:** `hydra.python.pyproject.PyProjectBuildConfiguration` — `dependencies` (scope
   partitions them into `[project.dependencies]` vs `[project.optional-dependencies]`).
 
 The dependency vocabulary (`PackageDependency`, `VersionSpecifier`, `DependencyScope`) is shared in
-`hydra.packaging`; each build system adds only its own fields. `VersionSpecifier` covers `any`,
+`hydra.core.packaging`; each build system adds only its own fields. `VersionSpecifier` covers `any`,
 `exact`, `atLeast`, and `range` (rendered to each ecosystem's syntax, e.g. a range becomes `>=3.7,<4.0`
 for PyPI or `[3.7,4.0)` for Maven).
 
-> **Why keyed differently:** `hydra.gradle` is keyed by *build system* (Gradle spans languages —
+> **Why keyed differently:** `hydra.java.gradle` is keyed by *build system* (Gradle spans languages —
 > Java, Clojure, …), whereas `hydra.python.pyproject` is keyed by *language* (pyproject/PEP 621 is
 > Python-specific). The axis is whatever the config actually varies over.
 
@@ -139,7 +145,7 @@ deps, plugins, and (for ANTLR) grammar-generation configuration.
 
 > **Interim note:** the generators currently read `build.json` directly (a plain JSON parse). The
 > format is the canonical encoding of the Hydra build-configuration types, so when the build system is
-> nativized (#416) the hand parse is replaced by the generated `hydra.decode.*` decoders with no change
+> nativized (#416) the hand parse is replaced by the generated `hydra.<root>.decode.*` decoders with no change
 > to the on-disk format.
 > The build system's other JSON formats (`hydra.json`, `package.json`, digests, manifests) are
 > specified the same way, by the `hydra.build.format` module (#512); see
@@ -164,7 +170,7 @@ This is why a sync can regenerate a package's modules without clobbering its han
 
 A package's modules are routed to their owning package by name. A *generated* module is routed
 automatically from the package's declared module list. A **native module** authored only in an
-overlay/host DSL (e.g. the build-config modules `hydra.gradle`, `hydra.python.pyproject`) has no
+overlay/host DSL (e.g. the build-config modules `hydra.java.gradle`, `hydra.python.pyproject`) has no
 generated Haskell `Module` value, so it must be declared explicitly. Wiring a new native build-config
 module requires four registrations (the routing is fail-loud — an unrouted module aborts the build):
 

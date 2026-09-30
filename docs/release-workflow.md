@@ -732,7 +732,7 @@ The following are Haskell-specific release steps:
     `<pkg>-<version>.tar.gz` + `<pkg>-<version>-docs.tar.gz` per package).
     Each package is assembled by `heads/haskell/bin/assemble-haskell-distribution.sh`,
     which stages the generated `dist/haskell/<pkg>/` tree plus the hand-written
-    head modules it needs (for `hydra-kernel`, the `Hydra.Overlay.Haskell.Lib.*` primitive
+    head modules it needs (for `hydra-kernel`, the `Hydra.Core.Overlay.Haskell.Lib.*` primitive
     implementations and the `Hydra.Settings`/`Hydra.Kernel` entry points) into a
     self-contained tree and runs `stack sdist`. (This replaces the 0.15-era
     `assemble-hackage-sdist.sh`, which flattened everything into one tarball.)
@@ -802,7 +802,7 @@ The published artifacts under group `net.fortytwo.hydra.java` (#519) are:
 
 | Artifact | Description | `api` dependencies |
 |----------|-------------|--------------------|
-| `hydra-kernel` | Core types, terms, DSL, eval, primitives + the Java runtime support classes (`hydra.util.*`, `hydra.lib.*`, `hydra.dsl.*`, `hydra.tools.*`, plus `Adapters`/`Coders`). Self-contained; downstream packages depend on this. | (none) |
+| `hydra-kernel` | Core types, terms, DSL, eval, primitives + the Java runtime support classes (`hydra.core.overlay.java.{util,lib,dsl,tools}.*`, plus `Adapters`/`Coders`). Self-contained; downstream packages depend on this. | (none) |
 | `hydra-build` | Build/packaging model shared across coders. | `hydra-kernel` |
 | `hydra-haskell` | Haskell syntax and coder (generates Haskell code from Hydra schemas). | `hydra-kernel` |
 | `hydra-jvm` | JVM serde support shared by the JVM coders. | `hydra-kernel` |
@@ -848,7 +848,7 @@ independent eta-expansion exposure and have not yet been re-validated — track 
 **Update (0.17.4, #643):** `hydra-ext` is TEMPORARILY excluded from the Java publish set again —
 its `targetLanguages`/registry metadata says it qualifies (per #636 above), but the generated
 Java does not compile (`#643`: a visitor-pattern inner interface collides with the enclosing
-`Visitor` type in `hydra.cpp.syntax`). `heads/java/bin/publish-maven.sh` filters `hydra-ext` out
+`Visitor` type in `hydra.ext.cpp.syntax`). `heads/java/bin/publish-maven.sh` filters `hydra-ext` out
 of the registry-derived set explicitly for this reason, since the registry metadata has no field
 yet for "codegen-eligible but temporarily broken for registry X" (a #573 metadata-gap finding).
 Python/Hackage are unaffected and continue to publish `hydra-ext` normally. Remove the filter in
@@ -1112,7 +1112,7 @@ The published wheels are:
 
 | Distribution | Description | `dependencies` |
 |--------------|-------------|----------------|
-| `hydra-kernel` | Core types, terms, DSL, eval, primitives + Python runtime support (`hydra.lib.*`, `hydra.dsl.*`, `hydra.sources.*`, `hydra.tools`). Self-contained. | (none) |
+| `hydra-kernel` | Core types, terms, DSL, eval, primitives + Python runtime support (`hydra.core.overlay.python.{lib,dsl,sources,util}.*`, `hydra.core.overlay.python.tools`). Self-contained. | (none) |
 | `hydra-build` | Build/packaging model shared across coders. | `hydra-kernel` |
 | `hydra-pg` | Property graph model, coders, GraphSON, TinkerPop. | `hydra-kernel`, `hydra-rdf` |
 | `hydra-rdf` | RDF, OWL, SHACL, ShEx, XML Schema models. | `hydra-kernel` |
@@ -1225,9 +1225,9 @@ The following are Python-specific release steps:
     `publish-pypi.sh` invokes `heads/python/bin/verify-distribution.sh --wheels <dir>` as a hard
     gate before any upload. The gate installs the just-built wheels into a fresh, isolated venv with
     `--no-index --find-links <wheels>` and imports the top-level kernel modules
-    (`hydra.codegen`, `hydra.rewriting`, `hydra.encoding`, `hydra.arity`, `hydra.analysis`,
-    `hydra.query`, `hydra.predicates`, `hydra.validate.core`, `hydra.validate.packaging`,
-    `hydra.python.util`) from a neutral cwd, so the worktree's own `heads/python/` cannot leak
+    (`hydra.core.codegen`, `hydra.core.rewriting`, `hydra.core.encoding`, `hydra.core.arity`,
+    `hydra.core.analysis`, `hydra.core.query`, `hydra.core.predicates`, `hydra.core.validate.model`,
+    `hydra.core.validate.packaging`, `hydra.core.overlay.python.util`) from a neutral cwd, so the worktree's own `heads/python/` cannot leak
     onto `sys.path` and mask a missing-from-wheel package. A failure aborts the publish.
     This gate exists because 0.16.0 shipped a `hydra-kernel` wheel whose generated modules imported
     `hydra.python.util` from a runtime package that lived only in `heads/python/` and was therefore
@@ -1321,7 +1321,7 @@ The following are Python-specific release steps:
     Python-specific wrinkles this surfaced, both handled in `pages.yml`:
     1. `hydra` is a [PEP 420 implicit namespace package](https://peps.python.org/pep-0420/) (see
        the wheel-layout note above) — plain `sphinx-apidoc` silently emits flatly-named,
-       unimportable module stubs (e.g. `rewriting` instead of `hydra.rewriting`) without the
+       unimportable module stubs (e.g. `rewriting` instead of `hydra.core.rewriting`) without the
        `--implicit-namespaces` flag.
     2. Because all three wheels install into the *same* `hydra.*` namespace on disk, pointing
        `sphinx-apidoc` at the shared installed tree would merge all three packages' modules into
@@ -1335,9 +1335,9 @@ The following are Python-specific release steps:
     cross-package refs render as styled-but-unlinked code, not broken markup.
   * **Docstring coverage caveat:** coverage is bimodal by construction, not randomly uneven.
     Modules whose content is `def`/`class` statements (records, unions, functions) get real
-    docstrings. Every file under `hydra/lib/*` (the primitive-function implementations — math,
+    docstrings. Every file under `hydra/core/lib/*` (the primitive-function implementations — math,
     strings, lists, etc.) currently has **zero** docstrings, because each primitive is emitted as
-    a module-level variable assignment (`abs = hydra.packaging.PrimitiveDefinition(...)`), which
+    a module-level variable assignment (`abs = hydra.core.packaging.PrimitiveDefinition(...)`), which
     has no docstring slot in Python — the rich hand-authored documentation for each primitive
     lives only inside the `PrimitiveDefinition`/`EntityMetadata` value, invisible to Sphinx's (or
     pdoc's) default `autodoc`. This is a real, visible gap in the published docs for that
@@ -1359,7 +1359,7 @@ The published packages are:
 
 | Package | Description | `dependencies` |
 |---------|-------------|----------------|
-| `hydra-kernel` | Core types, terms, DSL, eval, primitives + TypeScript runtime support (`hydra/runtime.ts`, `hydra/lib/*.ts`, `hydra/primitives.ts`). Self-contained. | (none) |
+| `hydra-kernel` | Core types, terms, DSL, eval, primitives + TypeScript runtime support (`hydra/core/runtime.ts`, `hydra/core/overlay/typescript/lib/*.ts`, `hydra/core/primitives.ts`). Self-contained. | (none) |
 | `hydra-build` | Build/packaging model shared across coders. | `hydra-kernel` |
 | `hydra-rdf` | RDF, OWL, SHACL, ShEx, XML Schema models. | `hydra-kernel` |
 | `hydra-pg` | Property graph model, coders, GraphSON, TinkerPop. | `hydra-kernel`, `hydra-rdf` |

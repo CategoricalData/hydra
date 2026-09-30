@@ -31,8 +31,8 @@ package's jar via the overlay system (see [docs/overlays.md](overlays.md) and th
 
 | ArtifactId | Contains |
 |---|---|
-| `hydra-kernel` | Core types (`Literal`, `Type`, `Term`), `hydra.print.*`, `hydra.validate.core`, `hydra.error.core`, library stdlib. The minimum dependency. |
-| `hydra-pg` | Property-graph model (`hydra.pg.model.*`), validation (`hydra.validate.pg`), errors (`hydra.error.pg`); the Java fluent builders in `hydra.pg.dsl.*` (from `overlay/java/hydra-pg`); a Neo4j-aligned model (`hydra.neo4j.model`) with client-side validation (`hydra.validate.neo4j`) and a `hydra.pg.model` ↔ Neo4j mapping; ANTLR-based openCypher/GQL parsers producing `hydra.pg.query.*`; and the TinkerPop/Gremlin bridge. |
+| `hydra-kernel` | Core types (`Literal`, `Type`, `Term`), `hydra.core.print.*`, `hydra.core.validate.model`, `hydra.core.error.model`, library stdlib. The minimum dependency. |
+| `hydra-pg` | Property-graph model (`hydra.pg.model.*`), validation (`hydra.pg.validate.model`), errors (`hydra.pg.error.model`); the Java fluent builders in `hydra.pg.overlay.java.dsl.*` (from `overlay/java/hydra-pg`); a Neo4j-aligned model (`hydra.pg.neo4j.model`) with client-side validation (`hydra.pg.validate.neo4j`) and a `hydra.pg.model` ↔ Neo4j mapping; ANTLR-based openCypher/GQL parsers producing `hydra.pg.query.*`; and the TinkerPop/Gremlin bridge. |
 | `hydra-rdf` | RDF 1.1 model, SHACL, OWL 2, ShEx, and XML Schema syntax models; N-Triples serialization; the rdf4j binding (from `overlay/java/hydra-rdf`) for external I/O via Eclipse rdf4j Rio. |
 | `hydra-java`, `hydra-python`, `hydra-scala`, `hydra-haskell`, `hydra-lisp`, `hydra-typescript` | Per-language coder packages. Depend on these if your code needs to generate code in that target. (Coq, WASM, and Go coders are not currently published — Coq and WASM are in progress; Go is a "head bud": kernel generation works, but the Go runtime is incomplete. See the [Implementations](../README.md#implementations) table.) |
 
@@ -68,14 +68,14 @@ dependencies {
 
 ### Construct a schema and validate a graph
 
-The Java DSL helpers in `hydra.pg.dsl.Graphs` provide a fluent builder for schemas and values:
+The Java DSL helpers in `hydra.pg.overlay.java.dsl.Graphs` provide a fluent builder for schemas and values:
 
 ```java
-import hydra.core.LiteralType;
-import hydra.core.Literal;
-import hydra.dsl.LiteralTypes;
-import hydra.dsl.Literals;
-import hydra.pg.dsl.Graphs;
+import hydra.core.model.LiteralType;
+import hydra.core.model.Literal;
+import hydra.core.overlay.java.dsl.LiteralTypes;
+import hydra.core.overlay.java.dsl.Literals;
+import hydra.pg.overlay.java.dsl.Graphs;
 import hydra.pg.model.GraphSchema;
 import hydra.pg.model.Graph;
 
@@ -104,7 +104,7 @@ Graph<Literal> graph = Graphs.graph(
             .build()));
 ```
 
-Validation uses `hydra.validate.pg.Pg.validateGraph`. The `checkValue` callback is supplied by the caller —
+Validation uses `hydra.pg.validate.Model.validateGraph`. The `checkValue` callback is supplied by the caller —
 a small adapter that bridges the kernel's typed `InvalidLiteralError` to the stringified `InvalidValueError`
 that `validateGraph` returns in its accumulator. See
 [`demos/src/main/java/hydra/demos/validatepg/ValidateDemo.java`](../demos/src/main/java/hydra/demos/validatepg/ValidateDemo.java)
@@ -126,8 +126,8 @@ to both conda-forge and PyPI.
 conda install -c conda-forge hydra-kernel hydra-pg
 ```
 
-After install, the packages expose `hydra.core`, `hydra.pg.model`, `hydra.validate.core`, `hydra.validate.pg`,
-`hydra.print.core`, `hydra.error.core`, `hydra.error.pg`, etc.
+After install, the packages expose `hydra.core.model`, `hydra.pg.model`, `hydra.core.validate.model`, `hydra.pg.validate.model`,
+`hydra.core.print.model`, `hydra.core.error.model`, `hydra.pg.error.model`, etc.
 
 ### Local install from the repo
 
@@ -173,12 +173,12 @@ else:
 ```
 
 For low-level access without HydraPop, import the kernel directly. The DSL helpers in
-`hydra.dsl.literal_types` and `hydra.dsl.literals` provide convenience constructors:
+`hydra.core.overlay.python.dsl.literal_types` and `hydra.core.overlay.python.dsl.literals` provide convenience constructors:
 
 ```python
-from hydra.dsl import literal_types, literals
-from hydra.validate.core import check_literal
-from hydra.lib.optionals import is_given
+from hydra.core.overlay.python.dsl import literal_types, literals
+from hydra.core.validate.model import check_literal
+from hydra.core.overlay.python.lib.optionals import is_given
 
 # Type mismatch returns Given(InvalidLiteralError(...)) -- typed error, not a string
 result = check_literal(literal_types.string(), literals.int32(42))
@@ -206,8 +206,8 @@ dependencies:
 ### Check a literal type
 
 ```haskell
-import qualified Hydra.Core as Core
-import qualified Hydra.Validate.Core as Validate
+import qualified Hydra.Core.Model as Core
+import qualified Hydra.Core.Validate.Model as Validate
 
 main :: IO ()
 main = case Validate.checkLiteral Core.LiteralTypeString (Core.LiteralString "hello") of
@@ -233,7 +233,7 @@ package spanning many modules with no single umbrella. Import specific submodule
 `import "hydra-kernel"`) fails by design, with Node's standard "No exports main defined" error.
 
 > **Design note (do not "fix" by adding a root export).** It is tempting to give a package a root
-> export by pointing `.` at one module (e.g. hydra-kernel → `hydra/core`). Do not — that is a
+> export by pointing `.` at one module (e.g. hydra-kernel → `hydra/core/model`). Do not — that is a
 > misleading easy fix: it privileges one arbitrary module as *the* entry point when these packages
 > deliberately have no single umbrella. A principled root export would re-export symbols from *many*
 > modules at once while resolving the cross-module name collisions that arise (e.g. hydra-pg has
@@ -246,8 +246,8 @@ Kernel types are plain tagged unions in TypeScript, so values can be constructed
 literals:
 
 ```typescript
-import { checkLiteral } from "hydra-kernel/dist/hydra/validate/core.js";
-import { isGiven } from "hydra-kernel/dist/hydra/runtime.js";
+import { checkLiteral } from "hydra-kernel/dist/hydra/core/validate/model.js";
+import { isGiven } from "hydra-kernel/dist/hydra/core/runtime.js";
 
 const expected = { tag: "string" };
 const value = { tag: "integer", value: { tag: "int32", value: 42 } };
@@ -268,8 +268,8 @@ Hydra publishes per-package Maven artifacts for Scala 3 under group `net.fortytw
 libraryDependencies += "net.fortytwo.hydra.scala" %% "hydra-kernel" % "0.17.3"
 ```
 
-The kernel modules have the same `hydra.*` shape as on the other hosts (`hydra.core`,
-`hydra.validate.core`, and so on). For writing Hydra programs and domain models in Scala,
+The kernel modules have the same `hydra.*` shape as on the other hosts (`hydra.core.model`,
+`hydra.core.validate.model`, and so on). For writing Hydra programs and domain models in Scala,
 see the [Scala DSL guide](dsl-guide-scala.md).
 
 ---
@@ -289,21 +289,21 @@ A handful of module names you'll touch most often as a library user:
 
 | Module name | Contents |
 |---|---|
-| `hydra.core` | The kernel types: `Literal`, `LiteralType`, `Term`, `Type`, `Name`, etc. |
-| `hydra.print.core` | Pretty-printers for literals, types, terms. |
-| `hydra.validate.core` | Validators that return typed errors (e.g. `checkLiteral`, `checkTerm`). |
-| `hydra.error.core` | The `InvalidTermError` / `InvalidTypeError` / `InvalidLiteralError` union types. |
+| `hydra.core.model` | The kernel types: `Literal`, `LiteralType`, `Term`, `Type`, `Name`, etc. |
+| `hydra.core.print.model` | Pretty-printers for literals, types, terms. |
+| `hydra.core.validate.model` | Validators that return typed errors (e.g. `checkLiteral`, `checkTerm`). |
+| `hydra.core.error.model` | The `InvalidTermError` / `InvalidTypeError` / `InvalidLiteralError` union types. |
 | `hydra.pg.model` | Property-graph schema and value types (`GraphSchema`, `Graph`, `Vertex`, `Edge`). |
-| `hydra.pg.dsl` | Fluent builders for constructing schemas and graphs (Java only at present; Python users typically use HydraPop's `hydrapop.dsl.pg`). |
-| `hydra.validate.pg` | Property-graph validation against a schema. |
-| `hydra.error.pg` | Property-graph validation errors. |
-| `hydra.lib.maps`, `hydra.lib.lists`, etc. | Stdlib-style helpers, generic over host stdlib. |
-| `hydra.overlay.java.util.Either` (Java) | Functional-style result wrapper; hand-written overlay type, not generated. Haskell uses native `Either`. |
-| `hydra.reflect` | Runtime reflection on the kernel types (`literalType`, `literalVariant`, etc.). |
+| `hydra.pg.overlay.java.dsl` | Fluent builders for constructing schemas and graphs (Java only at present; Python users typically use HydraPop's `hydrapop.dsl.pg`). |
+| `hydra.pg.validate.model` | Property-graph validation against a schema. |
+| `hydra.pg.error.model` | Property-graph validation errors. |
+| `hydra.core.lib.maps`, `hydra.core.lib.lists`, etc. | Stdlib-style helpers, generic over host stdlib. |
+| `hydra.core.overlay.java.util.Either` (Java) | Functional-style result wrapper; hand-written overlay type, not generated. Haskell uses native `Either`. |
+| `hydra.core.reflect` | Runtime reflection on the kernel types (`literalType`, `literalVariant`, etc.). |
 
 The full primitive lexicon is in
 [`docs/hydra-lexicon.txt`](https://github.com/CategoricalData/hydra/blob/main/docs/hydra-lexicon.txt)
-(~290 primitives with their type signatures, organized into 21 `hydra.lib.<sub>` module names).
+(~290 primitives with their type signatures, organized into 21 `hydra.core.lib.<sub>` module names).
 
 ---
 

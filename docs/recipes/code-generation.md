@@ -129,12 +129,12 @@ Schema-only (types, no terms):
 
 Generated files follow language-specific naming conventions:
 
-| Language | Path pattern | Example for `hydra.core` |
-|----------|-------------|--------------------------|
-| Haskell | `Prefix/Module.hs` | `Hydra/Core.hs` |
-| Java | `namespace/module/Module.java` | `hydra/core/Core.java` |
-| Python | `namespace/module/module.py` | `hydra/core/core.py` |
-| Scala | `namespace/module.scala` | `hydra/core.scala` |
+| Language | Path pattern | Example for `hydra.core.model` |
+|----------|-------------|--------------------------------|
+| Haskell | `Prefix/Module.hs` | `Hydra/Core/Model.hs` |
+| Java | `namespace/module/Type.java` (one class per type) | `hydra/core/model/Term.java` |
+| Python | `namespace/module.py` | `hydra/core/model.py` |
+| Scala | `namespace/module.scala` | `hydra/core/model.scala` |
 
 ## The sync scripts
 
@@ -307,7 +307,7 @@ Module lists are Haskell values from `Hydra.Sources.All`:
 ### Adding DSL wrapper generation for a new package
 
 `update-json-main` and `update-json-manifest` produce per-package
-`hydra.dsl.*` JSON wrappers from a list of "DSL input modules". By
+`hydra.<root>.dsl.*` JSON wrappers from a list of "DSL input modules". By
 default the list covers `hydra-kernel` and `hydra-haskell`. To enable
 wrappers for an additional package (e.g., enabling `hydra-python` so
 its source-DSL modules can resolve fully-qualified DSL accessors):
@@ -318,7 +318,7 @@ its source-DSL modules can resolve fully-qualified DSL accessors):
 2. Extend the `packageDslInputModules` dispatch in
    `heads/haskell/src/exec/transform-haskell-dsl-to-json/Main.hs` so
    the per-package split routes the package's modules into
-   `dist/json/<pkg>/src/main/json/hydra/dsl/...`.
+   `dist/json/<pkg>/src/main/json/hydra/<root>/dsl/...`.
 3. Bust caches once: delete `heads/haskell/.cache/phase1-input-cache.txt`
    and `dist/json/build/digest.json` before the next sync, since these
    exec edits don't otherwise invalidate Phase 1 (see "Phase 1 cache
@@ -330,9 +330,13 @@ A *derived* module is one the synthesizer produces from a source type module, ra
 human authors. There are three current categories, all generated per package from the same type
 inputs and best thought of as a set:
 
-- `hydra.dsl.*` — DSL wrapper builders/accessors (e.g. `atomTrue`, `bindingName`)
-- `hydra.encode.*` — term encoders
-- `hydra.decode.*` — term decoders
+- `hydra.<root>.dsl.*` — DSL wrapper builders/accessors (e.g. `atomTrue`, `bindingName`)
+- `hydra.<root>.encode.*` — term encoders
+- `hydra.<root>.decode.*` — term decoders
+
+The category segment is inserted after the two-segment package root, so the derived modules for
+`hydra.core.model` are `hydra.core.dsl.model`, `hydra.core.encode.model`, and `hydra.core.decode.model`,
+and those for `hydra.pg.model` are `hydra.pg.dsl.model`, and so on.
 
 Unlike hand-authored kernel modules — which start *untyped* and have their types *added* by
 inference — derived modules are constructed with their final types built in. The invariant:
@@ -366,7 +370,7 @@ change them for the worse:
 `writeDerivedJsonPackageSplit` (`Hydra.Generation`) writes all three categories without inference.
 Relatedly, the per-package main write pass (`inferAndWriteByPackage`) **skips the native-owned
 packages** `hydra-jvm`/`hydra-java`/`hydra-python` entirely (`inferTargets = []`): their already-derived
-`hydra.dsl.{java,python}.*` wrappers must not be re-inferred (it recorrupts them, as in #466), and
+`hydra.{java,python}.dsl.*` wrappers must not be re-inferred (it recorrupts them, as in #466), and
 inferring their whole native universe fails on by-name kernel refs; their schemes are harvested
 from the JSON signatures for free.
 
@@ -586,7 +590,7 @@ producer has changed.
 To force a Phase 1 rebuild, delete `heads/haskell/.cache/phase1-input-cache.txt`
 before running sync. The Stack build itself will pick up the exec
 changes; only the freshness gate is fooled. Likewise, when the change
-adds new JSON outputs (e.g., new `hydra.dsl.*` wrappers for a newly
+adds new JSON outputs (e.g., new `hydra.<root>.dsl.*` wrappers for a newly
 enabled package), wipe the build-cache subtree (`rm -rf dist/json/build
 dist/json/*/build`) to force downstream regeneration. The whole
 `dist/**/build/` tree is gitignored cache state.
@@ -610,7 +614,7 @@ never referenced.
 ### Hand-written test adapters that import generated modules
 
 `heads/<lang>/src/test/...` files that import a generated module
-(e.g., `Hydra.Lib.<Sub>` after a rename) cannot be built by `stack test`
+(e.g., `Hydra.Core.Lib.<Sub>` after a rename) cannot be built by `stack test`
 until the generated modules exist on disk. After renaming the module
 name of such a module, the build sequence is:
 
@@ -622,7 +626,7 @@ name of such a module, the build sequence is:
    verification phase.
 
 Running `stack test` between steps 1 and 2 will fail at the test
-adapter with `Could not find module 'Hydra.Lib.<Sub>'`. This is
+adapter with `Could not find module 'Hydra.Core.Lib.<Sub>'`. This is
 expected; defer the test run until after sync.
 
 ## Related documentation

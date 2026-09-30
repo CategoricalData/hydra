@@ -27,23 +27,23 @@ The lexicon is organized into three sections:
 ```
 Primitives:
   ...
-  hydra.lib.logic.and : ((boolean → boolean → boolean))
-  hydra.lib.logic.ifElse : (∀[x].(boolean → x → x → x))
-  hydra.lib.logic.not : ((boolean → boolean))
+  hydra.core.lib.logic.and : ((boolean → boolean → boolean))
+  hydra.core.lib.logic.ifElse : (forall x. (boolean → x → x → x))
+  hydra.core.lib.logic.not : ((boolean → boolean))
   ...
   
 Types:
   ...
-  hydra.core.Term = union{annotated:hydra.core.AnnotatedTerm, application:hydra.core.Application, either:either<hydra.core.Term, hydra.core.Term>, function:hydra.core.Function, let:hydra.core.Let, list:list<hydra.core.Term>, literal:hydra.core.Literal, map:map<hydra.core.Term, hydra.core.Term>, maybe:maybe<hydra.core.Term>, pair:hydra.core.Term×hydra.core.Term, product:list<hydra.core.Term>, record:hydra.core.Record, set:set<hydra.core.Term>, sum:hydra.core.Sum, typeApplication:hydra.core.TypeApplicationTerm, typeLambda:hydra.core.TypeLambda, union:hydra.core.Injection, unit:unit, variable:hydra.core.Name, wrap:hydra.core.WrappedTerm}
-  hydra.core.TupleProjection = record{arity:int32, index:int32, domain:maybe<list<hydra.core.Type>>}
-  hydra.core.Type = union{annotated:hydra.core.AnnotatedType, application:hydra.core.ApplicationType, either:hydra.core.EitherType, forall:hydra.core.ForallType, function:hydra.core.FunctionType, list:hydra.core.Type, literal:hydra.core.LiteralType, map:hydra.core.MapType, maybe:hydra.core.Type, pair:hydra.core.PairType, record:list<hydra.core.FieldType>, set:hydra.core.Type, union:list<hydra.core.FieldType>, unit:unit, variable:hydra.core.Name, void:unit, wrap:hydra.core.Type}
+  hydra.core.model.Term = union{annotated:hydra.core.model.AnnotatedTerm, application:hydra.core.model.Application, cases:hydra.core.model.CaseStatement, either:either<hydra.core.model.Term, hydra.core.model.Term>, inject:hydra.core.model.Injection, lambda:hydra.core.model.Lambda, let:hydra.core.model.Let, list:list<hydra.core.model.Term>, literal:hydra.core.model.Literal, map:map<hydra.core.model.Term, hydra.core.model.Term>, optional:optional<hydra.core.model.Term>, pair:(hydra.core.model.Term, hydra.core.model.Term), project:hydra.core.model.Projection, record:hydra.core.model.Record, set:set<hydra.core.model.Term>, typeApplication:hydra.core.model.TypeApplicationTerm, typeLambda:hydra.core.model.TypeLambda, unit:unit, unwrap:hydra.core.model.Name, variable:hydra.core.model.Name, wrap:hydra.core.model.WrappedTerm}
+  hydra.core.model.Type = union{annotated:hydra.core.model.AnnotatedType, application:hydra.core.model.ApplicationType, effect:hydra.core.model.Type, either:hydra.core.model.EitherType, forall:hydra.core.model.ForallType, function:hydra.core.model.FunctionType, list:hydra.core.model.Type, literal:hydra.core.model.LiteralType, map:hydra.core.model.MapType, optional:hydra.core.model.Type, pair:hydra.core.model.PairType, record:list<hydra.core.model.FieldType>, set:hydra.core.model.Type, union:list<hydra.core.model.FieldType>, unit:unit, variable:hydra.core.model.Name, void:unit, wrap:hydra.core.model.Type}
+  hydra.core.model.TypeScheme = record{variables:list<hydra.core.model.Name>, body:hydra.core.model.Type, constraints:map<hydra.core.model.Name, hydra.core.model.TypeVariableConstraints>}
   ...
 
 Terms:
   ...
-  hydra.inference.freshVariableType : ((hydra.typing.InferenceContext → (hydra.core.Type, hydra.typing.InferenceContext)))
-  hydra.inference.generalize : ((hydra.graph.Graph → hydra.core.Type → hydra.core.TypeScheme))
-  hydra.inference.inferGraphTypes : ((hydra.typing.InferenceContext → list<hydra.core.Binding> → hydra.graph.Graph → either<hydra.errors.Error, ((hydra.graph.Graph, list<hydra.core.Binding>), hydra.typing.InferenceContext)>))
+  hydra.core.inference.freshVariableType : ((hydra.core.typing.InferenceContext → (hydra.core.model.Type, hydra.core.typing.InferenceContext)))
+  hydra.core.inference.generalize : ((hydra.core.graph.Graph → hydra.core.model.Type → hydra.core.model.TypeScheme))
+  hydra.core.inference.inferGraphTypes : ((hydra.core.typing.InferenceContext → list<hydra.core.model.Binding> → hydra.core.graph.Graph → either<hydra.core.errors.Error, ((hydra.core.graph.Graph, list<hydra.core.model.Binding>), hydra.core.typing.InferenceContext)>))
   ...
 ```
 
@@ -70,7 +70,7 @@ pre-release preparation flow (`bin/prepare-release.sh`).
 When working with an LLM to generate Hydra code:
 
 1. **Include the lexicon in your prompt**: Provide the lexicon file as context so the LLM understands the available API
-2. **Reference specific modules**: Point the LLM to relevant sections (e.g., "use functions from hydra.lib.lists")
+2. **Reference specific modules**: Point the LLM to relevant sections (e.g., "use functions from hydra.core.lib.lists")
 3. **Specify the source language**: Indicate whether you want to use the Haskell, Java,
    or Python DSLs for expressing your code
 4. **Provide examples**: Show the LLM examples of the code style you want

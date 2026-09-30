@@ -10,7 +10,7 @@ Hydra currently has six complete implementations:
 Hydra-Lisp has four dialects (Clojure, Scheme, Common Lisp, and Emacs Lisp) sharing a coder and serializer
 but with distinct bootstrapping heads.
 All six implement the entire [Hydra Kernel](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Kernel.hs),
-support the full [Hydra standard library](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib),
+support the full [Hydra standard library](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib),
 and pass the [hydra-kernel test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
 The six implementations are mutually self-hosting: each can load Hydra modules from a
 language-independent JSON representation and regenerate code for any of the target languages
@@ -251,7 +251,7 @@ syntax tree for your language, you need to also map the abstract syntax tree int
 Compared to some of the steps above, this is one of the conceptually simplest tasks, and requires little explanation.
 
 It will be helpful to re-use the built-in
-[Hydra.Ast](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Ast.hs)
+[Hydra.Core.Ast](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Ast.hs)
 module here.
 
 ### Examples of serializers
@@ -330,7 +330,7 @@ trace the issue back to the inferred type annotations on the Hydra IR before ass
 ## Step 7: Implement standard primitives
 
 As noted above, Hydra has a
-[standard library](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib)
+[standard library](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib)
 of primitive, or built-in functions.
 There are many calls to these functions (though not all of them)
 in the Hydra kernel code which will be mapped into your new implementation,
@@ -345,18 +345,18 @@ though their behavior must be the same across implementations.
 
 **Haskell**:
 - Metadata:
-  [Hydra/Overlay/Haskell/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs) (DSL)
+  [Hydra/Core/Overlay/Haskell/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Libraries.hs) (DSL)
 - Implementations:
-  [Hydra/Overlay/Haskell/Lib](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib) (native Haskell)
+  [Hydra/Core/Overlay/Haskell/Lib](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib) (native Haskell)
 
 **Java**:
 - Metadata + implementations:
-  [hydra/lib](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib) (bundled together)
-- Registry: [hydra/lib/Libraries.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/Libraries.java)
+  [hydra/core/overlay/java/lib](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib) (bundled together)
+- Registry: [hydra/core/overlay/java/lib/Libraries.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/Libraries.java)
 
 **Python**:
 - Implementations:
-  [hydra/lib](https://github.com/CategoricalData/hydra/tree/main/overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib) (hand-written)
+  [hydra/core/overlay/python/lib](https://github.com/CategoricalData/hydra/tree/main/overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/lib) (hand-written)
 
 ### Requirements for primitives
 
@@ -378,7 +378,7 @@ At a bare minimum, all of the primitives which are referenced in the Hydra kerne
 each primitive must also be *registered* in a central registry (e.g.
 `Libraries.java` in Java) so it can be looked up by name at runtime.
 Periodically compare your registry against the authoritative list in
-[Hydra/Overlay/Haskell/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs) to catch any missing registrations.
+[Hydra/Core/Overlay/Haskell/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Libraries.hs) to catch any missing registrations.
 
 ### Lazy evaluation and thunking
 
@@ -398,12 +398,12 @@ mark, are:
 
 | Primitive | Lazy parameter(s) | Why |
 |-----------|-------------------|-----|
-| `hydra.lib.logic.ifElse` | both `then` and `else` branches | Only the chosen branch should be evaluated |
-| `hydra.lib.optionals.cases` | the `none`-case default value | Only evaluated when the optional is none |
-| `hydra.lib.optionals.fromOptional` | the default value | Only evaluated when the optional is none |
-| `hydra.lib.eithers.fromLeft` | the default value | Only evaluated when the Either is Right |
-| `hydra.lib.eithers.fromRight` | the default value | Only evaluated when the Either is Left |
-| `hydra.lib.maps.findWithDefault` | the default value | Only evaluated when the key is absent |
+| `hydra.core.lib.logic.ifElse` | both `then` and `else` branches | Only the chosen branch should be evaluated |
+| `hydra.core.lib.optionals.cases` | the `none`-case default value | Only evaluated when the optional is none |
+| `hydra.core.lib.optionals.fromOptional` | the default value | Only evaluated when the optional is none |
+| `hydra.core.lib.eithers.fromLeft` | the default value | Only evaluated when the Either is Right |
+| `hydra.core.lib.eithers.fromRight` | the default value | Only evaluated when the Either is Left |
+| `hydra.core.lib.maps.findWithDefault` | the default value | Only evaluated when the key is absent |
 
 To make a new primitive lazy, set the flag on the relevant parameters in its kernel signature; no
 coder change is needed, because every coder already consults the metadata (see
@@ -443,7 +443,7 @@ languages. If you encounter unexpected performance degradation in kernel functio
 eagerly-evaluated `let` bindings that are only used in some code paths.
 
 A coder can also defend against this structurally, so authors don't have to remember the
-lambda-wrapping. The Java and Python coders thunk a `let` binding (emit `hydra.util.Lazy<>` /
+lambda-wrapping. The Java and Python coders thunk a `let` binding (emit `hydra.core.overlay.java.util.Lazy<>` /
 `Lazy(lambda: ...)`) when it is complex and non-trivial — `isComplexBinding && !isTrivialTerm`.
 This is what makes the let-bound default form (`"dflt">: recurse @@ var "term"`) safe even
 without an explicit `λ_.`; before that rule, the Java coder emitted such a default eagerly and
@@ -495,32 +495,32 @@ generation but fails self-host (the symptom that motivated the #391 self-host fi
 #### Self-host requires the lib pass + redirect in your host's generation driver (#473)
 
 Under #473, primitive **definitions** (`PrimitiveDefinition` metadata) live in the language-independent
-`hydra.lib.*` modules, while each host's native **implementations** live alongside at
-`hydra.<lang>.lib.*` (the analog of Haskell's `Hydra.Overlay.Haskell.Lib.*`). The relocation is performed
+`hydra.core.lib.*` modules, while each host's native **implementations** live alongside at
+`hydra.core.overlay.<lang>.lib.*` (the analog of Haskell's `Hydra.Core.Overlay.Haskell.Lib.*`). The relocation is performed
 **entirely by the generation driver**, not by any coder — so when your language hosts code generation
 (self-hosting), your host's bootstrap driver (e.g. `heads/<lang>/.../Bootstrap.*`, the analog of
 `heads/haskell/src/exec/bootstrap-from-json/Main.hs`) must do two things the Haskell driver does:
 
-1. **Lib pass**: emit the `hydra.lib.*` `PrimitiveDefinition` def-modules from their *lowered* form
-   (`hydra.codegen.lowerPrimitiveDefinitions`), with a universe that lowers only the lib modules.
+1. **Lib pass**: emit the `hydra.core.lib.*` `PrimitiveDefinition` def-modules from their *lowered* form
+   (`hydra.core.codegen.lowerPrimitiveDefinitions`), with a universe that lowers only the lib modules.
 2. **Redirect**: rewrite generated *consumer* references to the relocated impl path
-   (`hydra.lib.<sub>` → `hydra.<lang>.lib.<sub>`), in whatever syntactic form your language uses —
-   dotted member access/imports (Java/Python/Scala/Clojure), R7RS `(hydra lib X)` → `(hydra <lang> lib X)`
-   (Scheme), or flat-symbol rename `hydra_lib_<sub>_` → `hydra_<lang>_lib_<sub>_` plus dropping the
+   (`hydra.core.lib.<sub>` → `hydra.core.overlay.<lang>.lib.<sub>`), in whatever syntactic form your language uses —
+   dotted member access/imports (Java/Python/Scala/Clojure), R7RS `(hydra core lib X)` → `(hydra core overlay <lang> lib X)`
+   (Scheme), or flat-symbol rename `hydra_core_lib_<sub>_` → `hydra_core_overlay_<lang>_lib_<sub>_` plus dropping the
    def-module from `:use` clauses (Common Lisp / Emacs Lisp). The redirect must run **last** (over both
-   `src/main` and `src/test`) and must **skip the `hydra/lib/` directory** — those are the def-modules,
-   which keep their canonical `hydra.lib.*` names; redirecting them relocates the def-modules on top of
-   the impls. Primitive *name strings* (quoted `"hydra.lib..."`) must also be preserved (protect them
+   `src/main` and `src/test`) and must **skip the `hydra/core/lib/` directory** — those are the def-modules,
+   which keep their canonical `hydra.core.lib.*` names; redirecting them relocates the def-modules on top of
+   the impls. Primitive *name strings* (quoted `"hydra.core.lib..."`) must also be preserved (protect them
    with a sentinel before redirecting).
 
 Two non-driver gaps to watch when a host self-hosts after the relocation: the per-cell
-`setup-<lang>-target.sh` and the host's own bootstrap loaders may hardcode the old `hydra/lib/` impl
-paths — point them at `hydra/<lang>/lib/`. Like #391, forgetting any of this passes Haskell-hosted
+`setup-<lang>-target.sh` and the host's own bootstrap loaders may hardcode the old `hydra/core/lib/` impl
+paths — point them at `hydra/core/overlay/<lang>/lib/`. Like #391, forgetting any of this passes Haskell-hosted
 generation but breaks self-host (`cannot find symbol` / `'PrimitiveDefinition' object is not callable` /
 `Wrong type to apply: PrimitiveDefinition`).
 
 When auto-detecting type variables from the type schemes of primitives, be aware that type variable names
-containing dots (e.g. `hydra.util.Comparison`) are nominal type references, not universally
+containing dots (e.g. `hydra.core.util.Comparison`) are nominal type references, not universally
 quantified type parameters. Exclude qualified names to avoid incorrect generalization.
 
 **Important: erase type-application wrappers when matching the application head.**
@@ -543,8 +543,8 @@ In addition to the implementations themselves, you need supporting infrastructur
 
 | Language | Key files |
 |----------|-----------|
-| Java | [PrimitiveFunction.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/tools/PrimitiveFunction.java), [Libraries.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/Libraries.java) |
-| Python | [hydra/dsl/prims.py](https://github.com/CategoricalData/hydra/blob/main/overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/dsl/prims.py), [hydra/sources/libraries.py](https://github.com/CategoricalData/hydra/blob/main/overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/sources/libraries.py) |
+| Java | [PrimitiveFunction.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/tools/PrimitiveFunction.java), [Libraries.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/Libraries.java) |
+| Python | [hydra/dsl/prims.py](https://github.com/CategoricalData/hydra/blob/main/overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/dsl/prims.py), [hydra/sources/libraries.py](https://github.com/CategoricalData/hydra/blob/main/overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/sources/libraries.py) |
 
 ## Step 8: Implement runtime foundation types
 
@@ -559,8 +559,8 @@ These are language-specific representations of Hydra's core algebraic types:
 
 | Language | Module |
 |----------|--------|
-| Java | [hydra/overlay/java/util/](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/util) (`Maybe`, `Either`, `Lazy`, `Unit`, `Pair`, `Tuple`) |
-| Python | Native `Given`/`None_`, `Left`/`Right`, `FrozenDict`, `frozenlist`, `Node` are defined across the generated `hydra.core.*` and `hydra.optionals`/`hydra.eithers` modules in `dist/python/hydra-kernel/`, plus per-host overlay helpers in `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/`. |
+| Java | [hydra/core/overlay/java/util/](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/util) (`Maybe`, `Either`, `Lazy`, `Unit`, `Pair`, `Tuple`) |
+| Python | Native `Given`/`None_`, `Left`/`Right`, `FrozenDict`, `frozenlist`, `Node` are defined in the overlay module `hydra.core.overlay.python.dsl.python` (under `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/`). |
 
 ## Step 9: Create test runners
 
@@ -605,15 +605,15 @@ criterion for a complete Hydra implementation.**
 ### Examples of test runners
 
 **Haskell**:
-- Generated suite: [dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestSuite.hs](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestSuite.hs)
+- Generated suite: [dist/haskell/hydra-kernel/src/test/haskell/Hydra/Core/Test/TestSuite.hs](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/test/haskell/Hydra/Core/Test/TestSuite.hs)
 - Runner: [heads/haskell/src/test/haskell/Hydra/TestSuiteSpec.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/test/haskell/Hydra/TestSuiteSpec.hs) (~100 lines)
 
 **Java**:
-- Generated suite: [dist/java/hydra-kernel/src/test/java/hydra/test/testSuite/TestSuite.java](https://github.com/CategoricalData/hydra/blob/main/dist/java/hydra-kernel/src/test/java/hydra/test/testSuite/TestSuite.java)
+- Generated suite: [dist/java/hydra-kernel/src/test/java/hydra/core/test/testSuite/TestSuite.java](https://github.com/CategoricalData/hydra/blob/main/dist/java/hydra-kernel/src/test/java/hydra/core/test/testSuite/TestSuite.java)
 - Runner: [heads/java/src/test/java/hydra/TestSuiteRunner.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/test/java/hydra/TestSuiteRunner.java) (~100 lines)
 
 **Python**:
-- Generated suite: Generated to `dist/python/hydra-kernel/src/test/python/hydra/test/`
+- Generated suite: Generated to `dist/python/hydra-kernel/src/test/python/hydra/core/test/`
 - Runner: [heads/python/src/test/python/test_suite_runner.py](https://github.com/CategoricalData/hydra/blob/main/heads/python/src/test/python/test_suite_runner.py)
 
 The generated test data should already be available (from step 6). The test runner is typically
@@ -643,24 +643,24 @@ be useful in your new implementation, then start building real applications to v
 You should start with these three DSLs, and then add others as desired:
 
 1. **Type construction DSL**: Allows developers to build type-level expressions
-   - [Haskell Types.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Types.hs)
-   - [Java Types.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/dsl/Types.java)
+   - [Haskell Types.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Types.hs)
+   - [Java Types.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/dsl/Types.java)
 
 2. **Term construction DSL**: Allows developers to build term-level expressions
-   - [Haskell Terms.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Terms.hs)
-   - [Java Terms.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/dsl/Terms.java)
+   - [Haskell Terms.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Terms.hs)
+   - [Java Terms.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/dsl/Terms.java)
 
 3. **Term decoding DSL ("expect")**: Allows developers to decode Hydra terms to native programming constructs.
-   The generated `hydra.extract.core` module (in `dist/<lang>/hydra-kernel/...`) provides the canonical
+   The generated `hydra.core.extract.model` module (in `dist/<lang>/hydra-kernel/...`) provides the canonical
    translingual decoders; each host may add thin native helpers alongside.
 
 ### Additional useful DSLs
 
 You may find it useful to define:
 - [Shorthand type constructors](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/ShorthandTypes.hs)
-- [Shorthand primitives](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/Prims.hs)
+- [Shorthand primitives](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Prims.hs)
 - Individual DSLs for specific Hydra kernel modules,
-  e.g. the [hydra.core DSL](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/Core.hs) in Haskell
+  e.g. the [hydra.core.model DSL](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Meta/Core.hs) in Haskell
 
 The last of these are only necessary if you plan to define new source-of-truth modules in your implementation,
 rather than just receiving generated code from Hydra-Haskell.
@@ -690,7 +690,7 @@ exists, your implementation can participate in Hydra's bootstrapping demo as bot
 
 | Language | Module |
 |----------|--------|
-| Java | [hydra/Generation.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/main/java/hydra/Generation.java), [hydra/Bootstrap.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/main/java/hydra/Bootstrap.java) |
+| Java | [hydra/build/overlay/java/Generation.java](https://github.com/CategoricalData/hydra/blob/main/overlay/java/hydra-build/src/main/java/hydra/build/overlay/java/Generation.java), [hydra/Bootstrap.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/main/java/hydra/Bootstrap.java) |
 | Python | [hydra/generation.py](https://github.com/CategoricalData/hydra/blob/main/heads/python/src/main/python/hydra/generation.py), [hydra/bootstrap.py](https://github.com/CategoricalData/hydra/blob/main/heads/python/src/main/python/hydra/bootstrap.py) |
 | Haskell | [Hydra/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Generation.hs) |
 

@@ -7,7 +7,7 @@ across all implementations.
 
 - Familiarity with Hydra's type system (see [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts))
 - Understanding of the target language implementations (Haskell, Java, Python, Scala, Lisp)
-- Knowledge of which library the primitive belongs to (e.g. `hydra.lib.strings`, `hydra.lib.math`)
+- Knowledge of which library the primitive belongs to (e.g. `hydra.core.lib.strings`, `hydra.core.lib.math`)
 
 **Important:** Every new primitive must include test cases in the hydra-kernel test suite.
 Tests ensure consistent behavior across all language implementations and catch regressions.
@@ -28,12 +28,12 @@ Each primitive has two faces:
    `Primitive` record at host-side registration time.
 
 The kernel's `Hydra/Sources/Kernel/Lib/<sub>.hs` files **are** the primitive registry:
-they enumerate every primitive in each `hydra.lib.<sub>` module name with its full
+they enumerate every primitive in each `hydra.core.lib.<sub>` module name with its full
 metadata. Host registrations look up that metadata by name and pair it with their
 native implementation.
 
 Most primitives are functions (*primitive functions*), but there are also *primitive
-constants* like `hydra.lib.math.pi` and `hydra.lib.sets.empty`.
+constants* like `hydra.core.lib.math.pi` and `hydra.core.lib.sets.empty`.
 
 ### When an operation should be a primitive
 
@@ -45,7 +45,7 @@ a primitive.
 The decision rule:
 
 - **Make it a primitive** when there is no way to express it in Hydra terms, or no
-  acceptable way: effectful operations (most of `hydra.lib.effects`, file and console
+  acceptable way: effectful operations (most of `hydra.core.lib.effects`, file and console
   I/O), host-native computation (arithmetic, character predicates, regex matching),
   and fundamental eliminators (`optionals.cases`, `pairs.first`) that bottom out the
   term language.
@@ -120,7 +120,7 @@ Built-in primitive signatures should lean on core `Type` constructors, literal t
 and type variables bound by the primitive's own type scheme, rather than on named Hydra
 types defined in model modules.
 For example, a primitive may have a polymorphic signature such as
-`forall a. a -> (a, a)`, but a signature such as `hydra.core.Term -> hydra.core.Type` —
+`forall a. a -> (a, a)`, but a signature such as `hydra.core.model.Term -> hydra.core.model.Type` —
 referencing named types defined outside the primitive's own scheme — is something to
 avoid where a core constructor will do.
 
@@ -138,7 +138,7 @@ UDFs, which application developers routinely write against named types from thei
 models.
 A domain library may deliberately use named types in its signatures when they make the
 intent clearer than bare core types would.
-`hydra.lib.files` is the standard example: its operations take a `FilePath` and return a
+`hydra.core.lib.files` is the standard example: its operations take a `FilePath` and return a
 `FileError` or `FileStatus` rather than passing raw `string`s and integers around, because
 a small, self-describing POSIX vocabulary is worth the named-type dependency.
 The judgement to make is whether the named type earns its keep, not whether named types
@@ -146,20 +146,20 @@ are forbidden.
 
 ### How the registry works
 
-For each library module name, e.g. `hydra.lib.logic`, there is a kernel source module
+For each library module name, e.g. `hydra.core.lib.logic`, there is a kernel source module
 `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Logic.hs` that
 declares every primitive in that module name as a `PrimitiveDefinition`:
 
 ```haskell
 ns :: ModuleName
-ns = ModuleName "hydra.lib.logic"
+ns = ModuleName "hydra.core.lib.logic"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.logic module.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.logic module.")}
   where
     definitions = [and, ifElse, not_, or_]
 
@@ -203,7 +203,7 @@ and host bindings.
 
 #### Writing the `comments` field
 
-Conventions established across the 18 `hydra.lib.*` module names (#319):
+Conventions established across the 18 `hydra.core.lib.*` module names (#319):
 
 - **Pick an authoritative source.** IEEE 754-2019 for floating-point operations
   (§5 for arithmetic + rounding, §9.2 for trig / exp / log); Unicode (general
@@ -242,7 +242,7 @@ The `definitions` list holds `PrimitiveDefinition` values directly; the module w
 This is distinct from modules that mix `Definition.term` and `Definition.type` entries —
 primitive-only modules use `DefinitionPrimitive <$>` exclusively.
 
-The generated JSON in `dist/json/hydra-kernel/src/main/json/hydra/lib/<sub>.json`
+The generated JSON in `dist/json/hydra-kernel/src/main/json/hydra/core/lib/<sub>.json`
 is the cross-host source of truth — every host language reads this to know what
 primitives exist, their signatures, and their default implementations.
 
@@ -251,17 +251,17 @@ primitives exist, their signatures, and their default implementations.
 | Concern | Location |
 |---------|----------|
 | Universal primitive metadata (name, description, comments, type signature, purity flags, default implementation) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs` |
-| Native Haskell implementation | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/<Sub>.hs` (post-#501 `hydra.overlay.haskell.*` namespace) |
-| Native Java implementation | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/<sub>/<FunctionName>.java` |
-| Native Python implementation | `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib/<sub>.py` (#473 — impls live at `hydra.overlay.python.lib.*`) |
-| Host-side primitive registry (binds names to native impls) | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs` (Haskell, #473) and, per host, the registry in that host's overlay: `overlay/{java,python,scala,typescript}/hydra-kernel/.../overlay/<lang>/{lib,}/Libraries.<ext>`, and equivalent overlay paths for the four Lisp dialects |
-| Phantom-typed DSL wrappers (for writing Hydra source modules) | **Generated** (#467): `hydra.dsl.lib.<sub>` in every target, e.g. `dist/haskell/.../Hydra/Dsl/Lib/<Sub>.hs` — no hand-written wrapper |
+| Native Haskell implementation | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib/<Sub>.hs` (post-#501 `hydra.core.overlay.haskell.*` namespace) |
+| Native Java implementation | `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/<sub>/<FunctionName>.java` |
+| Native Python implementation | `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/lib/<sub>.py` (#473 — impls live at `hydra.core.overlay.python.lib.*`) |
+| Host-side primitive registry (binds names to native impls) | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Libraries.hs` (Haskell, #473) and, per host, the registry in that host's overlay: `overlay/{java,python,scala,typescript}/hydra-kernel/.../overlay/<lang>/{lib,}/Libraries.<ext>`, and equivalent overlay paths for the four Lisp dialects |
+| Phantom-typed DSL wrappers (for writing Hydra source modules) | **Generated** (#467): `hydra.core.dsl.lib.<sub>` in every target, e.g. `dist/haskell/.../Hydra/Core/Dsl/Lib/<Sub>.hs` — no hand-written wrapper |
 | Common test cases | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Lib/<Sub>.hs` |
 
 **Important:** the canonical metadata for every primitive — *including its name* — is the
 `PrimitiveDefinition` in `Hydra/Sources/Kernel/Lib/<Sub>.hs`. All other files
 (host registrations, DSL wrappers) **derive** the primitive's name from that definition
-(via the generated `hydra.lib.*` def-modules) and do **not** re-declare the name, signature,
+(via the generated `hydra.core.lib.*` def-modules) and do **not** re-declare the name, signature,
 or description. There is no separate hand-maintained name index: the old
 `Hydra.Sources.Kernel.Lib.Names` module and the `_<namespace>_<localName>` alias layer in
 `Libraries.hs` were removed in #473.
@@ -270,17 +270,17 @@ or description. There is no separate hand-maintained name index: the old
 
 A primitive's name is declared once, in its kernel `PrimitiveDefinition`. From there (#473):
 
-1. Code generation emits a per-host `hydra.lib.*` **def-module** for each kernel `Hydra/Sources/Kernel/Lib/<Sub>.hs`,
-   carrying the `PrimitiveDefinition` (name + signature + metadata) as data. Defs live at `hydra.lib.<sub>`;
-   the native implementations live alongside at `hydra.<lang>.lib.<sub>` (mirroring Haskell's
-   `Hydra.Overlay.Haskell.Lib.*`).
+1. Code generation emits a per-host `hydra.core.lib.*` **def-module** for each kernel `Hydra/Sources/Kernel/Lib/<Sub>.hs`,
+   carrying the `PrimitiveDefinition` (name + signature + metadata) as data. Defs live at `hydra.core.lib.<sub>`;
+   the native implementations live alongside at `hydra.core.overlay.<lang>.lib.<sub>` (mirroring Haskell's
+   `Hydra.Core.Overlay.Haskell.Lib.*`).
 2. Every host's primitive registry **derives** each name from that def-module rather than hand-writing a
    string. In Haskell this is fully implicit: the DSL builders (`primitive`, `primN`, `primCase`,
    `standardLibrary`) accept a `PrimitiveDefinition` directly via the `ToPrimName` class, so you write
    `prim1 DefChars.isAlphaNum ...` and `primitive1 DefChars.toLower` with no explicit name accessor. Other
    hosts derive the name with a `.name`/`prim-name` accessor over the loaded def — Python
-   `def_chars.is_alpha_num.name`, Scala `hydra.lib.chars.isAlphaNum.name`, Java
-   `hydra.lib.Chars.isAlphaNum().name`, and the lisp dialects via `prim-name`.
+   `def_chars.is_alpha_num.name`, Scala `hydra.core.lib.chars.isAlphaNum.name`, Java
+   `hydra.core.lib.Chars.isAlphaNum().name`, and the lisp dialects via `prim-name`.
 
 The upshot: there is exactly one place a primitive name is written down (the kernel `PrimitiveDefinition`),
 and a rename there propagates to all hosts through regeneration.
@@ -293,7 +293,7 @@ Primitive functions conform to the case convention of the implementation languag
 - **Java**: PascalCase for class names (e.g. `IsAlphaNum`, `ToLower`)
 - **Python**: snake_case (e.g. `is_alpha_num`, `to_lower`)
 
-The native Hydra name is always camelCase (e.g. `hydra.lib.chars.isAlphaNum`),
+The native Hydra name is always camelCase (e.g. `hydra.core.lib.chars.isAlphaNum`),
 regardless of the implementation language.
 
 ### Default implementations
@@ -332,7 +332,7 @@ primitive's metadata — `primitiveDefinitionIsPure = False`, set by `impurePrim
 *Effectfulness* is a property of the primitive's *type*: its result is `effect<t>`.
 
 A primitive can be effectful (has `effect<t>` in its signature) yet **pure**: the
-`hydra.lib.effects` combinators `pure : a -> effect<a>`, `map`, and `bind` all mention
+`hydra.core.lib.effects` combinators `pure : a -> effect<a>`, `map`, and `bind` all mention
 `effect<t>`, but they only *construct and transform* effect values — `pure` wraps a value,
 `map`/`bind` compose descriptions of effects — without performing any interaction themselves.
 They are referentially transparent. The primitives that actually *perform* the interaction —
@@ -342,7 +342,7 @@ So set the impurity flag (`impurePrimitiveInModule`) only for primitives that ge
 perform a host interaction; give a primitive an `effect<t>` result type to make it effectful
 (see [Prefer core type constructors](#prefer-core-type-constructors-in-signatures) and the
 [Effects wiki](https://github.com/CategoricalData/hydra/wiki/Effects)). (Note: today the
-`hydra.lib.effects` module as a whole is *declared* with `impurePrimitiveInModule` for
+`hydra.core.lib.effects` module as a whole is *declared* with `impurePrimitiveInModule` for
 uniformity, even though `pure`/`map`/`bind` are semantically pure; the type is the reliable
 signal of effectfulness.)
 
@@ -367,7 +367,7 @@ registrations, then DSL wrappers, then tests.
 There is no separate name-constant step. A primitive's name — like its signature and
 documentation — is declared exactly once, in its `PrimitiveDefinition` in the kernel
 `Hydra/Sources/Kernel/Lib/<Sub>.hs` module (next step). Code generation emits that into the
-per-host `hydra.lib.*` def-modules, and every host registry **derives** the name from there
+per-host `hydra.core.lib.*` def-modules, and every host registry **derives** the name from there
 (see [How primitive names flow](#how-primitive-names-flow)). So just proceed to declaring the
 metadata — the name comes for free.
 
@@ -424,8 +424,8 @@ For a constrained polymorphic primitive (e.g. requires `ordering`):
 compare :: PrimitiveDefinition
 compare = define "compare" "Compare two values and return a Comparison."
   (sig $ Types.polyConstrained [("x", [Name "ordering"])]
-    (Types.var "x" Types.~> Types.var "x" Types.~> Types.var "hydra.util.Comparison"))
-  ["compare(x, y) returns the hydra.util.Comparison value classifying the relationship between x and y. ..."]
+    (Types.var "x" Types.~> Types.var "x" Types.~> Types.var "hydra.core.util.Comparison"))
+  ["compare(x, y) returns the hydra.core.util.Comparison value classifying the relationship between x and y. ..."]
 ```
 
 **Definitions must be in alphabetical order by primitive name.** The kernel
@@ -435,15 +435,15 @@ validator enforces this.
 
 #### Haskell
 
-Add the implementation in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/<Library>.hs` (#418):
+Add the implementation in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib/<Library>.hs` (#418):
 
 ```haskell
--- Hydra/Overlay/Haskell/Lib/Chars.hs
+-- Hydra/Core/Overlay/Haskell/Lib/Chars.hs
 isAlphaNum :: Int -> Bool
 isAlphaNum = C.isAlphaNum . C.chr
 ```
 
-Then register it in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs`:
+Then register it in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Libraries.hs`:
 
 ```haskell
 hydraLibChars :: Library
@@ -454,7 +454,7 @@ hydraLibChars = standardLibrary [
 
 The `prim1` / `prim2` / `prim3` helpers bind a primitive to a native implementation. They take the
 generated `PrimitiveDefinition` directly (`DefChars.isAlphaNum`, where `DefChars` is the generated
-`Hydra.Lib.Chars` def-module) — the single source of truth for the name. `standardLibrary` derives the
+`Hydra.Core.Lib.Chars` def-module) — the single source of truth for the name. `standardLibrary` derives the
 library's module name from the first primitive, so it needs no `ModuleName` argument. The type information
 passed to `primN` is a sanity-check repetition the host registry needs in native form, not the source of
 truth for the name. (Under the hood, `primN`/`primitive`/`standardLibrary` accept a `PrimitiveDefinition`
@@ -471,7 +471,7 @@ registry, **not** from the DSL sources or JSON:
 
 1. the kernel DSL signature in `Hydra.Sources.Kernel.Lib.*` (e.g. via `lazySig [positions]`);
 2. the regenerated `dist/json/hydra-kernel/.../lib/*.json` (produced from 1);
-3. the `prim*` call site in `Hydra.Overlay.Haskell.Libraries` — wrap it to attach the metadata
+3. the `prim*` call site in `Hydra.Core.Overlay.Haskell.Libraries` — wrap it to attach the metadata
    (e.g. `Prims.lazyArgs [0,1] $ prim3 ...`). This is what reaches `bootstrapGraph`.
 
 One further subtlety: the kernel adapts each primitive's signature to the target language
@@ -531,31 +531,31 @@ default is used: each primitive is bound with `prim1` / `prim2` /
 #### Java
 
 Create the per-primitive class
-`overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/<library>/<FunctionName>.java` (#418):
+`overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/<library>/<FunctionName>.java` (#418):
 
 ```java
-package hydra.lib.chars;
+package hydra.core.overlay.java.lib.chars;
 
-import hydra.core.Name;
-import hydra.core.Term;
-import hydra.core.TypeScheme;
-import hydra.dsl.Terms;
-import hydra.graph.Graph;
-import hydra.tools.PrimitiveFunction;
+import hydra.core.model.Name;
+import hydra.core.model.Term;
+import hydra.core.model.TypeScheme;
+import hydra.core.overlay.java.dsl.Terms;
+import hydra.core.graph.Graph;
+import hydra.core.overlay.java.tools.PrimitiveFunction;
 
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.dsl.Types.boolean_;
-import static hydra.dsl.Types.function;
-import static hydra.dsl.Types.int32;
-import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
-import hydra.errors.Error_;
-import hydra.overlay.java.util.Either;
+import static hydra.core.overlay.java.dsl.Types.boolean_;
+import static hydra.core.overlay.java.dsl.Types.function;
+import static hydra.core.overlay.java.dsl.Types.int32;
+import static hydra.core.overlay.java.dsl.Types.scheme;
+import hydra.core.typing.InferenceContext;
+import hydra.core.errors.Error_;
+import hydra.core.overlay.java.util.Either;
 
 public class IsAlphaNum extends PrimitiveFunction {
-    public Name name() { return new Name("hydra.lib.chars.isAlphaNum"); }
+    public Name name() { return new Name("hydra.core.lib.chars.isAlphaNum"); }
 
     @Override
     public TypeScheme type() {
@@ -565,9 +565,9 @@ public class IsAlphaNum extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph ->
-            hydra.lib.eithers.Map.apply(
+            hydra.core.overlay.java.lib.eithers.Map.apply(
                 c -> Terms.boolean_(apply(c)),
-                hydra.extract.Core.int32(graph, args.get(0)));
+                hydra.core.extract.Model.int32(graph, args.get(0)));
     }
 
     public static boolean apply(int codePoint) {
@@ -579,20 +579,20 @@ public class IsAlphaNum extends PrimitiveFunction {
 **Structure:**
 - `name()`: returns the fully qualified Hydra name.
 - `type()`: declares the type scheme (use type parameters for polymorphic functions).
-- `implementation()`: extracts arguments via `hydra.extract.Core.*` and wraps
+- `implementation()`: extracts arguments via `hydra.core.extract.Model.*` and wraps
   the result with `Terms.*`. The shape is `args -> cx -> graph -> Either<Error_, Term>`.
 - `apply()`: static Java method(s) for direct host-language calls.
 
-Note: the error type is `hydra.errors.Error_` (trailing underscore) — Hydra-side
-`hydra.core.Error` would clash with `java.lang.Error`.
+Note: the error type is `hydra.core.errors.Error_` (trailing underscore) — Hydra-side
+`hydra.core.errors.Error` would clash with `java.lang.Error`.
 
 **Higher-order primitives in Java:** when the primitive takes function arguments,
 the `implementation()` method must use `Reduction.reduceTerm(cx, graph, eager, term)`
-to evaluate function applications. See `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/lists/Foldr.java`
+to evaluate function applications. See `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/lists/Foldr.java`
 for an example that iterates in reverse and reduces on each step.
 
 Then register the new primitive in
-`overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/Libraries.java` (#418) by adding it to its
+`overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/Libraries.java` (#418) by adding it to its
 category's list (`charsPrimitives()` in this case). The category will already
 be enumerated in `standardPrimitives()`.
 
@@ -614,7 +614,7 @@ expansion for you.
 
 #### Python
 
-Add the implementation in `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib/<library>.py` (#418):
+Add the implementation in `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/lib/<library>.py` (#418):
 
 ```python
 def is_alpha_num(value: int) -> bool:
@@ -623,16 +623,16 @@ def is_alpha_num(value: int) -> bool:
 ```
 
 Then register it in the Python source registry at
-`overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/sources/libraries.py` (#418). Each module name has
+`overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/sources/libraries.py` (#418). Each module name has
 its own `register_<sub>_primitives()` function that returns a
 `dict[Name, Primitive]`; add an entry there using `prims.prim1` /
 `prims.prim2` / `prims.prim3` to match the kernel signature:
 
 ```python
 def register_chars_primitives() -> dict[Name, Primitive]:
-    from hydra.lib import chars
+    from hydra.core.overlay.python.lib import chars
 
-    namespace = "hydra.lib.chars"
+    namespace = "hydra.core.lib.chars"
     primitives: dict[Name, Primitive] = {}
 
     primitives[qname(namespace, "isAlphaNum")] = prims.prim1(
@@ -642,7 +642,7 @@ def register_chars_primitives() -> dict[Name, Primitive]:
     return primitives
 ```
 
-The `prims` helpers (from `hydra.dsl.prims`) provide the same first-order
+The `prims` helpers (from `hydra.core.overlay.python.dsl.prims`) provide the same first-order
 argument list — primitive Name, native callable, type-variable list, then
 argument and result `TermCoder`s. See the existing entries for examples of
 polymorphic primitives and higher-order patterns (`fun(dom, cod)` for
@@ -651,11 +651,11 @@ function-typed arguments).
 ### 4. DSL wrappers are generated — no manual step
 
 The typed DSL wrapper for each primitive is *generated*, not hand-written (#467).
-Because the `hydra.lib.*` modules are part of the kernel's `mainDslModules` set, the sync emits one
-`hydra.dsl.lib.<library>` module per library into every target language
-(Haskell `Hydra.Dsl.Lib.Chars`, Java `hydra.dsl.lib.Chars`, Python `hydra.dsl.lib.chars`, ...).
+Because the `hydra.core.lib.*` modules are part of the kernel's `mainDslModules` set, the sync emits one
+`hydra.core.dsl.lib.<library>` module per library into every target language
+(Haskell `Hydra.Core.Dsl.Lib.Chars`, Java `hydra.core.dsl.lib.Chars`, Python `hydra.core.dsl.lib.chars`, ...).
 Each primitive projects to a typed, arity-aware reference builder derived from its declared
-signature, e.g. `Hydra.Dsl.Lib.Chars.isAlphaNum :: TypedTerm Int -> TypedTerm Bool`.
+signature, e.g. `Hydra.Core.Dsl.Lib.Chars.isAlphaNum :: TypedTerm Int -> TypedTerm Bool`.
 
 So once the primitive definition (step 1) is in place, the wrapper appears automatically on the next
 sync; there is nothing to write.
@@ -689,7 +689,7 @@ Then add the test group to `allTests` in the same file.
 An *impure*, interaction-performing primitive (e.g. `readFile`, `writeStdout`, `execute`)
 cannot be tested by string comparison, because the pure evaluator cannot perform the
 interaction its result stands for — only the host can. (This is about impurity, not the
-`effect<t>` type per se: the pure `hydra.lib.effects` combinators `pure`/`map`/`bind` also
+`effect<t>` type per se: the pure `hydra.core.lib.effects` combinators `pure`/`map`/`bind` also
 return `effect<t>` but reduce normally and are tested with ordinary `primCase`.) For an
 interaction-performing primitive, use `effectfulCase` instead of `primCase`: its `actual`
 is an `effect<...>` term that each host's test runner **executes** (performing the real
@@ -759,30 +759,30 @@ When adding a new primitive function:
   - [ ] Signature as a `TermSignature` (via `sig $ TypeScheme ...` or `lazySig [...] $ TypeScheme ...`)
   - [ ] **(If applicable)** Default implementation inline as the last argument to `defineWithDefault`
 - [ ] **Haskell**
-  - [ ] Native implementation in `Hydra.Overlay.Haskell.Lib.<Library>`
-  - [ ] Registration via `primN Def<Library>.<fn> ...` in `Hydra.Overlay.Haskell.Libraries`
-  - [ ] DSL wrapper generated at `Hydra.Dsl.Lib.<Library>` (no manual step — see Step 4)
+  - [ ] Native implementation in `Hydra.Core.Overlay.Haskell.Lib.<Library>`
+  - [ ] Registration via `primN Def<Library>.<fn> ...` in `Hydra.Core.Overlay.Haskell.Libraries`
+  - [ ] DSL wrapper generated at `Hydra.Core.Dsl.Lib.<Library>` (no manual step — see Step 4)
 - [ ] **Java**
-  - [ ] `PrimitiveFunction` class in `hydra.lib.<library>` (its `name()` returns `hydra.lib.<Lib>.<fn>().name`)
+  - [ ] `PrimitiveFunction` class in `hydra.core.overlay.java.lib.<library>` (its `name()` returns `hydra.core.lib.<Lib>.<fn>().name`)
   - [ ] Registration in `Libraries.java`
 - [ ] **Python**
-  - [ ] Function in `hydra.overlay.python.lib.<library>`
-  - [ ] Registration in `hydra.sources.libraries` (name via `def_<library>.<fn>.name`)
+  - [ ] Function in `hydra.core.overlay.python.lib.<library>`
+  - [ ] Registration in `hydra.core.overlay.python.sources.libraries` (name via `def_<library>.<fn>.name`)
 - [ ] **Hydra-kernel test suite** (required)
   - [ ] Test group added to `Hydra.Sources.Test.Lib.<Library>`
   - [ ] Test group registered in `allTests`
 - [ ] **Tests pass** in all three languages
 
-## Adding a new hydra.lib module
+## Adding a new hydra.core.lib module
 
-Adding a brand-new `hydra.lib.<sub>` module name (as opposed to a primitive within an existing
+Adding a brand-new `hydra.core.lib.<sub>` module name (as opposed to a primitive within an existing
 one) is a **much rarer, higher-risk task**: every self-hosting host must register the new
 sub-namespace, or that host's tests fail — often deep into a per-host run, one host at a time,
 rather than immediately and with a named culprit. This is the failure mode #524
-(`hydra.lib.hashing`) hit empirically: missing a registration point compiles cleanly and fails
+(`hydra.core.lib.hashing`) hit empirically: missing a registration point compiles cleanly and fails
 only in that host's own test suite.
 
-There is no single registry enumerating "every `hydra.lib.<sub>` module every host must
+There is no single registry enumerating "every `hydra.core.lib.<sub>` module every host must
 register" (tracked as promotion work in #533). Until that exists, treat the following as the
 authoritative checklist — one entry per host or driver location that hardcodes the current set
 of module names:
@@ -802,7 +802,7 @@ of module names:
 - [ ] **Scala**: the equivalent dispatch entry in `overlay/scala/hydra-kernel/.../Libraries.scala`
 - [ ] **TypeScript**: the equivalent dispatch entry in `overlay/typescript/hydra-kernel/.../lib/libraries.ts`
 - [ ] **Clojure**: a `register-<sub>` function (or equivalent) in
-  `overlay/clojure/hydra-kernel/.../hydra/overlay/clojure/libraries.clj`. No hardcoded file-load
+  `overlay/clojure/hydra-kernel/.../hydra/core/overlay/clojure/libraries.clj`. No hardcoded file-load
   list to update — Clojure uses `:require`.
 - [ ] **Scheme**: the equivalent in `overlay/scheme/hydra-kernel/.../hydra/overlay/scheme/libraries.scm`
   (and `.sld`). No hardcoded file-load list to update — Scheme uses R7RS `import`.
@@ -847,14 +847,14 @@ constant to update. Two things deserve special care.
 another (e.g. the #401 replacement of the value-first `optionals.maybe` eliminator with
 the scrutinee-first `optionals.cases`) means rewriting every reference, including ones that
 do not match a simple text search: DSL call sites (`Optionals.maybe`), name-binding
-references (`_optionals_maybe`), hardcoded `Name "hydra.lib.optionals.maybe"` literals in
+references (`_optionals_maybe`), hardcoded `Name "hydra.core.lib.optionals.maybe"` literals in
 phantom helpers, and the per-host runtime registries (Java `Libraries.java`, Python
-`hydra.sources.libraries`, the four Lisp `lib/libraries.*`, the TypeScript
+`hydra.core.overlay.python.sources.libraries`, the four Lisp `lib/libraries.*`, the TypeScript
 `lib/libraries.ts`, and the per-host test runners). When the replacement has a
 different argument order, each call site must be reordered, not just renamed.
 
 **Manually invalidate the synthesis cache.** This is the non-obvious step. The
-synthesized decode/encode JSON modules (`dist/json/<pkg>/.../hydra/decode/*.json`)
+synthesized decode/encode JSON modules (`dist/json/<pkg>/.../hydra/<prefix>/decode/*.json`)
 embed the *names* of the primitives their generated terms reference. Their freshness
 check keys on the source module's *type shape*, not on the emitted content — so a
 primitive rename, which leaves the type shape unchanged, is **not** detected, and the
@@ -868,7 +868,7 @@ regeneration:
 
 ```bash
 # 1. Delete the stale synthesized decode/encode JSON artifacts:
-grep -rl "hydra.lib.<old.prim.name>" dist/json/*/src/main/json/hydra/{decode,encode} | xargs rm -f
+grep -rl "hydra.core.lib.<old.prim.name>" dist/json/*/src/main/json/hydra/*/{decode,encode} | xargs rm -f
 # 2. Clear the Phase-1 / bootstrap-from-json caches:
 rm -f heads/haskell/.stack-work/{phase1-input-cache,bootstrap-from-json-cache}.txt
 # 3. Re-export, including the cold-start java/python coder JSON (which also caches):
@@ -899,7 +899,7 @@ for the matching "untyped bindings" / stale-JSON failure mode see
    `logic.ifElse`), use `define` (no default) rather than `defineWithDefault`.
 
 5. **Type-variable naming.** The canonical type-variable names come from
-   `Hydra.Overlay.Haskell.Libraries` (`_x`, `_xOrd`, `_xEq`, etc., resolving to `TypeVar`
+   `Hydra.Core.Overlay.Haskell.Libraries` (`_x`, `_xOrd`, `_xEq`, etc., resolving to `TypeVar`
    values). Use the same names in your `TermSignature` to keep host signatures
    in sync.
 
@@ -926,14 +926,14 @@ for the matching "untyped bindings" / stale-JSON failure mode see
    The symptom of getting this wrong is not a compile error but a silently empty
    or wrong result at runtime (e.g. a file write that produces no bytes). Confirm
    the representation by reading a generated test that passes a `binary` literal,
-   or that host's `hydra.lib.literals` runtime (`binaryToBytes`/`base64ToBinary`).
+   or that host's `hydra.core.lib.literals` runtime (`binaryToBytes`/`base64ToBinary`).
    The registered *type scheme* still uses the abstract kernel `binary` type; only
    the native impl's parameter/return type changes.
 
 ## Adding a new type constructor (kernel core extension)
 
 Most primitive work reuses existing types. Adding a *new* type constructor to
-`hydra.core.Type` (as `effect<t>` was added for `hydra.lib.effects`/`hydra.lib.files`)
+`hydra.core.model.Type` (as `effect<t>` was added for `hydra.core.lib.effects`/`hydra.core.lib.files`)
 is a heavier, cross-cutting change with steps the per-primitive recipe does not cover:
 
 - **Bootstrap the core type.** Extending `Type` is circular (the kernel describes
@@ -967,8 +967,8 @@ implementation notes:
 - **In native impls**, the function argument arrives as a Hydra `Term`. To
   apply it, the host uses its term-reduction machinery (Haskell:
   `Reduction.reduceTerm`; Java: `Reduction.reduceTerm()`). See
-  `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/Lists.hs` for the Haskell pattern
-  and `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/lists/Foldr.java` for the Java
+  `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib/Lists.hs` for the Haskell pattern
+  and `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/lists/Foldr.java` for the Java
   pattern.
 
 - **In default implementations**, the function argument is just a TypedTerm —
@@ -984,13 +984,13 @@ implementation notes:
 
 ## Example: studying an existing migration
 
-The `hydra.lib.optionals` module name is a good case study: 12 primitives, most of
+The `hydra.core.lib.optionals` module name is a good case study: 12 primitives, most of
 which have default implementations in terms of `cases`. See:
 
 - Metadata: [Hydra/Sources/Kernel/Lib/Optionals.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Optionals.hs)
-- Haskell native impl: [Hydra/Overlay/Haskell/Lib/Optionals.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/Optionals.hs)
-- Haskell phantom-typed DSL infrastructure: [Hydra/Overlay/Haskell/Dsl/Typed/](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed)
-- Java native impls: [hydra/overlay/java/lib/optionals/](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/optionals)
+- Haskell native impl: [Hydra/Core/Overlay/Haskell/Lib/Optionals.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib/Optionals.hs)
+- Haskell phantom-typed DSL infrastructure: [Hydra/Core/Overlay/Haskell/Dsl/](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl)
+- Java native impls: [hydra/core/overlay/java/lib/optionals/](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/optionals)
 
 ## Further reading
 

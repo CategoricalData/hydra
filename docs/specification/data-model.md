@@ -2,7 +2,7 @@
      Written as a dense collection of falsifiable requirements about the core data model: each should
      be something a conforming implementation can be tested against and fail. Pure exposition is left
      to the informative wiki Concepts page and cross-linked, not repeated. The exhaustive per-variant
-     catalogs of hydra.core / hydra.graph are GENERATED module pages (#723) this chapter closes over.
+     catalogs of hydra.core.model / hydra.core.graph are GENERATED module pages (#723) this chapter closes over.
      Formalism: paper #197; inference realignment #377. Requirement names + wording need human review. -->
 
 # The data model
@@ -19,8 +19,8 @@ type constructs, their well-formedness conditions, and the graph view of a term.
 surface for the *core representation* — the requirements a conforming implementation is measured
 against. For an informative, first-principles introduction to the same model, see the
 [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) wiki page; this chapter does not
-repeat that exposition. An exhaustive per-variant reference generated from `hydra.core` and
-`hydra.graph` is planned (#723) but does not yet exist; this chapter closes over their variant sets
+repeat that exposition. An exhaustive per-variant reference generated from `hydra.core.model` and
+`hydra.core.graph` is planned (#723) but does not yet exist; this chapter closes over their variant sets
 in the meantime.
 
 **Provisions.** Non-derivable conditions — behavioral or semantic claims that cannot simply be read off
@@ -33,8 +33,8 @@ without a provision name.
 
 ## 1. Terms and types
 
-Hydra's core model is two constructs defined in `hydra.core`, the **term** (`hydra.core.Term`) and the
-**type** (`hydra.core.Type`).
+Hydra's core model is two constructs defined in `hydra.core.model`, the **term** (`hydra.core.model.Term`) and the
+**type** (`hydra.core.model.Type`).
 
 - The `Term` union is **closed**: its variants are exactly those enumerated in §§4–10 (`variable`,
   `lambda`, `application`, `let`, `typeLambda`, `typeApplication`, `literal`, `list`, `set`, `map`,
@@ -59,18 +59,18 @@ implementation that cannot encode its own types and terms as terms does not conf
 
 ## 2. Names
 
-A **name** (`hydra.core.Name`) is a dot-separated qualified identifier. Its namespace is every segment
+A **name** (`hydra.core.model.Name`) is a dot-separated qualified identifier. Its namespace is every segment
 but the last; the final segment is the local name. A name resolves to at most one definition in a
 graph. The lexical grammar of names is in [syntax.md](syntax.md); the packaging rules that constrain
 them (uniqueness, the module-prefix rule, resolution) are in [validation.md](validation.md). A
 `variable` term (§4) and a nominal term's type name (§8) are both names resolved against the graph;
 an unresolved name is non-conforming.
 
-## 3. Graphs: `hydra.core` in combination with `hydra.graph`
+## 3. Graphs: `hydra.core.model` in combination with `hydra.core.graph`
 
-A **graph** (`hydra.graph.Graph`) is the environment in which terms are given meaning. It records:
+A **graph** (`hydra.core.graph.Graph`) is the environment in which terms are given meaning. It records:
 `boundTerms` (the named term definitions — the elements), `boundTypes` / `schemaTypes` (named type
-definitions and the schema), `primitives` (built-in functions, `hydra.graph.Primitive`),
+definitions and the schema), `primitives` (built-in functions, `hydra.core.graph.Primitive`),
 `typeVariables` / `lambdaVariables` / `classConstraints` (the typing environment in scope), and
 `metadata`. Every free `variable` in a bound term resolves to another `boundTerm`, a `lambdaVariable`,
 or a `primitive`; a graph with a dangling reference is non-conforming.
@@ -106,8 +106,8 @@ These term variants form the calculus:
 
 ## 5. Literals
 
-A `literal` term carries a value of one of the primitive types (`hydra.core.Literal` /
-`hydra.core.LiteralType`): `boolean`, `string`, `binary`, and the numeric families. The numeric types
+A `literal` term carries a value of one of the primitive types (`hydra.core.model.Literal` /
+`hydra.core.model.LiteralType`): `boolean`, `string`, `binary`, and the numeric families. The numeric types
 are exactly: the integer types (`int8`, `int16`, `int32`, `int64`, `uint8`, `uint16`, `uint32`,
 `uint64`, `bigint`), the floating-point types (`float32`, `float64`), and arbitrary-scale
 `decimal`. A literal's value MUST inhabit its stated literal type (e.g. an `int8` literal outside
@@ -202,7 +202,7 @@ which permits annotations to be absent.
 
 ## 10. Annotations
 
-An `annotated` term or type (`hydra.core.AnnotatedTerm`) pairs a value with a metadata map from names
+An `annotated` term or type (`hydra.core.model.AnnotatedTerm`) pairs a value with a metadata map from names
 to terms. The falsifiable content:
 
 - **[HYDRA-DM-ANNOTATION-TRANSPARENT]** Annotations are transparent to meaning: a value and its annotated
@@ -224,6 +224,6 @@ to terms. The falsifiable content:
 - [Validation](validation.md) — the conformance relation and the packaging rules (the well-formedness
   claims above are enforced there).
 - [JSON format](json-format.md), [Serialization](serialization.md) — the wire representation.
-- Generated `hydra.core` / `hydra.graph` module pages — the exhaustive per-variant catalog
+- Generated `hydra.core.model` / `hydra.core.graph` module pages — the exhaustive per-variant catalog
   — *(planned; #723)*.
 - Type inference and elaboration, reduction semantics — *(planned; consume #377's rules)*.

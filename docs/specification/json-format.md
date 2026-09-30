@@ -254,12 +254,12 @@ to a base type; the compact form applies iff that base type is `string`.
 - `string` itself → compact.
 - An alias to string, e.g. `EmailAddress = string` → compact (dereference the alias).
 - `Type.wrap` of string, transitively — e.g. `wrap(string)`, `wrap(wrap(string))`, or
-  `wrap(alias-to-string)` (real kernel examples: `hydra.core.Name`, `hydra.ast.Symbol`,
-  `hydra.coders.LanguageName`, all `wrap(string)`) → compact.
+  `wrap(alias-to-string)` (real kernel examples: `hydra.core.model.Name`, `hydra.core.ast.Symbol`,
+  `hydra.core.coders.LanguageName`, all `wrap(string)`) → compact.
 - Anything else (a record — even a single-field record, a union, a list, another map, an
   optional, etc.) → entry array, unchanged.
 
-Example — given a map type with a `hydra.core.Name`-typed key (`wrap(string)`) and int values:
+Example — given a map type with a `hydra.core.model.Name`-typed key (`wrap(string)`) and int values:
 
 - `{Name "java": 1, Name "python": 2}` → `{"java": 1, "python": 2}` (compact form;
   previously `[{"key": "java", "value": 1}, {"key": "python", "value": 2}]`)
@@ -333,7 +333,7 @@ language-specific `annots` / `annotated` DSL functions) so the encoded
 key shape is `{"variable": "k1"}` consistently across hosts.
 Consumers should call `getAnnotationMap` to project back to
 `Map Name Term`; that function also accepts the transitional
-`{"wrap": {"typeName": "hydra.core.Name", "body": …}}` key shape so
+`{"wrap": {"typeName": "hydra.core.model.Name", "body": …}}` key shape so
 older fixtures continue to load.
 
 ## Literals
@@ -596,7 +596,7 @@ Example (`mainModules` abbreviated):
 ```json
 {
   "dslModules": [],
-  "mainModules": ["hydra.owl.syntax", "hydra.rdf.serde", "hydra.rdf.syntax"],
+  "mainModules": ["hydra.rdf.owl.syntax", "hydra.rdf.serde", "hydra.rdf.syntax"],
   "manifestFormatVersion": 1,
   "moduleFormatVersion": 1,
   "package": "hydra-rdf",

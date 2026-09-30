@@ -107,8 +107,8 @@ All generated output lives under `dist/<lang>/` in 0.15:
 | Implementation | Path | Granularity |
 |---------------|------|-------------|
 | Haskell | `dist/haskell/hydra-kernel/src/main/haskell/` | One `.hs` per module |
-| Haskell (decode/encode) | `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/`, `Hydra/Encode/` | One `.hs` per type module |
-| Haskell (DSL) | `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/` | One `.hs` per type module |
+| Haskell (decode/encode) | `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Decode/`, `Hydra/Core/Encode/` | One `.hs` per type module |
+| Haskell (DSL) | `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Dsl/` | One `.hs` per type module |
 | Haskell (ext coders) | `dist/haskell/hydra-ext/src/main/haskell/` | One `.hs` per coder module |
 | JSON | `dist/json/hydra-kernel/src/main/json/` | One `.json` per module |
 | Java | `dist/java/hydra-kernel/src/main/java/` | **One `.java` per type** |
@@ -167,10 +167,10 @@ Cross-reference against the module registries (Step 1) before deleting.
 
 **Java** — check for orphaned type files within valid packages:
 ```bash
-# For a specific package (e.g., hydra/testing/), compare Java files
+# For a specific package (e.g., hydra/core/testing/), compare Java files
 # against the types defined in the corresponding generated Haskell module
-diff <(ls dist/java/hydra-kernel/src/main/java/hydra/testing/ | sed 's/.java//' | sort) \
-     <(grep '^data ' dist/haskell/hydra-kernel/src/main/haskell/Hydra/Testing.hs | awk '{print $2}' | sort)
+diff <(ls dist/java/hydra-kernel/src/main/java/hydra/core/testing/ | sed 's/.java//' | sort) \
+     <(grep '^data ' dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Testing.hs | awk '{print $2}' | sort)
 ```
 
 For Java, also check `Decode/`, `Encode/`, and `Dsl/` subdirectories —
@@ -536,33 +536,29 @@ that path before introducing a patch.
 
 ### Hand-written files under `dist/`
 
-The hard rule is "no hand-written files under `dist/`." One bridge file
-remains:
+The hard rule is "no hand-written files under `dist/`." The hand-written `test_env` runtime is the
+main case where a test needs a file "right there" in `dist/`; it is authored outside `dist/` and copied in.
 
-- `dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs` —
+- Haskell: `overlay/haskell/hydra-kernel/src/test/haskell/Hydra/Core/Test/TestEnv.hs` —
   the Haskell-level runtime counterpart of the DSL stub
-  `Hydra.Sources.Test.TestEnv`. The kernel filters `hydra.test.testEnv`
+  `Hydra.Sources.Test.TestEnv`. The kernel filters `hydra.core.test.testEnv`
   from emitted output (via `testSkipEmitModuleNames` in
-  `Hydra.Sources.Test.All`), so this file is left alone by regeneration.
-  Tolerated for now because the Haskell test build's source set spans
-  `dist/haskell/.../src/test/haskell/`, and moving the file to `heads/`
-  would require restructuring the Haskell test build's source layout.
+  `Hydra.Sources.Test.All`), so the overlaid copy is left alone by regeneration.
 
-For every other target, the hand-written `test_env` runtime lives in
-`heads/<target>/src/test/...` and is copied into `dist/` at assemble time
-by the per-target `assemble-distribution.sh`. The pattern, target by target:
+For every other target, the hand-written `test_env` runtime lives in the overlay tree (Java: in
+`heads/`) and is copied into `dist/` at assemble time. The pattern, target by target:
 
-- Java: `heads/java/src/test/java/hydra/test/TestEnv.java`
-- Python: `heads/python/src/test/python/hydra/test/test_env.py`
-- Scala: `heads/scala/src/test/scala/hydra/test/testEnv.scala`
-- TypeScript: `heads/typescript/src/test/typescript/hydra/test/testEnv.ts`
-- Clojure: `heads/lisp/clojure/src/test/clojure/hydra/test/testEnv.clj`
-- Common Lisp: `heads/lisp/common-lisp/src/test/common-lisp/hydra/test/test_env.lisp`
-- Emacs Lisp: `heads/lisp/emacs-lisp/src/test/emacs-lisp/hydra/test/test_env.el`
-- Scheme: `heads/lisp/scheme/src/test/scheme/hydra/test/test_env.scm`
+- Java: `heads/java/src/test/java/hydra/test/TestEnv.java` (package `hydra.core.test`)
+- Python: `overlay/python/hydra-kernel/src/test/python/hydra/core/overlay/python/test_env.py`
+- Scala: `overlay/scala/hydra-kernel/src/test/scala/hydra/core/test/testEnv.scala`
+- TypeScript: `overlay/typescript/hydra-kernel/src/test/typescript/hydra/core/test/testEnv.ts`
+- Clojure: `overlay/clojure/hydra-kernel/src/test/clojure/hydra/core/overlay/clojure/test/testEnv.clj`
+- Common Lisp: `overlay/common-lisp/hydra-kernel/src/main/common-lisp/hydra/core/overlay/common_lisp/test/test_env.lisp`
+- Emacs Lisp: `overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/core/overlay/emacs_lisp/test/test_env.el`
+- Scheme: `overlay/scheme/hydra-kernel/src/test/scheme/hydra/core/test/test_env.scm`
 
-Each provides `hydra_test_test_env_test_context` (an `InferenceContext` value) and
-`hydra_test_test_env_test_graph` (a function `Map Name Type → Map Name Term → Graph`),
+Each provides `hydra_core_test_test_env_test_context` (an `InferenceContext` value) and
+`hydra_core_test_test_env_test_graph` (a function `Map Name Type → Map Name Term → Graph`),
 matching the DSL signature in `Hydra.Sources.Test.TestEnv`. Scala and the
 four Lisp dialects (Clojure, Common Lisp, Emacs Lisp, Scheme) curry the
 function as `((f types) terms)` to match their coders' multi-arg emission;
@@ -594,7 +590,7 @@ This applies to:
 - Per-language coder Source modules (`packages/hydra-haskell/`, `packages/hydra-java/`, `packages/hydra-python/`, `packages/hydra-scala/`, `packages/hydra-lisp/`, `packages/hydra-ext/`, `packages/hydra-pg/`, `packages/hydra-rdf/`, `packages/hydra-coq/`, `packages/hydra-typescript/`, `packages/hydra-bench/`)
 - Hand-written runtime modules (`heads/haskell/src/main/haskell/Hydra/`),
   including the hand-written DSL helper libraries under
-  `heads/haskell/src/main/haskell/Hydra/Dsl/` and its `Meta/`, `Meta/Lib/`,
+  `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/` and its `Meta/`
   and `Deep/Lib/` subdirectories. These are pure Haskell modules without a
   `definitions` list, but each module's top-level binding *bodies* must
   still appear in alphabetical order within their respective sections.
@@ -632,8 +628,8 @@ sections separated by comment dividers (e.g. `-- Unary functions`,
 Each section is alphabetized internally; bindings do not move across
 section boundaries. Section ordering itself is by convention.
 
-**Generator-derived modules are exempt.** The `hydra.dsl.*`, `hydra.encode.*`,
-and `hydra.decode.*` module families are produced by `dslModule`,
+**Generator-derived modules are exempt.** The derived `dsl`, `encode`,
+and `decode` module families (e.g. `hydra.core.dsl.*`, `hydra.core.encode.*`, `hydra.core.decode.*`) are produced by `dslModule`,
 `encodeModule`, and `decodeModule` from the corresponding type modules. Their
 `definitions` lists are deliberately grouped by source type (e.g., for each
 record: constructor, then field accessors, then with-updaters), which is more
@@ -660,7 +656,7 @@ appear in the same order as their entries in the `definitions` list.
 
 **Fixing violations:** reorder both the `definitions` list entry *and* the corresponding
 definition body together — they must stay in sync. When the module has no
-`definitions` list (e.g. hand-written DSL helpers under `Hydra/Dsl/`), only
+`definitions` list (e.g. hand-written DSL helpers under `Hydra/Core/Overlay/Haskell/Dsl/`), only
 the body order applies. Reordering pure Haskell bindings has no semantic
 effect — Haskell does not depend on top-level declaration order.
 
@@ -732,24 +728,24 @@ implementation — and around the native implementations themselves:
 
 ### Canonical registries (single source of truth)
 
-Each `hydra.lib.<sub>` module has a registry under
+Each `hydra.core.lib.<sub>` module has a registry under
 `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/`:
 
 | Namespace | Registry |
 |-----------|----------|
-| `hydra.lib.chars`     | `Hydra/Sources/Kernel/Lib/Chars.hs`     |
-| `hydra.lib.eithers`   | `Hydra/Sources/Kernel/Lib/Eithers.hs`   |
-| `hydra.lib.equality`  | `Hydra/Sources/Kernel/Lib/Equality.hs`  |
-| `hydra.lib.lists`     | `Hydra/Sources/Kernel/Lib/Lists.hs`     |
-| `hydra.lib.literals`  | `Hydra/Sources/Kernel/Lib/Literals.hs`  |
-| `hydra.lib.logic`     | `Hydra/Sources/Kernel/Lib/Logic.hs`     |
-| `hydra.lib.maps`      | `Hydra/Sources/Kernel/Lib/Maps.hs`      |
-| `hydra.lib.math`      | `Hydra/Sources/Kernel/Lib/Math.hs`      |
-| `hydra.lib.optionals` | `Hydra/Sources/Kernel/Lib/Optionals.hs` |
-| `hydra.lib.pairs`     | `Hydra/Sources/Kernel/Lib/Pairs.hs`     |
-| `hydra.lib.regex`     | `Hydra/Sources/Kernel/Lib/Regex.hs`     |
-| `hydra.lib.sets`      | `Hydra/Sources/Kernel/Lib/Sets.hs`      |
-| `hydra.lib.strings`   | `Hydra/Sources/Kernel/Lib/Strings.hs`   |
+| `hydra.core.lib.chars`     | `Hydra/Sources/Kernel/Lib/Chars.hs`      |
+| `hydra.core.lib.eithers`   | `Hydra/Sources/Kernel/Lib/Eithers.hs`    |
+| `hydra.core.lib.equality`  | `Hydra/Sources/Kernel/Lib/Equality.hs`   |
+| `hydra.core.lib.lists`     | `Hydra/Sources/Kernel/Lib/Lists.hs`      |
+| `hydra.core.lib.literals`  | `Hydra/Sources/Kernel/Lib/Literals.hs`   |
+| `hydra.core.lib.logic`     | `Hydra/Sources/Kernel/Lib/Logic.hs`      |
+| `hydra.core.lib.maps`      | `Hydra/Sources/Kernel/Lib/Maps.hs`       |
+| `hydra.core.lib.math`      | `Hydra/Sources/Kernel/Lib/Math.hs`       |
+| `hydra.core.lib.optionals` | `Hydra/Sources/Kernel/Lib/Optionals.hs`  |
+| `hydra.core.lib.pairs`     | `Hydra/Sources/Kernel/Lib/Pairs.hs`      |
+| `hydra.core.lib.regex`     | `Hydra/Sources/Kernel/Lib/Regex.hs`      |
+| `hydra.core.lib.sets`      | `Hydra/Sources/Kernel/Lib/Sets.hs`       |
+| `hydra.core.lib.strings`   | `Hydra/Sources/Kernel/Lib/Strings.hs`    |
 
 Each registry calls `primDef` or `primNoDef` to declare a `PrimitiveDefinition`:
 local name, description, `TermSignature`, optional comments, and either a default
@@ -762,15 +758,15 @@ Each host pairs canonical primitive names with native implementations in a regis
 
 | Host | Binding registry |
 |------|------------------|
-| Haskell    | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs` |
-| Java       | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/Libraries.java` |
-| Python     | `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/sources/libraries.py` |
-| Scala      | `overlay/scala/hydra-kernel/src/main/scala/hydra/overlay/scala/Libraries.scala` |
-| TypeScript | `overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib/libraries.ts` |
-| Clojure    | `overlay/clojure/hydra-kernel/src/main/clojure/hydra/overlay/clojure/libraries.clj` |
+| Haskell    | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Libraries.hs` |
+| Java       | `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/Libraries.java` |
+| Python     | `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/sources/libraries.py` |
+| Scala      | `overlay/scala/hydra-kernel/src/main/scala/hydra/core/overlay/scala/Libraries.scala` |
+| TypeScript | `overlay/typescript/hydra-kernel/src/main/typescript/hydra/core/overlay/typescript/lib/libraries.ts` |
+| Clojure    | `overlay/clojure/hydra-kernel/src/main/clojure/hydra/core/overlay/clojure/libraries.clj` |
 
 These registries call host-side helpers (`prim0`/`prim1`/`prim2` in Haskell's
-`Hydra.Overlay.Haskell.Dsl.Prims`, equivalents in each other host) to pair a name with a native
+`Hydra.Core.Overlay.Haskell.Dsl.Prims`, equivalents in each other host) to pair a name with a native
 function. The host helper re-derives a `PrimitiveDefinition` from the host-side
 argument types via `defaultPrimitiveDefinition`; the canonical kernel-side
 registry is the authority, and the host re-derivation must agree. On the Haskell
@@ -789,7 +785,7 @@ The set of canonical primitive names must be matched by each host's binding regi
      packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/*.hs \
      | grep -oE '"[a-zA-Z]+"' | sort -u
    ```
-   (Combined with the namespace from each file's `ns = ModuleName "hydra.lib.<sub>"`
+   (Combined with the namespace from each file's `ns = ModuleName "hydra.core.lib.<sub>"`
    to recover fully qualified names.)
 
 2. **Compare against each host's binding registry.**
@@ -1016,16 +1012,14 @@ content). Directories that are *entirely hand-written* runtime trees, copied int
 `copy-kernel-runtime.sh`, do not need (and should not have) the stub. The
 following intentionally lack `extend_path`:
 
-- `hydra/overlay/python/lib/__init__.py` — docstring-only marker for the hand-written
+- `hydra/core/overlay/python/lib/__init__.py` — docstring-only marker for the hand-written
   primitive-implementation tree.
-- `hydra/overlay/python/dsl/meta/__init__.py` — empty marker for the hand-written meta-DSL.
-- `hydra/overlay/python/dsl/meta/lib/__init__.py` — empty marker for the hand-written meta-DSL
-  library helpers.
-- `hydra/overlay/python/util/__init__.py` — explicit re-exports for the persistent-collection
+- `hydra/core/overlay/python/dsl/meta/__init__.py` — empty marker for the hand-written meta-DSL.
+- `hydra/core/overlay/python/util/__init__.py` — explicit re-exports for the persistent-collection
   types (`ConsList`, `Lazy`, `PersistentMap`, `PersistentSet`).
 
-(These moved under the `hydra.overlay.python.*` namespace in #501; earlier they were
-`hydra/lib`, `hydra/dsl/meta`, `hydra/python/util`.) The check above flags these by
+(These moved under the `hydra.overlay.python.*` namespace in #501, now `hydra.core.overlay.python.*`
+(#729); earlier they were `hydra/lib`, `hydra/dsl/meta`, `hydra/python/util`.) The check above flags these by
 design; they are not stale.
 
 ---
@@ -1242,7 +1236,8 @@ To run all checks in sequence (invoked via `/maintenance` in CLAUDE.md):
    specifically, outside the full sync.
    The validator must be invoked only on the hand-written Source modules
    (`Sources.kernelModules`); do not pass in generator-derived modules
-   (`hydra.dsl.*`, `hydra.encode.*`, `hydra.decode.*`) — those use a
+   (`hydra.core.dsl.*`, `hydra.core.encode.*`, `hydra.core.decode.*`, and their per-package
+   counterparts) — those use a
    semantic grouping in their definitions list and would always fail the
    ordering check.
 
@@ -1253,7 +1248,7 @@ To run all checks in sequence (invoked via `/maintenance` in CLAUDE.md):
    -- /tmp/run-kernel-validate.hs
    import Hydra.Kernel
    import Hydra.Sources.All (kernelModules)
-   import qualified Hydra.Validate.Packaging as VP
+   import qualified Hydra.Core.Validate.Packaging as VP
 
    main :: IO ()
    main = do

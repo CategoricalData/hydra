@@ -18,12 +18,12 @@ The key words MUST, MUST NOT, SHOULD, and MAY are to be interpreted as described
 
 This specification defines:
 
-- the core data model (`hydra.core`): the complete grammar of Hydra terms and types;
+- the core data model (`hydra.core.model`): the complete grammar of Hydra terms and types;
 - the textual syntax for terms, types, and their dependencies;
 - the constraint classes and the canonical equality and ordering of values;
 - the type system: inference, elaboration, checking, and unification;
 - validation: the well-formedness constraints on terms, types, modules, and packages;
-- the standard primitive library (`hydra.lib.*`);
+- the standard primitive library (`hydra.core.lib.*`);
 - the JSON interchange format.
 
 It does not define: the host-language authoring DSLs, the build and code-generation
@@ -36,7 +36,7 @@ counterpart, and the two cite each other.
 
 - **Notation**: terms and types appear in the Hydra textual syntax ([syntax.md](syntax.md)).
   Inference rules use the judgment forms defined in the type-system chapter.
-- **Names**: fully qualified, dotted (`hydra.core.Term`).
+- **Names**: fully qualified, dotted (`hydra.core.model.Term`).
 - **Generated and hand-written pages**: catalog pages (per-module reference
   documentation, including the primitive catalog) are generated from the package's
   post-inference module content; chapters like this one are hand-written and
@@ -45,13 +45,13 @@ counterpart, and the two cite each other.
 ### Verb categories
 
 A type `T` with a canonical textual form has `print<T> : T → string` (total — printing does
-not fail) and `parse<T> : string → <result>` in the `hydra.print.*` / `hydra.parse.*`
+not fail) and `parse<T> : string → <result>` in the `hydra.core.print.*` / `hydra.core.parse.*`
 namespaces. The pair satisfies the round-trip law `parse (print x) = x`, verified by tests.
 `<result>` is `optional<T>` for scalar literals (a value either is or is not a well-formed
 literal; there is nothing more to report on failure); structured textual syntax (the eventual
 `printable` type class, and the general parser of #497) uses `either<ParseError, T>` to report
 where and why parsing failed. Helper parsers that do not follow this shape (parser
-combinators, doc-string parsers, and other bespoke `hydra.parse.*` modules) are documented as
+combinators, doc-string parsers, and other bespoke `hydra.core.parse.*` modules) are documented as
 such in their own module description and are exempt from the convention.
 
 ### Provisions
@@ -66,16 +66,16 @@ implementation is measured against. Provisions come in two **kinds**:
 (The word *rule* is not used for these; it is reserved for *inference rules* and *validation rules*,
 which are distinct, narrower concepts.)
 
-Every provision has a **name**, which is an ordinary Hydra name (`hydra.core.Name`): the name of the
+Every provision has a **name**, which is an ordinary Hydra name (`hydra.core.model.Name`): the name of the
 definition it concerns, extended by one further segment for the provision. So a provision `emptyLists`
-concerning `hydra.lib.lists.concat` has the name `hydra.lib.lists.concat.emptyLists`. This mirrors how
+concerning `hydra.core.lib.lists.concat` has the name `hydra.core.lib.lists.concat.emptyLists`. This mirrors how
 a definition's name extends its enclosing module's name — the containment hierarchy is
 module ⊃ definition ⊃ provision, each named by extending its container. A provision authored directly
 in a specification chapter, rather than concerning a definition, is named under the chapter's namespace
 by the same convention.
 
-Provision names are written in prose in **UPPER-DASHED** form: `hydra.lib.lists.concat.emptyLists` is
-written **HYDRA-LIB-LISTS-CONCAT-EMPTY-LISTS**, shown in bold at the head of the provision. This is a
+Provision names are written in prose in **UPPER-DASHED** form: `hydra.core.lib.lists.concat.emptyLists` is
+written **HYDRA-CORE-LIB-LISTS-CONCAT-EMPTY-LISTS**, shown in bold at the head of the provision. This is a
 rendering of the canonical Hydra name, not a separate identifier — the name-part dots become dashes and
 each part is upper-cased (a compound part like `emptyLists` renders `EMPTY-LISTS`). The leading segment
 (`HYDRA`) is the issuing authority, taken from the module name; a definition in an external module
@@ -95,7 +95,7 @@ union) are stated in the specification without a provision name — naming them 
 ## 3. Conformance
 
 **A conforming Hydra implementation passes the hydra-kernel test suite**
-(`hydra.test.testSuite`) — the translingual test suite that accompanies Hydra's kernel.
+(`hydra.core.test.testSuite`) — the translingual test suite that accompanies Hydra's kernel.
 Other packages carry their own test suites; hydra-kernel is the definitive package for a
 Hydra implementation, and its suite is the conformance criterion.
 The suite exercises primitive semantics, formatting and serialization (including the
@@ -159,7 +159,7 @@ round-trippable printing, totalized partiality, and functorial-last parameter or
 Part I — The language:
 
 - [The core data model](data-model.md) — terms, types, names, graphs, and the construct families; the
-  conformance surface for the core representation *(early draft)*. The exhaustive per-`hydra.core`-type
+  conformance surface for the core representation *(early draft)*. The exhaustive per-`hydra.core.model`-type
   catalog is the generated module page (#723).
 - [Textual syntax](syntax.md) — the notation for terms, types, and their dependencies
 - [Constraint classes](classes.md) — the five classes and their semantics

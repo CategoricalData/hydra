@@ -48,7 +48,7 @@ Each category has a canonical comment tag placed above its import block.
 ## Naming conventions for aliases
 
 - **Trailing PascalCase.** A Hydra-module alias is the trailing component of the dotted
-  module path, in PascalCase. `Hydra.Dsl.Lib.Lists` is `Lists`,
+  module path, in PascalCase. `Hydra.Core.Dsl.Lib.Lists` is `Lists`,
   `Hydra.Sources.Kernel.Terms.Lexical` is `Lexical`. The full kernel-types aggregator
   `Hydra.Sources.Kernel.Types.All` is `KernelTypes` (a deliberate two-word exception
   because `All` would be uninformative).
@@ -62,16 +62,16 @@ Each category has a canonical comment tag placed above its import block.
   `Data.Set` is `S`, `Data.Maybe` is `Y`, `Data.Int` is `I`, `Data.ByteString` is `B`,
   `Data.ByteString.Char8` is `BC`, `Data.Scientific` is `Sci`.
 - **`T` is overloaded by category** — see the per-category blocks below. In categories
-  1–5 (term-/type-level production), `T = Hydra.Overlay.Haskell.Dsl.Types`. In categories 6–8 (tests
-  and fixtures), `T = Hydra.Overlay.Haskell.Dsl.Typed.Types`. The full alias
-  `MetaTypes = Hydra.Overlay.Haskell.Dsl.Typed.Types` is used when both are needed in the same file.
+  1–5 (term-/type-level production), `T = Hydra.Core.Overlay.Haskell.Dsl.Types`. In categories 6–8 (tests
+  and fixtures), `T = Hydra.Core.Overlay.Haskell.Dsl.Meta.Types`. The full alias
+  `MetaTypes = Hydra.Core.Overlay.Haskell.Dsl.Meta.Types` is used when both are needed in the same file.
 
 ## `reify` and `reify2`
 
 A common operation in categories 3, 4, 5, 6, 7 is to convert a Haskell-level
 meta-function `TypedTerm a -> TypedTerm b` into a first-class term-level function
 `TypedTerm (a -> b)`. Use `reify` (unary) and `reify2` (binary), exported from
-`Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`:
+`Hydra.Core.Overlay.Haskell.Dsl.Phantoms`:
 
 ```haskell
 PrintCore.list_ @@ reify Literals.printInt32 @@ xs
@@ -90,14 +90,14 @@ binPrim = reify2 (\x y -> Maths.add x (Maths.mul x y))
 
 **Centrally important (unqualified)**:
 - `Hydra.Kernel`
-- `Hydra.Overlay.Haskell.Dsl.Annotations` (for `doc`)
-- `Hydra.Overlay.Haskell.Bootstrap`
-- `Hydra.Overlay.Haskell.Dsl.Types` operators only — `(>:)`, `(@@)`, `(~>)` and helpers like
+- `Hydra.Core.Overlay.Haskell.Dsl.Annotations` (for `doc`)
+- `Hydra.Core.Overlay.Haskell.Bootstrap`
+- `Hydra.Core.Overlay.Haskell.Dsl.Types` operators only — `(>:)`, `(@@)`, `(~>)` and helpers like
   `record`, `union`, `enum`
 - `Hydra.Sources.Kernel.Types.All`
 
 **Qualified**:
-- `T = Hydra.Overlay.Haskell.Dsl.Types`
+- `T = Hydra.Core.Overlay.Haskell.Dsl.Types`
 - `M = Data.Map`, `L = Data.List`, `S = Data.Set`, `Y = Data.Maybe`
 
 ```haskell
@@ -105,10 +105,10 @@ module Hydra.Sources.Kernel.Types.<X> where
 
 -- Standard imports for kernel type modules
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import           Hydra.Sources.Kernel.Types.All
 
 import qualified Data.List as L
@@ -137,10 +137,10 @@ module Hydra.Sources.<Lang>.<X> where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Overlay.Haskell.Dsl.Types                 as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.All  as KernelTypes
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
@@ -158,28 +158,28 @@ import qualified Data.Set   as S
 
 **Centrally important (unqualified)**:
 - `Hydra.Kernel`
-- `Hydra.Overlay.Haskell.Dsl.Prims as Prims` and the generated `Hydra.Lib.*` def-modules — DSL builders take a
-  `PrimitiveDefinition` directly (`primitive DefLists.length`, `prim1 DefLists.length ...`) via the
+- `Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims` and the generated `Hydra.Core.Lib.*` def-modules — DSL builders
+  take a `PrimitiveDefinition` directly (`primitive DefLists.length`, `prim1 DefLists.length ...`) via the
   `ToPrimName` class, so the name flows from that one definition (the old `Hydra.Sources.Libraries`
   `_strings_toUpper`/`_lists_length` name constants were removed in #473). `Prims.primName Def...` still
   yields the bare `Name` for the rare site that needs one explicitly.
-- `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms` — the term-construction DSL (`var`, `lambda`,
+- `Hydra.Core.Overlay.Haskell.Dsl.Phantoms as Phantoms` — the term-construction DSL (`var`, `lambda`,
   `lambdas`, `record`, `match`, `cases`, polymorphic `(@@)`). Aliased so files may use
   `Phantoms.x` for disambiguation when needed.
 - `Hydra.Sources.Kernel.Types.All`
 - `Prelude hiding ((++))` — Hydra redefines `(++)` for string concatenation
 
 **Qualified**:
-- `T = Hydra.Overlay.Haskell.Dsl.Types` (use `T.` for type signatures and type expressions)
-- Library DSLs: `Strings`, `Lists`, `Maps`, `Math`, `Maybes`, `Sets`, `Eithers`,
-  `Equality`, `Pairs`, `Logic`, `Literals` (= `Hydra.Dsl.Lib.Literals`),
+- `T = Hydra.Core.Overlay.Haskell.Dsl.Types` (use `T.` for type signatures and type expressions)
+- Library DSLs: `Strings`, `Lists`, `Maps`, `Math`, `Optionals`, `Sets`, `Eithers`,
+  `Equality`, `Pairs`, `Logic`, `Literals` (= `Hydra.Core.Dsl.Lib.Literals`),
   `Chars`
-- Kernel meta wrappers: `Core = Hydra.Overlay.Haskell.Dsl.Typed.Core`,
-  `Graph = Hydra.Overlay.Haskell.Dsl.Typed.Graph`
+- Kernel meta wrappers: `Core = Hydra.Core.Overlay.Haskell.Dsl.Meta.Core`,
+  `Graph = Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph`
 - Other Hydra DSLs as needed: `Annotations`, `Ast`, `Bootstrap`, `Coders`, `Util`,
   `Packaging`, `Paths`, `Json`, `MetaBase`, `Tabular`, `Testing`, `Tests`,
   `Topology`, `Variants`, `Variants`
-- `MetaTerms = Hydra.Overlay.Haskell.Dsl.Typed.Terms` when needed
+- `MetaTerms = Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms` when needed
 - Std lib: `L`, `M`, `S`, `Y`, `I`
 
 ```haskell
@@ -187,46 +187,46 @@ module Hydra.Sources.Kernel.Terms.<X> where
 
 -- Standard imports for kernel terms modules
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Libraries
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
+import           Hydra.Core.Overlay.Haskell.Libraries
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations      as Annotations
-import qualified Hydra.Dsl.Ast                  as Ast
-import qualified Hydra.Overlay.Haskell.Bootstrap            as Bootstrap
-import qualified Hydra.Dsl.Coders               as Coders
-import qualified Hydra.Dsl.Errors               as Error
-import qualified Hydra.Dsl.Json.Model           as Json
-import qualified Hydra.Overlay.Haskell.Dsl.Literals         as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes     as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base       as MetaBase
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core       as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph      as Graph
-import qualified Hydra.Dsl.Lib.Chars           as Chars
-import qualified Hydra.Dsl.Lib.Eithers         as Eithers
-import qualified Hydra.Dsl.Lib.Equality        as Equality
-import qualified Hydra.Dsl.Lib.Lists           as Lists
-import qualified Hydra.Dsl.Lib.Literals        as LibLiterals
-import qualified Hydra.Dsl.Lib.Logic           as Logic
-import qualified Hydra.Dsl.Lib.Maps            as Maps
-import qualified Hydra.Dsl.Lib.Math            as Math
-import qualified Hydra.Dsl.Lib.Maybes          as Maybes
-import qualified Hydra.Dsl.Lib.Pairs           as Pairs
-import qualified Hydra.Dsl.Lib.Sets            as Sets
-import qualified Hydra.Dsl.Lib.Strings         as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular    as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms      as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing    as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants   as Variants
-import qualified Hydra.Dsl.Packaging            as Packaging
-import qualified Hydra.Dsl.Parsing              as Parsing
-import qualified Hydra.Dsl.Paths                as Paths
-import qualified Hydra.Overlay.Haskell.Dsl.Prims                as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
-import qualified Hydra.Dsl.Topology             as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Types                as T
-import qualified Hydra.Dsl.Util                 as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations      as Annotations
+import qualified Hydra.Core.Dsl.Ast                  as Ast
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap            as Bootstrap
+import qualified Hydra.Core.Dsl.Coders               as Coders
+import qualified Hydra.Core.Dsl.Errors               as Error
+import qualified Hydra.Core.Dsl.Json.Model           as Json
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals         as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes     as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base       as MetaBase
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core       as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph      as Graph
+import qualified Hydra.Core.Dsl.Lib.Chars           as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers         as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality        as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists           as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals        as LibLiterals
+import qualified Hydra.Core.Dsl.Lib.Logic           as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps            as Maps
+import qualified Hydra.Core.Dsl.Lib.Math            as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals       as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs           as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets            as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings         as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular    as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms      as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing    as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants   as Variants
+import qualified Hydra.Core.Dsl.Packaging            as Packaging
+import qualified Hydra.Core.Dsl.Parsing              as Parsing
+import qualified Hydra.Core.Dsl.Paths                as Paths
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims                as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests             as Tests
+import qualified Hydra.Core.Dsl.Topology             as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                as T
+import qualified Hydra.Core.Dsl.Util                 as Util
 
 import qualified Data.Int                       as I
 import qualified Data.List                      as L
@@ -239,7 +239,7 @@ Most files won't need every import in this list — copy this block as a templat
 and trim the imports your file doesn't reference. The aliases are stable across files
 so a reader recognizes `Lists.map` or `Strings.cat` without checking the import block.
 
-Note: when a file imports both `Hydra.Overlay.Haskell.Dsl.Literals` and `Hydra.Dsl.Lib.Literals`,
+Note: when a file imports both `Hydra.Core.Overlay.Haskell.Dsl.Literals` and `Hydra.Core.Dsl.Lib.Literals`,
 the latter is aliased `LibLiterals` to disambiguate.
 
 ## Category 4 — Kernel TERM module with DeepCore
@@ -247,14 +247,14 @@ the latter is aliased `LibLiterals` to disambiguate.
 **Tag**: `kernel terms modules with DeepCore`
 
 **Same as category 3, plus**:
-- Qualified: `DeepCore = Hydra.Overlay.Haskell.Dsl.Typed.DeepCore`
+- Qualified: `DeepCore = Hydra.Core.Overlay.Haskell.Dsl.Deep.Core`
 - Unqualified: the DeepCore operator `(@@@)`
 
 ```haskell
 -- Standard imports for kernel terms modules with DeepCore
 ... (same as category 3) ...
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.DeepCore as DeepCore
-import           Hydra.Overlay.Haskell.Dsl.Typed.DeepCore ((@@@))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Deep.Core as DeepCore
+import           Hydra.Core.Overlay.Haskell.Dsl.Deep.Core ((@@@))
 ```
 
 ## Category 5 — Term-level source outside the kernel
@@ -275,12 +275,12 @@ module Hydra.Sources.<Lang>.<X> where
 
 -- Standard imports for term-level sources outside of the kernel
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Libraries
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
+import           Hydra.Core.Overlay.Haskell.Libraries
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms as Phantoms
 import           Prelude hiding ((++))
 
 import qualified Hydra.Sources.Kernel.Types.All             as KernelTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations      as Annotations
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations      as Annotations
 ... (rest as in category 3) ...
 
 -- Per-language imports (follow collision rule):
@@ -302,20 +302,20 @@ not Hydra-runtime term application.
 
 **Centrally important (unqualified)**:
 - `Hydra.Kernel`
-- `Hydra.Overlay.Haskell.Libraries`
-- `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms`, including the `(@@)` operator
+- `Hydra.Core.Overlay.Haskell.Libraries`
+- `Hydra.Core.Overlay.Haskell.Dsl.Phantoms as Phantoms`, including the `(@@)` operator
   (brought in unqualified explicitly so bare `@@` is the polymorphic
   `Phantoms.@@`, NOT the monomorphic `Terms.@@`).
-- `Hydra.Overlay.Haskell.Dsl.Typed.Testing as Testing` — provides `supergroup`, `subgroup`, `testCase`,
+- `Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing as Testing` — provides `supergroup`, `subgroup`, `testCase`,
   the `(===)` operator
-- `Hydra.Testing` — runtime types `TestGroup`, `TestCase`, etc.
+- `Hydra.Core.Testing` — runtime types `TestGroup`, `TestCase`, etc.
 - `Hydra.Sources.Kernel.Types.All`
-- `Hydra.Overlay.Haskell.Dsl.Typed.Terms as Terms hiding ((@@))` — bring `match`, `record`, `inject`,
+- `Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms as Terms hiding ((@@))` — bring `match`, `record`, `inject`,
   etc. unqualified, but NOT `(@@)`. Test bodies use `match`/`record`/`inject` directly,
   with `(@@)` referring to Phantoms's polymorphic version.
 
 **Qualified**:
-- `T = Hydra.Overlay.Haskell.Dsl.Typed.Types` (in tests, `T.` is the meta-types DSL)
+- `T = Hydra.Core.Overlay.Haskell.Dsl.Meta.Types` (in tests, `T.` is the meta-types DSL)
 - Library DSLs and meta wrappers same as category 3.
 - Fixture imports: `TestGraph`, `TestTerms`, `TestTypes` — by their bare names.
 - Std lib.
@@ -325,21 +325,21 @@ module Hydra.Sources.Test.<X> where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms hiding ((@@))
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                ((@@))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import Hydra.Testing
-import Hydra.Overlay.Haskell.Libraries
+import Hydra.Core.Testing
+import Hydra.Core.Overlay.Haskell.Libraries
 ```
 
 When a test file references kernel-term primitives directly, add the relevant
@@ -368,20 +368,20 @@ module Hydra.Sources.Test.<X> where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import Hydra.Testing
-import Hydra.Overlay.Haskell.Libraries
+import Hydra.Core.Testing
+import Hydra.Core.Overlay.Haskell.Libraries
 ```
 
 When binding application is needed in a term-encoded test (e.g. applying
@@ -395,8 +395,8 @@ a kernel-side ref like `validateCoreTermRef`), use `Phantoms.@@` qualified.
 `TypedTermDefinition Binding` values — named test data used as inputs to category-6/7 files.
 
 **Same as category 7, with two deltas**:
-- `Hydra.Testing` is **NOT** imported (no `TestGroup`/`TestCase` constructors needed).
-- `Hydra.Overlay.Haskell.Libraries` is **NOT** imported (fixtures don't reference the library
+- `Hydra.Core.Testing` is **NOT** imported (no `TestGroup`/`TestCase` constructors needed).
+- `Hydra.Core.Overlay.Haskell.Libraries` is **NOT** imported (fixtures don't reference the library
   definitions).
 
 ```haskell
@@ -404,13 +404,13 @@ module Hydra.Sources.Test.<Fixture> where
 
 -- Standard imports for kernel test fixtures
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Testing       as Testing
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing       as Testing
 import           Hydra.Sources.Kernel.Types.All
 
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
-import qualified Hydra.Dsl.Packaging           as Packaging
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
+import qualified Hydra.Core.Dsl.Packaging           as Packaging
 
 import qualified Data.List                     as L
 import qualified Data.Map                      as M
@@ -435,7 +435,7 @@ nearest category.
   `module_` and follow category 6, but most of the body is `concatMap` over child
   suites' `module_` definitions; the import block is dominated by qualified imports of
   the children.
-- **`Hydra.Overlay.Haskell.Libraries`**. Library/primitive registry (the `hydraLib*` `standardLibrary`
+- **`Hydra.Core.Overlay.Haskell.Libraries`**. Library/primitive registry (the `hydraLib*` `standardLibrary`
   definitions + typevar/`TermCoder` helpers); primitive names now derive from the generated
   `PrimitiveDefinition`s (#473). Bespoke.
 - **`Hydra.Sources.Kernel.Manifest`**. Kernel-package manifest.
@@ -448,7 +448,7 @@ nearest category.
 A few non-obvious rules emerged from a survey of the existing codebase:
 
 1. **`Phantoms.@@` was an anti-pattern in tests that apply kernel bindings.**
-   Files that imported `Hydra.Overlay.Haskell.Dsl.Typed.Terms` unqualified-with-alias and `Phantoms`
+   Files that imported `Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms` unqualified-with-alias and `Phantoms`
    qualified had to write `Phantoms.@@` everywhere — because the unqualified `(@@)`
    from `Meta.Terms` is the narrower `TypedTerm Term -> TypedTerm Term -> TypedTerm Term`, while
    the polymorphic `Phantoms.@@ :: AsTerm f (a -> b) => f -> g -> TypedTerm b` is what
@@ -461,8 +461,8 @@ A few non-obvious rules emerged from a survey of the existing codebase:
    `Strings.cat`/`Strings.intercalate`/etc. Drop the unqualified import; the bare
    form was rarely used in earnest.
 3. **`unaryFunction`/`binaryFunction` were renamed to `reify`/`reify2`** in
-   `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`.
-4. **`DeepCore` is the canonical alias for `Hydra.Overlay.Haskell.Dsl.Typed.DeepCore`.** Earlier
+   `Hydra.Core.Overlay.Haskell.Dsl.Phantoms`.
+4. **`DeepCore` is the canonical alias for `Hydra.Core.Overlay.Haskell.Dsl.Deep.Core`.** Earlier
    files used `DC`; standardize on `DeepCore`.
 5. **`AsName` typeclass.** Phantoms's `inject`, `match`, `project`,
    `record`, `unwrap`, `wrap` accept any `AsName n => n` for type-name arguments —

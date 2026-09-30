@@ -18,11 +18,11 @@ kernel class definitions and carry their provisions in the generated module page
 
 | Class | Member primitives | Instances |
 |---|---|---|
-| `equality` | `hydra.lib.equality.equal`, `hydra.lib.equality.notEqual` | every Hydra type |
-| `ordering` | `hydra.lib.ordering.compare`, `gt`, `gte`, `lt`, `lte`, `max`, `min` | every Hydra type |
-| `numeric` | `hydra.lib.math.add`, `sub`, `mul`, `negate`, `abs`, `signum` | the nine integer types (int8, int16, int32, int64, uint8, uint16, uint32, uint64, bigint) and the two floating-point types (float32, float64) |
-| `integral` | `hydra.lib.math.div`, `mod`, `rem`, `even`, `odd` | the nine integer types |
-| `fractional` | `hydra.lib.math.divide` | float32, float64 |
+| `equality` | `hydra.core.lib.equality.equal`, `hydra.core.lib.equality.notEqual` | every Hydra type |
+| `ordering` | `hydra.core.lib.ordering.compare`, `gt`, `gte`, `lt`, `lte`, `max`, `min` | every Hydra type |
+| `numeric` | `hydra.core.lib.math.add`, `sub`, `mul`, `negate`, `abs`, `signum` | the nine integer types (int8, int16, int32, int64, uint8, uint16, uint32, uint64, bigint) and the two floating-point types (float32, float64) |
+| `integral` | `hydra.core.lib.math.div`, `mod`, `rem`, `even`, `odd` | the nine integer types |
+| `fractional` | `hydra.core.lib.math.divide` | float32, float64 |
 
 `equality` and `ordering` are universal: every Hydra value can be tested for structural
 equality and compared under the total order.
@@ -40,7 +40,7 @@ carry decimal on a lossy adapted representation.
      needing decimal computation (e.g. money aggregation); the design at that point is a
      numeric instance restricted to add/sub/mul/negate (exact, context-free), divide still
      excluded, contingent on the decimal carrier work landing first. -->
-The transcendental and rounding functions of `hydra.lib.math` are monomorphic (float64, or
+The transcendental and rounding functions of `hydra.core.lib.math` are monomorphic (float64, or
 per-width for rounding) and belong to no class.
 
 ## Arithmetic semantics by representation class
@@ -107,6 +107,6 @@ cross-host conformance suite exercises the interpreter path.
 ## Future classes
 
 The functor, applicative, and monad structure that several modules describe informally
-(`hydra.lib.lists`, `optionals`, `eithers`, `effects` each note their monadic operations) is
+(`hydra.core.lib.lists`, `optionals`, `eithers`, `effects` each note their monadic operations) is
 planned to become explicit instance records rather than constraint classes in the above
 sense; that design is tracked separately and will be added to this page when it lands.

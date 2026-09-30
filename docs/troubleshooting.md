@@ -32,20 +32,20 @@ implementations.
 file.
 
 **Registration files** (check all of these when adding or debugging primitives).
-Post-#501 all overlay registration files live under `hydra.overlay.<lang>.*`
-(kernel-authored `hydra.*` code is exclusively translingual):
+All kernel overlay registration files live under `hydra.core.overlay.<lang>.*` (Scheme: `hydra.overlay.scheme.*`)
+(kernel-authored `hydra.core.*` code is exclusively translingual):
 
 | Language | Registration file |
 |----------|-------------------|
-| Haskell | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs` |
-| Java | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/Libraries.java` |
-| Python | `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/sources/libraries.py` |
-| Scala | `overlay/scala/hydra-kernel/src/main/scala/hydra/overlay/scala/Libraries.scala` |
-| TypeScript | `overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib/libraries.ts` |
-| Clojure | `overlay/clojure/hydra-kernel/src/main/clojure/hydra/overlay/clojure/libraries.clj` |
-| Common Lisp | `overlay/common-lisp/hydra-kernel/src/main/common-lisp/hydra/overlay/common_lisp/lib/libraries.lisp` |
+| Haskell | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Libraries.hs` |
+| Java | `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/Libraries.java` |
+| Python | `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/sources/libraries.py` |
+| Scala | `overlay/scala/hydra-kernel/src/main/scala/hydra/core/overlay/scala/Libraries.scala` |
+| TypeScript | `overlay/typescript/hydra-kernel/src/main/typescript/hydra/core/overlay/typescript/lib/libraries.ts` |
+| Clojure | `overlay/clojure/hydra-kernel/src/main/clojure/hydra/core/overlay/clojure/libraries.clj` |
+| Common Lisp | `overlay/common-lisp/hydra-kernel/src/main/common-lisp/hydra/core/overlay/common_lisp/lib/libraries.lisp` |
 | Scheme | `overlay/scheme/hydra-kernel/src/main/scheme/hydra/overlay/scheme/libraries.scm` |
-| Emacs Lisp | `overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/overlay/emacs_lisp/lib/libraries.el` |
+| Emacs Lisp | `overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/core/overlay/emacs_lisp/lib/libraries.el` |
 
 **Fix**: Add the primitive to the appropriate `*Primitives()` method (Java) or equivalent
 in the registration file. See [adding primitives](recipes/adding-primitives.md) for the
@@ -83,8 +83,8 @@ When a primitive test fails in Java, the call chain is:
 **If step 4 fails**: check the `implementation()` method of the primitive class.
 The `implementation()` method must construct a term-level result, not execute native code.
 A stub that throws `UnsupportedOperationException` will cause runtime failures.
-See `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/lists/Map.java` for a higher-order example
-using `hydra.overlay.java.dsl.Terms` helpers (`lambda`, `app`, `variable`, etc.).
+See `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/lists/Map.java` for a higher-order example
+using `hydra.core.overlay.java.dsl.Terms` helpers (`lambda`, `app`, `variable`, etc.).
 
 ### Higher-order primitives
 
@@ -93,19 +93,19 @@ declared the same way as first-order primitives, via `primDef`/`primNoDef` in
 their `Hydra/Sources/Kernel/Lib/<Sub>.hs` registry. Their higher-orderness is
 expressed in the `TermSignature` (function-typed value parameters) rather than
 via a separate registration path. On the Haskell host, the same `prim*` family
-in `Hydra.Overlay.Haskell.Dsl.Prims` pairs each name with its native implementation; the
+in `Hydra.Core.Overlay.Haskell.Dsl.Prims` pairs each name with its native implementation; the
 native implementation must accept and apply its function arguments correctly.
 
 ### Key files for Java debugging
 
 | Purpose | Path |
 |---------|------|
-| Primitive registration | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/Libraries.java` |
-| Primitive classes | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/<library>/` |
-| DSL term builders | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/dsl/Terms.java` |
-| Either utilities | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/util/Either.java` |
+| Primitive registration | `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/Libraries.java` |
+| Primitive classes | `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/<library>/` |
+| DSL term builders | `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/dsl/Terms.java` |
+| Either utilities | `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/util/Either.java` |
 | Test runner | `heads/java/src/test/java/hydra/TestSuiteRunner.java` |
-| Reducer | `dist/java/hydra-kernel/src/main/java/hydra/Reduction.java` |
+| Reducer | `dist/java/hydra-kernel/src/main/java/hydra/core/Reduction.java` |
 
 ## Haskell build issues
 
@@ -237,7 +237,7 @@ See [Python DSL guide](dsl-guide-python.md) for details.
 
 If generated-Python codegen, inference, or term rewriting is unexpectedly slow,
 profile before guessing. The codegen pipeline in particular allocates millions
-of small persistent containers; an O(n) operation in `hydra.python.util.{ConsList,
+of small persistent containers; an O(n) operation in `hydra.core.overlay.python.util.{ConsList,
 PersistentMap, PersistentSet}` will dominate everything else.
 
 ```bash
@@ -246,7 +246,7 @@ python -c "import pstats; pstats.Stats('/tmp/codegen.prof').sort_stats('tottime'
 ```
 
 Look for any single function consuming >5% of `tottime`. The persistent
-collections in `hydra.python.util/` are thin facades over native `dict`/
+collections in `hydra.core.overlay.python.util` are thin facades over native `dict`/
 `frozenset`/`tuple`; if you're hot-spotting in one of their methods, the fix is
 usually to delegate to a native operation rather than to loop in Python.
 
@@ -291,7 +291,7 @@ populate `dist/scala/hydra-{haskell,java,python,lisp}/`. Use
 
 **Symptom**: `bin/sync-scala.sh` (or any `bin/sync.sh` invocation targeting Scala) fails during
 the `hydra.updateScalaJson` sbt run with a `java.lang.IllegalStateException` at
-`hydra.overlay.scala.dsl.meta.Defs$.checkComplete`, naming one or more member names and the
+`hydra.core.overlay.scala.dsl.meta.Defs$.checkComplete`, naming one or more member names and the
 module they belong to.
 
 **Cause**: A Scala DSL-authoring file (`packages/hydra-scala/src/main/scala/hydra/sources/scala/

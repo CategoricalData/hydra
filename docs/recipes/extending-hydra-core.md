@@ -43,7 +43,7 @@ and serves as a reference for adding other constructs like pairs, sum types, etc
 
 This guide documents how the `Either` type was added to Hydra Core
 and serves as a template for adding other constructors in the future.
-While `Either` is now built-in (available as `hydra.core.EitherType` and `Term.either`),
+While `Either` is now built-in (available as `hydra.core.model.EitherType` and `Term.either`),
 the process described here can be followed for adding new type/term constructors
 like pairs, sum types, or other constructs.
 
@@ -125,7 +125,7 @@ def "Term" $
 
 **Key Points:**
 - Maintain alphabetical order within the union *(a convention specific to the kernel core types
-  `hydra.core.Term`/`Type` — it keeps these large unions easy to scan; it is **not** a general rule
+  `hydra.core.model.Term`/`Type` — it keeps these large unions easy to scan; it is **not** a general rule
   that all record/union fields must be alphabetical)*
 - Use appropriate type combinators:
   - `Types.either_` for Either types
@@ -134,7 +134,7 @@ def "Term" $
   - `Types.map` for map types
 - Add supporting type definitions if needed (e.g., `EitherType`)
 - Core encode/decode modules must serialize the schema representation of
-  `hydra.core.Type`; this is separate from whether values of the new type are
+  `hydra.core.model.Type`; this is separate from whether values of the new type are
   serializable.
 
 ---
@@ -161,9 +161,9 @@ following existing patterns like `just` and `nothing` for `Maybe`.
 
 ### Step 2.5: Update Variants and Mantle DSL
 
-#### 2.5.1: Update Hydra.Variants
+#### 2.5.1: Update Hydra.Core.Variants
 
-**File:** `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Variants.hs`
+**File:** `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Variants.hs`
 
 This is a generated file, but you'll need to manually patch it during bootstrap. Add two things:
 
@@ -192,13 +192,13 @@ termVariants = [
 
 Similarly, if adding a Type constructor, update `typeVariant` and `typeVariants`.
 
-For a constructor added to the generated `hydra.variants.TypeVariant` enum,
+For a constructor added to the generated `hydra.core.variants.TypeVariant` enum,
 bootstrap may also require temporary patches to these generated modules:
 
-- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Variants.hs`
-- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Variants.hs`
-- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Variants.hs`
-- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Variants.hs`
+- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Variants.hs`
+- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Dsl/Variants.hs`
+- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Encode/Variants.hs`
+- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Decode/Variants.hs`
 
 These patches are only to break the circular dependency. A successful sync
 should regenerate them from `Hydra.Sources.Kernel.Types.Variants`.
@@ -233,7 +233,7 @@ Place in alphabetical order among the other `termVariantX` helpers.
 **File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs`
 
 > **⚠️ CRITICAL:** You MUST add your new constructor to the TermVariant and TypeVariant enum definitions
-> in the Variants module (module name `hydra.variants`). This is the source of the "No such field: X" error during code generation.
+> in the Variants module (module name `hydra.core.variants`). This is the source of the "No such field: X" error during code generation.
 
 Add to the `TermVariant` enum (around line 70-91):
 ```haskell
@@ -263,7 +263,7 @@ def "TypeVariant" $
 ```
 
 **Why this is necessary:** The `Variants` module uses these enums to map between Term/Type constructors
-and their metadata. The enums are defined in the `hydra.variants` module
+and their metadata. The enums are defined in the `hydra.core.variants` module
 (in the source file
 [`Hydra/Sources/Kernel/Types/Variants.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs)),
 which provides metadata and reflection types that describe the structure of Hydra core types and terms.
@@ -343,7 +343,7 @@ definitions = [
 If using library functions:
 
 ```haskell
-import qualified Hydra.Dsl.Lib.Eithers as Eithers
+import qualified Hydra.Core.Dsl.Lib.Eithers as Eithers
 ```
 
 ---
@@ -432,7 +432,7 @@ _Term_either>>: "e" ~> Eithers.either_
 **Add import:**
 
 ```haskell
-import qualified Hydra.Dsl.Lib.Eithers as Eithers
+import qualified Hydra.Core.Dsl.Lib.Eithers as Eithers
 ```
 
 **Verification:** Check your constructor appears in the file:
@@ -465,7 +465,7 @@ _Term_either>>: "et" ~> Eithers.either_
   (var "et")
 ```
 
-Add import: `import qualified Hydra.Dsl.Lib.Eithers as Eithers`
+Add import: `import qualified Hydra.Core.Dsl.Lib.Eithers as Eithers`
 
 #### 5.2: Other traversal files
 
@@ -717,9 +717,9 @@ stack exec ghci
 ```
 
 This regenerates:
-- `dist/python/hydra-kernel/src/main/python/hydra/core.py` (adds `TermEither` constructor)
-- `dist/python/hydra-kernel/src/main/python/hydra/variants.py` (adds variant enums and type classes)
-- `dist/python/hydra-kernel/src/main/python/hydra/util.py` (adds utility types)
+- `dist/python/hydra-kernel/src/main/python/hydra/core/model.py` (adds `TermEither` constructor)
+- `dist/python/hydra-kernel/src/main/python/hydra/core/variants.py` (adds variant enums and type classes)
+- `dist/python/hydra-kernel/src/main/python/hydra/core/util.py` (adds utility types)
 - All other Hydra kernel modules in Python
 
 #### 11.5.3: Update Other Languages
@@ -735,9 +735,9 @@ Each language coder needs to know how to encode/decode the new types in the targ
 
 ```bash
 # Python (run from the worktree root, dist paths are relative)
-python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/core.py
-python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/variants.py
-python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/util.py
+python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/core/model.py
+python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/core/variants.py
+python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/core/util.py
 
 # Java (from heads/java)
 (cd heads/java && ./gradlew :hydra-java:compileJava)
@@ -845,16 +845,16 @@ ulimit -n 4096; stack test
 | `No such field: pair` during code generation | Missing from TermVariant/TypeVariant enums in the Variants module | **CRITICAL:** Add to `TermVariant` and `TypeVariant` enum definitions in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs` |
 | `Variable not in scope: fst` compilation error | Variable name clashes with Prelude function | Use descriptive names: `pairFst`, `pairSnd`, not `fst`, `snd` |
 | `No such field: either` | Term union missing the constructor in Core schema | Add to `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs` |
-| `Variable not bound to type: hydra.inference.inferTypeOfX` | Function not registered in module exports | Add `toDefinition inferTypeOfXDef` to `definitions` list |
+| `Variable not bound to type: hydra.core.inference.inferTypeOfX` | Function not registered in module exports | Add `toDefinition inferTypeOfXDef` to `definitions` list |
 | Using `cases _Either` on built-in types | Confusion between Hydra unions and Haskell types | Use library functions (`Eithers.either_`) for Haskell built-ins |
 | `unexpected type: either<...>` in codegen | Coder doesn't know how to encode the type | Manually patch `Hydra/Haskell/Coder.hs` |
 | Type signature mismatch | Using wrong bind operations | Use `Eithers.bind` for Either binds, `<~` for pure lets |
 | Missing rewrite function cases | Forgot to add to all rewriting variants | Search for `_Term_maybe` in `Rewriting.hs` to find all functions needing updates |
-| Variants not updated | Missing from `Hydra.Variants` or `Hydra.Dsl.Mantle` | Add to `termVariant` function, `termVariants` list, and DSL helpers |
+| Variants not updated | Missing from `Hydra.Core.Variants` or `Hydra.Dsl.Mantle` | Add to `termVariant` function, `termVariants` list, and DSL helpers |
 | Language support missing | Constructor not in language definition | Add to `termVariants` in `Hydra/Sources/Python/Language.hs` (or other language) and regenerate |
-| `typeVariantX` not in scope during bootstrap | Generated variant enum/DSL files do not yet include the new `TypeVariant` case | Temporarily patch `Hydra/Variants.hs`, `Hydra/Dsl/Variants.hs`, `Hydra/Encode/Variants.hs`, and `Hydra/Decode/Variants.hs`, then rerun sync |
+| `typeVariantX` not in scope during bootstrap | Generated variant enum/DSL files do not yet include the new `TypeVariant` case | Temporarily patch `Hydra/Core/Variants.hs`, `Hydra/Core/Dsl/Variants.hs`, `Hydra/Core/Encode/Variants.hs`, and `Hydra/Core/Decode/Variants.hs`, then rerun sync |
 | `resource exhausted (Too many open files)` during JSON export or test source discovery | Process file descriptor limit is too low | Run sync/tests with `ulimit -n 4096` |
-| Confusing core schema serialization with value serialization | Core encode/decode must handle the new `hydra.core.Type` case even if values of that type are not serializable | Update `Hydra.Encode.Core`/`Hydra.Decode.Core` through generation, and separately update serializability predicates to reject unsupported value types |
+| Confusing core schema serialization with value serialization | Core encode/decode must handle the new `hydra.core.model.Type` case even if values of that type are not serializable | Update `Hydra.Core.Encode.Model`/`Hydra.Core.Decode.Model` through generation, and separately update serializability predicates to reject unsupported value types |
 
 ---
 
@@ -890,7 +890,7 @@ ulimit -n 4096; stack test
    Search the file for existing constructors like `_Term_maybe`
    to see all the places you need to add your constructor.
 
-9. **Update variants metadata** - Both `Hydra.Variants` and `Hydra.Dsl.Mantle` need updates
+9. **Update variants metadata** - Both `Hydra.Core.Variants` and `Hydra.Dsl.Mantle` need updates
    for language support and introspection
 
 10. **Test target languages** - If you regenerate Python/Java/Scala, verify the generated code compiles
@@ -955,19 +955,19 @@ ulimit -n 4096; stack test
 
 ### Generated Files (Bootstrap Patches)
 
-- [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Variants.hs`
+- [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Variants.hs`
   - [ ] Add case to `termVariant` function
   - [ ] Add to `termVariants` list
   - [ ] Add case to `typeVariant` function (if applicable)
   - [ ] Add to `typeVariants` list (if applicable)
 
-- [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Variants.hs`
+- [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Dsl/Variants.hs`
   - [ ] Add generated DSL injection for the new `TermVariant` or `TypeVariant`
 
-- [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Variants.hs`
+- [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Encode/Variants.hs`
   - [ ] Add generated encoder case for the new variant enum
 
-- [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Variants.hs`
+- [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Decode/Variants.hs`
   - [ ] Add generated decoder case for the new variant enum
 
 - [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Inference.hs`
@@ -992,9 +992,9 @@ ulimit -n 4096; stack test
 
 - [ ] Regenerate Python code
   - [ ] Run `bin/sync-python.sh` from the worktree root
-  - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/core.py`
-  - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/variants.py`
-  - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/util.py`
+  - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/core/model.py`
+  - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/core/variants.py`
+  - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/core/util.py`
   - [ ] Compile Python modules
 
 - [ ] Java (if needed)
@@ -1070,7 +1070,7 @@ Adding a field to an existing record type requires updates to:
 4. **Full sync + tests** - Regenerate every downstream target and verify
 
 **The constructor, accessors, and "with" helpers are auto-generated from the type definition** —
-`Hydra.Dsl.Typing` (like every `Hydra.Dsl.*` module) carries a "Do not edit" header and is produced
+`Hydra.Core.Dsl.Typing` (like every `Hydra.Core.Dsl.*` module) carries a "Do not edit" header and is produced
 by `sync-haskell.sh` from the type definition in `Types/Typing.hs`. There is no hand-written DSL
 helper module to edit; adding a field to the type definition and regenerating is what produces the
 new constructor parameter and the new `inferenceContext<Field>` / `inferenceContextWith<Field>`
@@ -1107,7 +1107,7 @@ inferenceContext = define "InferenceContext" $
 
 #### Step 2: Regenerate — do not hand-write the DSL module
 
-Run the Haskell sync (Step 1 only needs the Haskell side to update `Hydra.Dsl.Typing`; a full
+Run the Haskell sync (Step 1 only needs the Haskell side to update `Hydra.Core.Dsl.Typing`; a full
 cross-host sync comes in Step 4):
 
 ```bash
@@ -1119,7 +1119,7 @@ This regenerates `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Typing.hs
 `inferenceContextLetDepth` (accessor) and `inferenceContextWithLetDepth` (with-helper) — following
 the same naming pattern as the existing `inferenceContextFreshTypeVariableCount` /
 `inferenceContextWithFreshTypeVariableCount` and `inferenceContextTrace` / `inferenceContextWithTrace`.
-**Do not hand-edit `Hydra.Dsl.Typing` (or any `Hydra.Dsl.*` module)** — it carries a "Do not edit"
+**Do not hand-edit `Hydra.Core.Dsl.Typing` (or any `Hydra.Core.Dsl.*` module)** — it carries a "Do not edit"
 generated-file header, and any manual fix is overwritten (and silently diverges from source) on the
 next sync.
 
@@ -1182,7 +1182,7 @@ Haskell must go green before syncing/testing downstream hosts — see
 | Error | Cause | Solution |
 |-------|-------|----------|
 | Type/arity mismatch calling the constructor | A construction site wasn't updated | Fix every direct `Typing.inferenceContext` call (Step 3) |
-| Hand edit to `Hydra.Dsl.Typing` "disappears" | The file is generated | Add the field in Step 1 and regenerate (Step 2) instead |
+| Hand edit to `Hydra.Core.Dsl.Typing` "disappears" | The file is generated | Add the field in Step 1 and regenerate (Step 2) instead |
 | `No such field: xyz` at the type-definition level | Field missing from `T.record [...]` | Add the field in `Types/Typing.hs` |
 | A function silently keeps stale field data | Record reconstructed positionally, not via a "with" helper | Prefer `inferenceContextWith<Field>` over reconstructing the record |
 
@@ -1207,12 +1207,12 @@ Haskell must go green before syncing/testing downstream hosts — see
   - [ ] Update any site that needs to read/write the new field via the generated accessor/with-helper
 
 #### Generated Files
-- [ ] Do NOT hand-edit `Hydra.Dsl.Typing` (or any `Hydra.Dsl.*` module) — regenerate instead (Step 2)
+- [ ] Do NOT hand-edit `Hydra.Core.Dsl.Typing` (or any `Hydra.Core.Dsl.*` module) — regenerate instead (Step 2)
 - [ ] Confirm the regenerated constructor/accessor/with-helper names match the pattern
   `<record><Field>` / `<record>With<Field>`
 
 #### Build Checkpoints
-- [ ] `sync-haskell.sh` regenerates `Hydra.Dsl.Typing` with the new field
+- [ ] `sync-haskell.sh` regenerates `Hydra.Core.Dsl.Typing` with the new field
 - [ ] `stack build` / `stack test` pass with all call sites updated
 - [ ] Full `bin/sync.sh --hosts all --targets all` succeeds
 - [ ] All tests pass
@@ -1278,8 +1278,8 @@ one mid-build is much harder than finding it up front.
    flip — these are the literal strings on the JSON wire, not Haskell-level
    field names.
 
-5. **Bootstrap-tier DSL Term snippets.** The encode/decode modules (`hydra.encode.*`,
-   `hydra.decode.*`) are synthesized in-memory at runtime (#448) and no longer exist as
+5. **Bootstrap-tier DSL Term snippets.** The encode/decode modules (`hydra.core.encode.*`,
+   `hydra.core.decode.*`) are synthesized in-memory at runtime (#448) and no longer exist as
    `dist/haskell/.../Hydra/Sources/Encode/<Module>.hs` / `Sources/Decode/<Module>.hs` files.
    Their content — DSL Term values that, when
    interpreted, *produce* the encoders/decoders described in (4). Inside those
@@ -1293,7 +1293,7 @@ one mid-build is much harder than finding it up front.
 7. **Hand-written heads.** Java `Generation.java`, Python `generation.py`,
    Scala `Generation.scala`, the Haskell `Hydra.Generation` (which provides
    `moduleAsBindings` / `definitionAsBinding` for the `Definition → Binding`
-   conversion) / `Hydra.Overlay.Haskell.Bootstrap` / `verify-json-kernel/Main.hs`,
+   conversion) / `Hydra.Core.Overlay.Haskell.Bootstrap` / `verify-json-kernel/Main.hs`,
    the auto-generated `Hydra.Sources.Json.Bootstrap` source. Each language
    uses its native field-name convention (`type_scheme` in Python,
    `typeScheme` in Java/Scala, `:typeScheme` keyword in Common Lisp).
@@ -1362,7 +1362,7 @@ one mid-build is much harder than finding it up front.
      `recordTypeName`/`projectionTypeName`) is one of the four target records,
      and flip to `"typeScheme"`. **Do not flip** literals whose scope is a
      non-target record (e.g., `FieldType.type`, `TypeApplicationTerm.type`)
-     or whose role is a union variant tag (`hydra.packaging.Definition`'s
+     or whose role is a union variant tag (`hydra.core.packaging.Definition`'s
      `term`/`type` variants — those are not record fields, they are
      constructor names of a sum type and are separately in scope).
      A scope-aware Python script is the right tool here; a flat `sed` will

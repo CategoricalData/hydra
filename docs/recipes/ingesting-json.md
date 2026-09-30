@@ -40,24 +40,24 @@ A typed host value sits at the end of either of these chains:
 
 ```
    instance JSON       Value           Term         typed host value
-  (a Python dict,  →  (hydra.json.  →  (hydra.   →  (an instance of
-   parsed from        model.Value,     core.Term,   your schema's
-   the file)          a JSON AST)      Hydra's      generated Python
-                                       universal    dataclass)
+  (a Python dict,  →  (hydra.core.  →  (hydra.     →  (an instance of
+   parsed from        json.model.      core.model.    your schema's
+   the file)          Value, a JSON    Term, Hydra's  generated Python
+                      AST)             universal      dataclass)
                                        term IR)
 ```
 
 You can enter at either of two points:
 
 - **JSON → Value → Term → typed value.** Faithful to the full picture.
-  The Value and Value-to-Term layers live under `hydra.json.*` (parser
-  combinators in `hydra.json.parser`, decoders for `Value` in
-  `hydra.json.decoding`). This path needs the schema's `Type` ASTs
+  The Value and Value-to-Term layers live under `hydra.core.json.*` (parser
+  combinators in `hydra.core.json.parser`, decoders for `Value` in
+  `hydra.core.json.decoding`). This path needs the schema's `Type` ASTs
   loaded as data in the host, so the Value-to-Term step has something
   to drive it. Best fit for a long-running ingestion service that
   accepts arbitrary JSON.
 - **Build the `Term` directly, then decode it.** Skip the JSON / Value
-  layers entirely; emit the `hydra.core.Term` AST from your source
+  layers entirely; emit the `hydra.core.model.Term` AST from your source
   representation and hand it straight to a generated decoder. Doesn't
   require the schema as runtime data — the generated decoder *is* the
   schema knowledge. Best fit for a one-shot migration, a CLI tool, or
@@ -70,13 +70,14 @@ gate for "does this conform to my schema?"
 
 ## Step 1: generate decoders for your schema
 
-The generated decoders live next to the type modules under
-`hydra.decode.<your.namespace>.*`. There's one decoder function per
+The generated decoders live next to the type modules: for a schema module
+`hydra.<root>.<rest>`, the decoder module is `hydra.<root>.decode.<rest>`
+(the `decode` category is inserted after the two-segment package root). There's one decoder function per
 named type in your schema. Each has signature:
 
 ```python
-def my_type(cx: hydra.graph.Graph,
-            raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, MyType]:
+def my_type(cx: hydra.core.graph.Graph,
+            raw: hydra.core.model.Term) -> Either[hydra.core.errors.DecodingError, MyType]:
     ...
 ```
 
@@ -155,7 +156,7 @@ their own `TypeScheme`, so they don't need to be re-typed by the host.
 
 After either path you'll have:
 - `<out>/hydra/your/schema/*.py` — dataclass type modules
-- `<out>/hydra/decode/your/schema/*.py` — decoder modules
+- `<out>/hydra/your/decode/schema/*.py` — decoder modules
 
 > Both paths feed the same generated-output shape. Path A is what
 > `bin/sync-python.sh` runs in CI; Path B is convenient for one-off
@@ -166,14 +167,14 @@ After either path you'll have:
 To import your decoders you need **three** roots on `PYTHONPATH`:
 
 ```
-<hydra>/heads/python/src/main/python                  # hydra.dsl.python, hydra.json, etc.
-<hydra>/dist/python/hydra-kernel/src/main/python      # hydra.core, hydra.graph, hydra.errors
-<your-schema-out>/python                              # hydra.your.schema.*, hydra.decode.your.schema.*
+<hydra>/heads/python/src/main/python                  # host drivers (hydra.bootstrap, hydra.generation)
+<hydra>/dist/python/hydra-kernel/src/main/python      # hydra.core.* (incl. hydra.core.overlay.python.*)
+<your-schema-out>/python                              # hydra.your.schema.*, hydra.your.decode.schema.*
 ```
 
 All three are required: the first two ship the kernel and DSL; the
 third is your generated code. Missing any one of them produces an
-`ImportError` on import of `hydra.decode.<your>.<schema>.*`.
+`ImportError` on import of `hydra.<your>.decode.<schema>.*`.
 
 A `.envrc` (with [direnv](https://direnv.net)) or a wrapper script
 keeps this from biting you on every invocation:
@@ -191,8 +192,8 @@ sufficient. The constructor takes eight keyword arguments. Note the
 mix of `FrozenDict` and `frozenset`:
 
 ```python
-from hydra.dsl.python import FrozenDict
-import hydra.graph as G
+from hydra.core.overlay.python.dsl.python import FrozenDict
+import hydra.core.graph as G
 
 def empty_graph() -> G.Graph:
     return G.Graph(
@@ -259,8 +260,8 @@ A few traps from the first time through:
 Small helpers go a long way. A useful starting set:
 
 ```python
-import hydra.core as C
-from hydra.dsl.python import FrozenDict, Given, None_
+import hydra.core.model as C
+from hydra.core.overlay.python.dsl.python import FrozenDict, Given, None_
 
 def t_str(s):     return C.TermLiteral(C.LiteralString(s))
 def t_bool(b):    return C.TermLiteral(C.LiteralBoolean(b))
@@ -290,8 +291,8 @@ moment you produce one. Structure the ingestion as: encode → decode →
 on `Left`, fix and try again.
 
 ```python
-import hydra.dsl.python as dp
-import hydra.decode.your.schema.my_module as dec
+import hydra.core.overlay.python.dsl.python as dp
+import hydra.your.decode.schema.my_module as dec
 
 def ingest_one(raw_dict: dict) -> "MyType":
     term = encode_my_type(raw_dict)              # your encoder
@@ -376,11 +377,11 @@ Useful pieces to study, if still present at those paths:
   All eight fields are required, even on an empty graph. The
   `lambda_variables` / `type_variables` fields take `frozenset`, not
   `FrozenDict`.
-- **`AttributeError: module 'hydra.core' has no attribute 'TermUnion'`**.
+- **`AttributeError: module 'hydra.core.model' has no attribute 'TermUnion'`**.
   Union variants are `TermInject(Injection(...))`. There is no
   `TermUnion`. Related: optionals are `TermOptional`, not `TermMaybe`
   (renamed in #401).
-- **`ImportError: No module named hydra.decode.…`** at runtime.
+- **`ImportError: No module named hydra.<your>.decode.…`** at runtime.
   All three roots need to be on `PYTHONPATH` (see Step 2).
 
 ## Related documentation
@@ -395,7 +396,7 @@ Useful pieces to study, if still present at those paths:
   across `bin/sync-python.sh` runs.
 - [The Hydra JSON kernel](json-kernel.md) — the JSON representation
   Hydra uses to interchange modules between hosts. Useful context for
-  Path A in Step 1 and for the `hydra.json.*` modules referenced in the
+  Path A in Step 1 and for the `hydra.core.json.*` modules referenced in the
   overview.
 - [Hydra implementation overview](../implementation.md) and the
   [Concepts wiki page](https://github.com/CategoricalData/hydra/wiki/Concepts) —

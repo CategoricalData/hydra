@@ -56,12 +56,12 @@ usage, architecture details, and known limitations.
 ## ValidatePG (property graph validation)
 
 ValidatePG validates property graphs against a schema, exercising every validation condition
-in `hydra.validate.pg` (missing required properties, type mismatches, unknown labels,
+in `hydra.pg.validate.model` (missing required properties, type mismatches, unknown labels,
 wrong edge endpoints, etc.).
 
 The demo is **translingual**: a single set of example data (a schema and twelve graphs encoded
-as JSON via `hydra.encode.pg.model`) is consumed by drivers in Haskell, Java, and Python.
-Each driver decodes the JSON, runs `hydra.validate.pg.validateGraph`, and prints the results.
+as JSON via `hydra.pg.encode.model`) is consumed by drivers in Haskell, Java, and Python.
+Each driver decodes the JSON, runs `hydra.pg.validate.model.validateGraph`, and prints the results.
 An orchestrator script runs all three, compares their output, and displays a timing summary.
 
 See the [ValidatePG README](../demos/validatepg/README.md) for setup and usage.
@@ -70,7 +70,7 @@ See the [ValidatePG README](../demos/validatepg/README.md) for setup and usage.
 
 The user brings a graph as **plain Neo4j Cypher** (a `CREATE` script, the same one they'd run in
 `cypher-shell`); the demo ingests it into Hydra's Neo4j model and validates it in Java, Python,
-Haskell, and TypeScript — each running `hydra.validate.neo4j.validateGraph` generated from a single
+Haskell, and TypeScript — each running `hydra.pg.validate.neo4j.validateGraph` generated from a single
 Hydra source. The user never authors anything in Hydra. (The demo can also generate its own sample
 graphs from the Java DSL for a self-contained run.) Because every host reads identical data and runs
 a validator generated from one definition, the verdicts are identical across languages by
@@ -87,9 +87,9 @@ See the [JSON-artifact demo README](../demos/neo4j-validation/README-json.md) fo
 ## Neo4j validation — live graph (validate a running database via the Neo4j driver)
 
 Validates a **live Neo4j graph** against a Hydra Neo4j graph type, running the same
-`hydra.validate.neo4j.validateGraph` in Java and Python. Each host connects to a running Neo4j
+`hydra.pg.validate.neo4j.validateGraph` in Java and Python. Each host connects to a running Neo4j
 using that language's Neo4j client driver, reads the nodes and relationships, maps the driver's
-types onto `hydra.neo4j.model`, and reports all violations.
+types onto `hydra.pg.neo4j.model`, and reports all violations.
 
 It demonstrates a capability Neo4j itself lacks — retroactive, client-side, whole-graph validation
 that reports every violation at once (Neo4j enforces constraints and graph types only at write time,

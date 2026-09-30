@@ -6,7 +6,7 @@
 ## Overview
 
 Hydra is a typed, functional meta-programming language whose core data model
-is defined in `hydra.core.Term` — a System-F-based term algebra with
+is defined in `hydra.core.model.Term` — a System-F-based term algebra with
 lambdas, applications, let-bindings, case statements, and primitive
 references. The Hydra compiler generates code for multiple target
 languages including Haskell, Python, and Java.
@@ -57,8 +57,8 @@ type. TCO is a *code-generation concern*, not a language-level construct.
 
 Detection lives in the kernel `Analysis` module
 (`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Analysis.hs`),
-exposed as `hydra.analysis.isSelfTailRecursive` and
-`hydra.analysis.isTailRecursiveInTailPosition`. Both the Python and Java
+exposed as `hydra.core.analysis.isSelfTailRecursive` and
+`hydra.core.analysis.isTailRecursiveInTailPosition`. Both the Python and Java
 coders call into the kernel function rather than duplicating the algorithm.
 
 ### Algorithm
@@ -140,20 +140,20 @@ A Hydra function like `deannotateAndDetypeTerm` that pattern-matches and
 recurses on sub-terms generates:
 
 ```python
-def deannotate_and_detype_term(t: hydra.core.Term) -> hydra.core.Term:
+def deannotate_and_detype_term(t: hydra.core.model.Term) -> hydra.core.model.Term:
     r"""Strip type annotations from the top levels of a term."""
 
     while True:
         match t:
-            case hydra.core.TermAnnotated(value=at):
+            case hydra.core.model.TermAnnotated(value=at):
                 t = at.body
                 continue
 
-            case hydra.core.TermTypeApplication(value=tt):
+            case hydra.core.model.TermTypeApplication(value=tt):
                 t = tt.body
                 continue
 
-            case hydra.core.TermTypeLambda(value=ta):
+            case hydra.core.model.TermTypeLambda(value=ta):
                 t = ta.body
                 continue
 

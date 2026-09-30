@@ -39,8 +39,8 @@ The synchronization process generates three categories of Python code:
 
 | Category | Source | Target | Description |
 |----------|--------|--------|-------------|
-| Kernel modules | `Hydra.Sources.All.kernelModules` | `dist/python/hydra-kernel/src/main/python/hydra/` | Core Hydra types and functions |
-| Kernel tests | `Hydra.Sources.Test.All.testModules` | `dist/python/hydra-kernel/src/test/python/hydra/test/` | Test data structures |
+| Kernel modules | `Hydra.Sources.All.kernelModules` | `dist/python/hydra-kernel/src/main/python/hydra/core/` | Core Hydra types and functions |
+| Kernel tests | `Hydra.Sources.Test.All.testModules` | `dist/python/hydra-kernel/src/test/python/hydra/core/test/` | Test data structures |
 | Generation tests | TestSuite + TestGroups | `dist/python/hydra-kernel/src/test/python/generation/` | Executable pytest tests |
 
 ## Prerequisites
@@ -177,7 +177,7 @@ Check the output for "Skipping" messages to identify problematic modules.
 ### Test failures after sync
 
 1. Ensure Haskell tests pass first
-2. Check for missing primitive implementations in `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib/`
+2. Check for missing primitive implementations in `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/lib/`
 3. See [troubleshooting.md](../troubleshooting.md) for known failure modes
 
 ## Related Documentation

@@ -7,7 +7,7 @@ against `hydra-python` from PyPI; the version is pinned in `hydra.json`
 (see [The build system](../build-system.md#consuming-published-hosts)).
 
 This works because Hydra's data model is **forward-compatible**: a previously-published host can process
-the current build's data as long as `hydra.core` and `hydra.packaging` (especially the `Module` type)
+the current build's data as long as `hydra.core.model` and `hydra.core.packaging` (especially the `Module` type)
 have not changed incompatibly since that host was released
 (see [Self-bootstrapping and forward-compatibility](https://github.com/CategoricalData/hydra/wiki/Packaging#self-bootstrapping-and-forward-compatibility)).
 
@@ -18,7 +18,7 @@ current tree. There are two distinct failure modes with two different fixes.
 
 | | **Mode A — a release is buggy** | **Mode B — a backward-incompatible change** |
 |---|---|---|
-| What happened | A published host version has a bug (bad codegen, a crash), but the data model is unchanged. | A kernel change to `hydra.core` / `hydra.packaging` means **no** published host — including the latest — can process the new data. |
+| What happened | A published host version has a bug (bad codegen, a crash), but the data model is unchanged. | A kernel change to `hydra.core.model` / `hydra.core.packaging` means **no** published host — including the latest — can process the new data. |
 | Symptom | The current `hostVersion` fails, but an **earlier** published version works. | **Every** published version fails the same way; the change is in this tree's kernel. |
 | Fix | **Pin** to an earlier good version (no local build). | **Local-host shim**: build the host locally, use it this cycle, publish it, then pin to it. |
 | Section | [Mode A](#mode-a-pin-to-an-earlier-good-release) | [Mode B](#mode-b-the-local-host-shim) |

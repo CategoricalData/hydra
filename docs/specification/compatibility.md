@@ -1,5 +1,5 @@
 <!-- NOTE: hand-authored spec chapter (not a generated module page). Drafted under #676 as the
-     policy companion to #595 (the hydra.diff engine that mechanically applies these rules) and
+     policy companion to #595 (the hydra.core.diff engine that mechanically applies these rules) and
      #675 (the effect-sequencing contract, a behavioral instance). -->
 
 # Backward compatibility and deprecation
@@ -20,7 +20,7 @@ The key words MUST, MUST NOT, SHOULD, and MAY are to be interpreted as described
 Every consumed surface is frozen on one of two axes.
 
 - **Structural** — the shape of data a consumer's generated code depends on: the JSON wire format,
-  the `hydra.core` and `hydra.packaging` types, the `hydra.error.*` types, and primitive
+  the `hydra.core.model` and `hydra.core.packaging` types, the `hydra.core.error.*` types, and primitive
   signatures. Structural compatibility is governed by the **additivity calculus** (§2) and is
   mechanically checkable from the schema alone.
 - **Behavioral** — meaning that is not visible in a signature: the semantics of a primitive at an
@@ -117,7 +117,7 @@ forwarding-term rename path of §3.2. A field, type, or module that must change 
 old surface and adds a new one (per §2.1's additive rules); there is no forwarding for non-term
 surfaces.
 
-`LifecycleInfo` is defined in `hydra.packaging` and attaches through `EntityMetadata.lifecycle`,
+`LifecycleInfo` is defined in `hydra.core.packaging` and attaches through `EntityMetadata.lifecycle`,
 which every `PrimitiveDefinition`, `TypeDefinition`, and `TermDefinition` carries. The status
 badges on the per-primitive specification pages (`Deprecated since: <v>. Use: <target>.`) are the
 prose face of this data; the `deprecatedSince` stamp is its machine-checkable form.
@@ -190,7 +190,7 @@ chapter states the tiering):
 
 ### 5.2 Error types
 
-The `hydra.error.*` types are structural surface and are governed by the additivity calculus (§2).
+The `hydra.core.error.*` types are structural surface and are governed by the additivity calculus (§2).
 In particular, **adding an error variant is an X-class change**, because downstream code
 exhaustively matches error unions. Error **text** — the human-readable message strings — is
 explicitly unpromised and MAY change in any release.

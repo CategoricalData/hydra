@@ -1,6 +1,6 @@
 # List representation and indexed-access performance
 
-`hydra.lib.lists.map` (and most other `hydra.lib.lists.*` primitives) return the kernel's abstract
+`hydra.core.lib.lists.map` (and most other `hydra.core.lib.lists.*` primitives) return the kernel's abstract
 `list<x>` type. The DSL signature does not mandate a concrete backing structure — each host's coder
 independently chooses how to represent it. As of this writing, that choice is not uniform across
 hosts, and on some hosts repeated indexed access (`at(i, xs)`, or a host-native `get`/`nth`/
@@ -20,12 +20,12 @@ realistic data sizes.
 
 | Host | List representation | Indexed access |
 |------|---------------------|-----------------|
-| Java | `hydra.overlay.java.util.ConsList` — a singly-linked cons-list (implements `java.util.List`, so it type-checks as one, but `get(i)` walks `i` cells) | O(i) — **quadratic in a loop** |
+| Java | `hydra.core.overlay.java.util.ConsList` — a singly-linked cons-list (implements `java.util.List`, so it type-checks as one, but `get(i)` walks `i` cells) | O(i) — **quadratic in a loop** |
 | Clojure | native Clojure seq / lazy-seq; `at` uses `nth` | O(i) — **quadratic in a loop** |
 | Common Lisp | native cons-list; `at` uses `nth` | O(i) — **quadratic in a loop** |
 | Emacs Lisp | native cons-list; `at` uses `nth` | O(i) — **quadratic in a loop** |
 | Scheme | native cons-list (R7RS pairs); `at` uses `list-ref` | O(i) — **quadratic in a loop** |
-| Python | `hydra.overlay.python.util.ConsList` — backed internally by a native `tuple` | O(1) |
+| Python | `hydra.core.overlay.python.util.ConsList` — backed internally by a native `tuple` | O(1) |
 | Scala | native `Seq[A]` | O(1) |
 | TypeScript | native JS array | O(1) |
 | Haskell | native `[a]` | O(i) by construction — idiomatic for the language; Haskell code that needs random access already reaches for `Data.Sequence`/`Data.Vector` instead of indexing `[a]` |
@@ -52,7 +52,7 @@ storage trades an O(n) `cons`/prepend for O(1) indexing, judged the better trade
 codegen-heavy workloads). Scala and TypeScript are unaffected for the same reason (native
 array-backed sequences).
 
-If you only need a single lookup rather than a loop, `hydra.lib.lists.at(i, xs)` is fine as-is on
+If you only need a single lookup rather than a loop, `hydra.core.lib.lists.at(i, xs)` is fine as-is on
 every host — the cost only compounds when called repeatedly over an increasing (or any) range of
 indices against the same list.
 

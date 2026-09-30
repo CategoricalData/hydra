@@ -37,13 +37,13 @@ map, or pair only if its element (and key/value) types are; a wrapped or named t
 type it wraps or names is. A type built entirely from literals, records, unions, and the built-in
 collection types over serializable components is serializable.
 
-This is the property computed by `hydra.predicates.isSerializable`.
+This is the property computed by `hydra.core.predicates.isSerializable`.
 
 ## The encode/decode contract
 
 For every serializable type `T`, Hydra generates a pair of functions:
 
-- `encode : T → Term` — encodes a value as a `hydra.core.Term`.
+- `encode : T → Term` — encodes a value as a `hydra.core.model.Term`.
 - `decode : Term → T` — decodes a `Term` back to a value, with the possibility of failure on a
   malformed or ill-typed `Term`.
 

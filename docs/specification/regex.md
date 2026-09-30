@@ -10,12 +10,12 @@ normative specification.
 > Hydra textual syntax), of which the regex sub-syntax is a concrete increment.
 >
 > **Naming.** This work uses the **`parse`/`print`** axis rather than the earlier `read`/`show`
-> naming: `hydra.parse.regex` (text → AST), `hydra.print.regex` (AST → canonical text), and
-> `hydra.print.<dialect>.regex` (per-dialect rendering, e.g. `hydra.print.jvm.regex`).
+> naming: `hydra.core.parse.regex` (text → AST), `hydra.core.print.regex` (AST → canonical text), and
+> `hydra.core.print.<dialect>.regex` (per-dialect rendering, e.g. `hydra.core.print.pcre.regex`).
 
 ## Purpose
 
-Hydra's `hydra.lib.regex` primitives (`find`, `findAll`, `matches`, `replace`, `replaceAll`, `split`)
+Hydra's `hydra.core.lib.regex` primitives (`find`, `findAll`, `matches`, `replace`, `replaceAll`, `split`)
 currently delegate to each host's native regex engine, so a pattern's meaning is **host-defined**. For
 a finalized, translingual primitive set this is unacceptable: a pattern must mean the same thing on
 every host. This document defines a **Hydra-specific regex syntax** and records the per-host engine
@@ -24,7 +24,7 @@ every supported target dialect.
 
 ## Stage 0 — host regex-engine survey
 
-Each Hydra host delegates the `hydra.lib.regex` primitives to a native engine. The engines and their
+Each Hydra host delegates the `hydra.core.lib.regex` primitives to a native engine. The engines and their
 dialect families:
 
 | Host | Engine / library | Dialect family | Notes |
@@ -137,7 +137,7 @@ Each of these was decided against the host-engine evidence (see the TDFA probe r
 - **No `{,m}`.** POSIX ERE has no empty-lower-bound interval; ECMA only accepts it under the ES2018
   web-compat annex (and rejects it in Unicode mode). It is also redundant with the fully portable
   `{0,m}`. Dropped. The three portable interval forms remain: `{n}`, `{n,}`, `{n,m}`.
-- **No empty alternation branch.** `a|`, `|b`, `a||b`, `a|||` are **rejected** by `hydra.parse.regex`.
+- **No empty alternation branch.** `a|`, `|b`, `a||b`, `a|||` are **rejected** by `hydra.core.parse.regex`.
   POSIX ERE (TDFA) rejects them natively; ECMA/PCRE accept them but they are redundant — "`foo` or the
   empty string" is written `(foo)?` — and a stray `|` silently turns a pattern into match-anywhere.
   Every branch must contain at least one `quantified`.
@@ -156,7 +156,7 @@ Each of these was decided against the host-engine evidence (see the TDFA probe r
 
 ### Abstract syntax (Hydra regex AST)
 
-Proposed new kernel type module `hydra.regex` (namespace `hydra.regex`), a sibling of `hydra.ast`.
+Proposed new kernel type module `hydra.core.regex` (namespace `hydra.core.regex`), a sibling of `hydra.core.ast`.
 Sketch (final DSL in `packages/hydra-kernel/.../Kernel/Types/Regex.hs`):
 
 ```
@@ -177,9 +177,9 @@ CharacterRange  = { from: CodePoint, to: CodePoint }
 Characters are **full Unicode scalar values** (range `[U+0000, U+10FFFF]`, surrogates
 `U+D800–U+DFFF` excluded) — **not** BMP-only. They are represented as **`int32`** code points: the
 scalar-value range `[0, 0x10FFFF]` fits comfortably in signed 32-bit, and `int32` matches the code-point
-representation used throughout Hydra's string and parser primitives (`hydra.lib.strings.toList`/`fromList`
-and the `hydra.parsers` combinators all operate on `int32` code points), so no width conversion is needed
-at the parser/printer boundaries. `hydra.parse.regex` rejects out-of-range or lone-surrogate code points,
+representation used throughout Hydra's string and parser primitives (`hydra.core.lib.strings.toList`/`fromList`
+and the `hydra.core.parsers` combinators all operate on `int32` code points), so no width conversion is needed
+at the parser/printer boundaries. `hydra.core.parse.regex` rejects out-of-range or lone-surrogate code points,
 so the AST only ever holds valid scalar values. Each host printer is responsible for emitting a code point
 correctly in its target encoding (a literal char, a surrogate pair on UTF-16 hosts, `\u{...}`, etc.) — the
 AST carries the abstract code point only.
@@ -187,12 +187,12 @@ AST carries the abstract code point only.
 > Note: `QuantifierRange` and `CharacterRange` are **named** record types, not inline records nested
 > in the union variants. Hydra's coders cannot name an anonymous record nested inside a union variant
 > (the Haskell coder emits an unbound `placeholder` type variable), so every record used as a variant
-> payload must be a top-level definition — the same convention `hydra.query` follows with its `Range`
+> payload must be a top-level definition — the same convention `hydra.core.query` follows with its `Range`
 > type.
 
-Reuse note: `hydra.query.RegexQuantifier` / `Range` (in `Kernel/Types/Query.hs`) already model exactly
+Reuse note: `hydra.core.query.RegexQuantifier` / `Range` (in `Kernel/Types/Query.hs`) already model exactly
 these quantifiers — but specialized to quantify a graph **path**, not a character atom. The new
-`hydra.regex.Quantifier` should mirror its shape; a future refactor could hoist a shared
+`hydra.core.regex.Quantifier` should mirror its shape; a future refactor could hoist a shared
 `Quantifier`, but that is out of scope for #567 (noted as a Finding).
 
 ### Semantics to pin
@@ -212,16 +212,16 @@ these quantifiers — but specialized to quantify a graph **path**, not a charac
   agree on non-pathological inputs; the conformance suite pins the divergent cases (e.g. `a|ab` on
   `"ab"`).
 - **`matches` is whole-string-anchored** (settled convention).
-- **Ill-formed = does not parse under `hydra.parse.regex`.** Failure is Hydra-defined and portable
+- **Ill-formed = does not parse under `hydra.core.parse.regex`.** Failure is Hydra-defined and portable
   (same pattern is `left`/`nothing` on every host), per the issue's either/optional codomain rule.
 
 ### Escaping and canonical printing
 
 Escaping is purely a **concrete-syntax / serialization** concern — the AST holds bare code points, with
-no notion of escaping. `hydra.parse.regex` consumes escapes; the printers decide when to emit them.
+no notion of escaping. `hydra.core.parse.regex` consumes escapes; the printers decide when to emit them.
 
-- **`hydra.print.regex` (canonical) escapes minimally.** A character is escaped only where it is
-  special *in the context it appears*. `hydra.parse.regex` accepts liberally (`\x` for any `x`), so
+- **`hydra.core.print.regex` (canonical) escapes minimally.** A character is escaped only where it is
+  special *in the context it appears*. `hydra.core.parse.regex` accepts liberally (`\x` for any `x`), so
   `print ∘ parse` is idempotent on well-formed input.
 - **Top-level metaset** (outside `[...]`): `. ^ $ * + ? ( ) [ ] { } | \`. A `-` is **not** special at
   top level and prints bare (`a-b` at top level is three literals, not a range).
@@ -262,10 +262,10 @@ Run against the Haskell host of record to ground the decisions above (not assume
 
 - **Stage 1** — grammar/BNF + Hydra regex AST (verify the invariant against this matrix; resolve the
   Emacs `{n,m}` gap via option A).
-- **Stage 2** — `hydra.parse.regex` (text → AST) and `hydra.print.regex` (AST → canonical text).
-- **Stage 3** — per-dialect `hydra.print.<dialect>.regex` translators (one per distinct dialect family:
+- **Stage 2** — `hydra.core.parse.regex` (text → AST) and `hydra.core.print.regex` (AST → canonical text).
+- **Stage 3** — per-dialect `hydra.core.print.<dialect>.regex` translators (one per distinct dialect family:
   a POSIX-ERE dialect, a PCRE/`java.util.regex` dialect, an ECMA-262 dialect, an Emacs dialect, an RE2
   dialect).
-- **Stage 4** — rewire `hydra.lib.regex` to Hydra-defined semantics; either-returning codomains for
+- **Stage 4** — rewire `hydra.core.lib.regex` to Hydra-defined semantics; either-returning codomains for
   fail-on-malformed ops.
 - **Stage 5** — host-independent conformance suite.

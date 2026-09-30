@@ -28,7 +28,7 @@ using `ref`. This ensures consistency and eliminates duplication across test cas
 ```haskell
 module_ :: Module
 module_ = Module {
-    moduleName = ModuleName "hydra.test.testGraph",
+    moduleName = ModuleName "hydra.core.test.testGraph",
     moduleDefinitions = definitions,
     moduleDependencies = unqualifiedDep <$>
       ([moduleName TestTerms.module_, moduleName TestTypes.module_]
@@ -62,9 +62,9 @@ Tests are organized as proper Hydra modules with:
 When you run `writeHaskell "../../dist/haskell/hydra-kernel/src/test/haskell" allModules baseTestModules`
 (where `allModules = mainModules ++ testModules`),
 each module generates a separate file based on its module name:
-- `hydra.test.checking.fundamentals` → `Hydra/Test/Checking/Fundamentals.hs`
-- `hydra.test.inference.algebraicTypes` → `Hydra/Test/Inference/AlgebraicTypes.hs`
-- `hydra.test.etaExpansion` → `Hydra/Test/EtaExpansion.hs`
+- `hydra.core.test.checking.fundamentals` → `Hydra/Core/Test/Checking/Fundamentals.hs`
+- `hydra.core.test.inference.algebraicTypes` → `Hydra/Core/Test/Inference/AlgebraicTypes.hs`
+- `hydra.core.test.etaExpansion` → `Hydra/Core/Test/EtaExpansion.hs`
 
 ## Test Module Structure
 
@@ -76,14 +76,14 @@ Every test module follows this pattern:
 module Hydra.Sources.Test.MyTest where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing as Testing
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms as Phantoms
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 
 module_ :: Module
 module_ = Module {
-    moduleName = ModuleName "hydra.test.myTest",
+    moduleName = ModuleName "hydra.core.test.myTest",
     moduleDefinitions = definitions,
     moduleDependencies = unqualifiedDep <$>
       ([moduleName TestGraph.module_] L.++ kernelTypesModuleNames),
@@ -143,8 +143,8 @@ A test case is one of two variants of the `TestCase` union:
 
 - **`UniversalTestCase`** — the pervasive variant: `actual` and `expected` are both
   unit-thunks producing **strings**, compared for equality.
-- **`EffectfulTestCase`** (#494) — for testing effectful primitives (`hydra.lib.effects`,
-  `hydra.lib.files`): `actual` is a unit-thunk producing an **`effect<string>`** that the
+- **`EffectfulTestCase`** (#494) — for testing effectful primitives (`hydra.core.lib.effects`,
+  `hydra.core.lib.files`): `actual` is a unit-thunk producing an **`effect<string>`** that the
   runner *executes* (performing real host interactions, e.g. file I/O); `expected` is a
   unit-thunk producing a string. See [The field terms, and two ways the mapping translates
   them](#the-field-terms-and-two-ways-the-mapping-translates-them) below for how Hydra maps
@@ -157,11 +157,11 @@ structural value-equality check. This is deliberate and sound, for two reasons, 
 gap where a host with a subtly wrong value-equality could pass:
 
 1. **The rendering is information-preserving.** Types and terms are rendered through Hydra's textual
-   syntax (`hydra.print.*`), for which `parse (print x) == x` holds by design (the round-trip law; see the
+   syntax (`hydra.core.print.*`), for which `parse (print x) == x` holds by design (the round-trip law; see the
    `printable` capability and the [serialization spec](https://github.com/CategoricalData/hydra/blob/main/docs/specification/serialization.md)).
    Two values render to the same string exactly when they are the same value — so string equality of the
    renderings *is* value equality, not a lossy proxy for it.
-2. **The renderer is translingual.** `hydra.print.*` is itself Hydra code, generated into every host and
+2. **The renderer is translingual.** `hydra.core.print.*` is itself Hydra code, generated into every host and
    covered by the conformance suite, so the rendering behaves identically on every host. A per-host
    discrepancy in rendering would itself be a conformance failure, caught by the suite.
 
@@ -191,13 +191,13 @@ starts, and per-group timings collapse to 0 ms. See issue #311 for context.
 
 ### Constructing universal tests
 
-The DSL helper `Hydra.Overlay.Haskell.Dsl.Typed.Testing.universalTestCase` wraps each string
+The DSL helper `Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing.universalTestCase` wraps each string
 expression in a unit-lambda internally, so callers continue to pass plain
 `TypedTerm String` values:
 
 ```haskell
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms as Phantoms
 
 -- Typical test construction (string-equality comparison)
 Testing.universalCase "case name" actualExpr expectedExpr
@@ -209,7 +209,7 @@ Testing.infTest "case name" tags term typeScheme
 Testing.evalCase "case name" inputTerm outputTerm
 ```
 
-Every test helper in `Hydra.Overlay.Haskell.Dsl.Typed.Testing` (`universalCase`, `evalCase`,
+Every test helper in `Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing` (`universalCase`, `evalCase`,
 `evalCaseWithTags`, `infTest`, `infFailureTest`, `checkTest`, `noChange`,
 `evalPair`, `evalPairWithTags`, `stringEvalPair`, `alphaCase`, `typeRedCase`,
 `validateCoreTermCase`, `validateCoreTermCaseWithProfile`,
@@ -227,7 +227,7 @@ an appropriate unit argument:
 
 - Haskell: `actual ()` / `expected ()` (Hydra `\_ -> body` → Haskell `\_ -> body`)
 - Python: `actual(None)` / `expected(None)` (Python `lambda _: body`)
-- Java:  `actual.apply(new hydra.util.Unit())` (Java `Function<Unit, String>`)
+- Java:  `actual.apply(new hydra.core.overlay.java.util.Unit())` (Java `Function<Unit, String>`)
 - Scala: `actual(())` / `expected(())` (Scala `Unit => String`)
 - Clojure: `((:actual tc) nil)` (Clojure `(fn [_] body)`)
 - Common Lisp / Emacs Lisp: `(funcall <fn> nil)`
@@ -267,8 +267,8 @@ one of two ways the **mapping** translates that already-typed field term into a 
 case:
 
 1. **Interpreter-based mapping.** The mapping *reifies* the field term — turning it into a
-   `hydra.core.Term` value — and produces a derived term that applies the kernel interpreter
-   (`hydra.reduction.reduceTerm`, with `hydra.print.core.term` rendering the result). That
+   `hydra.core.model.Term` value — and produces a derived term that applies the kernel interpreter
+   (`hydra.core.reduction.reduceTerm`, with `hydra.core.print.model.term` rendering the result). That
    *derived* term is what gets encoded into the target, which therefore runs the expression
    through Hydra's own evaluator. (Today this is set up by the explicit `evalCase`/`primCase`
    helpers, which build the `reduceTerm` application by hand; #420 moves this into the
@@ -291,32 +291,32 @@ translation is restricted to the native path.
 Because `actual`/`expected` hold a term of the field's value type, author them with builders
 that produce a term *of that type*:
 
-- **Value-typed builders** (`Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`, `Hydra.Overlay.Haskell.Dsl.Literals` — e.g.
+- **Value-typed builders** (`Hydra.Core.Overlay.Haskell.Dsl.Phantoms`, `Hydra.Core.Overlay.Haskell.Dsl.Literals` — e.g.
   `Literals.string :: String -> TypedTerm String`, `Phantoms.primitive`, `Phantoms.@@`)
   produce a term of its own value type: `Literals.string "x"` is a `string`,
   `readFile (path "f")` is an `effect<string>`. Use these for the `actual`/`expected` fields.
-- **Reified-AST builders** (`Hydra.Overlay.Haskell.Dsl.Typed.Terms` — e.g. `Terms.string`, which is
+- **Reified-AST builders** (`Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms` — e.g. `Terms.string`, which is
   `termLiteral (literalString …)`, and `Terms.primitive`, which is `termVariable
-  (encodeName …)`) produce a term whose *type* is `hydra.core.Term` — a `Term`-valued AST.
-  These are for slots that genuinely take `hydra.core.Term` data, e.g. the argument the
+  (encodeName …)`) produce a term whose *type* is `hydra.core.model.Term` — a `Term`-valued AST.
+  These are for slots that genuinely take `hydra.core.model.Term` data, e.g. the argument the
   current `evalCase`/`primCase` helpers hand to `reduceTerm` when they construct the
   interpreter mapping by hand. They are **not** the field term itself.
 
 The pitfall that motivated this note: putting a reified `Terms.string`/`Terms.primitive`
-(type `hydra.core.Term`) directly into an `EffectfulTestCase` field is a type error — the
-field requires `effect<string>`/`string`, not `hydra.core.Term`. Every field body then
-infers as `hydra.core.Term`, and per-package inference fails with `cannot unify string with
+(type `hydra.core.model.Term`) directly into an `EffectfulTestCase` field is a type error — the
+field requires `effect<string>`/`string`, not `hydra.core.model.Term`. Every field body then
+infers as `hydra.core.model.Term`, and per-package inference fails with `cannot unify string with
 effect<string>`, because the schema's two distinct field types collide on the single
-`hydra.core.Term` variable. (Universal cases happen not to surface this, since both their
-fields are `string`, so the one `hydra.core.Term` variable unifies consistently — but a
+`hydra.core.model.Term` variable. (Universal cases happen not to surface this, since both their
+fields are `string`, so the one `hydra.core.model.Term` variable unifies consistently — but a
 universal field term should still be an honest `string` term.)
 
 This is the same rule in both cases: supply a term of the required type. Putting a reified
-`Terms.string`/`Terms.primitive` (type `hydra.core.Term`) into an `EffectfulTestCase` field
-is simply a type error: every field body then infers as `hydra.core.Term`, and per-package
+`Terms.string`/`Terms.primitive` (type `hydra.core.model.Term`) into an `EffectfulTestCase` field
+is simply a type error: every field body then infers as `hydra.core.model.Term`, and per-package
 inference fails with `cannot unify string with effect<string>`, because the schema's two
-distinct field types collide on the single `hydra.core.Term` variable. (Universal cases
-never expose this collision: both their fields are `string`, so the one `hydra.core.Term`
+distinct field types collide on the single `hydra.core.model.Term` variable. (Universal cases
+never expose this collision: both their fields are `string`, so the one `hydra.core.model.Term`
 variable unifies consistently — but they are still relying on the reduce-it-as-data path,
 which is unavailable to effects.)
 
@@ -324,12 +324,12 @@ which is unavailable to effects.)
 
 Understanding the distinction between meta-level and term-level DSLs is crucial for writing tests:
 
-### Term-Level DSL (`Hydra.Overlay.Haskell.Dsl.Terms`, `Hydra.Overlay.Haskell.Dsl.Tests`)
+### Term-Level DSL (`Hydra.Core.Overlay.Haskell.Dsl.Terms`, `Hydra.Core.Overlay.Haskell.Dsl.Tests`)
 
 Used for constructing **Haskell `Term` values** representing Hydra terms:
 
 ```haskell
-import Hydra.Overlay.Haskell.Dsl.Tests
+import Hydra.Core.Overlay.Haskell.Dsl.Tests
 
 -- These create Term values (Haskell data)
 lambda "x" $ var "x"                    -- Term
@@ -337,13 +337,13 @@ splitOn @@ string "," @@ var "input"    -- Term
 record personType ["name">: string "Alice", "age">: int32 30]  -- Term
 ```
 
-### Meta-Level DSL (`Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`, `Hydra.Overlay.Haskell.Dsl.Typed.Testing`)
+### Meta-Level DSL (`Hydra.Core.Overlay.Haskell.Dsl.Phantoms`, `Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing`)
 
 Used for constructing **`TypedTerm a` values** - meta-representations of Hydra terms used in modules:
 
 ```haskell
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing as Testing
 
 -- These create TypedTerm values (meta-representations)
 Phantoms.string "name"                  -- TypedTerm String
@@ -389,7 +389,7 @@ Aggregator modules group related test modules:
 -- Hydra/Sources/Test/Checking/All.hs
 module_ :: Module
 module_ = Module {
-    moduleName = ModuleName "hydra.test.checking.all",
+    moduleName = ModuleName "hydra.core.test.checking.all",
     moduleDefinitions = definitions,
     moduleDependencies = unqualifiedDep <$>
       ((moduleName <$> dependentModules) L.++ kernelTypesModuleNames),
@@ -507,20 +507,21 @@ This generates separate files for each test module based on their module names:
 ```
 dist/haskell/hydra-kernel/src/test/haskell/
 └── Hydra/
-    └── Test/
-        ├── TestSuite.hs
-        ├── TestGraph.hs
-        ├── Checking/
-        │   ├── All.hs
-        │   ├── Fundamentals.hs
-        │   ├── AlgebraicTypes.hs
-        │   └── ...
-        ├── Inference/
-        │   ├── All.hs
-        │   ├── Fundamentals.hs
-        │   └── ...
-        ├── EtaExpansion.hs
-        └── Formatting.hs
+    └── Core/
+        └── Test/
+            ├── TestSuite.hs
+            ├── TestGraph.hs
+            ├── Checking/
+            │   ├── All.hs
+            │   ├── Fundamentals.hs
+            │   ├── AlgebraicTypes.hs
+            │   └── ...
+            ├── Inference/
+            │   ├── All.hs
+            │   ├── Fundamentals.hs
+            │   └── ...
+            ├── EtaExpansion.hs
+            └── Formatting.hs
 ```
 
 ### Cross-Language Generation
@@ -558,7 +559,7 @@ project (Core.name "Person") (Core.name "firstName")
 
 ### 2. Keep the hydra-kernel test suite language-agnostic
 
-The hydra-kernel test suite (`hydra.test.*`) must not depend on any `hydra.<domain>.*` module.
+The hydra-kernel test suite (`hydra.core.test.*`) must not depend on any other package's modules (`hydra.<package>.*`, e.g. `hydra.pg.*`).
 Every test runner — Haskell, Java, Python, and future implementations — must be able
 to run the common tests without shipping language-specific extension modules. If a
 test needs data values that happen to exist in an extension module (e.g., operator
@@ -569,7 +570,7 @@ definitions), define them locally in the test module instead of importing them.
 - Test modules: `Hydra.Sources.Test.CategoryName`
 - Root binding: Always `allTestsDef`
 - Helper function: Always `define`
-- Module name: `hydra.test.categoryName` (camelCase)
+- Module name: `hydra.core.test.categoryName` (camelCase)
 
 ### 4. Use Meta-Level Functions for Structure
 
@@ -610,7 +611,7 @@ To add a new test module:
    ```haskell
    module_ :: Module
    module_ = Module {
-       moduleName = ModuleName "hydra.test.yourTest",
+       moduleName = ModuleName "hydra.core.test.yourTest",
        moduleDefinitions = definitions,
        moduleDependencies = unqualifiedDep <$>
          ([moduleName TestGraph.module_] L.++ kernelTypesModuleNames),

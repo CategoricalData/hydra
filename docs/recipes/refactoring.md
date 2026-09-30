@@ -59,12 +59,12 @@ module Hydra.Sources.Kernel.Terms.MyModule where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import Hydra.Overlay.Haskell.Libraries
+import Hydra.Core.Overlay.Haskell.Libraries
 -- ... other standard imports (copy from an existing module)
 
 -- Define the module name
 ns :: ModuleName
-ns = ModuleName "hydra.mymodule"
+ns = ModuleName "hydra.core.mymodule"
 
 -- Define the module
 module_ :: Module
@@ -194,7 +194,7 @@ In the source module, remove the element from the `definitions` list.
 Search for references to the deleted element:
 ```bash
 grep -rn 'myDeletedFunction' packages/hydra-haskell/src/main/haskell/
-grep -rn 'hydra.mymodule.myDeletedFunction' packages/hydra-haskell/src/
+grep -rn 'hydra.core.mymodule.myDeletedFunction' packages/hydra-haskell/src/
 ```
 
 Update or remove all references.
@@ -220,7 +220,7 @@ Remove the import and module reference from `All.hs`.
 Search for imports and references:
 ```bash
 grep -rn 'MyModule' packages/hydra-haskell/src/main/haskell/
-grep -rn 'hydra.mymodule' packages/hydra-haskell/src/
+grep -rn 'hydra.core.mymodule' packages/hydra-haskell/src/
 ```
 
 ### Step 3: Delete the Source File
@@ -232,9 +232,9 @@ rm packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/MyModule.hs
 ### Step 4: Delete Generated Files
 
 ```bash
-rm ../../dist/haskell/hydra-kernel/src/main/haskell/Hydra/MyModule.hs
-rm -rf ../dist/python/hydra-kernel/src/main/python/hydra/mymodule/
-rm -rf ../dist/java/hydra-kernel/src/main/java/hydra/mymodule/
+rm ../../dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/MyModule.hs
+rm -rf ../dist/python/hydra-kernel/src/main/python/hydra/core/mymodule/
+rm -rf ../dist/java/hydra-kernel/src/main/java/hydra/core/mymodule/
 ```
 
 ### Step 5: Build and Regenerate
@@ -284,7 +284,7 @@ myNewName = define "myNewName" $ ...
 Also update the Haskell binding name if desired.
 The local name string passed to `define` is what the validation rules see —
 if you are migrating to satisfy a naming-convention check
-(e.g., the camelCase rule in `hydra.validate.packaging`),
+(e.g., the camelCase rule in `hydra.core.validate.packaging`),
 the *string* must change, not just the Haskell binding.
 
 ### Step 2: Update the Element Registration
@@ -302,7 +302,7 @@ definitions = [
 Search the whole repo, not just `packages/hydra-haskell/`.
 Definitions in the kernel are referenced from at least:
 - DSL sources in `packages/hydra-*/src/main/haskell/Hydra/Sources/`
-- Hand-written runtimes in `heads/haskell/src/main/haskell/Hydra/Dsl/`
+- Hand-written runtimes in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/`
 - Test fixtures in `heads/haskell/src/test/`,
   `heads/{java,scala}/src/test/`, and the per-dialect Lisp test runners
   under `heads/lisp/*/src/test/`
@@ -313,13 +313,13 @@ Definitions in the kernel are referenced from at least:
 grep -rn 'myOldName' packages/ heads/ overlay/
 # Hydra-level fully-qualified name (appears in JSON, lisp test fixtures,
 # Java/Scala TestSuiteRunners, wasm manifest, etc.)
-grep -rn 'hydra.mymodule.myOldName' packages/ heads/ overlay/
+grep -rn 'hydra.core.mymodule.myOldName' packages/ heads/ overlay/
 ```
 
 ### Step 4: Build and Regenerate
 
 For a kernel rename, follow the bootstrap procedure below — the kernel
-sources won't compile against the old generated `Hydra.Constants` (or other
+sources won't compile against the old generated `Hydra.Core.Constants` (or other
 generated module), and regeneration depends on the kernel building.
 
 #### Bootstrap procedure for kernel renames
@@ -350,7 +350,7 @@ doesn't preserve), the case-converted identifiers in Python and Lisp dialects
 may be unchanged: e.g., both `key_classes` and `keyClasses` lower-snake to
 `key_classes`. In that situation no edits to host-language source files
 under `heads/python/` or `heads/lisp/*/` are needed, but the *fully-qualified
-Hydra names* embedded in test fixtures (`"hydra.constants.keyClasses"`) do
+Hydra names* embedded in test fixtures (`"hydra.core.constants.keyClasses"`) do
 change and must be updated.
 
 Java is the opposite: the local identifier (e.g., `keyClasses()`) reflects
@@ -368,9 +368,9 @@ because each host spells the kernel symbol differently. A complete sweep must co
   watch for the same type alias defined in *more than one* file (e.g. a per-module
   `type HaskellNamespaces = Namespaces H.ModuleName` in both `Utils.hs` and `Coder.hs`)
   — a unique-looking line can have duplicates.
-- **`heads/python/`**: snake_case imports and calls (`from hydra.names import namespace_to_file_path`).
+- **`heads/python/`**: snake_case imports and calls (`from hydra.core.names import namespace_to_file_path`).
 - **`heads/lisp/*/`**: the mangled `hydra_<module>_<snake_symbol>` form
-  (`hydra_codegen_namespace_to_path`, `hydra_names_namespace_to_file_path`).
+  (`hydra_core_codegen_namespace_to_path`, `hydra_core_names_namespace_to_file_path`).
 - **Native DSL sources** (`packages/hydra-{java,python,scala}/src/main/<lang>/`): the generated
   DSL *helper* is referenced in the host's native casing — Python uses **snake_case
   attribute access** for the helper itself (`Util.module_names(...)`, not
@@ -714,7 +714,7 @@ you need to rewrite every consumer of the old types to use the new one, often wi
    - Replace field accessors with the new type's accessors
    - Update DSL helper calls (constructor, `with*` helpers, field projections)
 
-4. **Update DSL helpers** in `Hydra/Overlay/Haskell/Dsl/Typed/`. Delete old constructors and accessors, add new ones or rename as appropriate.
+4. **Update DSL helpers** in `Hydra/Core/Overlay/Haskell/Dsl/Meta/`. Delete old constructors and accessors, add new ones or rename as appropriate.
 
 5. **Delete the old type** once no consumers remain.
    Remove it from the type definition source and the module's element list.
@@ -774,7 +774,7 @@ Generated Haskell code depends on modules that need to be generated. Solution:
 3. Manually patch **all** record construction sites in the generated tree to supply the new field —
    search for `TypeName {` across `dist/haskell/`
 4. If the new field's type needs a default value (like `emptyGraf`), add that helper manually to the generated file
-5. Update the DSL helpers (e.g., `Hydra/Overlay/Haskell/Dsl/Typed/Graph.hs`) — constructor, accessors, and all `with*` helpers
+5. Update the DSL helpers (e.g., `Hydra/Core/Overlay/Haskell/Dsl/Meta/Graph.hs`) — constructor, accessors, and all `with*` helpers
 6. Update all Source-level constructor calls to supply the new field
 7. `stack build` to verify everything compiles
 8. Regenerate cleanly — the generated files will now replace your manual patches
@@ -985,7 +985,7 @@ We created `hydra.hoisting` to separate these concerns.
 >   "interpreter-shape" defaults tree any more; either a primitive has a
 >   portable Hydra-term default at its public signature, or its registry
 >   entry is `primNoDef`.
-> - **Native Haskell impls**: `Hydra.Lib.*` → `Hydra.Overlay.Haskell.Lib.*` (#501).
+> - **Native Haskell impls**: `Hydra.Lib.*` → `Hydra.Overlay.Haskell.Lib.*` (#501) → `Hydra.Core.Overlay.Haskell.Lib.*` (#729).
 > - **Primitive registration helper**: `prim2Eval` and related `*Eval`
 >   helpers no longer exist; the same primitive now registers with
 >   plain `prim1` / `prim2` / `prim3` and pairs with a default impl

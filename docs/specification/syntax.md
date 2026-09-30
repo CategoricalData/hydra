@@ -6,7 +6,7 @@ Specification half of [#497](https://github.com/CategoricalData/hydra/issues/497
 
 This document specifies the Hydra textual notation for terms, types, literals, and type schemes:
 the presentation syntax used throughout the specification,
-produced by the `hydra.print.*` kernel functions and read by the `hydra.parse.*` functions.
+produced by the `hydra.core.print.*` kernel functions and read by the `hydra.core.parse.*` functions.
 The grammar is unambiguous, with stated precedence, and is normative for both directions:
 a conforming printer MUST emit text matching the canonical form (§4),
 and a conforming parser MUST accept every production of the grammar (§3).
@@ -72,7 +72,7 @@ The grammar is Unicode-only: there are no ASCII synonyms for the Unicode operato
 
 A *bare* name is a nonempty sequence of dot-separated segments of alphanumeric characters.
 Outside binder heads, bare dotted names are read greedily as qualified names
-(`hydra.core.Term` is one name).
+(`hydra.core.model.Term` is one name).
 
 A name may also be written in *backticked* form — `` ` `` … `` ` `` — using the string escape
 set of §2.5 for its content.
@@ -91,9 +91,9 @@ Case 3 concerns *binder heads*: the region between a binder (`λ`, `Λ`, `forall
 and the dot that terminates it.
 Within a binder head, at bracket depth zero, dots are structural
 and bare names are single dot-free segments.
-A dotted name there must be escaped: ``λx:`hydra.core.Term`.body``.
+A dotted name there must be escaped: ``λx:`hydra.core.model.Term`.body``.
 Inside nested delimiters — `<…>`, `(…)`, or backticks — dotted names read greedily as usual:
-`λx:list<hydra.core.Term>.body` needs no escaping.
+`λx:list<hydra.core.model.Term>.body` needs no escaping.
 
 ### 2.5 Strings
 
@@ -172,7 +172,7 @@ Precedence, tightest to loosest:
 A parenthesized single term or type is grouping; with a comma it is a pair.
 
 ```
--- Terms (21 variants of hydra.core.Term)
+-- Terms (21 variants of hydra.core.model.Term)
 term          ::= annotatedTerm | applicationTerm | caseTerm | eitherTerm
                 | injectTerm | lambdaTerm | letTerm | listTerm | literalTerm
                 | mapTerm | optionalTerm | pairTerm | projectTerm | recordTerm
@@ -233,7 +233,7 @@ stringLit     ::= JSON string
 decimalLit    ::= decimalDigits
 binaryLit     ::= stringLit ':' 'binary'
 
--- Types (18 variants of hydra.core.Type)
+-- Types (18 variants of hydra.core.model.Type)
 type          ::= annotatedType | applicationType | effectType | eitherType
                 | forallType | functionType | listType | literalType | mapType
                 | optionalType | pairType | recordType | setType | unionType
@@ -242,7 +242,7 @@ type          ::= annotatedType | applicationType | effectType | eitherType
 
 annotatedType ::= type annot
 applicationType ::= type type                  -- adjacency; left-associative:
-                                               -- hydra.coders.Adapter t1 t2 v1 v2 e
+                                               -- hydra.core.coders.Adapter t1 t2 v1 v2 e
 effectType    ::= 'effect' '<' type '>'
 eitherType    ::= 'either' '<' type ',' type '>'
 forallType    ::= 'forall' binder '.' type
@@ -289,7 +289,7 @@ Notes:
 
 ## 4. Canonical form
 
-The exact output of `hydra.print.core` is the canonical rendering:
+The exact output of `hydra.core.print.model` is the canonical rendering:
 spacing, parenthesization, separators, escaping, and element order.
 **[HYDRA-SYN-CANONICAL-BYTE-IDENTICAL]** Canonical rendering is byte-identical across implementations;
 this is guaranteed by translingual generation (one printer, generated into every host)
@@ -314,13 +314,13 @@ and confirmed by the cross-host formatting tests.
 ## 5. Sibling notations (non-normative)
 
 The kernel also serializes adjacent type families
-(`hydra.print.{graph,typing,errors,variants,docs,paths}`).
+(`hydra.core.print.{graph,typing,errors,variants,docs,paths}`).
 Those notations are out of scope here and may be specified as their sections of the
 specification land.
 
 ## Appendix: migration deltas (temporary)
 
-This appendix is the implementation checklist for bringing `hydra.print.core`
+This appendix is the implementation checklist for bringing `hydra.core.print.model`
 into conformance with this specification; delete it once the migration lands.
 The current implementation differs as follows:
 

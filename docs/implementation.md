@@ -125,18 +125,18 @@ the descriptions below cover the main ones:
 
 #### Core foundation
 
-**Core.hs** - `hydra.core` module name (largest type module)
+**Core.hs** - `hydra.core.model` module name (largest type module)
 - Central hub defining fundamental types: `Term`, `Type`, `Literal`, `Function`, `Application`, `Lambda`, `Let`,
   `Record`, `Union`, etc.
 - All other modules depend on Core directly or transitively
 - Special property: imports itself as a dependency
 
-**Variants.hs** - `hydra.variants` module name
+**Variants.hs** - `hydra.core.variants` module name
 - Supplements Core with metadata types NOT referenced by Core
 - Defines variant enums: `TermVariant`, `TypeVariant`, `LiteralVariant`, etc.
 - Provides introspection capabilities: `Precision`, `Comparison`
 
-**Packaging.hs** - `hydra.packaging` module
+**Packaging.hs** - `hydra.core.packaging` module
 - Defines the packaging model: `Package`, `Module`, `Definition`, `ModuleName`, `ModuleDependency`,
   `PackageDependency`, `VersionSpecifier`, and the metadata types
   `EntityMetadata`, `LifecycleInfo`, `EntityReference`, `DefinitionReference`, `Version`.
@@ -148,53 +148,53 @@ the descriptions below cover the main ones:
 
 #### Transformation framework
 
-**Coders.hs** - `hydra.coders` module name
+**Coders.hs** - `hydra.core.coders` module name
 - Defines `Coder v1 v2 e`, `Adapter t1 t2 v1 v2 e`, `Bicoder`, `SymmetricAdapter`, `Language`, `LanguageConstraints`, `AdapterContext`, `TraversalOrder`
 - `Coder` is a pair of partial functions (encode/decode), each returning `Either e` for generic error handling; the former `Flow` monad was removed in #245, and `InferenceContext` was removed from the encode/decode signatures in #518
 
 #### Graph and query
 
-**Graph.hs** - `hydra.graph` module name
+**Graph.hs** - `hydra.core.graph` module name
 - Extends core with graph operations
 - Defines: `Graph`, `Primitive`, `TermCoder`
 
-**Query.hs** - `hydra.query` module name
+**Query.hs** - `hydra.core.query` module name
 - Language-agnostic graph pattern queries
 - Triple patterns and path expressions
 
 #### Type system support
 
-**Typing.hs** - `hydra.typing` module name
+**Typing.hs** - `hydra.core.typing` module name
 - Type inference and reconstruction
 - Type constraints and substitutions
-- `TypeClass` record (used by `hydra.classes` term bindings)
+- `TypeClass` record (used by `hydra.core.classes` term bindings)
 
-**hydra.classes** - term module (not a type module)
+**hydra.core.classes** - term module (not a type module)
 - `equality` and `ordering` bindings of type `TypeClass`
 - See the [Concepts wiki § Type classes](https://github.com/CategoricalData/hydra/wiki/Concepts#type-classes)
 
 #### Error model
 
-**Errors.hs** - `hydra.errors` module name and the `Error/` subdirectory
+**Errors.hs** - `hydra.core.errors` module name and the `Error/` subdirectory
 - Structured error types used by inference, checking, and coders
 
 #### Parsing and path resolution
 
-**Parsing.hs** - `hydra.parsing` module name
-**Paths.hs** - `hydra.paths` module name
+**Parsing.hs** - `hydra.core.parsing` module name
+**Paths.hs** - `hydra.core.paths` module name
 
 #### Data model helpers
 
-**Ast.hs** - `hydra.ast` — common syntax tree for serializers
-**Tabular.hs** - `hydra.tabular` — CSV/TSV data model (generic)
+**Ast.hs** - `hydra.core.ast` — common syntax tree for serializers
+**Tabular.hs** - `hydra.core.tabular` — CSV/TSV data model (generic)
 
 #### Utility and specialized
 
-**Testing.hs** - `hydra.testing` — unit testing framework
-**Typed.hs** - `hydra.typed` — typed (phantom) wrappers for DSL use
-**Relational.hs** - `hydra.relational` — Codd's Relational Model
-**Topology.hs** - `hydra.topology` — graph algorithms (Tarjan SCC)
-**Util.hs** - `hydra.util` — misc utilities
+**Testing.hs** - `hydra.core.testing` — unit testing framework
+**Typed.hs** - `hydra.core.typed` — typed (phantom) wrappers for DSL use
+**Relational.hs** - `hydra.core.relational` — Codd's Relational Model
+**Topology.hs** - `hydra.core.topology` — graph algorithms (Tarjan SCC)
+**Util.hs** - `hydra.core.util` — misc utilities
 
 ### Type definition patterns
 
@@ -204,9 +204,9 @@ All type modules follow a consistent structure:
 module Hydra.Sources.Kernel.Types.ModuleName where
 
 import Hydra.Kernel
-import Hydra.Overlay.Haskell.Bootstrap
-import Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import Hydra.Core.Overlay.Haskell.Bootstrap
+import Hydra.Core.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 module_ :: Module
@@ -216,7 +216,7 @@ module_ = Module {
     moduleDependencies = unqualifiedDep <$> [moduleName Core.module_],
     moduleDescription = Just description}
   where
-    ns = ModuleName "hydra.namespace"
+    ns = ModuleName "hydra.core.namespace"
     core = typeref $ moduleName Core.module_
     def = datatype ns
 
@@ -294,11 +294,11 @@ def "TermVariant" $
 ### Dependency graph
 
 ```
-Core (hydra.core) - Foundation
+Core (hydra.core.model) - Foundation
   ├─ Variants   - Supplements with variants and introspection types
   ├─ Classes    - Typeclass metadata (Ord, Eq)
   ├─ Typing     - Type system support (inference results, schemes)
-  ├─ Typed      - Phantom-typed terms (TypedTerm; hydra.typed)
+  ├─ Typed      - Phantom-typed terms (TypedTerm; hydra.core.typed)
   ├─ Tabular    - Tabular data
   ├─ Query      - Graph queries
   ├─ Testing    - Test framework
@@ -329,16 +329,16 @@ The DSL system provides multiple levels of abstraction for different use cases.
 ### DSL module locations
 
 ```
-overlay/haskell/hydra-kernel/.../Hydra/Overlay/Haskell/Dsl/        # Hand-written base DSLs (#418/#501)
-overlay/haskell/hydra-kernel/.../Hydra/Overlay/Haskell/Dsl/Typed/  # Phantom-typed per-type DSLs
-dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/    # Generated DSLs (from hydra.dsls)
-heads/haskell/src/main/haskell/Hydra/                    # Generation drivers
-dist/haskell/hydra-<pkg>/src/main/haskell/Hydra/         # Generated per-package coder modules
-                                                          #   (hydra-haskell, hydra-java, hydra-python,
-                                                          #    hydra-scala, hydra-lisp, hydra-typescript,
-                                                          #    hydra-go (head bud),
-                                                          #    hydra-pg, hydra-rdf, hydra-ext for the long-tail,
-                                                          #    hydra-coq, ...)
+overlay/haskell/hydra-kernel/.../Hydra/Core/Overlay/Haskell/Dsl/      # Hand-written base DSLs (#418/#501)
+overlay/haskell/hydra-kernel/.../Hydra/Core/Overlay/Haskell/Dsl/Meta/ # Phantom-typed per-type DSLs
+dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Dsl/            # Generated DSLs (from hydra.core.dsls)
+heads/haskell/src/main/haskell/Hydra/                                 # Generation drivers
+dist/haskell/hydra-<pkg>/src/main/haskell/Hydra/                      # Generated per-package coder modules
+                                                                      #   (hydra-haskell, hydra-java, hydra-python,
+                                                                      #    hydra-scala, hydra-lisp, hydra-typescript,
+                                                                      #    hydra-go (head bud),
+                                                                      #    hydra-pg, hydra-rdf, hydra-ext for the long-tail,
+                                                                      #    hydra-coq, ...)
 ```
 
 **See also:** [DSL guide](dsl-guide.md) - Full DSL guide with examples and an operator reference
@@ -397,7 +397,7 @@ buildAddFunction =
 
 ### Generated DSL modules
 
-The `hydra.dsls` module (`Sources/Kernel/Terms/Dsls.hs`) automatically generates
+The `hydra.core.dsls` module (`Sources/Kernel/Terms/Dsls.hs`) automatically generates
 phantom-typed DSL functions from any Hydra type module. For each type definition, it
 produces:
 
@@ -407,41 +407,41 @@ produces:
 - **Union injectors** — one function per variant (unit variants produce nullary values)
 - **Wrap/unwrap** — for newtype wrappers
 
-Generated modules live in `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/` (e.g., `Hydra.Dsl.Core`,
-`Hydra.Dsl.Coders`, `Hydra.Dsl.Ast`). They are also generated into Java and Python
+Generated modules live in `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Dsl/` (e.g., `Hydra.Core.Dsl.Model`,
+`Hydra.Core.Dsl.Coders`, `Hydra.Core.Dsl.Ast`). They are also generated into Java and Python
 as part of the sync pipeline.
 
 ### Hand-written DSL modules
 
 The hand-written DSL infrastructure lives in the Haskell overlay
-(`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/`, namespace
-`Hydra.Overlay.Haskell.*` — relocated from `heads/haskell/.../Hydra/Dsl/` in #418/#501):
+(`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/`, namespace
+`Hydra.Core.Overlay.Haskell.*` — relocated from `heads/haskell/.../Hydra/Dsl/` in #418/#501):
 
-#### Base infrastructure (in `Hydra/Overlay/Haskell/Dsl/`)
+#### Base infrastructure (in `Hydra/Core/Overlay/Haskell/Dsl/`)
 - **Terms.hs** - Plain DSL for terms (`apply`, `lambda`, `record`, `inject`)
 - **Types.hs** - Plain DSL for types (operators `-->`, `@@`)
 - **Prims.hs** - Primitive-function references
 - **Annotations.hs** - Annotation handling (`doc`)
 - **Literals.hs**, **LiteralTypes.hs** - Literal handling
 - **Tests.hs** - Test-case construction helpers
-- **Bootstrap.hs** (in `Hydra/Overlay/Haskell/`) - Bootstrapping utilities (`defineType`, the bootstrap graph)
+- **Bootstrap.hs** (in `Hydra/Core/Overlay/Haskell/`) - Bootstrapping utilities (`defineType`, the bootstrap graph)
 
-#### Phantom-typed DSLs (in `Hydra/Overlay/Haskell/Dsl/Typed/`)
+#### Phantom-typed DSLs (in `Hydra/Core/Overlay/Haskell/Dsl/` and `Dsl/Meta/`)
 
 Typed wrappers over the plain DSLs, plus per-type helper modules:
 
-- **Typed/Phantoms.hs** - Phantom-typed term construction (`TypedTerm a`), operators (`@@`, `~>`, `<~`)
-- **Typed/Terms.hs**, **Typed/Types.hs** - Phantom-typed term- and type-encoded values
-- **Typed/Core.hs**, **Typed/Graph.hs**, **Typed/Testing.hs**, **Typed/Variants.hs**, etc. -
+- **Phantoms.hs** - Phantom-typed term construction (`TypedTerm a`), operators (`@@`, `~>`, `<~`)
+- **Meta/Terms.hs**, **Meta/Types.hs** - Phantom-typed term- and type-encoded values
+- **Meta/Core.hs**, **Meta/Graph.hs**, **Meta/Testing.hs**, **Meta/Variants.hs**, etc. -
   per-type construction helpers with `AsTerm`-flexible overrides
 
 ### Library DSLs
 
-Phantom-typed wrappers for the standard library primitives (`Hydra.Dsl.Lib.Lists`,
-`Hydra.Dsl.Lib.Maps`, `Hydra.Dsl.Lib.Strings`, ...) are **generated** into
-`dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Lib/` as part of the sync
+Phantom-typed wrappers for the standard library primitives (`Hydra.Core.Dsl.Lib.Lists`,
+`Hydra.Core.Dsl.Lib.Maps`, `Hydra.Core.Dsl.Lib.Strings`, ...) are **generated** into
+`dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Dsl/Lib/` as part of the sync
 pipeline; they are no longer hand-written. A small deep-DSL exception
-(`Hydra/Overlay/Haskell/Dsl/Deep/Lib/Math.hs`) remains hand-written in the overlay.
+(`Hydra/Core/Overlay/Haskell/Dsl/Deep/Lib/Math.hs`) remains hand-written in the overlay.
 
 ### DSL operators
 
@@ -527,7 +527,7 @@ Generated Source Code (Haskell, Python, Java)
 **Self-Hosting Loop:**
 1. Write inference logic in Phantom DSL → `Sources/Kernel/Terms/Inference.hs`
 2. DSL produces Term/Type values representing functions
-3. Code generator converts to executable Haskell → `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Inference.hs`
+3. Code generator converts to executable Haskell → `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Inference.hs`
 4. Generated code can now infer types for new Hydra code (including DSL code itself!)
 
 ---
@@ -544,27 +544,27 @@ and is **the** canonical registry for its module name:
 
 | Library | Count | Examples |
 |---------|-------|----------|
-| **hydra.lib.chars** | 8 | `isAlpha`, `isAlphaNum`, `isDigit`, `isLower` |
-| **hydra.lib.defaults** | 1 | `defaultImplementations` |
-| **hydra.lib.effects** | 9 | `apply`, `bind`, `compose`, `foldList` |
-| **hydra.lib.eithers** | 16 | `either`, `isLeft`, `rights`, `bimap`, `bind` |
-| **hydra.lib.equality** | 2 | `equal`, `notEqual` |
-| **hydra.lib.files** | 11 | `readFile`, `writeFile`, `exists` (effectful) |
-| **hydra.lib.functions** | 4 | `compose`, `const`, `flip`, `identity` |
-| **hydra.lib.hashing** | 2 | `sha256`, `sha256Hex` |
-| **hydra.lib.lists** | 43 | `map`, `filter`, `foldl`, `concat`, `sort` |
-| **hydra.lib.literals** | 55 | Type conversions, parsing, showing |
-| **hydra.lib.logic** | 4 | `and`, `or`, `not`, `ifElse` |
-| **hydra.lib.maps** | 23 | `lookup`, `insert`, `keys`, `toList` |
-| **hydra.lib.math** | 42 | `add`, `mul`, `acos`, `abs` |
-| **hydra.lib.optionals** | 15 | `fromOptional`, `cases`, `bind` |
-| **hydra.lib.ordering** | 7 | `compare`, `gt`, `lt`, `max`, `min` |
-| **hydra.lib.pairs** | 3 | `first`, `second`, `bimap` |
-| **hydra.lib.regex** | 6 | `matches`, `find`, `findAll`, `replace`, `replaceAll`, `split` |
-| **hydra.lib.sets** | 15 | `union`, `difference`, `member`, `filter` |
-| **hydra.lib.strings** | 13 | `concat`, `splitOn`, `charAt`, `fromList` |
-| **hydra.lib.system** | 9 | `execute`, `getEnvironment` (effectful) |
-| **hydra.lib.text** | 2 | `decodeUtf8`, `encodeUtf8` |
+| **hydra.core.lib.chars** | 8 | `isAlpha`, `isAlphaNum`, `isDigit`, `isLower` |
+| **hydra.core.lib.defaults** | 1 | `defaultImplementations` |
+| **hydra.core.lib.effects** | 9 | `apply`, `bind`, `compose`, `foldList` |
+| **hydra.core.lib.eithers** | 16 | `either`, `isLeft`, `rights`, `bimap`, `bind` |
+| **hydra.core.lib.equality** | 2 | `equal`, `notEqual` |
+| **hydra.core.lib.files** | 11 | `readFile`, `writeFile`, `exists` (effectful) |
+| **hydra.core.lib.functions** | 4 | `compose`, `const`, `flip`, `identity` |
+| **hydra.core.lib.hashing** | 2 | `sha256`, `sha256Hex` |
+| **hydra.core.lib.lists** | 43 | `map`, `filter`, `foldl`, `concat`, `sort` |
+| **hydra.core.lib.literals** | 55 | Type conversions, parsing, showing |
+| **hydra.core.lib.logic** | 4 | `and`, `or`, `not`, `ifElse` |
+| **hydra.core.lib.maps** | 23 | `lookup`, `insert`, `keys`, `toList` |
+| **hydra.core.lib.math** | 42 | `add`, `mul`, `acos`, `abs` |
+| **hydra.core.lib.optionals** | 15 | `fromOptional`, `cases`, `bind` |
+| **hydra.core.lib.ordering** | 7 | `compare`, `gt`, `lt`, `max`, `min` |
+| **hydra.core.lib.pairs** | 3 | `first`, `second`, `bimap` |
+| **hydra.core.lib.regex** | 6 | `matches`, `find`, `findAll`, `replace`, `replaceAll`, `split` |
+| **hydra.core.lib.sets** | 15 | `union`, `difference`, `member`, `filter` |
+| **hydra.core.lib.strings** | 13 | `concat`, `splitOn`, `charAt`, `fromList` |
+| **hydra.core.lib.system** | 9 | `execute`, `getEnvironment` (effectful) |
+| **hydra.core.lib.text** | 2 | `decodeUtf8`, `encodeUtf8` |
 
 **Total: 290 primitive functions.**
 
@@ -575,7 +575,7 @@ between universal metadata and per-host implementation (introduced in #156):
 
 #### Level 1: PrimitiveDefinition + Primitive (kernel types)
 
-`PrimitiveDefinition` (in `hydra.packaging`) carries the universal metadata that
+`PrimitiveDefinition` (in `hydra.core.packaging`) carries the universal metadata that
 is the same in every host language:
 
 ```haskell
@@ -592,7 +592,7 @@ def "PrimitiveDefinition" $
   ]
 ```
 
-`Primitive` (in `hydra.graph`) pairs the universal metadata with a host-specific
+`Primitive` (in `hydra.core.graph`) pairs the universal metadata with a host-specific
 implementation. This is what lives in a `Graph` as the per-host primitive
 registry:
 
@@ -630,7 +630,7 @@ arguments. The graph matters only for *higher-order* primitives that must evalua
 argument mid-computation. Take `lists.filter` applied to the predicate `\x -> equality.gt x 2`: the
 native impl is `(Term -> Bool) -> [Term] -> [Term]`, so it must turn that predicate *term* into a
 native `Term -> Bool`, which means reducing `gt x 2` per element. But `gt` arrives as an unresolved
-name (`hydra.lib.equality.gt`) — it sits under a lambda binder and cannot be evaluated until `filter`
+name (`hydra.core.lib.equality.gt`) — it sits under a lambda binder and cannot be evaluated until `filter`
 supplies a concrete `x` — and resolving that name requires the graph's primitive table. The graph
 passed in is the interpreter's *live* graph at the call site (which may hold primitives or bindings
 beyond the kernel's), so a captured or global graph would be wrong; it must be threaded from the
@@ -658,14 +658,14 @@ Example (`Hydra/Sources/Kernel/Lib/Logic.hs`):
 
 ```haskell
 ns :: ModuleName
-ns = ModuleName "hydra.lib.logic"
+ns = ModuleName "hydra.core.lib.logic"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.logic namespace."}
+            moduleDescription = Just "Primitives in the hydra.core.lib.logic namespace."}
   where
     definitions = [
       toPrimitive "Compute the logical AND of two boolean values." andSig and_,
@@ -682,7 +682,7 @@ and_ = define "and" $
   "a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TypedTerm Bool) false
 ```
 
-The metadata flows through to JSON in `dist/json/hydra-kernel/src/main/json/hydra/lib/<sub>.json`,
+The metadata flows through to JSON in `dist/json/hydra-kernel/src/main/json/hydra/core/lib/<sub>.json`,
 where it becomes the cross-host source of truth for the primitive's name,
 signature, description, and default implementation.
 
@@ -692,7 +692,7 @@ Per host, two things are needed beyond the kernel metadata:
 
 1. **Native implementations** — for the big three, in the `overlay/<lang>/hydra-kernel/`
    tree (#418); e.g. Haskell at
-   `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/Math.hs`:
+   `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib/Math.hs`:
 
    ```haskell
    add :: Int -> Int -> Int
@@ -701,7 +701,7 @@ Per host, two things are needed beyond the kernel metadata:
 
 2. **Host-side primitive registry** — binds names to native impls.
    The Haskell registry lives in
-   `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs` (#473):
+   `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Libraries.hs` (#473):
 
    ```haskell
    hydraLibMath :: Library
@@ -712,7 +712,7 @@ Per host, two things are needed beyond the kernel metadata:
 
    The `prim1`/`prim2`/`prim3` helpers build a `Primitive` by pairing the host's
    native `implementation` with a signature and the generated `PrimitiveDefinition`
-   (`DefMath.add`, where `DefMath` is the generated `Hydra.Lib.Math` def-module) — the
+   (`DefMath.add`, where `DefMath` is the generated `Hydra.Core.Lib.Math` def-module) — the
    single source of truth for the name (#473), taken via the `ToPrimName` class.
    `standardLibrary` derives the library's module name from its first primitive, so it
    needs no `ModuleName` argument. The argument-type info passed to the helper is a
@@ -720,7 +720,7 @@ Per host, two things are needed beyond the kernel metadata:
    truth for the name.
 
    Every other host has an analogous registry that likewise derives names from the generated
-   `hydra.lib.*` def-modules: `overlay/{java,python}/.../lib/Libraries.{java,py}` and
+   `hydra.core.lib.*` def-modules: `overlay/{java,python}/.../lib/Libraries.{java,py}` and
    `heads/<lang>/.../lib/Libraries.<ext>` for Scala and the Lisp dialects.
 
 The type information passed to `prim1`/`prim2`/`prim3` at host registration is
@@ -756,7 +756,7 @@ were merged into the canonical `Lib/<Sub>.hs` registries' inline
 
 ### TermCoder system
 
-The `Hydra.Overlay.Haskell.Dsl.Prims` module provides type coding:
+The `Hydra.Core.Overlay.Haskell.Dsl.Prims` module provides type coding:
 
 ```haskell
 -- Literal types
@@ -790,7 +790,7 @@ Each TermCoder contains:
 
 Primitive *names and signatures* are defined once in Haskell, in each kernel
 `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs` module
-(as `PrimitiveDefinition`s), and become part of the generated kernel — the `hydra.lib.*`
+(as `PrimitiveDefinition`s), and become part of the generated kernel — the `hydra.core.lib.*`
 def-modules — in every target language. The *implementations*
 shown below are hand-written per host language. For the big three (Haskell, Java,
 Python) they live in the top-level `overlay/<lang>/hydra-kernel/` tree (#418) and
@@ -803,15 +803,15 @@ for the full mechanism and the catalog of which subtrees are overlaid per langua
 
 #### Java Generation
 
-Location: `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/` (#501; formerly `hydra/lib/` before the `hydra.overlay.*` namespace was introduced)
+Location: `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/` (#501, #729; formerly `hydra/lib/`, then `hydra/overlay/java/lib/`)
 
 Each primitive becomes a class extending `PrimitiveFunction`:
 
 ```java
-// hydra/lib/math/Add.java
+// hydra/core/overlay/java/lib/math/Add.java
 public class Add extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.math.add");
+        return new Name("hydra.core.lib.math.add");
     }
 
     public TypeScheme type() {
@@ -834,12 +834,12 @@ public class Add extends PrimitiveFunction {
 
 #### Python Generation
 
-Location: `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib/` (#501; formerly `hydra/lib/` before the `hydra.overlay.*` namespace was introduced)
+Location: `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/lib/` (#501, #729; formerly `hydra/lib/`, then `hydra/overlay/python/lib/`)
 
 Pure Python implementations:
 
 ```python
-# hydra/lib/math.py
+# hydra/core/overlay/python/lib/math.py
 def add(x: int, y: int) -> int:
     """Add two integers."""
     return x + y
@@ -848,7 +848,7 @@ def sqrt(x: float) -> float:
     """Square root of a float."""
     return math.sqrt(x)
 
-# hydra/lib/lists.py
+# hydra/core/overlay/python/lib/lists.py
 def map_(f: Callable[[A], B], xs: frozenlist[A]) -> frozenlist[B]:
     """Map a function over a list."""
     return tuple(f(x) for x in xs)
@@ -878,14 +878,14 @@ registry declares each primitive with one of two helpers:
   `logic.ifElse`, `pairs.first`) or whose meaning is host-native (e.g.
   arithmetic, char predicates, regex matching).
 
-On the Haskell host, the `prim*` family in `Hydra.Overlay.Haskell.Dsl.Prims` pairs each name
+On the Haskell host, the `prim*` family in `Hydra.Core.Overlay.Haskell.Dsl.Prims` pairs each name
 with its native implementation regardless of which kernel helper declared the
 primitive.
 
 #### Pattern 3: Either for Error Handling
 
 All primitives operate within `Either Error a`, where `Error` is the structured union
-type from `hydra.errors`:
+type from `hydra.core.errors`:
 
 ```haskell
 type Result a = Either Error a
@@ -931,8 +931,8 @@ When `reduceTerm` encounters a `TermVariable`, it resolves the name in this orde
    It remains as-is (a free variable in the current scope).
 
 This means module bindings shadow primitives, and primitives shadow lambda-bound variables.
-In practice, names don't collide: module definitions use qualified names like `hydra.core.Term`,
-while primitives use the `hydra.lib.*` module name.
+In practice, names don't collide: module definitions use qualified names like `hydra.core.model.Term`,
+while primitives use the `hydra.core.lib.*` module names.
 
 ### Construction-time shadowing
 
@@ -944,7 +944,7 @@ not just by resolution order.
 
 ### Assembling primitives: `graphWithPrimitives`
 
-The `hydra.lexical.graphWithPrimitives` function creates a graph
+The `hydra.core.lexical.graphWithPrimitives` function creates a graph
 with primitives assembled from two lists:
 
 ```
@@ -957,7 +957,7 @@ This enables:
 - **Language implementers** to override kernel primitives with optimized host-language versions.
 - **Users** to provide domain-specific primitive functions alongside the standard library.
 
-The bootstrap graph (`Hydra.Overlay.Haskell.Bootstrap.bootstrapGraph` in Haskell) uses the standard
+The bootstrap graph (`Hydra.Core.Overlay.Haskell.Bootstrap.bootstrapGraph` in Haskell) uses the standard
 libraries directly.
 Test runners and custom applications can use `graphWithPrimitives` to inject additional primitives.
 
@@ -1002,27 +1002,27 @@ dist/haskell/hydra-java/src/main/haskell/Hydra/Java/          # Java coder
 dist/haskell/hydra-python/src/main/haskell/Hydra/Python/      # Python coder
 dist/haskell/hydra-scala/src/main/haskell/Hydra/Scala/        # Scala 3 coder
 dist/haskell/hydra-lisp/src/main/haskell/Hydra/Lisp/          # Lisp coder (4 dialects)
-dist/haskell/hydra-pg/src/main/haskell/Hydra/                 # Property graphs
-│   ├── Pg/                                                   # PG model + GraphSON
+dist/haskell/hydra-pg/src/main/haskell/Hydra/Pg/              # Property graphs
+│   ├── Model.hs, Graphson/                                   # PG model + GraphSON
 │   ├── Cypher/                                               # Cypher
 │   ├── Graphviz/                                             # Visualization
 │   └── Tinkerpop/                                            # Gremlin / TinkerPop
-dist/haskell/hydra-rdf/src/main/haskell/Hydra/                # RDF family
-│   ├── Rdf/                                                  # RDF model + N-Triples
+dist/haskell/hydra-rdf/src/main/haskell/Hydra/Rdf/            # RDF family
+│   ├── Syntax.hs, Serde.hs                                   # RDF model + N-Triples
 │   ├── Shacl/                                                # SHACL
 │   ├── Owl/                                                  # OWL
 │   ├── Shex/                                                 # ShEx
 │   └── Xml/                                                  # XML schema
-dist/haskell/hydra-ext/src/main/haskell/Hydra/                # Long-tail coders
+dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext/            # Long-tail coders
 │   ├── Avro/                                                 # Avro
 │   ├── Protobuf/                                             # Protocol Buffers
 │   ├── Graphql/                                              # GraphQL
 │   ├── Pegasus/                                              # LinkedIn PDL
 │   ├── Json/Schema/                                          # JSON Schema
-│   ├── Cpp/, Csharp/, Go/, Rust/, Yaml/, ...                # Other languages
-│   └── Atlas/, Azure/, Datalog/, Delta/, Geojson/, Iana/, Kusto/, Osv/, Parquet/, Sql/, Stac/, Workflow/
+│   ├── Cpp/, Csharp/, Yaml/, ...                             # Other languages
+│   └── Atlas/, Azure/, Datalog/, Delta/, Geojson/, Iana/, Kusto/, Osv/, Parquet/, Sql/, Stac/, Workflow.hs
 dist/haskell/hydra-coq/src/main/haskell/Hydra/Coq/            # Coq coder
-dist/haskell/hydra-typescript/src/main/haskell/Hydra/TypeScript/  # TypeScript coder
+dist/haskell/hydra-typescript/src/main/haskell/Hydra/Typescript/  # TypeScript coder
 dist/haskell/hydra-wasm/src/main/haskell/Hydra/Wasm/          # WebAssembly (in progress)
 ```
 
@@ -1069,7 +1069,7 @@ moduleToScala  :: Module -> [Definition] -> InferenceContext -> Graph -> Either 
 ### Coder framework
 
 Located in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Coders.hs`
-(generated output: `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Coders.hs`):
+(generated output: `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Coders.hs`):
 
 ```haskell
 -- A Coder is a pair of partial functions.
@@ -1090,7 +1090,7 @@ data Adapter t1 t2 v1 v2 e = Adapter {
 ```
 
 The `e` type parameter makes error handling polymorphic.
-Use `Error` (the kernel's structured error type from `hydra.errors`) when the coder
+Use `Error` (the kernel's structured error type from `hydra.core.errors`) when the coder
 participates in the kernel's inference and adaptation pipeline — it carries structured
 context such as extraction errors, unexpected shapes, and other errors.
 Use `String` for lightweight host-side coders where structured errors add no value;
@@ -1296,7 +1296,7 @@ The `Serde.hs` files bridge language AST to formatted source code:
   TypeScript, Rust, Go, and the Pegasus / GraphQL / Protobuf /
   JsonSchema / RDF / Graphviz extension coders.
 - **Layout.** Writers compose output through shared helpers in
-  `hydra.serialization`: `chooseLayout` selects between vertical and
+  `hydra.core.serialization`: `chooseLayout` selects between vertical and
   horizontal forms by measured width, `parenListAdaptive` /
   `commaSepAdaptive` / `spaceSepAdaptive` lay out punctuated lists, and
   the canonical line-length budget is `maxLineWidth = 120`. Per-language
@@ -1323,9 +1323,9 @@ The modules compiled in the Haskell head are aggregated in `Hydra.Sources.All`
 (kernel + Haskell coder + JSON) and `Hydra.Sources.Ext` (all extension coders):
 
 - **Kernel type modules** (`kernelTypesModules`) — Hydra's internal data model:
-  the core type system (`hydra.core`), graph and package structures (`hydra.graph`,
-  `hydra.packaging`), and supporting types like `hydra.typing`, `hydra.coders`,
-  `hydra.query`, `hydra.tabular`, etc.
+  the core type system (`hydra.core.model`), graph and package structures (`hydra.core.graph`,
+  `hydra.core.packaging`), and supporting types like `hydra.core.typing`, `hydra.core.coders`,
+  `hydra.core.query`, `hydra.core.tabular`, etc.
   Hand-written DSL definitions in `Hydra.Sources.Kernel.Types.*`.
 
 - **Kernel term modules** (`kernelTermsModules`) — The logic of Hydra:
@@ -1350,7 +1350,7 @@ The modules compiled in the Haskell head are aggregated in `Hydra.Sources.All`
 
 **Encoder/decoder source modules** are a special category of term modules that are
 *generated from* the type modules rather than hand-written. For each kernel type module
-(e.g., `hydra.core`), a pair of modules is generated that can encode objects of that type
+(e.g., `hydra.core.model`), a pair of modules is generated that can encode objects of that type
 as Hydra Terms and decode them from Terms. These live in `Hydra.Sources.{Encode,Decode}.*`
 and are included in `kernelTermsModules` alongside the hand-written term modules.
 
@@ -1363,7 +1363,7 @@ kernelModules = kernelTypesModules ++ kernelTermsModules ++ jsonModules
 kernelTermsModules = kernelPrimaryTermsModules   -- hand-written logic modules
 ```
 
-The encode/decode modules (`hydra.encode.*`, `hydra.decode.*`) are synthesized
+The encode/decode modules (`hydra.core.encode.*`, `hydra.core.decode.*`, and `hydra.<package>.{encode,decode}.*` for other packages) are synthesized
 in-memory at runtime by `generateEncoderModules`/`generateDecoderModules` (#448)
 and injected into the driver's universe before inference runs.
 They are no longer shipped as `dist/haskell/.../Sources/{Encode,Decode}/*.hs` files.
@@ -1382,9 +1382,9 @@ separate source-module generation pass between two compile passes.
 
 Because these derived modules are produced mechanically from a known type, the synthesizer
 is the authority on their types. Each derived Source module contains a single `module_`
-`TermDefinition` whose term has type `hydra.packaging.Module`. The synthesizer
+`TermDefinition` whose term has type `hydra.core.packaging.Module`. The synthesizer
 (`moduleToSourceModule` in `Hydra.Sources.Kernel.Terms.Generation`) must set
-`termDefinitionTypeScheme = Just (TypeScheme [] (TypeVariable "hydra.packaging.Module") M.empty)`
+`termDefinitionTypeScheme = Just (TypeScheme [] (TypeVariable "hydra.core.packaging.Module") M.empty)`
 on that binding, so downstream consumers can skip type inference rather than re-derive it
 from the term's large encoded structure. Leaving the field as `Nothing` forces a full
 `inferModulesIO` pass per derived module — manageable locally but memory-prohibitive on
@@ -1422,10 +1422,10 @@ For detailed context on encoder/decoder modules, see
 This section covers how Hydra's build system *runs* inference at scale — caching,
 incremental skipping, per-package iteration. For what inference itself does
 (HM with elaboration to typed System F, the two cooperating modules
-`hydra.inference` and `hydra.checking`, the `Graph` as inference context), see
+`hydra.core.inference` and `hydra.core.checking`, the `Graph` as inference context), see
 the [Inference wiki page](https://github.com/CategoricalData/hydra/wiki/Inference).
 
-`inferModulesGiven` (in `Hydra.Codegen`) takes a universe and a target set
+`inferModulesGiven` (in `Hydra.Core.Codegen`) takes a universe and a target set
 and re-infers only the relevant subset. Bindings in the target modules or
 in the transitive term-dependency closure that lack a pre-attached
 `TypeScheme` are fed to `inferGraphTypes`; clean non-target bindings are
@@ -1544,7 +1544,7 @@ stack build
 Hand-translate DSL definitions to Haskell in generated files:
 
 ```haskell
--- Manually edit: dist/haskell/hydra-kernel/src/main/haskell/Hydra/Inference.hs
+-- Manually edit: dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Inference.hs
 inferTypeOfEither :: InferenceContext -> Graph -> Either Term Term -> Either Error InferenceResult
 inferTypeOfEither cx graph (Left left) = do
   leftResult <- inferType cx graph left
@@ -1594,15 +1594,15 @@ packages/hydra-kernel/src/main/haskell/Hydra/
 └── Sources/                # Kernel DSL-based specifications (manual)
     ├── Kernel/Types/       # Type modules (data shapes)
     ├── Kernel/Terms/       # Term modules (kernel functions)
-    ├── Kernel/Lib/         # Primitive registry: PrimitiveDefinition per hydra.lib.<sub> module name
+    ├── Kernel/Lib/         # Primitive registry: PrimitiveDefinition per hydra.core.lib.<sub> module name
     └── Test/               # Hydra-kernel test suite
 
 packages/hydra-<lang>/src/main/haskell/Hydra/
 └── Sources/<Lang>/         # Per-language coder DSL sources (manual)
 
 dist/haskell/hydra-kernel/src/main/haskell/   # Generated kernel code
-├── Hydra/
-│   ├── Core.hs             # Generated Core types
+├── Hydra/Core/
+│   ├── Model.hs            # Generated core types (hydra.core.model)
 │   ├── Variants.hs         # Generated Variants types
 │   ├── Inference.hs        # Generated type inference
 │   ├── Checking.hs         # Generated type checking
@@ -1615,7 +1615,7 @@ dist/haskell/hydra-scala/src/main/haskell/Hydra/Scala/Coder.hs       # Scala cod
 dist/haskell/hydra-lisp/src/main/haskell/Hydra/Lisp/Coder.hs         # Lisp coder (4 dialects)
 dist/haskell/hydra-pg/src/main/haskell/Hydra/Pg/                     # Property graphs
 dist/haskell/hydra-rdf/src/main/haskell/Hydra/Rdf/                   # RDF / SHACL
-dist/haskell/hydra-ext/src/main/haskell/Hydra/                       # Long-tail (Avro, Protobuf, GraphQL, ...)
+dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext/                   # Long-tail (Avro, Protobuf, GraphQL, ...)
 ```
 
 ---
@@ -1653,47 +1653,48 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 [`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types)
 ```
-├── Core.hs              # hydra.core - foundation
-├── Variants.hs          # hydra.variants - metadata
-├── Coders.hs            # hydra.coders - Coder, Adapter, Language
-├── Graph.hs             # hydra.graph - primitives
-├── Packaging.hs         # hydra.packaging - modules, namespaces, packages
-├── Typing.hs            # hydra.typing - inference results
+├── Core.hs              # hydra.core.model - foundation
+├── Variants.hs          # hydra.core.variants - metadata
+├── Coders.hs            # hydra.core.coders - Coder, Adapter, Language
+├── Graph.hs             # hydra.core.graph - primitives
+├── Packaging.hs         # hydra.core.packaging - modules, namespaces, packages
+├── Typing.hs            # hydra.core.typing - inference results
 └── ...                  # see Hydra.Sources.Kernel.Types.All for the full list
 ```
 
 ### DSL system
 
-[`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl)
+[`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl)
 ```
 ├── Terms.hs             # Untyped term DSL
 ├── Types.hs             # Untyped type DSL
 ├── Prims.hs             # Primitive references
 ├── Annotations.hs       # Annotation helpers (doc)
 ├── Literals.hs          # Literal construction
-├── Typed/               # Phantom-typed DSLs (Phantoms.hs, Terms.hs, Types.hs,
+├── Phantoms.hs          # Phantom-typed term construction
+├── Meta/                # Phantom-typed DSLs (Terms.hs, Types.hs,
 │                        #   plus per-type helpers: Core.hs, Graph.hs, Testing.hs, ...)
 └── Deep/Lib/Math.hs     # Hand-written deep-DSL exception
 ```
 
 (#418/#501: the whole hand-written DSL tree is `hydra-kernel` distribution runtime and
-lives in the overlay under the `Hydra.Overlay.Haskell.*` namespace. Generated library
-DSLs — `Hydra.Dsl.Lib.*` — are emitted into `dist/haskell/hydra-kernel/.../Hydra/Dsl/Lib/`.)
+lives in the overlay under the `Hydra.Core.Overlay.Haskell.*` namespace. Generated library
+DSLs — `Hydra.Core.Dsl.Lib.*` — are emitted into `dist/haskell/hydra-kernel/.../Hydra/Core/Dsl/Lib/`.)
 
 ### Primitive functions
 
-[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib) — Canonical primitive registry (one `PrimitiveDefinition`-emitting module per `hydra.lib.<sub>` module name)
+[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib) — Canonical primitive registry (one `PrimitiveDefinition`-emitting module per `hydra.core.lib.<sub>` module name)
 
-[`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib) — Native Haskell implementations (relocated here from the head by #418; namespace per #501)
+[`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib) — Native Haskell implementations (relocated here from the head by #418; namespace per #501)
 
-[`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs) — Host-side bindings (pairs each native impl with a name derived from its `PrimitiveDefinition` via `prim1`/`prim2`/`prim3`; relocated here + name-derivation by #473)
+[`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Libraries.hs) — Host-side bindings (pairs each native impl with a name derived from its `PrimitiveDefinition` via `prim1`/`prim2`/`prim3`; relocated here + name-derivation by #473)
 ```
 Sources/Kernel/Lib/
 ├── Math.hs
 ├── Lists.hs
 └── ...
 
-overlay/haskell/hydra-kernel/.../Hydra/Overlay/Haskell/Lib/
+overlay/haskell/hydra-kernel/.../Hydra/Core/Overlay/Haskell/Lib/
 ├── Math.hs
 ├── Lists.hs
 └── ...

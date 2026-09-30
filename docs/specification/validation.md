@@ -13,7 +13,7 @@ property-graph data against property-graph types, and — as Hydra grows target 
 data of any target against that target's types.
 Named **provisions** (`HYDRA-VAL-…`, in bold at the head of a claim) follow the provisions convention
 in [index.md](index.md#provisions); the per-check rules of §4 are properties of specific
-`hydra.validate.*` definitions and carry their own provisions in the generated module pages, not here.
+`hydra.core.validate.*` definitions and carry their own provisions in the generated module pages, not here.
 
 ## 0. Conformance and its preservation
 
@@ -22,7 +22,7 @@ well-formed inhabitant of that type: in the core representation, every variable 
 nominal reference resolves to a type of the right kind, every record carries exactly its declared
 fields, every case covers its union, and so on.
 
-Conformance is not confined to `hydra.core`. Hydra maps paired representations of types and instances
+Conformance is not confined to `hydra.core.model`. Hydra maps paired representations of types and instances
 across languages and models in a **semantics-preserving** way, and conformance is a relation that
 exists in *each* representation:
 
@@ -63,27 +63,27 @@ Validation serves three purposes, all built on the same framework:
 
 ## 2. The representation-generic framework
 
-The framework lives in `hydra.validation` and is instantiated per representation:
+The framework lives in `hydra.core.validation` and is instantiated per representation:
 
-- `hydra.validate.core` — conformance rules for the **core** representation (this page's §4 catalog).
-- `hydra.validate.pg` — conformance rules for the **property-graph** representation: `validateVertex`,
+- `hydra.core.validate.model` — conformance rules for the **core** representation (this page's §4 catalog).
+- `hydra.pg.validate.model` — conformance rules for the **property-graph** representation: `validateVertex`,
   `validateEdge`, `validateProperties`, `validateGraph` check property-graph data against
   property-graph types, with their own profile and error types.
-- Future `hydra.validate.<target>` — one instance per target representation.
+- Future `hydra.<package>.validate.*` modules — one instance per target representation.
 
 Each instance is a set of *checks* selected and classified by a **validation profile**
-(`hydra.validation.ValidationProfile`):
+(`hydra.core.validation.ValidationProfile`):
 
 | Field | Meaning |
 |---|---|
-| `errorRules` | The set of fully-qualified rule names whose findings are **errors**. A rule name has the form `hydra.error.<package>.<UnionType>.<variant>`, e.g. `hydra.error.core.InvalidTermError.duplicateBinding`. |
+| `errorRules` | The set of fully-qualified rule names whose findings are **errors**. A rule name has the form `<error module>.<UnionType>.<variant>`, e.g. `hydra.core.error.model.InvalidTermError.duplicateBinding`. |
 | `warningRules` | The set of rule names whose findings are **warnings** (informational; do not fail the pass). |
 | `maxErrors` | Hard bound: the pass terminates once this many errors are collected. `1` reproduces "first error wins". |
 | `maxWarnings` | Soft bound: further warnings are dropped once reached, but the pass continues. |
 
 **[HYDRA-VAL-PROFILE-OPT-OUT]** A rule whose name is in **neither** the `errorRules` nor the
 `warningRules` set is never evaluated — this is how a project opts out of a rule. A pass produces a
-`hydra.validation.ValidationResult` (ordered error and warning findings); **[HYDRA-VAL-SUCCESS-NO-ERRORS]**
+`hydra.core.validation.ValidationResult` (ordered error and warning findings); **[HYDRA-VAL-SUCCESS-NO-ERRORS]**
 it **succeeds** iff the error list is empty. Hydra ships strict reference profiles
 (`kernelDefaultCoreProfile`, `kernelDefaultPackagingProfile`, `defaultPgProfile`) that enable the
 full rule set for the corresponding representation.
@@ -106,7 +106,7 @@ Within any representation, rules fall into two classes:
 This is the specification's own view: some rules are normative for any Hydra application (they *are*
 conformance); others are normative only for Hydra itself and opt-in elsewhere.
 
-## 4. Core-representation rules (`hydra.validate.core`)
+## 4. Core-representation rules (`hydra.core.validate.model`)
 
 The conformance rules for the core representation. MUST-class rules define conformance; SHOULD-class
 rules are the kernel's house style.
@@ -130,22 +130,22 @@ bottom position; see [syntax.md](syntax.md)) · nonComparableMapKeyType / nonCom
 has its module name as a dotted prefix) · modulePartition (no module namespace is declared by more than
 one package: the per-package declared module sets must partition the module universe; a doubly-declared
 module would be silently routed to a single winner. Universe-level, evaluated over all manifests
-together. Rule id `hydra.error.packaging.InvalidPackageError.moduleInMultiplePackages`.) (Dependency
+together. Rule id `hydra.core.error.packaging.InvalidPackageError.moduleInMultiplePackages`.) (Dependency
 resolution is transitive; the stricter "declare every referenced module directly" check is a
 kernel-authoring convention — SHOULD-class, §4.2 — not a conformance rule.)
 
 ### 4.2 SHOULD-class (kernel-strict, opt-in elsewhere)
 
 module no-prefix (no module name is a strict dotted-prefix of another within a package — `A` is a
-strict dotted-prefix of `B` when `B` begins with `A` followed by a `.`, so `hydra.codegen` conflicts
-with `hydra.codegen.docs` but `hydra.foo` does not conflict with `hydra.foobar`; a requirement for
+strict dotted-prefix of `B` when `B` begins with `A` followed by a `.`, so `hydra.core.codegen` conflicts
+with `hydra.core.codegen.docs` but `hydra.foo` does not conflict with `hydra.foobar`; a requirement for
 Hydra's own packages, MAY be relaxed for external application packages; the check is landing via
 [#721](https://github.com/CategoricalData/hydra/issues/721)) · undeclaredDependencies (a module directly
 declares every module it references, even one also transitively reachable — stricter than the transitive
 resolution the language uses, applied to Hydra's own kernel modules; akin to some target build systems)
 · definition alphabetical ordering · definition documentation required · naming conventions
 (camelCase / PascalCase / dotted-lowercase /
-hyphenated; regexes in `hydra.constants`; see
+hyphenated; regexes in `hydra.core.constants`; see
 [#722](https://github.com/CategoricalData/hydra/issues/722)) · the redundancy/suspicion lints
 (constantCondition, redundantWrapUnwrap, selfApplication, unnecessaryIdentityApplication — all
 well-typed) · variable shadowing · annotation nesting (**nested annotations are supported** — see

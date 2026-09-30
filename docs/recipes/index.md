@@ -38,7 +38,7 @@ for extending Hydra, implementing new features, and working with Hydra's archite
 - **[Generating code from your own Hydra modules](downstream-codegen.md)** - For downstream projects: the supported entry points (`ManifestWriter.packageManifestJson` + `Codegen.inferModulesGiven`), why the multi-package orchestration functions don't apply, and adjacent gaps (#640, #644)
 - **[Ingesting JSON data into a Hydra schema](ingesting-json.md)** - Loading external JSON into typed host values via the build-the-Term-directly path: generating decoders, Term-construction reference, fail-fast decoder roundtrip, and cycle-breaking patterns
 - **[Migration shims: building when a published host can't](migration-shims.md)** - What to do when a published host (Java/Python/Haskell) can't build the current tree: pinning to an earlier good release vs. the local-host shim for backward-incompatible kernel changes
-- **[List representation and indexed-access performance](list-performance.md)** - Which hosts back `hydra.lib.lists.map` output with a linked (cons) structure vs. an array-backed one, why repeated indexed access is quadratic on the affected hosts, and the per-host materialize workaround
+- **[List representation and indexed-access performance](list-performance.md)** - Which hosts back `hydra.core.lib.lists.map` output with a linked (cons) structure vs. an array-backed one, why repeated indexed access is quadratic on the affected hosts, and the per-host materialize workaround
 - For the build/sync/cache *model* (phases, what each cache keys on, the published-host consume model for all three hosts), see **[The Hydra build system](../build-system.md)** at the top level of `docs/`.
 
 ### Benchmarking
@@ -75,7 +75,7 @@ Feature retrospectives:
   #369/#370/#500/#608: the bootstrap-circularity problem, the consume-published decision, the `--local-host`
   shim, and the two bugs that turned oil-and-water into a CI-enforced invariant.
 - **[Design record: `hydra.pg.model` ↔ `hydra.neo4j.model` mapping](../history/design-pg-neo4j-mapping.md)** —
-  the design rationale behind the shipped `hydra.neo4j.pg` mapping (#510); the feature itself is documented
+  the design rationale behind the shipped `hydra.pg.neo4j.core` mapping (#510); the feature itself is documented
   in the [hydra-pg README](../../packages/hydra-pg/README.md).
 
 Completed investigations:

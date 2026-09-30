@@ -28,7 +28,7 @@ The organizing principle of Hydra's build is a clean separation between **source
   `heads/` or sibling trees.
 - **Overlay sources** (`overlay/<lang>/<pkg>/`) are the hand-written, language-specific
   source that a distribution package needs but that is *not* generated — e.g. the Haskell
-  kernel runtime (`Hydra.Overlay.Haskell.Lib.*`, the DSL term helpers, `Hydra.Settings`,
+  kernel runtime (`Hydra.Core.Overlay.Haskell.Lib.*`, the DSL term helpers, `Hydra.Settings`,
   `Hydra.Kernel`) and the `hydra` umbrella module. The overlay tree is a top-level sibling of
   `packages/`, `dist/`, and `heads/`, mirroring the `dist/<lang>/<pkg>/` shape.
   Overlay sources are authored, not generated, and are never compiled in place — only after
@@ -61,19 +61,19 @@ translingual — primitive implementations, runtime data structures (`cons_list.
 Cypher/GQL parsers — formerly the `bindings/` tree, folded into overlays as of #511).
 
 Heuristic: if the code *could* be generated into every target it belongs in `packages/`; if it is
-inherently host-specific it belongs in `overlay/`. Overlay files use the `hydra.overlay.<lang>.*`
-namespace, keeping `hydra.*` exclusively translingual and `hydra.overlay.<lang>.*` exclusively
-host-native.
+inherently host-specific it belongs in `overlay/`. Overlay files use the `hydra.core.overlay.<lang>.*`
+namespace (kernel) or `hydra.<pkg>.overlay.<lang>.*` (other packages, e.g. `hydra.pg.overlay.java`),
+keeping the rest of `hydra.*` exclusively translingual and the overlay namespaces exclusively host-native.
 
 **For the full overlay reference** — the governing equation, namespace rules, folding host-specific
 integrations, the `build.json` → generated `build.gradle`/`pyproject.toml` flow, prune protection, and
 how to route a new native module — see **[overlays.md](overlays.md)**.
 
 The `bootstrap-from-json` redirect mechanism rewrites generated consumer call-sites from
-`hydra.lib.<sub>.<fn>` → `hydra.overlay.<lang>.lib.<sub>.<fn>` at assemble time, so generated
+`hydra.core.lib.<sub>.<fn>` → `hydra.core.overlay.<lang>.lib.<sub>.<fn>` at assemble time, so generated
 code that calls a primitive ends up calling the native implementation, not a non-existent
 translingual module. Primitive *name strings* embedded in term data (the canonical graph
-registry keys, e.g. `"hydra.lib.chars.isAlphaNum"`) are protected from this rewrite.
+registry keys, e.g. `"hydra.core.lib.chars.isAlphaNum"`) are protected from this rewrite.
 
 So one translingual source package fans out into one complete distribution package per
 selected target language, and each distribution stands on its own. "Complete" is the bar:
@@ -124,10 +124,10 @@ express the same language in the host of their choice — Haskell today for
 with more diversification expected over time.
 
 Alongside the authored modules, the JSON write pass emits **derived modules** for each package:
-generated DSL wrappers (`hydra.dsl.<x>` — type constructors/accessors, primitive-library wrappers
-`hydra.dsl.lib.<x>`, and term-definition references; see the
+generated DSL wrappers (`hydra.core.dsl.<x>` in the kernel, `hydra.<pkg>.dsl.<x>` elsewhere — type
+constructors/accessors, primitive-library wrappers `hydra.core.dsl.lib.<x>`, and term-definition references; see the
 [DSL guide](dsl-guide.md#5-generated-dsl-modules)) plus term encoders and decoders
-(`hydra.encode.<x>` / `hydra.decode.<x>`).
+(`hydra.core.encode.<x>` / `hydra.core.decode.<x>`, and likewise `hydra.<pkg>.encode.<x>` elsewhere).
 Which source modules project a DSL is curated per package via the Manifest's `mainDslModules` list.
 Term-definition references need inferred signatures, which the compiled in-memory modules lack;
 the DSL pass reads them back from the main pass's just-written JSON rather than re-running
@@ -195,8 +195,8 @@ from the `--prune-stale` deletion pass.)
 Because the `overlay/<lang>/hydra-kernel/` tree holds *only* runtime (nothing
 else), the Java/Python/Haskell copy scripts are dumb full-tree merges — no selective
 file lists or per-file exclusions. (TypeScript's `copy-kernel-runtime.sh` is the one
-exception: it copies a named set of files, because its `dist/.../hydra/` directory
-interleaves generated kernel modules — e.g. `core.ts` — with hand-written runtime
+exception: it copies a named set of files, because its `dist/.../hydra/core/` directory
+interleaves generated kernel modules — e.g. `model.ts` — with hand-written runtime
 — `runtime.ts`, `primitives.ts`, `bootstrap.ts` — at the same path, so a blind merge
 would risk clobbering generated output.) Files that are NOT kernel runtime
 (multi-coder drivers, test bases, json-io stubs, each language's own coder, and a
@@ -205,13 +205,13 @@ developer rollup, not copied.
 
 | Language | Canonical runtime home | Overlaid by | Approx. file count |
 |----------|------------------------|-------------|--------------------|
-| Haskell | `overlay/haskell/hydra-kernel/` (+ `overlay/haskell/hydra/` umbrella): `Hydra.Settings`, `Hydra.Kernel`, `Hydra.Overlay.Haskell.{Lib.*,Dsl.*,Libraries,Bootstrap,AsTerm,AsType}` (#501 namespace) | `sync-haskell.sh` (head compiles from the dist copy, not the overlay; copies gitignored) | ~45 |
-| Java | `overlay/java/hydra-kernel/`: `Adapters.java`, `Coders.java`, full `hydra/{util,lib,dsl,tools}/`, `hydra/json/{JsonEncoding,JsonDecoding}.java` | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~282 |
-| Python | `overlay/python/hydra-kernel/`: `hydra/overlay/python/{lib,dsl,sources,util}/` + `tools.py`, `py.typed` (main, no `__init__.py` — PEP 420); `hydra/overlay/python/test_env.py` (test bridge). All overlay Python modules use the `hydra.overlay.python.*` namespace (#501). | `copy-kernel-runtime.sh` (Step 0 of assemble; copies overlay main + test) | ~41+3 |
-| TypeScript | `overlay/typescript/hydra-kernel/`: `hydra/{bootstrap,primitives,runtime}.ts`, `hydra/lib/*.ts` (main); `hydra/test/{testEnv,jsonBindings}.ts` (test) | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~19 |
-| Go (head bud) | `overlay/go/hydra-kernel/`: `hydra/lib/*` primitive impls (only `lib/literals` implemented; rest are package stubs). Generated code imports these via the dist-local module path `hydra.dev/hydra/lib/...` | `copy-kernel-runtime.sh` (Step 3 of assemble, post-prune) | ~13 |
-| Lisp dialects (clojure, scheme, common-lisp, emacs-lisp) | `overlay/<dialect>/hydra-kernel/`: the loader/prims/lazy/prelude/json-reader runtime + `hydra/lib/*` registries + `hydra/<dialect>/lib/*` native impls (+ Scheme's `scheme/`/`srfi/` externals) + the test bridge. Copied by common.sh's `lisp_copy_overlay` (Step 3, kernel-only). Each dialect's test runner loads the runtime from `dist/`. Common Lisp's `struct-compat.lisp` is generated into dist by gen-compat.sh (not overlay). | ~17 (clojure) – ~42 (scheme) |
-| Scala | `overlay/scala/hydra-kernel/`: `hydra/overlay/scala/{Libraries.scala,lib/*.scala,dsl/*.scala}` (#501 namespace, main); `hydra/{TestSuiteRunner,test/testEnv}.scala` (test). build.sbt lists the dist copy on `unmanagedSourceDirectories`. | `copy-kernel-runtime.sh` | ~25 |
+| Haskell | `overlay/haskell/hydra-kernel/` (+ `overlay/haskell/hydra/` umbrella): `Hydra.Settings`, `Hydra.Kernel`, `Hydra.Core.Overlay.Haskell.{Lib.*,Dsl.*,Libraries,Bootstrap,AsTerm,AsType}` (#501 namespace) | `sync-haskell.sh` (head compiles from the dist copy, not the overlay; copies gitignored) | ~45 |
+| Java | `overlay/java/hydra-kernel/`: `hydra/core/overlay/java/`: `Adapters.java`, `Coders.java`, full `{util,lib,dsl,tools}/`, `json/{JsonEncoding,JsonDecoding}.java` | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~282 |
+| Python | `overlay/python/hydra-kernel/`: `hydra/core/overlay/python/{lib,dsl,sources,util}/` + `tools.py`, `hydra/core/py.typed` (main, no `hydra/__init__.py` — PEP 420); `hydra/core/overlay/python/test_env.py` (test bridge). All overlay Python modules use the `hydra.core.overlay.python.*` namespace (#501). | `copy-kernel-runtime.sh` (Step 0 of assemble; copies overlay main + test) | ~41+3 |
+| TypeScript | `overlay/typescript/hydra-kernel/`: `hydra/core/{bootstrap,primitives,runtime}.ts`, `hydra/core/overlay/typescript/lib/*.ts` (main); `hydra/core/test/{testEnv,jsonBindings}.ts` (test) | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~19 |
+| Go (head bud) | `overlay/go/hydra-kernel/`: `hydra/core/overlay/go/lib/*` primitive impls (only `lib/literals` implemented; rest are package stubs). Generated code imports these via the dist-local module path `hydra.dev/hydra/lib/...` | `copy-kernel-runtime.sh` (Step 3 of assemble, post-prune) | ~13 |
+| Lisp dialects (clojure, scheme, common-lisp, emacs-lisp) | `overlay/<dialect>/hydra-kernel/`: the loader/prims/lazy/prelude/json-reader runtime + the `hydra/core/overlay/<dialect>/` library registry and `lib/*` native impls (Scheme: `hydra/overlay/scheme/`; + Scheme's `scheme/`/`srfi/` externals) + the test bridge. Copied by common.sh's `lisp_copy_overlay` (Step 3, kernel-only). Each dialect's test runner loads the runtime from `dist/`. Common Lisp's `struct-compat.lisp` is generated into dist by gen-compat.sh (not overlay). | ~17 (clojure) – ~42 (scheme) |
+| Scala | `overlay/scala/hydra-kernel/`: `hydra/core/overlay/scala/{Libraries.scala,lib/*.scala,dsl/*.scala}` (#501 namespace, main); `hydra/core/{TestSuiteRunner,test/testEnv}.scala` (test). build.sbt lists the dist copy on `unmanagedSourceDirectories`. | `copy-kernel-runtime.sh` | ~25 |
 
 The canonical edit point is the `overlay/<lang>/` tree (Haskell/Java/Python/TypeScript) or,
 for the not-yet-migrated heads, `heads/<lang>/src`. Editing the copy in `dist/` is wrong for
@@ -319,7 +319,7 @@ note in [claude/pitfalls.md](../claude/pitfalls.md)).
 Phase 5 completed the migration for [#344](https://github.com/CategoricalData/hydra/issues/344):
 `hydra-java` and `hydra-python` are authored in their own host languages, and as of #346 those
 host-native sources are the **sole** source of truth — the Haskell DSL copies are deleted. The
-native drivers also synthesize the `hydra.dsl.{java,python}.*` wrapper modules that the Haskell
+native drivers also synthesize the `hydra.{java,python}.dsl.*` wrapper modules that the Haskell
 DSL pass used to write, making each package a clean single-writer.
 
 Because Phase 5 is last but its output (`dist/json/hydra-{java,python}/`) is an *input* to
@@ -441,9 +441,9 @@ module (in the `hydra-build` package; #512):
 `PackageDescriptor`, the input and output digests `InputDigest` and `OutputDigest`, and
 `manifest.json` a `PackageManifest`.
 Overlay build configuration (`overlay/<lang>/<pkg>/build.json`) is specified separately by
-`hydra.gradle` and `hydra.python.pyproject` (see [docs/overlays.md](overlays.md)).
+`hydra.java.gradle` and `hydra.python.pyproject` (see [docs/overlays.md](overlays.md)).
 The scripts and drivers listed in this document still parse the files by hand; replacing
-those hand parsers with the generated `hydra.decode.build.format` decoders is deferred
+those hand parsers with the generated `hydra.build.decode.format` decoders is deferred
 until a published host carries the module (#416).
 
 ### Cache files are not tracked
@@ -580,8 +580,8 @@ generation driver — `heads/haskell/src/exec/bootstrap-from-json/` plus the orc
 modules `Hydra.Generation`, `Hydra.ExtGeneration`, `Hydra.PackageRouting`. That single binary
 emits *every* target, so a change to its emission logic must invalidate *all* targets. It is
 mixed into every target's stamp for exactly that reason. This leaf was added for
-[#473](https://github.com/CategoricalData/hydra/issues/473): the lib-pass / `hydra.lib.* →
-hydra.<lang>.lib.*` redirect logic lives in that driver, and a Step-0-class emission change
+[#473](https://github.com/CategoricalData/hydra/issues/473): the lib-pass / `hydra.core.lib.* →
+hydra.core.overlay.<lang>.lib.*` redirect logic lives in that driver, and a Step-0-class emission change
 there left the per-package *input* JSON hashes unchanged — so without `driver-id`, warm
 builds (surviving gitignored output digests) cache-skipped regeneration and shipped stale
 output. The lesson generalizes: **if a change alters generated bytes without altering any
@@ -595,7 +595,7 @@ tracked input or any `component_identity`/`runtime_identity` source, it must be 
   the identity is the version string `host:<pkg>:<ver>`. In this mode the build is
   conceptually depending on the published artifact, so **local source edits to that
   package do not change its identity**: the Layer 2 cache stays warm until the pinned
-  version bumps. Tweaking a comment in `hydra.graph` no longer forces a rebuild of every
+  version bumps. Tweaking a comment in `hydra.core.graph` no longer forces a rebuild of every
   downstream target. The resolution lives in `bin/lib/hydra-packages.py` (`host-version`),
   keyed off the `PUBLISHED_HOSTS` allowlist there.
 - **Local-source mode (the migration shim).** When `<pkg>` is not a consumed published
@@ -758,7 +758,7 @@ The Haskell case is shaped by a host/target split. The
 Haskell DSL *sources* are Haskell code compiled into the head (`Hydra.Sources.*`; `mainModules ::
 [Module]` is built by running compiled Haskell), and they stay local — they are the source of truth and
 must be recompiled to pick up edits. But the *kernel runtime* the head links to **run** the build
-(`Hydra.Codegen`, `Hydra.Inference`, `Hydra.Lib.*`, …) comes from the co-generated
+(`Hydra.Core.Codegen`, `Hydra.Core.Inference`, `Hydra.Core.Lib.*`, …) comes from the co-generated
 `dist/haskell/hydra-kernel` source tree. The kernel is always compiled from this dist copy — consuming
 it from the published Hackage release would link generated coder packages (`hydra-pg`, `hydra-rdf`, etc.)
 against a potentially stale kernel, breaking them when the kernel term-level API changes (#500). The
@@ -959,7 +959,7 @@ the correct, expected outcome.
 2. `heads/java/bin/patch-void-import.sh` — the one known bootstrap patch (see above); a no-op once
    unneeded.
 3. `heads/haskell/bin/overlay-kernel-runtime.sh` — restores hand-written overlay source (including the
-   `Hydra.Test.{TestEnv,DefaultImplGraph}` test bridge files) that step 1's `--prune-stale` removed, since
+   `Hydra.Core.Test.{TestEnv,DefaultImplGraph}` test bridge files) that step 1's `--prune-stale` removed, since
    those files are copied, not generated. **Must run after step 1**, not before.
 4. `stack build` / `stack test` in `heads/haskell` — now succeeds against a fully Java-seeded,
    patch-bridged `dist/haskell/`.
@@ -1043,7 +1043,7 @@ themselves are dropped, so GC reclaims their term bodies. A Generation-side wrap
 with the seed Map directly, bypassing the per-iteration `[Module]` reload. The
 JSON-write `schemaMap` is built ONCE up front from the full input universe (including
 the JSON-loaded clean modules in the warm-incremental path) so the encoder has
-hydra.packaging.Module and other cross-package schema types available — without this,
+`hydra.core.packaging.Module` and other cross-package schema types available — without this,
 `Maybe String` fields mis-serialize as single-element arrays.
 
 ### 4. Java and Python self-host pipelines
@@ -1051,7 +1051,7 @@ hydra.packaging.Module and other cross-package schema types available — withou
 Phase 5 (native DSL → JSON for hydra-java and hydra-python) now routes through a
 per-package iterative driver that mirrors the Haskell-side
 `inferAndWriteByPackage`: `Generation.inferAndWriteByPackage` in
-`heads/java/src/main/java/hydra/Generation.java` and `infer_and_write_by_package`
+`overlay/java/hydra-build/src/main/java/hydra/build/overlay/java/Generation.java` and `infer_and_write_by_package`
 in `heads/python/src/main/python/hydra/generation.py`. Both drivers
 (`bin/update-python-json.py` and `UpdateJavaJson`) call this routine after
 loading the kernel universe and the package's source modules. Today's runs

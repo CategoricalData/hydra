@@ -30,18 +30,20 @@ based on the routing table in `Hydra.PackageRouting`.
 ```
 dist/json/hydra-kernel/src/main/json/
 ├── hydra/
-│   ├── core.json           # Core types and terms
-│   ├── module.json         # Module type definitions
-│   ├── graph.json          # Graph structures
-│   └── ...
+│   └── core/
+│       ├── model.json      # Core types (terms, types, names)
+│       ├── packaging.json  # Module and package type definitions
+│       ├── graph.json      # Graph structures
+│       └── ...
 ```
 
 **Test modules** (`dist/json/hydra-kernel/src/test/json/`):
 ```
 dist/json/hydra-kernel/src/test/json/
 ├── hydra/
-│   └── test/
-│       ├── ...
+│   └── core/
+│       └── test/
+│           ├── ...
 ```
 
 **Per-package modules** (e.g. `dist/json/hydra-java/src/main/json/`):
@@ -105,9 +107,9 @@ Run to confirm:
 - JSON encoding/decoding is lossless
 
 This is especially useful after:
-- Changes to JSON encoding (`Hydra.Json.Encode`)
-- Changes to JSON decoding (`Hydra.Json.Decode`)
-- Changes to module encoding (`Hydra.Encode.Module`)
+- Changes to JSON encoding (`Hydra.Core.Json.Encode`)
+- Changes to JSON decoding (`Hydra.Core.Json.Decode`)
+- Changes to module encoding (`Hydra.Core.Encode.Packaging`)
 - Upgrading dependencies that affect serialization
 
 ## Manual Steps
@@ -153,8 +155,8 @@ Output (failure):
 ```
 === FAILED ===
 3 modules failed verification:
-  hydra.core: element count differs: 42 vs 41
-  hydra.packaging: type differs for moduleName
+  hydra.core.model: element count differs: 42 vs 41
+  hydra.core.packaging: type differs for moduleName
   ...
 ```
 
@@ -236,7 +238,7 @@ The tool uses Aeson for fast JSON parsing to minimize overhead.
 
 - **update-json-kernel/main/test**: Uses `Hydra.Generation.writeModulesJson` with type inference
   and schema map for type-directed encoding
-- **verify-json-kernel**: Uses `Hydra.Json.Decode.fromJson` with type-directed decoding
+- **verify-json-kernel**: Uses `Hydra.Core.Json.Decode.fromJson` with type-directed decoding
 
 ### JSON encoding format
 

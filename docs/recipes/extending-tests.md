@@ -51,7 +51,7 @@ Only extend them if absolutely necessary - changes to these modules can break ex
 
 If you must add DSL functions:
 
-In [Typed/Terms.hs][tterms]:
+In [Meta/Terms.hs][tterms]:
 ```haskell
 -- Example: Adding constructors for Either
 left :: TypedTerm Term -> TypedTerm Term
@@ -61,14 +61,14 @@ right :: TypedTerm Term -> TypedTerm Term
 right t = Core.termEither $ Phantoms.right t
 ```
 
-In [Typed/Types.hs][ttypes]:
+In [Meta/Types.hs][ttypes]:
 ```haskell
 -- Example: Adding a type constructor
 either :: TypedTerm Type -> TypedTerm Type -> TypedTerm Type
 either leftType rightType = Core.typeFunction _Either [leftType, rightType]
 ```
 
-Pattern: Import `qualified Hydra.Overlay.Haskell.Dsl.Typed.Core as Core`, use `Core.*` functions, return `TypedTerm`
+Pattern: Import `qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core as Core`, use `Core.*` functions, return `TypedTerm`
 phantom types.
 
 **Note**: As Hydra matures, DSL extensions should become increasingly rare.
@@ -177,7 +177,7 @@ Common issues when tests fail:
 - Look at similar passing tests in the same module for patterns
 
 **Missing DSL functions:**
-- Add to [Typed/Terms.hs][tterms] or [Typed/Types.hs][ttypes] as needed
+- Add to [Meta/Terms.hs][tterms] or [Meta/Types.hs][ttypes] as needed
 - Ensure consistency with `Terms` and `Types` when migrating
 
 ## Migrating existing Haskell-specific tests
@@ -205,11 +205,11 @@ Migrate tests when:
 2. **Check for missing DSL functions** - Find `Terms.*` calls in the spec file:
    ```bash
    grep -o 'Terms\.[a-z][a-zA-Z0-9]*' CheckingSpec.hs | sort -u > /tmp/terms_used.txt
-   grep -o '^[a-z][a-zA-Z0-9]* ::' Typed/Terms.hs | sed 's/ :://' | sort > /tmp/tterms_have.txt
+   grep -o '^[a-z][a-zA-Z0-9]* ::' Meta/Terms.hs | sed 's/ :://' | sort > /tmp/tterms_have.txt
    comm -23 /tmp/terms_used.txt /tmp/tterms_have.txt
    ```
 
-3. **Add missing DSL functions** - Add to [Typed/Terms.hs][tterms] or [Typed/Types.hs][ttypes] as needed
+3. **Add missing DSL functions** - Add to [Meta/Terms.hs][tterms] or [Meta/Types.hs][ttypes] as needed
 
 4. **Translate test cases** - Key differences:
 
@@ -232,7 +232,7 @@ cd heads/haskell
 # 1. Find missing DSL functions
 grep -o 'Terms\.[a-z][a-zA-Z0-9]*' src/test/haskell/Hydra/CheckingSpec.hs | sort -u
 
-# 2. Add missing functions to Typed/Terms.hs and Typed/Types.hs
+# 2. Add missing functions to Meta/Terms.hs and Meta/Types.hs
 
 # 3. Migrate a batch of test cases to Sources/Test/Checking/
 
@@ -269,7 +269,7 @@ See [GitHub issue #264](https://github.com/CategoricalData/hydra/issues/264) for
 
 ### Guidelines for floating-point test cases
 
-When writing test cases for `hydra.lib.math` primitives that use transcendental functions:
+When writing test cases for `hydra.core.lib.math` primitives that use transcendental functions:
 
 1. **Prefer inputs that produce exact results.** For example:
    - `sin(0) = 0`, `cos(0) = 1`, `exp(0) = 1`, `log(1) = 0`, `sqrt(4) = 2`, `atanh(0) = 0`
@@ -288,7 +288,7 @@ When writing test cases for `hydra.lib.math` primitives that use transcendental 
    --              roundedPrimCase2 "atan2 3 4" _math_atan2 3.0 4.0 (atan2 3.0 4.0)
    ```
 
-   The underlying primitives `roundFloat64` and `roundFloat32` (`hydra.lib.math`)
+   The underlying primitives `roundFloat64` and `roundFloat32` (`hydra.core.lib.math`)
    round a floating-point value to N significant digits. They are available for general use, not just
    tests.
 
@@ -313,8 +313,8 @@ When writing test cases for `hydra.lib.math` primitives that use transcendental 
 
 ## Key files
 
-- [Typed/Terms.hs][tterms] - Term-encoded term constructors
-- [Typed/Types.hs][ttypes] - Term-encoded type constructors
+- [Meta/Terms.hs][tterms] - Term-encoded term constructors
+- [Meta/Types.hs][ttypes] - Term-encoded type constructors
 - [Sources/Test/][sources-test] - All hydra-kernel test suite modules
   - [Checking/][test-checking] - Type checking tests
   - [Inference/][test-inference] - Type inference tests
@@ -322,7 +322,7 @@ When writing test cases for `hydra.lib.math` primitives that use transcendental 
 - [TestSuiteSpec.hs][test-suite-spec] - Test runner framework
 - [*Spec.hs files][spec-files] - Haskell-specific tests (migration sources)
 
-[tterms]: https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/Terms.hs
-[ttypes]: https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/Types.hs
+[tterms]: https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Meta/Terms.hs
+[ttypes]: https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Meta/Types.hs
 [test-suite-spec]: https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/test/haskell/Hydra/TestSuiteSpec.hs
 [spec-files]: https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/test/haskell/Hydra

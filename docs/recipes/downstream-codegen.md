@@ -17,7 +17,7 @@ the emission-time `overlaySubs` set (below). A driver built only on `generateSou
 hand-rebuilding that machinery.
 
 The next entry points a reader finds — `Generation.inferAndWriteByPackage` and
-`Generation.writePackageManifests` (both host-native; Java: `hydra.overlay.java.build.Generation`,
+`Generation.writePackageManifests` (both host-native; Java: `hydra.build.overlay.java.Generation`,
 same design in the Haskell `Hydra.Generation`) — look like the supported multi-step API because
 they have worked examples in [`code-generation.md`](code-generation.md) and
 [`build-system.md`](../build-system.md). They are not intended for a downstream project: both call
@@ -39,7 +39,7 @@ route against.
 Two pure, public functions — already on the classpath via `hydra-build` — cover what a downstream
 project actually needs, with no routing and no dependency on a pre-existing manifest tree:
 
-- **`hydra.Codegen.inferModulesGiven(ctx, bsGraph, universeMods, targetMods)`** — the same
+- **`hydra.core.Codegen.inferModulesGiven(ctx, bsGraph, universeMods, targetMods)`** — the same
   function `inferAndWriteByPackage` calls once per package internally. Pass every module in your
   project as both `universeMods` and `targetMods` to type-check them all together; cross-module
   references resolve automatically since every module is in scope at once.
@@ -86,16 +86,16 @@ path above; both cost a rediscovery if undocumented.
 
 ### Kernel leaf types referenced by primitives (#640)
 
-A term using a primitive like `hydra.lib.files.readFile` references kernel types
-(`hydra.file.FilePath`, `hydra.error.file.FileError`) that are not necessarily among your project's
+A term using a primitive like `hydra.core.lib.files.readFile` references kernel types
+(`hydra.core.file.FilePath`, `hydra.core.error.file.FileError`) that are not necessarily among your project's
 own modules or their declared dependencies — primitives resolve globally, so nothing forces you to
 declare the dependency. Passing those kernel type modules via `universeMods`/`targetMods` above is
 necessary but not sufficient: `inferModulesGiven` (and `generateSourceFiles` used standalone) need
 the types folded into the **graph**, not just listed as a universe module, or term-level resolution
 fails with `NoSuchBinding`.
 
-The Haskell host has a ready-made list for this, `Hydra.Generation.kernelTypeUniverse` (`hydra.time`,
-`hydra.file`, `hydra.error.file`, `hydra.system`, `hydra.error.system`) — fold it into the graph
+The Haskell host has a ready-made list for this, `Hydra.Generation.kernelTypeUniverse` (`hydra.core.time`,
+`hydra.core.file`, `hydra.core.error.file`, `hydra.core.system`, `hydra.core.error.system`) — fold it into the graph
 with `Codegen.modulesToGraph(bootstrapGraph, universe, universe)` before generating. There is no
 Java/Python equivalent yet, so a Java or Python downstream project referencing these primitives
 must currently obtain the same modules (e.g. from the published `hydra-kernel` JSON resources, if
@@ -104,7 +104,7 @@ present on the classpath, or decode them from JSON some other way) and fold them
 ### Deriving `overlaySubs` for the 5-arg coder (#644)
 
 `hydra.java.Coder.moduleToJava` / `hydra.python.Coder.moduleToPython` take an `overlaySubs` set
-that drives emission-time redirection of `hydra.lib.<sub>` primitive calls to their per-target
+that drives emission-time redirection of `hydra.core.lib.<sub>` primitive calls to their per-target
 overlay implementations. There is no published helper to derive this set; it can be reconstructed
 from the bootstrap graph's primitive names:
 
@@ -112,20 +112,20 @@ from the bootstrap graph's primitive names:
 Set<String> overlaySubs = new HashSet<>();
 for (Name n : Generation.bootstrapGraph().primitives.keySet()) {
     String v = n.value;
-    if (v.startsWith("hydra.lib.")) {
-        String rest = v.substring("hydra.lib.".length());
+    if (v.startsWith("hydra.core.lib.")) {
+        String rest = v.substring("hydra.core.lib.".length());
         int dot = rest.indexOf('.');
         if (dot > 0) overlaySubs.add(rest.substring(0, dot));
     }
 }
 ```
 
-This yields the full set of `hydra.lib.*` subnamespaces (`effects`, `files`, `text`, ...) that have
+This yields the full set of `hydra.core.lib.*` subnamespaces (`effects`, `files`, `text`, ...) that have
 per-target overlay implementations.
 
-### Indexed access over `hydra.lib.lists.map` output (#651)
+### Indexed access over `hydra.core.lib.lists.map` output (#651)
 
-On Java and the four Lisp-dialect hosts, `hydra.lib.lists.map` (and similar list primitives) return
+On Java and the four Lisp-dialect hosts, `hydra.core.lib.lists.map` (and similar list primitives) return
 a linked (cons) structure, so repeated indexed access in a loop is quadratic rather than linear —
 easy to hit in a downstream project's own traversal code, since nothing at the type level signals
 the cost. Python, Scala, and TypeScript are unaffected (array/tuple-backed). See

@@ -110,23 +110,23 @@ Copy it from an existing source module such as the
 [Haskell Coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Coder.hs).
 The block has these sections:
 
-1. **Unqualified core imports** — `Hydra.Kernel`, `Hydra.Overlay.Haskell.Libraries`, `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`,
-   `Hydra.Dsl.Lib.Strings`
-2. **Qualified DSL imports** — `Hydra.Overlay.Haskell.*` modules (`Bootstrap`; and under
-   `Hydra.Overlay.Haskell.Dsl.*`: Annotations, LiteralTypes, Literals, Types, Terms, etc.)
+1. **Unqualified core imports** — `Hydra.Kernel`, `Hydra.Core.Overlay.Haskell.Libraries`, `Hydra.Core.Overlay.Haskell.Dsl.Phantoms`,
+   `Hydra.Core.Dsl.Lib.Strings`
+2. **Qualified DSL imports** — `Hydra.Core.Overlay.Haskell.*` modules (`Bootstrap`; and under
+   `Hydra.Core.Overlay.Haskell.Dsl.*`: Annotations, LiteralTypes, Literals, Types, Terms, etc.)
 3. **Qualified generated DSL imports** —
-   `Hydra.Dsl.*` modules auto-generated from type definitions (Coders, Module, Ast, Error, Util, etc.).
+   `Hydra.Core.Dsl.*` modules auto-generated from type definitions (Coders, Module, Ast, Error, Util, etc.).
    These provide constructors, accessors, and updaters for all Hydra types.
-4. **Qualified meta DSL imports** — `Hydra.Overlay.Haskell.Dsl.Typed.*` wrapper modules (Core, Graph, Base, Terms, Types,
+4. **Qualified meta DSL imports** — `Hydra.Core.Overlay.Haskell.Dsl.Meta.*` wrapper modules (Core, Graph, Terms, Types,
    Variants, etc.). These re-export the generated DSLs and add custom helpers such as AsTerm-flexible overrides and
    expression conversion utilities.
-5. **Qualified library DSL imports** — `Hydra.Dsl.Lib.*` (Chars, Eithers, Equality, Lists, Literals, Logic, Maps,
+5. **Qualified library DSL imports** — `Hydra.Core.Dsl.Lib.*` (Chars, Eithers, Equality, Lists, Literals, Logic, Maps,
    Math, Optionals, Pairs, Sets)
 5. **Qualified kernel sources imports** —
    `Hydra.Sources.Kernel.Terms.*` modules for calling other promoted functions (Reduction, Rewriting, Inference, etc.)
 6. **Standard Haskell imports** — `Prelude hiding ((++))`, `Data.List as L`, `Data.Map as M`, `Data.Set as S`
 7. **Domain-specific imports** — generated phantom types for the types your module uses (e.g.,
-   `Hydra.Haskell.Ast as H`)
+   `Hydra.Haskell.Syntax as H`)
 
 Not every module needs all of these — include only what you use.
 The `(++)` from `Phantoms` is for `TypedTerm String` concatenation; use `L.++` for regular list concatenation.
@@ -423,7 +423,7 @@ list [a, b, c]
 
 ### Map/list operations
 
-Use the DSL wrappers from `Hydra.Dsl.Lib.*`:
+Use the DSL wrappers from `Hydra.Core.Dsl.Lib.*`:
 
 ```haskell
 -- Raw: map f xs
@@ -583,7 +583,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
    - `Maps.values` doesn't exist — use `Maps.elems`
    - `Lists.any` doesn't exist — use foldl with `Logic.or`
 
-   When in doubt, check the actual exports in `Hydra.Dsl.Lib.*` or `Hydra.Sources.Kernel.Terms.*`.
+   When in doubt, check the actual exports in `Hydra.Core.Dsl.Lib.*` or `Hydra.Sources.Kernel.Terms.*`.
 
 9. **`inject` takes direct arguments, not `@@`**: The `inject` function takes three Haskell arguments directly:
 
@@ -847,10 +847,10 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     ```
 
 24. **`Graph` module accessors**: To access graph state fields like `graphPrimitives`,
-    import `Hydra.Overlay.Haskell.Dsl.Typed.Graph` and use the accessor functions:
+    import `Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph` and use the accessor functions:
 
     ```haskell
-    import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph as Graph
+    import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph as Graph
 
     -- In DSL code:
     "g" <<~ Monads.getState $
@@ -883,7 +883,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 
 28. **`encodeTypeAsTerm` helper**: The staging code uses `EncodeCore.type_ typ` to encode a `Type` as a `Term` for
     annotations. In the DSL, use the pre-defined helper `encodeTypeAsTerm @@ var "typ"` (defined as `TypedTerm $
-    TermVariable $ Name "hydra.encode.core.type"`). Alternatively, `Phantoms.encoderFor _Type @@ var "typ"` works too.
+    TermVariable $ Name "hydra.core.encode.model.type"`). Alternatively, `Phantoms.encoderFor _Type @@ var "typ"` works too.
 
 29. **`Let` record fields**: The `Let` type has fields `_Let_bindings` and `_Let_body` (not `_Let_environment`).
     Check generated Core.hs for exact field names.
@@ -951,7 +951,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     define the type in a Types module and the functions in a separate Terms module that depends on it.
 
 40. **`Prelude hiding ((++))` and Haskell-level string operations**: Most DSL source modules import `Prelude hiding
-    ((++))` because `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms` exports its own `(++)` for `TypedTerm String` concatenation.
+    ((++))` because `Hydra.Core.Overlay.Haskell.Dsl.Phantoms` exports its own `(++)` for `TypedTerm String` concatenation.
     This means you cannot use Haskell's native `(++)` for regular `String` concatenation in DSL helper functions.
     Use `(<>)` instead, which works on any `Semigroup` including `String`:
 
@@ -1005,7 +1005,7 @@ console output), the I/O must be separated out first. Only the pure logic can be
    ```
 
 3. **Parameterize Haskell-specific values.** Some values exist only in Haskell (e.g.,
-   `bootstrapGraph` from `Hydra.Overlay.Haskell.Bootstrap`).
+   `bootstrapGraph` from `Hydra.Core.Overlay.Haskell.Bootstrap`).
    Instead of importing them in the pure code, pass them as explicit parameters.
    This makes the pure code language-independent — each language's I/O layer provides its own version:
    ```haskell
@@ -1047,7 +1047,7 @@ console output), the I/O must be separated out first. Only the pure logic can be
 - Error handling: inspecting `Either` results, formatting error messages
 - Library-specific code: Aeson JSON parsing, ByteString processing
 - Haskell-specific encoders/decoders: `EncodeModule.module_`, `DecodeCore.type_`
-- Bootstrap graph: `bootstrapGraph` (Haskell's is defined in `Hydra.Overlay.Haskell.Bootstrap`)
+- Bootstrap graph: `bootstrapGraph` (Haskell's is defined in `Hydra.Core.Overlay.Haskell.Bootstrap`)
 
 ## Promoting type definitions
 
@@ -1076,7 +1076,7 @@ universalTestCase = define "UniversalTestCase" $
 Key differences from promoting terms:
 
 - Use `define` (or `defineType`) instead of `definitionInModule`
-- Use `T.record`, `T.forAll`, `T.either_`, etc. from `Hydra.Overlay.Haskell.Dsl.Types` for type constructors
+- Use `T.record`, `T.forAll`, `T.either_`, etc. from `Hydra.Core.Overlay.Haskell.Dsl.Types` for type constructors
 - Use `>:` for field definitions (name `>:` type)
 - Reference other type bindings via their qualified module alias (e.g.,
   `Core.name`, `Module.module_`)
@@ -1097,7 +1097,7 @@ Not all promotions involve functions. Sometimes you need to promote a module of 
 > primitive-name index. `Hydra.Sources.Kernel.Lib.Names` (and the legacy
 > `_<ns>_<local>` aliases in `Libraries.hs`) were **removed entirely in #473**:
 > a primitive's name is now declared once in its kernel `PrimitiveDefinition`
-> and every host registry derives it from the generated `hydra.lib.*` def-modules
+> and every host registry derives it from the generated `hydra.core.lib.*` def-modules
 > (no separate name index). The example below is retained only to illustrate the
 > DSL-promotion mechanics on a now-obsolete module. See
 > [Adding new primitives to Hydra](adding-primitives.md#how-primitive-names-flow)

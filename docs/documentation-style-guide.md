@@ -123,8 +123,8 @@ See the [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) docum
 Use backticks for:
 - Function names: `inferType`
 - Type names: `Term`, `Type`
-- File names: `Core.hs`
-- Module names: `hydra.core`
+- File names: `Model.hs`
+- Module names: `hydra.core.model`
 - Language keywords: `lambda`, `let`
 
 ### Code blocks
@@ -266,7 +266,7 @@ Provide complete, runnable examples when possible:
 -- Complete example with imports
 module Example where
 
-import Hydra.Core
+import Hydra.Core.Model
 
 myFunction :: Term -> Term
 myFunction = ...
