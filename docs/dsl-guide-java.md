@@ -3,20 +3,20 @@
 This guide explains Hydra's domain-specific language (DSL) utilities for constructing types and terms in Java.
 
 > **Status note (0.17+).** Two namespaces matter, and the boundary is architectural:
-> `hydra.overlay.java.*` is **hand-written** host-native code; `hydra.*` (e.g. `hydra.dsl.lib.*`)
-> is **generated**. The **hand-written direct + phantom DSLs** live under
-> `hydra.overlay.java.dsl.*`: the direct DSLs `hydra.overlay.java.dsl.{Types,Terms,Literals,LiteralTypes}`,
-> the phantom-typed DSL `hydra.overlay.java.dsl.meta.Phantoms` (+ `hydra.overlay.java.dsl.meta.Defs`
-> and the helper layer `hydra.overlay.java.dsl.Helpers`). These are the foundation for the host-native
+> `hydra.core.overlay.java.*` is **hand-written** host-native code; everything else under `hydra.*`
+> (e.g. `hydra.core.dsl.lib.*`) is **generated**. The **hand-written direct + phantom DSLs** live under
+> `hydra.core.overlay.java.dsl.*`: the direct DSLs `hydra.core.overlay.java.dsl.{Types,Terms,Literals,LiteralTypes}`,
+> the phantom-typed DSL `hydra.core.overlay.java.dsl.Phantoms` (+ `hydra.core.overlay.java.dsl.meta.Defs`
+> and the helper layer `hydra.core.overlay.java.dsl.Helpers`). These are the foundation for the host-native
 > Java coder sources at `packages/hydra-java/src/main/java/hydra/sources/` (post-#344). The **library
-> wrappers** are the *generated* modules `hydra.dsl.lib.*` (`Lists`, `Maps`, `Sets`, `Logic`, `Math_`,
+> wrappers** are the *generated* modules `hydra.core.dsl.lib.*` (`Lists`, `Maps`, `Sets`, `Logic`, `Math_`,
 > `Optionals`, `Strings`, `Literals`, `Eithers`, `Pairs`, `Equality`, …), imported directly. The
 > hand-written *meta-level* domain DSLs once sketched here (a `hydra.dsl.meta.Core`/`Graph`/`Compute`
 > accessor layer) were **never built and have been removed from this guide**. Note this is distinct from
-> the *generated per-record constructor* DSLs `hydra.dsl.Core`/`hydra.dsl.Graph`/… (e.g.
-> `hydra.dsl.Core.lambda(...)`), which do exist and are covered under "Accessing kernel-type fields" below.
+> the *generated per-record constructor* DSLs `hydra.core.dsl.Model`/`hydra.core.dsl.Graph`/… (e.g.
+> `hydra.core.dsl.Model.lambda(...)`), which do exist and are covered under "Accessing kernel-type fields" below.
 > For typed field access in the coder sources, authors use `Phantoms` projections (`proj(...)`) + `Helpers`;
-> for primitive calls, the generated `hydra.dsl.lib.*`. For full kernel-source authoring, use the Haskell DSL
+> for primitive calls, the generated `hydra.core.dsl.lib.*`. For full kernel-source authoring, use the Haskell DSL
 > ([DSL Guide (Haskell)](dsl-guide.md)); the Java DSL covers Java-coder authoring only.
 
 **Note**: Hydra provides DSLs in all five implementation languages (Haskell, Java, Python, Scala, and Lisp).
@@ -53,27 +53,27 @@ Hydra-Java provides a layered DSL system for working with Hydra types and terms:
 
 | Layer | Module | Purpose |
 |-------|--------|---------|
-| **Direct DSLs** | `hydra.overlay.java.dsl.Types`, `hydra.overlay.java.dsl.Terms` | Raw construction of `Type` and `Term` instances |
-| **Phantom-typed DSL** | `hydra.overlay.java.dsl.meta.Phantoms` | `TypedTerm<A>` term construction; the phantom `A` documents intent (not a load-bearing check — see below) |
-| **Definition + helper layer** | `hydra.overlay.java.dsl.meta.Defs`, `hydra.overlay.java.dsl.Helpers` | Fluent `define(NS,"name").doc(…).lam(…).to(…)` builder + `ref`; `typeref`/`typeDef`/`doc` for assembling modules |
-| **Library wrappers** | `hydra.dsl.lib.*` (generated) | Typed wrappers around Hydra primitives (lists, sets, maps, etc.) |
-| **Term references** | `hydra.dsl.Strip`, `hydra.dsl.Serialization`, ... (generated) | Typed, rename-safe references to kernel functions (#467) |
+| **Direct DSLs** | `hydra.core.overlay.java.dsl.Types`, `hydra.core.overlay.java.dsl.Terms` | Raw construction of `Type` and `Term` instances |
+| **Phantom-typed DSL** | `hydra.core.overlay.java.dsl.Phantoms` | `TypedTerm<A>` term construction; the phantom `A` documents intent (not a load-bearing check — see below) |
+| **Definition + helper layer** | `hydra.core.overlay.java.dsl.meta.Defs`, `hydra.core.overlay.java.dsl.Helpers` | Fluent `define(NS,"name").doc(…).lam(…).to(…)` builder + `ref`; `typeref`/`typeDef`/`doc` for assembling modules |
+| **Library wrappers** | `hydra.core.dsl.lib.*` (generated) | Typed wrappers around Hydra primitives (lists, sets, maps, etc.) |
+| **Term references** | `hydra.core.dsl.Strip`, `hydra.core.dsl.Serialization`, ... (generated) | Typed, rename-safe references to kernel functions (#467) |
 
 The Direct DSLs are suitable for casual use: constructing test fixtures, prototyping, or building types.
 The Phantom-typed DSL plus the definition/helper layer are used for writing Hydra kernel source code in
 Java, mirroring the Haskell DSLs used in `packages/hydra-haskell/src/main/haskell/Hydra/Sources/`. The
-`hydra.dsl.lib.*` wrappers are generated (not hand-written) and imported directly.
+`hydra.core.dsl.lib.*` wrappers are generated (not hand-written) and imported directly.
 
 ## The DSL variants
 
 ### 1. Direct Types DSL
 
-**Module**: `hydra.overlay.java.dsl.Types`
+**Module**: `hydra.core.overlay.java.dsl.Types`
 
 Constructs `Type` instances directly. Used for defining Hydra data types (records, unions, wrappers).
 
 ```java
-import hydra.overlay.java.dsl.Types;
+import hydra.core.overlay.java.dsl.Types;
 
 Type personType = Types.record(
     Types.field("name", Types.string()),
@@ -82,12 +82,12 @@ Type personType = Types.record(
 
 ### 2. Direct Terms DSL
 
-**Module**: `hydra.overlay.java.dsl.Terms`
+**Module**: `hydra.core.overlay.java.dsl.Terms`
 
 Constructs raw `Term` instances. Useful for test data and simple term construction.
 
 ```java
-import hydra.overlay.java.dsl.Terms;
+import hydra.core.overlay.java.dsl.Terms;
 
 Term person = Terms.record(new Name("Person"),
     Terms.field("name", Terms.string("Alice")),
@@ -96,7 +96,7 @@ Term person = Terms.record(new Name("Person"),
 
 ### 3. Phantom-typed DSL
 
-**Module**: `hydra.overlay.java.dsl.meta.Phantoms`
+**Module**: `hydra.core.overlay.java.dsl.Phantoms`
 
 Wraps raw `Term` construction in a `TypedTerm<A>` whose phantom parameter `A` *names the intended*
 Hydra type at the Java level.
@@ -111,7 +111,7 @@ Hydra type at the Java level.
 > a large change for no functional gain.
 
 ```java
-import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import static hydra.core.overlay.java.dsl.Phantoms.*;
 
 TypedTerm<String> greeting = string("hello");
 TypedTerm<Integer> age = int32(30);
@@ -119,39 +119,39 @@ TypedTerm<Object> identity = lambda("x", var("x"));
 ```
 
 For typed field *access* on kernel types, there is no separate hand-written accessor "domain DSL" — the
-coder sources project with `Phantoms` (`proj(...)`) and the `hydra.overlay.java.dsl.Helpers` layer. (For
-*constructing* kernel records there are the generated `hydra.dsl.Core`/`Graph`/… constructor DSLs — see
+coder sources project with `Phantoms` (`proj(...)`) and the `hydra.core.overlay.java.dsl.Helpers` layer. (For
+*constructing* kernel records there are the generated `hydra.core.dsl.Model`/`Graph`/… constructor DSLs — see
 "Accessing kernel-type fields" below.) See the host-native sources at
 `packages/hydra-java/src/main/java/hydra/sources/` for concrete examples.
 
 ### 4. Library wrappers
 
-The generated `hydra.dsl.lib.*` modules provide typed wrappers around Hydra primitive functions,
-so a primitive call reads as a normal method call rather than a raw `apply(var("hydra.lib..."), ...)`.
+The generated `hydra.core.dsl.lib.*` modules provide typed wrappers around Hydra primitive functions,
+so a primitive call reads as a normal method call rather than a raw `apply(var("hydra.core.lib..."), ...)`.
 
 ```java
-import hydra.dsl.lib.Sets;
-import hydra.dsl.lib.Lists;
+import hydra.core.dsl.lib.Sets;
+import hydra.core.dsl.lib.Lists;
 
 TypedTerm<java.util.Set<R>> u = Sets.union(s1, s2);
 TypedTerm<java.util.List<B>> ys = Lists.map(f, xs);
 ```
 
-These modules are **generated** (one per `hydra.lib.*` library) and imported directly; they are not
+These modules are **generated** (one per `hydra.core.lib.*` library) and imported directly; they are not
 hand-written. See [Library wrappers](#library-wrappers) below for the full list.
 
 ### 5. Term references
 
-The generated `hydra.dsl.<Module>` interfaces provide one typed, rename-safe reference per kernel
+The generated `hydra.core.dsl.<Module>` interfaces provide one typed, rename-safe reference per kernel
 term definition (#467), derived from the definition's inferred signature.
 They replace stringly-typed `var("hydra....")` references, which no rename catches and which fail
 only at inference time.
 
 ```java
-import hydra.dsl.Strip;
-import hydra.dsl.Serialization;
+import hydra.core.dsl.Strip;
+import hydra.core.dsl.Serialization;
 
-TypedTerm<Type> stripped = Strip.deannotateType(typ);   // hydra.strip.deannotateType, rename-safe
+TypedTerm<Type> stripped = Strip.deannotateType(typ);   // hydra.core.strip.deannotateType, rename-safe
 ```
 
 One interface is generated per curated term module — the demand set covers the modules the coder
@@ -170,17 +170,17 @@ Prefer these over inline `var("hydra....")` strings in new code.
 | Primitive function calls | Library wrappers | `Sets.union(a, b)` instead of raw `apply(var(...), ...)` |
 
 **Rule of thumb**:
-- **Type modules** (defining data types): Use `hydra.overlay.java.dsl.Types` with `Types.record()`, `Types.union()`, `Types.wrap()`
-- **Term modules** (defining functions): Use `import static hydra.overlay.java.dsl.meta.Phantoms.*`
-- **Quick prototyping**: Use `hydra.overlay.java.dsl.Terms` directly
+- **Type modules** (defining data types): Use `hydra.core.overlay.java.dsl.Types` with `Types.record()`, `Types.union()`, `Types.wrap()`
+- **Term modules** (defining functions): Use `import static hydra.core.overlay.java.dsl.Phantoms.*`
+- **Quick prototyping**: Use `hydra.core.overlay.java.dsl.Terms` directly
 
 ## Direct DSLs (Types and Terms)
 
 ### Constructing Types
 
 ```java
-import hydra.core.*;
-import hydra.overlay.java.dsl.Types;
+import hydra.core.model.*;
+import hydra.core.overlay.java.dsl.Types;
 
 // Literal types
 Type stringType = Types.string();
@@ -214,7 +214,7 @@ Type shape = Types.union(
 Type name = Types.wrap(Types.string());
 
 // Type variable (forward reference)
-Type selfRef = Types.variable("hydra.core.Term");
+Type selfRef = Types.variable("hydra.core.model.Term");
 
 // Unit type
 Type unit = Types.unit();
@@ -223,8 +223,8 @@ Type unit = Types.unit();
 ### Constructing Terms
 
 ```java
-import hydra.core.*;
-import hydra.overlay.java.dsl.Terms;
+import hydra.core.model.*;
+import hydra.core.overlay.java.dsl.Terms;
 
 // Literals
 Term hello = Terms.string("hello");
@@ -242,7 +242,7 @@ Term person = Terms.record(new Name("Person"),
 // Lambdas
 Term identity = Terms.lambda("x", Terms.var("x"));
 Term add = Terms.lambda("x", Terms.lambda("y",
-    Terms.apply(Terms.apply(Terms.primitive("hydra.lib.math.add"),
+    Terms.apply(Terms.apply(Terms.primitive("hydra.core.lib.math.add"),
         Terms.var("x")), Terms.var("y"))));
 
 // Application
@@ -259,13 +259,13 @@ Term letExpr = Terms.let_("x", Terms.int32(5), Terms.var("x"));
 Term circle = Terms.inject("Shape", "circle", Terms.float64(3.14));
 
 // Wrapped term (newtype)
-Term name = Terms.wrap("hydra.core.Name", Terms.string("myName"));
+Term name = Terms.wrap("hydra.core.model.Name", Terms.string("myName"));
 ```
 
 ### Working with Union Types (Visitor pattern)
 
 ```java
-import hydra.core.*;
+import hydra.core.model.*;
 
 // Pattern match on a Term
 String describe(Term term) {
@@ -294,11 +294,11 @@ It wraps raw `Term` values in `TypedTerm<A>` to provide compile-time type tracki
 ### Import pattern
 
 ```java
-import hydra.typed.TypedBinding;
-import hydra.typed.TypedTerm;
+import hydra.core.typed.TypedBinding;
+import hydra.core.typed.TypedTerm;
 import hydra.util.Maybe;
 
-import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import static hydra.core.overlay.java.dsl.Phantoms.*;
 ```
 
 ### Literals
@@ -318,7 +318,7 @@ TypedTerm<Boolean> no = false_();
 TypedTerm<Object> id = lambda("x", var("x"));
 
 // Lambda (multiple parameters — curried)
-// Primitive calls use the generated hydra.dsl.lib.* wrappers (see "Library wrappers")
+// Primitive calls use the generated hydra.core.dsl.lib.* wrappers (see "Library wrappers")
 TypedTerm<Object> add = lambdas(List.of("x", "y"),
     Math_.add(var("x"), var("y")));
 
@@ -358,7 +358,7 @@ TypedTerm<Object> err = left(string("error"));
 ```java
 // Construct a record (requires type name + fields)
 // Generated kernel classes emit a `TYPE_` constant plus one bare-name constant per field.
-import hydra.core.AnnotatedTerm;
+import hydra.core.model.AnnotatedTerm;
 
 TypedTerm<Object> annotated = record(AnnotatedTerm.TYPE_,
     field(AnnotatedTerm.BODY, var("body")),
@@ -368,8 +368,8 @@ TypedTerm<Object> annotated = record(AnnotatedTerm.TYPE_,
 ### Union injection
 
 ```java
-import hydra.core.FloatType;
-import hydra.core.Literal;
+import hydra.core.model.FloatType;
+import hydra.core.model.Literal;
 
 // Inject into a union type
 TypedTerm<Object> f = inject(Literal.TYPE_, Literal.FLOAT,
@@ -382,7 +382,7 @@ TypedTerm<Object> f32 = inject(FloatType.TYPE_, FloatType.FLOAT32);
 ### Pattern matching (`cases`/`match`)
 
 ```java
-import hydra.core.Term;
+import hydra.core.model.Term;
 
 // match creates a case elimination (unapplied)
 TypedTerm<Object> matcher = match(Term.TYPE_,
@@ -447,7 +447,7 @@ with an extra `apply(..., unit())`:
 // field type is `unit -> string` — force the thunk
 TypedTerm<Object> value = apply(
     apply(
-        project("hydra.testing.UniversalTestCase", "actual"),
+        project("hydra.core.testing.UniversalTestCase", "actual"),
         var("ucase")),
     unit());
 ```
@@ -468,12 +468,12 @@ TypedTerm<Object> unwrapper = unwrap(Name.TYPE_);
 
 ### Primitive functions
 
-Primitive calls go through the generated `hydra.dsl.lib.*` wrappers — there are no
+Primitive calls go through the generated `hydra.core.dsl.lib.*` wrappers — there are no
 `primitive`/`primitive1`/`primitive2` helpers. Each wrapper method is typed and rename-safe:
 
 ```java
-import hydra.dsl.lib.Strings;
-import hydra.dsl.lib.Math_;   // math.* wrapper; escaped to avoid clashing with java.lang.Math
+import hydra.core.dsl.lib.Strings;
+import hydra.core.dsl.lib.Math_;   // math.* wrapper; escaped to avoid clashing with java.lang.Math
 
 TypedTerm<Integer> len = Strings.length(var("s"));
 TypedTerm<Integer> sum = Math_.add(var("x"), var("y"));
@@ -482,7 +482,7 @@ TypedTerm<Integer> sum = Math_.add(var("x"), var("y"));
 If no wrapper exists yet for a primitive, reference it by name and apply directly:
 
 ```java
-TypedTerm<Object> sum = apply(var("hydra.lib.math.add"), var("x"), var("y"));
+TypedTerm<Object> sum = apply(var("hydra.core.lib.math.add"), var("x"), var("y"));
 ```
 
 ### Documentation
@@ -499,7 +499,7 @@ projection. `proj(typeName, fieldName, varName)` is the idiomatic form (project-
 variable):
 
 ```java
-import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import static hydra.core.overlay.java.dsl.Phantoms.*;
 
 // Lambda.body of the term bound to "lam"
 TypedTerm<Object> body = proj(Lambda.TYPE_, Lambda.BODY, "lam");
@@ -508,7 +508,7 @@ TypedTerm<Object> ann = proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at"
 ```
 
 For constructing kernel records, use the `Terms.record(...)` / `Phantoms` constructors directly, or the
-generated `hydra.dsl.*` constructor DSLs (e.g. `hydra.dsl.Core.lambda(...)`). The host-native sources at
+generated `hydra.core.dsl.*` constructor DSLs (e.g. `hydra.core.dsl.Model.lambda(...)`). The host-native sources at
 `packages/hydra-java/src/main/java/hydra/sources/` are the canonical worked examples.
 
 ### Generated name constants
@@ -517,15 +517,15 @@ Generated Hydra types provide a `TYPE_` constant (the type's `Name`) plus one ba
 per field or variant (the field/variant's local `Name`):
 
 ```java
-// From hydra.core.Term (generated)
-Term.TYPE_          // Name("hydra.core.Term")
+// From hydra.core.model.Term (generated)
+Term.TYPE_          // Name("hydra.core.model.Term")
 Term.LITERAL        // Name("literal")
 Term.VARIABLE       // Name("variable")
 Term.APPLICATION    // Name("application")
 // ... etc.
 
-// From hydra.core.Lambda (generated)
-Lambda.TYPE_        // Name("hydra.core.Lambda")
+// From hydra.core.model.Lambda (generated)
+Lambda.TYPE_        // Name("hydra.core.model.Lambda")
 Lambda.PARAMETER    // Name("parameter")
 Lambda.BODY         // Name("body")
 ```
@@ -536,12 +536,12 @@ This ensures correctness and enables refactoring.
 ## Library wrappers
 
 Library wrappers provide phantom-typed interfaces to Hydra's primitive functions. They are
-**generated** — one `hydra.dsl.lib.<Library>` module per `hydra.lib.*` library — so you import and call
+**generated** — one `hydra.core.dsl.lib.<Library>` module per `hydra.core.lib.*` library — so you import and call
 them directly rather than hand-rolling raw primitive applications:
 
 ```java
-import hydra.dsl.lib.Sets;
-import hydra.dsl.lib.Lists;
+import hydra.core.dsl.lib.Sets;
+import hydra.core.dsl.lib.Lists;
 
 TypedTerm<java.util.Set<R>> u = Sets.union(s1, s2);
 TypedTerm<Integer> n = Lists.length(xs);
@@ -549,11 +549,11 @@ TypedTerm<B> acc = Lists.foldl(f, init, xs);
 ```
 
 The generated modules are: `Lists`, `Maps`, `Sets`, `Logic`, `Math_`, `Optionals`, `Strings`,
-`Literals`, `Eithers`, `Pairs`, `Equality`, `Chars` (plus any other `hydra.lib.*` library). Each method
+`Literals`, `Eithers`, `Pairs`, `Equality`, `Chars` (plus any other `hydra.core.lib.*` library). Each method
 name matches the primitive's local name; each is fully typed via `TypedTerm<A>`.
 
 The underlying primitive-reference form is still available when you need the unapplied primitive as a
-term: `Terms.primitive("hydra.lib.sets.union")` yields the `Term.Variable` for that primitive.
+term: `Terms.primitive("hydra.core.lib.sets.union")` yields the `Term.Variable` for that primitive.
 
 ## Type definitions
 
@@ -563,14 +563,14 @@ Each type definition is a `Binding` (a name-term pair).
 ### Pattern
 
 ```java
-import hydra.core.*;
-import hydra.overlay.java.dsl.Types;
+import hydra.core.model.*;
+import hydra.core.overlay.java.dsl.Types;
 
 public interface MyTypes {
     String NS = "my.namespace";
 
     static Binding define(String localName, Type type) {
-        return hydra.Annotations.typeElement(
+        return hydra.core.Annotations.typeElement(
             new Name(NS + "." + localName), type);
     }
 
@@ -598,7 +598,7 @@ Types in the same module reference each other through `Types.variable()`:
 
 ```java
 // Forward reference to another type in this module
-Type _Term = Types.variable("hydra.core.Term");
+Type _Term = Types.variable("hydra.core.model.Term");
 
 // Use it in a record field
 Binding lambda = define("Lambda",
@@ -607,7 +607,7 @@ Binding lambda = define("Lambda",
         Types.field("body", _Term)));
 ```
 
-### Complete example: hydra.core
+### Complete example: hydra.core.model
 
 The `examples/` directory is aspirational — the file does not yet exist. For a
 real reference, see the host-native Java coder sources at
@@ -630,9 +630,9 @@ The body passed to `.to(() -> ...)` stays lazy (a `Supplier`), so a definition m
 `Def` fields declared later in the class.
 
 ```java
-import hydra.typed.*;
+import hydra.core.typed.*;
 import hydra.util.Maybe;
-import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import static hydra.core.overlay.java.dsl.Phantoms.*;
 
 public class MyFunctions {
     public static final ModuleName NS = new ModuleName("my.namespace");
@@ -670,7 +670,7 @@ Use `var("namespace.functionName")` for qualified self-references:
 apply(var("my.namespace.deannotateTerm"), annotatedTermBody(var("at")))
 ```
 
-### Complete example: hydra.rewriting
+### Complete example: hydra.core.rewriting
 
 The `examples/` directory is aspirational — the file does not yet exist. The same
 patterns (simple pattern matching, case branches, composition with projection,
@@ -759,9 +759,9 @@ Generated Java classes for Hydra types provide:
 ### Example: Generated Term class
 
 ```java
-// hydra.core.Term (generated)
+// hydra.core.model.Term (generated)
 public abstract class Term implements Serializable, Comparable<Term> {
-    public static final Name TYPE_ = new Name("hydra.core.Term");
+    public static final Name TYPE_ = new Name("hydra.core.model.Term");
     public static final Name LITERAL = new Name("literal");
     public static final Name VARIABLE = new Name("variable");
     // ...
@@ -784,19 +784,19 @@ Each record exposes a static `builder()` factory and a nested `Builder` class wi
 field (named after the field) and a `build()` that returns the immutable record:
 
 ```java
-import hydra.core.Binding;
+import hydra.core.model.Binding;
 
 Binding b = Binding.builder()
-    .name(new hydra.core.Name("x"))
+    .name(new hydra.core.model.Name("x"))
     .term(myTerm)
-    .typeScheme(hydra.util.Optional.empty())
+    .typeScheme(hydra.core.overlay.java.util.Optional.none())
     .build();
 ```
 
 For generic records the type parameters are threaded through, so the builder stays type-safe:
 
 ```java
-// hydra.coders.Coder<V1, V2>
+// hydra.core.coders.Coder<V1, V2>
 Coder<A, B> c = Coder.<A, B>builder()
     .encode(myEncode)
     .decode(myDecode)
@@ -808,7 +808,7 @@ Each record also has one `withFieldName(...)` method per field, returning a new 
 field replaced and all others copied — useful for tweaking a single field of an immutable value:
 
 ```java
-Binding b2 = b.withName(new hydra.core.Name("y"));   // same term + typeScheme, new name
+Binding b2 = b.withName(new hydra.core.model.Name("y"));   // same term + typeScheme, new name
 ```
 
 Notes:
@@ -827,24 +827,24 @@ was removed in #245). An `InferenceContext` value is threaded alongside the grap
 and carries the fresh-type-variable counter and the current subterm-path trace.
 
 ```java
-import hydra.overlay.java.util.Either;
-import hydra.typing.InferenceContext;
-import hydra.errors.Error;
-import hydra.graph.Graph;
+import hydra.core.overlay.java.util.Either;
+import hydra.core.typing.InferenceContext;
+import hydra.core.errors.Error;
+import hydra.core.graph.Graph;
 
 // Create a successful result
 Either<Error, String> ok = Either.right("result");
 
 // Map over a result
 Either<Error, Integer> mapped =
-    hydra.lib.eithers.Map.apply(s -> s.length(), ok);
+    hydra.core.overlay.java.lib.eithers.Map.apply(s -> s.length(), ok);
 
 // Chain computations (bind / flatMap)
 Either<Error, String> bound =
-    hydra.lib.eithers.Bind.apply(result1, value ->
+    hydra.core.overlay.java.lib.eithers.Bind.apply(result1, value ->
         Either.right(value + " processed"));
 
-// Create a failure (Error is a tagged-union type; construct a variant from hydra.errors)
+// Create a failure (Error is a tagged-union type; construct a variant from hydra.core.errors)
 Either<Error, String> err = Either.left(Error.other("something went wrong"));
 
 // Inspect a result
@@ -857,18 +857,18 @@ if (result.isRight()) {
 
 ## Examples in the codebase
 
-All hand-written DSLs live under `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/dsl/`
-(namespace `hydra.overlay.java.dsl.*`); the library wrappers are generated.
+All hand-written DSLs live under `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/dsl/`
+(namespace `hydra.core.overlay.java.dsl.*`); the library wrappers are generated.
 
 | File | Description |
 |------|-------------|
-| `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/dsl/meta/Phantoms.java` | Phantom-typed DSL (all operations) |
-| `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/dsl/meta/Defs.java` | Module-definition helpers (`define`/`ref`/`definitionsOf`) |
-| `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/dsl/Helpers.java` | `typeref`/`typeDef`/`doc`/`typeScheme` helpers |
-| `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/dsl/Types.java` | Direct Types DSL |
-| `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/dsl/Terms.java` | Direct Terms DSL |
-| `hydra.dsl.lib.*` (generated; e.g. `hydra.dsl.lib.Lists`/`Maps`/`Sets`/`Logic`/`Math_`/`Optionals`/`Strings`) | Library wrappers — generated, imported directly |
-| `hydra.dsl.*` term references (generated; e.g. `hydra.dsl.Strip`/`Serialization`/`Names`) | Typed, rename-safe references to kernel functions (#467) |
+| `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/dsl/Phantoms.java` | Phantom-typed DSL (all operations) |
+| `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/dsl/meta/Defs.java` | Module-definition helpers (`define`/`ref`/`definitionsOf`) |
+| `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/dsl/Helpers.java` | `typeref`/`typeDef`/`doc`/`typeScheme` helpers |
+| `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/dsl/Types.java` | Direct Types DSL |
+| `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/dsl/Terms.java` | Direct Terms DSL |
+| `hydra.core.dsl.lib.*` (generated; e.g. `hydra.core.dsl.lib.Lists`/`Maps`/`Sets`/`Logic`/`Math_`/`Optionals`/`Strings`) | Library wrappers — generated, imported directly |
+| `hydra.core.dsl.*` term references (generated; e.g. `hydra.core.dsl.Strip`/`Serialization`/`Names`) | Typed, rename-safe references to kernel functions (#467) |
 | `packages/hydra-java/src/main/java/hydra/sources/` | Live host-native Java coder DSL sources (reference for current Phantoms idiom) |
 
 ## Related Documentation

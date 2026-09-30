@@ -39,31 +39,31 @@ Hydra-Python provides a layered DSL system for working with Hydra types and term
 
 | Layer | Module | Purpose |
 |-------|--------|---------|
-| **Direct DSLs** | `hydra.overlay.python.dsl.types`, `hydra.overlay.python.dsl.terms` | Raw construction of `Type` and `Term` instances |
-| **Phantom-typed DSL** | `hydra.overlay.python.dsl.meta.phantoms` | Type safety via `TypedTerm[A]` phantom types |
-| **Domain-specific DSLs** | `hydra.dsl.core`, `hydra.dsl.graph` (generated) | Typed accessors for Hydra kernel types |
-| **Library wrappers** | `hydra.dsl.lib.*` | Typed wrappers around Hydra primitives (lists, sets, maps, etc.) |
-| **Term references** | `hydra.dsl.strip`, `hydra.dsl.serialization`, ... (generated) | Typed, rename-safe references to kernel functions (#467) |
+| **Direct DSLs** | `hydra.core.overlay.python.dsl.types`, `hydra.core.overlay.python.dsl.terms` | Raw construction of `Type` and `Term` instances |
+| **Phantom-typed DSL** | `hydra.core.overlay.python.dsl.phantoms` | Type safety via `TypedTerm[A]` phantom types |
+| **Domain-specific DSLs** | `hydra.core.dsl.model`, `hydra.core.dsl.graph` (generated) | Typed accessors for Hydra kernel types |
+| **Library wrappers** | `hydra.core.dsl.lib.*` | Typed wrappers around Hydra primitives (lists, sets, maps, etc.) |
+| **Term references** | `hydra.core.dsl.strip`, `hydra.core.dsl.serialization`, ... (generated) | Typed, rename-safe references to kernel functions (#467) |
 
 The Direct DSLs are suitable for casual use: constructing test fixtures, prototyping, or building types.
 The Phantom-typed and Domain-specific DSLs are designed for writing Hydra kernel source code in Python,
 mirroring the Haskell DSLs used in `packages/hydra-haskell/src/main/haskell/Hydra/Sources/`.
 
-Note the two namespaces: the hand-written authoring DSLs live under `hydra.overlay.python.dsl.*`
-(host-native, authored in `overlay/python/`), while the **library wrappers `hydra.dsl.lib.*` are
-generated** (one module per `hydra.lib.*` library) and imported directly. The `hydra.*` namespace is
-exclusively generated/translingual; `hydra.overlay.python.*` is exclusively host-native (#501).
+Note the two namespaces: the hand-written authoring DSLs live under `hydra.core.overlay.python.dsl.*`
+(host-native, authored in `overlay/python/`), while the **library wrappers `hydra.core.dsl.lib.*` are
+generated** (one module per `hydra.core.lib.*` library) and imported directly. Everything else under `hydra.*` is
+generated/translingual; `hydra.core.overlay.python.*` is exclusively host-native (#501, #729).
 
 ## The DSL variants
 
 ### 1. Direct Types DSL
 
-**Module**: `hydra.overlay.python.dsl.types`
+**Module**: `hydra.core.overlay.python.dsl.types`
 
 Constructs `Type` instances directly. Used for defining Hydra data types.
 
 ```python
-import hydra.overlay.python.dsl.types as T
+import hydra.core.overlay.python.dsl.types as T
 
 person_type = T.record([
     T.field("name", T.string()),
@@ -72,12 +72,12 @@ person_type = T.record([
 
 ### 2. Direct Terms DSL
 
-**Module**: `hydra.overlay.python.dsl.terms`
+**Module**: `hydra.core.overlay.python.dsl.terms`
 
 Constructs raw `Term` instances. Useful for test data and simple term construction.
 
 ```python
-import hydra.overlay.python.dsl.terms as Terms
+import hydra.core.overlay.python.dsl.terms as Terms
 
 person = Terms.record(Name("Person"), [
     Terms.field("name", Terms.string("Alice")),
@@ -86,13 +86,13 @@ person = Terms.record(Name("Person"), [
 
 ### 3. Phantom-typed DSL
 
-**Module**: `hydra.overlay.python.dsl.meta.phantoms`
+**Module**: `hydra.core.overlay.python.dsl.phantoms`
 
 Wraps raw `Term` construction with `TypedTerm[A]` phantom types for type tracking.
 
 ```python
 # Recommended idiom: star-import for clean call sites
-from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
+from hydra.core.overlay.python.dsl.phantoms import *  # noqa: F401,F403
 
 greeting = string("hello")
 age = int32(42)
@@ -105,8 +105,8 @@ Phantom-typed functions like `cases`, `match`, `inject`, `wrap`, `field`,
 
 ```python
 # Both forms are equivalent — prefer the shorter str form.
-cases("hydra.core.Term", arg, ..., [field("lambda", ...)])
-cases(Name("hydra.core.Term"), arg, ..., [field(Name("lambda"), ...)])
+cases("hydra.core.model.Term", arg, ..., [field("lambda", ...)])
+cases(Name("hydra.core.model.Term"), arg, ..., [field(Name("lambda"), ...)])
 ```
 
 The `@` operator and the call operator are overloaded on `TypedTerm`, so function
@@ -121,13 +121,13 @@ f(a, b, c)                        # Python-native call syntax (preferred)
 
 ### 4. Domain-specific DSLs
 
-**Modules**: `hydra.dsl.core`, `hydra.dsl.graph`, etc. (generated, one per kernel type module).
+**Modules**: `hydra.core.dsl.model`, `hydra.core.dsl.graph`, etc. (generated, one per kernel type module).
 
 Provide typed field accessors, constructors, and `with_*` updaters for Hydra kernel types. These are
-**generated** (in the `hydra.dsl.*` namespace), so you import them directly:
+**generated** (in the `hydra.core.dsl.*` namespace), so you import them directly:
 
 ```python
-import hydra.dsl.core as Core
+import hydra.core.dsl.model as Core
 
 # Field accessors (project + apply, typed)
 body = Core.lambda_body(var("myLambda"))         # Lambda.body
@@ -137,18 +137,18 @@ param = Core.lambda_parameter(var("myLambda"))   # Lambda.parameter
 lam = Core.lambda_(param_term, domain_term, body_term)
 ```
 
-(There is also a small *hand-written* `hydra.overlay.python.dsl.meta.core` with a few literal-type
-helpers — distinct from the generated `hydra.dsl.core` above.)
+(There is also a small *hand-written* `hydra.core.overlay.python.dsl.meta.core` with a few literal-type
+helpers — distinct from the generated `hydra.core.dsl.model` above.)
 
 ### 5. Library wrappers
 
-**Modules**: `hydra.dsl.lib.sets`, `hydra.dsl.lib.lists`, etc.
+**Modules**: `hydra.core.dsl.lib.sets`, `hydra.core.dsl.lib.lists`, etc.
 
 Typed wrappers around Hydra primitive functions.
 
 ```python
-import hydra.dsl.lib.sets as Sets
-import hydra.dsl.lib.lists as Lists
+import hydra.core.dsl.lib.sets as Sets
+import hydra.core.dsl.lib.lists as Lists
 
 # Set operations
 empty = Sets.empty()
@@ -161,7 +161,7 @@ folded = Lists.foldl(fn, init, my_list)
 
 ### 6. Term references
 
-**Modules**: `hydra.dsl.strip`, `hydra.dsl.serialization`, `hydra.dsl.names`, etc.
+**Modules**: `hydra.core.dsl.strip`, `hydra.core.dsl.serialization`, `hydra.core.dsl.names`, etc.
 
 One typed, rename-safe reference function per kernel term definition (#467), derived from the
 definition's inferred signature.
@@ -169,9 +169,9 @@ These replace stringly-typed `var("hydra....")` references (and the coder-privat
 registry), which no rename catches and which fail only at inference time.
 
 ```python
-import hydra.dsl.strip as Strip
+import hydra.core.dsl.strip as Strip
 
-stripped = Strip.deannotate_type(typ)   # references hydra.strip.deannotateType, rename-safe
+stripped = Strip.deannotate_type(typ)   # references hydra.core.strip.deannotateType, rename-safe
 ```
 
 One module is generated per curated term module — the demand set covers the modules the coder
@@ -188,20 +188,20 @@ Prefer these over inline `var("hydra....")` strings in new code.
 | Writing kernel source code | Phantom-typed + Domain-specific | Type tracking + domain accessors |
 | Field access on kernel types | Domain-specific DSLs | `Core.lambda_body(t)` vs manual projection |
 | Primitive function calls | Library wrappers | `Sets.union(a, b)` vs raw `primitive2(...)` |
-| Referencing kernel functions | Term references | `Strip.deannotate_type(t)` vs `var("hydra.strip.deannotateType")` |
+| Referencing kernel functions | Term references | `Strip.deannotate_type(t)` vs `var("hydra.core.strip.deannotateType")` |
 
 **Rule of thumb**:
-- **Type modules** (defining data types): Use `hydra.overlay.python.dsl.types as T` with `T.record()`, `T.union()`, `T.wrap()`
-- **Term modules** (defining functions): Use `hydra.overlay.python.dsl.meta.phantoms as P` with domain DSLs
-- **Quick prototyping**: Use `hydra.overlay.python.dsl.terms` directly
+- **Type modules** (defining data types): Use `hydra.core.overlay.python.dsl.types as T` with `T.record()`, `T.union()`, `T.wrap()`
+- **Term modules** (defining functions): Use `hydra.core.overlay.python.dsl.phantoms as P` with domain DSLs
+- **Quick prototyping**: Use `hydra.core.overlay.python.dsl.terms` directly
 
 ## Direct DSLs (Types and Terms)
 
 ### Constructing Types
 
 ```python
-import hydra.overlay.python.dsl.types as T
-from hydra.core import Name
+import hydra.core.overlay.python.dsl.types as T
+from hydra.core.model import Name
 
 # Literal types
 string_type = T.string()
@@ -253,7 +253,7 @@ shape = T.union([
 name = T.wrap(T.string())
 
 # Type variable (forward reference)
-self_ref = T.variable("hydra.core.Term")
+self_ref = T.variable("hydra.core.model.Term")
 
 # Unit type
 unit = T.unit()
@@ -262,8 +262,8 @@ unit = T.unit()
 ### Constructing Terms
 
 ```python
-import hydra.overlay.python.dsl.terms as Terms
-from hydra.core import Name, Field
+import hydra.core.overlay.python.dsl.terms as Terms
+from hydra.core.model import Name, Field
 
 # Literals
 hello = Terms.string("hello")
@@ -294,7 +294,7 @@ nothing_val = Terms.nothing()
 Python uses `match` statements (3.10+) or `isinstance` checks for pattern matching:
 
 ```python
-from hydra.core import Term
+from hydra.core.model import Term
 
 # Python 3.10+ match statement
 def describe(term: Term) -> str:
@@ -325,10 +325,10 @@ It wraps raw `Term` values in `TypedTerm[A]` to provide type tracking.
 
 ```python
 # Recommended idiom: star-import phantoms so DSL primitives are unqualified.
-from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
-import hydra.dsl.core as Core
-from hydra.core import Name
-from hydra.overlay.python.dsl.python import Given, None_
+from hydra.core.overlay.python.dsl.phantoms import *  # noqa: F401,F403
+import hydra.core.dsl.model as Core
+from hydra.core.model import Name
+from hydra.core.overlay.python.dsl.python import Given, None_
 ```
 
 The star import brings `var`, `lam`, `apply`, `lets`, `let_chain`, `field`,
@@ -407,14 +407,14 @@ person = record("my.module.Person", [
 circle = inject("my.module.Shape", "circle", float64(3.14))
 
 # Unit injection (for enum-like variants)
-f32 = inject_unit("hydra.core.FloatType", "float32")
+f32 = inject_unit("hydra.core.model.FloatType", "float32")
 ```
 
 ### Pattern matching (`cases`/`match`)
 
 ```python
 # match creates a case elimination (unapplied)
-matcher = match("hydra.core.Term",
+matcher = match("hydra.core.model.Term",
     Given(var("default")),                 # default case
     [field("literal",
         lam("lit", string("found a literal"))),
@@ -422,11 +422,11 @@ matcher = match("hydra.core.Term",
         lam("v", string("found a variable")))])
 
 # cases applies the match to an argument (str type name auto-coerced)
-result = cases("hydra.core.Term", var("myTerm"),
+result = cases("hydra.core.model.Term", var("myTerm"),
     None_(),                            # no default
     [field("literal",
         lam("lit", var("lit"))),
-     field(hydra.core.TERM__VARIABLE__NAME,
+     field(hydra.core.model.TERM__VARIABLE__NAME,
         lam("v", var("v")))])
 ```
 
@@ -489,21 +489,21 @@ containing module, since the inferencer processes them in a shared context.
 
 ```python
 # Wrap a value (create a newtype instance)
-hydra_name = wrap(hydra.core.NAME__NAME, string("myName"))
+hydra_name = wrap(hydra.core.model.NAME__NAME, string("myName"))
 
 # Unwrap function
-unwrapper = unwrap(hydra.core.NAME__NAME)
+unwrapper = unwrap(hydra.core.model.NAME__NAME)
 ```
 
 ### Primitive functions
 
 ```python
 # Reference a primitive
-add_prim = primitive(Name("hydra.lib.math.add"))
+add_prim = primitive(Name("hydra.core.lib.math.add"))
 
 # Apply primitives with 1, 2, or 3 arguments
-length = primitive1(Name("hydra.lib.strings.length"), var("s"))
-sum_ = primitive2(Name("hydra.lib.math.add"), var("x"), var("y"))
+length = primitive1(Name("hydra.core.lib.strings.length"), var("s"))
+sum_ = primitive2(Name("hydra.core.lib.math.add"), var("x"), var("y"))
 ```
 
 ### Documentation
@@ -518,10 +518,10 @@ documented = doc("Adds two numbers", var("add"))
 The domain-specific DSLs (`core`, `graph`) provide typed accessors
 for Hydra's kernel types.
 
-### Core DSL (`hydra.dsl.core`, generated)
+### Core DSL (`hydra.core.dsl.model`, generated)
 
 ```python
-import hydra.dsl.core as Core
+import hydra.core.dsl.model as Core
 
 # Field accessors
 param = Core.lambda_parameter(var("lam"))         # Lambda.parameter
@@ -537,17 +537,17 @@ Generated Hydra modules provide `TYPE_NAME` and `FIELD_NAME_*` constants using
 Python naming conventions (double underscores for namespace separation):
 
 ```python
-import hydra.core
+import hydra.core.model
 
 # Type names
-hydra.core.TERM__NAME                    # Name("hydra.core.Term")
-hydra.core.LAMBDA__NAME                  # Name("hydra.core.Lambda")
+hydra.core.model.TERM__NAME                    # Name("hydra.core.model.Term")
+hydra.core.model.LAMBDA__NAME                  # Name("hydra.core.model.Lambda")
 
 # Field names (TYPE__FIELD__NAME pattern)
-hydra.core.TERM__LITERAL__NAME           # Name("literal")
-hydra.core.TERM__VARIABLE__NAME          # Name("variable")
-hydra.core.LAMBDA__PARAMETER__NAME       # Name("parameter")
-hydra.core.LAMBDA__BODY__NAME            # Name("body")
+hydra.core.model.TERM__LITERAL__NAME           # Name("literal")
+hydra.core.model.TERM__VARIABLE__NAME          # Name("variable")
+hydra.core.model.LAMBDA__PARAMETER__NAME       # Name("parameter")
+hydra.core.model.LAMBDA__BODY__NAME            # Name("body")
 ```
 
 Always use these constants rather than constructing `Name` instances manually.
@@ -556,10 +556,10 @@ Always use these constants rather than constructing `Name` instances manually.
 
 Library wrappers provide typed interfaces to Hydra's primitive functions.
 
-### Sets (`hydra.dsl.lib.sets`)
+### Sets (`hydra.core.dsl.lib.sets`)
 
 ```python
-import hydra.dsl.lib.sets as Sets
+import hydra.core.dsl.lib.sets as Sets
 
 empty = Sets.empty()
 union = Sets.union(set_a, set_b)
@@ -568,37 +568,37 @@ from_list = Sets.from_list(my_list)
 to_list = Sets.to_list(my_set)
 ```
 
-### Lists (`hydra.dsl.lib.lists`)
+### Lists (`hydra.core.dsl.lib.lists`)
 
 ```python
-import hydra.dsl.lib.lists as Lists
+import hydra.core.dsl.lib.lists as Lists
 
 folded = Lists.foldl(fn, init, my_list)
 mapped = Lists.map_(fn, my_list)
 concat = Lists.concat(list_of_lists)
 ```
 
-### Logic (`hydra.dsl.lib.logic`)
+### Logic (`hydra.core.dsl.lib.logic`)
 
 ```python
-import hydra.dsl.lib.logic as Logic
+import hydra.core.dsl.lib.logic as Logic
 
 result = Logic.if_else(condition, then_branch, else_branch)
 negated = Logic.not_(condition)
 ```
 
-### Equality (`hydra.dsl.lib.equality`)
+### Equality (`hydra.core.dsl.lib.equality`)
 
 ```python
-import hydra.dsl.lib.equality as Equality
+import hydra.core.dsl.lib.equality as Equality
 
 eq = Equality.equal_name(name_a, name_b)
 ```
 
-### Optionals (`hydra.dsl.lib.optionals`)
+### Optionals (`hydra.core.dsl.lib.optionals`)
 
 ```python
-import hydra.dsl.lib.optionals as Optionals
+import hydra.core.dsl.lib.optionals as Optionals
 
 mapped = Optionals.map_(fn, optional_val)
 ```
@@ -610,10 +610,10 @@ Type-level modules define Hydra data types using the Direct Types DSL.
 ### Pattern
 
 ```python
-from hydra.core import Name, Type, TypeScheme
-from hydra.overlay.python.dsl.python import FrozenDict
-from hydra.packaging import DefinitionType, ModuleName, TypeDefinition
-import hydra.overlay.python.dsl.types as T
+from hydra.core.model import Name, Type, TypeScheme
+from hydra.core.overlay.python.dsl.python import FrozenDict
+from hydra.core.packaging import DefinitionType, ModuleName, TypeDefinition
+import hydra.core.overlay.python.dsl.types as T
 
 NS = ModuleName("my.namespace")
 
@@ -682,13 +682,13 @@ calling `definition_in_module(placeholder, local_name, term)` directly (the prim
 wraps). It is the low-level form; new multi-def term modules should use shape (a) instead.
 
 ```python
-import hydra.core
-import hydra.packaging
-import hydra.dsl.core as Core
-from hydra.overlay.python.dsl.python import Given, None_
-from hydra.typed import TypedBinding
+import hydra.core.model
+import hydra.core.packaging
+import hydra.core.dsl.model as Core
+from hydra.core.overlay.python.dsl.python import Given, None_
+from hydra.core.typed import TypedBinding
 
-ns = hydra.packaging.ModuleName("my.namespace")
+ns = hydra.core.packaging.ModuleName("my.namespace")
 _def = make_def(Module(ns, None_(), [], []))   # or the module placeholder for this source
 
 # Qualified self-reference helper
@@ -701,9 +701,9 @@ def _deannotate_term():
         .doc("Remove annotations from a term")
         .lam("term")
         .to(
-            cases(hydra.core.TERM__NAME, var("term"),
+            cases(hydra.core.model.TERM__NAME, var("term"),
                 Given(var("term")),
-                [field(hydra.core.TERM__ANNOTATED__NAME,
+                [field(hydra.core.model.TERM__ANNOTATED__NAME,
                     lam("at",
                         apply(_self("deannotateTerm"),
                             Core.annotated_term_body(var("at")))))])))
@@ -745,9 +745,9 @@ Match on a union type, handle one variant, pass others through:
 
 ```python
 fn = lam("term",
-    cases(hydra.core.TERM__NAME, var("term"),
+    cases(hydra.core.model.TERM__NAME, var("term"),
         Given(var("term")),                        # default: identity
-        [field(hydra.core.TERM__ANNOTATED__NAME,  # handle one case
+        [field(hydra.core.model.TERM__ANNOTATED__NAME,  # handle one case
             lam("at",
                 Core.annotated_term_body(var("at"))))]))
 ```
@@ -760,9 +760,9 @@ Bind a local transform, pass it to a rewriting function:
 fn = lam("typ",
     let1("f",
         lam("recurse", lam("t",
-            cases(hydra.core.TYPE__NAME, var("t"),
+            cases(hydra.core.model.TYPE__NAME, var("t"),
                 Given(apply(var("recurse"), var("t"))),
-                [field(hydra.core.TYPE__ANNOTATED__NAME,
+                [field(hydra.core.model.TYPE__ANNOTATED__NAME,
                     lam("at",
                         apply(var("recurse"),
                             Core.annotated_type_body(var("at")))))]))),
@@ -772,8 +772,8 @@ fn = lam("typ",
 ### Pattern 3: Fold with set operations
 
 ```python
-import hydra.dsl.lib.sets as Sets
-import hydra.dsl.lib.lists as Lists
+import hydra.core.dsl.lib.sets as Sets
+import hydra.core.dsl.lib.lists as Lists
 
 vars = let1("dfltVars",
     Lists.foldl(
@@ -783,7 +783,7 @@ vars = let1("dfltVars",
         Sets.empty(),
         apply(_self("subterms"), var("term"))),
     # then match on specific cases...
-    cases(hydra.core.TERM__NAME, var("term"),
+    cases(hydra.core.model.TERM__NAME, var("term"),
         Given(var("dfltVars")),
         [...]))
 ```
@@ -792,12 +792,12 @@ vars = let1("dfltVars",
 
 ```python
 replace_fn = lam("recurse", lam("t",
-    cases(hydra.core.TERM__NAME, var("t"),
+    cases(hydra.core.model.TERM__NAME, var("t"),
         Given(apply(var("recurse"), var("t"))),
-        [field(hydra.core.TERM__FUNCTION__NAME,
-            match(hydra.core.FUNCTION__NAME,
+        [field(hydra.core.model.TERM__FUNCTION__NAME,
+            match(hydra.core.model.FUNCTION__NAME,
                 Given(apply(var("recurse"), var("t"))),
-                [field(hydra.core.FUNCTION__LAMBDA__NAME,
+                [field(hydra.core.model.FUNCTION__LAMBDA__NAME,
                     lam("l",
                         Logic.if_else(
                             Equality.equal_name(
@@ -814,7 +814,7 @@ Generated Python code for Hydra types uses dataclasses with nested classes for u
 ### Example: Generated Term type
 
 ```python
-# hydra/core.py (generated)
+# hydra/core/model.py (generated)
 class Term:
     class Annotated:
         value: AnnotatedTerm
@@ -826,7 +826,7 @@ class Term:
         value: Name
     # ...
 
-TERM__NAME = Name("hydra.core.Term")
+TERM__NAME = Name("hydra.core.model.Term")
 TERM__LITERAL__NAME = Name("literal")
 TERM__VARIABLE__NAME = Name("variable")
 # ...
@@ -844,7 +844,7 @@ replaced and all others copied. Since every generated record is a `@dataclass(fr
 `dataclasses.replace`:
 
 ```python
-from hydra.core import Binding, Name
+from hydra.core.model import Binding, Name
 
 b2 = b.with_name(Name("y"))   # same term + type_scheme, new name
 ```
@@ -856,7 +856,7 @@ Each record also exposes a static `builder()` factory and a nested `Builder` cla
 field (named after the field) and a `build()` that returns the immutable record:
 
 ```python
-from hydra.core import Lambda, Name
+from hydra.core.model import Lambda, Name
 
 lam = (Lambda.builder()
        .parameter(Name("x"))
@@ -883,20 +883,20 @@ was removed in #245). An `InferenceContext` value is threaded alongside the grap
 and carries the fresh-type-variable counter and the current subterm-path trace.
 
 ```python
-from hydra.util import Either
-from hydra.typing import InferenceContext
-from hydra.errors import Error
+from hydra.core.overlay.python.dsl.python import Either
+from hydra.core.typing import InferenceContext
+from hydra.core.errors import Error
 
 # Create a successful result
 ok = Either.right("result")
 
 # Map over a result
-mapped = hydra.lib.eithers.map_.apply(lambda s: len(s), ok)
+mapped = hydra.core.overlay.python.lib.eithers.map(lambda s: len(s), ok)
 
 # Chain computations (bind / flatMap)
-bound = hydra.lib.eithers.bind.apply(result1, lambda value: Either.right(value + " processed"))
+bound = hydra.core.overlay.python.lib.eithers.bind(result1, lambda value: Either.right(value + " processed"))
 
-# Create a failure (Error is a tagged-union type; construct a variant from hydra.errors)
+# Create a failure (Error is a tagged-union type; construct a variant from hydra.core.errors)
 err = Either.left(Error.other("something went wrong"))
 
 # Inspect a result
@@ -914,7 +914,7 @@ match result:
 Hydra maps use `FrozenDict` for immutability:
 
 ```python
-from hydra.overlay.python.dsl.python import FrozenDict
+from hydra.core.overlay.python.dsl.python import FrozenDict
 
 d = FrozenDict({"key1": "value1", "key2": "value2"})
 value = d["key1"]
@@ -923,17 +923,17 @@ d2 = FrozenDict({**d, "key3": "value3"})
 
 ## Examples in the codebase
 
-(The Python `hydra/dsl/` runtime was relocated to `overlay/python/hydra-kernel/` by #418.)
+The hand-written DSLs live under `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/dsl/`
+(namespace `hydra.core.overlay.python.dsl.*`); the library wrappers and domain DSLs are generated.
 
 | File | Description |
 |------|-------------|
-| `overlay/python/hydra-kernel/src/main/python/hydra/dsl/meta/phantoms.py` | Phantom-typed DSL (all operations) |
-| `overlay/python/hydra-kernel/src/main/python/hydra/dsl/meta/core.py` | Core domain DSL (field accessors) |
-| `overlay/python/hydra-kernel/src/main/python/hydra/dsl/meta/graph.py` | Graph domain DSL |
-| `overlay/python/hydra-kernel/src/main/python/hydra/dsl/meta/lib/sets.py` | Sets library wrapper |
-| `overlay/python/hydra-kernel/src/main/python/hydra/dsl/meta/lib/lists.py` | Lists library wrapper |
-| `overlay/python/hydra-kernel/src/main/python/hydra/dsl/types.py` | Direct Types DSL |
-| `overlay/python/hydra-kernel/src/main/python/hydra/dsl/terms.py` | Direct Terms DSL |
+| `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/dsl/phantoms.py` | Phantom-typed DSL (all operations) |
+| `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/dsl/meta/core.py` | Core domain DSL helpers (re-exports `hydra.core.dsl.model`) |
+| `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/dsl/meta/graph.py` | Graph domain DSL helpers (re-exports `hydra.core.dsl.graph`) |
+| `hydra.core.dsl.lib.*` (generated; e.g. `hydra.core.dsl.lib.sets`/`lists`) | Library wrappers — generated, imported directly |
+| `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/dsl/types.py` | Direct Types DSL |
+| `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/dsl/terms.py` | Direct Terms DSL |
 
 ## Related Documentation
 
