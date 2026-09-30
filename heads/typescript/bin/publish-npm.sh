@@ -257,11 +257,11 @@ trap 'rm -rf "$SMOKE_DIR"' EXIT
     # downstream four) is smoke-tested via a representative subpath import.
     cross_import_subpath() {
         case "$1" in
-            hydra-kernel) echo "dist/hydra/core.js" ;;
+            hydra-kernel) echo "dist/hydra/core/model.js" ;;
             hydra-build) echo "dist/hydra/build/reconcile.js" ;;
             hydra-rdf) echo "dist/hydra/rdf/serde.js" ;;
             hydra-pg) echo "dist/hydra/pg/rdf/mappings.js" ;;
-            hydra-typescript) echo "dist/hydra/typeScript/coder.js" ;;
+            hydra-typescript) echo "dist/hydra/typescript/coder.js" ;;
         esac
     }
     for pkg in "${PUBLISH_SET[@]}"; do
