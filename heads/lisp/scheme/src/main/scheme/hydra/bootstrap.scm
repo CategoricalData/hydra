@@ -712,7 +712,7 @@
 ;; Hydra.Core.Overlay.Haskell.Lib.* (#630).
 (define (overlay-lib-dir repo-root target)
   (if (string=? target "haskell")
-      (string-append repo-root "/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib")
+      (string-append repo-root "/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib")
       (string-append repo-root "/overlay/" target "/hydra-kernel/src/main/" target
                      "/hydra/overlay/" (overlay-dir-segment target) "/lib")))
 
@@ -739,8 +739,8 @@
 (define (lib-module? m)
   (let* ((mn (hydra_core_packaging_module-name m))
          (ns (if (string? mn) mn (hydra_core_packaging_module_name-value mn))))
-    (and (>= (string-length ns) 10)
-         (string=? (substring ns 0 10) "hydra.lib."))))
+    (and (>= (string-length ns) 15)
+         (string=? (substring ns 0 15) "hydra.core.lib."))))
 
 ;; Emit the (hydra lib <sub>) def-modules from their LOWERED form. Lib modules lowered; universe lowers
 ;; ONLY lib modules (so a lib default-implementation referencing another primitive resolves to it).

@@ -58,9 +58,9 @@
   (let [lib-dir (java.io.File. ^String (clojure.string/join java.io.File/separator
                   (if (= target "haskell")
                     [repo-root "overlay" "haskell" "hydra-kernel" "src" "main" "haskell"
-                     "Hydra" "Overlay" "Haskell" "Lib"]
+                     "Hydra" "Core" "Overlay" "Haskell" "Lib"]
                     [repo-root "overlay" target "hydra-kernel" "src" "main" target
-                     "hydra" "overlay" (overlay-dir-segment target) "lib"])))]
+                     "hydra" "core" "overlay" (overlay-dir-segment target) "lib"])))]
     (if-not (.isDirectory lib-dir)
       lib-subs-fallback
       (let [entries (or (.listFiles lib-dir) (make-array java.io.File 0))
@@ -79,7 +79,7 @@
         (if (seq subs) (vec subs) lib-subs-fallback)))))
 
 (defn- lib-module? [m]
-  (let [ns (:name m)] (.startsWith ^String (if (string? ns) ns (:value ns)) "hydra.lib.")))
+  (let [ns (:name m)] (.startsWith ^String (if (string? ns) ns (:value ns)) "hydra.core.lib.")))
 
 (defn- run-lib-pass
   "Emit the hydra.lib.* def-modules from their LOWERED form using the same coder. Mirrors

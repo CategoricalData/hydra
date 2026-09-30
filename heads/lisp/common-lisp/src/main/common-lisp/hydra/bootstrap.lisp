@@ -361,9 +361,9 @@
   ;; against, so every hydra.lib.* redirect is skipped and generated Haskell imports Hydra.Lib.*
   ;; instead of Hydra.Core.Overlay.Haskell.Lib.* (#630).
   (let* ((lib-dir (if (string= target "haskell")
-                      (format nil "~A/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/"
+                      (format nil "~A/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib/"
                               repo-root)
-                      (format nil "~A/overlay/~A/hydra-kernel/src/main/~A/hydra/overlay/~A/lib/"
+                      (format nil "~A/overlay/~A/hydra-kernel/src/main/~A/hydra/core/overlay/~A/lib/"
                               repo-root target target (overlay-dir-segment target)))))
     (if (not (probe-file lib-dir))
         *lib-subs-fallback*
@@ -387,7 +387,7 @@
 (defun lib-module-p (m)
   (let* ((mn (funcall 'hydra_core_packaging_module-name m))
          (ns (if (stringp mn) mn (funcall 'hydra_core_packaging_module_name-value mn))))
-    (and (>= (length ns) 10) (string= (subseq ns 0 10) "hydra.lib."))))
+    (and (>= (length ns) 15) (string= (subseq ns 0 15) "hydra.core.lib."))))
 
 (defun run-lib-pass (coder language flags out-main all-mods mods-to-generate)
   "Emit the :hydra.lib.<sub> def-modules from their LOWERED form (lib modules lowered; universe lowers

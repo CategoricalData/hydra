@@ -286,7 +286,7 @@ object BootstrapHelpers:
   def libSubsForTarget(repoRoot: String, target: String): Seq[String] =
     val seg = overlayDirSegment(target)
     val libDir = new File(Seq(repoRoot, "overlay", target, "hydra-kernel", "src", "main", target,
-      "hydra", "overlay", seg, "lib").mkString(File.separator))
+      "hydra", "core", "overlay", seg, "lib").mkString(File.separator))
     if !libDir.isDirectory then libSubsFallback
     else
       val entries = Option(libDir.listFiles()).getOrElse(Array.empty[File])
@@ -296,7 +296,7 @@ object BootstrapHelpers:
       if subs.isEmpty then libSubsFallback else subs
 
   private def isLibModule(m: hydra.core.packaging.Module): Boolean =
-    m.name.startsWith("hydra.lib.")
+    m.name.startsWith("hydra.core.lib.")
 
   /** #473 lib pass: emit the hydra.lib.* PrimitiveDefinition def-modules from their LOWERED form.
    *  Mirrors genForDirLib in bootstrap-from-json/Main.hs. The lib modules are filtered from
