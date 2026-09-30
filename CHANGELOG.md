@@ -32,7 +32,10 @@ primitive pipeline and several silent-correctness fixes in the coder layer.
   every host (Haskell, Java, Python, Scala, TypeScript, all four Lisp dialects) and required fixing
   stale namespace references, overlay-directory paths, and `hostOverrides` shims across every driver
   and bootstrap script that had hardcoded the old grammar. Further consolidation (a structurally
-  enforced package↔prefix law) is tracked for 0.18.1.
+  enforced package↔prefix law) is tracked for 0.18.1. The kernel package itself is still published as
+  `hydra-kernel` (its modules are under `hydra.core.*`); the `hydra-core` package rename #729 called for
+  is under review because that name is taken on PyPI and npm
+  ([#770](https://github.com/CategoricalData/hydra/issues/770)).
 - **Translingual regex primitives** ([#603](https://github.com/CategoricalData/hydra/issues/603)):
   `hydra.lib.regex` primitives (`find`, `findAll`, `matches`, `replace`, `replaceAll`, `split`) now run
   every pattern through the shared `hydra.regex` parse/print pipeline instead of handing raw pattern
