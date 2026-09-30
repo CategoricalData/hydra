@@ -4,5 +4,6 @@
   "description": "RDF support for Hydra",
   "sourceLanguage": "haskell",
   "targetLanguages": ["haskell", "java", "python", "typescript"],
+  "registries": ["haskell", "java", "python", "typescript", "scala"],
   "dependencies": ["hydra-kernel"]
 }
