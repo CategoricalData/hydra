@@ -95,13 +95,13 @@ object Terms:
   /** Character as int32 (ord value). */
   def char_(value: Char): Term = int32(value.toInt)
 
-  /** Construct a Comparison value as an injection into hydra.mantle.Comparison. */
+  /** Construct a Comparison value as an injection into hydra.core.util.Comparison. */
   def comparison(c: hydra.core.util.Comparison): Term =
     val variant: String = c match
       case hydra.core.util.Comparison.equalTo    => "equalTo"
       case hydra.core.util.Comparison.lessThan   => "lessThan"
       case hydra.core.util.Comparison.greaterThan => "greaterThan"
-    injectUnit("hydra.mantle.Comparison", variant)
+    injectUnit("hydra.core.util.Comparison", variant)
 
   // ===== Function terms =====
 

@@ -390,17 +390,17 @@ public interface Terms {
         return comp.accept(new Comparison.Visitor<Term>() {
             @Override
             public Term visit(Comparison.EqualTo instance) {
-                return injectUnit(name("hydra.mantle.Comparison"), name("equalTo"));
+                return injectUnit(name("hydra.core.util.Comparison"), name("equalTo"));
             }
 
             @Override
             public Term visit(Comparison.LessThan instance) {
-                return injectUnit(name("hydra.mantle.Comparison"), name("lessThan"));
+                return injectUnit(name("hydra.core.util.Comparison"), name("lessThan"));
             }
 
             @Override
             public Term visit(Comparison.GreaterThan instance) {
-                return injectUnit(name("hydra.mantle.Comparison"), name("greaterThan"));
+                return injectUnit(name("hydra.core.util.Comparison"), name("greaterThan"));
             }
         });
     }
