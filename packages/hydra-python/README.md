@@ -126,20 +126,20 @@ Hydra's Python code is split across three locations
 - **Python kernel overlay** ([`overlay/python/hydra-kernel/src/main/python/`](https://github.com/CategoricalData/hydra/tree/main/overlay/python/hydra-kernel/src/main/python))
   — hand-written Python kernel runtime, overlaid onto `dist/python/hydra-kernel/`
   by `heads/python/bin/copy-kernel-runtime.sh` so the published `hydra-kernel` wheel is self-contained
-  - `hydra/overlay/python/lib/` — primitive function implementations
-  - `hydra/overlay/python/dsl/` — DSL utilities (FrozenDict, Maybe, ...)
-  - `hydra/overlay/python/util/` — `ConsList`, `Lazy`, `PersistentMap`, `PersistentSet`
-  - `hydra/overlay/python/sources/libraries.py` — primitive registration
+  - `hydra/core/overlay/python/lib/` — primitive function implementations
+  - `hydra/core/overlay/python/dsl/` — DSL utilities (FrozenDict, Maybe, ...)
+  - `hydra/core/overlay/python/util/` — `ConsList`, `Lazy`, `PersistentMap`, `PersistentSet`
+  - `hydra/core/overlay/python/sources/libraries.py` — primitive registration
 - **Python head** ([`heads/python/src/main/python/`](https://github.com/CategoricalData/hydra/tree/main/heads/python/src/main/python))
   — bootstrap layer above the kernel (`bootstrap.py`, `generation.py`, the `hydra.python` coder
   package). `pyproject.toml` lives in `heads/python/`.
 
 - **Generated Python kernel** ([`dist/python/hydra-kernel/src/main/python/`](https://github.com/CategoricalData/hydra/tree/main/dist/python/hydra-kernel/src/main/python))
-  - `hydra/core.py` — core types (Term, Type, Literal, ...)
-  - `hydra/graph.py`, `hydra/packaging.py` — graph and packaging structures
-  - `hydra/coders.py` — type adapters and coder framework
-  - `hydra/reduction.py`, `hydra/rewriting.py`, `hydra/hoisting.py` — term transformations
-  - `hydra/inference.py`, `hydra/checking.py` — type inference and checking
+  - `hydra/core/model.py` — core types (Term, Type, Literal, ...)
+  - `hydra/core/graph.py`, `hydra/core/packaging.py` — graph and packaging structures
+  - `hydra/core/coders.py` — type adapters and coder framework
+  - `hydra/core/reduction.py`, `hydra/core/rewriting.py`, `hydra/core/hoisting.py` — term transformations
+  - `hydra/core/inference.py`, `hydra/core/checking.py` — type inference and checking
   - Generated from the kernel DSL sources using the Python coder
 
 - **Generated Python test suite** (`dist/python/hydra-kernel/src/test/python/`)
@@ -281,7 +281,7 @@ mirroring [Hydra-Java](https://github.com/CategoricalData/hydra/blob/main/packag
   dependency-free; callers can pass any compatible collection.
 - **At the implementation level**, generated term-level literals construct
   immutable collection classes from
-  [`hydra.python.util`](https://github.com/CategoricalData/hydra/tree/main/overlay/python/hydra-kernel/src/main/python/hydra/python/util):
+  [`hydra.core.overlay.python.util`](https://github.com/CategoricalData/hydra/tree/main/overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/util):
   `ConsList` (a frozen sequence), `PersistentMap` (a frozen map), and
   `PersistentSet` (a frozen set). Each implements the corresponding
   `collections.abc` ABC, so `ConsList` IS a `Sequence`, `PersistentMap` IS
@@ -300,10 +300,10 @@ are sorted at extraction time via a fall-through comparator: natural `<`
 where it works, structural comparison for Hydra `Term`/`Type` and other
 complex values that don't define ordering in Python.
 
-The classes live under `hydra.python.util` rather than `hydra.core.util` because the
+The classes live under `hydra.core.overlay.python.util` rather than `hydra.core.util` because the
 latter is already a kernel-generated module (containing `Comparison`,
 `CaseConvention`, etc.) shared across all Hydra implementations. Putting the
-Python-runtime helpers under `hydra.python.util` keeps the kernel namespace
+Python-runtime helpers under `hydra.core.overlay.python.util` keeps the kernel namespace
 intact while making the host/kernel separation explicit. `hydra.python` itself
 is a `pkgutil`-style namespace package so heads-side helpers and the
 kernel-generated `hydra.python.{coder,environment,...}` modules coexist
@@ -323,7 +323,7 @@ Rough guide:
 |---|---|
 | `bin/run-bootstrapping-demo.sh` codegen | CPython by ~5% |
 | Type inference on large modules (`hydra.core.codegen.infer_modules_given`) | PyPy by ~4× |
-| `hydra.lib.*` primitive microbenchmarks | CPython by ~2.5× |
+| `hydra.core.lib.*` primitive microbenchmarks | CPython by ~2.5× |
 
 The microbench gap reflects CPython's C-level `dict`/`frozenset`/`tuple`
 operations beating PyPy's pure-Python equivalents. The inference gap reflects

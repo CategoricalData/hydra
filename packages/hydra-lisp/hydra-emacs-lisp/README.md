@@ -23,7 +23,7 @@ Set `HYDRA_BENCHMARK_OUTPUT` to a file path to produce benchmark JSON output.
 
 ### Loader
 
-The loader (`heads/lisp/emacs-lisp/src/main/emacs-lisp/hydra/loader.el`) handles
+The loader (`overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/core/loader.el`) handles
 the impedance mismatch between the generated Lisp-1 code (Scheme-style, single
 namespace) and Emacs Lisp's Lisp-2 semantics (separate function and value
 namespaces):
@@ -79,7 +79,7 @@ same blowup Python had pre-#344 and Common Lisp had pre-#360. The
 transformation is gated on the body containing a conditional or
 lambda; straight-line let chains stay as plain native lets to avoid
 unnecessary overhead. Runtime helpers (`make-lazy`, `lazy-force`)
-live in `heads/lisp/emacs-lisp/src/main/emacs-lisp/hydra/lazy.el`.
+live in `overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/core/lazy.el`.
 
 These two fixes together (#361, mirroring #359 for Java and #360 for
 Common Lisp) make Hydra-Emacs-Lisp inference scale near-linearly with
@@ -87,14 +87,19 @@ workload size. See
 [docs/history/emacs-lisp-collections-perf.md](../../../docs/history/emacs-lisp-collections-perf.md)
 for the side-by-side numbers and investigation notes.
 
-### Hand-written files (in `heads/lisp/emacs-lisp/`)
+### Hand-written files
 
-- `src/main/emacs-lisp/hydra/lib/` — native library implementations
+In the kernel overlay (`overlay/emacs-lisp/hydra-kernel/`):
+
+- `src/main/emacs-lisp/hydra/core/overlay/emacs_lisp/lib/` — native library implementations
   (chars, eithers, equality, lists, literals, logic, maps, math, maybes,
   pairs, sets, strings, libraries)
-- `src/main/emacs-lisp/hydra/prims.el` — TermCoder constructors and primitive
+- `src/main/emacs-lisp/hydra/core/prims.el` — TermCoder constructors and primitive
   builders with proper type schemes
-- `src/main/emacs-lisp/hydra/loader.el` — loading and transformation
+- `src/main/emacs-lisp/hydra/core/loader.el` — loading and transformation
+
+In the head (`heads/lisp/emacs-lisp/`):
+
 - `src/test/emacs-lisp/hydra/test_runner.el` — test suite runner
 
 ## See also

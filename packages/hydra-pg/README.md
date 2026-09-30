@@ -205,7 +205,7 @@ parsers) and so are hand-written rather than generated. They live under `overlay
 `overlay/<lang>/hydra-pg/build.json` (the encoded `hydra.java.gradle` / `hydra.python.pyproject` build
 configuration).
 
-- **Neo4j openCypher + GQL parsers** (`hydra.core.overlay.java.{cypher,gql}`). ANTLR grammars under
+- **Neo4j openCypher + GQL parsers** (`hydra.pg.overlay.java.{cypher,gql}`). ANTLR grammars under
   `overlay/java/hydra-pg/src/main/antlr/`: `org/neo4j/Cypher.g4` (openCypher, generates
   `org.neo4j.{CypherLexer,CypherParser}`) and `net/fortytwo/hydra/gql/parser/GQL.g4` (ISO/IEC GQL,
   generates `net.fortytwo.hydra.gql.parser.{GQLLexer,GQLParser}` — a neutral Hydra-scoped namespace, as

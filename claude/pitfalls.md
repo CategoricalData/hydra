@@ -403,7 +403,7 @@ old latent cost — investigate the coder, don't wait it out.
 
 A change that touches no java/python *coder* source does not need Phase 5 to re-run. Phase 5's
 output is a pure function of the `hydra.{java,python}.*` coder sources; a kernel or
-`hydra.lib.*` edit leaves that output identical to the prior green sync, so the committed
+`hydra.core.lib.*` edit leaves that output identical to the prior green sync, so the committed
 `coder.json` already *is* the validated Phase-5 result. Validate such a change with
 `bin/test.sh` (which compiles/runs generated target code, not the slow self-host inference)
 rather than fighting a Phase-5 wedge.
@@ -411,7 +411,7 @@ rather than fighting a Phase-5 wedge.
 ### Bootstrap "Could not find module" early in compile is usually transient
 
 When `/bootstrap` reports a path failing at module 1-of-N with
-`Could not find module 'Hydra.Core'` or similar dep-not-built errors
+`Could not find module 'Hydra.Core.Model'` or similar dep-not-built errors
 on generated files that clearly exist on disk, the cause is almost
 always transient: parallel stack lock contention or OOM from
 concurrent host syncs (Java/Python/Haskell building at once). Re-run
@@ -438,13 +438,13 @@ Three categories of files coexist under `dist/<lang>/<pkg>/src/{main,test}/<lang
 1. Generator output from `bootstrap-from-json` (most files).
 2. Hand-written runtime support **overlaid in** from the top-level `overlay/<lang>/<pkg>/`
    tree (#418): for Haskell by `sync-haskell.sh`, for Java/Python by `copy-kernel-runtime.sh`
-   (Step 0 of `assemble-distribution.sh hydra-kernel`). E.g. Java `hydra/Adapters.java`,
-   `hydra/util/...`, `hydra/dsl/...`; Haskell `Hydra/Settings.hs`, `Hydra/Haskell/Lib/*`.
+   (Step 0 of `assemble-distribution.sh hydra-kernel`). E.g. Java `hydra/core/overlay/java/Adapters.java`,
+   `hydra/core/overlay/java/{util,dsl}/...`; Haskell `Hydra/Settings.hs`, `Hydra/Core/Overlay/Haskell/Lib/*`.
    Canonical edit point is `overlay/<lang>/`, NOT `dist/` (and no longer `heads/<lang>/src`
    for the big three). TypeScript still copies from `heads/typescript/src` pending migration.
    NOTE: every `dist/<lang>/` tree is gitignored, so the overlaid copies never show up as tracked.
 3. Hand-written skip-emit stubs whose namespace appears in
-   `testSkipEmitModuleNames` (currently `hydra.test.testEnv`): `dist/haskell/.../Hydra/Test/TestEnv.hs`
+   `testSkipEmitModuleNames` (currently `hydra.core.test.testEnv`): `dist/haskell/.../Hydra/Core/Test/TestEnv.hs`
    and each other host's `test_env`/`testEnv` equivalent. The generator deliberately does NOT write
    these; they're hand-written bridge modules that the generated test_graph imports. Canonical source
    for each lives under `overlay/<lang>/`, overlaid into the gitignored `dist/<lang>/` on each sync —
@@ -471,19 +471,19 @@ you forget:
   excluded in place — the trick Java/Python use (Gradle/hatch file-level `include` lists in the
   rollup) does not translate to hpack.
 - **Dependency conflict later.** When a head switches to a versioned `hydra-kernel-0.16.x`
-  package dependency (#370), that dependency *provides* `Hydra.Settings`, `Hydra.Haskell.Lib.*`,
+  package dependency (#370), that dependency *provides* `Hydra.Settings`, `Hydra.Core.Overlay.Haskell.Lib.*`,
   etc. If the head also compiled a local copy, you get a multiple-provider clash. Compiling only
   from the dist copy keeps the switchover conflict-free.
 
 Corollary for the **bootstrap** (`demos/bootstrapping/bin/setup-<lang>-target.sh`): these stitch
 a flat single-tree build, so they must overlay the runtime from `overlay/<lang>/hydra-kernel/`
 (not from `heads/<lang>/src`, which no longer holds it for the big three). Forgetting this is a
-silent "Could not find module Hydra.Settings / hydra.lib.* not found" at bootstrap compile time.
+silent "Could not find module Hydra.Settings / hydra.core.lib.* not found" at bootstrap compile time.
 
-Corollary for a **bare `stack build`**: because the overlaid `dist/haskell/.../Hydra/Haskell/Lib/*`
+Corollary for a **bare `stack build`**: because the overlaid `dist/haskell/.../Hydra/Core/Overlay/Haskell/Lib/*`
 copies are *gitignored*, a freshly-checked-out (or freshly-synced-elsewhere) worktree may not have
 them on disk yet. A direct `stack build` then fails with `Could not find module
-'Hydra.Haskell.Lib.Strings'` (often surfacing first in a downstream consumer like
+'Hydra.Core.Overlay.Haskell.Lib.Strings'` (often surfacing first in a downstream consumer like
 `dist/haskell/hydra-ext/.../Yaml/Serde.hs`, not the kernel). This is **not** a code error — run
 `heads/haskell/bin/overlay-kernel-runtime.sh` first (the sync scripts run it for you; a bare
 `stack build` does not). Prefer `/sync-haskell` over a raw `stack build` when in doubt.
@@ -510,9 +510,9 @@ projection sites slip past the type checker. After updating the schema
 and sync passes Phase 1, expect a second wave of issues in:
 
 - **DSL bodies with stringly-typed projection paths.** Calls like
-  `project("hydra.core.Projection", "field")` (Java),
-  `_proj("hydra.core.Projection", "field", "proj")` (Python), and
-  `Testing.java`'s `project("hydra.packaging.Module", "namespace")`
+  `project("hydra.core.model.Projection", "field")` (Java),
+  `_proj("hydra.core.model.Projection", "field", "proj")` (Python), and
+  `Testing.java`'s `project("hydra.core.packaging.Module", "namespace")`
   encode the OLD field name as a literal. Inference fails late with
   `NoMatchingFieldError(field_name=Name(value='field'))`.
 - **`[ModuleDependency]` lists with stray bare `ModuleName` entries.**
@@ -770,9 +770,9 @@ a -> a -> a`) because the head is actually `TypeApp(Var "ifElse", T)`, not
 `Var "ifElse"`. Your head-finder must erase those wrappers. Symptom if you forget:
 debug markers show `name=NONAME argc=3` for every ifElse call and zero LAZY wrappings
 get emitted, even though detection "works" for monomorphic functions like
-`hydra.inference.inferTypeOfTerm`.
+`hydra.core.inference.inferTypeOfTerm`.
 
-### Porting `hydra.lib.math.range` to a new host: it's inclusive
+### Porting `hydra.core.lib.math.range` to a new host: it's inclusive
 
 Haskell's `[a..b]` is **inclusive on both ends** and Hydra's `math.range`
 follows that: `range 1 3 = [1, 2, 3]`, `range 1 1 = [1]`, `range 2 1 = []`.
@@ -804,32 +804,32 @@ silently produces empty/wrong results (no compile error). Confirmed: Haskell
 `ByteString`, Java `byte[]`, Scala base64-`String`, Python `bytes`, Clojure
 vector-of-ints `[65 66]`, Scheme vector `#(65 66)` (not a bytevector), Common
 Lisp `#(65 66)`, Emacs Lisp `[65 66]`. Verify against a generated test that
-passes a `binary` literal, or the host's `hydra.lib.literals` runtime
+passes a `binary` literal, or the host's `hydra.core.lib.literals` runtime
 (`binaryToBytes`/`base64ToBinary`). Full table + the new-type-constructor
 checklist (coder `encodeType` case for transparent wrappers, all type-walkers,
 the adapter, `--local-host`, coder cache-busting) live in
 [docs/recipes/adding-primitives.md](../docs/recipes/adding-primitives.md). This
-is how `effect<t>` + `hydra.lib.{effects,files}` were added across all eight
+is how `effect<t>` + `hydra.core.lib.{effects,files}` were added across all eight
 hosts (#494).
 
 ### Primitive type schemes must carry class constraints
 
 The kernel inference reads `typeScheme.constraints :: Maybe (Map TypeVariable
 ConstraintSet)` for each primitive and threads those constraints through
-unification. Built-in primitives like `hydra.lib.maps.lookup` carry
-`(ordering k) =>`; `hydra.lib.lists.sort` carries `(ordering a) =>`;
-`hydra.lib.equality.equal` carries `(equality a) =>`. Omit them (`constraints:
+unification. Built-in primitives like `hydra.core.lib.maps.lookup` carry
+`(ordering k) =>`; `hydra.core.lib.lists.sort` carries `(ordering a) =>`;
+`hydra.core.lib.equality.equal` carries `(equality a) =>`. Omit them (`constraints:
 {tag: "nothing"}`) and inference still *runs*, but emits the wrong scheme
 (no constraints) for downstream uses — tests like `(forall t0. (ordering t0)
 => ...)` fail because the actual scheme is missing the constraint clause. See
-`overlay/java/hydra-kernel/src/main/java/hydra/dsl/Types.java` (`ORD`, `EQ`, `NONE`,
+`overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/dsl/Types.java` (`ORD`, `EQ`, `NONE`,
 `constrained1..4`, `schemeOrd`, `schemeEq`) for the canonical per-primitive
 constraint assignments to mirror.
 
 ### Kernel-loaded TypeSchemes encode polymorphism in the body, not the variables list
 
 When loading TypeSchemes from `dist/json/hydra-kernel/`, polymorphic types
-like `hydra.coders.Coder` arrive as `{variables: [], body: annotated(forall t0.
+like `hydra.core.coders.Coder` arrive as `{variables: [], body: annotated(forall t0.
 forall t1. record {...})}`. Inference reads `ts.variables` to know how many
 type vars to instantiate, so a `variables: []` scheme is treated as
 monomorphic and downstream nominal-type lookups fail with confusing errors.
@@ -932,7 +932,7 @@ Always check both layers when debugging.
 
 ### Primitive definition list alphabetical-order trap
 
-The kernel validator (`hydra.validate.packaging`) requires the
+The kernel validator (`hydra.core.validate.packaging`) requires the
 `definitions` list in each `Hydra/Sources/Kernel/Lib/<Sub>.hs` module to be
 in lexical alphabetical order by primitive name. Numeric suffixes
 sort lexically, not numerically: `bigintToInt16` < `bigintToInt32` <
@@ -942,7 +942,7 @@ The validator fails with `definitions out of order: <X> precedes <Y>`.
 
 ### Empty `description` field fails the documentation validator
 
-`hydra.validate.packaging`'s documentation rule (`checkDefinitionDocumentation`)
+`hydra.core.validate.packaging`'s documentation rule (`checkDefinitionDocumentation`)
 flags any `PrimitiveDefinition` whose `description` is the empty string. The
 description is a required field on the type but the validator treats `""` as
 "undocumented". When using `toPrimitive` or `primNoDef`, always pass a
@@ -985,7 +985,7 @@ The `cleanMods` set (modules whose typed JSON is loaded for inference
 context) should still span `universeMods \\ dirtyMods` — wider than
 `targetMods` — so cross-package type references resolve.
 
-### Schema-extending `hydra.packaging.Module` or `Package` ramifies into DSL term sources
+### Schema-extending `hydra.core.packaging.Module` or `Package` ramifies into DSL term sources
 
 `dist/haskell/hydra-kernel/.../Sources/Decode/Packaging.hs` and
 `Sources/Encode/Packaging.hs` contain 1500–2000 line nested-AST Hydra
@@ -1038,10 +1038,10 @@ that imports `hydra.<lang>.syntax.*`. If the target syntax is excluded,
 the DSL wrapper compile fails with "package hydra.<lang>.syntax does not
 exist".
 
-Currently only `hydra/scala/**` triggers this — the other languages'
-Java emission type-checks standalone. New coder additions that need
-`hydra/<lang>/**` excluded should add `hydra/dsl/<lang>/**` at the same
-time.
+No language triggers this today: the `hydra/scala/**` exclude was removed in #409/#421 once the
+Scala coder's Java emission type-checked standalone. Since #729 the DSL wrappers live under
+`hydra/<lang>/dsl/` (namespace `hydra.<lang>.dsl.*`), so a future `hydra/<lang>/**` exclude
+covers the wrapper as well.
 
 ### Stale per-dialect Lisp `struct-compat.lisp`
 
@@ -1070,7 +1070,7 @@ hand-update the per-dialect `prims.*` registries (now under
 Emacs' default `case-fold-search` is `t` in batch mode, which makes
 character classes like `[a-z]` case-insensitive — `[a-z]` then matches `H`.
 Hydra follows POSIX-ERE case-sensitive semantics. Every regex primitive
-in `overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/overlay/emacs_lisp/lib/regex.el` binds
+in `overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/core/overlay/emacs_lisp/lib/regex.el` binds
 `case-fold-search` to `nil` in its `let*`. New EL regex primitives must
 do the same.
 
@@ -1089,7 +1089,7 @@ runtime's structural shape no longer matches what the kernel emits.
 
 Fix: rename the hand-written file. In #126 the hand-written
 `hydra/core.ts` was renamed to `runtime.ts`
-(now `overlay/typescript/hydra-kernel/src/main/typescript/hydra/runtime.ts`);
+(now `overlay/typescript/hydra-kernel/src/main/typescript/hydra/core/runtime.ts`);
 the corresponding `copy-kernel-runtime.sh` loop was
 updated. Any future head should pick a name that cannot collide with
 the kernel's namespace (e.g. `hydra.<lang>.core`, `hydra.<lang>.context`,
@@ -1155,7 +1155,7 @@ Mixing produces a `TypeError: Do not know how to serialize a BigInt` at comparis
 
 ### TS `standardPrimitives()` must enumerate every primitive family
 
-`overlay/typescript/hydra-kernel/src/main/typescript/hydra/lib/libraries.ts`'s
+`overlay/typescript/hydra-kernel/src/main/typescript/hydra/core/overlay/typescript/lib/libraries.ts`'s
 `standardPrimitives()` must include all primitive category functions (e.g.
 `effectsPrimitives()`, `filesPrimitives()`, `systemPrimitives()`). If a category is
 missing, the inference engine fails with "INFERENCE ERROR: failed" for any term that
@@ -1177,6 +1177,10 @@ Similarly, `libraries.ts` imports of generated kernel modules (`core.js`, `graph
 `"../"` (relative to the old `hydra/lib/` location, reaching `hydra/`) now need `"../../../"`.
 
 Path arithmetic from `hydra/overlay/typescript/lib/`: `../` = `typescript/`, `../../` = `overlay/`, `../../../` = `hydra/`.
+
+Since #729 the lib files live at `hydra/core/overlay/typescript/lib/`, and `runtime.ts` plus the
+generated kernel modules (`model.js`, `graph.js`, ...) live in `hydra/core/`, so `"../../../"` now
+reaches `hydra/core/` and the depth is unchanged.
 
 Also: `copy-kernel-runtime.sh` must include `overlay` in its subpackage copy loop so the
 `hydra/overlay/` subtree lands in `dist/typescript/hydra-kernel/`. Without it, `bootstrap.ts`

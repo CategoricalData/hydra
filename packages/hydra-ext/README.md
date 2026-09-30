@@ -79,7 +79,7 @@ For the broader process, see
 [Creating a new Hydra implementation](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/new-implementation.md)
 (for full host languages) or
 [Adding new primitives](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/adding-primitives.md)
-(for new functions in `hydra.lib.*`).
+(for new functions in `hydra.core.lib.*`).
 
 ## See also
 

@@ -27,7 +27,7 @@ the same generation pipeline.
 The native sources are authoritative for the generated output: the main sync regenerates
 `dist/json/hydra-{jvm,java,python,scala}` from them in Phase 5 (`bin/generate-hydra-java-from-java.sh`,
 `bin/generate-hydra-python-from-python.sh`, `bin/generate-hydra-scala-from-scala.sh`), and the native
-drivers also synthesize the `hydra.dsl.{java,python,scala}.*` wrapper modules (previously written by the
+drivers also synthesize the `hydra.{java,python,scala}.dsl.*` wrapper modules (previously written by the
 Haskell DSL pass). As of 0.16 the Java and Python drivers run against the **published host by default**
 (`net.fortytwo.hydra.java:hydra-java` from Maven / `hydra-python` from PyPI, version from `hydra.json`
 `hostVersion`), with a `--local-host` bootstrap shim for backward-incompatible kernel changes — the #370
@@ -67,13 +67,17 @@ graphs with deep support for polymorphism.
   `overlay/` or on `heads/` for shipped runtime (generation drivers and a head's own test runners are not
   shipped and stay in `heads/`). Structure: `overlay/<lang>/<package>/src/...`. All ten hosts
   have `overlay/<lang>/hydra-kernel/` populated (Haskell also has the `overlay/haskell/hydra`
-  umbrella). Downstream-package overlays exist only where host-specific integrations live:
-  `overlay/java/hydra-pg`, `overlay/python/hydra-pg`, `overlay/java/hydra-rdf`. Extending
+  umbrella). Downstream-package overlays exist only where host-specific code lives:
+  `overlay/java/hydra-pg`, `overlay/python/hydra-pg`, `overlay/java/hydra-rdf`, `overlay/java/hydra-build`,
+  `overlay/haskell/hydra-pg`, `overlay/haskell/hydra-typescript`. Extending
   downstream-package overlay coverage to other hosts is deferred (#434). Authored, not
   generated; never compiled in place. (#418, #434)
-  Overlay files use the `hydra.overlay.<lang>.*` namespace (#501), keeping a hard boundary:
-  `hydra.*` is exclusively translingual (generated or derived from generated code);
-  `hydra.overlay.<lang>.*` is exclusively host-native.
+  Overlay files live in a dedicated overlay namespace (#501, #729), keeping a hard boundary:
+  kernel overlays use `hydra.core.overlay.<lang>.*` (e.g. Haskell `Hydra.Core.Overlay.Haskell.*`),
+  and package overlays use `hydra.<pkg>.overlay.<lang>.*` (e.g. `hydra.pg.overlay.java.*`);
+  Scheme's kernel overlay is the exception, keeping `(hydra overlay scheme ...)`.
+  These overlay namespaces are exclusively host-native; translingual modules (generated or derived
+  from generated code) never live under them.
 - **`dist/`** holds generated and copied artifacts. **Never manually edit**
   (unless doing a bootstrap patch, which must be overwritten by regeneration afterward).
 - Host-specific third-party integrations — adapters that wire Hydra packages to external libraries

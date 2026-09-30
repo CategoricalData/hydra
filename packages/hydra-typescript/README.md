@@ -78,7 +78,7 @@ typed parameters. Inner lambdas peel the same way (matching Python's
 `makeUncurriedLambda`).
 
 Consequence: every site that consumes a Hydra function value must
-agree on this ABI. The hand-written `overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib/*.ts`
+agree on this ABI. The hand-written `overlay/typescript/hydra-kernel/src/main/typescript/hydra/core/overlay/typescript/lib/*.ts`
 primitives use flat positional signatures; the test runtime's
 `testGraph` is flat (`(testTypes, testTerms) => Graph`); HOF primitives
 that re-enter the reducer call `reduceTerm(cx, g, true, term)` flat.
@@ -107,7 +107,7 @@ The generation completes in ~15 minutes with zero stack overflows; the shipped
 
 The resulting Java source set does not yet compile cleanly due to a separate
 codegen correctness gap: the TS Java coder does not yet emit aggregate namespace
-interface files (`hydra.lib.Maps`, `hydra.lib.Strings`, etc.) that the individual
+interface files (`hydra.core.lib.Maps`, `hydra.core.lib.Strings`, etc.) that the individual
 primitive stub classes reference (#499). This is a coder bug, not a stack or heap
 limitation.
 
@@ -137,7 +137,7 @@ generic-binder syntax to introduce them.
 ### Why `runtime.ts`, not `core.ts`
 
 The hand-written runtime lives at
-`heads/typescript/src/main/typescript/hydra/runtime.ts`. It used to be
+`overlay/typescript/hydra-kernel/src/main/typescript/hydra/core/runtime.ts`. It used to be
 named `core.ts`, but `heads/typescript/bin/copy-kernel-runtime.sh` copies it into the
 same dist directory as the GENERATED kernel `core.ts` — and the
 hand-written file silently overwrote the generated module, masking
@@ -191,7 +191,7 @@ base64 strings). `hydra.core.lib.literals.binaryToBase64` base64-encodes binary 
 
 - **TypeScript-as-host.** Today TypeScript is a target only. Adding TS-as-host
   requires meta-level DSL builders (`hydra/dsl/*.ts` analogues of
-  `Hydra.Core.Overlay.Haskell.Dsl.Typed.*`) plus a TS source-import path equivalent to
+  `Hydra.Core.Overlay.Haskell.Dsl.Meta.*`) plus a TS source-import path equivalent to
   `transform-haskell-dsl-to-json`. The Scala and Lisp heads also lack this today;
   not a blocker for parity with them.
 - **Primitive coverage parity.** A handful of inference edge cases tagged

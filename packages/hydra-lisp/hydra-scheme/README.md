@@ -61,12 +61,17 @@ conformance check.
 
 ## Architecture
 
-### Hand-written files (in `heads/lisp/scheme/`)
+### Hand-written files
 
-- `src/main/scheme/hydra/lib/` — native library implementations
+In the kernel overlay (`overlay/scheme/hydra-kernel/`):
+
+- `src/main/scheme/hydra/overlay/scheme/lib/` — native library implementations
   (chars, eithers, equality, lists, literals, logic, maps, math, maybes,
   pairs, sets, strings, libraries)
-- `src/main/scheme/hydra/prims.scm` — TermCoder constructors and primitive builders
+- `src/main/scheme/hydra/core/prims.scm` — TermCoder constructors and primitive builders
+
+In the head (`heads/lisp/scheme/`):
+
 - `src/test/scheme/hydra/annotation_bindings.scm` — hand-written annotation bindings
   used by the test graph
 - `run-tests.scm` — entry point wrapper
@@ -75,7 +80,7 @@ conformance check.
 ### Generated files (in `dist/scheme/hydra-kernel/`)
 
 - `src/main/scheme/hydra/` — kernel modules as R7RS libraries (`.sld` + `.scm`)
-- `src/test/scheme/hydra/test/` — generated test modules
+- `src/test/scheme/hydra/core/test/` — generated test modules
 
 ### Collections
 

@@ -139,24 +139,25 @@ Hydra's Java code is split across three locations
   — hand-written Java kernel runtime, overlaid onto `dist/java/hydra-kernel/`
   by `heads/java/bin/copy-kernel-runtime.sh` so the published `hydra-kernel` Maven artifact
   is self-contained
-  - `hydra/overlay/java/lib/` — primitive function implementations
-  - `hydra/overlay/java/dsl/` — Java DSL (Terms, Types, Expect, ...)
-  - `hydra/overlay/java/util/` — core utilities (Either, Optional, Pair, Lazy) plus the
+  - `hydra/core/overlay/java/lib/` — primitive function implementations
+  - `hydra/core/overlay/java/dsl/` — Java DSL (Terms, Types, Expect, ...)
+  - `hydra/core/overlay/java/util/` — core utilities (Either, Optional, Pair, Lazy) plus the
     persistent collection helpers `ConsList` / `PersistentMap` / `PersistentSet`
     (see [Collection classes](#collection-classes) under design notes)
-  - `hydra/overlay/java/tools/` — framework classes (PrimitiveFunction, MapperBase, ...)
+  - `hydra/core/overlay/java/tools/` — framework classes (PrimitiveFunction, MapperBase, ...)
 - **Java head** ([`heads/java/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/heads/java/src/main/java))
   — bootstrap and driver layer above the kernel
-  - `hydra/Bootstrap.java`, `hydra/Generation.java` — code-generation drivers
+  - `hydra/Bootstrap.java` — code-generation driver (the shared `Generation` driver ships as the
+    `hydra-build` overlay, `hydra.build.overlay.java.Generation`)
   - `hydra/UpdateJavaJson.java` — driver that updates `dist/json/hydra-java/`
     from the Java DSL sources in this package (see [Generate Java code](#generate-java-code))
   - `hydra/json/` — JSON I/O glue
 
 - **Generated Java kernel** ([`dist/java/hydra-kernel/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/dist/java/hydra-kernel/src/main/java))
   — code-generated from the kernel DSL sources
-  - `hydra/core/`, `hydra/graph/`, `hydra/packaging/`, `hydra/coders/`, `hydra/typing/`, ...
-  - `hydra/reduction/`, `hydra/rewriting/`, `hydra/hoisting/`
-  - `hydra/inference/`, `hydra/checking/`
+  - `hydra/core/model/`, `hydra/core/graph/`, `hydra/core/packaging/`, `hydra/core/coders/`, `hydra/core/typing/`, ...
+  - `hydra/core/reduction/`, `hydra/core/rewriting/`, `hydra/core/hoisting/`
+  - `hydra/core/inference/`, `hydra/core/checking/`
 
 - **Generated Java test suite** (`dist/java/hydra-kernel/src/test/java/`) —
   the hydra-kernel test suite compiled into Java.
@@ -230,7 +231,7 @@ afterward (or do a full bootstrap demo via `bin/run-bootstrapping-demo.sh
 
 > **Note on Phase 5 (Java self-host).** `sync-java.sh` will also run
 > Phase 5 (`generate-hydra-java-from-java.sh`), which compiles
-> `hydra.Generation` and friends. That compile imports
+> `hydra.build.overlay.java.Generation` and friends. That compile imports
 > `hydra.{python,haskell,lisp,typescript}.*` from per-language `dist/java/`
 > trees, so on a cold checkout Phase 5 will fail until those siblings
 > have been populated by `bin/sync.sh` (full matrix) or `bin/sync.sh
@@ -317,7 +318,7 @@ Two boundaries exist where plain JDK collections still appear:
 - **Internal sort scratch buffers** in algorithms that need O(1) random access
   (e.g. `Sort`, `SortOn`, `Transpose`). These never escape the function and
   return a `ConsList` to the caller.
-- **`LinkedHashMap` in JSON output** (`hydra.json.JsonEncoding.ObjectBuilder`),
+- **`LinkedHashMap` in JSON output** (`hydra.core.overlay.java.json.JsonEncoding.ObjectBuilder`),
   to preserve insertion-order key emission. This is a deliberate user-visible
   ordering choice, not a bug.
 

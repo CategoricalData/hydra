@@ -234,7 +234,7 @@ All three bootstrap executables accept the same options:
 | `--include-coders` | Include extension coder modules |
 | `--include-tests` | Include test modules |
 | `--include-gentests` | Generate generation tests |
-| `--kernel-only` | Exclude `hydra.*` modules |
+| `--kernel-only` | Only generate kernel modules (exclude coder packages) |
 | `--types-only` | Only type-defining modules |
 | `--json-dir <dir>` | Override kernel JSON directory |
 | `--ext-json-dir <dir>` | Override extension JSON directory |
@@ -244,12 +244,12 @@ All three bootstrap executables accept the same options:
 ### I/O wrappers
 
 Each language has a thin I/O wrapper that provides file I/O around the pure,
-generated `hydra.codeGeneration` module:
+generated `hydra.core.codegen` module:
 
 | Language | I/O Wrapper | Bootstrap CLI |
 |----------|-------------|---------------|
 | Haskell  | `Hydra.Generation` (heads/haskell) | `bootstrap-from-json` (heads/haskell) |
-| Java     | `hydra.Generation` (heads/java) | `hydra.Bootstrap` (heads/java) |
+| Java     | `hydra.build.overlay.java.Generation` (overlay/java/hydra-build) | `hydra.Bootstrap` (heads/java) |
 | Python   | `hydra.generation` (heads/python) | `hydra.bootstrap` (heads/python) |
 | Scala    | `hydra.Generation` (heads/scala) | `hydra.Bootstrap` (heads/scala) |
 

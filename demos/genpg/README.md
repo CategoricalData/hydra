@@ -284,7 +284,7 @@ writeEncoderSourceHaskell "../../dist/haskell/hydra-pg/src/main/haskell" (kernel
 
 ### Step 2: Sync Python kernel (if kernel code changed)
 
-If Hydra kernel code has changed (e.g., `hydra.core.json.writer`, `hydra.lib.*`), regenerate the Python kernel modules:
+If Hydra kernel code has changed (e.g., `hydra.core.json.writer`, `hydra.core.lib.*`), regenerate the Python kernel modules:
 
 ```bash
 cd heads/haskell

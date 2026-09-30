@@ -22,7 +22,7 @@ linking only names that resolve unambiguously to a dependency symbol.
 
 - **~260 generated modules** from the Hydra kernel, all compiling cleanly under Scala 3.3.7
 - **Bootstrapping host**: loads Hydra modules from JSON and generates Haskell, Java, Python, and Scala
-- **The full `hydra.lib.*` primitive library** (see
+- **The full `hydra.core.lib.*` primitive library** (see
   [docs/hydra-lexicon.txt](https://github.com/CategoricalData/hydra/blob/main/docs/hydra-lexicon.txt)
   for the current set of primitives and signatures)
 - **Lazy evaluation support** via Scala's by-name parameters for `ifElse`, `cases`, `fromOptional`, etc.
@@ -98,7 +98,7 @@ In 0.15, Hydra's Scala code is split across three locations
     namespace `hydra.core.overlay.scala.*`, #434/#501) and are copied into `dist/scala/` at assemble time
 
 - **Generated Scala kernel** ([`dist/scala/hydra-kernel/src/main/scala/`](https://github.com/CategoricalData/hydra/tree/main/dist/scala/hydra-kernel/src/main/scala))
-  - `hydra/core.scala`, `hydra/graph.scala`, `hydra/packaging.scala`, ... — generated kernel modules
+  - `hydra/core/model.scala`, `hydra/core/graph.scala`, `hydra/core/packaging.scala`, ... — generated kernel modules
 
 ## Design notes
 
@@ -118,7 +118,7 @@ structurally shared:
 - `s + x` and `s - x` are likewise effectively O(1) via HAMT.
 - `m1 ++ m2` (union) is O(n + m).
 
-`hydra.lib.{lists, maps, sets}` are thin wrappers over these immutable
+`hydra.core.lib.{lists, maps, sets}` are thin wrappers over these immutable
 collections — no custom collection classes needed. The `keys`, `elems`,
 `toList` functions sort their output to match Haskell's `Data.Map` /
 `Data.Set` ordered-iteration semantics, which is required for cross-host

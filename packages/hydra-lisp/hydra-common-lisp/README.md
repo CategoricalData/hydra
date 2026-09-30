@@ -35,7 +35,7 @@ trees, mirroring the API/implementation split in
 [Hydra-Python](../../hydra-python/README.md#collections):
 
 - **At the API level**, `lib/maps.lisp` and `lib/sets.lisp` expose the same
-  `hydra_lib_maps_*` and `hydra_lib_sets_*` functions every other host
+  `hydra_core_lib_maps_*` and `hydra_core_lib_sets_*` functions every other host
   implements. Callers do not see the underlying representation; they get
   and return values that behave like persistent maps and sets.
 - **At the implementation level**, both libraries are backed by an Okasaki
@@ -51,7 +51,7 @@ records take a fast path on their interned string field, raw strings
 compare lexicographically, otherwise `equal` and finally a `generic-compare`
 fallback. This keeps the kernel's typical key shape (interned names) fast
 while still handling the long tail of structural keys correctly. Where
-ordered iteration matters (`hydra_lib_maps_keys`/`elems`/`to_list`, set
+ordered iteration matters (`hydra_core_lib_maps_keys`/`elems`/`to_list`, set
 iteration), the tree's in-order traversal yields elements in sorted order
 by construction.
 

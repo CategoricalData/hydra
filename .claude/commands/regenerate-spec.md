@@ -38,7 +38,7 @@ generated artifacts.
 
    Pass one or more `--module <namespace>` flags to scope regeneration
    to specific kernel modules while iterating on a single page, e.g.
-   `bin/regenerate-spec.sh --module hydra.lib.lists`.
+   `bin/regenerate-spec.sh --module hydra.core.lib.lists`.
 
 3. Inspect the diff. Each regenerated page should show the expected
    changes (new/changed doc strings, signatures, provisions). Surprises
@@ -59,7 +59,7 @@ generated artifacts.
    expected, not a bug. See the page-name-mapping notes in
    `feature_723_spec_generator_markdown-plan.md` for the full mapping
    rule (some `types/*.md` pages combine a type module with its paired
-   `hydra.error.*` module onto one page).
+   `hydra.core.error.*` module onto one page).
 
 5. Once a page's generated output genuinely matches, strip its
    `generator not yet built` IOU header in the same commit as the

@@ -25,26 +25,25 @@ for the full picture.
   - `Hydra/Sources/Kernel/Types/` — core types (Core, Graph, Packaging, Coders, ...)
   - `Hydra/Sources/Kernel/Terms/` — term-level logic (Inference, Checking, Reduction, ...)
   - `Hydra/Sources/Kernel/Lib/` — canonical primitive registry (one `PrimitiveDefinition`-emitting
-    module per `hydra.lib.<sub>` namespace)
+    module per `hydra.core.lib.<sub>` namespace)
 
 - **Haskell kernel overlay** ([`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra))
   — hand-written Haskell kernel runtime, overlaid onto `dist/haskell/hydra-kernel/`
   so the published `hydra` Hackage package is self-contained
-  - `Overlay/Haskell/Lib/` — native primitive implementations for the Haskell host
-  - `Overlay/Haskell/Libraries.hs` — host-side primitive registration (the `hydraLib*` library definitions;
+  - `Core/Overlay/Haskell/Lib/` — native primitive implementations for the Haskell host
+  - `Core/Overlay/Haskell/Libraries.hs` — host-side primitive registration (the `hydraLib*` library definitions;
     names derive from the generated `PrimitiveDefinition`s, #473)
-  - `Overlay/Haskell/Dsl/Terms.hs`, `Overlay/Haskell/Dsl/Literals.hs`, `Overlay/Haskell/Dsl/Typed/Common.hs` — DSL syntax definitions
+  - `Core/Overlay/Haskell/Dsl/Terms.hs`, `Core/Overlay/Haskell/Dsl/Literals.hs`, `Core/Overlay/Haskell/Dsl/Common.hs` — DSL syntax definitions
     used by the generated kernel
+  - `Core/Overlay/Haskell/Dsl/` — the rest of the authoring DSL (Annotations, Types, Prims, Tests, `Meta/`, ...)
   - `Kernel.hs`, `Settings.hs` — runtime helpers
 - **Haskell head** ([`heads/haskell/src/main/haskell/Hydra/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra))
   — the bootstrapping layer above the kernel
-  - `Dsl/` — additional DSL syntax definitions used to write the kernel + coder sources
-    (Annotations, Bootstrap, Types, Prims, Tests, the rest of `Meta/`, ...)
   - `Generation.hs` / `ExtGeneration.hs` / `Haskell/Generation.hs` — code-generation drivers
   - `Minimal.hs`, `Tools/` — runtime helpers
 
 - **Generated Haskell kernel** ([`dist/haskell/hydra-kernel/src/main/haskell/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-kernel/src/main/haskell))
-  - `Hydra/Core.hs`, `Hydra/Graph.hs`, etc. — generated from the kernel DSL sources
+  - `Hydra/Core/Model.hs`, `Hydra/Core/Graph.hs`, etc. — generated from the kernel DSL sources
 
 - **Generated coder output** — per-package directories under `dist/haskell/`
   - [`dist/haskell/hydra-haskell/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-haskell/src/main/haskell) — Haskell coder
@@ -84,9 +83,9 @@ Haskell is Hydra's **bootstrapping language**, and the runnable head lives in
 `packages/hydra-<lang>/` packages. Together they produce:
 
 - **DSL syntax and runtime**:
-  [`heads/haskell/src/main/haskell/Hydra/Dsl`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Dsl)
-  (head DSL helpers)
-  and [`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib)
+  [`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl)
+  (overlaid DSL helpers)
+  and [`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib)
   (overlaid kernel primitive implementations)
 - **Kernel DSL sources**:
   [`packages/hydra-kernel/src/main/haskell/Hydra/Sources`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources)
@@ -235,9 +234,9 @@ Some of the fundamental types in Hydra are:
 These are defined in
 [Hydra/Sources/Kernel/Types](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types)
 and code-generated into
-[`Hydra.Core.Model`](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core.hs),
-[`Hydra.Core.Graph`](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Graph.hs), and
-[`Hydra.Core.Packaging`](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Packaging.hs).
+[`Hydra.Core.Model`](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Model.hs),
+[`Hydra.Core.Graph`](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Graph.hs), and
+[`Hydra.Core.Packaging`](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Packaging.hs).
 
 See [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) for detailed explanations.
 
@@ -280,8 +279,8 @@ for details.
 Hydra provides multiple domain-specific languages for constructing types and terms:
 
 **Untyped DSLs**
-([Hydra/Overlay/Haskell/Dsl/Types.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Types.hs),
-[Hydra/Overlay/Haskell/Dsl/Terms.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Terms.hs)):
+([Hydra/Core/Overlay/Haskell/Dsl/Types.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Types.hs),
+[Hydra/Core/Overlay/Haskell/Dsl/Terms.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Terms.hs)):
 ```haskell
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as Types
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms as Terms
@@ -296,7 +295,7 @@ alice = Terms.record [
 ```
 
 **Phantom-typed DSLs**
-([Hydra/Overlay/Haskell/Dsl/Typed/Phantoms.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/Phantoms.hs)) -
+([Hydra/Core/Overlay/Haskell/Dsl/Phantoms.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Phantoms.hs)) -
 Compile-time type safety:
 ```haskell
 import Hydra.Core.Overlay.Haskell.Dsl.Phantoms
@@ -306,7 +305,7 @@ safeFn = lambda "x" (Strings.toUpper (var "x"))  -- Type-checked at compile time
 ```
 
 **Library DSLs**
-([Hydra/Dsl/Lib](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Lib)) -
+([Hydra/Core/Dsl/Lib](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Dsl/Lib)) -
 Wrappers for primitive functions:
 ```haskell
 import Hydra.Core.Dsl.Lib.Lists as Lists
@@ -320,7 +319,7 @@ in the Implementation wiki for comprehensive coverage.
 
 ### JSON and YAML serialization
 
-Hydra provides JSON and YAML coders in `Hydra.Json.*` (and a YAML model via
+Hydra provides JSON and YAML coders in `Hydra.Core.Json.*` (and a YAML model via
 `Hydra.Core.Yaml.Model`), with DSL helpers under `Hydra.Core.Dsl.Json.Model`.
 The [JSON kernel recipe](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/json-kernel.md)
 covers exporting and loading kernel modules via JSON; for general-purpose JSON
@@ -358,12 +357,12 @@ The generated code includes:
 - Type inference and checking
 - Term reduction and rewriting
 - Coders and adapters
-- Primitive functions (signatures only; implementations are in Hydra/Lib)
+- Primitive functions (signatures only; implementations are in Hydra/Core/Overlay/Haskell/Lib)
 
 What remains hand-written:
-- `Hydra.Lib` - Native primitive implementations
+- `Hydra.Core.Overlay.Haskell.Lib` - Native primitive implementations
 - `Hydra.Sources` - DSL-based specifications (input to code generation)
-- `Hydra.Core.Dsl` - DSL syntax
+- `Hydra.Core.Overlay.Haskell.Dsl` - DSL syntax
 - `Hydra.Generation` - I/O and generation utilities
 - Test runners
 

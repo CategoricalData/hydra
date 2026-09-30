@@ -68,7 +68,7 @@ defines the algorithms:
 ### Library modules — the canonical primitive registry
 
 [`src/main/haskell/Hydra/Sources/Kernel/Lib/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib)
-is **the** primitive registry: one module per `hydra.lib.<sub>` namespace,
+is **the** primitive registry: one module per `hydra.core.lib.<sub>` namespace,
 declaring every primitive in that namespace as a `PrimitiveDefinition`
 (name, description, signature, isPure / isTotal flags, and an optional
 cross-compilable default implementation in Hydra terms).
@@ -84,9 +84,9 @@ for the full signature list, and
 for the recipe to add a new one.
 
 Host-side primitive registries — including the Haskell-side
-[`Hydra/Overlay/Haskell/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs)
-(in `overlay/haskell` since #473, relocated under the `hydra.core.overlay.<lang>.*`
-namespace by #501) that pairs each native implementation with a
+[`Hydra/Core/Overlay/Haskell/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Libraries.hs)
+(in `overlay/haskell` since #473, relocated under the overlay namespace by #501, now
+`hydra.core.overlay.<lang>.*` after #729) that pairs each native implementation with a
 primitive name — are distinct from this canonical registry: they provide
 host-specific implementations and **derive** each primitive's name from its
 generated `PrimitiveDefinition` (the single source of truth), rather than
@@ -100,9 +100,9 @@ live in adjacent directories:
 | Where | What |
 |-------|------|
 | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/`            | Kernel DSL sources (this package) |
-| `heads/haskell/src/main/haskell/Hydra/Dsl/`                        | Hand-written Haskell DSL helpers used to write the sources |
-| `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/` | Hand-written Haskell primitive implementations (overlaid onto the kernel dist) |
-| `dist/haskell/hydra-kernel/`                                       | Generated Haskell kernel (`Hydra/Core.hs`, `Hydra/Graph.hs`, etc.) |
+| `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/` | Hand-written Haskell DSL helpers used to write the sources |
+| `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib/` | Hand-written Haskell primitive implementations (overlaid onto the kernel dist) |
+| `dist/haskell/hydra-kernel/`                                       | Generated Haskell kernel (`Hydra/Core/Model.hs`, `Hydra/Core/Graph.hs`, etc.) |
 | `dist/java/hydra-kernel/`                               | Generated Java kernel (`hydra.core.model.*`, `hydra.core.graph.*`, etc.) |
 | `dist/python/hydra-kernel/`                             | Generated Python kernel |
 | `dist/scala/hydra-kernel/`                              | Generated Scala kernel |
@@ -134,7 +134,7 @@ Three of the most common kernel-modification tasks have dedicated recipes:
 - **[Adding new type and term constructors](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/extending-hydra-core.md)**
   — solving the bootstrap problem when you extend `Core.Term` or `Core.Type`.
 - **[Adding new primitive functions](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/adding-primitives.md)**
-  — adding to `hydra.lib.*` and registering across all hosts.
+  — adding to `hydra.core.lib.*` and registering across all hosts.
 - **[Refactoring the Hydra kernel](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/refactoring.md)**
   — creating, renaming, moving, or deleting kernel elements or modules, including
   namespace refactoring.
