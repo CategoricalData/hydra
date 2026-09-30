@@ -100,13 +100,27 @@ fi
 # against "java", not $TARGET: this tool's runtime classes (hydra.core.print.Core etc.) come
 # from published hydra-kernel/hydra-java regardless of which --target is requested.
 #
-# Checked UNCONDITIONALLY (#761) — NOT gated on HYDRA_HOST_VERSION being unset. The two
-# concerns are orthogonal: HYDRA_HOST_VERSION pins a version to make the published
+# Checked UNCONDITIONALLY w.r.t. HYDRA_HOST_VERSION (#761) — NOT gated on it being unset.
+# The two concerns are orthogonal: HYDRA_HOST_VERSION pins a version to make the published
 # classpath *resolvable* (the cold-seed path, #703); hostOverrides["java"]=local means
 # the published classpath is resolvable but *semantically stale* and must not be used
 # regardless. Gating this check on HYDRA_HOST_VERSION being empty meant the cold-seed
 # path (which always sets HYDRA_HOST_VERSION) silently skipped the override entirely and
 # used the published host even when hostOverrides["java"]=local was explicitly set.
+#
+# Gated on SOURCE_SET=test (#729): the #719 staleness this override guards against —
+# hydra.core.print.Core.term's printDecimal rendering "42.0" for a scale-0 literal — only
+# manifests in rendered `expected`-value TEST fixtures, never in main-source structural
+# generation. Forcing local for `main` too creates a real bootstrap circularity: the local
+# headsExtras build compiles packages/hydra-java's FULL main source set (including the
+# hydra.sources.java.* DSL-authoring classes, e.g. Language.java), which imports
+# hydra.core.model.* from dist/java/hydra-kernel — but on a fresh checkout dist/java/ is
+# gitignored and doesn't exist yet, and this main-source seed call is one of the first
+# steps that would populate it (seed-dist-haskell.sh, #703). CI hit this exactly: the
+# cold-seed of dist/haskell/hydra-kernel (main) forced a local headsExtras compile before
+# dist/java/hydra-kernel existed, failing with "package hydra.core.model does not exist".
+# Using the published+pinned-version classpath for `main` breaks the circularity without
+# reintroducing the #719 bug (which never affected `main` generation in the first place).
 OVERRIDE_RAW=$(python3 -c "
 import json
 try:
@@ -117,7 +131,7 @@ except Exception:
     pass
 " 2>/dev/null || true)
 FORCE_LOCAL=0
-if [ "$OVERRIDE_RAW" = "local" ]; then
+if [ "$OVERRIDE_RAW" = "local" ] && [ "$SOURCE_SET" = "test" ]; then
     FORCE_LOCAL=1
 fi
 
