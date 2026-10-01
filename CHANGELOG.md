@@ -48,9 +48,11 @@ primitive pipeline and several silent-correctness fixes in the coder layer.
   JSON-Schema/Avro/GraphQL/GraphSON/Protobuf coders (extended integer widths, map-key handling), the
   kernel's encode/decode generators (reversed type-parameter order on 2+-param polymorphic types), and
   the Python coder (silently dropping a module's types when types and terms share a file path).
-- **Self-hosted specification docs** ([#723](https://github.com/CategoricalData/hydra/issues/723)):
-  the module-reference pages under `docs/specification/` are now generated directly from the kernel
-  (`bin/regenerate-spec.sh`) via a new metadata-only doc coder, rather than hand-maintained.
+- **Specification-docs generator, kernel side** ([#723](https://github.com/CategoricalData/hydra/issues/723)):
+  a new metadata-only doc coder (`generateModuleDoc`) and `hydra.markdown` model, the translingual core
+  for generating the module-reference pages under `docs/specification/`. *Erratum:* the Java driver that
+  `bin/regenerate-spec.sh` invokes (`hydra.RegenerateSpec`) did not ship in 0.18.0, so the pages are still
+  hand-maintained; the driver is pending under #723.
 
 ### New features
 
@@ -58,7 +60,7 @@ primitive pipeline and several silent-correctness fixes in the coder layer.
   suite covering the minimal-core grammar (literals, classes, quantifiers, alternation, anchors,
   grouping) across all 9 hosts.
 - **[#723](https://github.com/CategoricalData/hydra/issues/723)** `hydra.markdown` type module and
-  `generateModuleDoc`, the metadata-only doc coder backing the self-generated spec pages.
+  `generateModuleDoc`, the metadata-only doc coder intended to back self-generated spec pages.
 - **[#382](https://github.com/CategoricalData/hydra/issues/382)** the Rust coder is split out of
   `hydra-ext` into its own first-class `hydra-rust` package.
 
