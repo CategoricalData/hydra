@@ -689,8 +689,11 @@ public class Bootstrap {
         // sources/libraries.py was previously unguarded, so java→python corrupted its
         // def_<sub>.<fn>.name references onto the impl, breaking pytest collection with
         // "'function' object has no attribute 'name'".
+        // #729/#767: match the /overlay/ segment itself rather than a hardcoded hydra/overlay/
+        // prefix -- real paths are hydra/core/overlay/... or hydra/build/overlay/..., not
+        // hydra/overlay/... directly (mirrors the Scala driver's isLibDefFile fix, d0cbc9f634).
         return pSlash.contains("/hydra/lib/")
-            || pSlash.matches(".*/hydra/overlay/[^/]+/(.*/)?[Ll]ibraries\\.[^/]+$");
+            || pSlash.matches(".*/overlay/[^/]+/(.*/)?[Ll]ibraries\\.[^/]+$");
     }
 
     /** Soft maximum line length for generated Scala source files. */

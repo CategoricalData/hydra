@@ -429,10 +429,13 @@
    hydra/overlay/<lang>/Libraries.<ext>) deliberately imports BOTH the relocated impl and the
    def-module (aliased, for `def_X.fn.name`) — never redirect it either. #569 Defect B: the
    previous guard checked \"sources/libraries.\" (wrong directory, never matched the actual
-   generated path), wrongly redirecting the registry's def-module import onto the impl."
+   generated path), wrongly redirecting the registry's def-module import onto the impl.
+   #729/#767: match the /overlay/ segment itself rather than a hardcoded hydra/overlay/
+   prefix -- real paths are hydra/core/overlay/... or hydra/build/overlay/..., not
+   hydra/overlay/... directly (mirrors the Scala driver's isLibDefFile fix, d0cbc9f634)."
   (let ((p (namestring path)))
     (or (search "/hydra/lib/" p)
-        (let ((idx (search "/hydra/overlay/" p)))
+        (let ((idx (search "/overlay/" p)))
           (and idx (let ((base (pathname-name path)))
                      (and base (or (string-equal base "Libraries")
                                     (string-equal base "libraries")))))))))

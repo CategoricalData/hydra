@@ -110,11 +110,14 @@
    def-module (aliased, for `def_X.fn.name`) — never redirect it either. #569 Defect B: the
    previous guard (in sibling drivers) checked \"sources/libraries.\" (wrong directory, never
    matched the actual generated path), wrongly redirecting the registry's def-module import onto
-   the impl and breaking `.name` member access."
+   the impl and breaking `.name` member access. #729/#767: match the /overlay/ segment itself
+   rather than a hardcoded hydra/overlay/ prefix -- real paths are hydra/core/overlay/... or
+   hydra/build/overlay/..., not hydra/overlay/... directly (mirrors the Scala driver's
+   isLibDefFile fix, d0cbc9f634)."
   [^java.io.File f]
   (let [p (.replace (.getPath f) java.io.File/separatorChar \/)]
     (boolean (or (.contains p "/hydra/lib/")
-                 (re-find #"/hydra/overlay/[^/]+/[Ll]ibraries\.[^/]+$" p)))))
+                 (re-find #"/overlay/[^/]+/[Ll]ibraries\.[^/]+$" p)))))
 
 (defn- redirect-dotted
   "Rewrite consumer references from the un-relocated hydra.lib.<sub> / hydra.core.test.testEnv namespaces to
