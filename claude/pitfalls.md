@@ -1257,6 +1257,14 @@ If it works there, the issue is the agent's shell environment, not the script.
 Don't patch the script as a workaround;
 ask the user to run the command from their own shell.
 
+A second, intermittent form was seen on marvin7 during the 0.18.0 release, in a detached run (not the
+agent shell): `verify-distribution.sh` hung writing a ~600-byte heredoc, and `sample <pid>` showed bash
+blocked in `heredoc_write` → `write` on its own heredoc pipe. The same heredoc and sizes up to 21 KB did
+not reproduce afterwards, so it looks load-related (pipe-buffer pressure on a busy machine). If a step
+stalls with no CPU and no children, `sample` the bash process; if it is in `heredoc_write`, kill that
+subshell (yours) and re-run the step. Prefer writing multi-line content to a file with the editor tool
+over shell heredocs in agent commands.
+
 ### Background `stack build` exit code is masked by trailing pipes
 
 Running `stack build ...; echo "EXIT=$?"` inside a `run_in_background:true`
