@@ -247,19 +247,19 @@ def case_npm_truncated(tmp: Path) -> None:
 
 
 def case_npm_lib_overlay(tmp: Path) -> None:
-    print("Case 7: npm hydra.lib.* satisfied by TS overlay path -> exit 0")
-    # The TS host ships hydra.lib.X primitives as overlay modules at
-    # hydra/overlay/typescript/lib/<leaf>.js, NOT hydra/lib/<leaf>.js. The gate
+    print("Case 7: npm hydra.core.lib.* satisfied by TS overlay path -> exit 0")
+    # The TS host ships hydra.core.lib.X primitives as overlay modules at
+    # hydra/core/overlay/typescript/lib/<leaf>.js, NOT hydra/core/lib/<leaf>.js. The gate
     # must accept the overlay location, or every kernel npm tarball false-fails.
     manifest = tmp / "npm-lib-manifest.json"
     main_modules = ["hydra.core.lib.strings", "hydra.core.lib.math", "hydra.core.lib.defaults"]
     write_manifest(manifest, "hydra-kernel", main_modules)
     artifact = tmp / "hydra-kernel-0.17.3.tgz"
-    # strings + math only at the overlay path; defaults at the direct hydra/lib/ path.
+    # strings + math only at the overlay path; defaults at the direct hydra/core/lib/ path.
     members = [
-        "hydra/overlay/typescript/lib/strings.js",
-        "hydra/overlay/typescript/lib/math.js",
-        "hydra/lib/defaults.js",
+        "hydra/core/overlay/typescript/lib/strings.js",
+        "hydra/core/overlay/typescript/lib/math.js",
+        "hydra/core/lib/defaults.js",
     ]
     make_npm_tgz(artifact, members)
     r = run_check("--manifest", str(manifest), "--artifact", str(artifact), "--kind", "npm-tgz")

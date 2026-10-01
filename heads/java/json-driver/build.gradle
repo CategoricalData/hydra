@@ -77,10 +77,9 @@ sourceSets {
             // Just the one remaining driver file from heads/java (everything else
             // there needs the local dist or the cross-target coders).
             srcDir file("$hydraRoot/heads/java/src/main/java")
-            include 'hydra/overlay/java/dsl/meta/**'
-            include 'hydra/overlay/java/dsl/Helpers.java'
+            include 'hydra/core/overlay/java/dsl/meta/**'
+            include 'hydra/core/overlay/java/dsl/Helpers.java'
             include 'hydra/build/**'
-            include 'hydra/overlay/java/build/**'
             include 'hydra/sources/jvm/**'
             include 'hydra/sources/java/**'
             include 'hydra/dsl/**'

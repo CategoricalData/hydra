@@ -236,19 +236,19 @@ def _npm_candidate_suffixes(ns: str) -> list[str]:
     """Member-path suffixes that satisfy a declared namespace in an npm tarball.
 
     Normally one compiled .js at hydra/<segs>.js. But the translingual primitive
-    libraries (hydra.lib.*) are provided host-natively: in the TypeScript host they
-    ship as OVERLAY modules at hydra/overlay/typescript/lib/<leaf>.js, not at
-    hydra/lib/<leaf>.js (only hydra.core.lib.defaults is a generated hydra/lib/ file).
-    So for a hydra.lib.X namespace, accept EITHER the direct path or the TS overlay
+    libraries (hydra.core.lib.*) are provided host-natively: in the TypeScript host they
+    ship as OVERLAY modules at hydra/core/overlay/typescript/lib/<leaf>.js, not at
+    hydra/core/lib/<leaf>.js (only hydra.core.lib.defaults is a generated hydra/core/lib/ file).
+    So for a hydra.core.lib.X namespace, accept EITHER the direct path or the TS overlay
     path — the primitive is present either way. This mirrors the Java jar, where
-    hydra.core.lib.strings is satisfied by hydra/lib/Strings.class AND/OR the
-    hydra/overlay/java/lib/strings/ package.
+    hydra.core.lib.strings is satisfied by hydra/core/lib/Strings.class AND/OR the
+    hydra/core/overlay/java/lib/strings/ package.
     """
     direct = namespace_to_npm_suffix(ns)  # hydra/<segs>.js
     cands = [direct]
-    if ns.startswith("hydra.lib."):
+    if ns.startswith("hydra.core.lib."):
         leaf = ns.split(".")[-1]
-        cands.append(f"hydra/overlay/typescript/lib/{leaf}.js")
+        cands.append(f"hydra/core/overlay/typescript/lib/{leaf}.js")
     return cands
 
 
@@ -257,7 +257,7 @@ def check_npm(members: list[str], main_modules: list[str]) -> list[str]:
 
     npm tarballs prefix with package/ and TS emits to dist/, so we match the
     trailing hydra/<segs>.js. The TS coder may recase the leaf file, so match the
-    suffix case-insensitively. hydra.lib.* primitives are accepted at their TS
+    suffix case-insensitively. hydra.core.lib.* primitives are accepted at their TS
     overlay path too (see _npm_candidate_suffixes).
     """
     errors: list[str] = []
@@ -360,8 +360,8 @@ def check_scala_jar(members: list[str], main_modules: list[str]) -> list[str]:
     Scala-3 top-level-definition holders (hydra/lib/strings/strings$package.class),
     and .tasty sidecars (ignored — only .class counts). No leaf-as-class-prefix case
     (Scala never hoists the leaf to a PascalCase class in the parent dir) and no
-    #417 required-symbols machinery (that is Java-host-specific). hydra.lib.* land
-    directly at hydra/lib/<leaf>/ here (NOT an overlay path as in the TS host).
+    #417 required-symbols machinery (that is Java-host-specific). hydra.core.lib.* land
+    directly at hydra/core/lib/<leaf>/ here (NOT an overlay path as in the TS host).
     """
     errors: list[str] = []
     for ns in main_modules:

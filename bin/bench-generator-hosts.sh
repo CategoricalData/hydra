@@ -97,7 +97,7 @@ for HOST in haskell java; do
                 "$HYDRA_ROOT_DIR/heads/java/src/main/java/hydra/Bootstrap.java" \
                 "$HYDRA_ROOT_DIR/heads/java/src/main/java/hydra/GenerationTargets.java" \
                 "$HYDRA_ROOT_DIR/dist/java/hydra-build/src/main/java/hydra/build/"*.java \
-                "$HYDRA_ROOT_DIR/overlay/java/hydra-build/src/main/java/hydra/overlay/java/build/Generation.java" \
+                "$HYDRA_ROOT_DIR/overlay/java/hydra-build/src/main/java/hydra/build/overlay/java/Generation.java" \
                 >/dev/null 2>&1
         fi
         echo "$JAVA_CP" > "$RUN_DIR/java-classpath.txt"
