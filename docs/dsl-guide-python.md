@@ -105,8 +105,8 @@ Phantom-typed functions like `cases`, `match`, `inject`, `wrap`, `field`,
 
 ```python
 # Both forms are equivalent — prefer the shorter str form.
-cases("hydra.core.model.Term", arg, ..., [field("lambda", ...)])
-cases(Name("hydra.core.model.Term"), arg, ..., [field(Name("lambda"), ...)])
+match("hydra.core.model.Term", arg, ..., [field("lambda", ...)])
+match(Name("hydra.core.model.Term"), arg, ..., [field(Name("lambda"), ...)])
 ```
 
 The `@` operator and the call operator are overloaded on `TypedTerm`, so function
@@ -191,7 +191,8 @@ Prefer these over inline `var("hydra....")` strings in new code.
 | Referencing kernel functions | Term references | `Strip.deannotate_type(t)` vs `var("hydra.core.strip.deannotateType")` |
 
 **Rule of thumb**:
-- **Type modules** (defining data types): Use `hydra.core.overlay.python.dsl.types as T` with `T.record()`, `T.union()`, `T.wrap()`
+- **Type modules** (defining data types): Use `hydra.core.overlay.python.dsl.types as T`
+  with `T.record()`, `T.union()`, `T.wrap()`
 - **Term modules** (defining functions): Use `hydra.core.overlay.python.dsl.phantoms as P` with domain DSLs
 - **Quick prototyping**: Use `hydra.core.overlay.python.dsl.terms` directly
 
@@ -294,23 +295,23 @@ nothing_val = Terms.nothing()
 Python uses `match` statements (3.10+) or `isinstance` checks for pattern matching:
 
 ```python
-from hydra.core.model import Term
+from hydra.core.model import Term, TermList, TermLiteral
 
 # Python 3.10+ match statement
 def describe(term: Term) -> str:
     match term:
-        case Term.Literal(value):
+        case TermLiteral(value):
             return "A literal value"
-        case Term.List(value):
+        case TermList(value):
             return f"A list with {len(value)} elements"
         case _:
             return "Some other term"
 
 # Pre-3.10 isinstance approach
 def describe(term: Term) -> str:
-    if isinstance(term, Term.Literal):
+    if isinstance(term, TermLiteral):
         return "A literal value"
-    elif isinstance(term, Term.List):
+    elif isinstance(term, TermList):
         return f"A list with {len(term.value)} elements"
     else:
         return "Some other term"
@@ -413,20 +414,22 @@ f32 = inject_unit("hydra.core.model.FloatType", "float32")
 ### Pattern matching (`cases`/`match`)
 
 ```python
-# match creates a case elimination (unapplied)
-matcher = match("hydra.core.model.Term",
-    Given(var("default")),                 # default case
+from hydra.core.model import Term
+
+# cases creates a case elimination (unapplied); str type names are auto-coerced to Name
+matcher = cases("hydra.core.model.Term",
+    Given(string("something else")),       # default case
     [field("literal",
         lam("lit", string("found a literal"))),
      field("variable",
         lam("v", string("found a variable")))])
 
-# cases applies the match to an argument (str type name auto-coerced)
-result = cases("hydra.core.model.Term", var("myTerm"),
-    None_(),                            # no default
-    [field("literal",
+# match applies the case elimination to an argument
+result = match(Term.TYPE_, var("myTerm"),
+    None_(),                               # no default (or omit: dflt defaults to None)
+    [field(Term.LITERAL,
         lam("lit", var("lit"))),
-     field(hydra.core.model.TERM__VARIABLE__NAME,
+     field(Term.VARIABLE,
         lam("v", var("v")))])
 ```
 
@@ -450,7 +453,7 @@ expr2 = lets([
 
 ```python
 # Create a field accessor function
-get_name = project(hydra.core.PERSON__NAME, hydra.core.PERSON__NAME__NAME)
+get_name = project("my.app.Person", "name")   # str names are auto-coerced to Name
 
 # Apply it
 name = apply(get_name, var("person"))
@@ -462,8 +465,8 @@ via the shared `proj` helper in `_source_dsl.py`:
 
 ```python
 from hydra.sources.python._source_dsl import proj as _proj
-# Equivalent to: project(Name("hydra.core.Person"), Name("name"))(var("p"))
-name = _proj("hydra.core.Person", "name", "p")
+# Equivalent to: project(Name("my.app.Person"), Name("name"))(var("p"))
+name = _proj("my.app.Person", "name", "p")
 ```
 
 Source modules with a fixed type module-name prefix typically wrap this
@@ -489,10 +492,10 @@ containing module, since the inferencer processes them in a shared context.
 
 ```python
 # Wrap a value (create a newtype instance)
-hydra_name = wrap(hydra.core.model.NAME__NAME, string("myName"))
+hydra_name = wrap(Name.TYPE_, string("myName"))
 
 # Unwrap function
-unwrapper = unwrap(hydra.core.model.NAME__NAME)
+unwrapper = unwrap(Name.TYPE_)
 ```
 
 ### Primitive functions
@@ -533,21 +536,21 @@ tname = Core.injection_type_name(var("inj"))      # Injection.typeName
 
 ### Generated name constants
 
-Generated Hydra modules provide `TYPE_NAME` and `FIELD_NAME_*` constants using
-Python naming conventions (double underscores for namespace separation):
+Each generated type carries name constants as class attributes: `TYPE_` for the type's own name,
+plus one upper-snake-case constant per record field or union variant:
 
 ```python
-import hydra.core.model
+from hydra.core.model import Lambda, Term
 
 # Type names
-hydra.core.model.TERM__NAME                    # Name("hydra.core.model.Term")
-hydra.core.model.LAMBDA__NAME                  # Name("hydra.core.model.Lambda")
+Term.TYPE_                    # Name("hydra.core.model.Term")
+Lambda.TYPE_                  # Name("hydra.core.model.Lambda")
 
-# Field names (TYPE__FIELD__NAME pattern)
-hydra.core.model.TERM__LITERAL__NAME           # Name("literal")
-hydra.core.model.TERM__VARIABLE__NAME          # Name("variable")
-hydra.core.model.LAMBDA__PARAMETER__NAME       # Name("parameter")
-hydra.core.model.LAMBDA__BODY__NAME            # Name("body")
+# Field / variant names
+Term.LITERAL                  # Name("literal")
+Term.VARIABLE                 # Name("variable")
+Lambda.PARAMETER              # Name("parameter")
+Lambda.BODY                   # Name("body")
 ```
 
 Always use these constants rather than constructing `Name` instances manually.
@@ -701,9 +704,9 @@ def _deannotate_term():
         .doc("Remove annotations from a term")
         .lam("term")
         .to(
-            cases(hydra.core.model.TERM__NAME, var("term"),
+            match(hydra.core.model.Term.TYPE_, var("term"),
                 Given(var("term")),
-                [field(hydra.core.model.TERM__ANNOTATED__NAME,
+                [field(hydra.core.model.Term.ANNOTATED,
                     lam("at",
                         apply(_self("deannotateTerm"),
                             Core.annotated_term_body(var("at")))))])))
@@ -745,9 +748,9 @@ Match on a union type, handle one variant, pass others through:
 
 ```python
 fn = lam("term",
-    cases(hydra.core.model.TERM__NAME, var("term"),
+    match(hydra.core.model.Term.TYPE_, var("term"),
         Given(var("term")),                        # default: identity
-        [field(hydra.core.model.TERM__ANNOTATED__NAME,  # handle one case
+        [field(hydra.core.model.Term.ANNOTATED,  # handle one case
             lam("at",
                 Core.annotated_term_body(var("at"))))]))
 ```
@@ -760,9 +763,9 @@ Bind a local transform, pass it to a rewriting function:
 fn = lam("typ",
     let1("f",
         lam("recurse", lam("t",
-            cases(hydra.core.model.TYPE__NAME, var("t"),
+            match(hydra.core.model.Type.TYPE_, var("t"),
                 Given(apply(var("recurse"), var("t"))),
-                [field(hydra.core.model.TYPE__ANNOTATED__NAME,
+                [field(hydra.core.model.Type.ANNOTATED,
                     lam("at",
                         apply(var("recurse"),
                             Core.annotated_type_body(var("at")))))]))),
@@ -783,7 +786,7 @@ vars = let1("dfltVars",
         Sets.empty(),
         apply(_self("subterms"), var("term"))),
     # then match on specific cases...
-    cases(hydra.core.model.TERM__NAME, var("term"),
+    match(hydra.core.model.Term.TYPE_, var("term"),
         Given(var("dfltVars")),
         [...]))
 ```
@@ -792,19 +795,16 @@ vars = let1("dfltVars",
 
 ```python
 replace_fn = lam("recurse", lam("t",
-    cases(hydra.core.model.TERM__NAME, var("t"),
+    match(hydra.core.model.Term.TYPE_, var("t"),
         Given(apply(var("recurse"), var("t"))),
-        [field(hydra.core.model.TERM__FUNCTION__NAME,
-            match(hydra.core.model.FUNCTION__NAME,
-                Given(apply(var("recurse"), var("t"))),
-                [field(hydra.core.model.FUNCTION__LAMBDA__NAME,
-                    lam("l",
-                        Logic.if_else(
-                            Equality.equal_name(
-                                Core.lambda_parameter(var("l")),
-                                var("name")),
-                            var("t"),
-                            apply(var("recurse"), var("t")))))]))])))
+        [field(hydra.core.model.Term.LAMBDA,
+            lam("l",
+                Logic.if_else(
+                    Equality.equal_name(
+                        Core.lambda_parameter(var("l")),
+                        var("name")),
+                    var("t"),
+                    apply(var("recurse"), var("t")))))])))
 ```
 
 ## Working with generated code
@@ -815,21 +815,25 @@ Generated Python code for Hydra types uses dataclasses with nested classes for u
 
 ```python
 # hydra/core/model.py (generated)
-class Term:
-    class Annotated:
-        value: AnnotatedTerm
-    class Application:
-        value: Application
-    class Literal:
-        value: Literal
-    class Variable:
-        value: Name
-    # ...
+class TermAnnotated(Node["AnnotatedTerm"]):
+    r"""A term annotated with metadata"""
 
-TERM__NAME = Name("hydra.core.model.Term")
-TERM__LITERAL__NAME = Name("literal")
-TERM__VARIABLE__NAME = Name("variable")
-# ...
+class TermLiteral(Node["Literal"]):
+    r"""A literal value"""
+
+class TermVariable(Node["Name"]):
+    r"""A variable reference"""
+
+# ... one Node subclass per variant
+
+class Term(metaclass=_TermMeta):
+    r"""TermAnnotated | TermApplication | ... | TermVariable | TermWrap"""
+
+    TYPE_ = Name("hydra.core.model.Term")
+    ANNOTATED = Name("annotated")
+    LITERAL = Name("literal")
+    VARIABLE = Name("variable")
+    # ...
 ```
 
 ### Constructing record values: builders and copy-update
@@ -883,28 +887,29 @@ was removed in #245). An `InferenceContext` value is threaded alongside the grap
 and carries the fresh-type-variable counter and the current subterm-path trace.
 
 ```python
-from hydra.core.overlay.python.dsl.python import Either
+import hydra.core.overlay.python.lib.eithers
+from hydra.core.overlay.python.dsl.python import Left, Right
 from hydra.core.typing import InferenceContext
-from hydra.core.errors import Error
+from hydra.core.errors import ErrorOther, OtherError
 
 # Create a successful result
-ok = Either.right("result")
+ok = Right("result")
 
 # Map over a result
 mapped = hydra.core.overlay.python.lib.eithers.map(lambda s: len(s), ok)
 
 # Chain computations (bind / flatMap)
-bound = hydra.core.overlay.python.lib.eithers.bind(result1, lambda value: Either.right(value + " processed"))
+bound = hydra.core.overlay.python.lib.eithers.bind(result1, lambda value: Right(value + " processed"))
 
-# Create a failure (Error is a tagged-union type; construct a variant from hydra.core.errors)
-err = Either.left(Error.other("something went wrong"))
+# Create a failure (Error is a tagged-union type; construct a variant class from hydra.core.errors)
+err = Left(ErrorOther(OtherError("something went wrong")))
 
 # Inspect a result
 match result:
-    case Either.Right(value):
+    case Right(value=value):
         # use value
         pass
-    case Either.Left(e):
+    case Left(value=e):
         # e is an Error value
         pass
 ```

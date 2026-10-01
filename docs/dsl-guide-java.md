@@ -170,7 +170,8 @@ Prefer these over inline `var("hydra....")` strings in new code.
 | Primitive function calls | Library wrappers | `Sets.union(a, b)` instead of raw `apply(var(...), ...)` |
 
 **Rule of thumb**:
-- **Type modules** (defining data types): Use `hydra.core.overlay.java.dsl.Types` with `Types.record()`, `Types.union()`, `Types.wrap()`
+- **Type modules** (defining data types): Use `hydra.core.overlay.java.dsl.Types`
+  with `Types.record()`, `Types.union()`, `Types.wrap()`
 - **Term modules** (defining functions): Use `import static hydra.core.overlay.java.dsl.Phantoms.*`
 - **Quick prototyping**: Use `hydra.core.overlay.java.dsl.Terms` directly
 
@@ -296,7 +297,6 @@ It wraps raw `Term` values in `TypedTerm<A>` to provide compile-time type tracki
 ```java
 import hydra.core.typed.TypedBinding;
 import hydra.core.typed.TypedTerm;
-import hydra.util.Maybe;
 
 import static hydra.core.overlay.java.dsl.Phantoms.*;
 ```
@@ -384,17 +384,17 @@ TypedTerm<Object> f32 = inject(FloatType.TYPE_, FloatType.FLOAT32);
 ```java
 import hydra.core.model.Term;
 
-// match creates a case elimination (unapplied)
-TypedTerm<Object> matcher = match(Term.TYPE_,
-    Maybe.just(var("default")),   // default case
+// cases creates a case elimination (unapplied); casesWithDefault adds a default branch
+TypedTerm<Object> matcher = casesWithDefault(Term.TYPE_,
+    string("something else"),     // default case
     field(Term.LITERAL,           // case: literal
         lambda("lit", string("found a literal"))),
     field(Term.VARIABLE,          // case: variable
         lambda("v", string("found a variable"))));
 
-// cases applies the match to an argument
-TypedTerm<Object> result = cases(Term.TYPE_, var("myTerm"),
-    Maybe.nothing(),              // no default
+// match applies the case elimination to an argument (no default);
+// matchWithDefault(typeName, arg, default, branches...) adds one
+TypedTerm<Object> result = match(Term.TYPE_, var("myTerm"),
     field(Term.LITERAL,
         lambda("lit", var("lit"))),
     field(Term.VARIABLE,
@@ -558,34 +558,42 @@ term: `Terms.primitive("hydra.core.lib.sets.union")` yields the `Term.Variable` 
 ## Type definitions
 
 Type-level modules define Hydra data types using the Direct Types DSL.
-Each type definition is a `Binding` (a name-term pair).
+Each type definition is a `Definition` (a `Definition.Type` wrapping a `TypeDefinition`), built with
+`hydra.core.overlay.java.dsl.Helpers.typeDef`.
+This is the pattern used by the host-native coder sources
+(e.g. `packages/hydra-java/src/main/java/hydra/sources/java/Gradle.java`).
 
 ### Pattern
 
 ```java
-import hydra.core.model.*;
+import hydra.core.model.Type;
 import hydra.core.overlay.java.dsl.Types;
+import hydra.core.packaging.Definition;
+import hydra.core.packaging.ModuleName;
+
+import static hydra.core.overlay.java.dsl.Helpers.doc;
+import static hydra.core.overlay.java.dsl.Helpers.typeDef;
+import static hydra.core.overlay.java.dsl.Helpers.typeref;
 
 public interface MyTypes {
-    String NS = "my.namespace";
+    ModuleName NS = new ModuleName("my.namespace");
 
-    static Binding define(String localName, Type type) {
-        return hydra.core.Annotations.typeElement(
-            new Name(NS + "." + localName), type);
+    static Definition define(String localName, Type type) {
+        return typeDef(NS, localName, type);
     }
 
-    // Forward references
-    Type _Person = Types.variable(NS + ".Person");
-    Type _Address = Types.variable(NS + ".Address");
+    // References to other types in this module
+    Type _Person = typeref(NS, "Person");
+    Type _Address = typeref(NS, "Address");
 
     // Type definitions
-    Binding person = define("Person",
+    Definition person = define("Person", doc("A person",
         Types.record(
             Types.field("name", Types.string()),
             Types.field("age", Types.int32()),
-            Types.field("address", _Address)));
+            Types.field("address", _Address))));
 
-    Binding address = define("Address",
+    Definition address = define("Address",
         Types.record(
             Types.field("street", Types.string()),
             Types.field("city", Types.string())));
@@ -594,14 +602,15 @@ public interface MyTypes {
 
 ### Cross-referencing types
 
-Types in the same module reference each other through `Types.variable()`:
+Types reference each other by name through `typeref(namespace, localName)`, which is shorthand for
+`Types.variable(namespace + "." + localName)`:
 
 ```java
-// Forward reference to another type in this module
-Type _Term = Types.variable("hydra.core.model.Term");
+// Reference to a type in another module
+Type _Term = typeref(new ModuleName("hydra.core.model"), "Term");
 
 // Use it in a record field
-Binding lambda = define("Lambda",
+Definition lambda = define("Lambda",
     Types.record(
         Types.field("parameter", _Name),
         Types.field("body", _Term)));
@@ -631,7 +640,6 @@ The body passed to `.to(() -> ...)` stays lazy (a `Supplier`), so a definition m
 
 ```java
 import hydra.core.typed.*;
-import hydra.util.Maybe;
 import static hydra.core.overlay.java.dsl.Phantoms.*;
 
 public class MyFunctions {
@@ -651,8 +659,8 @@ public class MyFunctions {
         .doc("Remove annotations from a term")
         .lam("term")
         .to(() ->
-            cases(Term.TYPE_, var("term"),
-                Maybe.just(var("term")),       // default: return unchanged
+            matchWithDefault(Term.TYPE_, var("term"),
+                var("term"),       // default: return unchanged
                 field(Term.ANNOTATED,
                     lambda("at",
                         apply(var("deannotateTerm"),
@@ -687,8 +695,8 @@ Match on a union type, handle one variant, pass others through:
 
 ```java
 TypedTerm<Object> fn = lambda("term",
-    cases(Term.TYPE_, var("term"),
-        Maybe.just(var("term")),                    // default: identity
+    matchWithDefault(Term.TYPE_, var("term"),
+        var("term"),                    // default: identity
         field(Term.ANNOTATED,                       // handle one case
             lambda("at", annotatedTermBody(var("at"))))));
 ```
@@ -701,8 +709,8 @@ Bind a local transform, pass it to a rewriting function:
 TypedTerm<Object> fn = lambda("typ",
     let1("f",
         lambda("recurse", lambda("t",
-            cases(Type.TYPE_, var("t"),
-                Maybe.just(apply(var("recurse"), var("t"))),
+            matchWithDefault(Type.TYPE_, var("t"),
+                apply(var("recurse"), var("t")),
                 field(Type.ANNOTATED,
                     lambda("at",
                         apply(var("recurse"),
@@ -723,8 +731,8 @@ TypedTerm<Object> vars = let1("dfltVars",
         setsEmpty(),
         apply(var("subterms"), var("term"))),
     // then match on specific cases...
-    cases(Term.TYPE_, var("term"),
-        Maybe.just(var("dfltVars")),
+    matchWithDefault(Term.TYPE_, var("term"),
+        var("dfltVars"),
         // ...
     ));
 ```
@@ -735,8 +743,8 @@ Check whether a variable is shadowed before rewriting:
 
 ```java
 TypedTerm<Object> replaceFn = lambda("recurse", lambda("t",
-    cases(Term.TYPE_, var("t"),
-        Maybe.just(apply(var("recurse"), var("t"))),
+    matchWithDefault(Term.TYPE_, var("t"),
+        apply(var("recurse"), var("t")),
         field(Term.LAMBDA,
             lambda("l",
                 // Stop if lambda shadows our variable

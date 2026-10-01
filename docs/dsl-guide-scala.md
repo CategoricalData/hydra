@@ -229,11 +229,17 @@ the gap, or the idiom doesn't apply to Scala's laziness model:
   `lazy val` at each `lazy val fooDef` call site plus a by-name parameter on `DefBuilder.to` — three
   different mechanisms converging on the same guarantee (forward/cross-references between
   definitions resolve regardless of source order).
-- **No typed generated-DSL reference layer yet.** Java has `hydra.core.dsl.Strip`/`hydra.core.dsl.Serialization`-style
-  typed, rename-safe references to kernel functions (#467); Scala doesn't generate these yet.
+- **Typed generated-DSL references exist but are not yet adopted.** The generated term-module DSLs
+  (#467) are emitted for Scala as for every other target (e.g. `hydra.core.dsl.strip`,
+  `hydra.core.dsl.serialization`, with signatures such as
+  `deannotateType(arg0: TypedTerm[Type]): TypedTerm[Type]`), and the coder sources already import the
+  generated type-module DSLs (`hydra.core.dsl.{model, ast, ...}`) and primitive wrappers
+  (`hydra.core.dsl.lib.*`).
+  However, the Scala coder sources do not yet use the term-module references: calls into kernel
+  functions are still spelled as raw name strings passed to `applyP`/`v`
+  (e.g. `applyP("hydra.core.strip.deannotateType", v("t"))`), as before #553.
   `makeLocal` covers *intra-package* Scala-to-Scala references (self/cross-module within
-  `hydra.sources.scala`) but not typed references into the kernel or other packages — those are
-  still spelled as raw primitive-name strings passed to `applyP`/`v`, same as before #553.
+  `hydra.sources.scala`).
 
 ## Generation pipeline
 

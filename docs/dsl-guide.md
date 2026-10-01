@@ -224,7 +224,7 @@ or modules containing type definitions. See `Hydra/Sources/Test` for real exampl
 import Hydra.Core.Model
 
 myFunction :: Term
-myFunction = TermFunction $ FunctionLambda $
+myFunction = TermLambda $
   Lambda (Name "x") Nothing (TermLiteral $ LiteralInteger $ IntegerValueInt32 42)
 ```
 
@@ -831,14 +831,19 @@ The entire Hydra kernel is defined using the meta DSLs.
 (see [Sources/Kernel/Types](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types)):
 - `Hydra/Sources/Kernel/Types/Core.hs` - Core type definitions (Type, Term, etc.)
 - `Hydra/Sources/Kernel/Types/Graph.hs` - Graph and module types
-- These modules import `qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T` along with unqualified operators `(>:)`, `(@@)`, `(~>)`
+- These modules import `qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T`
+  along with unqualified operators `(>:)`, `(@@)`, `(~>)`
 
 **Term modules**
 (see [Sources/Kernel/Terms](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms)):
 - `Hydra/Sources/Kernel/Terms/Inference.hs` - Type inference algorithm
 - `Hydra/Sources/Kernel/Terms/Reduction.hs` - Term reduction logic
-- `overlay/haskell/hydra-kernel/.../Hydra/Core/Overlay/Haskell/Libraries.hs` - host-side primitive registry (names derived from PrimitiveDefinitions)
-- These modules import `Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms` (unqualified)
+- `overlay/haskell/hydra-kernel/.../Hydra/Core/Overlay/Haskell/Libraries.hs` - host-side primitive registry
+  (names derived from PrimitiveDefinitions)
+- These modules import `Hydra.Core.Overlay.Haskell.Dsl.Phantoms` unqualified (the phantom-typed term DSL),
+  plus qualified helpers such as `Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms as MetaTerms`,
+  `Hydra.Core.Overlay.Haskell.Dsl.Meta.Core as Core`, and the generated `Hydra.Core.Dsl.Lib.*` primitive wrappers
+  (copy the import block from an existing module such as `Reduction.hs`)
 
 ## Operator reference
 
@@ -861,7 +866,9 @@ The entire Hydra kernel is defined using the meta DSLs.
 
 | Operator | DSL | Type | Description | Example |
 |----------|-----|------|-------------|---------|
-| `>:` | All | `String -> a -> (TypedTerm Name, a)` | Field definition | `"name">: value` |
+| `>:` | Phantom | `AsTerm t a => String -> t -> Field` | Field definition | `"name">: value` |
+| `>:` | Base | `String -> a -> (TypedTerm Name, a)` | Record field (tuple) | `"name">: value` |
+| `>:` | Types | `AsType a => String -> a -> FieldType` | Field type in a record/union type | `"name">: T.string` |
 | `>>:` | Base | `Name -> a -> (TypedTerm Name, a)` | Record field (tuple) | `fname>>: value` |
 
 ### Pattern matching
@@ -947,8 +954,9 @@ handleOptional = Optionals.cases optValue
   defaultValue                          -- the `nothing` case
   ("val" ~> processValue (var "val"))   -- the `just` case
 
--- Match on a (hypothetical) union type with `match` / `>>:`
-handleResult = match _Result Nothing [
+-- Match on a (hypothetical) union type with `cases` / `>>:` (an unapplied case function;
+-- use `match _Result subject Nothing [...]` to apply it to a subject directly)
+handleResult = cases _Result Nothing [
   _Result_success >>: "val" ~> var "val",
   _Result_error >>: "err" ~> handleError (var "err")]
 ```
@@ -992,7 +1000,8 @@ sum = Lists.foldl (lambda "acc" (lambda "x" (Math.add (var "acc") (var "x")))) (
 ```
 
 **Note on naming conflicts**: In this example, `Lists.map` is qualified because the `Lists` library is imported.
-If you also need `Hydra.Core.Overlay.Haskell.Dsl.Terms.map` (for constructing Map terms), you would use `Terms.map` to disambiguate:
+If you also need `Hydra.Core.Overlay.Haskell.Dsl.Terms.map` (for constructing Map terms),
+you would use `Terms.map` to disambiguate:
 
 ```haskell
 import Hydra.Core.Overlay.Haskell.Dsl.Terms as Terms
@@ -1164,14 +1173,14 @@ var "add" @@ int32 2 @@ int32 3
 ### Data access
 
 ```haskell
--- Project field from record (requires type name and field name)
-project (Name "Person") (Name "name") (var "person")
+-- Project field from record (a projection is a function; apply it to the record)
+project (Name "Person") (Name "name") @@ var "person"
 
 -- Or with generated constants from meta DSLs
-project _Person _Person_name (var "person")
+project _Person _Person_name @@ var "person"
 
--- Extract value from union
-match _Result Nothing [
+-- Extract value from union (match applies the case function to a subject)
+match _Result (var "result") Nothing [
   _Result_success >>: "val" ~> var "val",
   _Result_error >>: "err" ~> string "error"]
 ```
@@ -1388,7 +1397,7 @@ If `Phantoms` is imported qualified (as in test source files), the unqualified `
 
 ```haskell
 -- Error: Couldn't match expected type 'Field' with actual type '(TypedTerm Name, TypedTerm (a -> b))'
-Phantoms.cases _Term (Phantoms.var "t") (Just defaultVal) [
+Phantoms.match _Term (Phantoms.var "t") (Just defaultVal) [
   _Term_literal >>: Phantoms.lambda "lit" $ ...]   -- >>: is Base.>>:, returns a tuple
 ```
 
@@ -1404,7 +1413,7 @@ Phantoms.cases _Term (Phantoms.var "t") (Just defaultVal) [
 (~>:) = (Phantoms.>>:)
 infixr 0 ~>:
 
-Phantoms.cases _Term (Phantoms.var "t") (Just defaultVal) [
+Phantoms.match _Term (Phantoms.var "t") (Just defaultVal) [
   _Term_literal ~>: Phantoms.lambda "lit" $ ...]   -- correct: produces a Field
 ```
 
