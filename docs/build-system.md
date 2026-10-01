@@ -186,8 +186,9 @@ For TypeScript, Step 0 of assemble invokes `copy-kernel-runtime.sh` directly;
 for Haskell the overlay runs as a step of `sync-haskell.sh`.
 
 The copy is a *merge* into the generated tree, not a wholesale overwrite —
-several subdirectories (e.g. `hydra/json/`) contain both generated and
-hand-written files and would clobber the generator's output if replaced.
+some directories contain both generated and hand-written files and would clobber the generator's output if replaced.
+For example, `hydra/core/` holds the generated kernel modules alongside the overlay's
+`hydra/core/overlay/<lang>/` subtree (and, for Python, the hand-written `hydra/core/py.typed`).
 (For Java/Python, the script appends every copied path to a manifest consumed by
 `bootstrap-from-json --keep-paths-from`, which protects hand-copied files
 from the `--prune-stale` deletion pass.)
@@ -209,7 +210,7 @@ developer rollup, not copied.
 | Java | `overlay/java/hydra-kernel/`: `hydra/core/overlay/java/`: `Adapters.java`, `Coders.java`, full `{util,lib,dsl,tools}/`, `json/{JsonEncoding,JsonDecoding}.java` | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~282 |
 | Python | `overlay/python/hydra-kernel/`: `hydra/core/overlay/python/{lib,dsl,sources,util}/` + `tools.py`, `hydra/core/py.typed` (main, no `hydra/__init__.py` — PEP 420); `hydra/core/overlay/python/test_env.py` (test bridge). All overlay Python modules use the `hydra.core.overlay.python.*` namespace (#501). | `copy-kernel-runtime.sh` (Step 0 of assemble; copies overlay main + test) | ~41+3 |
 | TypeScript | `overlay/typescript/hydra-kernel/`: `hydra/core/{bootstrap,primitives,runtime}.ts`, `hydra/core/overlay/typescript/lib/*.ts` (main); `hydra/core/test/{testEnv,jsonBindings}.ts` (test) | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~19 |
-| Go (head bud) | `overlay/go/hydra-kernel/`: `hydra/core/overlay/go/lib/*` primitive impls (only `lib/literals` implemented; rest are package stubs). Generated code imports these via the dist-local module path `hydra.dev/hydra/lib/...` | `copy-kernel-runtime.sh` (Step 3 of assemble, post-prune) | ~13 |
+| Go (head bud) | `overlay/go/hydra-kernel/`: `hydra/core/overlay/go/lib/<name>/` primitive impls plus `util/` and `libraries/` runtime helpers. Generated code is rooted at the dist-local Go module `hydra.dev`, but the Go coder (`packages/hydra-go/.../Go/Coder.hs`) and the overlay's own imports still use the pre-#729 paths `hydra.dev/hydra/overlay/go/{util,lib/<name>}`, which do not yet match the overlay's on-disk `hydra/core/overlay/go/` location (migration incomplete) | `apply-assembly-plan.sh go hydra-kernel` (Step 3 of assemble, post-prune) | ~25 |
 | Lisp dialects (clojure, scheme, common-lisp, emacs-lisp) | `overlay/<dialect>/hydra-kernel/`: the loader/prims/lazy/prelude/json-reader runtime + the `hydra/core/overlay/<dialect>/` library registry and `lib/*` native impls (Scheme: `hydra/overlay/scheme/`; + Scheme's `scheme/`/`srfi/` externals) + the test bridge. Copied by common.sh's `lisp_copy_overlay` (Step 3, kernel-only). Each dialect's test runner loads the runtime from `dist/`. Common Lisp's `struct-compat.lisp` is generated into dist by gen-compat.sh (not overlay). | ~17 (clojure) – ~42 (scheme) |
 | Scala | `overlay/scala/hydra-kernel/`: `hydra/core/overlay/scala/{Libraries.scala,lib/*.scala,dsl/*.scala}` (#501 namespace, main); `hydra/core/{TestSuiteRunner,test/testEnv}.scala` (test). build.sbt lists the dist copy on `unmanagedSourceDirectories`. | `copy-kernel-runtime.sh` | ~25 |
 
@@ -609,7 +610,8 @@ target's stamp; a single bad host can be pinned back via `hostOverrides`, which
 invalidates only that host's stamp. This is the cache half of
 [#370](https://github.com/CategoricalData/hydra/issues/370) (external versioned hosts):
 #347 wires the cache to key off published versions; #370 makes the build actually consume
-those published artifacts. Since the published-host migration (#370, 0.16) the **Java and Python DSL→JSON steps consume the
+those published artifacts.
+Since the published-host migration (#370, 0.16) the **Java and Python DSL→JSON steps consume the
 published host by default**, and the **Haskell host links the published `hydra-kernel` +
 `hydra-haskell` from Hackage** for its own compile — see
 [Consuming published hosts](#consuming-published-hosts) below.
@@ -1080,8 +1082,13 @@ Both pieces are independent and can land separately. The T-side is closer to don
 ## See also
 
 - [#347 Merkle trees for cache invalidation](https://github.com/CategoricalData/hydra/issues/347) — this issue.
-- [#329 Definition-level change detection](https://github.com/CategoricalData/hydra/issues/329) — finer-grained source-side invalidation; orthogonal to #347 but composable.
-- [#343 Finalize JSON format](https://github.com/CategoricalData/hydra/issues/343) — `encoderId` was introduced here; closed.
-- [#344 Native DSL sources for hydra-java and hydra-python](https://github.com/CategoricalData/hydra/issues/344) — drives Phase 5.
-- [#233 Per-package DSL wrappers](https://github.com/CategoricalData/hydra/issues/233) — cross-referenced from #347 because of the `dslTypeModules` ↔ `writeDslHaskell` gap.
-- [Validation wiki](https://github.com/CategoricalData/hydra/wiki/Validation) — the package/module/term/type validation framework enforced during Phase 1.
+- [#329 Definition-level change detection](https://github.com/CategoricalData/hydra/issues/329) — finer-grained
+  source-side invalidation; orthogonal to #347 but composable.
+- [#343 Finalize JSON format](https://github.com/CategoricalData/hydra/issues/343) — `encoderId` was introduced here;
+  closed.
+- [#344 Native DSL sources for hydra-java and hydra-python](https://github.com/CategoricalData/hydra/issues/344) —
+  drives Phase 5.
+- [#233 Per-package DSL wrappers](https://github.com/CategoricalData/hydra/issues/233) — cross-referenced from #347
+  because of the `dslTypeModules` ↔ `writeDslHaskell` gap.
+- [Validation wiki](https://github.com/CategoricalData/hydra/wiki/Validation) — the package/module/term/type validation
+  framework enforced during Phase 1.

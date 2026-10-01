@@ -15,7 +15,7 @@ and serves as a reference for adding other constructs like pairs, sum types, etc
 - [Step-by-Step Guide](#step-by-step-guide)
   - [Step 1: Update Core Schema](#step-1-update-core-schema)
   - [Step 2: Verify DSL Constructors](#step-2-verify-dsl-constructors)
-  - [Step 2.5: Update Variants and Mantle DSL](#step-25-update-variants-and-mantle-dsl)
+  - [Step 2.5: Update Variants and the variant DSL helpers](#step-25-update-variants-and-the-variant-dsl-helpers)
   - [Step 3: Add Type Inference](#step-3-add-type-inference)
   - [Step 3.5: Add Type Checking](#step-35-add-type-checking)
   - [Step 4: Update Rewriting Functions](#step-4-update-rewriting-functions)
@@ -141,7 +141,7 @@ def "Term" $
 
 ### Step 2: Verify DSL Constructors
 
-**File:** `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/Phantoms.hs`
+**File:** `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Phantoms.hs`
 
 For term constructors, check that term-level constructors exist in the DSL:
 
@@ -159,33 +159,37 @@ following existing patterns like `just` and `nothing` for `Maybe`.
 
 ---
 
-### Step 2.5: Update Variants and Mantle DSL
+### Step 2.5: Update Variants and the variant DSL helpers
 
-#### 2.5.1: Update Hydra.Core.Variants
+#### 2.5.1: Update Hydra.Core.Reflect
 
-**File:** `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Variants.hs`
+**Source:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Reflect.hs` (module `hydra.core.reflect`)
 
-This is a generated file, but you'll need to manually patch it during bootstrap. Add two things:
+**Generated:** `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Reflect.hs`
+
+Add the new constructor to the source definitions.
+During bootstrap you'll also need to manually patch the generated file.
+Add two things:
 
 1. **Add case to `termVariant` function:**
 ```haskell
-termVariant :: (Core.Term -> Mantle.TermVariant)
+termVariant :: Core.Term -> Variants.TermVariant
 termVariant x = case x of
-  Core.TermAnnotated _ -> Mantle.TermVariantAnnotated
-  Core.TermApplication _ -> Mantle.TermVariantApplication
-  Core.TermEither _ -> Mantle.TermVariantEither  -- ← ADD THIS
-  Core.TermFunction _ -> Mantle.TermVariantFunction
+  Core.TermAnnotated _ -> Variants.TermVariantAnnotated
+  Core.TermApplication _ -> Variants.TermVariantApplication
+  Core.TermEither _ -> Variants.TermVariantEither  -- ← ADD THIS
+  Core.TermFunction _ -> Variants.TermVariantFunction
   -- ...
 ```
 
 2. **Add to `termVariants` list:**
 ```haskell
-termVariants :: [Mantle.TermVariant]
+termVariants :: [Variants.TermVariant]
 termVariants = [
-  Mantle.TermVariantAnnotated,
-  Mantle.TermVariantApplication,
-  Mantle.TermVariantEither,  -- ← ADD THIS (alphabetical order)
-  Mantle.TermVariantFunction,
+  Variants.TermVariantAnnotated,
+  Variants.TermVariantApplication,
+  Variants.TermVariantEither,  -- ← ADD THIS (alphabetical order)
+  Variants.TermVariantFunction,
   -- ...
 ]
 ```
@@ -203,16 +207,17 @@ bootstrap may also require temporary patches to these generated modules:
 These patches are only to break the circular dependency. A successful sync
 should regenerate them from `Hydra.Sources.Kernel.Types.Variants`.
 
-#### 2.5.2: Update Hydra.Dsl.Mantle
+#### 2.5.2: Update the variant DSL helpers
 
-**File:** `heads/haskell/src/main/haskell/Hydra/Dsl/Mantle.hs`
+**File:** `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Meta/Variants.hs`
+(module `Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants`, a hand-written layer over the generated
+`Hydra.Core.Dsl.Variants`)
 
-Add DSL helpers for the variant metadata:
+Add the new case to the Haskell-enum-to-term converter:
 
-1. **Add case to `termVariant` pattern match:**
 ```haskell
 termVariant :: TermVariant -> TypedTerm TermVariant
-termVariant v = unitVariant _TermVariant $ case v of
+termVariant v = injectUnit _TermVariant $ case v of
   TermVariantAnnotated -> _TermVariant_annotated
   TermVariantApplication -> _TermVariant_application
   TermVariantEither -> _TermVariant_either  -- ← ADD THIS
@@ -220,20 +225,16 @@ termVariant v = unitVariant _TermVariant $ case v of
   -- ...
 ```
 
-2. **Add helper function:**
-```haskell
-termVariantEither :: TypedTerm TermVariant
-termVariantEither = unitVariant _TermVariant _TermVariant_either
-```
-
-Place in alphabetical order among the other `termVariantX` helpers.
+Per-constructor helpers such as `termVariantEither` are generated into `Hydra.Core.Dsl.Variants`
+(re-exported by this module), so they need a bootstrap patch only, not a hand-written definition.
 
 #### 2.5.3: Update Variant Enum Definitions (CRITICAL!)
 
 **File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs`
 
 > **⚠️ CRITICAL:** You MUST add your new constructor to the TermVariant and TypeVariant enum definitions
-> in the Variants module (module name `hydra.core.variants`). This is the source of the "No such field: X" error during code generation.
+> in the Variants module (module name `hydra.core.variants`).
+> This is the source of the "No such field: X" error during code generation.
 
 Add to the `TermVariant` enum (around line 70-91):
 ```haskell
@@ -850,7 +851,7 @@ ulimit -n 4096; stack test
 | `unexpected type: either<...>` in codegen | Coder doesn't know how to encode the type | Manually patch `Hydra/Haskell/Coder.hs` |
 | Type signature mismatch | Using wrong bind operations | Use `Eithers.bind` for Either binds, `<~` for pure lets |
 | Missing rewrite function cases | Forgot to add to all rewriting variants | Search for `_Term_maybe` in `Rewriting.hs` to find all functions needing updates |
-| Variants not updated | Missing from `Hydra.Core.Variants` or `Hydra.Dsl.Mantle` | Add to `termVariant` function, `termVariants` list, and DSL helpers |
+| Variants not updated | Missing from `Hydra.Core.Reflect` or `Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants` | Add to `termVariant` function, `termVariants` list, and DSL helpers |
 | Language support missing | Constructor not in language definition | Add to `termVariants` in `Hydra/Sources/Python/Language.hs` (or other language) and regenerate |
 | `typeVariantX` not in scope during bootstrap | Generated variant enum/DSL files do not yet include the new `TypeVariant` case | Temporarily patch `Hydra/Core/Variants.hs`, `Hydra/Core/Dsl/Variants.hs`, `Hydra/Core/Encode/Variants.hs`, and `Hydra/Core/Decode/Variants.hs`, then rerun sync |
 | `resource exhausted (Too many open files)` during JSON export or test source discovery | Process file descriptor limit is too low | Run sync/tests with `ulimit -n 4096` |
@@ -890,7 +891,8 @@ ulimit -n 4096; stack test
    Search the file for existing constructors like `_Term_maybe`
    to see all the places you need to add your constructor.
 
-9. **Update variants metadata** - Both `Hydra.Core.Variants` and `Hydra.Dsl.Mantle` need updates
+9. **Update variants metadata** - `hydra.core.variants`, `hydra.core.reflect`, and
+   `Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants` need updates
    for language support and introspection
 
 10. **Test target languages** - If you regenerate Python/Java/Scala, verify the generated code compiles
@@ -908,7 +910,7 @@ ulimit -n 4096; stack test
 - [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs` (**CRITICAL!**)
   - [ ] Add to `TermVariant` and/or `TypeVariant` enum definition
 
-- [ ] `heads/haskell/src/main/haskell/Hydra/Dsl/Mantle.hs`
+- [ ] `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Meta/Variants.hs`
   - [ ] Add variant pattern-match case and helper function
 
 - [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Inference.hs`
@@ -949,7 +951,8 @@ ulimit -n 4096; stack test
 
 ### Source Files (Sometimes Modified)
 
-- [ ] `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/Phantoms.hs` - Add DSL constructors if missing (#473)
+- [ ] `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Phantoms.hs` - Add DSL constructors
+      if missing (#473)
 - [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Extract/Core.hs` - Add extraction logic
 - [ ] `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` - Register library functions (#473)
 
@@ -1319,12 +1322,11 @@ one mid-build is much harder than finding it up front.
 
 4. **Sweep hand-written record-syntax sites.** Patch record-construction
    `field = value` syntax in:
-   - `heads/haskell/src/main/haskell/Hydra/Dsl/Bootstrap.hs`
+   - `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Bootstrap.hs`
    - `heads/haskell/src/main/haskell/Hydra/Generation.hs` (where the
      `definitionAsBinding` / `moduleAsBindings` helpers live; previously
      `Hydra.Module.Compat`, retired in 0.16)
    - `heads/haskell/src/exec/verify-json-kernel/Main.hs`
-   - `heads/haskell/src/test/haskell/Hydra/EvalPrimitives.hs`
    - `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Bootstrap.hs`
    - `demos/src/main/haskell/Hydra/Demos/<Demo>/Modules.hs`
 
@@ -1506,7 +1508,8 @@ there are two extra concerns:
    shape is picked up automatically on the next sync.
    If the synthesis produces incorrect output for the new shape (e.g., a
    `string → (unit → string)` change where the encoder must force a thunk),
-   fix the synthesizer (`Hydra.CodeGeneration`) rather than patching generated files.
+   fix the synthesizer (`encodeModule` / `decodeModule` in `hydra.core.encoding` / `hydra.core.decoding`)
+   rather than patching generated files.
    Without a correct synthesizer, `update-json-main` will fail type inference with
    `cannot unify string with (unit → string)` once the schema flips.
 
@@ -1600,9 +1603,9 @@ This is a rename *plus* a new type, with two extra concerns beyond the rename pl
 2. **A new *type* (not just a renamed field) requires a synthesizer-level fix.**
    The encode/decode modules are synthesized in-memory from the schema (#448);
    `update-json` uses them before writing JSON. If the synthesizer
-   (`Hydra.CodeGeneration`) doesn't yet know how to handle the new type, its
+   (`hydra.core.encoding` / `hydra.core.decoding`) doesn't yet know how to handle the new type, its
    container's encoder/decoder will reference a non-existent
-   `hydra.{encode,decode}.core.<newType>`.
+   `hydra.core.{encode,decode}.model.<newType>`.
    Fix the synthesizer for the new type, or — as a temporary bootstrap patch —
    pre-seed the universe by adding the new type's encoder/decoder Module value
    directly to the driver's universe list in `update-json-main/Main.hs`.

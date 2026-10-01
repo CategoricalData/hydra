@@ -158,7 +158,8 @@ gap where a host with a subtly wrong value-equality could pass:
 
 1. **The rendering is information-preserving.** Types and terms are rendered through Hydra's textual
    syntax (`hydra.core.print.*`), for which `parse (print x) == x` holds by design (the round-trip law; see the
-   `printable` capability and the [serialization spec](https://github.com/CategoricalData/hydra/blob/main/docs/specification/serialization.md)).
+   `printable` capability and the
+   [serialization spec](https://github.com/CategoricalData/hydra/blob/main/docs/specification/serialization.md)).
    Two values render to the same string exactly when they are the same value — so string equality of the
    renderings *is* value equality, not a lossy proxy for it.
 2. **The renderer is translingual.** `hydra.core.print.*` is itself Hydra code, generated into every host and
@@ -559,7 +560,8 @@ project (Core.name "Person") (Core.name "firstName")
 
 ### 2. Keep the hydra-kernel test suite language-agnostic
 
-The hydra-kernel test suite (`hydra.core.test.*`) must not depend on any other package's modules (`hydra.<package>.*`, e.g. `hydra.pg.*`).
+The hydra-kernel test suite (`hydra.core.test.*`) must not depend on any other package's modules (`hydra.<package>.*`,
+e.g. `hydra.pg.*`).
 Every test runner — Haskell, Java, Python, and future implementations — must be able
 to run the common tests without shipping language-specific extension modules. If a
 test needs data values that happen to exist in an extension module (e.g., operator

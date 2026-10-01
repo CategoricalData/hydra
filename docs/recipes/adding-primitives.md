@@ -270,7 +270,8 @@ or description. There is no separate hand-maintained name index: the old
 
 A primitive's name is declared once, in its kernel `PrimitiveDefinition`. From there (#473):
 
-1. Code generation emits a per-host `hydra.core.lib.*` **def-module** for each kernel `Hydra/Sources/Kernel/Lib/<Sub>.hs`,
+1. Code generation emits a per-host `hydra.core.lib.*` **def-module** for each kernel
+   `Hydra/Sources/Kernel/Lib/<Sub>.hs`,
    carrying the `PrimitiveDefinition` (name + signature + metadata) as data. Defs live at `hydra.core.lib.<sub>`;
    the native implementations live alongside at `hydra.core.overlay.<lang>.lib.<sub>` (mirroring Haskell's
    `Hydra.Core.Overlay.Haskell.Lib.*`).
@@ -435,7 +436,8 @@ validator enforces this.
 
 #### Haskell
 
-Add the implementation in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib/<Library>.hs` (#418):
+Add the implementation in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib/<Library>.hs`
+(#418):
 
 ```haskell
 -- Hydra/Core/Overlay/Haskell/Lib/Chars.hs
@@ -588,7 +590,8 @@ Note: the error type is `hydra.core.errors.Error_` (trailing underscore) — Hyd
 
 **Higher-order primitives in Java:** when the primitive takes function arguments,
 the `implementation()` method must use `Reduction.reduceTerm(cx, graph, eager, term)`
-to evaluate function applications. See `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/lists/Foldr.java`
+to evaluate function applications.
+See `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/lists/Foldr.java`
 for an example that iterates in reverse and reduces on each step.
 
 Then register the new primitive in
@@ -614,7 +617,8 @@ expansion for you.
 
 #### Python
 
-Add the implementation in `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/lib/<library>.py` (#418):
+Add the implementation in `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/lib/<library>.py`
+(#418):
 
 ```python
 def is_alpha_num(value: int) -> bool:
@@ -623,7 +627,8 @@ def is_alpha_num(value: int) -> bool:
 ```
 
 Then register it in the Python source registry at
-`overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/sources/libraries.py` (#418). Each module name has
+`overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/sources/libraries.py` (#418).
+Each module name has
 its own `register_<sub>_primitives()` function that returns a
 `dict[Name, Primitive]`; add an entry there using `prims.prim1` /
 `prims.prim2` / `prims.prim3` to match the kernel signature:
@@ -763,7 +768,8 @@ When adding a new primitive function:
   - [ ] Registration via `primN Def<Library>.<fn> ...` in `Hydra.Core.Overlay.Haskell.Libraries`
   - [ ] DSL wrapper generated at `Hydra.Core.Dsl.Lib.<Library>` (no manual step — see Step 4)
 - [ ] **Java**
-  - [ ] `PrimitiveFunction` class in `hydra.core.overlay.java.lib.<library>` (its `name()` returns `hydra.core.lib.<Lib>.<fn>().name`)
+  - [ ] `PrimitiveFunction` class in `hydra.core.overlay.java.lib.<library>` (its `name()` returns
+        `hydra.core.lib.<Lib>.<fn>().name`)
   - [ ] Registration in `Libraries.java`
 - [ ] **Python**
   - [ ] Function in `hydra.core.overlay.python.lib.<library>`

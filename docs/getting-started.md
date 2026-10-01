@@ -10,7 +10,8 @@ For library users the common use cases are:
 
 - **Typed property-graph construction and validation** (TinkerPop, Neo4j, Neptune)
 - **Schema-driven coders** between Avro, Protobuf, JSON Schema, GraphQL, PDL, RDF, etc.
-- **Code generation** of typed data structures from Hydra modules into Java / Python / Scala / TypeScript / Lisp dialects
+- **Code generation** of typed data structures from Hydra modules into Java / Python / Scala / TypeScript / Lisp
+  dialects
 
 The library shape is the same on every host: depend on the package, import what you need, call functions.
 There is no CLI to invoke; you are integrating Hydra into your own application.
@@ -22,7 +23,8 @@ There is no CLI to invoke; you are integrating Hydra into your own application.
 
 ## Java
 
-Hydra publishes one Maven artifact per package. Pick the ones you need; coordinates are under group `net.fortytwo.hydra.java`, all at the same version.
+Hydra publishes one Maven artifact per package.
+Pick the ones you need; coordinates are under group `net.fortytwo.hydra.java`, all at the same version.
 
 Host-specific integrations (the Java rdf4j binding, ANTLR-based Cypher/openGQL parsers, TinkerPop/Gremlin
 bridges, and the Java PG DSL builders) are not separate artifacts — they ship inside the corresponding
@@ -126,7 +128,8 @@ to both conda-forge and PyPI.
 conda install -c conda-forge hydra-kernel hydra-pg
 ```
 
-After install, the packages expose `hydra.core.model`, `hydra.pg.model`, `hydra.core.validate.model`, `hydra.pg.validate.model`,
+After install, the packages expose `hydra.core.model`, `hydra.pg.model`, `hydra.core.validate.model`,
+`hydra.pg.validate.model`,
 `hydra.core.print.model`, `hydra.core.error.model`, `hydra.pg.error.model`, etc.
 
 ### Local install from the repo
@@ -173,7 +176,8 @@ else:
 ```
 
 For low-level access without HydraPop, import the kernel directly. The DSL helpers in
-`hydra.core.overlay.python.dsl.literal_types` and `hydra.core.overlay.python.dsl.literals` provide convenience constructors:
+`hydra.core.overlay.python.dsl.literal_types` and `hydra.core.overlay.python.dsl.literals` provide convenience
+constructors:
 
 ```python
 from hydra.core.overlay.python.dsl import literal_types, literals
@@ -309,7 +313,9 @@ The full primitive lexicon is in
 
 ## Next steps
 
-- **Construct a typed schema**: see the per-language DSL guides ([Java](dsl-guide-java.md), [Python](dsl-guide-python.md), [Scala](dsl-guide-scala.md), [Haskell](dsl-guide.md)).
-- **Convert schemas between formats**: see the coder documentation in `hydra-ext` (Avro ↔ Protobuf ↔ JSON Schema ↔ GraphQL, etc.).
+- **Construct a typed schema**: see the per-language DSL guides ([Java](dsl-guide-java.md),
+  [Python](dsl-guide-python.md), [Scala](dsl-guide-scala.md), [Haskell](dsl-guide.md)).
+- **Convert schemas between formats**: see the coder documentation in `hydra-ext` (Avro ↔ Protobuf ↔ JSON Schema ↔
+  GraphQL, etc.).
 - **Generate code from a schema**: see [Generating code with Hydra](recipes/code-generation.md).
 - **Reference project**: [HydraPop](https://github.com/CategoricalData/HydraPop) — TinkerPop validation, Java + Python.

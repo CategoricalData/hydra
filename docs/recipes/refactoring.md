@@ -6,7 +6,7 @@ and propagate the changes across all implementations.
 ## Overview
 
 Hydra kernel code lives in multiple places:
-- **Source modules** (`packages/hydra-haskell/src/main/haskell/Hydra/Sources/...`) - DSL definitions
+- **Source modules** (`packages/hydra-<pkg>/src/main/haskell/Hydra/Sources/...`) - DSL definitions
 - **Generated Haskell** (`dist/haskell/hydra-kernel/src/main/haskell/Hydra/...`) - Generated implementations
 - **Generated Python** (`dist/python/hydra-kernel/src/main/python/hydra/...`)
 - **Generated Java** (`dist/java/hydra-kernel/src/main/java/hydra/...`)
@@ -29,7 +29,7 @@ Changes to kernel code must be propagated to all of these locations.
 
 ## Prerequisites
 
-- Working Haskell build environment (`stack build` succeeds in packages/hydra-haskell)
+- Working Haskell build environment (`stack build` succeeds in heads/haskell)
 - Understanding of Hydra's module system and DSL
 - For Python: virtual environment set up in packages/hydra-python
 - For Java: Gradle configured in packages/hydra-java
@@ -40,7 +40,7 @@ Changes to kernel code must be propagated to all of these locations.
 
 ### Step 1: Create the Source File
 
-Create a new file in the appropriate location under `packages/hydra-haskell/src/main/haskell/Hydra/Sources/`.
+Create a new file in the appropriate location under `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/`.
 
 **For a types-only module** (no term definitions):
 ```
@@ -193,8 +193,8 @@ In the source module, remove the element from the `definitions` list.
 
 Search for references to the deleted element:
 ```bash
-grep -rn 'myDeletedFunction' packages/hydra-haskell/src/main/haskell/
-grep -rn 'hydra.core.mymodule.myDeletedFunction' packages/hydra-haskell/src/
+grep -rn 'myDeletedFunction' packages/*/src/main/haskell/
+grep -rn 'hydra.core.mymodule.myDeletedFunction' packages/
 ```
 
 Update or remove all references.
@@ -219,8 +219,8 @@ Remove the import and module reference from `All.hs`.
 
 Search for imports and references:
 ```bash
-grep -rn 'MyModule' packages/hydra-haskell/src/main/haskell/
-grep -rn 'hydra.core.mymodule' packages/hydra-haskell/src/
+grep -rn 'MyModule' packages/*/src/main/haskell/
+grep -rn 'hydra.core.mymodule' packages/
 ```
 
 ### Step 3: Delete the Source File
@@ -253,8 +253,8 @@ The element's fully-qualified name changes (e.g., `hydra.oldmodule.foo` → `hyd
 
 Search and update:
 ```bash
-grep -rn 'hydra.oldmodule.foo' packages/hydra-haskell/src/
-grep -rn 'OldModule.foo' packages/hydra-haskell/src/
+grep -rn 'hydra.oldmodule.foo' packages/
+grep -rn 'OldModule.foo' packages/
 ```
 
 ### Step 3: Update Dependencies
@@ -299,7 +299,7 @@ definitions = [
 
 ### Step 3: Update All References
 
-Search the whole repo, not just `packages/hydra-haskell/`.
+Search the whole repo, not just `packages/hydra-kernel/`.
 Definitions in the kernel are referenced from at least:
 - DSL sources in `packages/hydra-*/src/main/haskell/Hydra/Sources/`
 - Hand-written runtimes in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/`
@@ -388,16 +388,25 @@ for `/sync` to flush out a second round of fixes after the source-and-`dist` pat
 
 ## Moving or Renaming Modules (namespace refactoring)
 
-This is the most complex refactoring operation. A Hydra module name like `hydra.foo` corresponds to:
-- A Haskell source module (e.g., `Hydra/Sources/Kernel/Types/Foo.hs` or `Kernel/Terms/Foo.hs`)
-- Generated Haskell code (e.g., `Hydra/Foo.hs`)
-- Generated decoder/encoder implementations (e.g., `Hydra/Decode/Foo.hs`, `Hydra/Encode/Foo.hs`)
-- Generated Python code (e.g., `hydra/foo.py` or `hydra/foo/__init__.py`)
-- Generated Java code (e.g., `hydra/foo/Element.java`)
-- JSON kernel exports (e.g., `hydra/foo.json`)
+This is the most complex refactoring operation.
+The walkthrough below renames a kernel module `hydra.core.foo` to `hydra.core.foo.bar`.
+Every module name starts with a two-segment package root (`hydra.core` for the kernel, `hydra.pg` for hydra-pg, etc.).
+Derived modules (decoders, encoders, DSL wrappers) insert their category *after* that root,
+so the decoder for `hydra.core.foo` is `hydra.core.decode.foo`, and after the rename it is `hydra.core.decode.foo.bar`
+(see `derivedModuleName` in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Names.hs`).
 
-Note: `Hydra/Sources/Decode/Foo.hs` and `Hydra/Sources/Encode/Foo.hs` no longer exist
-as dist files (#448); the encode/decode modules are synthesized in-memory at runtime.
+A module name like `hydra.core.foo` corresponds to:
+- A Haskell source module (e.g., `Hydra/Sources/Kernel/Types/Foo.hs` or `Kernel/Terms/Foo.hs`)
+- Generated Haskell code (e.g., `Hydra/Core/Foo.hs`)
+- Generated decoder/encoder implementations (e.g., `Hydra/Core/Decode/Foo.hs`, `Hydra/Core/Encode/Foo.hs`)
+- Generated Python code (e.g., `hydra/core/foo.py`)
+- Generated Java code (e.g., `hydra/core/foo/Element.java`)
+- JSON module exports (e.g., `dist/json/hydra-kernel/src/main/json/hydra/core/foo.json`,
+  plus `hydra/core/decode/foo.json` and `hydra/core/encode/foo.json`)
+
+Note: there are no DSL *source* modules for decoders and encoders (the former `Hydra/Sources/Decode/Foo.hs` and
+`Hydra/Sources/Encode/Foo.hs` were removed in #448); the decode/encode modules are synthesized in memory from the type
+modules and then generated like any other module.
 
 ### When You Might Need This
 
@@ -418,9 +427,9 @@ as dist files (#448); the encode/decode modules are synthesized in-memory at run
 2. **Update the module-name declaration**
    ```haskell
    -- Change from:
-   ns = ModuleName "hydra.foo"
+   ns = ModuleName "hydra.core.foo"
    -- To:
-   ns = ModuleName "hydra.foo.bar"
+   ns = ModuleName "hydra.core.foo.bar"
    ```
 
 3. **Update the Haskell module declaration**
@@ -436,100 +445,89 @@ as dist files (#448); the encode/decode modules are synthesized in-memory at run
 1. **Update module registry files**
    - `Hydra/Sources/Kernel/Types/All.hs` — update imports and module lists for the type module.
    - `Hydra/Sources/Kernel/Terms/All.hs` — no decoder/encoder imports needed (#448:
-     encode/decode modules are synthesized in-memory, not imported from dist files).
+     encode/decode modules are synthesized in-memory, not imported from source files).
 
 2. **Update files that reference the old module name.** Use `grep` to find all references:
    ```bash
-   grep -rn 'Hydra\.Foo[^.]' packages/hydra-haskell/src/main/haskell/
-   grep -rn 'hydra\.foo[^.]' packages/hydra-haskell/src/main/haskell/
+   grep -rn 'Hydra\.Core\.Foo[^.]' packages/hydra-kernel/src/main/haskell/ heads/haskell/src/ overlay/haskell/
+   grep -rn 'hydra\.core\.foo[^.]' packages/hydra-kernel/src/main/haskell/ heads/haskell/src/ overlay/haskell/
    ```
 
    Update imports:
    ```haskell
    -- Change:
-   import qualified Hydra.Foo as Foo
+   import qualified Hydra.Core.Foo as Foo
    -- To:
-   import qualified Hydra.Foo.Bar as Foo
+   import qualified Hydra.Core.Foo.Bar as Foo
    ```
 
 3. **Bootstrap the generated module.** If the generated code doesn't exist yet, create a minimal version:
    ```bash
-   mkdir -p dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo
+   mkdir -p dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Foo
    # Create Bar.hs with necessary exports
    ```
 
-4. **Build and verify**
+4. **Build and verify** (from `heads/haskell`)
    ```bash
    stack build
    ```
 
-5. **Move implementation decoder/encoder modules** (not `Sources/` — those are synthesized in-memory, #448):
+5. **Move the generated decoder/encoder modules** (there are no decoder/encoder `Sources/` modules to move, #448):
    ```bash
-   mkdir -p dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Foo
-   mkdir -p dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Foo
-   mv dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Foo.hs \
-      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Foo/Bar.hs
-   mv dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Foo.hs \
-      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Foo/Bar.hs
+   mkdir -p dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Decode/Foo
+   mkdir -p dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Encode/Foo
+   mv dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Decode/Foo.hs \
+      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Decode/Foo/Bar.hs
+   mv dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Encode/Foo.hs \
+      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Encode/Foo/Bar.hs
    ```
 
 6. **Update module declarations in moved files**
    ```bash
-   perl -i -pe 's/module Hydra\.Decode\.Foo where/module Hydra.Decode.Foo.Bar where/g' \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Foo/Bar.hs
-   perl -i -pe 's/module Hydra\.Encode\.Foo where/module Hydra.Encode.Foo.Bar where/g' \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Foo/Bar.hs
+   perl -i -pe 's/module Hydra\.Core\.Decode\.Foo where/module Hydra.Core.Decode.Foo.Bar where/g' \
+     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Decode/Foo/Bar.hs
+   perl -i -pe 's/module Hydra\.Core\.Encode\.Foo where/module Hydra.Core.Encode.Foo.Bar where/g' \
+     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Encode/Foo/Bar.hs
    ```
 
 7. **Update module-name references in generated files.** The generated files contain module-name strings that
    need updating:
    ```bash
-   perl -i -pe 's/hydra\.foo\.Element/hydra.foo.bar.Element/g' \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Foo/Bar.hs \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Foo/Bar.hs
+   perl -i -pe 's/hydra\.core\.foo\.Element/hydra.core.foo.bar.Element/g' \
+     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Decode/Foo/Bar.hs \
+     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Encode/Foo/Bar.hs
    ```
 
-8. **Update import aliases in generated files.** Some generated files import the type module with an alias
-   that should be updated:
+8. **Update imports of the type module in generated files.** Generated files that import the type module
+   need the new module name (the alias can stay as generated):
    ```bash
-   # Change "import qualified Hydra.Foo.Bar as Foo" to "import qualified Hydra.Foo.Bar as Model"
-   # in files that use the module for types (not the module-name DSL)
-   perl -i -pe 's/import qualified Hydra\.Foo\.Bar as Foo/import qualified Hydra.Foo.Bar as Model/g' \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo/Decode.hs \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo/Encode.hs \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Testing.hs
-
-   # Then update the type references
-   perl -i -pe 's/Foo\.Element/Model.Element/g' \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo/Decode.hs \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Testing.hs
+   grep -rln 'import qualified Hydra\.Core\.Foo as' dist/haskell/hydra-kernel/src/ \
+     | xargs perl -i -pe 's/import qualified Hydra\.Core\.Foo as/import qualified Hydra.Core.Foo.Bar as/g'
    ```
 
 9. **Update files that import the decoder/encoder modules**
    ```bash
-   perl -i -pe 's/import qualified Hydra\.Decode\.Foo as Foo/import qualified Hydra.Decode.Foo.Bar as Foo/g' \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Testing.hs
-   perl -i -pe 's/import qualified Hydra\.Encode\.Foo as Foo/import qualified Hydra.Encode.Foo.Bar as Foo/g' \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Testing.hs
+   perl -i -pe 's/import qualified Hydra\.Core\.Decode\.Foo as/import qualified Hydra.Core.Decode.Foo.Bar as/g' \
+     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Decode/Testing.hs
+   perl -i -pe 's/import qualified Hydra\.Core\.Encode\.Foo as/import qualified Hydra.Core.Encode.Foo.Bar as/g' \
+     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Encode/Testing.hs
    ```
 
-10. **Update test files**
+10. **Update test files.** Hand-written specs live in `heads/haskell/src/test/haskell/Hydra/`;
+    generated tests live under `dist/haskell/hydra-kernel/src/test/haskell/Hydra/Core/Test/`.
     ```bash
-    perl -i -pe 's/import Hydra\.Foo \(Element\)/import Hydra.Foo.Bar (Element)/g' \
-      heads/haskell/src/test/haskell/Hydra/Foo/*.hs
-
-    perl -i -pe 's/Foo\.Element/Model.Element/g' \
-      dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/Foo/*.hs
+    grep -rln 'Hydra\.Core\.Foo[^.]' heads/haskell/src/test/haskell/ dist/haskell/hydra-kernel/src/test/haskell/ \
+      | xargs perl -i -pe 's/Hydra\.Core\.Foo\b(?!\.)/Hydra.Core.Foo.Bar/g'
     ```
 
 11. **Clean up orphan files.** Remove any old dist files left at the old locations:
     ```bash
-    rm -f dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Foo.hs
-    rm -f dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Foo.hs
-    rm -f dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo.hs
+    rm -f dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Decode/Foo.hs
+    rm -f dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Encode/Foo.hs
+    rm -f dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Foo.hs
     ```
 
-13. **Rebuild and verify**
+12. **Rebuild and verify** (from `heads/haskell`)
     ```bash
     stack build
     ./bin/update-json-kernel.sh
@@ -541,17 +539,14 @@ as dist files (#448); the encode/decode modules are synthesized in-memory at run
 
 1. **Update source module imports**
    ```bash
-   grep -rln 'import.*Hydra\.Foo[^.]' \
-     packages/hydra-pg/src/main/haskell/ \
-     packages/hydra-rdf/src/main/haskell/ \
-     packages/hydra-ext/src/main/haskell/
+   grep -rln 'import.*Hydra\.Core\.Foo[^.]' packages/*/src/main/haskell/
    ```
 
    Update each file to use the new module name.
 
 2. **Update generated files**
    ```bash
-   grep -rln 'import.*Hydra\.Foo[^.]' dist/haskell/hydra-kernel/src/main/haskell/
+   grep -rln 'import.*Hydra\.Core\.Foo[^.]' dist/haskell/*/src/main/haskell/
    ```
 
 3. **Build and verify**
@@ -561,130 +556,128 @@ as dist files (#448); the encode/decode modules are synthesized in-memory at run
 
 ### Phase 4: Regenerate the Python implementation
 
-1. **Run the Python sync script** from the `heads/haskell` directory:
+1. **Run the Python sync script** from the worktree root:
    ```bash
-   cd heads/haskell
    ./bin/sync-python.sh --no-tests
    ```
 
 2. **Verify the new module structure**
    ```bash
-   ls -la ../heads/python/src/main/python/hydra/foo/
-   # Should show: bar.py (instead of old foo.py)
+   ls -la dist/python/hydra-kernel/src/main/python/hydra/core/foo/
+   # Should show: bar.py (instead of the old hydra/core/foo.py)
    ```
 
 3. **Clean up orphan Python files**
    ```bash
-   rm -f ../heads/python/src/main/python/hydra/foo.py
+   rm -f dist/python/hydra-kernel/src/main/python/hydra/core/foo.py
    ```
 
 4. **Test the Python implementation**
    ```bash
-   cd ../packages/hydra-python
-   source .venv/bin/activate
-   PYTHONPATH=heads/python/src/main/python:dist/python/hydra-kernel/src/test/python \
-     pytest heads/python/src/test/python -x
+   heads/python/bin/test-distribution.sh hydra-kernel
    ```
 
 ### Phase 5: Update the Java implementation
 
 > Note: Java generation may have unrelated issues. Update what you can manually.
 
-1. **Update hand-written utility files**
+1. **Update hand-written overlay files**
    ```bash
-   perl -i -pe 's/import hydra\.foo\.Element;/import hydra.foo.bar.Element;/g' \
-     heads/java/src/main/java/hydra/foo/*.java
+   grep -rln 'hydra\.core\.foo\.Element' overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/ \
+     | xargs perl -i -pe 's/import hydra\.core\.foo\.Element;/import hydra.core.foo.bar.Element;/g'
    ```
 
 2. **Move generated files to new package**
    ```bash
-   mkdir -p dist/java/hydra-kernel/src/main/java/hydra/foo/bar
-   mv dist/java/hydra-kernel/src/main/java/hydra/foo/Element.java \
-      dist/java/hydra-kernel/src/main/java/hydra/foo/bar/
-   perl -i -pe 's/package hydra\.foo;/package hydra.foo.bar;/g' \
-     dist/java/hydra-kernel/src/main/java/hydra/foo/bar/Element.java
-   perl -i -pe 's/hydra\.foo\.Element/hydra.foo.bar.Element/g' \
-     dist/java/hydra-kernel/src/main/java/hydra/foo/bar/Element.java
+   mkdir -p dist/java/hydra-kernel/src/main/java/hydra/core/foo/bar
+   mv dist/java/hydra-kernel/src/main/java/hydra/core/foo/Element.java \
+      dist/java/hydra-kernel/src/main/java/hydra/core/foo/bar/
+   perl -i -pe 's/package hydra\.core\.foo;/package hydra.core.foo.bar;/g' \
+     dist/java/hydra-kernel/src/main/java/hydra/core/foo/bar/Element.java
+   perl -i -pe 's/hydra\.core\.foo\.Element/hydra.core.foo.bar.Element/g' \
+     dist/java/hydra-kernel/src/main/java/hydra/core/foo/bar/Element.java
    ```
 
 3. **Update testing files**
    ```bash
-   perl -i -pe 's/hydra\.foo\.Element/hydra.foo.bar.Element/g' \
-     dist/java/hydra-kernel/src/main/java/hydra/testing/*.java
+   perl -i -pe 's/hydra\.core\.foo\.Element/hydra.core.foo.bar.Element/g' \
+     dist/java/hydra-kernel/src/main/java/hydra/core/testing/*.java
    ```
 
 ### Namespace-refactor verification checklist
 
-- [ ] `packages/hydra-haskell` builds (`stack build`)
+- [ ] `heads/haskell` builds (`stack build`)
 - [ ] Decoder/encoder modules regenerated (GHCi: `writeDecoderSourceHaskell`, `writeEncoderSourceHaskell`)
 - [ ] Orphan files cleaned up (old `.hs` files at previous locations)
-- [ ] `packages/hydra-haskell` tests pass (`stack test`)
-- [ ] JSON kernel regenerated (`./bin/update-json-kernel.sh`)
-- [ ] JSON kernel verified (`./bin/verify-json-kernel.sh`)
-- [ ] Extension packages build (`stack build` in `packages/hydra-pg`, `hydra-rdf`, `hydra-ext`)
-- [ ] Python regenerated (`./bin/sync-python.sh` in `heads/haskell`)
+- [ ] `heads/haskell` tests pass (`stack test`)
+- [ ] JSON kernel regenerated (`heads/haskell/bin/update-json-kernel.sh`)
+- [ ] JSON kernel verified (`heads/haskell/bin/verify-json-kernel.sh`)
+- [ ] Extension packages build (`stack build`)
+- [ ] Python regenerated (`./bin/sync-python.sh` from the worktree root)
 - [ ] Orphan Python files cleaned up
 - [ ] Python tests pass (or at least don't regress)
-- [ ] Java regenerated (`./bin/sync-java.sh` in `heads/haskell`)
+- [ ] Java regenerated (`./bin/sync-java.sh` from the worktree root)
 
 ### Files typically affected by a module-name rename
 
-For a rename from `hydra.foo` to `hydra.foo.bar`:
+For a rename from `hydra.core.foo` to `hydra.core.foo.bar`:
 
 **Kernel DSL source:**
 - `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Foo.hs` → `.../Foo/Bar.hs`
 - `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/All.hs` (types registry)
-- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/All.hs` (terms registry,
-  decoder/encoder imports)
-- `heads/haskell/src/test/haskell/Hydra/Foo/*.hs` (test files)
+- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/All.hs` (terms registry)
+- `heads/haskell/src/test/haskell/Hydra/*Spec.hs` (hand-written test files that import the module)
 
-**Generated (`dist/haskell`):**
-- `Hydra/Foo.hs` → `Hydra/Foo/Bar.hs` (generated types)
-- `Hydra/Sources/Decode/Foo.hs` → `Hydra/Sources/Decode/Foo/Bar.hs`
-- `Hydra/Sources/Encode/Foo.hs` → `Hydra/Sources/Encode/Foo/Bar.hs`
-- `Hydra/Decode/Foo.hs` → `Hydra/Decode/Foo/Bar.hs`
-- `Hydra/Encode/Foo.hs` → `Hydra/Encode/Foo/Bar.hs`
-- `Hydra/Sources/Decode/Testing.hs`, `Hydra/Sources/Encode/Testing.hs` (function references)
-- `Hydra/Testing.hs` (type imports)
-- `Hydra/Test/Foo/*.hs` (generated test files)
+**Generated (`dist/haskell/hydra-kernel`):**
+- `Hydra/Core/Foo.hs` → `Hydra/Core/Foo/Bar.hs` (generated types)
+- `Hydra/Core/Decode/Foo.hs` → `Hydra/Core/Decode/Foo/Bar.hs`
+- `Hydra/Core/Encode/Foo.hs` → `Hydra/Core/Encode/Foo/Bar.hs`
+- `Hydra/Core/Decode/Testing.hs`, `Hydra/Core/Encode/Testing.hs` (function references)
+- `Hydra/Core/Testing.hs` (type imports)
+- `Hydra/Core/Test/**/*.hs` (generated test files)
 
-**Extension packages (`packages/hydra-pg`, `hydra-rdf`, `hydra-ext`):**
-- `packages/hydra-*/src/main/haskell/Hydra/*/Coder.hs` (various coders)
-- `dist/haskell/hydra-*/src/main/haskell/Hydra/*/*.hs` (generated files)
+**Generated (`dist/json/hydra-kernel`):**
+- `hydra/core/foo.json` → `hydra/core/foo/bar.json`
+- `hydra/core/decode/foo.json` → `hydra/core/decode/foo/bar.json`, and likewise for `encode`
 
-**`heads/python`:**
-- `heads/python/src/main/python/hydra/foo.py` → `heads/python/src/main/python/hydra/foo/bar.py`
+**Extension packages (`packages/hydra-pg`, `hydra-rdf`, `hydra-ext`, ...):**
+- `packages/hydra-*/src/main/haskell/Hydra/Sources/**/*.hs` (DSL sources and coders)
+- `dist/haskell/hydra-*/src/main/haskell/Hydra/**/*.hs` (generated files)
 
-**`packages/hydra-java`:**
-- `dist/java/hydra-kernel/src/main/java/hydra/foo/Element.java` → `.../hydra/foo/bar/Element.java`
-- `heads/java/src/main/java/hydra/foo/*.java` (hand-written utilities)
+**Python (`dist/python/hydra-kernel`):**
+- `hydra/core/foo.py` → `hydra/core/foo/bar.py`
+- `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/**/*.py` (hand-written overlay files)
+
+**Java (`dist/java/hydra-kernel`):**
+- `hydra/core/foo/Element.java` → `hydra/core/foo/bar/Element.java`
+- `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/**/*.java` (hand-written overlay files)
 
 ### Namespace-refactor pitfalls
 
-**Import alias conventions.** In **generated implementation code** (e.g., `Hydra/Foo/Decode.hs`), the type
-module is typically imported as `Model`:
+**Import aliases.** Generated implementation code (e.g., `Hydra/Core/Decode/Foo/Bar.hs`) imports the type module
+under an alias chosen by the Haskell coder; only the module name changes on a rename:
 ```haskell
-import qualified Hydra.Foo.Bar as Model
+import qualified Hydra.Core.Foo.Bar as ...
 ```
 
-In **DSL source code** (e.g., `Hydra/Sources/Foo/Decode.hs`), you may keep a shorter alias for convenience:
+In **DSL source code**, you may keep a shorter alias for convenience:
 ```haskell
-import qualified Hydra.Foo.Bar as Foo
+import qualified Hydra.Core.Foo.Bar as Foo
 ```
 
 **Function reference updates.** Generated code contains function references that include the module name, like
-`hydra.decode.foo.element`. When renaming, these become `hydra.decode.foo.bar.element`. Look for these
-patterns:
-- `hydra.decode.<namespace>.element` → `hydra.decode.<new-namespace>.element`
-- `hydra.encode.<namespace>.element` → `hydra.encode.<new-namespace>.element`
+`hydra.core.decode.foo.element`. When renaming, these become `hydra.core.decode.foo.bar.element`.
+The category (`decode`, `encode`, `dsl`) sits right after the package root, not at the front of the name.
+Look for these patterns:
+- `hydra.core.decode.<rest>.element` → `hydra.core.decode.<new-rest>.element`
+- `hydra.core.encode.<rest>.element` → `hydra.core.encode.<new-rest>.element`
 
-**Decoder/encoder module paths.** When renaming `hydra.foo` to `hydra.foo.bar`, the decoder/encoder modules
-also move:
-- `Hydra.Sources.Decode.Foo` → `Hydra.Sources.Decode.Foo.Bar`
-- `Hydra.Decode.Foo` → `Hydra.Decode.Foo.Bar`
+**Decoder/encoder module paths.** When renaming `hydra.core.foo` to `hydra.core.foo.bar`, the decoder/encoder
+modules also move:
+- `Hydra.Core.Decode.Foo` → `Hydra.Core.Decode.Foo.Bar`
 - Same for encode modules.
 
-The `Terms/All.hs` module registry needs to be updated to import from the new paths.
+There are no decoder/encoder `Sources/` modules to move or re-register (#448).
 
 ---
 
@@ -714,7 +707,8 @@ you need to rewrite every consumer of the old types to use the new one, often wi
    - Replace field accessors with the new type's accessors
    - Update DSL helper calls (constructor, `with*` helpers, field projections)
 
-4. **Update DSL helpers** in `Hydra/Core/Overlay/Haskell/Dsl/Meta/`. Delete old constructors and accessors, add new ones or rename as appropriate.
+4. **Update DSL helpers** in `Hydra/Core/Overlay/Haskell/Dsl/Meta/`.
+   Delete old constructors and accessors, add new ones or rename as appropriate.
 
 5. **Delete the old type** once no consumers remain.
    Remove it from the type definition source and the module's element list.
@@ -725,20 +719,22 @@ you need to rewrite every consumer of the old types to use the new one, often wi
 
 ### Updating Non-Generated Code
 
-Type consolidation affects not only Sources and the generated `dist/haskell/<pkg>/` trees, but also hand-written code that references the old types:
+Type consolidation affects not only Sources and the generated `dist/haskell/<pkg>/` trees, but also hand-written code
+that references the old types:
 
 - **Test infrastructure**: Test runners in Java (`TestSuiteRunner.java`), Python, and Haskell (`TestUtils.hs`,
   `TestSuiteSpec.hs`) construct kernel types directly.
   These need manual updates to use new constructors and field names.
 - **Executables**: `verify-json-kernel/Main.hs` and `Generation.hs` use kernel types directly.
-- **DSL bootstrap**: `Dsl/Bootstrap.hs` constructs initial graphs using Haskell record syntax on kernel types.
+- **DSL bootstrap**: `overlay/haskell/hydra-kernel/.../Hydra/Core/Overlay/Haskell/Bootstrap.hs` constructs initial
+  graphs using Haskell record syntax on kernel types.
 - **Language coders**: Coders in `packages/hydra-pg`, `packages/hydra-rdf`, and
   `packages/hydra-ext` reference kernel types in their state management.
 
 Search broadly for the old type name:
 ```bash
 # Search across all subprojects, not just Sources
-grep -rn 'OldTypeName' packages/hydra-haskell/ packages/hydra-java/ packages/hydra-python/ packages/hydra-pg/ packages/hydra-rdf/ packages/hydra-ext/
+grep -rn 'OldTypeName' packages/hydra-kernel/ packages/hydra-haskell/ packages/hydra-java/ packages/hydra-python/ packages/hydra-pg/ packages/hydra-rdf/ packages/hydra-ext/
 ```
 
 ### Pitfalls Specific to Type Consolidation
@@ -770,11 +766,13 @@ Generated Haskell code depends on modules that need to be generated. Solution:
 
 **Adding a field to a kernel type** (e.g., adding `transitionalGraf` to `Graph`):
 1. Add the field to the type definition in Sources (e.g., `Sources/Kernel/Types/Graph.hs`)
-2. Regenerate just the types module into the generated tree (e.g., via `writeHaskell` in ghci into `dist/haskell/hydra-kernel/src/main/haskell/`)
+2. Regenerate just the types module into the generated tree (e.g., via `writeHaskell` in ghci into
+   `dist/haskell/hydra-kernel/src/main/haskell/`)
 3. Manually patch **all** record construction sites in the generated tree to supply the new field —
    search for `TypeName {` across `dist/haskell/`
 4. If the new field's type needs a default value (like `emptyGraf`), add that helper manually to the generated file
-5. Update the DSL helpers (e.g., `Hydra/Core/Overlay/Haskell/Dsl/Meta/Graph.hs`) — constructor, accessors, and all `with*` helpers
+5. Update the DSL helpers (e.g., `Hydra/Core/Overlay/Haskell/Dsl/Meta/Graph.hs`) — constructor, accessors, and all
+   `with*` helpers
 6. Update all Source-level constructor calls to supply the new field
 7. `stack build` to verify everything compiles
 8. Regenerate cleanly — the generated files will now replace your manual patches
@@ -812,9 +810,10 @@ Python can't have both `foo.py` and `foo/` directory.
 Use a structure like `hydra/foo/bar.py` instead of `hydra/foo.py` alongside `hydra/foo/baz.py`.
 
 ### Decoder/Encoder Module Paths
-When renaming `hydra.foo` to `hydra.foo.bar`, the decoder/encoder modules also move:
-- `Hydra.Sources.Decode.Foo` → `Hydra.Sources.Decode.Foo.Bar`
-- `Hydra.Decode.Foo` → `Hydra.Decode.Foo.Bar`
+Derived module names insert the category after the two-segment package root.
+When renaming `hydra.core.foo` to `hydra.core.foo.bar`, the decoder/encoder modules also move:
+- `hydra.core.decode.foo` → `hydra.core.decode.foo.bar` (Haskell `Hydra.Core.Decode.Foo` → `Hydra.Core.Decode.Foo.Bar`)
+- `hydra.core.encode.foo` → `hydra.core.encode.foo.bar`
 
 ---
 
@@ -865,8 +864,8 @@ Similarly, if Haskell tests fail, investigate before regenerating Java/Python �
 
 ## Verification Checklist
 
-- [ ] packages/hydra-haskell builds (`stack build`)
-- [ ] packages/hydra-haskell tests pass (`stack test`)
+- [ ] heads/haskell builds (`stack build`)
+- [ ] heads/haskell tests pass (`stack test`)
 - [ ] JSON kernel regenerated and verified
 - [ ] Extension packages build (`stack build` in packages/hydra-pg, hydra-rdf, hydra-ext)
 - [ ] Python kernel regenerated
@@ -985,7 +984,8 @@ We created `hydra.hoisting` to separate these concerns.
 >   "interpreter-shape" defaults tree any more; either a primitive has a
 >   portable Hydra-term default at its public signature, or its registry
 >   entry is `primNoDef`.
-> - **Native Haskell impls**: `Hydra.Lib.*` → `Hydra.Overlay.Haskell.Lib.*` (#501) → `Hydra.Core.Overlay.Haskell.Lib.*` (#729).
+> - **Native Haskell impls**: `Hydra.Lib.*` → `Hydra.Overlay.Haskell.Lib.*` (#501) → `Hydra.Core.Overlay.Haskell.Lib.*`
+>   (#729).
 > - **Primitive registration helper**: `prim2Eval` and related `*Eval`
 >   helpers no longer exist; the same primitive now registers with
 >   plain `prim1` / `prim2` / `prim3` and pairs with a default impl

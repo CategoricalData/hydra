@@ -587,7 +587,9 @@ definition bodies appear in **alphabetical order** within each module.
 
 This applies to:
 - Kernel Source modules (`packages/hydra-kernel/src/main/haskell/Hydra/Sources/`)
-- Per-language coder Source modules (`packages/hydra-haskell/`, `packages/hydra-java/`, `packages/hydra-python/`, `packages/hydra-scala/`, `packages/hydra-lisp/`, `packages/hydra-ext/`, `packages/hydra-pg/`, `packages/hydra-rdf/`, `packages/hydra-coq/`, `packages/hydra-typescript/`, `packages/hydra-bench/`)
+- Per-language coder Source modules (`packages/hydra-haskell/`, `packages/hydra-java/`, `packages/hydra-python/`,
+  `packages/hydra-scala/`, `packages/hydra-lisp/`, `packages/hydra-ext/`, `packages/hydra-pg/`, `packages/hydra-rdf/`,
+  `packages/hydra-coq/`, `packages/hydra-typescript/`, `packages/hydra-bench/`)
 - Hand-written runtime modules (`heads/haskell/src/main/haskell/Hydra/`),
   including the hand-written DSL helper libraries under
   `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/` and its `Meta/`
@@ -629,7 +631,8 @@ Each section is alphabetized internally; bindings do not move across
 section boundaries. Section ordering itself is by convention.
 
 **Generator-derived modules are exempt.** The derived `dsl`, `encode`,
-and `decode` module families (e.g. `hydra.core.dsl.*`, `hydra.core.encode.*`, `hydra.core.decode.*`) are produced by `dslModule`,
+and `decode` module families (e.g. `hydra.core.dsl.*`, `hydra.core.encode.*`, `hydra.core.decode.*`) are produced by
+`dslModule`,
 `encodeModule`, and `decodeModule` from the corresponding type modules. Their
 `definitions` lists are deliberately grouped by source type (e.g., for each
 record: constructor, then field accessors, then with-updaters), which is more
@@ -1004,10 +1007,12 @@ done
 If this prints anything, investigate whether the file is intentional or leftover
 from a pre-0.15 version.
 
-**Known false positives.** The `extend_path` stub is required only for directories
-that have a generated sibling tree (e.g. `hydra/`, `hydra/dsl/`, `hydra/sources/`,
-`hydra/python/`, `hydra/dsl/python/` — these merge with `src/gen-main/python/...`
-content). Directories that are *entirely hand-written* runtime trees, copied into
+**Known false positives.** The `extend_path` stub is required only for namespace-package directories
+whose contents are spread across more than one source root.
+Examples are `hydra/` itself and the overlay directories that carry the stub in
+`overlay/python/hydra-kernel/src/main/python/`: `hydra/core/overlay/`, `hydra/core/overlay/python/`,
+`hydra/core/overlay/python/dsl/`, `hydra/core/overlay/python/dsl/python/`, and `hydra/core/overlay/python/sources/`.
+Directories that are *entirely hand-written* runtime trees, copied into
 `dist/python/hydra-kernel/` from `overlay/python/hydra-kernel/src/main/python/` via
 `copy-kernel-runtime.sh`, do not need (and should not have) the stub. The
 following intentionally lack `extend_path`:

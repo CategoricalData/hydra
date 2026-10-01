@@ -97,7 +97,7 @@ if a promoted function has a bug, you can always revert to the staging version o
 
 ### 2. Create the source module file
 
-Create a new file in the appropriate location under `Hydra/Sources/` or `Hydra/Sources/`:
+Create a new file in the appropriate location under the owning package's `src/main/haskell/Hydra/Sources/` directory:
 
 ```haskell
 module Hydra.Sources.Pg.Graphson.Coder where
@@ -110,7 +110,8 @@ Copy it from an existing source module such as the
 [Haskell Coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Coder.hs).
 The block has these sections:
 
-1. **Unqualified core imports** — `Hydra.Kernel`, `Hydra.Core.Overlay.Haskell.Libraries`, `Hydra.Core.Overlay.Haskell.Dsl.Phantoms`,
+1. **Unqualified core imports** — `Hydra.Kernel`, `Hydra.Core.Overlay.Haskell.Libraries`,
+   `Hydra.Core.Overlay.Haskell.Dsl.Phantoms`,
    `Hydra.Core.Dsl.Lib.Strings`
 2. **Qualified DSL imports** — `Hydra.Core.Overlay.Haskell.*` modules (`Bootstrap`; and under
    `Hydra.Core.Overlay.Haskell.Dsl.*`: Annotations, LiteralTypes, Literals, Types, Terms, etc.)
@@ -550,7 +551,8 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 4. **Check DSL exports**: If a function isn't found in a DSL module, check what's actually exported (e.g.,
    `Optionals.cat` not `Optionals.catOptionals`).
 
-5. **Compose type conversions**: Some conversions are not direct; compose existing primitives. For example, `int32ToBigint` then `bigintToDecimal`, then `decimalToFloat64` to go from int32 to float64.
+5. **Compose type conversions**: Some conversions are not direct; compose existing primitives.
+   For example, `int32ToBigint` then `bigintToDecimal`, then `decimalToFloat64` to go from int32 to float64.
 
 6. **Avoid custom state types**: If your Haskell code uses a custom record type for state (e.g., in a fold),
    consider using nested tuples instead. Custom types require schema definitions, while tuples work directly:
@@ -598,7 +600,8 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
    This is because `inject` returns a `TypedTerm b`, not a curried `TypedTerm (a -> b)`.
    Other functions like `wrap` follow the same pattern.
 
-10. **`TypedTermDefinition` vs `TypedTerm`**: A `TypedTermDefinition a` value must be explicitly converted with `asTerm` when used in a context
+10. **`TypedTermDefinition` vs `TypedTerm`**: A `TypedTermDefinition a` value must be explicitly converted with `asTerm`
+    when used in a context
     expecting `TypedTerm a`. This comes up when passing module-level configuration bindings to DSL functions like
     `Logic.and` or `Equality.equal`:
 
@@ -610,7 +613,8 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     Logic.and (asTerm useInlineTypeParams) (var "flag")
     ```
 
-    Note: `TypedTermDefinition` values work fine with `@@` (application) without conversion, since `@@` has an `AsTerm` constraint.
+    Note: `TypedTermDefinition` values work fine with `@@` (application) without conversion, since `@@` has an `AsTerm`
+    constraint.
     The issue only arises with DSL functions that expect `TypedTerm` directly.
 
 11. **Wrapping Haskell-level DSL functions in lambdas for higher-order use**: DSL library functions like `Lists.concat`
@@ -641,7 +645,8 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     ```
 
 13. **Where clauses become separate TypedTermDefinitions**: Haskell `where` clauses have no DSL equivalent.
-    Extract local helper functions into separate top-level `TypedTermDefinition` definitions and add them to the module's elements
+    Extract local helper functions into separate top-level `TypedTermDefinition` definitions and add them to the
+    module's elements
     list.
 
 14. **Constructing syntax types without DSL helpers**: Not all generated types have convenience constructors in DSL
@@ -664,18 +669,20 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 
 16. **Bulk swapping with module re-exports**: When many functions have been promoted,
     you can swap the entire staging module to import from the generated module in bulk,
-    rather than function by function. Use an explicit import list and re-export the imported modules so downstream
-    consumers don't need changes:
+    rather than function by function.
+    Use an explicit import list and re-export the imported modules so downstream consumers don't need changes.
+    In this example, a hand-written staging module (here called `Hydra.Staging.Java.Utils`) re-exports the generated
+    `hydra.java.utils` and `hydra.java.environment` modules:
 
     ```haskell
-    module Hydra.Java.Utils (
-      module Hydra.Java.Utils,
-      module Hydra.Java.Helpers,
+    module Hydra.Staging.Java.Utils (
+      module Hydra.Staging.Java.Utils,
+      module Hydra.Java.Environment,
       module Hydra.Java.Utils,
       ) where
 
-    -- Import types from the generated Helpers module
-    import Hydra.Java.Helpers (Aliases(..))
+    -- Import types from the generated Environment module
+    import Hydra.Java.Environment (Aliases(..))
 
     -- Import promoted functions from the generated Utils module
     import Hydra.Java.Utils (
@@ -697,7 +704,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     so downstream consumers (like the staging Coder) see everything they need without import changes.
 
     When swapping, also swap any local type definitions (e.g., `data JavaFeatures`,
-    `data JavaEnvironment`) to use the generated versions from the Helpers module.
+    `data JavaEnvironment`) to use the generated versions from the Environment module.
     This may require renaming constructors or field accessors to match the generated names (e.g.,
     `supportsDiamondOperator` becomes `javaFeaturesSupportsDiamondOperator`).
     Use `replace_all` or find-and-replace to update references throughout the staging code.
@@ -814,7 +821,8 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 
     **Fallback pattern**: When a function has complex nested case analysis (e.g.,
     `encodeApplication` has a `fallback` helper),
-    extract the fallback logic into a separate `TypedTermDefinition` with an explicit name like `encodeApplication_fallback`.
+    extract the fallback logic into a separate `TypedTermDefinition` with an explicit name like
+    `encodeApplication_fallback`.
     This simplifies the main function and creates a clean separation of concerns.
 
 22. **DSL function availability pitfalls**: When translating Haskell code to DSL,
@@ -857,7 +865,8 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     "prims" <~ Graph.graphPrimitives (var "g") $
     ```
 
-    Note: `Graph.graphPrimitives`, `Graph.primitiveType`, etc. are Haskell-level DSL helpers (not `TypedTermDefinition`s),
+    Note: `Graph.graphPrimitives`, `Graph.primitiveType`, etc. are Haskell-level DSL helpers (not
+    `TypedTermDefinition`s),
     so they take direct arguments without `@@`.
 
 25. **`Arity` module**: The `typeArity` function for computing function type arity is in
@@ -883,7 +892,8 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 
 28. **`encodeTypeAsTerm` helper**: The staging code uses `EncodeCore.type_ typ` to encode a `Type` as a `Term` for
     annotations. In the DSL, use the pre-defined helper `encodeTypeAsTerm @@ var "typ"` (defined as `TypedTerm $
-    TermVariable $ Name "hydra.core.encode.model.type"`). Alternatively, `Phantoms.encoderFor _Type @@ var "typ"` works too.
+    TermVariable $ Name "hydra.core.encode.model.type"`). Alternatively, `Phantoms.encoderFor _Type @@ var
+    "typ"` works too.
 
 29. **`Let` record fields**: The `Let` type has fields `_Let_bindings` and `_Let_body` (not `_Let_environment`).
     Check generated Core.hs for exact field names.
@@ -951,7 +961,8 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     define the type in a Types module and the functions in a separate Terms module that depends on it.
 
 40. **`Prelude hiding ((++))` and Haskell-level string operations**: Most DSL source modules import `Prelude hiding
-    ((++))` because `Hydra.Core.Overlay.Haskell.Dsl.Phantoms` exports its own `(++)` for `TypedTerm String` concatenation.
+    ((++))` because `Hydra.Core.Overlay.Haskell.Dsl.Phantoms` exports its own `(++)` for `TypedTerm
+    String` concatenation.
     This means you cannot use Haskell's native `(++)` for regular `String` concatenation in DSL helper functions.
     Use `(<>)` instead, which works on any `Semigroup` including `String`:
 
@@ -1028,7 +1039,7 @@ console output), the I/O must be separated out first. Only the pure logic can be
 6. **Delegate from the original module.** After promotion,
    the hand-written module imports the generated module and delegates to it. The I/O wrappers remain hand-written:
    ```haskell
-   import qualified Hydra.CodeGeneration as Generated
+   import qualified Hydra.Core.Codegen as Generated
 
    -- Delegated to generated code:
    generateSourceFiles = Generated.generateSourceFiles

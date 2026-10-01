@@ -6,7 +6,9 @@ Specification half of [#497](https://github.com/CategoricalData/hydra/issues/497
 
 This document specifies the Hydra textual notation for terms, types, literals, and type schemes:
 the presentation syntax used throughout the specification,
-produced by the `hydra.core.print.*` kernel functions and read by the `hydra.core.parse.*` functions.
+produced by the `hydra.core.print.*` kernel functions.
+A general parser for this notation is planned ([#497](https://github.com/CategoricalData/hydra/issues/497)) but not yet part of the kernel;
+`hydra.core.parse.*` currently covers only docs and regular expressions.
 The grammar is unambiguous, with stated precedence, and is normative for both directions:
 a conforming printer MUST emit text matching the canonical form (§4),
 and a conforming parser MUST accept every production of the grammar (§3).

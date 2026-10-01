@@ -182,8 +182,9 @@ chapter states the tiering):
   when the conformance suite passes. Their stability falls out of the conformance work
   ([#420](https://github.com/CategoricalData/hydra/issues/420)).
 - **Tier 2 — host-native surfaces.** Governed by a declared public/internal manifest expressed as
-  data on `hydra.build.Registry`'s `LanguageProfile` (the names-in-data pattern of
-  [#416](https://github.com/CategoricalData/hydra/issues/416)). Only the declared-public surface is
+  data on the `LanguageProfile` records of `hydra.build.registry` (type defined in `hydra.build.format`; the
+  names-in-data pattern of [#416](https://github.com/CategoricalData/hydra/issues/416)).
+  Only the declared-public surface is
   frozen.
 - **Tier 3 — third-party integrations.** Track their upstream libraries; a documented carve-out,
   not frozen by this policy.

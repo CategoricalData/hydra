@@ -149,8 +149,10 @@ the descriptions below cover the main ones:
 #### Transformation framework
 
 **Coders.hs** - `hydra.core.coders` module name
-- Defines `Coder v1 v2 e`, `Adapter t1 t2 v1 v2 e`, `Bicoder`, `SymmetricAdapter`, `Language`, `LanguageConstraints`, `AdapterContext`, `TraversalOrder`
-- `Coder` is a pair of partial functions (encode/decode), each returning `Either e` for generic error handling; the former `Flow` monad was removed in #245, and `InferenceContext` was removed from the encode/decode signatures in #518
+- Defines `Coder v1 v2 e`, `Adapter t1 t2 v1 v2 e`, `Bicoder`, `SymmetricAdapter`, `Language`, `LanguageConstraints`,
+  `AdapterContext`, `TraversalOrder`
+- `Coder` is a pair of partial functions (encode/decode), each returning `Either e` for generic error handling; the
+  former `Flow` monad was removed in #245, and `InferenceContext` was removed from the encode/decode signatures in #518
 
 #### Graph and query
 
@@ -803,7 +805,8 @@ for the full mechanism and the catalog of which subtrees are overlaid per langua
 
 #### Java Generation
 
-Location: `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/` (#501, #729; formerly `hydra/lib/`, then `hydra/overlay/java/lib/`)
+Location: `overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib/` (#501, #729; formerly `hydra/lib/`,
+then `hydra/overlay/java/lib/`)
 
 Each primitive becomes a class extending `PrimitiveFunction`:
 
@@ -834,7 +837,8 @@ public class Add extends PrimitiveFunction {
 
 #### Python Generation
 
-Location: `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/lib/` (#501, #729; formerly `hydra/lib/`, then `hydra/overlay/python/lib/`)
+Location: `overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/lib/` (#501, #729; formerly
+`hydra/lib/`, then `hydra/overlay/python/lib/`)
 
 Pure Python implementations:
 
@@ -988,7 +992,8 @@ to write Hydra code in their preferred language and compile it to any other supp
 **See also:**
 - [Property Graphs](https://github.com/CategoricalData/hydra/wiki/Property-graphs) -
   Mapping Hydra schemas to property graphs with annotations
-- [Testing](https://github.com/CategoricalData/hydra/wiki/Testing) - How the hydra-kernel test suite validates coder parity
+- [Testing](https://github.com/CategoricalData/hydra/wiki/Testing) - How the hydra-kernel test suite validates coder
+  parity
 
 ### Coder locations
 
@@ -1348,11 +1353,12 @@ The modules compiled in the Haskell head are aggregated in `Hydra.Sources.All`
 - **Test modules** (`testModules`) — The hydra-kernel test suite, compiled into each target
   language as part of the sync process. Defined separately from `mainModules`.
 
-**Encoder/decoder source modules** are a special category of term modules that are
-*generated from* the type modules rather than hand-written. For each kernel type module
-(e.g., `hydra.core.model`), a pair of modules is generated that can encode objects of that type
-as Hydra Terms and decode them from Terms. These live in `Hydra.Sources.{Encode,Decode}.*`
-and are included in `kernelTermsModules` alongside the hand-written term modules.
+**Encoder/decoder modules** are a special category of term modules that are
+*derived from* the type modules rather than hand-written.
+For each kernel type module (e.g., `hydra.core.model`), a pair of modules (`hydra.core.encode.model` and
+`hydra.core.decode.model`) is derived that can encode objects of that type as Hydra Terms and decode them from Terms.
+These modules have no DSL source files: they are synthesized in memory (#448) by `encodeModule` and `decodeModule`
+(in `hydra.core.encoding` and `hydra.core.decoding`), so they are not part of `kernelTermsModules`.
 
 The full set is composed as:
 
@@ -1363,7 +1369,8 @@ kernelModules = kernelTypesModules ++ kernelTermsModules ++ jsonModules
 kernelTermsModules = kernelPrimaryTermsModules   -- hand-written logic modules
 ```
 
-The encode/decode modules (`hydra.core.encode.*`, `hydra.core.decode.*`, and `hydra.<package>.{encode,decode}.*` for other packages) are synthesized
+The encode/decode modules (`hydra.core.encode.*`, `hydra.core.decode.*`, and `hydra.<package>.{encode,decode}.*` for
+other packages) are synthesized
 in-memory at runtime by `generateEncoderModules`/`generateDecoderModules` (#448)
 and injected into the driver's universe before inference runs.
 They are no longer shipped as `dist/haskell/.../Sources/{Encode,Decode}/*.hs` files.
@@ -1583,9 +1590,12 @@ stack build
 ### Generated code structure
 
 ```
-heads/haskell/src/main/haskell/Hydra/
+overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/
 ├── Dsl/                    # DSL definitions (manual)
-├── Lib/                    # Native implementations (manual)
+├── Lib/                    # Native primitive implementations (manual)
+└── Libraries.hs            # Primitive registry wiring (manual)
+
+heads/haskell/src/main/haskell/Hydra/
 ├── Generation.hs           # Code-gen driver (manual)
 ├── ExtGeneration.hs        # Driver for ext-language coders (manual)
 └── Haskell/Generation.hs   # Haskell-specific coder driver (manual)
@@ -1721,17 +1731,19 @@ host-natively in Java, Python, and Scala (`.../{java,python,scala}/hydra/sources
 - [`packages/hydra-coq/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-coq/src/main/haskell/Hydra/Sources) — Coq
 - [`packages/hydra-typescript/src/main/haskell/Hydra/Sources/TypeScript/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-typescript/src/main/haskell/Hydra/Sources/TypeScript) — TypeScript
 
-Generated coder output lands under `dist/haskell/<pkg>/` for each source package.
-The long-tail [`dist/haskell/hydra-ext/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra)
-tree is frozen (`targetLanguages: []` in
-[`packages/hydra-ext/package.json`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/package.json))
-and shipped as-is rather than regenerated by the sync matrix.
+Generated coder output lands under `dist/<lang>/<pkg>/` for each source package and each of its target languages
+(the `targetLanguages` field of the package's `package.json`; for example,
+[`packages/hydra-ext/package.json`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/package.json)
+targets Haskell, Java, and Python).
 
 ### Generated code
 
-[`dist/haskell/hydra-kernel/src/main/haskell/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-kernel/src/main/haskell) — Generated Haskell
-[`dist/java/hydra-kernel/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/dist/java/hydra-kernel/src/main/java) — Generated Java
-[`dist/python/hydra-kernel/src/main/python/`](https://github.com/CategoricalData/hydra/tree/main/dist/python/hydra-kernel/src/main/python) — Generated Python
+Only the JSON tier is checked in; the per-language trees are produced by sync and are gitignored.
+
+- [`dist/json/hydra-kernel/src/main/json/`](https://github.com/CategoricalData/hydra/tree/main/dist/json/hydra-kernel/src/main/json) — Generated JSON modules
+- `dist/haskell/hydra-kernel/src/main/haskell/` — Generated Haskell
+- `dist/java/hydra-kernel/src/main/java/` — Generated Java
+- `dist/python/hydra-kernel/src/main/python/` — Generated Python
 
 ---
 

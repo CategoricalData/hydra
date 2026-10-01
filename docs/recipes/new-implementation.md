@@ -145,7 +145,8 @@ Create sources in:
 
 Add them to
 [Sources/All.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/All.hs),
-then use the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell) instructions
+then use the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell)
+instructions
 to generate the Haskell code:
 
 ```haskell
@@ -193,12 +194,13 @@ Currently, the Hydra kernel and also the language coders are written in Haskell.
 - [Haskell coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Coder.hs) - ~600 lines, very close to Hydra Core
 - [JSON coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Sources/Json/Schema/Coder.hs) - Data format coder
 
-**Extended language coders** (generated in dist/haskell/hydra-ext/):
-- [Java coder](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Java/Coder.hs) - ~1500 lines, OOP patterns
-- [Python coder](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Python/Coder.hs) - Dynamic typing
+**Other language coders** (each in its own package; the Java and Python coders are authored host-natively):
+- [Java coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/java/hydra/sources/java/Coder.java) (`hydra-java`) - OOP patterns
+- [Python coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-python/src/main/python/hydra/sources/python/coder.py) (`hydra-python`) - Dynamic typing
+- [TypeScript coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-typescript/src/main/haskell/Hydra/Sources/TypeScript/Coder.hs) (`hydra-typescript`) - Haskell DSL
 
 Note that there are also many coders for [other
-languages](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra)
+languages](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/src/main/haskell/Hydra/Sources)
 in which we do not have full Hydra implementations (Avro, Protobuf, GraphQL, etc.).
 
 ### Purpose
@@ -239,10 +241,10 @@ and this simple guide will not attempt to break it down into a step-by-step reci
 
 ### Where to place your coder
 
-- **For kernel languages**: `packages/hydra-haskell/src/main/haskell/Hydra/Sources/NewLang/Coder.hs` (written in DSL,
-  will be code-generated)
-- **For extended languages**: `dist/haskell/hydra-ext/src/main/haskell/Hydra/NewLang/Coder.hs` (generated from DSL sources in
-  Haskell)
+- **For a new language**: create a package `packages/hydra-<newlang>/`
+  and put the coder at `packages/hydra-<newlang>/src/main/haskell/Hydra/Sources/NewLang/Coder.hs`
+  (written in the Haskell DSL, then code-generated), following `packages/hydra-typescript/` or `packages/hydra-lisp/`.
+- **For data-format and non-host languages**: add the coder under `packages/hydra-ext/src/main/haskell/Hydra/Sources/`.
 
 ## Step 5: Create the serializer
 
@@ -251,7 +253,7 @@ syntax tree for your language, you need to also map the abstract syntax tree int
 Compared to some of the steps above, this is one of the conceptually simplest tasks, and requires little explanation.
 
 It will be helpful to re-use the built-in
-[Hydra.Core.Ast](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Ast.hs)
+[hydra.core.ast](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Ast.hs)
 module here.
 
 ### Examples of serializers
@@ -260,9 +262,9 @@ module here.
 - [Haskell SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Serde.hs) - Written in DSL
 - [JSON SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Sources/Json/Schema/Serde.hs) - Simple format
 
-**Extended languages** (generated in dist/haskell/hydra-ext/):
-- [Java SerDe](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Java/Serde.hs) - Handles complex syntax
-- [Python SerDe](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Python/Serde.hs) - Indentation-based syntax
+**Other languages** (each in its own package; authored host-natively):
+- [Java SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/java/hydra/sources/java/Serde.java) - Handles complex syntax
+- [Python SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-python/src/main/python/hydra/sources/python/serde.py) - Indentation-based syntax
 
 Note that while "SerDe" stands for "serializer and deserializer",
 you will only need the former; we have no need to map *from* expressions in the target language, as noted above.
@@ -496,7 +498,8 @@ generation but fails self-host (the symptom that motivated the #391 self-host fi
 
 Under #473, primitive **definitions** (`PrimitiveDefinition` metadata) live in the language-independent
 `hydra.core.lib.*` modules, while each host's native **implementations** live alongside at
-`hydra.core.overlay.<lang>.lib.*` (the analog of Haskell's `Hydra.Core.Overlay.Haskell.Lib.*`). The relocation is performed
+`hydra.core.overlay.<lang>.lib.*` (the analog of Haskell's `Hydra.Core.Overlay.Haskell.Lib.*`).
+The relocation is performed
 **entirely by the generation driver**, not by any coder — so when your language hosts code generation
 (self-hosting), your host's bootstrap driver (e.g. `heads/<lang>/.../Bootstrap.*`, the analog of
 `heads/haskell/src/exec/bootstrap-from-json/Main.hs`) must do two things the Haskell driver does:
@@ -505,7 +508,8 @@ Under #473, primitive **definitions** (`PrimitiveDefinition` metadata) live in t
    (`hydra.core.codegen.lowerPrimitiveDefinitions`), with a universe that lowers only the lib modules.
 2. **Redirect**: rewrite generated *consumer* references to the relocated impl path
    (`hydra.core.lib.<sub>` → `hydra.core.overlay.<lang>.lib.<sub>`), in whatever syntactic form your language uses —
-   dotted member access/imports (Java/Python/Scala/Clojure), R7RS `(hydra core lib X)` → `(hydra core overlay <lang> lib X)`
+   dotted member access/imports (Java/Python/Scala/Clojure), R7RS `(hydra core lib X)` →
+   `(hydra core overlay <lang> lib X)`
    (Scheme), or flat-symbol rename `hydra_core_lib_<sub>_` → `hydra_core_overlay_<lang>_lib_<sub>_` plus dropping the
    def-module from `:use` clauses (Common Lisp / Emacs Lisp). The redirect must run **last** (over both
    `src/main` and `src/test`) and must **skip the `hydra/core/lib/` directory** — those are the def-modules,
@@ -605,11 +609,12 @@ criterion for a complete Hydra implementation.**
 ### Examples of test runners
 
 **Haskell**:
-- Generated suite: [dist/haskell/hydra-kernel/src/test/haskell/Hydra/Core/Test/TestSuite.hs](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/test/haskell/Hydra/Core/Test/TestSuite.hs)
+- Suite source: [packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/TestSuite.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/TestSuite.hs)
+  (generated to `dist/haskell/hydra-kernel/src/test/haskell/Hydra/Core/Test/TestSuite.hs`)
 - Runner: [heads/haskell/src/test/haskell/Hydra/TestSuiteSpec.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/test/haskell/Hydra/TestSuiteSpec.hs) (~100 lines)
 
 **Java**:
-- Generated suite: [dist/java/hydra-kernel/src/test/java/hydra/core/test/testSuite/TestSuite.java](https://github.com/CategoricalData/hydra/blob/main/dist/java/hydra-kernel/src/test/java/hydra/core/test/testSuite/TestSuite.java)
+- Generated suite: generated to `dist/java/hydra-kernel/src/test/java/hydra/core/test/testSuite/TestSuite.java`
 - Runner: [heads/java/src/test/java/hydra/TestSuiteRunner.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/test/java/hydra/TestSuiteRunner.java) (~100 lines)
 
 **Python**:
@@ -657,7 +662,7 @@ You should start with these three DSLs, and then add others as desired:
 ### Additional useful DSLs
 
 You may find it useful to define:
-- [Shorthand type constructors](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/ShorthandTypes.hs)
+- [Type constructors](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Types.hs)
 - [Shorthand primitives](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Prims.hs)
 - Individual DSLs for specific Hydra kernel modules,
   e.g. the [hydra.core.model DSL](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Meta/Core.hs) in Haskell
