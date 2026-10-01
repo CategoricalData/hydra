@@ -469,7 +469,7 @@ testPairs = libPairs ++ otherPairs
 This creates a hierarchy:
 ```
 TestSuite (common)
-├── Lib tests (Chars, Eithers, Equality, Flows, Lists, Literals, Logic, Maps, ...)
+├── Lib tests (Chars, Eithers, Equality, Lists, Literals, Logic, Maps, Math, Strings, ...)
 ├── Checking (all checking tests)
 │   ├── Fundamentals
 │   ├── Algebraic Types
@@ -493,7 +493,7 @@ TestSuite (common)
 ```haskell
 -- In GHCi:
 import Hydra.Sources.All
-import Hydra.Generation
+import Hydra.Haskell.Generation
 
 -- Generate all test modules
 -- First arg: output directory
@@ -532,7 +532,7 @@ The same test modules can be generated for other languages:
 ```haskell
 -- From heads/haskell
 import Hydra.Sources.All
-import Hydra.Generation
+import Hydra.ExtGeneration
 
 -- Set up the universe
 let allModules = mainModules ++ testModules
@@ -640,7 +640,7 @@ To add a new test module:
    ```bash
    stack ghci
    import Hydra.Sources.All
-   import Hydra.Generation
+   import Hydra.Haskell.Generation
    let allModules = mainModules ++ testModules
    writeHaskell "../../dist/haskell/hydra-kernel/src/test/haskell" allModules baseTestModules
    :q
