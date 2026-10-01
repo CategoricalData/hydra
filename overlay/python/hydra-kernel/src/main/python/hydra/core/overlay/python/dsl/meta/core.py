@@ -1,6 +1,6 @@
 """Meta-DSL for constructing Hydra core terms and types as first-class values.
 
-Mirrors the Haskell module Hydra.Core.Dsl.Meta.Core, providing phantom-typed constructors,
+Mirrors the Haskell module Hydra.Core.Overlay.Haskell.Dsl.Meta.Core, providing phantom-typed constructors,
 accessors, and modifiers for all core Hydra types.
 
 Most functions are re-exported from the generated module hydra.core.dsl.model. This module

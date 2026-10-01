@@ -304,10 +304,10 @@ The classes live under `hydra.core.overlay.python.util` rather than `hydra.core.
 latter is already a kernel-generated module (containing `Comparison`,
 `CaseConvention`, etc.) shared across all Hydra implementations. Putting the
 Python-runtime helpers under `hydra.core.overlay.python.util` keeps the kernel namespace
-intact while making the host/kernel separation explicit. `hydra.python` itself
-is a `pkgutil`-style namespace package so heads-side helpers and the
-kernel-generated `hydra.python.{coder,environment,...}` modules coexist
-cleanly.
+intact while making the host/kernel separation explicit. In the Python head, the top-level
+`hydra` package is a `pkgutil`-style namespace package (`extend_path`), so head-side modules
+(e.g. `hydra.bootstrap`, `hydra.generation`) and the generated `hydra.*` modules from other
+source roots coexist cleanly.
 
 ## CPython vs PyPy
 

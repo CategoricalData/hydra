@@ -155,9 +155,11 @@ Hydra's Java code is split across three locations
 
 - **Generated Java kernel** ([`dist/java/hydra-kernel/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/dist/java/hydra-kernel/src/main/java))
   — code-generated from the kernel DSL sources
-  - `hydra/core/model/`, `hydra/core/graph/`, `hydra/core/packaging/`, `hydra/core/coders/`, `hydra/core/typing/`, ...
-  - `hydra/core/reduction/`, `hydra/core/rewriting/`, `hydra/core/hoisting/`
-  - `hydra/core/inference/`, `hydra/core/checking/`
+  - type modules become packages with one class per type:
+    `hydra/core/model/`, `hydra/core/graph/`, `hydra/core/packaging/`, `hydra/core/coders/`, `hydra/core/typing/`, ...
+  - term modules become a single class each:
+    `hydra/core/Reduction.java`, `hydra/core/Rewriting.java`, `hydra/core/Hoisting.java`,
+    `hydra/core/Inference.java`, `hydra/core/Checking.java`, ...
 
 - **Generated Java test suite** (`dist/java/hydra-kernel/src/test/java/`) —
   the hydra-kernel test suite compiled into Java.

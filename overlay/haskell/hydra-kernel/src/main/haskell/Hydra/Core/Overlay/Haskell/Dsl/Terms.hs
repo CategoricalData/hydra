@@ -257,8 +257,9 @@ pair a b = TermPair (a, b)
 -- | Things that name a primitive. Lets the term/DSL helpers take a generated
 -- 'PrimitiveDefinition' directly (@primitive DefStrings.toUpper@) — keeping the def-modules the
 -- single source of truth for primitive names (#473) — while still accepting a raw 'Name'.
--- Defined here (the lowest DSL module) so 'Hydra.Overlay.Haskell.Dsl.Prims', 'Hydra.Overlay.Haskell.Dsl.Typed.Terms', and
--- 'Hydra.Overlay.Haskell.Dsl.Typed.Phantoms' can all share one class without an import cycle.
+-- Defined here (the lowest DSL module) so 'Hydra.Core.Overlay.Haskell.Dsl.Prims',
+-- 'Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms', and 'Hydra.Core.Overlay.Haskell.Dsl.Phantoms' can all
+-- share one class without an import cycle.
 class ToPrimName a where
   toPrimName :: a -> Name
 

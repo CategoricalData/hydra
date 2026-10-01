@@ -1,6 +1,6 @@
 """Meta-DSL for constructing graph-related terms (Graph, Primitive, Comparison).
 
-Mirrors the Haskell module Hydra.Core.Dsl.Meta.Graph, providing phantom-typed constructors,
+Mirrors the Haskell module Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph, providing phantom-typed constructors,
 accessors, and modifiers for graph-related Hydra types.
 
 Most functions are re-exported from the generated module hydra.core.dsl.graph. This module

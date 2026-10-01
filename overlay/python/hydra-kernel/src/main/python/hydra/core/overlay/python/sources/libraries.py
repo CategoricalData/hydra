@@ -1,6 +1,6 @@
 """Python primitive registration functions.
 
-Primitive names are derived from the generated hydra.lib.* PrimitiveDefinition def-modules
+Primitive names are derived from the generated hydra.core.lib.* PrimitiveDefinition def-modules
 (via def_<sub>.<fn>.name) — the single source of truth for primitive names (#473) — rather than
 hand-written name strings. Signatures remain explicit here because the registry must present each
 primitive's type to the interpreter in native type-coder form."""

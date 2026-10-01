@@ -338,7 +338,7 @@ This generates to `dist/java/hydra-pg/src/main/java` (and related directories):
 - `hydra.demos.genpg.sales` - Sales demo schemas and mapping
 - `hydra.demos.genpg.health` - Health demo schemas and mapping
 
-Note: `hydra.pg.model` types are already generated in `dist/java/hydra-kernel/src/main/java/`.
+Note: `hydra.pg.model` types are already generated in `dist/java/hydra-pg/src/main/java/` (part of the `hydra-pg` package).
 
 ## How it works
 

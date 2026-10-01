@@ -1,6 +1,6 @@
 {
   "comment": "M1 smoke test: verifies the harness can load a kernel WAT module, invoke zero-arg exports, and decode results (i32 constants + length-prefixed strings). Target: hydra.core.constants.*",
-  "wasm_file": "dist/wasm/hydra-kernel/src/main/wat/hydra/constants.wat",
+  "wasm_file": "dist/wasm/hydra-kernel/src/main/wat/hydra/core/constants.wat",
   "tests": [
     {
       "name": "hydra.core.constants.debug_inference returns true (i32 1)",

@@ -54,7 +54,7 @@ heads/wasm/bin/test-wasm.sh path/to/manifest.json
 
 ```json
 {
-  "wasm_file": "dist/wasm/hydra-kernel/src/main/wat/hydra/constants.wat",
+  "wasm_file": "dist/wasm/hydra-kernel/src/main/wat/hydra/core/constants.wat",
   "tests": [
     { "name": "...", "export": "hydra.core.constants.max_int32",
       "kind": "i32", "expected": 2147483647 },

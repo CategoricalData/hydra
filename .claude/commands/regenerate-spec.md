@@ -9,6 +9,10 @@ allowed-tools:
 
 # Regenerate the module-reference spec pages
 
+> **Not yet runnable: the `hydra.RegenerateSpec` driver is pending under #723.**
+> `bin/regenerate-spec.sh` invokes that Java class, which has not been committed yet,
+> so this command will fail until #723 lands.
+
 ## When to run
 
 User-invoked. Typical triggers:
@@ -45,16 +49,17 @@ generated artifacts.
    are usually a sign the sync wasn't run or the kernel change isn't
    where expected.
 
-4. **Not every committed page converges under this generator** — three
+4. **Not every committed page converges under this generator** — two
    are structurally out of scope and will not match generated output
    even when everything else is current:
-   - `primitives/equality.md` and `primitives/ordering.md` catalog
-     primitives by type-class membership across many source files, not
-     by a single module; this generator walks one module at a time.
-   - `primitives/functions.md` documents a primitive module
-     (`Lib/Functions.hs`) that does not exist in the kernel yet.
+   `primitives/equality.md` and `primitives/ordering.md` catalog
+   primitives by type-class membership across many source files, not
+   by a single module; this generator walks one module at a time.
+   (`primitives/functions.md` is an ordinary per-module page:
+   `hydra.core.lib.functions` now exists in the kernel, at
+   `Hydra/Sources/Kernel/Lib/Functions.hs`.)
 
-   These three keep their `generator not yet built` IOU header
+   These two keep their `generator not yet built` IOU header
    regardless of how current the generator is — a diff against them is
    expected, not a bug. See the page-name-mapping notes in
    `feature_723_spec_generator_markdown-plan.md` for the full mapping
