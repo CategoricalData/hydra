@@ -830,8 +830,8 @@ done
 
 # Sentinels indicating each native host is fully built (i.e. has the host's
 # hydra-<lang> dist with the DSL meta-modules a native DSL→JSON run needs).
-JAVA_HOST_SENTINEL="$HYDRA_ROOT/dist/java/hydra-java/src/main/java/hydra/dsl/java/Syntax.java"
-PYTHON_HOST_SENTINEL="$HYDRA_ROOT/dist/python/hydra-python/src/main/python/hydra/dsl/python/syntax.py"
+JAVA_HOST_SENTINEL="$HYDRA_ROOT/dist/java/hydra-java/src/main/java/hydra/java/dsl/Syntax.java"
+PYTHON_HOST_SENTINEL="$HYDRA_ROOT/dist/python/hydra-python/src/main/python/hydra/python/dsl/syntax.py"
 
 native_generate_and_report() {
     local lang="$1"        # java | python
