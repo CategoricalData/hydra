@@ -2,7 +2,7 @@
 # #703 bootstrap patch (Step 8, extending-hydra-core.md): the PUBLISHED hydra-haskell
 # host's Coder predates #684's "always import Data.Void" emission rule, so the
 # Java-host cold-seed of dist/haskell/hydra-kernel omits `import Data.Void` from
-# Hydra/Dsl/Lib/Functions.hs even though it references the Void type (via `absurd`).
+# Hydra/Core/Dsl/Lib/Functions.hs even though it references the Void type (via `absurd`).
 # Without this import, the local Haskell host's own `stack build` fails before it can
 # even run — a chicken-and-egg the seed step alone can't resolve (a LOCAL, currently-
 # correct hydra-haskell host would emit the import; but nothing can build that host
@@ -11,7 +11,7 @@
 # This patch is minimal and self-verifying: it is a deliberate bootstrap patch, not a
 # permanent source change (dist/haskell/ is generated) — the very next
 # GENERATOR_HOST=haskell regeneration (run by a build of the host this patch enables)
-# emits Hydra/Dsl/Lib/Functions.hs itself, complete with the import, from the CURRENT
+# emits Hydra/Core/Dsl/Lib/Functions.hs itself, complete with the import, from the CURRENT
 # (locally-built) coder — overwriting this patch with equivalent, generator-produced
 # content. See docs/build-system.md for the invariant this documents.
 #
@@ -34,7 +34,7 @@ if [ -z "$REPO_ROOT" ]; then
     REPO_ROOT="$( cd "$HYDRA_JAVA_HEAD/../.." && pwd )"
 fi
 
-TARGET="$REPO_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Lib/Functions.hs"
+TARGET="$REPO_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Dsl/Lib/Functions.hs"
 if [ ! -f "$TARGET" ]; then
     echo "patch-void-import.sh: $TARGET not found (did the seed step run first?)" >&2
     exit 1
