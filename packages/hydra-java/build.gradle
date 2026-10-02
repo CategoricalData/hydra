@@ -133,6 +133,52 @@ tasks.register('printHeadsExtrasRuntimeClasspath') {
     }
 }
 
+// #747: compileJava (the `main` sourceSet above) compiles packages/hydra-java's and
+// packages/hydra-jvm's DSL-authoring sources against whatever is in the dist/java/<pkg>
+// srcDirs. If dist/java/hydra-kernel is empty or near-empty (a cold/never-synced tree,
+// or a stale/partial seed left over from an interrupted run), almost nothing in those
+// DSL sources resolves — and at least one source file (hydra.sources.java.Coder's
+// self-referencing, deeply-nested-generic annotateBodyWithCod field) sends javac's
+// error-recovery path (DeferredAttr$RecoveryDeferredTypeMap) into a combinatorial
+// blowup: a multi-minute, ~100%-CPU hang rather than a normal compile error. This is
+// NOT a code-quality problem in that source — it compiles fine in seconds against a
+// complete classpath (confirmed directly: isolating the method alone against a full
+// classpath succeeds; the same isolated method alone against an EMPTY classpath hangs,
+// jstack-confirmed via the same ArgumentAttr/DeferredAttr/RecoveryDeferredTypeMap stack
+// every time). The real bug is that nothing stops compileJava from being invoked
+// against an incomplete dist/java in the first place — sync.sh's own seeding loop
+// already works around this ordering hazard for its own orchestrated path (see its
+// #633 comment on forcing GENERATOR_HOST=haskell while populating dist/java/* one
+// package at a time), but a DIRECT `./gradlew :hydra-java:compileJava` (or
+// compileHeadsExtrasJava, which depends on it) bypasses that protection entirely —
+// which is how this was originally hit and mis-diagnosed as a compileHeadsExtrasJava-
+// specific javac bug. Fail fast here instead of hanging.
+tasks.register('checkDistJavaKernelPopulated') {
+    doLast {
+        def kernelDir = file("$projectDir/../../dist/java/hydra-kernel/src/main/java")
+        def javaFileCount = kernelDir.exists() ?
+            fileTree(kernelDir) { include '**/*.java' }.files.size() : 0
+        // Threshold, not "> 0": a handful of stray/partial files (e.g. a single
+        // overlay file copied before the rest) is exactly the "partially broken"
+        // state that can still trigger the hang, as seen this session. The real
+        // kernel has ~300+ generated .java files; 20 is comfortably below any
+        // genuine partial-seed noise but well above "basically empty."
+        if (javaFileCount < 20) {
+            throw new GradleException(
+                "dist/java/hydra-kernel/src/main/java is missing or has only " +
+                "${javaFileCount} .java file(s) — compileJava needs the kernel " +
+                "generated there first (or this is a cold/interrupted tree). " +
+                "Run heads/java/bin/assemble-distribution.sh hydra-kernel (or the " +
+                "full bin/sync.sh pipeline) before invoking compileJava/" +
+                "compileHeadsExtrasJava directly. Without this guard, javac hangs " +
+                "for minutes burning CPU instead of failing with a clear error " +
+                "(#747)."
+            )
+        }
+    }
+}
+compileJava.dependsOn checkDistJavaKernelPopulated
+
 // hydra/scala/** and hydra/dsl/scala/** used to be excluded here because the
 // Scala coder's generated Java didn't type-check standalone (and hydra/lisp/Coder.java
 // as a generator wart). The wart is fixed — both packages now compile cleanly, and

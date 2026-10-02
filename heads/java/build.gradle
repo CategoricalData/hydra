@@ -46,9 +46,12 @@ subprojects {
         // #736: toolchain replaces sourceCompatibility/targetCompatibility (both
         // VERSION_11 previously) — Gradle 7.6 rejects combining toolchain with
         // explicit compatibility on the same java{} extension. The toolchain pin
-        // selects JDK 11 regardless of ambient PATH/JAVA_HOME; without it, a JDK 17+
-        // host can hit a javac DeferredAttr hang in compileHeadsExtrasJava.
-        // Perf-neutral vs 17 (measured); matches CI's pinned 11.0.19.
+        // selects JDK 11 regardless of ambient PATH/JAVA_HOME. Perf-neutral vs 17
+        // (measured); matches CI's pinned 11.0.19. (Not a #747 fix: the
+        // compileJava/compileHeadsExtrasJava javac DeferredAttr hang reproduces
+        // identically on JDK 11 — it's triggered by an incomplete dist/java
+        // classpath, not JDK version; see packages/hydra-java/build.gradle's
+        // checkDistJavaKernelPopulated guard.)
         toolchain {
             languageVersion = JavaLanguageVersion.of(11)
         }
