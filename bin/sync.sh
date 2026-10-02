@@ -864,18 +864,28 @@ fi
 #     helpers, "sourceLanguage": "java") assembled into the SAME target — hydra.jvm.serde.*
 #     is a compiled-import dependency of hydra-java's/hydra-scala's own generated Serde.
 #   - heads/scala/src/main/scala/hydra/Generation.scala imports hydra.{java,python,scala,
-#     haskell,lisp}.{coder,language} UNCONDITIONALLY at the top of the file (its multi-
-#     target dispatch table for writeJava/writePython/writeScala/writeHaskell/writeLisp),
-#     so dist/scala/{hydra-jvm,hydra-java,hydra-python,hydra-scala,hydra-haskell,hydra-lisp}
-#     must ALL exist before ANY Scala head code compiles, not just when generating those
-#     targets specifically. hydra-haskell/hydra-lisp are "sourceLanguage": "haskell" (like
-#     hydra-kernel), but Phase 3's loop below is hardcoded to kernel/build/rdf/pg, so they
-#     need the same explicit seeding here.
+#     haskell,lisp,typescript}.{coder,language} UNCONDITIONALLY at the top of the file (its
+#     multi-target dispatch table for writeJava/writePython/writeScala/writeHaskell/writeLisp/
+#     writeTypeScript), so dist/scala/{hydra-jvm,hydra-java,hydra-python,hydra-scala,
+#     hydra-haskell,hydra-lisp,hydra-typescript} must ALL exist before ANY Scala head code
+#     compiles, not just when generating those targets specifically. hydra-haskell/hydra-lisp
+#     are "sourceLanguage": "haskell" (like hydra-kernel), but Phase 3's loop below is
+#     hardcoded to kernel/build/rdf/pg, so they need the same explicit seeding here.
 # On a warm tree this is silently already satisfied by a previous sync; a genuinely cold
 # checkout has none of these directories and nothing else creates them (confirmed: this
 # bug predates #497, reproduces on main from an equally cold dist/, unrelated to the
 # hydra.core.print.* rename). Guarded by a directory-exists sentinel + HOSTS/TARGETS membership
 # so this is a no-op on a warm tree and skips languages not in scope for this sync.
+#
+# #756: hydra-typescript was missing from the scala list below even though
+# Generation.scala needs it just as unconditionally as the other six — on a sync where
+# scala is a --targets-only language (not in --hosts), this was the sole cold-start path
+# that could have assembled it (Phase 4's STATIC_DEPS pre-assembly, which does list
+# hydra-typescript for scala, only runs when scala is literally in --hosts). The gap let
+# Phase 5's native Scala DSL->JSON driver fail an sbt compile ("value typeScript is not a
+# member of hydra") that was then silently swallowed by that phase's `|| echo WARNING...`
+# fallback. Fixed here; see also the Phase 5 sentinel gate added below, which now fails
+# loudly instead of swallowing if the prerequisite is still somehow missing.
 if printf '%s\n' $LANG_UNION | grep -qx java; then
     for pkg in hydra-jvm hydra-java; do
         if [ ! -d "$HYDRA_ROOT/dist/java/$pkg" ]; then
@@ -891,11 +901,11 @@ if printf '%s\n' $LANG_UNION | grep -qx python && [ ! -d "$HYDRA_ROOT/dist/pytho
     "$HYDRA_ROOT/heads/python/bin/assemble-distribution.sh" hydra-python
 fi
 if printf '%s\n' $LANG_UNION | grep -qx scala; then
-    for pkg in hydra-jvm hydra-java hydra-python hydra-scala hydra-haskell hydra-lisp; do
+    for pkg in hydra-jvm hydra-java hydra-python hydra-scala hydra-haskell hydra-lisp hydra-typescript; do
         if [ ! -d "$HYDRA_ROOT/dist/scala/$pkg" ]; then
             echo ""
             echo "Cold-start detected (missing dist/scala/$pkg); assembling from tracked dist/json/"
-            echo "(heads/scala/Generation.scala imports all six packages unconditionally)..."
+            echo "(heads/scala/Generation.scala imports all seven packages unconditionally)..."
             "$HYDRA_ROOT/heads/scala/bin/assemble-distribution.sh" "$pkg"
         fi
     done
@@ -1038,6 +1048,13 @@ done
 # hydra-<lang> dist with the DSL meta-modules a native DSL→JSON run needs).
 JAVA_HOST_SENTINEL="$HYDRA_ROOT/dist/java/hydra-java/src/main/java/hydra/java/dsl/Syntax.java"
 PYTHON_HOST_SENTINEL="$HYDRA_ROOT/dist/python/hydra-python/src/main/python/hydra/python/dsl/syntax.py"
+# #756: the Scala native DSL -> JSON driver needs dist/scala/hydra-typescript (among
+# other dist/scala/hydra-* packages Generation.scala imports unconditionally; see the
+# Phase 1.5 cold-start block above) to be assembled BEFORE sbt compiles the driver.
+# hydra-typescript is the one most likely to be missing in a scoped sync (it's the only
+# one of those packages that Phase 4's STATIC_DEPS list also keys on scala being in
+# --hosts specifically, not just LANG_UNION), so it's the sentinel here.
+SCALA_HOST_SENTINEL="$HYDRA_ROOT/dist/scala/hydra-typescript/src/main/scala/hydra/typescript/coder.scala"
 
 native_generate_and_report() {
     local lang="$1"        # java | python
@@ -1208,10 +1225,23 @@ else
 fi
 # #509: hydra-scala native DSL → JSON. Writes 4 of 5 source modules byte-identically;
 # Coder.json has simplified bodies (pending full translation).
+#
+# #756: gate on SCALA_HOST_SENTINEL (mirroring JAVA_HOST_SENTINEL/PYTHON_HOST_SENTINEL
+# above) so a missing build-input prerequisite (dist/scala/hydra-typescript not yet
+# assembled) is reported as a clear skip rather than an sbt compile failure swallowed by
+# a bare `||`. The Phase 1.5 cold-start block above should always assemble this sentinel
+# by now, so hitting the skip branch here indicates that block's package list has fallen
+# out of sync with Generation.scala's imports again — not a normal, expected path.
+# With the prerequisite gap closed, a non-zero exit from the driver past this point is a
+# real compile/driver failure (not a missing prerequisite) and is NOT swallowed.
 if printf '%s\n' $LANG_UNION | grep -qx scala; then
     echo "--- hydra-scala (native Scala DSL → JSON) ---"
-    "$HYDRA_ROOT/bin/generate-hydra-scala-from-scala.sh" || \
-        echo "  WARNING: scala native DSL → JSON failed; continuing (the Haskell DSL pass already wrote dist/json/hydra-scala/)"
+    if [ ! -f "$SCALA_HOST_SENTINEL" ]; then
+        echo "  skipping: scala host prerequisite not built (missing $SCALA_HOST_SENTINEL)."
+        echo "  hydra-scala JSON remains as written by the last native-generator run (or the Haskell DSL pass)."
+    else
+        "$HYDRA_ROOT/bin/generate-hydra-scala-from-scala.sh"
+    fi
 else
     echo "--- hydra-scala (skipped: scala not in hosts ∪ targets) ---"
 fi
