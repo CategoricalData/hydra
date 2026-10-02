@@ -377,6 +377,17 @@ from the JSON signatures for free.
 If you see `typeLambda`/`forall t0` in a generated derived module whose source type is monomorphic,
 a derived module is being inferred when it shouldn't be.
 
+**`writeJava`/`writePython` ([above](#generating-from-dsl-modules-directly)) do not enforce this
+invariant.** Both hardcode `doInfer=True` unconditionally (`Hydra.ExtGeneration`) with no check for
+derived-module namespaces. Hydra's own usage never passes them derived content —
+`mainModules`/`kernelModules` are hand-authored only — so the invariant holds in practice today,
+but nothing *enforces* it. Passing a `hydra.<root>.{dsl,encode,decode}.*` module to either function
+will re-infer it and can hit the spurious occurs-check failure described in
+[#758](https://github.com/CategoricalData/hydra/issues/758) for a polymorphic-recursive derived
+coder group, or a silently-wrong generalized signature otherwise. If you assemble your own module
+list for `writeJava`/`writePython`, keep derived categories out of it, the same way `mainModules`
+does.
+
 ### Coq
 
 Coq output is generated via dedicated executables rather than GHCi.

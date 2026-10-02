@@ -47,6 +47,20 @@ project actually needs, with no routing and no dependency on a pre-existing mani
   pure manifest field-assembly and serialization, no filesystem access. Produces the same
   `manifest.json` contents `writePackageManifests` would, for one package, without routing.
 
+**"Every module in your project" means your own hand-authored modules only.** If your project
+also synthesizes its own derived `dsl`/`encode`/`decode` modules (e.g. via the same
+`Generation.generateDecoderModules`/`generateEncoderModules`/DSL-synthesis calls Hydra's own sync
+uses), do not fold those into `universeMods`/`targetMods` here. Derived modules carry their final
+types from the synthesizer and must never be re-inferred — see [Derived modules carry their
+types](code-generation.md#derived-modules-carry-their-types--never-re-infer-them) for why, and
+[#758](https://github.com/CategoricalData/hydra/issues/758) for what re-inferring one looks like in
+practice: a parametric type used at two instantiations inside one recursive encoder/decoder group
+(polymorphic recursion) trips a spurious occurs-check error (`Variable t appears free in type
+...`) under `inferModulesGiven`/`inferTypeOfLet`'s monomorphic-SCC treatment, even though the
+synthesized term is correct as emitted. Generate your derived modules the same way Hydra does —
+synthesized with their types already attached, emitted with `doInfer=false`, and never mixed into
+an `inferModulesGiven` call — and pass only your hand-authored modules through the pattern below.
+
 Minimal Java example, one project, one package, no pre-existing output tree:
 
 ```java
