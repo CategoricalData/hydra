@@ -6,7 +6,7 @@
 // the overlay util.Optional; pairs use util.Pair.
 package lists
 
-import "hydra.dev/hydra/overlay/go/util"
+import "hydra.dev/hydra/core/overlay/go/util"
 
 func asList(x any) []any { return x.([]any) }
 

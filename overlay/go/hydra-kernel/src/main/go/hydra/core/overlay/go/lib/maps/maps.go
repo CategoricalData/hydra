@@ -3,7 +3,7 @@
 // thunk). Maps are immutable; every mutator returns a new map.
 package maps
 
-import "hydra.dev/hydra/overlay/go/util"
+import "hydra.dev/hydra/core/overlay/go/util"
 
 func asMap(x any) util.Map { return x.(util.Map) }
 

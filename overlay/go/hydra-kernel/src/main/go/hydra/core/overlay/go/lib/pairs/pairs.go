@@ -1,7 +1,7 @@
 // Package pairs implements the hydra.core.lib.pairs primitives.
 package pairs
 
-import "hydra.dev/hydra/overlay/go/util"
+import "hydra.dev/hydra/core/overlay/go/util"
 
 // Bimap : (a -> c) -> (b -> d) -> pair<a,b> -> pair<c,d>
 func Bimap(f any, g any, p any) any {

@@ -12,7 +12,7 @@ package regex
 import (
 	"regexp"
 
-	"hydra.dev/hydra/overlay/go/util"
+	"hydra.dev/hydra/core/overlay/go/util"
 )
 
 func compile(pattern any) *regexp.Regexp {

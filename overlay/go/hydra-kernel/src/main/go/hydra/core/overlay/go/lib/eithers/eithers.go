@@ -8,7 +8,7 @@
 // (lefts, rights).
 package eithers
 
-import "hydra.dev/hydra/overlay/go/util"
+import "hydra.dev/hydra/core/overlay/go/util"
 
 func asEither(x any) util.Either { return x.(util.Either) }
 

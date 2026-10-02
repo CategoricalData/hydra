@@ -9,8 +9,8 @@
 package ordering
 
 import (
-	"hydra.dev/hydra/overlay/go/util"
-	genutil "hydra.dev/hydra/util"
+	"hydra.dev/hydra/core/overlay/go/util"
+	genutil "hydra.dev/hydra/core/util"
 )
 
 // Compare : x -> x -> Comparison

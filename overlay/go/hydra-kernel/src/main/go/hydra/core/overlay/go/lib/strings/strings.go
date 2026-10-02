@@ -11,7 +11,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"hydra.dev/hydra/overlay/go/util"
+	"hydra.dev/hydra/core/overlay/go/util"
 )
 
 // Cat : list<string> -> string
