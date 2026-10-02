@@ -7,7 +7,7 @@
 #   digest.sh fresh         --inputs <file> --output-dir <dir> --output-digest <file>
 #                           [--keep-paths-from <manifest>]
 #   digest.sh refresh       --inputs <file> --output-dir <dir> --output-digest <file>
-#   digest.sh refresh-input --package <pkg> --dist-json-root <dir>
+#   digest.sh refresh-input --package <pkg> --dist-json-root <dir> [--source-set main|test]
 #
 # `refresh-input` rewrites a package's INPUT digest from current on-disk state:
 # it scans the package's source files, extracts each declared namespace via a
@@ -57,8 +57,11 @@ Usage:
            refreshes the digest, and reports a hit (#393 reconcile).
   refresh: walk <output-dir>, hash every file, write <output-digest> with
            paths relative to <output-dir>, plus the generation record.
-  refresh-input: rewrite <dir>/<pkg>/build/main/digest.json from the current
-           source files (declared-namespace scan) + JSON content (#469).
+  refresh-input: rewrite <dir>/<pkg>/build/<set>/digest.json from the current
+           source files. --source-set main (default) writes the main input
+           digest (declared-namespace scan + JSON content, #469); --source-set
+           test writes the test input digest (full module-universe source hash,
+           mirroring Generation.refreshDigestAt; package-independent, #773).
 EOF
 }
 
@@ -636,12 +639,72 @@ do_refresh_input() {
   echo "  digest.sh refresh-input: wrote $dpath ($nsrc src + $njson json = $((nsrc + njson)) entries)"
 }
 
+# refresh-input for the TEST source set (#773 fast-path seed).
+#
+# The full (Haskell) pipeline writes <pkg>/build/test/digest.json via
+# Generation.refreshDigestAt, whose value is `hashUniverse nsFiles universeMods`
+# — the hash of every source module in THIS RUN'S inference universe. That value
+# is a function of the inference universe (not of any on-disk tree alone) and so
+# cannot be faithfully reproduced without running inference — exactly the Haskell
+# work the fast path exists to avoid.
+#
+# We do NOT try to reproduce that value. The digest's ONLY role is as a freshness
+# key: `digest.sh fresh` compares the input digest's moduleHashes against what the
+# per-target output digest recorded, declaring a cache miss (⇒ regenerate) on any
+# difference — it attaches no meaning to the entries. So a self-contained,
+# deterministic hash of the actual transform inputs (the tracked src/test/json
+# tree) is a CORRECT and TIGHT freshness key: it changes exactly when the test
+# JSON the assembler transforms changes. It intentionally differs from the Haskell
+# universe digest, so the next haskell-inclusive sync simply recomputes it (a
+# one-time, harmless test-set regeneration) — never a false cache HIT.
+#
+# Shape matches the on-disk test digest written by the Haskell path (no selfHash,
+# empty dependencyHashes, a flat moduleHashes map) so `digest.sh fresh` parses it
+# identically; only the entry set (keyed jsonContent:<rel>) differs.
+do_refresh_input_test() {
+  local pkg="$1" dist_json_root="$2"
+  local dpath="$dist_json_root/$pkg/build/test/digest.json"
+  local json_root="$dist_json_root/$pkg/src/test/json"
+
+  local tmpd; tmpd="$(mktemp -d)"
+  # shellcheck disable=SC2064
+  trap "rm -rf '$tmpd'" RETURN
+
+  # Hash each test JSON file, keyed on its path relative to src/test/json —
+  # the same jsonContent: convention do_refresh_input uses for main JSON.
+  local tsv="" f rel h
+  if [ -d "$json_root" ]; then
+    while IFS= read -r f; do
+      [ -n "$f" ] || continue
+      rel="$(make_relative_to "$json_root" "$f")"
+      h="$(hash_file "$f")"
+      tsv+="jsonContent:${rel}"$'\t'"${h}"$'\n'
+    done < <(find "$json_root" -type f -name '*.json' -not -path '*/.*' | LC_ALL=C sort)
+  fi
+
+  printf '%s' "$tsv" | jq -R -s '
+    split("\n") | map(select(length>0) | split("\t") | {key:.[0], value:.[1]})
+  ' > "$tmpd/modules.json"
+
+  mkdir -p "$(dirname "$dpath")"
+  jq -n \
+    --argjson dfv "$DIGEST_FORMAT_VERSION" \
+    --argjson mfv "$MODULE_FORMAT_VERSION" \
+    --slurpfile modules "$tmpd/modules.json" '
+    {digestFormatVersion:$dfv, moduleFormatVersion:$mfv,
+     dependencyHashes:[], moduleHashes:$modules[0]}
+  ' > "$dpath"
+
+  local n; n="$(jq 'length' "$tmpd/modules.json")"
+  echo "  digest.sh refresh-input: wrote $dpath ($n test-json entries, test source set)"
+}
+
 # ---------------------------------------------------------------------------
 main() {
   [ $# -ge 1 ] || { usage; exit 1; }
   local cmd="$1"; shift
   local inputs="" output_dir="" output_digest="" keep_from=""
-  local package="" dist_json_root=""
+  local package="" dist_json_root="" source_set="main"
   while [ $# -gt 0 ]; do
     case "$1" in
       --inputs)          inputs="$2"; shift 2 ;;
@@ -650,6 +713,7 @@ main() {
       --keep-paths-from) keep_from="$2"; shift 2 ;;
       --package)         package="$2"; shift 2 ;;
       --dist-json-root)  dist_json_root="$2"; shift 2 ;;
+      --source-set)      source_set="$2"; shift 2 ;;
       *) err "unknown argument: $1"; usage; exit 1 ;;
     esac
   done
@@ -665,13 +729,23 @@ main() {
       if [ -z "$package" ] || [ -z "$dist_json_root" ]; then
         err "refresh-input requires --package and --dist-json-root"; exit 1
       fi
+      case "$source_set" in
+        main|test) ;;
+        *) err "refresh-input --source-set must be 'main' or 'test'"; exit 1 ;;
+      esac
       ;;
   esac
 
   case "$cmd" in
     fresh)         do_fresh         "$inputs" "$output_dir" "$output_digest" "$keep_from" ;;
     refresh)       do_refresh       "$inputs" "$output_dir" "$output_digest" ;;
-    refresh-input) do_refresh_input "$package" "$dist_json_root" ;;
+    refresh-input)
+      if [ "$source_set" = "test" ]; then
+        do_refresh_input_test "$package" "$dist_json_root"
+      else
+        do_refresh_input "$package" "$dist_json_root"
+      fi
+      ;;
     *) err "unknown subcommand: $cmd"; usage; exit 1 ;;
   esac
 }

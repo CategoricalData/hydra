@@ -67,14 +67,18 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT/heads/haskell"
 
-# --- #730 build-slot guard: serialize shared-~/.stack GHC builds fleet-wide. ---
-# sync.sh is THE chokepoint — every sync-*.sh execs it, and it drives the Haskell
-# host build. Re-exec under bin/with-stack-slot.sh unless we already hold the slot
-# (reentrant pass-through) or this is a help-only invocation. Internal scripts it
-# calls (transform-json-to-target, assemble-*, sync-haskell) inherit fd 9 — no guard.
-if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && [ "${1:-}" != "--help" ] && [ "${1:-}" != "-h" ]; then
-  exec "$HYDRA_ROOT/bin/with-stack-slot.sh" --label "sync.sh $*" -- "$0" "$@"
-fi
+# NOTE (#730/#773): the build-slot re-exec that formerly lived here has moved
+# *below* argument parsing (see "#730 build-slot guard" after LANG_UNION is known).
+# It must run after we can tell whether this is a Haskell-free fast-path sync
+# (#773) — such a sync spawns no shared-~/.stack GHC build, so it must NOT hold the
+# fleet build-slot and block Haskell syncs behind it. Parsing args first is cheap
+# (pure shell) and nothing between here and there touches ~/.stack.
+#
+# Capture the ORIGINAL argv HERE, before the parse loop below consumes it with
+# `shift`. The relocated re-exec must forward these — not the post-parse "$@"
+# (which is empty), or the re-exec'd sync.sh would see no args and default to
+# all×all instead of the requested scope.
+SYNC_ORIG_ARGS=("$@")
 
 source "$HYDRA_ROOT/bin/lib/common.sh"
 
@@ -239,6 +243,90 @@ done
 # tested) before the Lisp dialects so failures surface earlier.
 LANG_UNION=$(printf '%s\n' $HOSTS $TARGETS | awk '!seen[$0]++' | xargs)
 
+# ────────────────────────────────────────────────────────────────────
+# #773: Haskell-free fast path.
+# ────────────────────────────────────────────────────────────────────
+# The default generation host went Java (#703/#559) so that generating code
+# needs no local Haskell compile — but the sync *pipeline* still used the
+# Haskell toolchain as its orchestration backbone (Phase 0's unconditional
+# 930-module `stack build`, Phase 1/1.5/2, the Phase 5 dist/haskell re-assemble).
+# For a sync whose hosts ∪ targets contains no Haskell work at all, that whole
+# backbone is dead weight: on a cold `.stack-work` a single java→python cell
+# cost 171 min, almost entirely GHC. Phases 3/4/5 already drive non-Haskell
+# hosts through heads/<host>/bin/assemble-distribution.sh → the Java/Python/
+# Scala/TypeScript transform-json-to-target.sh drivers (published host + Maven
+# coders, zero GHC — the same primitive the #703 cold-seeder trusts).
+#
+# Take the fast path when ALL of:
+#   - haskell is in neither --hosts nor --targets (nothing compiles the Haskell
+#     kernel/coders this run), AND
+#   - no Lisp dialect is in hosts ∪ targets — Phase 3's Lisp branch still forces
+#     GENERATOR_HOST=haskell (#719 temporary), so a Lisp cell needs the Haskell
+#     generator, AND
+#   - HOST_MODE is not 'local' — an explicit --local-host sync is deliberately
+#     asking to build the Haskell host from source, AND
+#   - dist/json is present (the transform source of truth; it is git-tracked, so
+#     this holds on any checkout — guarded defensively regardless), AND
+#   - dist/<L>/hydra-build already exists for every in-scope non-Haskell language L.
+#     This last condition is load-bearing: hydra-build is self-referential, so
+#     bin/lib/assemble-common.sh's run_layer1_transform routes its generation through
+#     generators.bootstrapSeedHost=haskell (the #459/#559 circular-seed guard) REGARDLESS
+#     of GENERATOR_HOST — and that Haskell seed (bootstrap-from-json) needs the 930-module
+#     library. So a sync that must *generate* hydra-build cannot be Haskell-free. When
+#     dist/<L>/hydra-build is already present (warm), the Phase 3 assembler's freshness
+#     check skips hydra-build regeneration and never invokes the Haskell seed; when it is
+#     absent (cold), we must NOT take the fast path and instead let the normal path build
+#     the execs in Phase 0. This narrows the fast path to a WARM-tree Haskell-elimination —
+#     exactly where the fleet pain (repeated cold-ish syncs each paying stack test + the
+#     slot) actually is; the one-time cold 930-module build is unavoidable (see the issue).
+#
+# When taken, we skip Phase 0 (the stack build + cold Haskell seed + overlay),
+# Phase 1 (sync-haskell.sh), Phase 1.5's heal + update-json-main (its outputs
+# feed only the skipped Phase-2 dist/haskell build; Phase 5's native drivers are
+# the authoritative JSON regen anyway), Phase 2 (dist/haskell coders), and the
+# Phase 5 dist/haskell consistency re-assemble. The CI `git diff dist/haskell`
+# consistency of hydra-<lang> coders simply "lags to the next sync" that includes
+# haskell — a trade-off the existing Phase 5 comment already contemplates — and
+# nothing in this run reads dist/haskell, so it is sound.
+HASKELL_FREE_FAST_PATH=false
+if [ "$HOST_MODE" != "local" ] \
+   && ! printf '%s\n' $LANG_UNION | grep -qx haskell \
+   && ! printf '%s\n' $LANG_UNION | grep -Eqx 'clojure|scheme|common-lisp|emacs-lisp' \
+   && [ -d "$HYDRA_ROOT/dist/json" ]; then
+    # Every in-scope non-Haskell language must already have a FRESH dist/<L>/hydra-build
+    # — specifically its OUTPUT digest (dist/<L>/hydra-build/build/main/digest.json). That
+    # file's presence is the signal a prior full sync already generated hydra-build and
+    # recorded its digest; with both input (dist/json/...) and output digests on disk, the
+    # Phase 3 assembler's assemble_check_fresh short-circuits and NEVER invokes
+    # run_layer1_transform (the #459 Haskell seed). The source dir existing is not enough —
+    # a transform without a recorded output digest would still force a regen → Haskell.
+    # go is a kernel-only head bud (no hydra-build). (Option A, #773.)
+    HASKELL_FREE_FAST_PATH=true
+    for _L in $LANG_UNION; do
+        case "$_L" in
+            haskell|go) continue ;;
+        esac
+        if [ ! -f "$HYDRA_ROOT/dist/$_L/hydra-build/build/main/digest.json" ]; then
+            HASKELL_FREE_FAST_PATH=false
+            break
+        fi
+    done
+    unset _L
+fi
+
+# --- #730 build-slot guard: serialize shared-~/.stack GHC builds fleet-wide. ---
+# sync.sh is THE chokepoint — every sync-*.sh execs it, and it drives the Haskell
+# host build. Re-exec under bin/with-stack-slot.sh unless we already hold the slot
+# (reentrant pass-through), this is a help-only invocation, or this is a #773
+# Haskell-free fast-path sync (no shared-~/.stack GHC build runs, so holding the
+# fleet slot would only block Haskell syncs behind non-GHC work). Internal scripts
+# it calls (transform-json-to-target, assemble-*, sync-haskell) inherit fd 9 — no guard.
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && [ "$HASKELL_FREE_FAST_PATH" != "true" ]; then
+  # Forward the ORIGINAL argv (captured before the parse loop), not "$@" — the loop
+  # above shifted "$@" empty, and passing that would re-run sync.sh as all×all.
+  exec "$HYDRA_ROOT/bin/with-stack-slot.sh" --label "sync.sh $HOSTS_ARG/$TARGETS_ARG" -- "$0" ${SYNC_ORIG_ARGS[@]+"${SYNC_ORIG_ARGS[@]}"}
+fi
+
 # Ensure JAVA_HOME is set to a native arm64 JDK 19 if any host or target is java.
 need_java=false
 for l in $LANG_UNION; do
@@ -281,6 +369,12 @@ echo "  Targets: $TARGETS"
 echo "  Union:   $LANG_UNION"
 echo ""
 
+if [ "$HASKELL_FREE_FAST_PATH" = "true" ]; then
+    banner1 "Phases 0–2 skipped (#773 Haskell-free fast path: haskell ∉ hosts ∪ targets)"
+    echo "  No Haskell kernel/coder build this run — Phases 3/4/5 drive the"
+    echo "  requested cells through the published Java/Python/Scala/TypeScript hosts."
+    echo ""
+else
 # ────────────────────────────────────────────────────────────────────
 # Phase 0: Ensure essential Haskell executables are built.
 # ────────────────────────────────────────────────────────────────────
@@ -292,7 +386,8 @@ echo ""
 #
 # This stack build is a no-op on warm local trees (seconds to confirm)
 # and one-time cost on cold CI (amortized by actions/cache on ~/.stack).
-# Unconditional ensures correctness.
+# Unconditional ensures correctness — EXCEPT it is skipped entirely on the
+# #773 Haskell-free fast path above (no `stack exec` runs this sync).
 
 # #370: emit the head's build files for the chosen host mode BEFORE the Phase-0
 # stack build, so Phase 0 and Phase 1 (sync-haskell.sh, below) build the host
@@ -623,6 +718,65 @@ for L in $LANG_UNION; do
     echo "--- $pkg (Haskell) ---"
     "$HYDRA_HASKELL_DIR/bin/assemble-distribution.sh" "$pkg"
 done
+fi  # end: Haskell-free fast path skips Phases 0–2 (#773)
+
+# #773: On the Haskell-free fast path, Phase 1's `update-json-main` — which
+# normally writes each package's INPUT digest (dist/json/<pkg>/build/main/
+# digest.json) — did not run. The Phase 3/4 assemblers below call
+# assemble_refresh_digest after generating, which HARD-FAILS when that input
+# digest is absent (bin/lib/assemble-common.sh), so seed it here for every
+# in-scope package via the pure-bash, Haskell-free `digest.sh refresh-input`
+# (the #416 promotion the Scala-digest seed already used). Idempotent and cheap;
+# a warm tree already has these but re-seeding is the honest on-disk digest.
+#
+# hydra-build is DELIBERATELY EXCLUDED: the fast-path gate guarantees
+# dist/<L>/hydra-build already exists (it is only taken when so), meaning a prior
+# full sync both generated it AND wrote its input+output digests. Re-seeding its
+# input digest here with refresh-input's shape could DIFFER from what that full
+# sync's update-json-main wrote, flip assemble_check_fresh to "stale", and trigger
+# a regeneration — which for hydra-build routes through the Haskell bootstrapSeedHost
+# (#459) and re-introduces the 930-module build the fast path exists to avoid. Leave
+# hydra-build's existing (fresh) digests untouched so its Phase 3 assembly is skipped.
+if [ "$HASKELL_FREE_FAST_PATH" = "true" ]; then
+    echo ""
+    echo "Seeding package input digests (Haskell-free; #773/#416)..."
+    _fastpath_pkgs="hydra-kernel hydra-rdf hydra-pg"
+    for L in $LANG_UNION; do
+        case "$L" in
+            java)                                   _fastpath_pkgs="$_fastpath_pkgs hydra-jvm hydra-java" ;;
+            python|scala|typescript|go)             _fastpath_pkgs="$_fastpath_pkgs hydra-$L" ;;
+            clojure|scheme|common-lisp|emacs-lisp)  _fastpath_pkgs="$_fastpath_pkgs hydra-lisp" ;;
+        esac
+    done
+    # Static host deps the Phase 4 host compiles against (see STATIC_DEPS below):
+    # every non-Haskell host imports the full sibling-coder set, so their input
+    # digests must exist even when the language isn't itself a target this run.
+    for H in $HOSTS; do
+        case "$H" in
+            java|python|scala|typescript)
+                _fastpath_pkgs="$_fastpath_pkgs hydra-haskell hydra-jvm hydra-java hydra-python hydra-scala hydra-lisp hydra-typescript" ;;
+        esac
+    done
+    for pkg in $(printf '%s\n' $_fastpath_pkgs | awk '!seen[$0]++'); do
+        if [ -d "$HYDRA_ROOT/dist/json/$pkg/src/main/json" ]; then
+            "$HYDRA_ROOT/bin/digest.sh" refresh-input \
+                --package "$pkg" \
+                --dist-json-root "$HYDRA_ROOT/dist/json" || exit 1
+        fi
+        # The assembler also processes the test source set when the package has a
+        # src/test/json tree (tracked for hydra-kernel/hydra-build), and its
+        # assemble_refresh_digest hard-fails without the test INPUT digest too —
+        # which Phase 1's update-json-test (skipped here) normally writes. Seed it
+        # Haskell-free via the test-source-set mode (universe source hash).
+        if [ -d "$HYDRA_ROOT/dist/json/$pkg/src/test/json" ]; then
+            "$HYDRA_ROOT/bin/digest.sh" refresh-input \
+                --package "$pkg" --source-set test \
+                --dist-json-root "$HYDRA_ROOT/dist/json" || exit 1
+        fi
+    done
+    unset _fastpath_pkgs
+    echo ""
+fi
 
 # ────────────────────────────────────────────────────────────────────
 # Phase 3: hydra-kernel + hydra-pg + hydra-rdf into every language.
@@ -909,10 +1063,21 @@ native_generate_and_report() {
         # left to reconcile — moving this native DSL→JSON step ahead of Phase 2
         # and deleting this re-assemble block is a viable simplification, just not
         # done yet. Left as a future cleanup rather than bundled here.
-        echo "  hydra-$lang: regenerating dist/haskell/hydra-$lang from native JSON..."
-        "$HYDRA_ROOT/heads/haskell/bin/assemble-distribution.sh" "hydra-$lang"
-        echo "  hydra-$lang: rebuilding Haskell executables so bootstrap-from-json embeds the new coder..."
-        ( cd "$HYDRA_ROOT/heads/haskell" && stack build )
+        #
+        # #773: on the Haskell-free fast path, haskell ∉ hosts ∪ targets and the
+        # Haskell execs were never built (Phase 0 skipped), so we cannot — and
+        # need not — refresh dist/haskell here. The native JSON + dist/<lang>/
+        # re-assemble above keep this run's requested cells consistent; the
+        # dist/haskell coder mirror simply "lags to the next sync" that includes
+        # haskell, exactly the trade-off the NOTE above already contemplates.
+        if [ "$HASKELL_FREE_FAST_PATH" = "true" ]; then
+            echo "  hydra-$lang: skipping dist/haskell re-assemble (#773 Haskell-free fast path; lags to next haskell-inclusive sync)."
+        else
+            echo "  hydra-$lang: regenerating dist/haskell/hydra-$lang from native JSON..."
+            "$HYDRA_ROOT/heads/haskell/bin/assemble-distribution.sh" "hydra-$lang"
+            echo "  hydra-$lang: rebuilding Haskell executables so bootstrap-from-json embeds the new coder..."
+            ( cd "$HYDRA_ROOT/heads/haskell" && stack build )
+        fi
     else
         echo "  hydra-$lang: native output matches snapshot on all $total JSON files."
     fi
