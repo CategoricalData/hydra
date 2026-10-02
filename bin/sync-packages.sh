@@ -393,6 +393,33 @@ fi
 HYDRA_HASKELL_HOST_MODE="${HYDRA_HASKELL_HOST_MODE:-local}" "$HYDRA_ROOT_DIR/heads/haskell/bin/overlay-kernel-runtime.sh"
 echo ""
 
+# #771: pre-assemble hydra-build for java/python (whichever are in scope) BEFORE
+# the Phase 2 target loop below. Phase 2 iterates targets in ALL_TARGETS order,
+# which puts 'haskell' before 'java'/'python'. hydra-jvm (and other Java-native
+# packages) assembled for the 'haskell' target route through the Java generator
+# host, which falls back to a local headsExtras build when the published
+# hydra-java artifact can't serve the request. That build's classpath includes
+# dist/java/hydra-build/src/main/java (packages/hydra-java/build.gradle) so it can
+# see hydra.build.overlay.java.Generation et al — but that tree is gitignored and
+# only populated as Step 0 of `heads/java/bin/assemble-distribution.sh hydra-build`
+# (the overlay copy), which otherwise wouldn't run until the 'java' target's own
+# pass over hydra-build, later in the same loop. On a fresh/seeded tree (empty
+# dist/java/hydra-build) this left the 'haskell' target's hydra-jvm assembly
+# failing with "package hydra.build.overlay.java does not exist" (39 errors).
+#
+# Mirrors bin/sync.sh's heal_java_python_native(), which hit the identical
+# problem for its own pipeline (#560 red-main incident) and fixed it the same
+# way: unconditionally assemble hydra-build first. Cheap and idempotent (a
+# Layer-1 JSON->target transform, digest-skipped on a warm tree) — safe to run
+# every time the target is in scope.
+for pkg_build_target in java python; do
+    if echo " $EFFECTIVE_TARGETS " | grep -q " $pkg_build_target "; then
+        echo "Pre-assembling hydra-build for $pkg_build_target (#771, avoids headsExtras races with the haskell target)..."
+        "$HYDRA_ROOT_DIR/heads/$pkg_build_target/bin/assemble-distribution.sh" hydra-build || exit 1
+        echo ""
+    fi
+done
+
 # Phase 2: Assemblers. When generating every package for a target and
 # the head has a batch assembler (assemble-all.sh), invoke it once per
 # target — one Haskell universe load per target instead of one per
