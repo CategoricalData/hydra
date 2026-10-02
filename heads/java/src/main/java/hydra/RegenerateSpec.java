@@ -39,6 +39,15 @@ import java.util.Map;
  */
 public class RegenerateSpec {
 
+    // Matches CLAUDE.md's documented convention for generated source files verbatim, since no
+    // distinct wording has been specified for generated prose pages. Prepended here, outside the
+    // Markdown-AST, rather than folded into generateModuleDoc's Document content: hand-authored
+    // pages put this notice BEFORE the title, but hydra.core.print.markdown's document printer
+    // always emits "H1 title followed by its blocks" (its own documented, general-purpose
+    // contract) -- so a Block.raw notice inside Document.content would land after the title.
+    private static final String GENERATED_FILE_NOTICE =
+            "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n";
+
     /** page path (relative to docs/specification/) -> backing module namespaces. */
     private static final Map<String, List<String>> PAGE_MODULES = buildPageModules();
 
@@ -130,14 +139,17 @@ public class RegenerateSpec {
     }
 
     /**
-     * Renders one or more generateModuleDoc Documents as a single page: each
-     * module's Document (already including its own generated-file notice) is
-     * rendered in namespace order and concatenated.
+     * Renders one or more generateModuleDoc Documents as a single page: a single
+     * generated-file notice up front, then each module's Document rendered in
+     * namespace order and concatenated.
      */
     private static String renderPage(List<Document> docs) {
-        StringBuilder sb = new StringBuilder();
-        for (Document doc : docs) {
-            sb.append(hydra.core.print.Markdown.document(doc));
+        StringBuilder sb = new StringBuilder(GENERATED_FILE_NOTICE);
+        for (int i = 0; i < docs.size(); i++) {
+            if (i > 0) {
+                sb.append("\n\n");
+            }
+            sb.append(hydra.core.print.Markdown.document(docs.get(i)));
         }
         return sb.toString();
     }
