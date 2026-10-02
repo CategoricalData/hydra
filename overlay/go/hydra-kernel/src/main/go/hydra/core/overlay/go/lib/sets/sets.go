@@ -2,7 +2,7 @@
 // canonical-order util.Set. Sets are immutable; every mutator returns a new set.
 package sets
 
-import "hydra.dev/hydra/overlay/go/util"
+import "hydra.dev/hydra/core/overlay/go/util"
 
 func asSet(x any) util.Set { return x.(util.Set) }
 

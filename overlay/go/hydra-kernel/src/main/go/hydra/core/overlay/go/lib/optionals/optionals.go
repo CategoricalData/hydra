@@ -5,7 +5,7 @@
 // fromOptional arg 0) arrive as func() any thunks.
 package optionals
 
-import "hydra.dev/hydra/overlay/go/util"
+import "hydra.dev/hydra/core/overlay/go/util"
 
 // Apply : optional<a -> b> -> optional<a> -> optional<b>
 func Apply(mf any, mx any) any {

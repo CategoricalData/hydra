@@ -182,7 +182,7 @@ resolveTypeRef name targs st =
 -- Pair, Map, Set, comparison — see overlay/go/hydra-kernel). The package
 -- declares itself as "util", so no import alias is needed.
 goUtilImportPath :: String
-goUtilImportPath = goModulePath ++ "/hydra/overlay/go/util"
+goUtilImportPath = goModulePath ++ "/hydra/core/overlay/go/util"
 
 resolveUtilType :: String -> [Go.Type] -> GoState -> (Go.Type, GoState)
 resolveUtilType name targs st =
@@ -1316,12 +1316,12 @@ libPackageAlias lib = "lib" ++ lib
 
 -- | Resolve a Hydra primitive name to a reference to its native overlay
 -- implementation: "hydra.core.lib.strings.concat" -> libstrings.Concat with import
--- "hydra.dev/hydra/overlay/go/lib/strings" aliased as libstrings (via
+-- "hydra.dev/hydra/core/overlay/go/lib/strings" aliased as libstrings (via
 -- libPackageAlias, so a bare `strings` binding/param can never shadow the pkg).
 resolvePrimRef :: Core.Name -> GoState -> (Go.Expression, GoState)
 resolvePrimRef (Core.Name name) st = case Strings.splitOn "." name of
   ["hydra", "lib", lib, fn] ->
-    let impPath = goModulePath ++ "/hydra/overlay/go/lib/" ++ lib
+    let impPath = goModulePath ++ "/hydra/core/overlay/go/lib/" ++ lib
     in (goQualNameExpr (libPackageAlias lib) (capitalize fn), addImport impPath st)
   _ -> (goNameExpr name, st)
 
@@ -3543,13 +3543,13 @@ buildImports imps
       let dirName = lastSeg path
           -- Reconstruct the namespace from the import path to get the Go alias
           ns = pathToNamespace path
-          -- Overlay lib packages (hydra/overlay/go/lib/<name>) are referenced
+          -- Overlay lib packages (hydra/core/overlay/go/lib/<name>) are referenced
           -- under a "lib"-prefixed alias so a same-named local variable cannot
           -- shadow them; that alias must be declared on the import too. Other
           -- overlay packages (util) keep their declared short name. Everything
           -- else uses the computed Go package alias.
-          isLibPkg = "/hydra/overlay/go/lib/" `L.isInfixOf` path
-          isOverlayPkg = "/hydra/overlay/go/" `L.isInfixOf` path
+          isLibPkg = "/hydra/core/overlay/go/lib/" `L.isInfixOf` path
+          isOverlayPkg = "/hydra/core/overlay/go/" `L.isInfixOf` path
           goAlias
             | isLibPkg = libPackageAlias dirName
             | isOverlayPkg = dirName

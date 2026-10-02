@@ -13,7 +13,7 @@ package math
 import (
 	gomath "math"
 
-	"hydra.dev/hydra/overlay/go/util"
+	"hydra.dev/hydra/core/overlay/go/util"
 )
 
 // Abs : int32 -> int32

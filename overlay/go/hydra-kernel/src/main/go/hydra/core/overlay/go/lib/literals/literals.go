@@ -16,7 +16,7 @@ import (
 	"strconv"
 	"strings"
 
-	"hydra.dev/hydra/overlay/go/util"
+	"hydra.dev/hydra/core/overlay/go/util"
 )
 
 // ---- bigint -> fixed width ----
