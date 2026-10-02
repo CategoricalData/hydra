@@ -303,7 +303,6 @@ generateModuleDocCase = universalCase
     -- "(forall a. (a → a))", mixing ASCII (scheme header) and Unicode (body arrow).
     expected = Phantoms.string $
       "# hydra.testInput.doc\n\n" ++
-      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
       "## hydra.testInput.doc.identity\n\n" ++
       "The identity function\n\n" ++
       "`∀a.a → a`"
@@ -341,7 +340,6 @@ undocumentedCase = universalCase
     actual = PrintMarkdown.document # (Generation.generateModuleDoc # undocumentedModule)
     expected = Phantoms.string $
       "# hydra.testInput.undoc\n\n" ++
-      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
       "## hydra.testInput.undoc.identity\n\n" ++
       "*(undocumented)*\n\n" ++
       "`∀a.a → a`"
@@ -406,7 +404,6 @@ primitiveDocCase = universalCase
     -- separator (see Print/Markdown.hs's `inlines` -- Strings.concat with no join string).
     expected = Phantoms.string $
       "# hydra.testInput.prim\n\n" ++
-      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
       "## hydra.testInput.prim.example\n\n" ++
       "A trivial constant primitive\n\n" ++
       "`∀.string`\n\n" ++
@@ -449,7 +446,6 @@ typeDocCase = universalCase
     actual = PrintMarkdown.document # (Generation.generateModuleDoc # typeExampleModule)
     expected = Phantoms.string $
       "# hydra.testInput.typ\n\n" ++
-      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
       "## hydra.testInput.typ.Example\n\n" ++
       "A type alias for string\n\n" ++
       "`∀.string`"
@@ -490,7 +486,6 @@ multiDefinitionCase = universalCase
     actual = PrintMarkdown.document # (Generation.generateModuleDoc # multiDefinitionModule)
     expected = Phantoms.string $
       "# hydra.testInput.doc\n\n" ++
-      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
       "## hydra.testInput.doc.identity\n\n" ++
       "The identity function\n\n" ++
       "`∀a.a → a`\n\n" ++

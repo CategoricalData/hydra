@@ -383,18 +383,14 @@ definitionSection name mdoc sig provisions =
         (Lists.map ("p" ~> inject PrintMarkdown._Block PrintMarkdown._Block_paragraph (provisionParagraph (var "p"))) provisions),
     PrintMarkdown._Section_anchor>>: nothing]
 
--- | The generated-file notice banner, prepended to every generated module page as a raw HTML
--- comment block -- resolves the previously-open "generated-file notice wording" question now
--- that hydra.core.markdown has a Block.raw passthrough variant (#579's addition) to carry it. Text
--- matches CLAUDE.md's documented convention for generated source files verbatim, since no
--- distinct wording has been specified for generated prose pages.
-generatedFileNoticeBlock :: TypedTerm Term
-generatedFileNoticeBlock = inject PrintMarkdown._Block PrintMarkdown._Block_raw
-  (string "<!-- Note: this is an automatically generated file. Do not edit. -->")
-
 -- | Generate a hydra.core.markdown Document describing a module's definitions: one Section per
--- definition (name, doc string, signature, provisions -- see definitionToSection), prepended
--- with a generated-file notice banner.
+-- definition (name, doc string, signature, provisions -- see definitionToSection). The
+-- generated-file notice is NOT part of this Document's content -- hydra.core.print.markdown's
+-- document printer always emits "H1 title followed by its blocks" (its own documented contract,
+-- applicable to any Document, not just generated ones), which would place a Block.raw notice
+-- AFTER the title. Hand-authored spec pages put the notice BEFORE the title, so the caller
+-- (hydra.RegenerateSpec) prepends the notice line to the rendered string instead, outside the
+-- Markdown-AST entirely -- it is metadata about the file, not part of the document's content.
 generateModuleDoc :: TypedTermDefinition (Module -> Term)
 generateModuleDoc = define "generateModuleDoc" $
   doc "Generate a hydra.core.markdown Document describing a module's definitions" $
@@ -402,8 +398,8 @@ generateModuleDoc = define "generateModuleDoc" $
   "sections" <~ Lists.map ("d" ~> definitionToSection (var "d")) (Packaging.moduleDefinitions $ var "mod") $
   record PrintMarkdown._Document [
     PrintMarkdown._Document_title>>: Packaging.unModuleName (Packaging.moduleName $ var "mod"),
-    PrintMarkdown._Document_content>>: Lists.cons generatedFileNoticeBlock
-      (Lists.map ("s" ~> inject PrintMarkdown._Block PrintMarkdown._Block_section (var "s")) (var "sections"))]
+    PrintMarkdown._Document_content>>:
+      Lists.map ("s" ~> inject PrintMarkdown._Block PrintMarkdown._Block_section (var "s")) (var "sections")]
 
 -- | Convert a Module to a JSON string.
 -- Encodes the Module as a Term, converts to JSON, then serializes to a string.

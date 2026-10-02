@@ -2556,26 +2556,16 @@
                                 "function": {
                                   "application": {
                                     "function": {
-                                      "typeApplication": {"body": {"variable": "hydra.core.lib.lists.cons"}, "type": {"variable": "hydra.core.markdown.Block"}}},
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.markdown.Section"}}},
+                                        "type": {"variable": "hydra.core.markdown.Block"}}},
                                     "argument": {
-                                      "inject": {
-                                        "typeName": "hydra.core.markdown.Block",
-                                        "field": {"name": "raw", "term": {"literal": {"string": "<!-- Note: this is an automatically generated file. Do not edit. -->"}}}}}}},
-                                "argument": {
-                                  "application": {
-                                    "function": {
-                                      "application": {
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.markdown.Section"}}},
-                                            "type": {"variable": "hydra.core.markdown.Block"}}},
-                                        "argument": {
-                                          "lambda": {
-                                            "parameter": "s",
-                                            "domain": {"variable": "hydra.core.markdown.Section"},
-                                            "body": {"inject": {"typeName": "hydra.core.markdown.Block", "field": {"name": "section", "term": {"variable": "s"}}}}}}}},
-                                    "argument": {"variable": "sections"}}}}}}]}}}}}},
+                                      "lambda": {
+                                        "parameter": "s",
+                                        "domain": {"variable": "hydra.core.markdown.Section"},
+                                        "body": {"inject": {"typeName": "hydra.core.markdown.Block", "field": {"name": "section", "term": {"variable": "s"}}}}}}}},
+                                "argument": {"variable": "sections"}}}}]}}}}}},
             "annotation": {
               "map": [
                 {
