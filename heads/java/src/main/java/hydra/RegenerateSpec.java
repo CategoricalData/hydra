@@ -1,9 +1,10 @@
 package hydra;
 
-import hydra.core.Name;
-import hydra.overlay.java.build.Generation;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleName;
+import hydra.build.overlay.java.Generation;
+import hydra.core.markdown.Document;
+import hydra.core.model.Name;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleName;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -17,14 +18,14 @@ import java.util.Map;
 
 /**
  * Regenerates docs/specification/{primitives,types}/*.md from the kernel via
- * hydra.codegen.generateModuleDoc + hydra.print.markdown.document (#723).
+ * hydra.core.Codegen.generateModuleDoc + hydra.core.print.Markdown.document (#723).
  *
  * Each page maps to one or more kernel module namespaces (PAGE_MODULES below).
- * Most primitives/ pages are 1:1 with a hydra.lib.<name> module; three pages
- * are permanently out of per-module scope (equality.md/ordering.md are
- * type-class-scoped, not single-module; functions.md now has a backing module
- * but is not yet wired into this table — see the branch plan). Some types/
- * pages combine a type module with its paired hydra.error.<name> module.
+ * Most primitives/ pages are 1:1 with a hydra.core.lib.<name> module; equality.md
+ * and ordering.md are permanently out of per-module scope (they catalog primitives
+ * by type-class membership across many source files, not by a single module).
+ * Some types/ pages combine a type module with its paired hydra.core.error.<name>
+ * module.
  *
  * Usage:
  *   java hydra.RegenerateSpec [--module <namespace>]...
@@ -43,20 +44,21 @@ public class RegenerateSpec {
 
     private static Map<String, List<String>> buildPageModules() {
         Map<String, List<String>> m = new LinkedHashMap<>();
-        // primitives/ — 1:1 with hydra.lib.<name>, except equality/ordering/functions
-        // (documented exclusions; see docs/specification/primitives/*.md IOU headers).
+        // primitives/ — 1:1 with hydra.core.lib.<name>, except equality/ordering
+        // (documented exclusions; see docs/specification/primitives/*.md IOU headers
+        // and .claude/commands/regenerate-spec.md).
         for (String name : Arrays.asList(
-                "chars", "effects", "eithers", "files", "hashing", "lists", "literals",
-                "logic", "maps", "math", "optionals", "pairs", "regex", "sets", "strings",
-                "system", "text")) {
-            m.put("primitives/" + name + ".md", Arrays.asList("hydra.lib." + name));
+                "chars", "effects", "eithers", "files", "functions", "hashing", "lists",
+                "literals", "logic", "maps", "math", "optionals", "pairs", "regex", "sets",
+                "strings", "system", "text")) {
+            m.put("primitives/" + name + ".md", Arrays.asList("hydra.core.lib." + name));
         }
-        // types/ — combines a type module with its paired hydra.error.<name> module
+        // types/ — combines a type module with its paired hydra.core.error.<name> module
         // where one exists.
-        m.put("types/files.md", Arrays.asList("hydra.file", "hydra.error.file"));
-        m.put("types/system.md", Arrays.asList("hydra.system", "hydra.error.system"));
-        m.put("types/time.md", Arrays.asList("hydra.time"));
-        m.put("types/util.md", Arrays.asList("hydra.util"));
+        m.put("types/files.md", Arrays.asList("hydra.core.file", "hydra.core.error.file"));
+        m.put("types/system.md", Arrays.asList("hydra.core.system", "hydra.core.error.system"));
+        m.put("types/time.md", Arrays.asList("hydra.core.time"));
+        m.put("types/util.md", Arrays.asList("hydra.core.util"));
         return m;
     }
 
@@ -81,7 +83,7 @@ public class RegenerateSpec {
                 + File.separator + "main" + File.separator + "json";
 
         System.err.println("Loading universe from " + kernelMainDir + " ...");
-        Map<Name, hydra.core.Type> schemaMap = Generation.bootstrapSchemaMap();
+        Map<Name, hydra.core.model.Type> schemaMap = Generation.bootstrapSchemaMap();
         List<ModuleName> mainNs = Generation.readManifestField(kernelMainDir, "mainModules");
         List<Module> universe = Generation.loadModulesFromJson(kernelMainDir, schemaMap, mainNs);
         System.err.println("  loaded " + universe.size() + " modules");
@@ -99,7 +101,7 @@ public class RegenerateSpec {
                 continue;
             }
 
-            List<hydra.core.Term> sectionBlocks = new ArrayList<>();
+            List<Document> docs = new ArrayList<>();
             for (String ns : namespaces) {
                 Module mod = byNamespace.get(ns);
                 if (mod == null) {
@@ -107,11 +109,10 @@ public class RegenerateSpec {
                             + ") not found in the loaded universe.");
                     System.exit(2);
                 }
-                hydra.core.Term doc = hydra.Codegen.generateModuleDoc(mod);
-                sectionBlocks.add(doc);
+                docs.add(hydra.core.Codegen.generateModuleDoc(mod));
             }
 
-            String rendered = renderPage(page, sectionBlocks);
+            String rendered = renderPage(docs);
             java.nio.file.Path outPath = Paths.get(worktreeRoot, "docs", "specification", page);
             Files.createDirectories(outPath.getParent());
             try (PrintWriter pw = new PrintWriter(outPath.toFile())) {
@@ -129,15 +130,14 @@ public class RegenerateSpec {
     }
 
     /**
-     * Renders one or more generateModuleDoc Document terms as a single page: the
-     * first module's Document supplies the title, and every module's content
-     * blocks (each already including its own generated-file notice) are
-     * concatenated in namespace order.
+     * Renders one or more generateModuleDoc Documents as a single page: each
+     * module's Document (already including its own generated-file notice) is
+     * rendered in namespace order and concatenated.
      */
-    private static String renderPage(String page, List<hydra.core.Term> docs) {
+    private static String renderPage(List<Document> docs) {
         StringBuilder sb = new StringBuilder();
-        for (hydra.core.Term doc : docs) {
-            sb.append(hydra.print.Markdown.document(doc));
+        for (Document doc : docs) {
+            sb.append(hydra.core.print.Markdown.document(doc));
         }
         return sb.toString();
     }

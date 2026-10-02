@@ -74,6 +74,9 @@ sourceSets {
             include 'hydra/HydraTestBase.java'
             include 'hydra/UpdateJavaJson.java'
             include 'hydra/ProfileJavaCoder.java'
+            // hydra.RegenerateSpec (#723): the Java-host driver behind bin/regenerate-spec.sh,
+            // same shape as BenchInference.java above (reads dist/json, writes output files).
+            include 'hydra/RegenerateSpec.java'
             include 'hydra/json/JsonIoCoder.java'
             include 'hydra/json/JsonSerde.java'
         }
