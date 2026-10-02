@@ -17,6 +17,11 @@ Inputs hashed:
   - heads/haskell/package.yaml                                (build config)
   - heads/haskell/stack.yaml                                  (build config)
   - heads/haskell/bin/sync-haskell.sh                         (the runner itself)
+  - overlay/haskell/*/src/main/haskell/**.hs                  (hand-written overlay source, #757;
+                                                                copied onto dist/haskell/ by
+                                                                overlay-kernel-runtime.sh before
+                                                                Phase 0's stack build)
+  - overlay/haskell/hydra-kernel/src/test/haskell/**.hs       (overlay test bridge, #757)
 
 Exit 0 if the current hash matches the recorded one in
 heads/haskell/.stack-work/phase1-input-cache.txt — every Phase 1
@@ -102,6 +107,24 @@ def collect_inputs(hydra_root: Path) -> list:
     runner = heads_haskell / "bin" / "sync-haskell.sh"
     if runner.is_file():
         paths.add(runner)
+    # #757: overlay/haskell/** is hand-written source that overlay-kernel-runtime.sh
+    # copies onto dist/haskell/ BEFORE Phase 0's stack build (and again after Phase 1
+    # Step 4's --prune-stale regen) — it is a real compiled input to `stack test`, not
+    # just documentation. Mirror overlay-kernel-runtime.sh's own traversal: every
+    # overlay/haskell/<pkg>/src/main/haskell/** tree (hydra-kernel, hydra, hydra-pg,
+    # hydra-typescript, and any future package overlay), plus hydra-kernel's dedicated
+    # src/test/haskell/** test bridge.
+    overlay_haskell = hydra_root / "overlay" / "haskell"
+    if overlay_haskell.is_dir():
+        for pkg_dir in overlay_haskell.iterdir():
+            main_src = pkg_dir / "src" / "main" / "haskell"
+            if main_src.is_dir():
+                for hs in main_src.rglob("*.hs"):
+                    paths.add(hs)
+        kernel_test_src = overlay_haskell / "hydra-kernel" / "src" / "test" / "haskell"
+        if kernel_test_src.is_dir():
+            for hs in kernel_test_src.rglob("*.hs"):
+                paths.add(hs)
     result = [(str(p.relative_to(hydra_root)), hash_file(p)) for p in paths]
     # #370: hash the COMMITTED (mode-invariant) form of the head build files so a
     # transient published-host rewrite doesn't poison the Phase-1 cache.
