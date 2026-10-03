@@ -259,10 +259,8 @@ LANG_UNION=$(printf '%s\n' $HOSTS $TARGETS | awk '!seen[$0]++' | xargs)
 #
 # Take the fast path when ALL of:
 #   - haskell is in neither --hosts nor --targets (nothing compiles the Haskell
-#     kernel/coders this run), AND
-#   - no Lisp dialect is in hosts ∪ targets — Phase 3's Lisp branch still forces
-#     GENERATOR_HOST=haskell (#719 temporary), so a Lisp cell needs the Haskell
-#     generator, AND
+#     kernel/coders this run) — this now covers the 4 Lisp dialects too, since
+#     #787 removed Phase 3's Lisp-specific GENERATOR_HOST=haskell override, AND
 #   - HOST_MODE is not 'local' — an explicit --local-host sync is deliberately
 #     asking to build the Haskell host from source, AND
 #   - dist/json is present (the transform source of truth; it is git-tracked, so
@@ -291,7 +289,6 @@ LANG_UNION=$(printf '%s\n' $HOSTS $TARGETS | awk '!seen[$0]++' | xargs)
 HASKELL_FREE_FAST_PATH=false
 if [ "$HOST_MODE" != "local" ] \
    && ! printf '%s\n' $LANG_UNION | grep -qx haskell \
-   && ! printf '%s\n' $LANG_UNION | grep -Eqx 'clojure|scheme|common-lisp|emacs-lisp' \
    && [ -d "$HYDRA_ROOT/dist/json" ]; then
     # Every in-scope non-Haskell language must already have a FRESH dist/<L>/hydra-build
     # — specifically its OUTPUT digest (dist/<L>/hydra-build/build/main/digest.json). That
@@ -864,17 +861,13 @@ for L in $LANG_UNION; do
                 "$HYDRA_ROOT/heads/$L/bin/assemble-distribution.sh" "$pkg"
                 ;;
             clojure|scheme|common-lisp|emacs-lisp)
-                # #719 TEMPORARY: force the Haskell generator host for the 4 Lisp
-                # dialects specifically (not global -- global would trigger the
-                # #459 java-from-source OOM). Needed so the scale-distinctness
-                # test-case filter in bootstrap-from-json/Main.hs (Common
-                # Lisp/Emacs Lisp/Scheme have no scale-preserving decimal at all;
-                # Clojure needs its own coder-config fix, tracked separately)
-                # actually runs -- the default GENERATOR_HOST=java routes through
-                # heads/java/bin/transform-json-to-target.sh, a separate driver
-                # that doesn't have this filter. Remove this override once the
-                # filter itself is removed (tracked follow-up issues).
-                GENERATOR_HOST=haskell "$HYDRA_ROOT/heads/lisp/bin/assemble-distribution.sh" "$pkg" "$L"
+                # #787: the #719 GENERATOR_HOST=haskell override that used to live here is
+                # obsolete -- #735 moved the scale-distinctness test-case filter into kernel
+                # data (both drivers now implement it identically), and #727 gave all 4 Lisp
+                # dialects a real scale-preserving decimal, so the filter never drops anything
+                # for them anyway. Use the default (Java) generator host like every other
+                # full head.
+                "$HYDRA_ROOT/heads/lisp/bin/assemble-distribution.sh" "$pkg" "$L"
                 ;;
             *)
                 die "Internal: no assembler for $L"
