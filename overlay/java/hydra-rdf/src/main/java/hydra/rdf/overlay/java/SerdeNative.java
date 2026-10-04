@@ -1,5 +1,6 @@
 package hydra.rdf.overlay.java;
 
+import hydra.rdf.Serde;
 import hydra.rdf.syntax.Description;
 import hydra.rdf.syntax.Graph;
 import hydra.rdf.syntax.Node;
@@ -73,13 +74,14 @@ public interface SerdeNative {
   }
 
   /**
-   * Convert a Hydra IRI to its RDF4j equivalent.
+   * Convert a Hydra IRI to its RDF4j equivalent. IRI-illegal characters are escaped the same way
+   * as in the N-Triples serialization path, for consistency between the two RDF output paths.
    *
    * @param r the Hydra IRI
    * @return the RDF4j IRI
    */
   static IRI iri(hydra.rdf.syntax.Iri r) {
-    return valueFactory.createIRI(r.value);
+    return valueFactory.createIRI(Serde.escapeIriStr(r.value));
   }
 
   /**
