@@ -57,7 +57,8 @@ allTests = define "allTests" $
       arraysGroup,
       objectsGroup,
       nestedGroup,
-      whitespaceGroup]
+      whitespaceGroup,
+      writerRoundtripGroup]
 
 arraysGroup :: TypedTerm TestGroup
 arraysGroup = subgroup "arrays" [
@@ -140,6 +141,12 @@ objectsGroup = subgroup "objects" [
 parserCase :: String -> String -> TypedTerm Value -> TypedTerm TestCaseWithMetadata
 parserCase name input expectedValue = parserCaseWithTags name [] input expectedValue
 
+-- Helper for creating JSON parser test cases that are expected to fail to parse
+parserFailureCase :: String -> String -> TypedTerm TestCaseWithMetadata
+parserFailureCase name input = universalCase name
+  (showParseResult (Parsers.runParser @@ JsonParser.jsonValue @@ Phantoms.string input))
+  (Phantoms.string "failure(parse error)")
+
 parserCaseWithTags :: String -> [Tag] -> String -> TypedTerm Value -> TypedTerm TestCaseWithMetadata
 parserCaseWithTags name tags input expectedValue = universalCaseWithTags name tags
   (showParseResult (Parsers.runParser @@ JsonParser.jsonValue @@ Phantoms.string input))
@@ -169,6 +176,19 @@ primitivesGroup = subgroup "primitives" [
     parserCase "scientific with decimal" "1.5e2" (Json.valueNumber $ Phantoms.decimal 150.0),
     parserCase "negative exponent" "1e-2" (Json.valueNumber $ Phantoms.decimal 0.01)]
 
+-- | All C0 control characters (U+0000 through U+001F), to confirm that whatever the writer
+-- escapes, the parser can read back (#777: printJson output must always re-parse).
+allC0ControlChars :: String
+allC0ControlChars = ['\x00' .. '\x1F']
+
+writerRoundtripGroup :: TypedTerm TestGroup
+writerRoundtripGroup = subgroup "writer round-trip" [
+    universalCase "parseJson (printJson v) == v for all C0 control characters"
+      (showParseResult (Parsers.runParser @@ JsonParser.jsonValue @@
+        (JsonWriter.printJson @@ Json.valueString (Phantoms.string allC0ControlChars))))
+      (showParseResult (Parsing.parseResultSuccess $ Parsing.parseSuccess
+        (Json.valueString (Phantoms.string allC0ControlChars)) (Phantoms.list ([] :: [TypedTerm Int]))))]
+
 -- Show a ParseResult Value as a string for universal test comparison.
 -- Uses Phantoms.match to pattern-match the ParseResult union.
 showParseResult :: TypedTerm (ParseResult Value) -> TypedTerm String
@@ -196,7 +216,17 @@ stringsGroup = subgroup "strings" [
     parserCase "escaped newline" "\"line1\\nline2\"" (Json.valueString $ Phantoms.string "line1\nline2"),
     parserCase "escaped carriage return" "\"line1\\rline2\"" (Json.valueString $ Phantoms.string "line1\rline2"),
     parserCase "escaped tab" "\"col1\\tcol2\"" (Json.valueString $ Phantoms.string "col1\tcol2"),
-    parserCase "escaped forward slash" "\"a\\/b\"" (Json.valueString $ Phantoms.string "a/b")]
+    parserCase "escaped forward slash" "\"a\\/b\"" (Json.valueString $ Phantoms.string "a/b"),
+
+    -- \uXXXX escapes (#777)
+    parserCase "unicode escape basic letter" "\"\\u0041A\"" (Json.valueString $ Phantoms.string "AA"),
+    parserCase "unicode escape non-ascii" "\"\\u00e9\"" (Json.valueString $ Phantoms.string "\233"),
+    parserCase "unicode escape uppercase hex digits" "\"\\u00E9\"" (Json.valueString $ Phantoms.string "\233"),
+    parserCase "unicode escape null control char" "\"\\u0000\"" (Json.valueString $ Phantoms.string "\0"),
+    parserCase "unicode escape surrogate pair" "\"\\ud83c\\udf89\"" (Json.valueString $ Phantoms.string "\127881"),
+    parserFailureCase "unicode escape lone high surrogate" "\"\\ud83c\"",
+    parserFailureCase "unicode escape lone low surrogate" "\"\\udf89\"",
+    parserFailureCase "unicode escape short (too few hex digits)" "\"\\u12\""]
 
 whitespaceGroup :: TypedTerm TestGroup
 whitespaceGroup = subgroup "whitespace handling" [

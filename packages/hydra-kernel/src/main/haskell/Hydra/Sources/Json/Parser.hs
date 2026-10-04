@@ -98,9 +98,15 @@ module_ = Module {
       toDefinition jsonArray,
       toDefinition jsonBool,
       toDefinition jsonEscapeChar,
+      toDefinition jsonEscapedChar,
       toDefinition jsonExponentPart,
       toDefinition jsonFractionPart,
+      toDefinition jsonHex4,
+      toDefinition jsonHexDigit,
+      toDefinition jsonHexDigitValue,
       toDefinition jsonIntegerPart,
+      toDefinition jsonIsHighSurrogate,
+      toDefinition jsonIsLowSurrogate,
       toDefinition jsonKeyValue,
       toDefinition jsonNull,
       toDefinition jsonNumber,
@@ -144,6 +150,12 @@ dotCode = int32 46        -- '.'
 letterELower, letterEUpper :: TypedTerm Int
 letterELower = int32 101  -- 'e'
 letterEUpper = int32 69   -- 'E'
+
+letterALower, letterFLower, letterAUpper, letterFUpper :: TypedTerm Int
+letterALower = int32 97   -- 'a'
+letterFLower = int32 102  -- 'f'
+letterAUpper = int32 65   -- 'A'
+letterFUpper = int32 70   -- 'F'
 
 letterNCode, letterUCode, letterLCode :: TypedTerm Int
 letterNCode = int32 110   -- 'n'
@@ -211,8 +223,46 @@ jsonEscapeChar = define "jsonEscapeChar" $
     Parsers.map @@ (constant $ int32 12) @@ (Parsers.char @@ letterFCode),  -- '\f'
     Parsers.map @@ (constant newlineCode) @@ (Parsers.char @@ letterNCode), -- '\n'
     Parsers.map @@ (constant returnCode) @@ (Parsers.char @@ letterRCode),  -- '\r'
-    Parsers.map @@ (constant tabCode) @@ (Parsers.char @@ letterTCode)]     -- '\t'
-    -- Note: \uXXXX unicode escapes not yet implemented
+    Parsers.map @@ (constant tabCode) @@ (Parsers.char @@ letterTCode),     -- '\t'
+    Parsers.bind @@ (Parsers.char @@ letterUCode) @@ (constant jsonHex4)]   -- '\uXXXX'
+
+-- | Compute the numeric value (0-15) of a hex digit character code, or Nothing if not a hex digit
+jsonHexDigitValue :: TypedTermDefinition (Int -> Maybe Int)
+jsonHexDigitValue = define "jsonHexDigitValue" $
+  doc "Compute the numeric value of a hex digit character code (0-15), or Nothing if not a hex digit" $
+  "c" ~>
+    Logic.ifElse
+      (Logic.and (Ordering.gte (var "c") zeroCode) (Ordering.lte (var "c") nineCode))
+      (just $ Math.sub (var "c") zeroCode)
+      (Logic.ifElse
+        (Logic.and (Ordering.gte (var "c") letterALower) (Ordering.lte (var "c") letterFLower))
+        (just $ Math.add (int32 10) (Math.sub (var "c") letterALower))
+        (Logic.ifElse
+          (Logic.and (Ordering.gte (var "c") letterAUpper) (Ordering.lte (var "c") letterFUpper))
+          (just $ Math.add (int32 10) (Math.sub (var "c") letterAUpper))
+          nothing))
+
+-- | Parse a single hex digit, yielding its numeric value (0-15)
+jsonHexDigit :: TypedTermDefinition (Parser Int)
+jsonHexDigit = define "jsonHexDigit" $
+  doc "Parse a single hex digit character, yielding its numeric value (0-15)" $
+  Parsers.bind @@ Parsers.anyChar @@ ("c" ~>
+    Optionals.match (jsonHexDigitValue @@ var "c")
+      (Parsers.fail @@ string "expected a hex digit")
+      ("v" ~> Parsers.pure @@ var "v"))
+
+-- | Parse exactly four hex digits, yielding the 16-bit code unit they encode
+jsonHex4 :: TypedTermDefinition (Parser Int)
+jsonHex4 = define "jsonHex4" $
+  doc "Parse exactly four hex digits as a 16-bit code unit" $
+  Parsers.bind @@ jsonHexDigit @@ ("d1" ~>
+    Parsers.bind @@ jsonHexDigit @@ ("d2" ~>
+      Parsers.bind @@ jsonHexDigit @@ ("d3" ~>
+        Parsers.bind @@ jsonHexDigit @@ ("d4" ~>
+          Parsers.pure @@
+            (Math.add (Math.mul (var "d1") (int32 4096))
+              (Math.add (Math.mul (var "d2") (int32 256))
+                (Math.add (Math.mul (var "d3") (int32 16)) (var "d4"))))))))
 
 -- | Parse a single JSON string character
 -- | Parse the exponent part of a JSON number
@@ -325,15 +375,48 @@ jsonString = define "jsonString" $
         Parsers.bind @@ (Parsers.char @@ quoteCode) @@ (constant $
           Parsers.pure @@ (Json.valueString (Strings.fromList (var "chars")))))))
 
+-- | Combine an escaped UTF-16 high surrogate (0xD800-0xDBFF) with an immediately following
+-- escaped low surrogate (0xDC00-0xDFFF) into one supplementary-plane code point. A lone
+-- surrogate (high not followed by low, or any low surrogate on its own) is a parse error.
+jsonEscapedChar :: TypedTermDefinition (Parser Int)
+jsonEscapedChar = define "jsonEscapedChar" $
+  doc "Parse a JSON escape sequence after the backslash, combining surrogate pairs" $
+  Parsers.bind @@ (Parsers.char @@ backslashCode) @@ (constant $
+    Parsers.bind @@ jsonEscapeChar @@ ("u1" ~>
+      Logic.ifElse (jsonIsHighSurrogate @@ var "u1")
+        (Parsers.bind @@ (Parsers.char @@ backslashCode) @@ (constant $
+          Parsers.bind @@ (Parsers.char @@ letterUCode) @@ (constant $
+            Parsers.bind @@ jsonHex4 @@ ("u2" ~>
+              Logic.ifElse (jsonIsLowSurrogate @@ var "u2")
+                (Parsers.pure @@
+                  (Math.add (int32 0x10000)
+                    (Math.add (Math.mul (Math.sub (var "u1") (int32 0xD800)) (int32 0x400))
+                      (Math.sub (var "u2") (int32 0xDC00)))))
+                (Parsers.fail @@ string "invalid low surrogate in escaped surrogate pair")))))
+        (Logic.ifElse (jsonIsLowSurrogate @@ var "u1")
+          (Parsers.fail @@ string "lone low surrogate in escape sequence")
+          (Parsers.pure @@ var "u1"))))
+
+-- | Is the given code unit a UTF-16 high surrogate (0xD800-0xDBFF)?
+jsonIsHighSurrogate :: TypedTermDefinition (Int -> Bool)
+jsonIsHighSurrogate = define "jsonIsHighSurrogate" $
+  doc "Check whether a code unit is a UTF-16 high surrogate (0xD800-0xDBFF)" $
+  "c" ~> Logic.and (Ordering.gte (var "c") (int32 0xD800)) (Ordering.lte (var "c") (int32 0xDBFF))
+
+-- | Is the given code unit a UTF-16 low surrogate (0xDC00-0xDFFF)?
+jsonIsLowSurrogate :: TypedTermDefinition (Int -> Bool)
+jsonIsLowSurrogate = define "jsonIsLowSurrogate" $
+  doc "Check whether a code unit is a UTF-16 low surrogate (0xDC00-0xDFFF)" $
+  "c" ~> Logic.and (Ordering.gte (var "c") (int32 0xDC00)) (Ordering.lte (var "c") (int32 0xDFFF))
+
 -- | Parse a JSON array
 -- | Parse a single JSON string character
 jsonStringChar :: TypedTermDefinition (Parser Int)
 jsonStringChar = define "jsonStringChar" $
   doc "Parse a single character in a JSON string (handling escapes)" $
   Parsers.alt @@
-    -- Escape sequence
-    (Parsers.bind @@ (Parsers.char @@ backslashCode) @@ (constant $
-      jsonEscapeChar)) @@
+    -- Escape sequence (including surrogate pairs)
+    jsonEscapedChar @@
     -- Regular character (not quote or backslash)
     (Parsers.satisfy @@ ("c" ~>
       Logic.and
