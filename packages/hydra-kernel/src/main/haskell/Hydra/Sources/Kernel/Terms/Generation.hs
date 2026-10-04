@@ -504,6 +504,47 @@ generateSourceFiles = define "generateSourceFiles" $
             (Packaging.moduleDefinitions $ var "m"))) $
       "allBindings" <~ Lexical.graphToBindings @@ var "g1" $
       "refreshedMods" <~ Lists.map ("m" ~> var "refreshModule" @@ var "allBindings" @@ var "m") (var "termModulesToGenerate") $
+      -- #764: refreshModule (above) silently drops a Definition.term whose name has no
+      -- matching binding in allBindings (Optionals.map over a failed Lists.find, filtered
+      -- by Optionals.givens). A silent drop here means findImports-style nominal-name
+      -- collection sees an incomplete module while the separately-threaded 'defs' below
+      -- still prints the dropped definition's full body -- the generated file compiles but
+      -- is missing imports or other module-level metadata, with no error anywhere in the
+      -- pipeline. This was the root cause of #764 (two generator drivers loading slightly
+      -- different universes produced silently different Scala output for the same input).
+      -- Fail loud instead: any module whose refreshed term-definition count is smaller than
+      -- its original is an unresolved binding, named explicitly so the failure points at the
+      -- namespace to investigate (a universe that's missing a dependency, not a #764-style
+      -- byte-level mystery).
+      "termDefNames" <~ ("m" ~> Optionals.givens (Lists.map
+        ("d" ~> match _Definition (var "d") (Just nothing) [_Definition_term>>: "td" ~> just (Packaging.termDefinitionName $ var "td")])
+        (Packaging.moduleDefinitions $ var "m"))) $
+      "g1Primitives" <~ Graph.graphPrimitives (var "g1") $
+      "refreshedModsChecked" <<~ Eithers.mapList ("p" ~>
+          "original" <~ Pairs.first (var "p") $
+          "refreshed" <~ Pairs.second (var "p") $
+          "origNames" <~ (var "termDefNames" @@ var "original" :: TypedTerm [Name]) $
+          "refreshedNames" <~ (Sets.fromList (var "termDefNames" @@ var "refreshed") :: TypedTerm (S.Set Name)) $
+          -- #435: lowerPrimitiveDefinitions (above) gives a lowered term binding the SAME name
+          -- as its source primitive, and Lexical.buildGraph's primitive-precedence rule then
+          -- strips any bound term whose name collides with a registered primitive -- by design,
+          -- not a missing dependency. Every hydra.core.lib.* module is 100% primitives, so
+          -- without this exemption the check below fires on every one of them. A name shadowed
+          -- by a same-named primitive in g1 is accounted for (the primitive IS its resolution);
+          -- only a name with neither a term binding NOR a primitive is a genuine #764-class gap.
+          "missing" <~ Lists.filter ("n" ~> Logic.and
+              (Logic.not (Sets.member (var "n" :: TypedTerm Name) (var "refreshedNames")))
+              (Logic.not (Maps.member (var "n" :: TypedTerm Name) (var "g1Primitives"))))
+            (var "origNames") $
+          Logic.ifElse (Lists.isEmpty $ var "missing")
+            (right (var "refreshed"))
+            (left $ Error.errorOther $ Error.otherError $ Strings.concat (list [
+              string "refreshModule could not resolve ", Literals.printInt32 (Lists.length $ var "missing"),
+              string " term binding(s) in ", Packaging.unModuleName (Packaging.moduleName $ var "original"),
+              string " against the post-adaptation graph; the loaded universe is missing a dependency these ",
+              string "bindings need. Offending name(s): ",
+              Strings.join (string ", ") (Lists.map (reify Core.unName) (var "missing"))])))
+        (Lists.zip (var "termModulesToGenerate") (var "refreshedMods")) $
       -- Deduplicate definitions by name to avoid duplicate functions in generated code,
       -- then sort alphabetically by name. The sort is load-bearing: Maps.elems iteration
       -- order is host-implementation-dependent (Haskell's Data.Map is key-sorted; Clojure
@@ -520,7 +561,7 @@ generateSourceFiles = define "generateSourceFiles" $
           "defs" <~ Pairs.second (var "p") $
           Eithers.map ("m" ~> Maps.toList (var "m" :: TypedTerm (M.Map String String))) $
             var "printDefinitions" @@ var "mod" @@ Lists.map ("d" ~> Packaging.definitionTerm (var "d")) (var "defs") @@ var "cx" @@ var "g1")
-        (Lists.zip (var "refreshedMods") (var "dedupedDefLists"))) $
+        (Lists.zip (var "refreshedModsChecked") (var "dedupedDefLists"))) $
 
   -- Combine results, merging by path. A module which has both type and term definitions
   -- yields one entry in schemaFiles and one in termFiles for the *same* path; a naive

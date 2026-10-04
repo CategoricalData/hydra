@@ -247,13 +247,44 @@ public class TransformJsonToTarget {
             // and stored as its own file. Mirrors bootstrap-from-json/Main.hs's loadPackageDsl:
             // derive names via dslModuleName, then filter to those that actually exist on disk
             // before loading (a source module may have no DSL-eligible bindings).
+            //
+            // #764: DSL wrappers derive from mainDslModules (broad); encode/decode derive from
+            // mainEncodingModules (narrower, #475) via hydra.core.Encoding.encodeModuleName /
+            // hydra.core.Decoding.decodeModuleName — this branch previously loaded ONLY the
+            // mainDslModules-derived wrappers, omitting the encode/decode pairs (and the legacy
+            // dslModules field) that bootstrap-from-json/Main.hs's loadPackageDsl also loads.
+            // That smaller universe made this driver's generated Scala output diverge from the
+            // bootstrap demo's (#764): a universe-sensitive helper downstream
+            // (Hydra.Generation.refreshModule) silently drops definitions it can't resolve in the
+            // smaller universe, which in turn silently drops nominal references that drive the
+            // Scala coder's wildcard-import logic. Loading the identical derived-name set here
+            // keeps this driver's universe in parity with the Haskell original.
             String pkgMainDir = Bootstrap.packageMainDir(distJsonRoot, pkg);
             List<ModuleName> dslSrcNs = Bootstrap.readManifestFieldOrEmpty(pkgMainDir, "mainDslModules");
+            List<ModuleName> encSrcNs = Bootstrap.readManifestFieldOrEmpty(pkgMainDir, "mainEncodingModules");
+            List<ModuleName> legacyDslNs = Bootstrap.readManifestFieldOrEmpty(pkgMainDir, "dslModules");
             modsToGenerate = new ArrayList<>(pkgMainMods);
-            List<ModuleName> derivedNs = new ArrayList<>();
+            List<ModuleName> derivedNs = new ArrayList<>(legacyDslNs);
             for (ModuleName ns : dslSrcNs) derivedNs.add(hydra.core.Dsls.dslModuleName(ns));
+            for (ModuleName ns : encSrcNs) {
+                derivedNs.add(hydra.core.Encoding.encodeModuleName(ns));
+                derivedNs.add(hydra.core.Decoding.decodeModuleName(ns));
+            }
+            Set<String> alreadyInModsToGenerate = new HashSet<>();
+            for (Module m : modsToGenerate) {
+                alreadyInModsToGenerate.add(m.name.value);
+            }
             List<ModuleName> existingNs = new ArrayList<>();
             for (ModuleName ns : derivedNs) {
+                // #764's encode/decode derivation can rediscover a module already present in
+                // pkgMainMods (e.g. hydra.core.model is both an ordinary main module AND a
+                // mainEncodingModules source, whose derived decodeModuleName is
+                // hydra.core.decode.model -- also an ordinary main module). Without this guard,
+                // such a module is appended a second time, and the generator writes its content
+                // twice into the same output file (a real SyntaxError on Python targets, since a
+                // duplicated `from __future__ import annotations` is illegal past the top of the
+                // file).
+                if (alreadyInModsToGenerate.contains(ns.value)) continue;
                 java.nio.file.Path p = Paths.get(pkgMainDir, Codegen.moduleNameToPath(ns) + ".json");
                 if (java.nio.file.Files.isRegularFile(p)) existingNs.add(ns);
             }
