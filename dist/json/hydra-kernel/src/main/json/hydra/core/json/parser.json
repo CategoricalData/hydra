@@ -329,12 +329,187 @@
                             "argument": {
                               "lambda": {"parameter": "_", "domain": {"literal": {"integer": "int32"}}, "body": {"literal": {"integer": {"int32": 9}}}}}}},
                         "argument": {
-                          "application": {"function": {"variable": "hydra.core.parsers.char"}, "argument": {"literal": {"integer": {"int32": 116}}}}}}}]}}},
+                          "application": {"function": {"variable": "hydra.core.parsers.char"}, "argument": {"literal": {"integer": {"int32": 116}}}}}}},
+                    {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                "type": {"literal": {"integer": "int32"}}}},
+                            "argument": {
+                              "application": {"function": {"variable": "hydra.core.parsers.char"}, "argument": {"literal": {"integer": {"int32": 117}}}}}}},
+                        "argument": {
+                          "lambda": {"parameter": "_", "domain": {"literal": {"integer": "int32"}}, "body": {"variable": "hydra.core.json.parser.jsonHex4"}}}}}]}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Parse a JSON escape sequence after the backslash"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.json.parser.jsonEscapedChar",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.core.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {
+                  "application": {
+                    "function": {
+                      "typeApplication": {
+                        "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                        "type": {"literal": {"integer": "int32"}}}},
+                    "argument": {
+                      "application": {"function": {"variable": "hydra.core.parsers.char"}, "argument": {"literal": {"integer": {"int32": 92}}}}}}},
+                "argument": {
+                  "lambda": {
+                    "parameter": "_",
+                    "domain": {"literal": {"integer": "int32"}},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                "type": {"literal": {"integer": "int32"}}}},
+                            "argument": {"variable": "hydra.core.json.parser.jsonEscapeChar"}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "u1",
+                            "domain": {"literal": {"integer": "int32"}},
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.core.lib.logic.ifElse"},
+                                            "type": {"application": {"function": {"variable": "hydra.core.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}}}},
+                                        "argument": {
+                                          "application": {"function": {"variable": "hydra.core.json.parser.jsonIsHighSurrogate"}, "argument": {"variable": "u1"}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "type": {"literal": {"integer": "int32"}}}},
+                                            "argument": {
+                                              "application": {"function": {"variable": "hydra.core.parsers.char"}, "argument": {"literal": {"integer": {"int32": 92}}}}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "_",
+                                            "domain": {"literal": {"integer": "int32"}},
+                                            "body": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                                        "type": {"literal": {"integer": "int32"}}}},
+                                                    "argument": {
+                                                      "application": {"function": {"variable": "hydra.core.parsers.char"}, "argument": {"literal": {"integer": {"int32": 117}}}}}}},
+                                                "argument": {
+                                                  "lambda": {
+                                                    "parameter": "_",
+                                                    "domain": {"literal": {"integer": "int32"}},
+                                                    "body": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                "type": {"literal": {"integer": "int32"}}}},
+                                                            "argument": {"variable": "hydra.core.json.parser.jsonHex4"}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "u2",
+                                                            "domain": {"literal": {"integer": "int32"}},
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.core.lib.logic.ifElse"},
+                                                                            "type": {"application": {"function": {"variable": "hydra.core.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}}}},
+                                                                        "argument": {"application": {"function": {"variable": "hydra.core.json.parser.jsonIsLowSurrogate"}, "argument": {"variable": "u2"}}}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.pure"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                "argument": {"literal": {"integer": {"int32": 65536}}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                    "argument": {"variable": "u1"}}},
+                                                                                                "argument": {"literal": {"integer": {"int32": 55296}}}}}}},
+                                                                                        "argument": {"literal": {"integer": {"int32": 1024}}}}}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                        "argument": {"variable": "u2"}}},
+                                                                                    "argument": {"literal": {"integer": {"int32": 56320}}}}}}}}}}}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.fail"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                    "argument": {"literal": {"string": "invalid low surrogate in escaped surrogate pair"}}}}}}}}}}}}}}}}}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.core.lib.logic.ifElse"},
+                                                "type": {"application": {"function": {"variable": "hydra.core.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}}}},
+                                            "argument": {"application": {"function": {"variable": "hydra.core.json.parser.jsonIsLowSurrogate"}, "argument": {"variable": "u1"}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.fail"}, "type": {"literal": {"integer": "int32"}}}},
+                                            "argument": {"literal": {"string": "lone low surrogate in escape sequence"}}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.pure"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "argument": {"variable": "u1"}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse a JSON escape sequence after the backslash, combining surrogate pairs"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.json.parser.jsonExponentPart",
@@ -531,6 +706,300 @@
                   "value": {"literal": {"string": "Parse the optional fractional part of a JSON number"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.core.json.parser.jsonHex4",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.core.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {
+                  "application": {
+                    "function": {
+                      "typeApplication": {
+                        "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                        "type": {"literal": {"integer": "int32"}}}},
+                    "argument": {"variable": "hydra.core.json.parser.jsonHexDigit"}}},
+                "argument": {
+                  "lambda": {
+                    "parameter": "d1",
+                    "domain": {"literal": {"integer": "int32"}},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                "type": {"literal": {"integer": "int32"}}}},
+                            "argument": {"variable": "hydra.core.json.parser.jsonHexDigit"}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "d2",
+                            "domain": {"literal": {"integer": "int32"}},
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "type": {"literal": {"integer": "int32"}}}},
+                                    "argument": {"variable": "hydra.core.json.parser.jsonHexDigit"}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "d3",
+                                    "domain": {"literal": {"integer": "int32"}},
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "type": {"literal": {"integer": "int32"}}}},
+                                            "argument": {"variable": "hydra.core.json.parser.jsonHexDigit"}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "d4",
+                                            "domain": {"literal": {"integer": "int32"}},
+                                            "body": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.pure"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                "argument": {"variable": "d1"}}},
+                                                            "argument": {"literal": {"integer": {"int32": 4096}}}}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                    "argument": {"variable": "d2"}}},
+                                                                "argument": {"literal": {"integer": {"int32": 256}}}}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                        "argument": {"variable": "d3"}}},
+                                                                    "argument": {"literal": {"integer": {"int32": 16}}}}}}},
+                                                            "argument": {"variable": "d4"}}}}}}}}}}}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse exactly four hex digits as a 16-bit code unit"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.json.parser.jsonHexDigit",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.core.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {
+                  "application": {
+                    "function": {
+                      "typeApplication": {
+                        "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                        "type": {"literal": {"integer": "int32"}}}},
+                    "argument": {"variable": "hydra.core.parsers.anyChar"}}},
+                "argument": {
+                  "lambda": {
+                    "parameter": "c",
+                    "domain": {"literal": {"integer": "int32"}},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.optionals.match"}, "type": {"literal": {"integer": "int32"}}}},
+                                    "type": {"application": {"function": {"variable": "hydra.core.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}}}},
+                                "argument": {"application": {"function": {"variable": "hydra.core.json.parser.jsonHexDigitValue"}, "argument": {"variable": "c"}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.fail"}, "type": {"literal": {"integer": "int32"}}}},
+                                "argument": {"literal": {"string": "expected a hex digit"}}}}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "v",
+                            "domain": {"literal": {"integer": "int32"}},
+                            "body": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.pure"}, "type": {"literal": {"integer": "int32"}}}},
+                                "argument": {"variable": "v"}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse a single hex digit character, yielding its numeric value (0-15)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.json.parser.jsonHexDigitValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": "int32"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "c",
+                "domain": {"literal": {"integer": "int32"}},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.lib.logic.and"},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.gte"}, "type": {"literal": {"integer": "int32"}}}},
+                                            "argument": {"variable": "c"}}},
+                                        "argument": {"literal": {"integer": {"int32": 48}}}}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "argument": {"variable": "c"}}},
+                                    "argument": {"literal": {"integer": {"int32": 57}}}}}}}}},
+                        "argument": {
+                          "optional": {
+                            "application": {
+                              "function": {
+                                "application": {
+                                  "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                  "argument": {"variable": "c"}}},
+                              "argument": {"literal": {"integer": {"int32": 48}}}}}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"variable": "hydra.core.lib.logic.and"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.gte"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "argument": {"variable": "c"}}},
+                                            "argument": {"literal": {"integer": {"int32": 97}}}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                                            "argument": {"variable": "c"}}},
+                                        "argument": {"literal": {"integer": {"int32": 102}}}}}}}}},
+                            "argument": {
+                              "optional": {
+                                "application": {
+                                  "function": {
+                                    "application": {
+                                      "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                      "argument": {"literal": {"integer": {"int32": 10}}}}},
+                                  "argument": {
+                                    "application": {
+                                      "function": {
+                                        "application": {
+                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                          "argument": {"variable": "c"}}},
+                                      "argument": {"literal": {"integer": {"int32": 97}}}}}}}}}},
+                        "argument": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"variable": "hydra.core.lib.logic.and"},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.gte"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "argument": {"variable": "c"}}},
+                                                "argument": {"literal": {"integer": {"int32": 65}}}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "argument": {"variable": "c"}}},
+                                            "argument": {"literal": {"integer": {"int32": 70}}}}}}}}},
+                                "argument": {
+                                  "optional": {
+                                    "application": {
+                                      "function": {
+                                        "application": {
+                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                          "argument": {"literal": {"integer": {"int32": 10}}}}},
+                                      "argument": {
+                                        "application": {
+                                          "function": {
+                                            "application": {
+                                              "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                              "argument": {"variable": "c"}}},
+                                          "argument": {"literal": {"integer": {"int32": 65}}}}}}}}}},
+                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": "int32"}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Compute the numeric value of a hex digit character code (0-15), or Nothing if not a hex digit"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.core.json.parser.jsonIntegerPart",
         "signature": {
           "typeParameters": [],
@@ -597,6 +1066,80 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Parse the integer part of a JSON number (optional minus, then digits)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.json.parser.jsonIsHighSurrogate",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "c",
+                "domain": {"literal": {"integer": "int32"}},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"variable": "hydra.core.lib.logic.and"},
+                        "argument": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.gte"}, "type": {"literal": {"integer": "int32"}}}},
+                                "argument": {"variable": "c"}}},
+                            "argument": {"literal": {"integer": {"int32": 55296}}}}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                            "argument": {"variable": "c"}}},
+                        "argument": {"literal": {"integer": {"int32": 56319}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether a code unit is a UTF-16 high surrogate (0xD800-0xDBFF)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.json.parser.jsonIsLowSurrogate",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "c",
+                "domain": {"literal": {"integer": "int32"}},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"variable": "hydra.core.lib.logic.and"},
+                        "argument": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.gte"}, "type": {"literal": {"integer": "int32"}}}},
+                                "argument": {"variable": "c"}}},
+                            "argument": {"literal": {"integer": {"int32": 56320}}}}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                            "argument": {"variable": "c"}}},
+                        "argument": {"literal": {"integer": {"int32": 57343}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether a code unit is a UTF-16 low surrogate (0xDC00-0xDFFF)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.json.parser.jsonKeyValue",
@@ -1019,21 +1562,7 @@
                 "function": {
                   "application": {
                     "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.alt"}, "type": {"literal": {"integer": "int32"}}}},
-                    "argument": {
-                      "application": {
-                        "function": {
-                          "application": {
-                            "function": {
-                              "typeApplication": {
-                                "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
-                                "type": {"literal": {"integer": "int32"}}}},
-                            "argument": {
-                              "application": {"function": {"variable": "hydra.core.parsers.char"}, "argument": {"literal": {"integer": {"int32": 92}}}}}}},
-                        "argument": {
-                          "lambda": {
-                            "parameter": "_",
-                            "domain": {"literal": {"integer": "int32"}},
-                            "body": {"variable": "hydra.core.json.parser.jsonEscapeChar"}}}}}}},
+                    "argument": {"variable": "hydra.core.json.parser.jsonEscapedChar"}}},
                 "argument": {
                   "application": {
                     "function": {"variable": "hydra.core.parsers.satisfy"},

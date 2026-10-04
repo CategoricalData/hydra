@@ -4681,6 +4681,1322 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "unicode escape basic letter"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.core.testing.TestCase",
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.core.testing.UniversalTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {"body": {"variable": "hydra.core.parsers.runParser"}, "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                          "argument": {"variable": "hydra.core.json.parser.jsonValue"}}},
+                                                                      "argument": {"literal": {"string": "\"\\u0041A\""}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "field": {
+                                                                            "name": "success",
+                                                                            "term": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "record": {
+                                                                                    "typeName": "hydra.core.parsing.ParseSuccess",
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "value",
+                                                                                        "term": {
+                                                                                          "inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "AA"}}}}}},
+                                                                                      {"name": "remainder", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": "int32"}}}}}]}},
+                                                                                "type": {"variable": "hydra.core.json.model.Value"}}}}}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}}}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                          {
+                                            "name": "provisions",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "unicode escape non-ascii"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.core.testing.TestCase",
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.core.testing.UniversalTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {"body": {"variable": "hydra.core.parsers.runParser"}, "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                          "argument": {"variable": "hydra.core.json.parser.jsonValue"}}},
+                                                                      "argument": {"literal": {"string": "\"\\u00e9\""}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "field": {
+                                                                            "name": "success",
+                                                                            "term": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "record": {
+                                                                                    "typeName": "hydra.core.parsing.ParseSuccess",
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "value",
+                                                                                        "term": {
+                                                                                          "inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "é"}}}}}},
+                                                                                      {"name": "remainder", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": "int32"}}}}}]}},
+                                                                                "type": {"variable": "hydra.core.json.model.Value"}}}}}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}}}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                          {
+                                            "name": "provisions",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "unicode escape uppercase hex digits"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.core.testing.TestCase",
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.core.testing.UniversalTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {"body": {"variable": "hydra.core.parsers.runParser"}, "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                          "argument": {"variable": "hydra.core.json.parser.jsonValue"}}},
+                                                                      "argument": {"literal": {"string": "\"\\u00E9\""}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "field": {
+                                                                            "name": "success",
+                                                                            "term": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "record": {
+                                                                                    "typeName": "hydra.core.parsing.ParseSuccess",
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "value",
+                                                                                        "term": {
+                                                                                          "inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "é"}}}}}},
+                                                                                      {"name": "remainder", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": "int32"}}}}}]}},
+                                                                                "type": {"variable": "hydra.core.json.model.Value"}}}}}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}}}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                          {
+                                            "name": "provisions",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "unicode escape null control char"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.core.testing.TestCase",
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.core.testing.UniversalTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {"body": {"variable": "hydra.core.parsers.runParser"}, "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                          "argument": {"variable": "hydra.core.json.parser.jsonValue"}}},
+                                                                      "argument": {"literal": {"string": "\"\\u0000\""}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "field": {
+                                                                            "name": "success",
+                                                                            "term": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "record": {
+                                                                                    "typeName": "hydra.core.parsing.ParseSuccess",
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "value",
+                                                                                        "term": {
+                                                                                          "inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "\u0000"}}}}}},
+                                                                                      {"name": "remainder", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": "int32"}}}}}]}},
+                                                                                "type": {"variable": "hydra.core.json.model.Value"}}}}}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}}}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                          {
+                                            "name": "provisions",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "unicode escape surrogate pair"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.core.testing.TestCase",
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.core.testing.UniversalTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {"body": {"variable": "hydra.core.parsers.runParser"}, "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                          "argument": {"variable": "hydra.core.json.parser.jsonValue"}}},
+                                                                      "argument": {"literal": {"string": "\"\\ud83c\\udf89\""}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "field": {
+                                                                            "name": "success",
+                                                                            "term": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "record": {
+                                                                                    "typeName": "hydra.core.parsing.ParseSuccess",
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "value",
+                                                                                        "term": {
+                                                                                          "inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "🎉"}}}}}},
+                                                                                      {"name": "remainder", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": "int32"}}}}}]}},
+                                                                                "type": {"variable": "hydra.core.json.model.Value"}}}}}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}}}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                          {
+                                            "name": "provisions",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "unicode escape lone high surrogate"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.core.testing.TestCase",
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.core.testing.UniversalTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {"body": {"variable": "hydra.core.parsers.runParser"}, "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                          "argument": {"variable": "hydra.core.json.parser.jsonValue"}}},
+                                                                      "argument": {"literal": {"string": "\"\\ud83c\""}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "failure(parse error)"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                          {
+                                            "name": "provisions",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "unicode escape lone low surrogate"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.core.testing.TestCase",
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.core.testing.UniversalTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {"body": {"variable": "hydra.core.parsers.runParser"}, "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                          "argument": {"variable": "hydra.core.json.parser.jsonValue"}}},
+                                                                      "argument": {"literal": {"string": "\"\\udf89\""}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "failure(parse error)"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                          {
+                                            "name": "provisions",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "unicode escape short (too few hex digits)"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.core.testing.TestCase",
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.core.testing.UniversalTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {"body": {"variable": "hydra.core.parsers.runParser"}, "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                          "argument": {"variable": "hydra.core.json.parser.jsonValue"}}},
+                                                                      "argument": {"literal": {"string": "\"\\u12\""}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "failure(parse error)"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                          {
+                                            "name": "provisions",
                                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
                         {
                           "record": {
@@ -8400,6 +9716,234 @@
                                                                                                     "inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "number", "term": {"literal": {"decimal": 1}}}}},
                                                                                                   {
                                                                                                     "inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "number", "term": {"literal": {"decimal": 2}}}}}]}}}}},
+                                                                                      {"name": "remainder", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": "int32"}}}}}]}},
+                                                                                "type": {"variable": "hydra.core.json.model.Value"}}}}}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}}}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                          {
+                                            "name": "provisions",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestGroup",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "writer round-trip"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "parseJson (printJson v) == v for all C0 control characters"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.core.testing.TestCase",
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.core.testing.UniversalTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {"body": {"variable": "hydra.core.parsers.runParser"}, "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                          "argument": {"variable": "hydra.core.json.parser.jsonValue"}}},
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                          "argument": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.json.model.Value",
+                                                                              "field": {
+                                                                                "name": "string",
+                                                                                "term": {
+                                                                                  "literal": {
+                                                                                    "string": "\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000b\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001a\u001b\u001c\u001d\u001e\u001f"}}}}}}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "cases": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "cases": [
+                                                                            {
+                                                                              "name": "success",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "ps",
+                                                                                  "domain": {
+                                                                                    "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "success("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.core.json.writer.printJson"},
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                      "argument": {"variable": "ps"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": ", "}}}},
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.strings.fromList"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                                                  "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                                                              "argument": {"variable": "ps"}}}}}}},
+                                                                                                  "argument": {"literal": {"string": ")"}}}}}}}}}}}}},
+                                                                            {
+                                                                              "name": "failure",
+                                                                              "handler": {
+                                                                                "lambda": {
+                                                                                  "parameter": "pe",
+                                                                                  "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "failure("}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "parse error"}}}},
+                                                                                          "argument": {"literal": {"string": ")"}}}}}}}}}]}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                                  "argument": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.parsing.ParseResult",
+                                                                          "field": {
+                                                                            "name": "success",
+                                                                            "term": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "record": {
+                                                                                    "typeName": "hydra.core.parsing.ParseSuccess",
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "value",
+                                                                                        "term": {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.json.model.Value",
+                                                                                            "field": {
+                                                                                              "name": "string",
+                                                                                              "term": {
+                                                                                                "literal": {
+                                                                                                  "string": "\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000b\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001a\u001b\u001c\u001d\u001e\u001f"}}}}}},
                                                                                       {"name": "remainder", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": "int32"}}}}}]}},
                                                                                 "type": {"variable": "hydra.core.json.model.Value"}}}}}},
                                                                       "type": {"variable": "hydra.core.json.model.Value"}}}}}}}}]}}}}}},
