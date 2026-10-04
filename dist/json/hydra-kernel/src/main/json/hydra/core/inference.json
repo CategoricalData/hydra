@@ -2067,16 +2067,138 @@
                             "function": {
                               "application": {
                                 "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.eithers.bind"}, "type": {"variable": "hydra.core.errors.Error"}}},
+                                        "type": {"variable": "hydra.core.typing.InferenceResult"}}},
+                                    "type": {"variable": "hydra.core.typing.InferenceResult"}}},
+                                "argument": {
                                   "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.core.inference.inferTypeOfTerm"}, "argument": {"variable": "fcx"}}},
-                                    "argument": {"variable": "cx"}}},
-                                "argument": {"variable": "term"}}},
-                            "argument": {"literal": {"string": "single term"}}}}}}}}}},
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.core.inference.inferTypeOfTerm"}, "argument": {"variable": "fcx"}}},
+                                            "argument": {"variable": "cx"}}},
+                                        "argument": {"variable": "term"}}},
+                                    "argument": {"literal": {"string": "single term"}}}}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "result",
+                                "domain": {"variable": "hydra.core.typing.InferenceResult"},
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "fcx2",
+                                        "term": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.typing.InferenceResult", "fieldName": "context"}},
+                                            "argument": {"variable": "result"}}},
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.typing.InferenceContext"}, "constraints": []}}],
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.eithers.bind"}, "type": {"variable": "hydra.core.errors.Error"}}},
+                                                    "type": "unit"}},
+                                                "type": {"variable": "hydra.core.typing.InferenceResult"}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {"function": {"variable": "hydra.core.inference.dischargeClassConstraints"}, "argument": {"variable": "fcx2"}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"project": {"typeName": "hydra.core.typing.InferenceResult", "fieldName": "subst"}},
+                                                        "argument": {"variable": "result"}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"project": {"typeName": "hydra.core.typing.InferenceResult", "fieldName": "classConstraints"}},
+                                                    "argument": {"variable": "result"}}}}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "_",
+                                            "domain": "unit",
+                                            "body": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {"body": {"variable": "hydra.core.lib.eithers.bind"}, "type": {"variable": "hydra.core.errors.Error"}}},
+                                                            "type": {"variable": "hydra.core.model.Term"}}},
+                                                        "type": {"variable": "hydra.core.typing.InferenceResult"}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.core.inference.finalizeInferredTerm"},
+                                                                    "type": {"variable": "hydra.core.typing.InferenceContext"}}},
+                                                                "argument": {"variable": "fcx2"}}},
+                                                            "argument": {"variable": "cx"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"project": {"typeName": "hydra.core.typing.InferenceResult", "fieldName": "term"}},
+                                                            "argument": {"variable": "result"}}}}}}},
+                                                "argument": {
+                                                  "lambda": {
+                                                    "parameter": "finalized",
+                                                    "domain": {"variable": "hydra.core.model.Term"},
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "either": {
+                                                                "right": {
+                                                                  "record": {
+                                                                    "typeName": "hydra.core.typing.InferenceResult",
+                                                                    "fields": [
+                                                                      {"name": "term", "term": {"variable": "finalized"}},
+                                                                      {
+                                                                        "name": "type",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "function": {"project": {"typeName": "hydra.core.typing.InferenceResult", "fieldName": "type"}},
+                                                                            "argument": {"variable": "result"}}}},
+                                                                      {
+                                                                        "name": "subst",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "function": {"project": {"typeName": "hydra.core.typing.InferenceResult", "fieldName": "subst"}},
+                                                                            "argument": {"variable": "result"}}}},
+                                                                      {
+                                                                        "name": "classConstraints",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "function": {"project": {"typeName": "hydra.core.typing.InferenceResult", "fieldName": "classConstraints"}},
+                                                                            "argument": {"variable": "result"}}}},
+                                                                      {"name": "context", "term": {"variable": "fcx2"}}]}}}},
+                                                            "type": {"variable": "hydra.core.errors.Error"}}},
+                                                        "type": {"variable": "hydra.core.typing.InferenceResult"}}}}}}}}}}}}}}}}}}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Infer the type of a term in a given inference context"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Infer the type of a term in a given inference context, running the same soundness tail (class-constraint discharge and finalization) as the other top-level entry points"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.inference.inferMany",

@@ -281,13 +281,14 @@ extendContext = define "extendContext" $
 -- types variables actually resolved to, so e.g. divide's fractional constraint type-checked
 -- but never rejected an int32 argument.
 --
--- Called once at each of the two genuine top-level entry points into inference
--- (inferGraphTypes, inferTypeOf) rather than inside any individual inference sub-rule: most
--- sub-rules (application, let, literal, type application, ...) construct their InferenceResult
--- directly rather than through yieldChecked/yieldWithConstraints, so a per-rule hook would miss
--- most of inference. Every sub-rule's constraints and substitution flow through the same
--- InferenceResult record on the way to one of these two entry points, so checking there is
--- complete: there is no third path into a fully-inferred term.
+-- Called once at each of the three genuine top-level entry points into inference
+-- (inferGraphTypes, inferTypeOf, inferInGraphContext) rather than inside any individual inference
+-- sub-rule: most sub-rules (application, let, literal, type application, ...) construct their
+-- InferenceResult directly rather than through yieldChecked/yieldWithConstraints, so a per-rule
+-- hook would miss most of inference. Every sub-rule's constraints and substitution flow through the
+-- same InferenceResult record on the way to one of these entry points, so checking there is
+-- complete. (inferInGraphContext formerly skipped this tail and so silently accepted ill-typed
+-- terms -- #748; it now runs the same discharge + finalize tail as the other two.)
 dischargeClassConstraints :: TypedTermDefinition (InferenceContext -> TypeSubst -> M.Map Name TypeVariableConstraints -> Prelude.Either Error ())
 dischargeClassConstraints = define "dischargeClassConstraints" $
   doc "Check that every constrained type variable's final resolved type is an instance of each class it was constrained to." $
@@ -407,9 +408,18 @@ inferGraphTypes = define "inferGraphTypes" $
 
 inferInGraphContext :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error InferenceResult)
 inferInGraphContext = define "inferInGraphContext" $
-  doc "Infer the type of a term in a given inference context" $
+  doc "Infer the type of a term in a given inference context, running the same soundness tail (class-constraint discharge and finalization) as the other top-level entry points" $
   "fcx" ~> "cx" ~> "term" ~>
-  inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "term" @@ (string "single term")
+  "result" <<~ inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "term" @@ (string "single term") $
+  "fcx2" <~ Typing.inferenceResultContext (var "result") $
+  "_" <<~ dischargeClassConstraints @@ var "fcx2" @@ (Typing.inferenceResultSubst (var "result")) @@ (Typing.inferenceResultClassConstraints (var "result")) $
+  "finalized" <<~ finalizeInferredTerm @@ var "fcx2" @@ var "cx" @@ Typing.inferenceResultTerm (var "result") $
+  right $ Typing.inferenceResult
+    (var "finalized")
+    (Typing.inferenceResultType (var "result"))
+    (Typing.inferenceResultSubst (var "result"))
+    (Typing.inferenceResultClassConstraints (var "result"))
+    (var "fcx2")
 
 inferMany :: TypedTermDefinition (InferenceContext -> Graph -> [(Term, String)] -> Prelude.Either Error (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableConstraints))), InferenceContext))
 inferMany = define "inferMany" $
