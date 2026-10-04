@@ -178,7 +178,11 @@ encodeFieldType = define "encodeFieldType" $
     "forType">: lambda "mn" $ lambda "mx" $ lambda "t" $
       match _Type (Strip.deannotateType @@ var "t") (Just (var "forTypeDefault" @@ var "mn" @@ var "mx" @@ var "t")) [
         _Type_optional>>: lambda "ot" $ var "forType" @@ (just (bigint 0)) @@ var "mx" @@ var "ot",
-        _Type_set>>: lambda "st" $ var "forType" @@ var "mn" @@ nothing @@ var "st"],
+        -- #751: a bare set<X> allows the empty set, so its minCount is 0 — not the field's
+        -- inherited minCount (1 for a non-optional field). Force minCount 0 here, exactly as the
+        -- optional arm above does; maxCount stays unbounded (nothing). optional<set<X>> remains
+        -- correct either way (the outer optional already sets minCount 0, and this passes 0 again).
+        _Type_set>>: lambda "st" $ var "forType" @@ (just (bigint 0)) @@ nothing @@ var "st"],
     -- Default case: build property shape
     "forTypeDefault">: lambda "mn" $ lambda "mx" $ lambda "t" $
       Eithers.map

@@ -66,6 +66,26 @@ spec = do
       case mapError $ ShaclCoder.encodeType (Name "test.MyId") wrapped testContext of
         Left e -> H.expectationFailure $ "encodeType failed: " ++ e
         Right props -> ShaclModel.commonPropertiesConstraints props `H.shouldNotBe` S.empty
+
+ -- Regression test for #751 Bug 3: a bare set<X> field inherited the enclosing field's minCount 1,
+ -- so an empty set failed validation. encodeFieldType's _Type_set arm now forces minCount 0 (an
+ -- empty set is valid), matching the optional arm. maxCount stays unbounded.
+ H.describe "Shacl.Coder.encodeFieldType on bare set<X> (#751 Bug 3)" $ do
+
+    H.it "gives a bare set<string> field minCount 0, not the inherited 1" $ do
+      let ft = FieldType (Name "tags") (TypeSet (TypeLiteral LiteralTypeString))
+      -- encodeFieldType's 4th arg (cx) is polymorphic (t0) and unused for this path; () avoids an
+      -- ambiguous-type default. The 2nd arg (Just 0) is sh:order, unrelated to minCount.
+      case mapError $ ShaclCoder.encodeFieldType (Name "test.MyRecord") (Just 0) ft () of
+        Left e -> H.expectationFailure $ "encodeFieldType failed: " ++ e
+        Right def -> do
+          let constraints = S.toList $ ShaclModel.propertyShapeConstraints
+                              $ ShaclModel.definitionTarget def
+              minCounts = [n | ShaclModel.PropertyShapeConstraintMinCount n <- constraints]
+          -- the only minCount present (if any) must be 0 — never the inherited 1
+          minCounts `H.shouldSatisfy` all (== 0)
+          -- and it must not carry minCount 1 (the bug's symptom)
+          minCounts `H.shouldSatisfy` notElem 1
   where
     testSubject = Rdf.ResourceIri $ Rdf.Iri "urn:example:1"
     enumInstance = injectUnit (Name "test.Color") (Name "red")

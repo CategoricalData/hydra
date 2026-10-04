@@ -424,7 +424,8 @@
                                                                       "application": {
                                                                         "function": {
                                                                           "application": {
-                                                                            "function": {"application": {"function": {"variable": "forType"}, "argument": {"variable": "mn"}}},
+                                                                            "function": {
+                                                                              "application": {"function": {"variable": "forType"}, "argument": {"optional": {"literal": {"integer": {"bigint": "0"}}}}}},
                                                                             "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": "bigint"}}}}}},
                                                                         "argument": {"variable": "st"}}}}}}]}},
                                                         "argument": {"application": {"function": {"variable": "hydra.core.strip.deannotateType"}, "argument": {"variable": "t"}}}}}}}}}}},
