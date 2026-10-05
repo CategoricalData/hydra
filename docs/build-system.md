@@ -935,6 +935,39 @@ published Hydra type whose shape might have moved on.** The published Java host'
 logic* (which imports to emit, which primitive names to reference) can still be stale relative to
 not-yet-published kernel/coder changes — see the bootstrap patch below for the one such gap known today.
 
+**Known limitation ([#768](https://github.com/CategoricalData/hydra/issues/768)): the claim above is
+about the *data path* only — the driver itself has its own compiled-type boundary.** The "no
+compiled-type boundary" property holds for how `TransformJsonToTarget` turns a JSON term-AST into
+Haskell text. It does not hold for the driver's own code: `TransformJsonToTarget.java`,
+`Bootstrap.java`, and `GenerationTargets.java` (`heads/java/src/main/java/hydra/`) directly
+`import hydra.core.*` Java types (`hydra.core.Codegen`, `hydra.core.packaging.{Definition,Module,
+ModuleName,TermDefinition}`, etc.) to drive their own control flow. Before any schema-walking can
+happen, the driver itself must compile against *some* Java host jar — published or locally built —
+whose compiled package/class shape matches HEAD's. That is a genuine compiled-type boundary, just
+one level up from the JSON-decode step this section otherwise describes.
+
+For an additive or field-shape kernel change this boundary never breaks, because the driver's own
+imports are stable across such changes. It breaks when a change moves the *package or class shape*
+`hydra.core.*` itself — e.g. #729's repo-wide `hydra.*` → `hydra.core.*`/`hydra.<pkg>.*` rename,
+which the driver's `import` lines directly depend on. On a rename like that, every already-published
+Java host jar predates the new shape, so the fast "published host, no local build" path in the first
+bullet above cannot even compile the driver, let alone run it. The two resolutions used during the
+#729 incident ([details](https://github.com/CategoricalData/hydra/issues/768)):
+
+- **Publish a post-rename host first**, then cold-seed against it — the clean close, but a
+  chicken-and-egg: it needs a release cut before CI's cold-seed path goes green again. This is what
+  actually resolved #729 (0.18.0 published, `hostVersion` bumped, `hostOverrides` cleared).
+- **Force a local build** (`hostOverrides[java]=local` or equivalent) instead of the published jar —
+  works on a *warm* tree (some Java host already built this session), but is itself circular on a
+  genuinely cold checkout: the local build needs `dist/java/hydra-kernel`, which is downstream of the
+  seed step this driver performs.
+
+Neither resolution is available purely from configuration on a cold tree mid-rename; see
+[Migration shims](recipes/migration-shims.md) for the shim lifecycle this falls under. This is a
+dormant gap — it does not affect additive or field-shape changes, only a future repo-wide rename of
+`hydra.core.*`'s own package/class structure — tracked for a real fix (e.g. decoupling the driver
+classes from `hydra.core.*` compiled types) rather than fixed here.
+
 **Known gap and its bootstrap patch: coder-emission logic vs. kernel data.** The distinction that matters
 is DATA (the JSON term-AST, which any coder version transcribes correctly) vs. LOGIC (the coder's own
 compiled emission rules — which imports to always add, which primitive name to print for a given
