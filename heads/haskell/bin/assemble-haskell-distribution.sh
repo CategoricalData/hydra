@@ -152,6 +152,24 @@ MODCOUNT="$(find "$MAIN_DST" -name '*.hs' | wc -l | tr -d ' ')"
 echo "  staged $MODCOUNT module(s)"
 echo ""
 
+# #786: for hydra-kernel only, bundle the kernel's JSON module universe as
+# Cabal data-files (declared by generate-haskell-package-build.py in
+# data-dir/data-files below), so the published sdist is introspectable
+# without a source checkout.
+if [ "$PKG" = "hydra-kernel" ]; then
+    KERNEL_JSON_SRC="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json"
+    if [ ! -d "$KERNEL_JSON_SRC" ]; then
+        echo "  ERROR: missing kernel JSON source dir: $KERNEL_JSON_SRC" >&2
+        exit 1
+    fi
+    KERNEL_JSON_DST="$STAGE/hydra-kernel-json"
+    echo "Staging kernel JSON module universe..."
+    cp -R "$KERNEL_JSON_SRC" "$KERNEL_JSON_DST"
+    JSONCOUNT="$(find "$KERNEL_JSON_DST" -name '*.json' | wc -l | tr -d ' ')"
+    echo "  staged $JSONCOUNT JSON module file(s)"
+    echo ""
+fi
+
 echo "Generating build files..."
 HYDRA_ROOT_DIR="$HYDRA_ROOT" python3 "$HYDRA_ROOT/bin/lib/generate-haskell-package-build.py" \
     "$PKG" --out-dir "$STAGE"

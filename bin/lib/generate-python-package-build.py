@@ -32,6 +32,33 @@ AUTHOR_NAME = "Joshua Shinavier"
 AUTHOR_EMAIL = "josh@fortytwo.net"
 PYTHON_REQUIRES = ">=3.12"
 
+# #786: package-data directory the kernel's JSON module universe is bundled
+# under, as a subpackage of `hydra` (a valid Python identifier; the other
+# hosts use the hyphenated "hydra-kernel-json" resource name).
+KERNEL_JSON_PACKAGE_DIR = "hydra_kernel_json"
+
+
+def copy_kernel_json_resources(repo_root: str, package: str, out_dir: str) -> None:
+    """#786: for hydra-kernel only, copy dist/json/hydra-kernel/src/main/json
+    into src/main/python/hydra/hydra_kernel_json/ so the published wheel
+    bundles the kernel's module universe as package data. Hatchling ships any
+    file under an included package root by default (verified empirically; no
+    package_data/force-include declaration is needed), so this rides the
+    existing `packages = ["src/main/python/hydra", ...]` declaration with no
+    pyproject.toml change. A no-op for every other package.
+    """
+    if package != "hydra-kernel":
+        return
+    src = os.path.join(repo_root, "dist", "json", "hydra-kernel", "src", "main", "json")
+    if not os.path.isdir(src):
+        print(f"error: missing kernel JSON source dir: {src}", file=sys.stderr)
+        sys.exit(1)
+    dest = os.path.join(out_dir, "src", "main", "python", "hydra", KERNEL_JSON_PACKAGE_DIR)
+    if os.path.isdir(dest):
+        shutil.rmtree(dest)
+    shutil.copytree(src, dest)
+
+
 def load_overlay_build_config(repo_root: str, name: str) -> dict:
     """Load overlay/python/<pkg>/build.json — the encoded
     hydra.python.pyproject.PyProjectBuildConfiguration for this package (#511).
@@ -281,6 +308,10 @@ def main() -> int:
     # package-local — a path escaping the package root is absent from the sdist.
     for fname in ("LICENSE", "NOTICE"):
         shutil.copyfile(os.path.join(args.repo_root, fname), os.path.join(out_dir, fname))
+
+    # #786: bundle the kernel's JSON module universe as package data, before
+    # discover_wheel_package_roots() scans src/main/python/ below.
+    copy_kernel_json_resources(args.repo_root, args.package, out_dir)
 
     overlay = load_overlay_build_config(args.repo_root, args.package)
 

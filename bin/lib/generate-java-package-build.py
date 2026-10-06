@@ -64,6 +64,31 @@ SCOPE_TO_CONFIGURATION = {
 }
 
 
+# #786: resource-relative subpath the kernel's JSON module universe is bundled
+# under. Shared verbatim with the Scala/TypeScript generators (Python uses the
+# underscored "hydra_kernel_json", a valid Python identifier, as a subpackage
+# of hydra/; Haskell uses it as the hpack data-dir).
+KERNEL_JSON_RESOURCE_SUBDIR = "hydra-kernel-json"
+
+
+def copy_kernel_json_resources(repo_root: str, package: str, out_dir: str, resource_root: str) -> None:
+    """#786: for hydra-kernel only, copy dist/json/hydra-kernel/src/main/json
+    into <out_dir>/<resource_root>/hydra-kernel-json/ so the published jar
+    bundles the kernel's module universe as a classpath resource. A no-op for
+    every other package — only the kernel package ships this universe.
+    """
+    if package != "hydra-kernel":
+        return
+    src = os.path.join(repo_root, "dist", "json", "hydra-kernel", "src", "main", "json")
+    if not os.path.isdir(src):
+        print(f"error: missing kernel JSON source dir: {src}", file=sys.stderr)
+        sys.exit(1)
+    dest = os.path.join(out_dir, resource_root, KERNEL_JSON_RESOURCE_SUBDIR)
+    if os.path.isdir(dest):
+        shutil.rmtree(dest)
+    shutil.copytree(src, dest)
+
+
 def load_overlay_build_config(repo_root: str, name: str) -> dict:
     """Load overlay/java/<pkg>/build.json — the encoded hydra.java.gradle
     GradleBuildConfiguration for this package (#511). Returns {} when absent
@@ -475,6 +500,13 @@ def _write_package_build(args) -> int:
     # published/standalone build).
     for fname in ("LICENSE", "NOTICE"):
         shutil.copyfile(os.path.join(args.repo_root, fname), os.path.join(out_dir, fname))
+
+    # #786: bundle the kernel's JSON module universe as a classpath resource, so
+    # a published hydra-kernel jar is introspectable without a source checkout.
+    # The java-library plugin includes src/main/resources on the compile/runtime
+    # classpath (and in the published jar) by convention, with no build.gradle
+    # change needed.
+    copy_kernel_json_resources(args.repo_root, args.package, out_dir, "src/main/resources")
 
     print(f"  wrote {build_path}")
     print(f"  wrote {settings_path}")

@@ -51,6 +51,29 @@ SBT_PGP_VERSION = "2.3.1"
 # library deps beyond the cross-package Hydra deps declared in package.json.
 EXTERNAL_DEPS: dict[str, list[str]] = {}
 
+# #786: resource-relative subpath the kernel's JSON module universe is bundled
+# under (shared name convention with the Java generator's classpath resource).
+KERNEL_JSON_RESOURCE_SUBDIR = "hydra-kernel-json"
+
+
+def copy_kernel_json_resources(repo_root: str, package: str, out_dir: str) -> None:
+    """#786: for hydra-kernel only, copy dist/json/hydra-kernel/src/main/json
+    into <out_dir>/src/main/resources/hydra-kernel-json/ so the published jar
+    bundles the kernel's module universe as a classpath resource. sbt's default
+    layout includes src/main/resources in the packaged jar with no build.sbt
+    change needed. A no-op for every other package.
+    """
+    if package != "hydra-kernel":
+        return
+    src = os.path.join(repo_root, "dist", "json", "hydra-kernel", "src", "main", "json")
+    if not os.path.isdir(src):
+        print(f"error: missing kernel JSON source dir: {src}", file=sys.stderr)
+        sys.exit(1)
+    dest = os.path.join(out_dir, "src", "main", "resources", KERNEL_JSON_RESOURCE_SUBDIR)
+    if os.path.isdir(dest):
+        shutil.rmtree(dest)
+    shutil.copytree(src, dest)
+
 
 def render_build_sbt(name: str, description: str, version: str, deps: list[str],
                       bundle_dir: str) -> str:
@@ -257,6 +280,9 @@ def main() -> int:
     # Copy LICENSE + NOTICE so the build.sbt mappings block can bundle them.
     for fname in ("LICENSE", "NOTICE"):
         shutil.copyfile(os.path.join(args.repo_root, fname), os.path.join(out_dir, fname))
+
+    # #786: bundle the kernel's JSON module universe as a classpath resource.
+    copy_kernel_json_resources(args.repo_root, args.package, out_dir)
 
     print(f"  wrote {build_path}")
     print(f"  wrote {plugins_path}")

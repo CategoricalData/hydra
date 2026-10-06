@@ -36,6 +36,31 @@ ENGINES_NODE = ">=20"
 # exists, so no third-party npm deps are pulled into the published packages.
 EXTERNAL_DEPS: dict[str, list[str]] = {}
 
+# #786: package-root directory the kernel's JSON module universe is bundled
+# under (shared name convention with the Java/Scala classpath resource).
+KERNEL_JSON_RESOURCE_SUBDIR = "hydra-kernel-json"
+
+
+def copy_kernel_json_resources(repo_root: str, package: str, out_dir: str) -> None:
+    """#786: for hydra-kernel only, copy dist/json/hydra-kernel/src/main/json
+    into <out_dir>/hydra-kernel-json/ so the published npm package bundles the
+    kernel's module universe. Placed at the package root rather than under
+    dist/ (the TypeScript compiler's own output dir for this package) to avoid
+    confusion between the two unrelated "dist" trees. A no-op for every other
+    package.
+    """
+    if package != "hydra-kernel":
+        return
+    src = os.path.join(repo_root, "dist", "json", "hydra-kernel", "src", "main", "json")
+    if not os.path.isdir(src):
+        print(f"error: missing kernel JSON source dir: {src}", file=sys.stderr)
+        sys.exit(1)
+    dest = os.path.join(out_dir, KERNEL_JSON_RESOURCE_SUBDIR)
+    if os.path.isdir(dest):
+        shutil.rmtree(dest)
+    shutil.copytree(src, dest)
+
+
 # All Hydra TypeScript packages are subpath-only by design (#600): none gets
 # a "." export, "main", or "types" field. Consumers import specific submodules
 # via the "./dist/*.js" subpath export instead (documented in
@@ -57,7 +82,8 @@ EXTERNAL_DEPS: dict[str, list[str]] = {}
 
 
 def render_package_json(
-    name: str, description: str, version: str, deps: list[str], readme_rel: str | None
+    name: str, description: str, version: str, deps: list[str], readme_rel: str | None,
+    package: str | None = None,
 ) -> str:
     hydra_deps: dict[str, str] = {d: version for d in deps}
     for ext_dep in EXTERNAL_DEPS.get(name, []):
@@ -77,6 +103,12 @@ def render_package_json(
     safe_desc = description.replace('"', '\\"')
     readme_field = f',\n  "readme": "{readme_rel}"' if readme_rel else ""
 
+    # #786: hydra-kernel bundles its JSON module universe at the package root.
+    files_list = ["dist/**/*.js", "dist/**/*.d.ts", "dist/**/*.js.map", "LICENSE", "NOTICE"]
+    if package == "hydra-kernel":
+        files_list.append(f"{KERNEL_JSON_RESOURCE_SUBDIR}/**/*.json")
+    files_block = ",\n    ".join(f'"{f}"' for f in files_list)
+
     return f"""\
 {{
   "name": "{name}",
@@ -90,11 +122,7 @@ def render_package_json(
     }}
   }},
   "files": [
-    "dist/**/*.js",
-    "dist/**/*.d.ts",
-    "dist/**/*.js.map",
-    "LICENSE",
-    "NOTICE"
+    {files_block}
   ],
   "engines": {{
     "node": "{ENGINES_NODE}"
@@ -187,9 +215,12 @@ def main() -> int:
     for fname in ("LICENSE", "NOTICE"):
         shutil.copyfile(os.path.join(args.repo_root, fname), os.path.join(out_dir, fname))
 
+    # #786: bundle the kernel's JSON module universe at the package root.
+    copy_kernel_json_resources(args.repo_root, args.package, out_dir)
+
     pkg_json_path_out = os.path.join(out_dir, "package.json")
     with open(pkg_json_path_out, "w") as f:
-        f.write(render_package_json(pkg_name, description, version, deps, readme_rel))
+        f.write(render_package_json(pkg_name, description, version, deps, readme_rel, args.package))
     print(f"  wrote {pkg_json_path_out}")
 
     tsconfig_path = os.path.join(out_dir, "tsconfig.build.json")
