@@ -96,10 +96,27 @@ fails with `NoSuchBinding`.
 
 The Haskell host has a ready-made list for this, `Hydra.Generation.kernelTypeUniverse` (`hydra.core.time`,
 `hydra.core.file`, `hydra.core.error.file`, `hydra.core.system`, `hydra.core.error.system`) — fold it into the graph
-with `Codegen.modulesToGraph(bootstrapGraph, universe, universe)` before generating. There is no
-Java/Python equivalent yet, so a Java or Python downstream project referencing these primitives
-must currently obtain the same modules (e.g. from the published `hydra-kernel` JSON resources, if
-present on the classpath, or decode them from JSON some other way) and fold them the same way.
+with `Codegen.modulesToGraph(bootstrapGraph, universe, universe)` before generating.
+
+As of 0.18.1 (#786), the published `hydra-kernel` jar bundles the kernel's full JSON module
+universe as a classpath resource (`hydra-kernel-json/**`, generated into
+`src/main/resources/hydra-kernel-json/` at package-assembly time), so this is no longer a
+filesystem-checkout dependency. On Java, `hydra.build.overlay.java.Generation.loadKernelModules()`
+reads that resource and returns every kernel module (decoded `Module` list) with no arguments —
+no source checkout, no explicit namespace list:
+
+```java
+List<Module> kernelModules = Generation.loadKernelModules();
+Graph bsGraph = Codegen.modulesToGraph(Generation.bootstrapGraph(), kernelModules, kernelModules);
+```
+
+Fold the result into the graph via `Codegen.modulesToGraph`, same as the Haskell path above — this
+call does not do that folding for you, since not every caller needs the *whole* kernel universe
+folded in (some only need `inferModulesGiven`'s `universeMods`/`targetMods` lists). Python, Scala,
+and TypeScript downstream projects can read the equivalent bundled resource directly (Python:
+`hydra/hydra_kernel_json/` package data; Scala: `hydra-kernel-json/` classpath resource;
+TypeScript: `hydra-kernel-json/` in the installed npm package) — a `loadKernelModules()`-style
+helper for those hosts is not yet published; see [#786](https://github.com/CategoricalData/hydra/issues/786).
 
 ### Deriving `overlaySubs` for the 5-arg coder (#644)
 
