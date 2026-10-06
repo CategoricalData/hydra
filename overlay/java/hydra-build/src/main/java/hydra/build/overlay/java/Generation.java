@@ -393,6 +393,60 @@ public class Generation {
         return modules;
     }
 
+    // #786: the classpath-resource root the kernel's JSON module universe is
+    // bundled under in the published hydra-kernel jar (see
+    // bin/lib/generate-java-package-build.py's copy_kernel_json_resources,
+    // which copies dist/json/hydra-kernel/src/main/json into
+    // src/main/resources/hydra-kernel-json/ at package-assembly time).
+    private static final String KERNEL_JSON_RESOURCE_ROOT = "hydra-kernel-json";
+
+    /**
+     * Parse a JSON classpath resource into a Hydra JSON value. Resource path is
+     * relative to {@link #KERNEL_JSON_RESOURCE_ROOT}, e.g. "manifest.json" or
+     * "hydra/core/model.json".
+     */
+    private static Value parseJsonResource(String relativePath) throws IOException {
+        String resourcePath = KERNEL_JSON_RESOURCE_ROOT + "/" + relativePath;
+        try (java.io.InputStream in = Generation.class.getClassLoader().getResourceAsStream(resourcePath)) {
+            if (in == null) {
+                throw new IOException("kernel JSON resource not found on classpath: " + resourcePath
+                        + " (is hydra-kernel on the classpath, and is it a 0.18.1+ build with #786 bundling?)");
+            }
+            String jsonStr = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            return new SimpleJsonParser(jsonStr).parseValue();
+        }
+    }
+
+    /**
+     * Load every "main" module of the published hydra-kernel's bundled JSON
+     * module universe (#786), from the classpath rather than a filesystem
+     * path — the resource counterpart of {@link #loadModulesFromJson}. The
+     * module set loaded is manifest.json's mainModules field: the kernel's
+     * own types, terms, and DSL runtime, the same set
+     * docs/recipes/downstream-codegen.md's #640 section asks a downstream
+     * project to fold into its inference graph via
+     * {@code Codegen.modulesToGraph}.
+     *
+     * <p>Requires hydra-kernel 0.18.1+ on the classpath (the #786 release
+     * that first bundles this resource); on an older jar this throws
+     * {@link IOException}, not a silent empty result.</p>
+     */
+    public static List<Module> loadKernelModules() throws IOException {
+        Value manifestVal = parseJsonResource("manifest.json");
+        Map<String, Value> manifestObj = expectObject(manifestVal, "manifest.json");
+        List<Value> mainModulesVal = expectArray(manifestObj.get("mainModules"), "manifest.mainModules");
+
+        Map<Name, hydra.core.model.Type> schemaMap = bootstrapSchemaMap();
+        Graph bsGraph = bootstrapGraph();
+        List<Module> modules = new ArrayList<>();
+        for (Value v : mainModulesVal) {
+            ModuleName ns = new ModuleName(expectString(v, "manifest.mainModules entry"));
+            String relativePath = Codegen.moduleNameToPath(ns) + ".json";
+            Value jsonVal = parseJsonResource(relativePath);
+            modules.add(decodeModuleFromJson(bsGraph, schemaMap, jsonVal));
+        }
+        return modules;
+    }
 
     private static Map<String, Value> expectObject(Value val, String context) {
         if (val instanceof Value.Object_) {
