@@ -2517,16 +2517,24 @@ public class Serde {
         .lam("s")
         .to(() ->
                 Strings.join(
-                        string("&gt;"),
+                        string("*&#47;"),
                         Strings.splitOn(
-                            string(">"),
+                            string("*/"),
                             Strings.join(
-                                string("&lt;"),
+                                string("&#92;"),
                                 Strings.splitOn(
-                                    string("<"),
+                                    string("\\"),
                                     Strings.join(
-                                        string("&amp;"),
-                                        Strings.splitOn(string("&"), var("s"))))))));
+                                        string("&gt;"),
+                                        Strings.splitOn(
+                                            string(">"),
+                                            Strings.join(
+                                                string("&lt;"),
+                                                Strings.splitOn(
+                                                    string("<"),
+                                                    Strings.join(
+                                                        string("&amp;"),
+                                                        Strings.splitOn(string("&"), var("s"))))))))))));
 
     public static final Def javaDocEntityRef = def("javaDocEntityRef")
         .doc("Render a hydra.core.packaging.EntityReference as Javadoc link syntax")
