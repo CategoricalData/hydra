@@ -20,5 +20,7 @@ object strings:
       "" +: s.codePoints().toArray.toSeq.map(cp => new String(Character.toChars(cp)))
     else s.split(java.util.regex.Pattern.quote(sep), -1).toSeq
   def toList(s: String): Seq[Int] = s.codePoints().toArray.toSeq
-  def toLower(s: String): String = s.toLowerCase
-  def toUpper(s: String): String = s.toUpperCase
+  def toLower(s: String): String =
+    new String(s.codePoints().toArray.flatMap(cp => Character.toChars(chars.toLower(cp))))
+  def toUpper(s: String): String =
+    new String(s.codePoints().toArray.flatMap(cp => Character.toChars(chars.toUpper(cp))))

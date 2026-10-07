@@ -252,12 +252,17 @@ allTests = define "allTests" $
         test "control characters" "\n\t\r" "\n\t\r",
 
         -- Unicode
-        test "unicode accented chars" "\209\193\201\205\211\218" "\241\225\233\237\243\250"]  -- ÑÁÉÍÓÚ -> ñáéíóú
+        test "unicode accented chars" "\209\193\201\205\211\218" "\241\225\233\237\243\250",  -- ÑÁÉÍÓÚ -> ñáéíóú
+
+        -- Simple (one-to-one) case mapping only (#782): U+0130 "İ" has a
+        -- two-code-point full lowercase mapping ("i̇"), but the simple
+        -- mapping used here is plain "i".
+        test "dotted capital I has a simple, single-codepoint mapping" "\304" "i"]  -- İ -> i
         where
           test name s result = stringEvalPair name
             (Strings.toLower (Phantoms.string s))
             (Phantoms.string result)
-  
+
       stringsToUpper = subgroup "toUpper" [
         -- Basic functionality
         test "mixed case" "hello World" "HELLO WORLD",
@@ -270,7 +275,17 @@ allTests = define "allTests" $
         test "control characters" "\n\t\r" "\n\t\r",
 
         -- Unicode
-        test "unicode accented chars" "\241\225\233\237\243\250" "\209\193\201\205\211\218"]  -- ñáéíóú -> ÑÁÉÍÓÚ
+        test "unicode accented chars" "\241\225\233\237\243\250" "\209\193\201\205\211\218",  -- ñáéíóú -> ÑÁÉÍÓÚ
+
+        -- Code-point-by-code-point, not full Unicode case conversion (#782):
+        -- U+00DF "ß" has no single-code-point uppercase mapping, so it is
+        -- returned unchanged rather than expanded to "SS".
+        test "sharp s is not expanded to SS" "stra\223e" "STRA\223E",  -- straße -> STRAße
+        -- U+0149 "ŉ" likewise has no simple uppercase mapping.
+        test "n preceded by apostrophe is unchanged" "\329" "\329",
+        -- U+1F80's simple uppercase mapping is the single code point
+        -- U+1F88, not the two-code-point full mapping "ἈΙ".
+        test "greek alpha with psili and ypogegrammeni" "\8064" "\8072"]
         where
           test name s result = stringEvalPair name
             (Strings.toUpper (Phantoms.string s))

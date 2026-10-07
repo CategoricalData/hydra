@@ -3,6 +3,8 @@
 // Operates on JavaScript strings. Code points are represented as `number`,
 // matching Hydra's `Int` for characters.
 
+import * as chars from "./chars.js";
+
 export const concat = (xs: readonly string[]): string => xs.join("");
 export const concat2 = (a: string, b: string): string => a + b;
 
@@ -36,8 +38,10 @@ export const toList = (s: string): readonly number[] => {
 
 export const isEmpty = (s: string): boolean => s.length === 0;
 
-export const toUpper = (s: string): string => s.toUpperCase();
-export const toLower = (s: string): string => s.toLowerCase();
+export const toUpper = (s: string): string =>
+  [...s].map((ch) => String.fromCodePoint(chars.toUpper(ch.codePointAt(0)!))).join("");
+export const toLower = (s: string): string =>
+  [...s].map((ch) => String.fromCodePoint(chars.toLower(ch.codePointAt(0)!))).join("");
 
 export const trim = (s: string): string => s.trim();
 

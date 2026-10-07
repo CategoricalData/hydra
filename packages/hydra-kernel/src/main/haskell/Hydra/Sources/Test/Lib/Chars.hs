@@ -85,7 +85,10 @@ charsToLower :: TypedTerm TestGroup
 charsToLower = subgroup "toLower" [
   test "uppercase" (ord 'A') (ord 'a'),
   test "lowercase" (ord 'a') (ord 'a'),
-  test "digit" (ord '5') (ord '5')]
+  test "digit" (ord '5') (ord '5'),
+  -- U+0130 LATIN CAPITAL LETTER I WITH DOT ABOVE: the simple lowercase
+  -- mapping is plain 'i' (U+0069), not the two-code-point full mapping "i̇".
+  test "dotted capital I" 0x130 (ord 'i')]
   where
     test name x result = primCase name DefChars.toLower [int32 x] (int32 result)
 
@@ -93,6 +96,17 @@ charsToUpper :: TypedTerm TestGroup
 charsToUpper = subgroup "toUpper" [
   test "lowercase" (ord 'a') (ord 'A'),
   test "uppercase" (ord 'A') (ord 'A'),
-  test "digit" (ord '5') (ord '5')]
+  test "digit" (ord '5') (ord '5'),
+  -- U+00DF LATIN SMALL LETTER SHARP S ("ß") has no single-code-point
+  -- uppercase mapping, so it is returned unchanged rather than expanded
+  -- to "SS" (#782).
+  test "sharp s" 0xDF 0xDF,
+  -- U+0149 LATIN SMALL LETTER N PRECEDED BY APOSTROPHE ("ŉ") likewise has
+  -- no simple uppercase mapping.
+  test "n preceded by apostrophe" 0x149 0x149,
+  -- U+1F80 GREEK SMALL LETTER ALPHA WITH PSILI AND YPOGEGRAMMENI: the simple
+  -- uppercase mapping is the single code point U+1F88, not the two-code-point
+  -- full mapping "ἈΙ" (capital alpha with psili, followed by capital iota).
+  test "greek alpha with psili and ypogegrammeni" 0x1F80 0x1F88]
   where
     test name x result = primCase name DefChars.toUpper [int32 x] (int32 result)

@@ -77,11 +77,34 @@
             (recur (+ i chars) (cons cp acc))))))))
 
 ;; to_lower :: String -> String
+;; Maps each code point through Character/toLowerCase (the same simple,
+;; one-to-one mapping used by chars.clj's to_lower), rather than
+;; clojure.string/lower-case, which performs full Unicode case folding
+;; (e.g. "ß" would be unaffected, but other locale-sensitive expansions
+;; are not guaranteed one-to-one). Code-point-safe iteration (mirroring
+;; to_list/split_on above) rather than .codePoints, whose IntStream isn't
+;; directly seqable by doseq.
 (def hydra_overlay_clojure_lib_strings_to_lower
   "Convert a string to lowercase."
-  (fn [s] (clojure.string/lower-case s)))
+  (fn [s]
+    (let [len (.length ^String s)
+          sb (StringBuilder.)]
+      (loop [i 0]
+        (when (< i len)
+          (let [cp (.codePointAt ^String s i)]
+            (.appendCodePoint sb (Character/toLowerCase cp))
+            (recur (+ i (Character/charCount cp))))))
+      (.toString sb))))
 
 ;; to_upper :: String -> String
 (def hydra_overlay_clojure_lib_strings_to_upper
   "Convert a string to uppercase."
-  (fn [s] (clojure.string/upper-case s)))
+  (fn [s]
+    (let [len (.length ^String s)
+          sb (StringBuilder.)]
+      (loop [i 0]
+        (when (< i len)
+          (let [cp (.codePointAt ^String s i)]
+            (.appendCodePoint sb (Character/toUpperCase cp))
+            (recur (+ i (Character/charCount cp))))))
+      (.toString sb))))

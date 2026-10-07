@@ -4,6 +4,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 
 from hydra.core.overlay.python.dsl.python import frozenlist, Optional, Given, None_
+from hydra.core.overlay.python.lib import chars
 
 
 def concat(xs: Sequence[str]) -> str:
@@ -59,12 +60,12 @@ def to_list(x: str) -> frozenlist[int]:
 
 def to_lower(s: str) -> str:
     """Convert a string to lowercase."""
-    return s.lower()
+    return "".join(chr(chars.to_lower(ord(c))) for c in s)
 
 
 def to_upper(s: str) -> str:
     """Convert a string to uppercase."""
-    return s.upper()
+    return "".join(chr(chars.to_upper(ord(c))) for c in s)
 
 
 def words(s: str) -> frozenlist[str]:

@@ -52,7 +52,8 @@ public class ToLower extends PrimitiveFunction {
      * @return the lowercase version of the string
      */
     public static String apply(String upper) {
-        // TODO: Java's built-in behavior may not agree with that of Haskell or other host languages
-        return upper.toLowerCase();
+        StringBuilder sb = new StringBuilder(upper.length());
+        upper.codePoints().forEach(cp -> sb.appendCodePoint(hydra.core.overlay.java.lib.chars.ToLower.apply(cp)));
+        return sb.toString();
     }
 }
