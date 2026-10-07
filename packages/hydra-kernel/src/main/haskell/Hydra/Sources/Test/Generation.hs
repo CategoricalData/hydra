@@ -235,7 +235,9 @@ allTests = define "allTests" $
       subgroup "inferModulesGiven" [
         incrementalSubsetCase,
         incrementalFullCase,
-        vacuousQuantifierCase]]
+        vacuousQuantifierCase,
+        targetOutsideUniverseGivenCase,
+        targetOutsideUniverseFullCase]]
 
 ----------------------------------------
 -- generateModuleDoc test input and case (#723).
@@ -551,3 +553,38 @@ vacuousQuantifierCase = universalCase
     target = Phantoms.list [modW]
     actual = showResult (Generation.inferModulesGiven
       # TestGraph.testContext # TestGraph.testGraph # vacuousUniverse # target)
+
+-- | Regression test for #781: a target module passed in `targetMods` but
+-- absent from `universeMods` must still be inferred and keep its term
+-- definitions, not silently lose them while `inferModulesGiven` returns
+-- `Right`. `universeMods` here is empty -- modA and modB (the only source of
+-- the `idA`/`useId` bindings) are known to `inferModulesGiven` only via
+-- `targetMods`.
+targetOutsideUniverseGivenCase :: TypedTerm TestCaseWithMetadata
+targetOutsideUniverseGivenCase = universalCase
+    "inferModulesGiven infers a target module that is absent from universeMods, instead of dropping its term definitions"
+    actual
+    expected
+  where
+    emptyUniverse = Phantoms.list ([] :: [TypedTerm Module])
+    target = Phantoms.list [modA, modB]
+    actual = showResult (Generation.inferModulesGiven
+      # TestGraph.testContext # TestGraph.testGraph # emptyUniverse # target)
+    expected = showResult (Generation.inferModulesGiven
+      # TestGraph.testContext # TestGraph.testGraph # universeMods # target)
+
+-- | Companion to targetOutsideUniverseGivenCase for `inferModules`: same
+-- empty-universe / target-only setup, asserting the same non-dropping
+-- property for the non-incremental entry point.
+targetOutsideUniverseFullCase :: TypedTerm TestCaseWithMetadata
+targetOutsideUniverseFullCase = universalCase
+    "inferModules infers a target module that is absent from universeMods, instead of dropping its term definitions"
+    actual
+    expected
+  where
+    emptyUniverse = Phantoms.list ([] :: [TypedTerm Module])
+    target = Phantoms.list [modA, modB]
+    actual = showResult (Generation.inferModules
+      # TestGraph.testContext # TestGraph.testGraph # emptyUniverse # target)
+    expected = showResult (Generation.inferModules
+      # TestGraph.testContext # TestGraph.testGraph # universeMods # target)

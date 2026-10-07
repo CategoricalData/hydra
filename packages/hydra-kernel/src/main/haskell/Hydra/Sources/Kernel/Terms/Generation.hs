@@ -622,8 +622,12 @@ inferModules :: TypedTermDefinition (InferenceContext -> Graph -> [Module] -> [M
 inferModules = define "inferModules" $
   doc "Perform type inference on modules and reconstruct with inferred types" $
   "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
-  "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "universeMods" @@ var "universeMods" $
-  "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "universeMods")) $
+  -- Seed both the graph and the data elements from universeMods ++ targetMods, not
+  -- universeMods alone: a target module not also present in universeMods must still be
+  -- inferred (and its term definitions preserved by refreshModule below). See #781.
+  "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "universeMods" @@ var "targetMods" $
+  "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m"))
+    (Lists.concat2 (var "universeMods") (var "targetMods"))) $
   "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0" $
   "inferResult" <~ Pairs.first (var "inferResultWithCx") $
   "inferredElements" <~ Pairs.second (var "inferResult") $
@@ -686,11 +690,15 @@ inferModulesGiven :: TypedTermDefinition (InferenceContext -> Graph -> [Module] 
 inferModulesGiven = define "inferModulesGiven" $
   doc "Infer types for target modules in the context of a typed universe" $
   "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
-  "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "universeMods" @@ var "universeMods" $
-  -- ModuleName index over the full universe, used to resolve module dep edges.
+  -- Seed both the graph and the namespace index from universeMods ++ targetMods, not
+  -- universeMods alone: a target module not also present in universeMods must still
+  -- resolve through nsMap (else moduleDepsTransitive silently drops it from closureMods,
+  -- and its term definitions are discarded below with no error). See #781.
+  "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "universeMods" @@ var "targetMods" $
+  -- ModuleName index over the full universe plus targets, used to resolve module dep edges.
   "nsMap" <~ (Maps.fromList (Lists.map
     ("m" ~> pair (Packaging.moduleName $ var "m") (var "m"))
-    (var "universeMods")) :: TypedTerm (M.Map Name Module)) $
+    (Lists.concat2 (var "universeMods") (var "targetMods"))) :: TypedTerm (M.Map Name Module)) $
   -- Transitive closure of term-deps for the target set (self-inclusive).
   "closureMods" <~ moduleDepsTransitive @@ var "nsMap" @@ var "targetMods" $
   "targetNamespaces" <~ Sets.fromList (Lists.map (reify Packaging.moduleName) (var "targetMods")) $
