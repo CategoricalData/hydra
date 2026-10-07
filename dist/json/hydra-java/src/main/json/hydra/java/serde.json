@@ -6835,23 +6835,36 @@
                 "domain": {"literal": "string"},
                 "body": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "&gt;"}}}},
+                    "function": {
+                      "application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "*&#47;"}}}},
                     "argument": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.core.lib.strings.splitOn"}, "argument": {"literal": {"string": ">"}}}},
+                        "function": {"application": {"function": {"variable": "hydra.core.lib.strings.splitOn"}, "argument": {"literal": {"string": "*/"}}}},
                         "argument": {
                           "application": {
-                            "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "&lt;"}}}},
+                            "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "&#92;"}}}},
                             "argument": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.core.lib.strings.splitOn"}, "argument": {"literal": {"string": "<"}}}},
+                                "function": {"application": {"function": {"variable": "hydra.core.lib.strings.splitOn"}, "argument": {"literal": {"string": "\\"}}}},
                                 "argument": {
                                   "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "&amp;"}}}},
+                                    "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "&gt;"}}}},
                                     "argument": {
                                       "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.core.lib.strings.splitOn"}, "argument": {"literal": {"string": "&"}}}},
-                                        "argument": {"variable": "s"}}}}}}}}}}}}}}},
+                                        "function": {"application": {"function": {"variable": "hydra.core.lib.strings.splitOn"}, "argument": {"literal": {"string": ">"}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "&lt;"}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.core.lib.strings.splitOn"}, "argument": {"literal": {"string": "<"}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "&amp;"}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"application": {"function": {"variable": "hydra.core.lib.strings.splitOn"}, "argument": {"literal": {"string": "&"}}}},
+                                                        "argument": {"variable": "s"}}}}}}}}}}}}}}}}}}}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Sanitize a string for use in a Java comment"}}}]}}}}},
     {
