@@ -12,6 +12,7 @@
 
 import type { Optional } from "../../../runtime.js";
 import { Given, None } from "../../../runtime.js";
+import { compareValues } from "./ordering.js";
 
 export const apply = <A, B>(fs: readonly ((a: A) => B)[], xs: any): readonly B[] => {
   const out: B[] = [];
@@ -141,16 +142,11 @@ export const reverse = (xs: any): readonly any[] => [...xs].reverse();
 
 export const singleton = <A>(x: A): readonly A[] => [x];
 
-const defaultCompare = (a: unknown, b: unknown): number => {
-  if (a === b) return 0;
-  return (a as never) < (b as never) ? -1 : 1;
-};
-
 export const sort = (xs: any): readonly any[] =>
-  [...xs].sort(defaultCompare);
+  [...xs].sort(compareValues);
 
 export const sortBy = <A, B>(key: (a: A) => B, xs: any): readonly A[] =>
-  [...xs].sort((x, y) => defaultCompare(key(x), key(y)));
+  [...xs].sort((x, y) => compareValues(key(x), key(y)));
 
 export const span = <A>(p: (a: A) => boolean, xs: any): readonly [readonly A[], readonly A[]] => {
   for (let i = 0; i < xs.length; i++) if (!p(xs[i]!)) return [xs.slice(0, i), xs.slice(i)] as const;

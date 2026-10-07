@@ -8,11 +8,12 @@ full-tuple-copy that ``tuple``-based implementations would impose.
 
 from __future__ import annotations
 from collections.abc import Callable, Sequence
-from functools import reduce
+from functools import cmp_to_key, reduce
 from typing import Any, TypeVar
 
 from hydra.core.overlay.python.dsl.python import Optional, Given, None_
 from hydra.core.overlay.python.util import ConsList
+from hydra.core.overlay.python.util._compare import compare as _compare_terms
 
 A = TypeVar('A')
 B = TypeVar('B')
@@ -234,16 +235,15 @@ def singleton(value: A) -> Sequence[A]:
     return ConsList.singleton(value)
 
 
-# TODO: ensure that Hydra's native comparison primitives are used for sorting
 def sort(values: Sequence[A]) -> Sequence[A]:
-    """Sort a list."""
-    return ConsList.from_iterable(sorted(values))  # type: ignore[type-var]
+    """Sort a list using Hydra's structural ordering (handles arbitrary Term/Type values)."""
+    return ConsList.from_iterable(sorted(values, key=cmp_to_key(_compare_terms)))  # type: ignore[type-var]
 
 
-# TODO: ensure that Hydra's native comparison primitives are used for sorting
 def sort_by(key: Callable[[A], B], values: Sequence[A]) -> Sequence[A]:
-    """Sort a list based on a key function."""
-    return ConsList.from_iterable(sorted(values, key=key))  # type: ignore[arg-type, type-var]
+    """Sort a list based on a key function, using Hydra's structural ordering on the keys."""
+    key_cmp = cmp_to_key(lambda a, b: _compare_terms(key(a), key(b)))
+    return ConsList.from_iterable(sorted(values, key=key_cmp))  # type: ignore[arg-type, type-var]
 
 
 def span(
