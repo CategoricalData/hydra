@@ -156,16 +156,20 @@
     (map 'list #'char-code s)))
 
 ;; to_lower :: String -> String
-;; Convert a string to lowercase.
+;; Convert a string to lowercase, via the simple (one-to-one) code-point
+;; mapping in chars.lisp -- NOT string-downcase, which performs full Unicode
+;; case folding and can diverge from the simple mapping (#782).
 (defvar hydra_overlay_common_lisp_lib_strings_to_lower
   (lambda (s)
-    (string-downcase s)))
+    (map 'string (lambda (c) (code-char (funcall hydra_overlay_common_lisp_lib_chars_to_lower (char-code c)))) s)))
 
 ;; to_upper :: String -> String
-;; Convert a string to uppercase.
+;; Convert a string to uppercase, via the simple (one-to-one) code-point
+;; mapping in chars.lisp -- NOT string-upcase, which performs full Unicode
+;; case folding and can diverge from the simple mapping (#782).
 (defvar hydra_overlay_common_lisp_lib_strings_to_upper
   (lambda (s)
-    (string-upcase s)))
+    (map 'string (lambda (c) (code-char (funcall hydra_overlay_common_lisp_lib_chars_to_upper (char-code c)))) s)))
 
 ;; unwords :: [String] -> String
 ;; Join a list of strings with spaces.

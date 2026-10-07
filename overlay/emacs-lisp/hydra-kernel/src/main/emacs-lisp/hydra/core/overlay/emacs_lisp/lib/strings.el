@@ -165,16 +165,22 @@
     (string-to-list (hydra--ensure-multibyte s))))
 
 ;; to_lower :: String -> String
+;; Convert a string to lowercase, via the simple (one-to-one) code-point
+;; mapping in chars.el -- NOT downcase on the whole string, which performs
+;; full Unicode case folding and can diverge from the simple mapping (#782).
 (defvar hydra_overlay_emacs_lisp_lib_strings_to_lower
   (lambda (s)
-    "Convert a string to lowercase."
-    (downcase (hydra--ensure-multibyte s))))
+    (let ((mb (hydra--ensure-multibyte s)))
+      (concat (mapcar (lambda (c) (funcall hydra_overlay_emacs_lisp_lib_chars_to_lower c)) mb)))))
 
 ;; to_upper :: String -> String
+;; Convert a string to uppercase, via the simple (one-to-one) code-point
+;; mapping in chars.el -- NOT upcase on the whole string, which performs
+;; full Unicode case folding and can diverge from the simple mapping (#782).
 (defvar hydra_overlay_emacs_lisp_lib_strings_to_upper
   (lambda (s)
-    "Convert a string to uppercase."
-    (upcase (hydra--ensure-multibyte s))))
+    (let ((mb (hydra--ensure-multibyte s)))
+      (concat (mapcar (lambda (c) (funcall hydra_overlay_emacs_lisp_lib_chars_to_upper c)) mb)))))
 
 ;; unwords :: [String] -> String
 (defvar hydra_overlay_emacs_lisp_lib_strings_unwords

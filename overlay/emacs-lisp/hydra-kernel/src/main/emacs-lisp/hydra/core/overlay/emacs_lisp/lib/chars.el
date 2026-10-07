@@ -38,16 +38,32 @@
     "Check whether a character is uppercase."
     (and (>= c ?A) (<= c ?Z))))
 
+;; Emacs's downcase/upcase mostly implement Unicode's SIMPLE case mapping
+;; directly (a true one-to-one code-point mapping), but diverge from it for
+;; the code points below. Found by diffing against Java's
+;; Character.toLowerCase/toUpperCase (which expose Unicode's simple mapping
+;; directly) across every code point that changes case under #782's spec.
+(defvar hydra_overlay_emacs_lisp_lib_chars_simple_lower_overrides
+  '((#x0130 . #x0069))) ; LATIN CAPITAL LETTER I WITH DOT ABOVE -> i (Emacs leaves it unchanged)
+
+(defvar hydra_overlay_emacs_lisp_lib_chars_simple_upper_overrides
+  ;; U+00DF LATIN SMALL LETTER SHARP S ("ß") has no single-code-point simple
+  ;; uppercase mapping, but Emacs's upcase maps it to U+1E9E (capital sharp
+  ;; S), which is its own distinct code point, not ß's simple mapping.
+  '((#x00DF . #x00DF)))
+
 ;; to_lower :: Int32 -> Int32
 (defvar hydra_overlay_emacs_lisp_lib_chars_to_lower
   (lambda (c)
     "Convert a character to lowercase."
-    (downcase c)))
+    (let ((override (assoc c hydra_overlay_emacs_lisp_lib_chars_simple_lower_overrides)))
+      (if override (cdr override) (downcase c)))))
 
 ;; to_upper :: Int32 -> Int32
 (defvar hydra_overlay_emacs_lisp_lib_chars_to_upper
   (lambda (c)
     "Convert a character to uppercase."
-    (upcase c)))
+    (let ((override (assoc c hydra_overlay_emacs_lisp_lib_chars_simple_upper_overrides)))
+      (if override (cdr override) (upcase c)))))
 
 (provide 'hydra.core.lib.chars)
