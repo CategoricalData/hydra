@@ -306,7 +306,7 @@ generateModuleDocCase = universalCase
       "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
       "## hydra.testInput.doc.identity\n\n" ++
       "The identity function\n\n" ++
-      "`(forall a. (a → a))`"
+      "`∀a.a → a`"
 
 -- | Property: an undocumented definition (metadata = nothing) renders the
 -- "*(undocumented)*" placeholder paragraph rather than failing, per #723's
@@ -344,7 +344,7 @@ undocumentedCase = universalCase
       "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
       "## hydra.testInput.undoc.identity\n\n" ++
       "*(undocumented)*\n\n" ++
-      "`(forall a. (a → a))`"
+      "`∀a.a → a`"
 
 -- | Property: a PrimitiveDefinition's signature always renders (never falls back to "?",
 -- unlike TermDefinition, since a primitive's signature is "always explicit, never inferred"
@@ -409,7 +409,7 @@ primitiveDocCase = universalCase
       "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
       "## hydra.testInput.prim.example\n\n" ++
       "A trivial constant primitive\n\n" ++
-      "`(string)`\n\n" ++
+      "`∀.string`\n\n" ++
       "**[HYDRA-TEST-INPUT-PRIM-EXAMPLE-CONSTANT-VALUE] (requirement) **" ++
       "This primitive always returns the same string value."
 
@@ -452,7 +452,7 @@ typeDocCase = universalCase
       "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
       "## hydra.testInput.typ.Example\n\n" ++
       "A type alias for string\n\n" ++
-      "`(string)`"
+      "`∀.string`"
 
 -- | Property: a module with multiple definitions renders one Section per definition,
 -- joined by a blank line in the module's own definition order (Packaging.moduleDefinitions'
@@ -493,10 +493,10 @@ multiDefinitionCase = universalCase
       "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
       "## hydra.testInput.doc.identity\n\n" ++
       "The identity function\n\n" ++
-      "`(forall a. (a → a))`\n\n" ++
+      "`∀a.a → a`\n\n" ++
       "## hydra.testInput.doc.identity2\n\n" ++
       "*(undocumented)*\n\n" ++
-      "`(forall a. (a → a))`"
+      "`∀a.a → a`"
 
 -- | Property: when target = universe, `inferModulesGiven` is equivalent to
 -- `inferModules`.
@@ -546,7 +546,7 @@ vacuousQuantifierCase = universalCase
     "incremental inference uses cached scheme verbatim on vacuous-quantifier universe"
     actual
     (Phantoms.string $
-      "hydra.testInput.w.useFunky :: ∀.int32 := " ++
+      "hydra.testInput.w.useFunky :: ∀.int32 = " ++
       "hydra.testInput.v.funky⟨string⟩⟨int32⟩⟨int32⟩" ++
       " \"foo\" 7:int32 100:int32\n")
   where
