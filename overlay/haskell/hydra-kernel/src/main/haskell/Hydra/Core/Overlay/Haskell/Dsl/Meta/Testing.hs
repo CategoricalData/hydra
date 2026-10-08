@@ -26,7 +26,7 @@ import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Core.Dsl.Lib.Pairs as Pairs
 import qualified Hydra.Core.Dsl.Lib.Strings as Strings
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms as MetaTerms
-import Hydra.Core.Overlay.Haskell.Dsl.Terms (ToPrimName)
+import Hydra.Core.Overlay.Haskell.Dsl.Terms (ToPrimName(..))
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types as T
 import qualified Data.Set as S
 import qualified Hydra.Core.Dsl.Validation as Validation
@@ -268,6 +268,29 @@ primCaseWithTags :: ToPrimName n => String -> [Tag] -> n -> [TypedTerm Term] -> 
 primCaseWithTags cname tags prim args output = evalCaseWithTags cname tags input output
   where
     input = L.foldl (MetaTerms.@@) (MetaTerms.primitive prim) args
+
+-- | Create a primitive test case which cites the provisions (by local segment, composed against
+-- the primitive's own name) that it confirms. Mirrors 'withProvisions' in Phantoms.hs, which
+-- performs the same composition when a primitive's provisions are authored. Builds the
+-- UniversalTestCase directly (rather than post-processing 'primCase', whose TestCaseWithMetadata
+-- fields are TypedTerm projections, not plain record accessors).
+-- Example: primCaseWithProvisions "all empty lists" ["emptyInputs"] DefLists.concat [...] (intList [])
+primCaseWithProvisions :: ToPrimName n => String -> [String] -> n -> [TypedTerm Term] -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+primCaseWithProvisions cname localSegments prim args output =
+    testCaseWithMetadataAndProvisions (Phantoms.string cname)
+      (testCaseUniversal $ universalTestCase
+        (retype $ Eithers.either
+          (Phantoms.lambda "e" (Phantoms.string "<<eval error>>"))
+          (Phantoms.lambda "t" (showTermRef @@ Phantoms.var "t"))
+          (reduceTermRef @@ testContextRef @@ testGraphRef @@ true @@ input))
+        (retype $ showTermRef @@ output))
+      nothing (Phantoms.list ([] :: [TypedTerm Tag])) provisions
+  where
+    input = L.foldl (MetaTerms.@@) (MetaTerms.primitive prim) args
+    pname = toPrimName prim
+    provisions = Phantoms.list $ Phantoms.nameLift . composeProvisionName pname <$> localSegments
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
 
 reduceTermRef :: TypedTerm (InferenceContext -> Graph -> Bool -> Term -> Either Error Term)
 reduceTermRef = TypedTerm $ TermVariable $ Name "hydra.core.reduction.reduceTerm"
