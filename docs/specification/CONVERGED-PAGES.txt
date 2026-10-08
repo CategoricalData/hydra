@@ -1,0 +1,11 @@
+# Pages under docs/specification/{primitives,types}/ confirmed to match
+# bin/regenerate-spec.sh's output exactly (IOU header already stripped).
+# One path per line, relative to docs/specification/. Checked by
+# bin/check-spec-freshness.sh: any page listed here that no longer matches
+# generated output is reported as a REGRESSION (gate failure). See
+# .claude/commands/regenerate-spec.md step 5 for how a page earns its place
+# on this list.
+#
+# Empty as of #723's initial landing -- no page's hand-authored content
+# currently matches generated output (kernel doc-strings are sparser than
+# the hand-authored prose; see feature_723_spec_generator_markdown-plan.md).

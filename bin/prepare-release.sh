@@ -23,13 +23,15 @@
 #   7.  Lisp tests (Clojure, Common Lisp, Emacs Lisp, Scheme)    [quality check]
 #   8.  JSON kernel verification (round-trips vs the in-memory kernel)     [gate]
 #   9.  Lexicon freshness (docs/hydra-lexicon.txt matches the kernel)      [gate]
-#   10. Per-package Hackage sdist case-sensitivity check (assembles cleanly
+#   10. Spec page freshness (docs/specification/*.md regressions only, #723)
+#                                                                 [quality check]
+#   11. Per-package Hackage sdist case-sensitivity check (assembles cleanly
 #       on a case-sensitive filesystem + `cabal v2-build --dry-run`)       [gate]
-#   11. Per-package Haddock-for-Hackage docs build (ready for `cabal upload`)[gate]
-#   12. Canonical source archive + checksum + signature: a single
+#   12. Per-package Haddock-for-Hackage docs build (ready for `cabal upload`)[gate]
+#   13. Canonical source archive + checksum + signature: a single
 #       `git archive` source tarball (the Apache "release of record"),
 #       its SHA-512 checksum, and a detached GPG signature.               [gate*]
-#   13. Per-host published-package self-containment                        [gate]
+#   14. Per-host published-package self-containment                        [gate]
 #
 # On success, the upload-ready per-package artifacts (sdists + docs tarballs)
 # plus the canonical source archive (tarball + .sha512 + .asc) land in
@@ -100,7 +102,7 @@ mkdir -p "$ARTIFACT_DIR"
 HACKAGE_OUT="$HYDRA_ROOT/dist/haskell"
 mkdir -p "$HACKAGE_OUT"
 
-TOTAL_STEPS=13
+TOTAL_STEPS=14
 
 ERRORS=0
 WARNINGS=0
@@ -381,7 +383,29 @@ else
 fi
 rm -f "$LEXICON_BACKUP"
 
-# --- Step 10: Per-package Hackage sdists + case-sensitivity check ---
+# --- Step 10: Spec page freshness (quality check) ---
+# docs/specification/{primitives,types}/*.md pages generated from the kernel via
+# bin/regenerate-spec.sh (#723). Non-blocking: most pages do not yet converge
+# with generated output (kernel doc-strings are sparser than the hand-authored
+# prose; see #723's own issue text: "Missing doc strings render as a visible
+# marker, not a failure"). The only hard failure this step can produce is a
+# REGRESSION — a page listed in docs/specification/CONVERGED-PAGES.txt (i.e.
+# previously confirmed to match, IOU header already stripped) that no longer
+# matches; bin/check-spec-freshness.sh itself enforces that as a real error.
+step 10 $TOTAL_STEPS "Verifying spec page freshness (quality check)"
+echo ""
+
+cd "$HYDRA_ROOT"
+if bash "$HYDRA_ROOT/bin/check-spec-freshness.sh" 2>&1 | tee "$LOG_DIR/spec-freshness.log"; then
+    echo "  OK: no converged spec page has regressed"
+else
+    echo "  WARNING: a converged spec page regressed (not a release gate yet — #723 is early-stage;"
+    echo "           see verify-logs/spec-freshness.log). Investigate before the NEXT page converges"
+    echo "           to avoid compounding drift."
+    WARNINGS=$((WARNINGS + 1))
+fi
+
+# --- Step 11: Per-package Hackage sdists + case-sensitivity check ---
 # Hydra now ships per-package Hackage distributions (hydra-kernel, hydra-haskell,
 # and the hydra umbrella) rather than one monolithic `hydra` sdist (#418). We
 # assemble all three (leaves first) on a case-sensitive volume — the Hackage
@@ -389,7 +413,7 @@ rm -f "$LEXICON_BACKUP"
 # default, masking case-only directory clashes — then extract and run
 # `cabal v2-build --dry-run` per package to catch GHC-28623 module/path
 # case-mismatches without the full compile cost.
-step 10 $TOTAL_STEPS "Verifying per-package Hackage sdists on case-sensitive filesystem"
+step 11 $TOTAL_STEPS "Verifying per-package Hackage sdists on case-sensitive filesystem"
 echo ""
 
 cd "$HYDRA_ROOT"
@@ -506,7 +530,7 @@ fi
 # --- Step 11: Per-package Haddock-for-Hackage docs build ---
 # Hackage's auto-doc-builder is best-effort; pre-build docs per package so they
 # can be uploaded via `cabal upload --documentation --publish` after release.
-step 11 $TOTAL_STEPS "Building per-package Haddock-for-Hackage docs"
+step 12 $TOTAL_STEPS "Building per-package Haddock-for-Hackage docs"
 echo ""
 
 DOC_LOG="$LOG_DIR/haddock.log"
@@ -559,7 +583,7 @@ fi
 # key and silently shipping an unsigned archive is precisely the failure this gate
 # prevents. It degrades to a WARNING only when no key is configured, so a developer
 # can run this script outside a real release without one.
-step 12 $TOTAL_STEPS "Building canonical source archive (tarball + sha512 + signature)"
+step 13 $TOTAL_STEPS "Building canonical source archive (tarball + sha512 + signature)"
 echo ""
 
 cd "$HYDRA_ROOT"
@@ -679,7 +703,7 @@ fi
 # packaging boundary; this step does. See #472 (Python wheel), #473 (Haskell
 # cold-build), and #537 (Scala). Java's verifier hard-fails when no JDK 17+ is
 # present.
-step 13 $TOTAL_STEPS "Verifying per-host published-package self-containment"
+step 14 $TOTAL_STEPS "Verifying per-host published-package self-containment"
 echo ""
 
 for hv in \
