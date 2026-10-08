@@ -218,8 +218,7 @@
                                                               "parameter": "_",
                                                               "domain": "unit",
                                                               "body": {
-                                                                "literal": {
-                                                                  "string": "# hydra.testInput.doc\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.doc.identity\n\nThe identity function\n\n`∀a.a → a`"}}}}}]}}}}}},
+                                                                "literal": {"string": "# hydra.testInput.doc\n\n## hydra.testInput.doc.identity\n\nThe identity function\n\n`∀a.a → a`"}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
@@ -451,7 +450,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "literal": {
-                                                                  "string": "# hydra.testInput.doc\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.doc.identity\n\nThe identity function\n\n`∀a.a → a`\n\n## hydra.testInput.doc.identity2\n\n*(undocumented)*\n\n`∀a.a → a`"}}}}}]}}}}}},
+                                                                  "string": "# hydra.testInput.doc\n\n## hydra.testInput.doc.identity\n\nThe identity function\n\n`∀a.a → a`\n\n## hydra.testInput.doc.identity2\n\n*(undocumented)*\n\n`∀a.a → a`"}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
@@ -587,7 +586,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "literal": {
-                                                                  "string": "# hydra.testInput.prim\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.prim.example\n\nA trivial constant primitive\n\n`∀.string`\n\n**[HYDRA-TEST-INPUT-PRIM-EXAMPLE-CONSTANT-VALUE] (requirement) **This primitive always returns the same string value."}}}}}]}}}}}},
+                                                                  "string": "# hydra.testInput.prim\n\n## hydra.testInput.prim.example\n\nA trivial constant primitive\n\n`∀.string`\n\n**[HYDRA-TEST-INPUT-PRIM-EXAMPLE-CONSTANT-VALUE] (requirement) **This primitive always returns the same string value."}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
@@ -700,8 +699,7 @@
                                                               "parameter": "_",
                                                               "domain": "unit",
                                                               "body": {
-                                                                "literal": {
-                                                                  "string": "# hydra.testInput.typ\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.typ.Example\n\nA type alias for string\n\n`∀.string`"}}}}}]}}}}}},
+                                                                "literal": {"string": "# hydra.testInput.typ\n\n## hydra.testInput.typ.Example\n\nA type alias for string\n\n`∀.string`"}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
@@ -839,8 +837,7 @@
                                                               "parameter": "_",
                                                               "domain": "unit",
                                                               "body": {
-                                                                "literal": {
-                                                                  "string": "# hydra.testInput.undoc\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.undoc.identity\n\n*(undocumented)*\n\n`∀a.a → a`"}}}}}]}}}}}},
+                                                                "literal": {"string": "# hydra.testInput.undoc\n\n## hydra.testInput.undoc.identity\n\n*(undocumented)*\n\n`∀a.a → a`"}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
