@@ -31,7 +31,12 @@ defineWithDefault :: String -> String -> TermSignature -> [String] -> TypedTerm 
 defineWithDefault = primitiveWithDefaultInModule module_
 
 bimap :: PrimitiveDefinition
-bimap = defineWithDefault "bimap" "Map over both elements of a pair."
+bimap = withProvisions [
+  requirement "mapsBothElementsIndependently"
+    "bimap applies the first function to the pair's first element and the second function to\
+    \ the pair's second element, producing a new pair of the two results, for any element and\
+    \ function types."]
+  $ defineWithDefault "bimap" "Map over both elements of a pair."
   (sigWithParams [("f", "the function applied to the first element"),
                   ("g", "the function applied to the second element"),
                   ("p", "the pair to map over")] $ TypeScheme [Name "a", Name "b", Name "c", Name "d"]
@@ -47,7 +52,10 @@ bimap = defineWithDefault "bimap" "Map over both elements of a pair."
     (var "g" @@ Pairs.second (var "p")))
 
 first :: PrimitiveDefinition
-first = define "first" "Get the first element of a pair."
+first = withProvisions [
+  requirement "returnsFirstComponent"
+    "first returns the first component of the pair unchanged, for any element type and value."]
+  $ define "first" "Get the first element of a pair."
   (sigWithParams [("p", "the pair whose first element is returned")] $ TypeScheme [Name "a", Name "b"]
     (Types.pair (Types.var "a") (Types.var "b") Types.~> Types.var "a")
     mempty)
@@ -55,7 +63,11 @@ first = define "first" "Get the first element of a pair."
    "Total. Corresponds to Haskell's fst :: (a, b) -> a."]
 
 pair :: PrimitiveDefinition
-pair = define "pair" "Construct a pair from two values."
+pair = withProvisions [
+  requirement "constructsFromTwoValues"
+    "pair x y constructs the pair (x, y), preserving both components exactly as given, for any\
+    \ value."]
+  $ define "pair" "Construct a pair from two values."
   (sigWithParams [("x", "the first element"), ("y", "the second element")] $ TypeScheme [Name "a", Name "b"]
     (Types.var "a" Types.~> Types.var "b" Types.~> Types.pair (Types.var "a") (Types.var "b"))
     mempty)
@@ -64,7 +76,11 @@ pair = define "pair" "Construct a pair from two values."
    "Total. Corresponds to Haskell's (,) :: a -> b -> (a, b)."]
 
 second :: PrimitiveDefinition
-second = define "second" "Get the second element of a pair."
+second = withProvisions [
+  requirement "returnsSecondComponent"
+    "second returns the second component of the pair unchanged, for any element type and\
+    \ value."]
+  $ define "second" "Get the second element of a pair."
   (sigWithParams [("p", "the pair whose second element is returned")] $ TypeScheme [Name "a", Name "b"]
     (Types.pair (Types.var "a") (Types.var "b") Types.~> Types.var "b")
     mempty)

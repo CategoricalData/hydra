@@ -41,7 +41,26 @@ result :: Type -> Type
 result t = effect (Types.either_ systemError t)
 
 execute :: PrimitiveDefinition
-execute = define "execute" "Run a program to completion and capture its result."
+execute = withProvisions [
+  requirement "capturesStdoutByteExactly"
+    "execute captures the child program's standard output as raw bytes, byte-exactly, with no\
+    \ newline translation, including the full argument vector being passed through to the child\
+    \ in order.",
+  requirement "capturesStderrSeparately"
+    "execute captures the child program's standard error separately from standard output, so\
+    \ diagnostics written to stderr do not leak into the captured stdout.",
+  requirement "reportsExitStatusAsRight"
+    "execute reports a child's exit status as right(result), for both a zero (successful) and a\
+    \ non-zero exit status -- a non-zero exit is a normal, successful launch outcome, not a\
+    \ SystemError.",
+  requirement "honorsWorkingDirectoryAndEnvironmentFields"
+    "execute honors the command's workingDirectory field (running the child with that directory as\
+    \ its current directory) and its environment field (replacing the child's environment with\
+    \ exactly the given bindings, not merely augmenting it).",
+  requirement "leftCommandNotFoundOnMissingProgram"
+    "execute returns left(commandNotFound) when the program does not exist, distinguishing a\
+    \ launch failure from a program that ran and exited non-zero."]
+  $ define "execute" "Run a program to completion and capture its result."
   (sigWithParams [("command", "the program and arguments to run")] $
     TypeScheme [] (command Types.~> effect (Types.either_ systemError processResult)) mempty)
   ["execute(command) describes an effectful computation which runs the program described by command\
@@ -70,7 +89,12 @@ exit = define "exit" "Terminate the current process with a status code."
   \ are not performed."]
 
 getEnvironment :: PrimitiveDefinition
-getEnvironment = define "getEnvironment" "Get the full set of environment variables."
+getEnvironment = withProvisions [
+  requirement "returnsExactEnvironmentContents"
+    "getEnvironment returns a map containing exactly the current process's environment, with no\
+    \ entries for variables that are not actually set (observed by the absence of a\
+    \ guaranteed-unset variable name)."]
+  $ define "getEnvironment" "Get the full set of environment variables."
   (sig $ TypeScheme [] (effect (Types.map environmentVariable Types.string)) mempty)
   ["getEnvironment describes an effectful computation which returns the entire environment of the\
   \ current process -- the POSIX environment list environ (XBD section 8, Environment Variables,\
@@ -80,7 +104,10 @@ getEnvironment = define "getEnvironment" "Get the full set of environment variab
   \ computation does not fail; an empty environment yields an empty map."]
 
 getEnvironmentVariable :: PrimitiveDefinition
-getEnvironmentVariable = define "getEnvironmentVariable" "Look up a single environment variable by name."
+getEnvironmentVariable = withProvisions [
+  requirement "noneForAbsentVariable"
+    "getEnvironmentVariable returns none when the named environment variable is not set."]
+  $ define "getEnvironmentVariable" "Look up a single environment variable by name."
   (sigWithParams [("name", "the name of the environment variable to look up")] $
     TypeScheme [] (environmentVariable Types.~> effect (Types.optional Types.string)) mempty)
   ["getEnvironmentVariable(name) describes an effectful computation which returns the value of the\
@@ -90,7 +117,14 @@ getEnvironmentVariable = define "getEnvironmentVariable" "Look up a single envir
   \ POSIX getenv signals with a null pointer. This computation does not fail."]
 
 getTime :: PrimitiveDefinition
-getTime = define "getTime" "Get the current wall-clock time."
+getTime = withProvisions [
+  requirement "returnsPositiveEpochSeconds"
+    "getTime returns a Timespec whose seconds field is a positive number of seconds since the\
+    \ Unix epoch.",
+  requirement "returnsNanosecondsInValidRange"
+    "getTime returns a Timespec whose nanoseconds field is within the documented range\
+    \ [0, 1000000000)."]
+  $ define "getTime" "Get the current wall-clock time."
   (sig $ TypeScheme [] (effect timespec) mempty)
   ["getTime describes an effectful computation which returns the current wall-clock time as a\
   \ Timespec (seconds and nanoseconds since the Unix Epoch) -- the POSIX clock_gettime() function\
@@ -101,7 +135,10 @@ getTime = define "getTime" "Get the current wall-clock time."
   \ clock is adjusted. This computation does not fail."]
 
 getWorkingDirectory :: PrimitiveDefinition
-getWorkingDirectory = define "getWorkingDirectory" "Get the current working directory."
+getWorkingDirectory = withProvisions [
+  requirement "returnsNonEmptyPath"
+    "getWorkingDirectory returns a non-empty absolute path for the current working directory."]
+  $ define "getWorkingDirectory" "Get the current working directory."
   (sig $ TypeScheme [] (effect (Types.either_ systemError filePath)) mempty)
   ["getWorkingDirectory describes an effectful computation which returns the absolute pathname of\
   \ the current working directory -- the POSIX getcwd() function (XSH,\

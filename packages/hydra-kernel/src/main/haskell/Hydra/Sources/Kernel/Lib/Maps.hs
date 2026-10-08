@@ -57,7 +57,12 @@ ordKey :: [(String, String)] -> [(String, [Name])] -> Type -> TermSignature
 ordKey params extra body = sigWithParams params $ Types.polyConstrained (("k", [Name "ordering"]) : extra) body
 
 alter :: PrimitiveDefinition
-alter = defineWithDefault "alter" "Alter a value at a key using a function which sees the optional current value."
+alter = withProvisions [
+  requirement "insertsUpdatesOrDeletes"
+    "alter applies the given function to the optional current value at the key: if the function\
+    \ returns given(v'), that binding is set (inserting if absent, overwriting if present); if it\
+    \ returns none, the key is removed."]
+  $ defineWithDefault "alter" "Alter a value at a key using a function which sees the optional current value."
   (sigWithParams
     [("f", "the update function, applied to the optional current value at the key"),
      ("k", "the key whose binding to alter"),
@@ -78,7 +83,13 @@ alter = defineWithDefault "alter" "Alter a value at a key using a function which
     :: TypedTerm ((Maybe v -> Maybe v) -> Int -> M.Map Int v -> M.Map Int v))
 
 bimap :: PrimitiveDefinition
-bimap = defineWithDefault "bimap" "Map functions over both the keys and values of a map."
+bimap = withProvisions [
+  requirement "transformsKeysAndValues"
+    "bimap returns a new map where each binding (k, v) becomes (fk(k), fv(v)), applying the key\
+    \ function and value function independently to every binding.",
+  requirement "emptyInput"
+    "bimap of the empty map is the empty map, regardless of the key and value functions."]
+  $ defineWithDefault "bimap" "Map functions over both the keys and values of a map."
   (sigWithParams
     [("fk", "the function to apply to each key"),
      ("fv", "the function to apply to each value"),
@@ -98,7 +109,13 @@ bimap = defineWithDefault "bimap" "Map functions over both the keys and values o
     :: TypedTerm ((Int -> Int) -> (v1 -> v2) -> M.Map Int v1 -> M.Map Int v2))
 
 delete :: PrimitiveDefinition
-delete = define "delete" "Remove a key from a map."
+delete = withProvisions [
+  requirement "removesKeyIfPresent"
+    "delete removes the binding for the given key if present, leaving the rest of the map\
+    \ unchanged.",
+  requirement "noOpWhenAbsentOrEmpty"
+    "delete leaves the map unchanged when the key is absent, including when the map is empty."]
+  $ define "delete" "Remove a key from a map."
   (ordKey [("k", "the key to remove"), ("m", "the map to remove the key from")]
     [("v", [])] (tk Types.~> mp tk tv Types.~> mp tk tv))
   ["delete(k, m) returns m with the binding for k removed; if k is not present, m is returned\
@@ -117,7 +134,13 @@ difference = define "difference" "Compute the difference of two maps by key."
    "Total. Corresponds to Haskell's Data.Map.difference :: Ord k => Map k v -> Map k v -> Map k v."]
 
 elems :: PrimitiveDefinition
-elems = define "elems" "Return the values of a map (in key order)."
+elems = withProvisions [
+  requirement "returnsValuesInKeyOrder"
+    "elems returns the map's values as a list ordered by ascending key, including when keys were\
+    \ inserted out of order.",
+  requirement "emptyInput"
+    "elems of the empty map is the empty list."]
+  $ define "elems" "Return the values of a map (in key order)."
   (ordKey [("m", "the map whose values to return")]
     [("v", [])] (mp tk tv Types.~> Types.list tv))
   ["elems(m) returns the values of m as a list, ordered by their keys' ascending order.",
@@ -125,14 +148,24 @@ elems = define "elems" "Return the values of a map (in key order)."
    "Total. Corresponds to Haskell's Data.Map.elems :: Map k v -> [v]."]
 
 empty :: PrimitiveDefinition
-empty = define "empty" "The empty map."
+empty = withProvisions [
+  requirement "hasNoBindings"
+    "empty is the map containing no bindings."]
+  $ define "empty" "The empty map."
   (sig $ Types.polyConstrained [("k", [Name "ordering"]), ("v", [])] (mp tk tv))
   ["empty is the map with no bindings.",
    "Requires an 'ordering' constraint on the key type.",
    "Total. Corresponds to Haskell's Data.Map.empty :: Map k v."]
 
 filter :: PrimitiveDefinition
-filter = defineWithDefault "filter" "Filter a map by value."
+filter = withProvisions [
+  requirement "keepsMatchingValues"
+    "filter returns the submap containing exactly the bindings whose value satisfies the\
+    \ predicate, preserving all matching keys.",
+  requirement "boundaryCases"
+    "filter degrades correctly at the boundaries: a predicate matching no value yields the\
+    \ empty map; filtering the empty map yields the empty map."]
+  $ defineWithDefault "filter" "Filter a map by value."
   (sigWithParams
     [("p", "the predicate to test each value"),
      ("m", "the map to filter")] $ Types.polyConstrained [("v", []), ("k", [Name "ordering"])]
@@ -148,7 +181,14 @@ filter = defineWithDefault "filter" "Filter a map by value."
     :: TypedTerm ((v -> Bool) -> M.Map Int v -> M.Map Int v))
 
 filterWithKey :: PrimitiveDefinition
-filterWithKey = defineWithDefault "filterWithKey" "Filter a map by key and value."
+filterWithKey = withProvisions [
+  requirement "keepsMatchingBindings"
+    "filterWithKey returns the submap containing exactly the bindings for which the predicate,\
+    \ given both key and value, is true.",
+  requirement "boundaryCases"
+    "filterWithKey degrades correctly at the boundaries: a predicate matching no binding yields\
+    \ the empty map; filtering the empty map yields the empty map."]
+  $ defineWithDefault "filterWithKey" "Filter a map by key and value."
   (sigWithParams
     [("p", "the predicate to test each key and value"),
      ("m", "the map to filter")] $ Types.polyConstrained [("k", [Name "ordering"]), ("v", [])]
@@ -165,7 +205,11 @@ filterWithKey = defineWithDefault "filterWithKey" "Filter a map by key and value
 
 -- The default value (position 0) is lazy: it is only evaluated when the key is absent.
 findWithDefault :: PrimitiveDefinition
-findWithDefault = defineWithDefault "findWithDefault" "Look up a value with a default if the key is absent."
+findWithDefault = withProvisions [
+  requirement "returnsBoundValueOrDefault"
+    "findWithDefault returns the value bound to the key when present, or the supplied default\
+    \ value when the key is absent."]
+  $ defineWithDefault "findWithDefault" "Look up a value with a default if the key is absent."
   (markLazyParams [0] $ sigWithParams
     [("def", "the default value, returned when the key is absent"),
      ("k", "the key to look up"),
@@ -180,7 +224,16 @@ findWithDefault = defineWithDefault "findWithDefault" "Look up a value with a de
     :: TypedTerm (v -> Int -> M.Map Int v -> v))
 
 fromList :: PrimitiveDefinition
-fromList = define "fromList" "Build a map from a list of key-value pairs."
+fromList = withProvisions [
+  requirement "buildsMapFromPairs"
+    "fromList returns the map containing exactly the bindings in the input list of key-value\
+    \ pairs.",
+  requirement "lastDuplicateWins"
+    "fromList resolves multiple entries for the same key by keeping the value from the last\
+    \ occurrence in the input list.",
+  requirement "emptyInput"
+    "fromList of the empty list of pairs is the empty map."]
+  $ define "fromList" "Build a map from a list of key-value pairs."
   (ordKey [("xs", "the list of key-value pairs to build the map from")]
     [("v", [])] (Types.list (Types.pair tk tv) Types.~> mp tk tv))
   ["fromList(xs) returns the map containing exactly the bindings in xs. If xs contains multiple\
@@ -189,7 +242,11 @@ fromList = define "fromList" "Build a map from a list of key-value pairs."
    "Total. Corresponds to Haskell's Data.Map.fromList :: Ord k => [(k, v)] -> Map k v."]
 
 insert :: PrimitiveDefinition
-insert = define "insert" "Insert a key-value pair into a map."
+insert = withProvisions [
+  requirement "addsOrOverwritesBinding"
+    "insert adds the given key-value binding to the map, overwriting any existing value at that\
+    \ key, including when the map was empty."]
+  $ define "insert" "Insert a key-value pair into a map."
   (ordKey [("k", "the key to insert"), ("v", "the value to bind to the key"), ("m", "the map to insert into")]
     [("v", [])] (tk Types.~> tv Types.~> mp tk tv Types.~> mp tk tv))
   ["insert(k, v, m) returns m with the binding (k, v) added or updated. If k is already present, its\
@@ -209,7 +266,10 @@ intersection = define "intersection" "Compute the intersection of two maps by ke
    "Total. Corresponds to Haskell's Data.Map.intersection :: Ord k => Map k v -> Map k v -> Map k v."]
 
 isEmpty :: PrimitiveDefinition
-isEmpty = define "isEmpty" "Test whether a map is empty."
+isEmpty = withProvisions [
+  requirement "testsZeroBindings"
+    "isEmpty returns true exactly when the map has no bindings."]
+  $ define "isEmpty" "Test whether a map is empty."
   (ordKey [("m", "the map to test")]
     [("v", [])] (mp tk tv Types.~> Types.boolean))
   ["isEmpty(m) returns true iff m has no bindings.",
@@ -217,7 +277,13 @@ isEmpty = define "isEmpty" "Test whether a map is empty."
    "Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool."]
 
 keys :: PrimitiveDefinition
-keys = define "keys" "Return the keys of a map (in key order)."
+keys = withProvisions [
+  requirement "returnsKeysInOrder"
+    "keys returns the map's keys as a list in ascending order, including when keys were\
+    \ inserted out of order.",
+  requirement "emptyInput"
+    "keys of the empty map is the empty list."]
+  $ define "keys" "Return the keys of a map (in key order)."
   (ordKey [("m", "the map whose keys to return")]
     [("v", [])] (mp tk tv Types.~> Types.list tk))
   ["keys(m) returns the keys of m as a list, in ascending order.",
@@ -225,7 +291,12 @@ keys = define "keys" "Return the keys of a map (in key order)."
    "Total. Corresponds to Haskell's Data.Map.keys :: Map k v -> [k]."]
 
 lookup :: PrimitiveDefinition
-lookup = define "lookup" "Look up a value in a map by key, returning Nothing if absent."
+lookup = withProvisions [
+  requirement "returnsBoundValue"
+    "lookup returns the value bound to the given key, wrapped, when the key is present.",
+  requirement "noneWhenAbsentOrEmpty"
+    "lookup returns none when the key is absent, including when the map is empty."]
+  $ define "lookup" "Look up a value in a map by key, returning Nothing if absent."
   (ordKey [("k", "the key to look up"), ("m", "the map to search")]
     [("v", [])] (tk Types.~> mp tk tv Types.~> Types.optional tv))
   ["lookup(k, m) returns Just(v) where v is the value bound to k in m, or Nothing if k is not\
@@ -234,7 +305,12 @@ lookup = define "lookup" "Look up a value in a map by key, returning Nothing if 
    "Total. Corresponds to Haskell's Data.Map.lookup :: Ord k => k -> Map k v -> Maybe v."]
 
 map :: PrimitiveDefinition
-map = defineWithDefault "map" "Map a function over the values of a map."
+map = withProvisions [
+  requirement "appliesFunctionToValues"
+    "map applies the given function to every value in the map, leaving keys unchanged.",
+  requirement "emptyInput"
+    "map over the empty map is the empty map, regardless of the function."]
+  $ defineWithDefault "map" "Map a function over the values of a map."
   (sigWithParams
     [("f", "the function to apply to each value"),
      ("m", "the map to transform")] $ Types.polyConstrained [("v1", []), ("v2", []), ("k", [Name "ordering"])]
@@ -249,7 +325,13 @@ map = defineWithDefault "map" "Map a function over the values of a map."
     :: TypedTerm ((v1 -> v2) -> M.Map Int v1 -> M.Map Int v2))
 
 mapKeys :: PrimitiveDefinition
-mapKeys = defineWithDefault "mapKeys" "Map a function over the keys of a map."
+mapKeys = withProvisions [
+  requirement "appliesFunctionToKeys"
+    "mapKeys applies the given function to every key in the map, leaving the bound values\
+    \ unchanged.",
+  requirement "emptyInput"
+    "mapKeys over the empty map is the empty map, regardless of the function."]
+  $ defineWithDefault "mapKeys" "Map a function over the keys of a map."
   (sigWithParams
     [("f", "the function to apply to each key"),
      ("m", "the map to transform")] $ Types.polyConstrained
@@ -268,7 +350,12 @@ mapKeys = defineWithDefault "mapKeys" "Map a function over the keys of a map."
     :: TypedTerm ((Int -> Int) -> M.Map Int v -> M.Map Int v))
 
 member :: PrimitiveDefinition
-member = define "member" "Test whether a key is present in a map."
+member = withProvisions [
+  requirement "testsKeyPresence"
+    "member returns true exactly when the given key is present in the map.",
+  requirement "falseWhenAbsentOrEmpty"
+    "member returns false when the key is absent, including when the map is empty."]
+  $ define "member" "Test whether a key is present in a map."
   (ordKey [("k", "the key to test for"), ("m", "the map to test")]
     [("v", [])] (tk Types.~> mp tk tv Types.~> Types.boolean))
   ["member(k, m) returns true iff k is a key in m.",
@@ -276,7 +363,10 @@ member = define "member" "Test whether a key is present in a map."
    "Total. Corresponds to Haskell's Data.Map.member :: Ord k => k -> Map k v -> Bool."]
 
 singleton :: PrimitiveDefinition
-singleton = define "singleton" "Construct a map with a single key-value pair."
+singleton = withProvisions [
+  requirement "wrapsOneBinding"
+    "singleton returns the map containing exactly the one given key-value binding."]
+  $ define "singleton" "Construct a map with a single key-value pair."
   (ordKey [("k", "the key of the single binding"), ("v", "the value of the single binding")]
     [("v", [])] (tk Types.~> tv Types.~> mp tk tv))
   ["singleton(k, v) returns the map containing exactly the binding (k, v).",
@@ -284,7 +374,10 @@ singleton = define "singleton" "Construct a map with a single key-value pair."
    "Total. Corresponds to Haskell's Data.Map.singleton :: k -> v -> Map k v."]
 
 size :: PrimitiveDefinition
-size = define "size" "Return the number of key-value pairs in a map."
+size = withProvisions [
+  requirement "countsBindings"
+    "size returns the number of bindings in the map, including zero for the empty map."]
+  $ define "size" "Return the number of key-value pairs in a map."
   (ordKey [("m", "the map whose bindings to count")]
     [("v", [])] (mp tk tv Types.~> Types.int32))
   ["size(m) returns the number of bindings in m as an int32.",
@@ -292,7 +385,13 @@ size = define "size" "Return the number of key-value pairs in a map."
    "Total. Corresponds to Haskell's Data.Map.size :: Map k v -> Int (with narrowing to int32)."]
 
 toList :: PrimitiveDefinition
-toList = define "toList" "Convert a map to a list of key-value pairs (in key order)."
+toList = withProvisions [
+  requirement "returnsPairsInKeyOrder"
+    "toList returns the map's bindings as a list of key-value pairs ordered by ascending key,\
+    \ including when keys were inserted out of order.",
+  requirement "emptyInput"
+    "toList of the empty map is the empty list."]
+  $ define "toList" "Convert a map to a list of key-value pairs (in key order)."
   (ordKey [("m", "the map to convert")]
     [("v", [])] (mp tk tv Types.~> Types.list (Types.pair tk tv)))
   ["toList(m) returns the bindings of m as a list of (key, value) pairs, in ascending key order.",
@@ -300,7 +399,14 @@ toList = define "toList" "Convert a map to a list of key-value pairs (in key ord
    "Total. Corresponds to Haskell's Data.Map.toList :: Map k v -> [(k, v)]."]
 
 union :: PrimitiveDefinition
-union = define "union" "Compute the union of two maps; the first map's bindings take precedence on key collision."
+union = withProvisions [
+  requirement "firstMapTakesPrecedence"
+    "union returns the map containing all bindings from the first map plus the bindings of the\
+    \ second map whose keys are not in the first; on key collision the first map's binding is\
+    \ kept.",
+  requirement "identityWithEmpty"
+    "union with either map empty returns the other map unchanged."]
+  $ define "union" "Compute the union of two maps; the first map's bindings take precedence on key collision."
   (ordKey [("m1", "the map whose bindings take precedence"), ("m2", "the map whose remaining bindings are added")]
     [("v", [])] (mp tk tv Types.~> mp tk tv Types.~> mp tk tv))
   ["union(m1, m2) returns the map containing all bindings from m1 plus the bindings of m2 whose keys\

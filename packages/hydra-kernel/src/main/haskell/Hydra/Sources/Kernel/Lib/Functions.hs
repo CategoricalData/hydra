@@ -61,7 +61,11 @@ compose = defineWithDefault "compose" "Compose two functions."
   ("g" ~> "f" ~> "x" ~> (var "g" @@ (var "f" @@ var "x")))
 
 const :: PrimitiveDefinition
-const = defineWithDefault "const" "Return the first argument, ignoring the second."
+const = withProvisions [
+  requirement "returnsFirstArgumentIgnoringSecond"
+    "const returns its first argument unchanged and ignores its second argument entirely,\
+    \ regardless of the second argument's type or value."]
+  $ defineWithDefault "const" "Return the first argument, ignoring the second."
   (sigWithParams [("x", "the value to return"),
                   ("y", "the ignored second argument")] $ TypeScheme [Name "t1", Name "t2"]
     (t1 Types.~> t2 Types.~> t1) mempty)
@@ -71,7 +75,11 @@ const = defineWithDefault "const" "Return the first argument, ignoring the secon
   ("x" ~> "y" ~> var "x")
 
 flip :: PrimitiveDefinition
-flip = defineWithDefault "flip" "Swap the argument order of a binary function."
+flip = withProvisions [
+  requirement "swapsArgumentOrder"
+    "flip(f, x, y) applies f with its two arguments in reversed order, i.e. flip(f, x, y) =\
+    \ f(y, x)."]
+  $ defineWithDefault "flip" "Swap the argument order of a binary function."
   (sigWithParams [("f", "the binary function whose argument order is swapped"),
                   ("x", "the argument passed as f's second argument"),
                   ("y", "the argument passed as f's first argument")] $ TypeScheme [Name "t1", Name "t2", Name "t3"]
@@ -81,7 +89,10 @@ flip = defineWithDefault "flip" "Swap the argument order of a binary function."
   ("f" ~> "x" ~> "y" ~> (var "f" @@ var "y" @@ var "x"))
 
 identity :: PrimitiveDefinition
-identity = defineWithDefault "identity" "Return the argument unchanged."
+identity = withProvisions [
+  requirement "returnsArgumentUnchanged"
+    "identity returns its argument completely unchanged, for any value."]
+  $ defineWithDefault "identity" "Return the argument unchanged."
   (sigWithParams [("x", "the value to return unchanged")] $ TypeScheme [Name "t1"] (t1 Types.~> t1) mempty)
   ["identity(x) = x; this defining equation is the specification. The polymorphic identity function.",
    "identity is the unit of compose: compose(identity, f) and compose(f, identity) are both f.",

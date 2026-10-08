@@ -33,7 +33,11 @@ ty = Types.var "y"
 tz = Types.var "z"
 
 apply :: PrimitiveDefinition
-apply = define "apply" "Applicative apply for effects."
+apply = withProvisions [
+  requirement "appliesEffectfulFunctionToEffectfulArgument"
+    "apply interprets the function-producing effect and the argument-producing effect, then\
+    \ applies the resulting function to the resulting argument."]
+  $ define "apply" "Applicative apply for effects."
   (sigWithParams [("ef", "the effect producing the function to apply"),
                   ("ex", "the effect producing the argument")]
     $ TypeScheme [Name "x", Name "y"]
@@ -43,7 +47,15 @@ apply = define "apply" "Applicative apply for effects."
   \ function to the argument."]
 
 bind :: PrimitiveDefinition
-bind = define "bind" "Sequence two effectful computations."
+bind = withProvisions [
+  requirement "threadsResultIntoNextEffect"
+    "bind passes the result of the first effect to the given function to obtain the next effect,\
+    \ whose result is the overall result.",
+  requirement "performsEffectsInOrderExactlyOnce"
+    "bind performs the first effect to completion, exactly once, before performing the second\
+    \ effect, also exactly once -- observable via real host side effects (not merely by return\
+    \ value), ruling out a host that reorders, double-runs, skips, or eagerly runs either effect."]
+  $ define "bind" "Sequence two effectful computations."
   (sigWithParams [("e", "the effect to interpret first"),
                   ("f", "the function producing the next effect from e's result")]
     $ TypeScheme [Name "x", Name "y"]
@@ -54,7 +66,11 @@ bind = define "bind" "Sequence two effectful computations."
    \ effect boundary explicit."]
 
 compose :: PrimitiveDefinition
-compose = define "compose" "Kleisli composition for effects."
+compose = withProvisions [
+  requirement "sequencesTwoKleisliArrows"
+    "compose(f, g, x) runs f on x to obtain the first effect, then runs g on that effect's result\
+    \ to obtain the second effect, equivalent to bind(f(x), g)."]
+  $ define "compose" "Kleisli composition for effects."
   (sigWithParams [("f", "the first effect-returning function"),
                   ("g", "the second effect-returning function"),
                   ("x", "the input to the composed computation")]
@@ -63,7 +79,15 @@ compose = define "compose" "Kleisli composition for effects."
   ["compose(f, g, x) describes an effectful computation equivalent to bind(f(x), g)."]
 
 foldList :: PrimitiveDefinition
-foldList = define "foldList" "Left-fold over a list with an effect-returning function."
+foldList = withProvisions [
+  requirement "sequencesEffectReturningStepOverList"
+    "foldList sequences an effect-returning step function over the list's elements, threading the\
+    \ accumulator through, and the overall result is the final accumulator.",
+  requirement "performsElementEffectsLeftToRightExactlyOnce"
+    "foldList performs the element effects left-to-right in list order, each exactly once --\
+    \ observable via real host side effects, ruling out a host that reorders, double-runs, or\
+    \ skips an element's effect."]
+  $ define "foldList" "Left-fold over a list with an effect-returning function."
   (sigWithParams [("f", "the effect-returning combining function"),
                   ("acc0", "the initial accumulator value"),
                   ("xs", "the list to fold over")]
@@ -73,7 +97,11 @@ foldList = define "foldList" "Left-fold over a list with an effect-returning fun
   \ left to right."]
 
 map :: PrimitiveDefinition
-map = define "map" "Map a pure function over the result of an effect."
+map = withProvisions [
+  requirement "appliesPureFunctionToEffectResult"
+    "map interprets the given effect and applies the pure function to its result; equivalent to\
+    \ bind(e, \\x -> pure(f x))."]
+  $ define "map" "Map a pure function over the result of an effect."
   (sigWithParams [("f", "the pure function to apply to the effect's result"),
                   ("e", "the effect to interpret")]
     $ TypeScheme [Name "x", Name "y"]
@@ -82,7 +110,15 @@ map = define "map" "Map a pure function over the result of an effect."
    "Equivalent to bind(e, \\x -> pure(f x))."]
 
 mapList :: PrimitiveDefinition
-mapList = define "mapList" "Map an effect-returning function over a list."
+mapList = withProvisions [
+  requirement "appliesEffectReturningFunctionAndCollectsResults"
+    "mapList applies the effect-returning function to each element and collects the per-element\
+    \ results into a list of the same length, in order.",
+  requirement "performsElementEffectsLeftToRightExactlyOnce"
+    "mapList performs the element effects left-to-right in list order, each exactly once --\
+    \ observable via real host side effects, ruling out a host that reorders, double-runs, or\
+    \ skips an element's effect."]
+  $ define "mapList" "Map an effect-returning function over a list."
   (sigWithParams [("f", "the effect-returning function to apply to each element"),
                   ("xs", "the list to map over")]
     $ TypeScheme [Name "x", Name "y"]
@@ -91,7 +127,15 @@ mapList = define "mapList" "Map an effect-returning function over a list."
   \ left to right and collects the results."]
 
 mapOptional :: PrimitiveDefinition
-mapOptional = define "mapOptional" "Map an effect-returning function over an optional."
+mapOptional = withProvisions [
+  requirement "appliesFunctionWhenPresentPassesThroughNoneWhenAbsent"
+    "mapOptional over a present value applies the effect-returning function and wraps the result\
+    \ in given; mapOptional over none yields none, with the function not applied.",
+  requirement "performsExactlyZeroOrOneEffect"
+    "mapOptional over none performs zero effects; mapOptional over a present value performs\
+    \ exactly one effect -- observable via a real host side effect, distinguishing \"the function\
+    \ was never invoked\" from \"the function was invoked and its effect ran\"."]
+  $ define "mapOptional" "Map an effect-returning function over an optional."
   (sigWithParams [("f", "the effect-returning function to apply to the contained value"),
                   ("m", "the optional to map over")]
     $ TypeScheme [Name "x", Name "y"]
@@ -111,7 +155,10 @@ mapSet = define "mapSet" "Map an effect-returning function over a set."
    "Requires 'ordering' constraints on both element types (the set type contract)."]
 
 pure :: PrimitiveDefinition
-pure = define "pure" "Lift a pure value into an effect."
+pure = withProvisions [
+  requirement "liftsValueWithoutHostInteraction"
+    "pure(x) succeeds with exactly x, without requiring any host interaction."]
+  $ define "pure" "Lift a pure value into an effect."
   (sigWithParams [("x", "the pure value to lift into an effect")]
     $ TypeScheme [Name "x"] (tx Types.~> effect tx) mempty)
   ["pure(x) describes an effectful computation which succeeds with x without requiring host\

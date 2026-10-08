@@ -66,7 +66,11 @@ apply = defineWithDefault "apply" "Applicative apply for either: combine a funct
     Eithers.bind (var "ef") ("f" ~> Eithers.map (var "f") (var "ex")))
 
 bimap :: PrimitiveDefinition
-bimap = defineWithDefault "bimap" "Map over both sides of an either value."
+bimap = withProvisions [
+  requirement "mapsBothSidesIndependently"
+    "bimap applies the first function if the either is a left and the second function if it is\
+    \ a right, preserving the left/right variant of the result."]
+  $ defineWithDefault "bimap" "Map over both sides of an either value."
   (sigWithParams [("f", "the function to apply to a Left value"), ("g", "the function to apply to a Right value"), ("e", "the either value to map over")] $ TypeScheme [Name "x", Name "y", Name "z", Name "w"]
     ((tx Types.~> tz) Types.~> (ty Types.~> tw) Types.~> ee tx ty Types.~> ee tz tw) mempty)
   ["bimap(f, g, e) applies f to the contained value if e is a Left, or g if e is a Right; the result\
@@ -80,7 +84,12 @@ bimap = defineWithDefault "bimap" "Map over both sides of an either value."
       (var "e"))
 
 bind :: PrimitiveDefinition
-bind = defineWithDefault "bind" "Bind (flatMap) for either: if Right, apply the function; if Left, return unchanged."
+bind = withProvisions [
+  requirement "chainsOnRightShortCircuitsOnLeft"
+    "bind applies the continuation function when the either is a right, propagating the\
+    \ continuation's own result (which may itself be a left or right); when the either is a\
+    \ left, bind returns that left unchanged without invoking the continuation."]
+  $ defineWithDefault "bind" "Bind (flatMap) for either: if Right, apply the function; if Left, return unchanged."
   (sigWithParams [("e", "the either value to bind"), ("f", "the function to apply to a Right value")] $ TypeScheme [Name "x", Name "y", Name "z"]
     (ee tx ty Types.~> (ty Types.~> ee tx tz) Types.~> ee tx tz) mempty)
   ["bind(e, f) is the monadic bind for either with a fixed Left type: if e is Right v, the result is\
@@ -105,7 +114,11 @@ compose = defineWithDefault "compose" "Kleisli composition for either."
     Eithers.bind (var "f" @@ var "x") (var "g"))
 
 either :: PrimitiveDefinition
-either = deprecatedSince "0.18" "cases" $ define "either" "Eliminate an either value by applying one of two functions."
+either = withProvisions [
+  requirement "eliminatesByVariant"
+    "either applies the first function if given a left value and the second function if given\
+    \ a right value, returning that function's result directly."]
+  $ deprecatedSince "0.18" "cases" $ define "either" "Eliminate an either value by applying one of two functions."
   (sigWithParams [("f", "the function to apply to a Left value"), ("g", "the function to apply to a Right value"), ("e", "the either value to eliminate")] $ TypeScheme [Name "x", Name "y", Name "z"]
     ((tx Types.~> tz) Types.~> (ty Types.~> tz) Types.~> ee tx ty Types.~> tz) mempty)
   ["either(f, g, e) returns f(x) if e is Left x and g(y) if e is Right y.",
@@ -114,7 +127,13 @@ either = deprecatedSince "0.18" "cases" $ define "either" "Eliminate an either v
    "Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c."]
 
 foldList :: PrimitiveDefinition
-foldList = defineWithDefault "foldList" "Left-fold over a list with an Either-returning function, short-circuiting on Left."
+foldList = withProvisions [
+  requirement "foldsLeftShortCircuitingOnLeft"
+    "foldList folds the given function over the list from the left, threading an accumulator\
+    \ through successive right results; the first left result returned by the step function\
+    \ short-circuits the whole fold to that left, and folding the empty list returns right of\
+    \ the initial accumulator unchanged."]
+  $ defineWithDefault "foldList" "Left-fold over a list with an Either-returning function, short-circuiting on Left."
   (sigWithParams [("f", "the Either-returning folding function"), ("acc0", "the initial accumulator value"), ("xs", "the list to fold over")] $ TypeScheme [Name "x", Name "y", Name "z"]
     ((tx Types.~> ty Types.~> ee tz tx) Types.~> tx Types.~> Types.list ty Types.~> ee tz tx) mempty)
   ["foldList(f, acc0, xs) folds f over xs from the left, threading an accumulator of type a, where each\
@@ -129,28 +148,44 @@ foldList = defineWithDefault "foldList" "Left-fold over a list with an Either-re
       (var "xs"))
 
 isLeft :: PrimitiveDefinition
-isLeft = defineWithDefault "isLeft" "Check whether an either is a Left value."
+isLeft = withProvisions [
+  requirement "testsLeftVariant"
+    "isLeft returns true exactly when the either is a left value, and false for a right\
+    \ value."]
+  $ defineWithDefault "isLeft" "Check whether an either is a Left value."
   (sigWithParams [("e", "the either value to test")] $ TypeScheme [Name "x", Name "y"] (ee tx ty Types.~> Types.boolean) mempty)
   ["True if the argument is a Left variant, false if a Right.",
    "Total. Corresponds to Haskell's Data.Either.isLeft :: Either a b -> Bool."]
   ("e" ~> Eithers.either ("_" ~> true) ("_" ~> false) (var "e"))
 
 isRight :: PrimitiveDefinition
-isRight = defineWithDefault "isRight" "Check whether an either is a Right value."
+isRight = withProvisions [
+  requirement "testsRightVariant"
+    "isRight returns true exactly when the either is a right value, and false for a left\
+    \ value."]
+  $ defineWithDefault "isRight" "Check whether an either is a Right value."
   (sigWithParams [("e", "the either value to test")] $ TypeScheme [Name "x", Name "y"] (ee tx ty Types.~> Types.boolean) mempty)
   ["True if the argument is a Right variant, false if a Left.",
    "Total. Corresponds to Haskell's Data.Either.isRight :: Either a b -> Bool."]
   ("e" ~> Eithers.either ("_" ~> false) ("_" ~> true) (var "e"))
 
 left :: PrimitiveDefinition
-left = define "left" "Construct a left (error/exceptional) either value."
+left = withProvisions [
+  requirement "constructsLeftVariant"
+    "left wraps a value as the left (error/exceptional) variant of an either."]
+  $ define "left" "Construct a left (error/exceptional) either value."
   (sigWithParams [("x", "the value to wrap as a Left")] $ TypeScheme [Name "x", Name "y"] (tx Types.~> ee tx ty) mempty)
   ["left(x) is Left x. The dual constructor to right, injecting into the Left (error/exceptional)\
   \ side of an either.",
    "Total. Corresponds to Haskell's Left :: a -> Either a b."]
 
 lefts :: PrimitiveDefinition
-lefts = defineWithDefault "lefts" "Extract all Left values from a list of either values."
+lefts = withProvisions [
+  requirement "extractsLeftValuesPreservingOrder"
+    "lefts returns the list of every left value in the input list, in original order,\
+    \ discarding right values; given a list of only right values, or an empty list, the result\
+    \ is the empty list."]
+  $ defineWithDefault "lefts" "Extract all Left values from a list of either values."
   (sigWithParams [("xs", "the list of either values to extract Lefts from")] $ TypeScheme [Name "x", Name "y"]
     (Types.list (ee tx ty) Types.~> Types.list tx) mempty)
   ["lefts(xs) returns a list containing every Left value in xs, in original order, with Right values\
@@ -167,7 +202,11 @@ lefts = defineWithDefault "lefts" "Extract all Left values from a list of either
       (var "xs"))
 
 map :: PrimitiveDefinition
-map = defineWithDefault "map" "Map a function over the Right side of an either (standard functor map)."
+map = withProvisions [
+  requirement "mapsRightPreservesLeft"
+    "map applies the given function to the contained value when the either is a right, and\
+    \ leaves a left value completely unchanged."]
+  $ defineWithDefault "map" "Map a function over the Right side of an either (standard functor map)."
   (sigWithParams [("f", "the function to apply to a Right value"), ("e", "the either value to map over")] $ TypeScheme [Name "x", Name "y", Name "z"]
     ((tx Types.~> ty) Types.~> ee tz tx Types.~> ee tz ty) mempty)
   ["map(f, e) returns Right (f y) if e is Right y, or Left x unchanged if e is Left x.",
@@ -181,7 +220,13 @@ map = defineWithDefault "map" "Map a function over the Right side of an either (
       (var "e"))
 
 mapList :: PrimitiveDefinition
-mapList = defineWithDefault "mapList" "Map a function returning either over a list, collecting results or short-circuiting on Left."
+mapList = withProvisions [
+  requirement "traversesCollectingOrShortCircuiting"
+    "mapList applies the given either-returning function to each element of the list; if every\
+    \ application returns a right, the result is a right of the list of contained values in\
+    \ original order, and the first application returning a left short-circuits the whole\
+    \ result to that left; folding the empty list returns a right of the empty list."]
+  $ defineWithDefault "mapList" "Map a function returning either over a list, collecting results or short-circuiting on Left."
   (sigWithParams [("f", "the either-returning function to apply to each element"), ("xs", "the list to map over")] $ TypeScheme [Name "x", Name "y", Name "z"]
     ((tx Types.~> ee tz ty) Types.~> Types.list tx Types.~> ee tz (Types.list ty)) mempty)
   ["mapList(f, xs) applies f to each element of xs. If every application returns Right, the result is\
@@ -197,7 +242,12 @@ mapList = defineWithDefault "mapList" "Map a function returning either over a li
       (var "xs"))
 
 mapOptional :: PrimitiveDefinition
-mapOptional = defineWithDefault "mapOptional" "Map a function returning either over an optional, or return Right none if none."
+mapOptional = withProvisions [
+  requirement "traversesOptionalCollectingOrShortCircuiting"
+    "mapOptional returns a right of none when the input optional is none; when the input is\
+    \ given a value, it applies the given function to that value and lifts a right result back\
+    \ into right of given, or propagates a left result unchanged."]
+  $ defineWithDefault "mapOptional" "Map a function returning either over an optional, or return Right none if none."
   (sigWithParams [("f", "the either-returning function to apply to the contained value"), ("m", "the optional to map over")] $ TypeScheme [Name "x", Name "y", Name "z"]
     ((tx Types.~> ee tz ty) Types.~> Types.optional tx Types.~> ee tz (Types.optional ty)) mempty)
   ["mapOptional(f, m) returns Right none if m is none; otherwise applies f to the contained value\
@@ -209,7 +259,14 @@ mapOptional = defineWithDefault "mapOptional" "Map a function returning either o
       ("x" ~> Eithers.map ("y" ~> just (var "y")) (var "f" @@ var "x")))
 
 mapSet :: PrimitiveDefinition
-mapSet = defineWithDefault "mapSet" "Map a function returning either over a set, collecting results or short-circuiting on Left."
+mapSet = withProvisions [
+  requirement "traversesSetCollectingOrShortCircuiting"
+    "mapSet applies the given either-returning function to each element of the set; if every\
+    \ application returns a right, the result is a right of the set of contained values\
+    \ (deduplicated by the result type's ordering), and the first application returning a left\
+    \ short-circuits the whole result to that left; mapping the empty set returns a right of\
+    \ the empty set."]
+  $ defineWithDefault "mapSet" "Map a function returning either over a set, collecting results or short-circuiting on Left."
   (sigWithParams [("f", "the either-returning function to apply to each element"), ("s", "the set to map over")] $
     Types.polyConstrained [("x", [Name "ordering"]), ("y", [Name "ordering"]), ("z", [])]
     ((tx Types.~> ee tz ty) Types.~> Types.set tx Types.~> ee tz (Types.set ty)))
@@ -229,7 +286,13 @@ mapSet = defineWithDefault "mapSet" "Map a function returning either over a set,
         (Sets.toList (var "s" :: TypedTerm (S.Set Int))))) :: TypedTerm ((Int -> Either Int Int) -> S.Set Int -> Either Int (S.Set Int)))
 
 partition :: PrimitiveDefinition
-partition = defineWithDefault "partition" "Partition a list of either values into lefts and rights."
+partition = withProvisions [
+  requirement "splitsIntoLeftsAndRights"
+    "partition returns a pair of (every left value in the input, every right value in the\
+    \ input), each preserving original relative order; an all-left, all-right, or empty input\
+    \ list degrades to the corresponding (full, empty) / (empty, full) / (empty, empty)\
+    \ pairing."]
+  $ defineWithDefault "partition" "Partition a list of either values into lefts and rights."
   (sigWithParams [("xs", "the list of either values to partition")] $ TypeScheme [Name "x", Name "y"]
     (Types.list (ee tx ty) Types.~> Types.pair (Types.list tx) (Types.list ty)) mempty)
   ["partition(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs in\
@@ -246,14 +309,22 @@ partition = defineWithDefault "partition" "Partition a list of either values int
       (var "xs"))
 
 right :: PrimitiveDefinition
-right = define "right" "Construct a right (success/normal) either value."
+right = withProvisions [
+  requirement "constructsRightVariant"
+    "right wraps a value as the right (success/normal) variant of an either."]
+  $ define "right" "Construct a right (success/normal) either value."
   (sigWithParams [("x", "the value to wrap as a Right")] $ TypeScheme [Name "x", Name "y"] (ty Types.~> ee tx ty) mempty)
   ["right(x) is Right x. The dual constructor to left, injecting into the Right (success/normal)\
   \ side of an either.",
    "Total. Corresponds to Haskell's Right :: b -> Either a b."]
 
 rights :: PrimitiveDefinition
-rights = defineWithDefault "rights" "Extract all Right values from a list of either values."
+rights = withProvisions [
+  requirement "extractsRightValuesPreservingOrder"
+    "rights returns the list of every right value in the input list, in original order,\
+    \ discarding left values; given a list of only left values, or an empty list, the result\
+    \ is the empty list."]
+  $ defineWithDefault "rights" "Extract all Right values from a list of either values."
   (sigWithParams [("xs", "the list of either values to extract Rights from")] $ TypeScheme [Name "x", Name "y"]
     (Types.list (ee tx ty) Types.~> Types.list ty) mempty)
   ["rights(xs) returns a list containing every Right value in xs, in original order, with Left values\

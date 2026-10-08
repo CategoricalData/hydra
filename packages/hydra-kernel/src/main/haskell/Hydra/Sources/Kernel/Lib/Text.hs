@@ -25,7 +25,14 @@ define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
 
 decodeUtf8 :: PrimitiveDefinition
-decodeUtf8 = define "decodeUtf8" "Decode a sequence of bytes as UTF-8 text."
+decodeUtf8 = withProvisions [
+  requirement "decodesValidUtf8"
+    "decodeUtf8 decodes a valid UTF-8 byte sequence to its text, wrapped in right, including the\
+    \ empty byte sequence, ASCII-only text, and multi-byte (non-ASCII) text.",
+  requirement "leftOnInvalidUtf8"
+    "decodeUtf8 returns left(message) when the byte sequence is not valid UTF-8, such as a lone\
+    \ continuation byte."]
+  $ define "decodeUtf8" "Decode a sequence of bytes as UTF-8 text."
   (sigWithParams [("bytes", "the byte sequence to decode as UTF-8")] $ TypeScheme [] (Types.binary Types.~> Types.either_ Types.string Types.string) mempty)
   ["decodeUtf8(bytes) attempts to interpret bytes as a UTF-8 encoded string. A byte sequence which\
   \ is not valid UTF-8 yields left(message), where message is a host-provided description of the\
@@ -33,7 +40,11 @@ decodeUtf8 = define "decodeUtf8" "Decode a sequence of bytes as UTF-8 text."
    "Pairs with hydra.core.lib.files.readFile, which returns raw bytes."]
 
 encodeUtf8 :: PrimitiveDefinition
-encodeUtf8 = define "encodeUtf8" "Encode text as a sequence of UTF-8 bytes."
+encodeUtf8 = withProvisions [
+  requirement "encodesExactUtf8Bytes"
+    "encodeUtf8 returns the exact UTF-8 byte sequence for the given text, for the empty string,\
+    \ ASCII-only text, and multi-byte (non-ASCII) text."]
+  $ define "encodeUtf8" "Encode text as a sequence of UTF-8 bytes."
   (sigWithParams [("text", "the text to encode as UTF-8")] $ TypeScheme [] (Types.string Types.~> Types.binary) mempty)
   ["encodeUtf8(text) returns the UTF-8 encoding of text as raw bytes. Total: every Hydra string is\
   \ valid Unicode and therefore always encodes.",

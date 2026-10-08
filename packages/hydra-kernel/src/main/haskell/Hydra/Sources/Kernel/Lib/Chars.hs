@@ -57,7 +57,13 @@ isAlpha = define "isAlpha" "Check whether a character is alphabetic."
    "Total. Corresponds to Haskell's Data.Char.isAlpha :: Char -> Bool."]
 
 isAlphaNum :: PrimitiveDefinition
-isAlphaNum = define "isAlphaNum" "Check whether a character is alphanumeric."
+isAlphaNum = withProvisions [
+  requirement "classifiesAlphanumeric"
+    "isAlphaNum returns true for a code point that is a Unicode letter or digit.",
+  requirement "classifiesNonAlphanumeric"
+    "isAlphaNum returns false for a code point that is neither a Unicode letter nor a digit, such\
+    \ as whitespace or punctuation."]
+  $ define "isAlphaNum" "Check whether a character is alphanumeric."
   (intToBool [("char", "the character to test, as a Unicode code point")])
   ["True if the argument is a Unicode letter or digit, false otherwise.",
    "The argument is interpreted as a Unicode code point: arguments outside the valid code-point range\
@@ -75,7 +81,13 @@ isDigit = define "isDigit" "Check whether a character is an ASCII decimal digit.
    "Total. Corresponds to Haskell's Data.Char.isDigit :: Char -> Bool."]
 
 isLower :: PrimitiveDefinition
-isLower = define "isLower" "Check whether a character is lowercase."
+isLower = withProvisions [
+  requirement "classifiesLowercase"
+    "isLower returns true for a code point that is a Unicode lowercase letter.",
+  requirement "classifiesNonLowercase"
+    "isLower returns false for a code point that is not a Unicode lowercase letter, including\
+    \ uppercase letters and digits."]
+  $ define "isLower" "Check whether a character is lowercase."
   (intToBool [("char", "the character to test, as a Unicode code point")])
   ["True if the argument is a Unicode lowercase letter (general category Ll), false otherwise.",
    "The argument is interpreted as a Unicode code point: arguments outside [0, 0x10FFFF] yield an\
@@ -85,7 +97,14 @@ isLower = define "isLower" "Check whether a character is lowercase."
    "Total. Corresponds to Haskell's Data.Char.isLower :: Char -> Bool."]
 
 isSpace :: PrimitiveDefinition
-isSpace = define "isSpace" "Check whether a character is a whitespace character."
+isSpace = withProvisions [
+  requirement "classifiesWhitespace"
+    "isSpace returns true for a code point that is a Unicode whitespace character, including the\
+    \ space, tab, and newline characters.",
+  requirement "classifiesNonWhitespace"
+    "isSpace returns false for a code point that is not a Unicode whitespace character, such as a\
+    \ letter."]
+  $ define "isSpace" "Check whether a character is a whitespace character."
   (intToBool [("char", "the character to test, as a Unicode code point")])
   ["True if the argument is a Unicode whitespace character, false otherwise.",
    "The whitespace set follows Haskell's Data.Char.isSpace, which recognises U+0020 (space), U+0009\
@@ -94,7 +113,13 @@ isSpace = define "isSpace" "Check whether a character is a whitespace character.
    "Total. Corresponds to Haskell's Data.Char.isSpace :: Char -> Bool."]
 
 isUpper :: PrimitiveDefinition
-isUpper = define "isUpper" "Check whether a character is uppercase."
+isUpper = withProvisions [
+  requirement "classifiesUppercase"
+    "isUpper returns true for a code point that is a Unicode uppercase letter.",
+  requirement "classifiesNonUppercase"
+    "isUpper returns false for a code point that is not a Unicode uppercase letter, including\
+    \ lowercase letters and digits."]
+  $ define "isUpper" "Check whether a character is uppercase."
   (intToBool [("char", "the character to test, as a Unicode code point")])
   ["True if the argument is a Unicode uppercase letter (general category Lu), false otherwise.",
    "The argument is interpreted as a Unicode code point: arguments outside [0, 0x10FFFF] yield an\
@@ -103,7 +128,15 @@ isUpper = define "isUpper" "Check whether a character is uppercase."
    "Total. Corresponds to Haskell's Data.Char.isUpper :: Char -> Bool."]
 
 toLower :: PrimitiveDefinition
-toLower = define "toLower" "Convert a character to lowercase."
+toLower = withProvisions [
+  requirement "mapsToLowercaseOrUnchanged"
+    "toLower returns the lowercase mapping of an uppercase code point, and returns a code point\
+    \ with no lowercase mapping (e.g. a digit, or an already-lowercase letter) unchanged.",
+  requirement "usesSimpleNotFullMapping"
+    "toLower uses the simple (one-to-one) Unicode case mapping, not full case folding: a code\
+    \ point whose full lowercase mapping would expand to multiple code points instead maps to\
+    \ its single-code-point simple mapping."]
+  $ define "toLower" "Convert a character to lowercase."
   (intToInt [("char", "the character to convert, as a Unicode code point")])
   ["Return the simple (one-to-one) Unicode lowercase mapping of the argument, or the argument itself if\
   \ it has no lowercase mapping.",
@@ -113,7 +146,17 @@ toLower = define "toLower" "Convert a character to lowercase."
    "Total. Corresponds to Haskell's Data.Char.toLower :: Char -> Char."]
 
 toUpper :: PrimitiveDefinition
-toUpper = define "toUpper" "Convert a character to uppercase."
+toUpper = withProvisions [
+  requirement "mapsToUppercaseOrUnchanged"
+    "toUpper returns the uppercase mapping of a lowercase code point, and returns a code point\
+    \ with no uppercase mapping (e.g. a digit, or an already-uppercase letter) unchanged.",
+  requirement "usesSimpleNotFullMapping"
+    "toUpper uses the simple (one-to-one) Unicode case mapping, not full case folding: a code\
+    \ point with no single-code-point uppercase mapping (e.g. sharp s, n preceded by apostrophe)\
+    \ is returned unchanged rather than expanded to a multi-code-point full mapping, and a code\
+    \ point whose simple mapping is itself a different single code point maps to that code\
+    \ point."]
+  $ define "toUpper" "Convert a character to uppercase."
   (intToInt [("char", "the character to convert, as a Unicode code point")])
   ["Return the simple (one-to-one) Unicode uppercase mapping of the argument, or the argument itself if\
   \ it has no uppercase mapping.",
