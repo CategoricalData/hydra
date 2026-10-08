@@ -186,6 +186,19 @@ and that compile is expensive in ways a fetched artifact never is.
   time — not a code change; the structural fix (a shared cache, or an automated retention policy)
   remains open.
 
+  **It recurred.** The night of 2026-10-07/08 — days later, same machine — root disk again reached
+  0 bytes free, with the identical `df`-itself-can't-write symptom and the identical root cause:
+  eleven worktrees' `.stack-work/dist` + `.stack-work/install` trees at 5.7-6GB apiece, none of
+  it redundant (`~/.stack`'s shared package database is genuine; each worktree's own compiled
+  `.o`/`.hi` output reflects that worktree's own checked-out source and cannot be shared). A
+  `/bootstrap` run already in flight died mid-write with `No space left on device`; recovery was
+  again entirely manual — a human clearing ~35GB by hand, since nothing in the pipeline detects
+  low disk before committing to a multi-gigabyte build. The open structural fix named above is
+  still open. The absence of even a pre-flight check (fail fast with a clear message before a
+  build starts, rather than crash mid-write) is itself notable: the first incident's finding was
+  available in this very document, and the second one still ran into the identical failure with
+  no guard in between.
+
 ## The lesson
 
 No single incident above is damning on its own — a slow cold build, one test filter forced into

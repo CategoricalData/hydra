@@ -226,6 +226,27 @@ echo "with-stack-slot: acquired build slot after ${waited}s — ${HOLDER_DESC}" 
 cleanup() { : > "$METAFILE" 2>/dev/null || true; }
 trap cleanup EXIT
 
+# ---- disk-headroom guard (hydra-agents#3) ---------------------------------
+# Checked HERE, after acquiring the slot, not before: a build that queued for
+# hours could see disk free up or fill up during the wait, so the only check
+# that matters is the one taken right before we actually let a build proceed.
+# ~6GB is this fleet's measured .stack-work footprint (dist/ + install/) for
+# a single worktree's full Haskell build (see docs/history/haskell-as-host-cost.md);
+# two incidents of root disk hitting 0 while a build was already in flight,
+# dying mid-write with ENOSPC, motivated this fail-fast guard over silent
+# corruption. Sourced from the hydra-agents checkout (generic, project-agnostic
+# function); only the 6144 MB threshold here is Hydra-specific.
+DISK_CHECK_LIB="$(git rev-parse --show-toplevel 2>/dev/null)/../../external/agents/bin/lib-disk-check.sh"
+if [ -r "$DISK_CHECK_LIB" ]; then
+  # shellcheck disable=SC1090
+  . "$DISK_CHECK_LIB"
+  if ! ha_check_disk_headroom 6144; then
+    exit 1
+  fi
+else
+  echo "with-stack-slot: hydra-agents disk-check lib not found at $DISK_CHECK_LIB; skipping the guard (not fatal)." >&2
+fi
+
 # Run the wrapped command while holding fd 9. Children inherit fd 9, so the lock
 # stays held until the entire tree exits. Capture status to return it verbatim.
 # Export the reentrancy marker so nested wrappers pass through instead of deadlocking.
