@@ -151,6 +151,7 @@ public class RegenerateSpec {
             }
             sb.append(hydra.core.print.Markdown.document(docs.get(i)));
         }
+        sb.append("\n");
         return sb.toString();
     }
 
