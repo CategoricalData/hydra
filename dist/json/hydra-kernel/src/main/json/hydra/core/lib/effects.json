@@ -42,7 +42,11 @@
           "comments": [
             "apply(ef, ex) describes an effectful computation which first interprets ef to produce a function, then interprets ex to produce an argument, and returns the result of applying the function to the argument."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.effects.apply.appliesEffectfulFunctionToEffectfulArgument",
+              "kind": "requirement",
+              "statement": "apply interprets the function-producing effect and the argument-producing effect, then applies the resulting function to the resulting argument."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -68,7 +72,15 @@
             "bind(e, f) describes an effectful computation which first interprets e, then passes its result to f to obtain the next effect.",
             "Host interpreters provide the operational meaning; Hydra uses the type effect<t> to keep the effect boundary explicit."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.effects.bind.threadsResultIntoNextEffect",
+              "kind": "requirement",
+              "statement": "bind passes the result of the first effect to the given function to obtain the next effect, whose result is the overall result."},
+            {
+              "name": "hydra.core.lib.effects.bind.performsEffectsInOrderExactlyOnce",
+              "kind": "requirement",
+              "statement": "bind performs the first effect to completion, exactly once, before performing the second effect, also exactly once -- observable via real host side effects (not merely by return value), ruling out a host that reorders, double-runs, skips, or eagerly runs either effect."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -88,7 +100,11 @@
           "description": "Kleisli composition for effects.",
           "comments": ["compose(f, g, x) describes an effectful computation equivalent to bind(f(x), g)."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.effects.compose.sequencesTwoKleisliArrows",
+              "kind": "requirement",
+              "statement": "compose(f, g, x) runs f on x to obtain the first effect, then runs g on that effect's result to obtain the second effect, equivalent to bind(f(x), g)."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
@@ -113,7 +129,15 @@
           "description": "Left-fold over a list with an effect-returning function.",
           "comments": ["foldList(f, acc0, xs) describes an effectful left fold over xs, sequencing applications of f from left to right."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.effects.foldList.sequencesEffectReturningStepOverList",
+              "kind": "requirement",
+              "statement": "foldList sequences an effect-returning step function over the list's elements, threading the accumulator through, and the overall result is the final accumulator."},
+            {
+              "name": "hydra.core.lib.effects.foldList.performsElementEffectsLeftToRightExactlyOnce",
+              "kind": "requirement",
+              "statement": "foldList performs the element effects left-to-right in list order, each exactly once -- observable via real host side effects, ruling out a host that reorders, double-runs, or skips an element's effect."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -139,7 +163,11 @@
             "map(f, e) describes an effectful computation which interprets e and applies f to its result.",
             "Equivalent to bind(e, \\x -> pure(f x))."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.effects.map.appliesPureFunctionToEffectResult",
+              "kind": "requirement",
+              "statement": "map interprets the given effect and applies the pure function to its result; equivalent to bind(e, \\x -> pure(f x))."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -160,7 +188,15 @@
           "comments": [
             "mapList(f, xs) describes an effectful computation which applies f to each element of xs from left to right and collects the results."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.effects.mapList.appliesEffectReturningFunctionAndCollectsResults",
+              "kind": "requirement",
+              "statement": "mapList applies the effect-returning function to each element and collects the per-element results into a list of the same length, in order."},
+            {
+              "name": "hydra.core.lib.effects.mapList.performsElementEffectsLeftToRightExactlyOnce",
+              "kind": "requirement",
+              "statement": "mapList performs the element effects left-to-right in list order, each exactly once -- observable via real host side effects, ruling out a host that reorders, double-runs, or skips an element's effect."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -181,7 +217,15 @@
           "comments": [
             "mapOptional(f, m) describes an effectful computation which returns none when m is none, or applies f to the contained value and wraps the result in given."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.effects.mapOptional.appliesFunctionWhenPresentPassesThroughNoneWhenAbsent",
+              "kind": "requirement",
+              "statement": "mapOptional over a present value applies the effect-returning function and wraps the result in given; mapOptional over none yields none, with the function not applied."},
+            {
+              "name": "hydra.core.lib.effects.mapOptional.performsExactlyZeroOrOneEffect",
+              "kind": "requirement",
+              "statement": "mapOptional over none performs zero effects; mapOptional over a present value performs exactly one effect -- observable via a real host side effect, distinguishing \"the function was never invoked\" from \"the function was invoked and its effect ran\"."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -223,7 +267,11 @@
           "description": "Lift a pure value into an effect.",
           "comments": ["pure(x) describes an effectful computation which succeeds with x without requiring host interaction."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.effects.pure.liftsValueWithoutHostInteraction",
+              "kind": "requirement",
+              "statement": "pure(x) succeeds with exactly x, without requiring any host interaction."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "x", "description": "the pure value to lift into an effect", "type": {"variable": "x"}, "isLazy": false}],

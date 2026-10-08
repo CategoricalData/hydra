@@ -46,7 +46,15 @@
             "Since: 0.18 (moved from hydra.core.lib.equality.compare).",
             "Total. Corresponds to Haskell's compare :: Ord a => a -> a -> Ordering."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.ordering.compare.threeWayClassification",
+              "kind": "requirement",
+              "statement": "compare(x, y) returns lessThan, equalTo, or greaterThan classifying x relative to y under the type's ordering, for integers, strings (lexicographic, by Unicode code point), floats, lists (lexicographic, order-sensitive), sets, and maps (canonical sorted-order comparison, independent of construction/insertion order)."},
+            {
+              "name": "hydra.core.lib.ordering.compare.decimalScaleTiebreak",
+              "kind": "requirement",
+              "statement": "compare on decimals orders primarily by numeric value; when two decimals are numerically equal but have different scale, compare treats them as distinct (not equalTo) and breaks the tie by scale (smaller scale orders first), including transitively across more than two scale levels."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -66,7 +74,11 @@
             "Since: 0.18 (moved from hydra.core.lib.equality.gt).",
             "Total. Corresponds to Haskell's (>) :: Ord a => a -> a -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.ordering.gt.strictGreaterThan",
+              "kind": "requirement",
+              "statement": "gt(x, y) returns true exactly when x is strictly greater than y under the type's ordering, for integers, floats, and strings; equal values and lesser values both return false."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -86,7 +98,11 @@
             "Since: 0.18 (moved from hydra.core.lib.equality.gte).",
             "Total. Corresponds to Haskell's (>=) :: Ord a => a -> a -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.ordering.gte.greaterThanOrEqual",
+              "kind": "requirement",
+              "statement": "gte(x, y) returns true when x is greater than or strictly equal to y under the type's ordering, for integers, floats, strings, and decimals -- including the decimal scale-tiebreak rule (a numerically-equal, smaller-scale decimal is treated as lesser, so gte is true in that direction)."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -106,7 +122,11 @@
             "Since: 0.18 (moved from hydra.core.lib.equality.lt).",
             "Total. Corresponds to Haskell's (<) :: Ord a => a -> a -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.ordering.lt.strictLessThan",
+              "kind": "requirement",
+              "statement": "lt(x, y) returns true exactly when x is strictly less than y under the type's ordering, for integers, floats, and strings; equal values and greater values both return false."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -126,7 +146,11 @@
             "Since: 0.18 (moved from hydra.core.lib.equality.lte).",
             "Total. Corresponds to Haskell's (<=) :: Ord a => a -> a -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.ordering.lte.lessThanOrEqual",
+              "kind": "requirement",
+              "statement": "lte(x, y) returns true when x is less than or strictly equal to y under the type's ordering, for integers, floats, strings, and decimals -- including the decimal scale-tiebreak rule."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -146,7 +170,11 @@
             "Since: 0.18 (moved from hydra.core.lib.equality.max).",
             "Total. Corresponds to Haskell's max :: Ord a => a -> a -> a."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.ordering.max.returnsLargerOperand",
+              "kind": "requirement",
+              "statement": "max(x, y) returns whichever of x and y is larger under the type's ordering; when x and y are equal, max returns y (matching Haskell's tie-breaking convention) -- holds for integers, strings, floats, and decimals."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -185,7 +213,11 @@
             "Since: 0.18 (moved from hydra.core.lib.equality.min).",
             "Total. Corresponds to Haskell's min :: Ord a => a -> a -> a."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.ordering.min.returnsSmallerOperand",
+              "kind": "requirement",
+              "statement": "min(x, y) returns whichever of x and y is smaller under the type's ordering; when x and y are equal, min returns x (matching Haskell's tie-breaking convention) -- holds for integers, strings, floats, and decimals."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [

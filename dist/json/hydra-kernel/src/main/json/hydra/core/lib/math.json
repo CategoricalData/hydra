@@ -44,7 +44,15 @@
             "Requires a 'numeric' type-class constraint on the argument type.",
             "Corresponds to Haskell's abs :: Num a => a -> a."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.abs.preservesMagnitudeAcrossTypes",
+              "kind": "requirement",
+              "statement": "abs returns the non-negative magnitude of the argument, for every numeric type with a 'numeric' instance (signed/unsigned integers of every width, bigint, float32/float64)."},
+            {
+              "name": "hydra.core.lib.math.abs.boundaryAndSpecialValues",
+              "kind": "requirement",
+              "statement": "abs at the signed-integer minimum value wraps to itself (not representable as its positive magnitude); abs of signed zero preserves sign to +0; abs(NaN) is NaN; abs(-Infinity) is +Infinity."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
@@ -61,7 +69,15 @@
             "For arguments outside the domain [-1, +1] (including ±∞), the result is NaN. acos(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 acos operation and to Haskell's acos :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.acos.inverseCosineInPrincipalRange",
+              "kind": "requirement",
+              "statement": "acos returns the principal value of the inverse cosine, in radians, in [0, pi], for arguments in its domain [-1, +1]."},
+            {
+              "name": "hydra.core.lib.math.acos.outOfDomainIsNanSpecialValuesPropagate",
+              "kind": "requirement",
+              "statement": "acos of an argument outside [-1, +1] (including +-Infinity) is NaN; acos(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -83,7 +99,15 @@
             "For arguments less than 1 the result is NaN; acosh(1) = +0; acosh(+∞) = +∞; acosh(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 acosh operation and to Haskell's acosh :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.acosh.inverseHyperbolicCosineInNonnegativeRange",
+              "kind": "requirement",
+              "statement": "acosh returns the principal value of the inverse hyperbolic cosine, in [0, +Infinity), for arguments in its domain [1, +Infinity)."},
+            {
+              "name": "hydra.core.lib.math.acosh.outOfDomainIsNanAsymmetricAtInfinity",
+              "kind": "requirement",
+              "statement": "acosh of an argument less than 1 (including -Infinity) is NaN; acosh(+Infinity) is +Infinity; acosh(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -105,7 +129,15 @@
             "Requires a 'numeric' type-class constraint on the argument type, which is the closest Hydra equivalent to Haskell's Num instance.",
             "The operation is total. Corresponds to Haskell's (+) :: Num a => a -> a -> a."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.add.wrapsOrRoundsPerType",
+              "kind": "requirement",
+              "statement": "add combines two values of a numeric type per that type's own arithmetic: two's-complement wraparound for fixed-width integers, arbitrary precision for bigint, IEEE 754 round-to-nearest for floating-point -- and dispatches correctly regardless of which numeric type is supplied at the call site."},
+            {
+              "name": "hydra.core.lib.math.add.boundaryWraparoundAndIeeeSpecialValues",
+              "kind": "requirement",
+              "statement": "add wraps silently at every fixed-width integer type's boundary (no overflow exception); add of two bigints beyond int64/uint64 range remains exact; add on float64/float32 follows IEEE 754 special-value rules (opposite-sign infinities and any NaN operand yield NaN, ties round to even, -0 + -0 = -0)."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [
@@ -126,7 +158,11 @@
             "Deprecated since 0.18. Use: hydra.core.lib.math.add."],
           "seeAlso": [],
           "lifecycle": {"deprecatedSince": "0.18"},
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.addFloat64.addsFloat64Values",
+              "kind": "requirement",
+              "statement": "addFloat64 computes the IEEE 754 binary64 sum of its two arguments."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -145,7 +181,15 @@
             "For arguments outside the domain [-1, +1] (including ±∞), the result is NaN; asin(ଐ) = ଐ; asin(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 asin operation and to Haskell's asin :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.asin.inverseSineInPrincipalRange",
+              "kind": "requirement",
+              "statement": "asin returns the principal value of the inverse sine, in radians, in [-pi/2, +pi/2], for arguments in its domain [-1, +1]."},
+            {
+              "name": "hydra.core.lib.math.asin.outOfDomainIsNanSpecialValuesPropagate",
+              "kind": "requirement",
+              "statement": "asin of an argument outside [-1, +1] (including +-Infinity) is NaN; asin(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -166,7 +210,15 @@
             "Principal value of the inverse hyperbolic sine. Defined for all finite reals; asinh(ଐ) = ଐ; asinh(±∞) = ±∞; asinh(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 asinh operation and to Haskell's asinh :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.asinh.inverseHyperbolicSineDefinedForAllFiniteReals",
+              "kind": "requirement",
+              "statement": "asinh returns the principal value of the inverse hyperbolic sine, defined for every finite real argument."},
+            {
+              "name": "hydra.core.lib.math.asinh.oddSymmetryAtInfinityNanPropagates",
+              "kind": "requirement",
+              "statement": "asinh(+-Infinity) is +-Infinity respectively (odd symmetry preserved at the boundary); asinh(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -187,7 +239,15 @@
             "Principal value of the inverse tangent, in radians. The result is in (-π/2, +π/2); atan(ଐ) = ଐ; atan(±∞) = ±π/2; atan(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 atan operation and to Haskell's atan :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.atan.inverseTangentInPrincipalRange",
+              "kind": "requirement",
+              "statement": "atan returns the principal value of the inverse tangent, in radians, in (-pi/2, +pi/2), for any finite argument."},
+            {
+              "name": "hydra.core.lib.math.atan.saturatesAtInfinityNanPropagates",
+              "kind": "requirement",
+              "statement": "atan of +-Infinity saturates to +-pi/2 respectively (rather than NaN); atan(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -209,7 +269,15 @@
             "Special match follow IEEE 754 ੹.2: atan2(ଐ, +x>0) = ଐ; atan2(ଐ, -x<0) = ±π; atan2(±y>0, 0) = ±π/2; atan2(±y, +∞) = ଐ; atan2(±y, -∞) = ±π; atan2(±∞, finite) = ±π/2; atan2(±∞, +∞) = ±π/4; atan2(±∞, -∞) = ଓπ/4; atan2 of any NaN argument is NaN.",
             "Corresponds to Haskell's atan2 :: Double -> Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.atan2.quadrantAwareArcTangentOfTwoArguments",
+              "kind": "requirement",
+              "statement": "atan2(y, x) returns the angle in radians, in (-pi, +pi], from the positive x-axis to the point (x, y), using the signs of both arguments to determine the quadrant."},
+            {
+              "name": "hydra.core.lib.math.atan2.ieeeSpecialValueMatrix",
+              "kind": "requirement",
+              "statement": "atan2 follows the IEEE 754 9.2 special-value table for signed-zero, infinite, and NaN arguments in either position, including the cross-infinity combinations where this implementation returns NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -227,7 +295,15 @@
             "Principal value of the inverse hyperbolic tangent. Defined for arguments in (-1, +1); atanh(଑) = ±∞ (with division-by-zero exception in IEEE 754); arguments outside [-1, +1] produce NaN; atanh(ଐ) = ଐ; atanh(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 atanh operation and to Haskell's atanh :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.atanh.inverseHyperbolicTangentOnOpenInterval",
+              "kind": "requirement",
+              "statement": "atanh returns the principal value of the inverse hyperbolic tangent, defined on the open interval (-1, +1)."},
+            {
+              "name": "hydra.core.lib.math.atanh.boundaryIsInfiniteOutOfDomainIsNan",
+              "kind": "requirement",
+              "statement": "atanh at the boundary (+-1) is +-Infinity respectively; atanh of an argument outside [-1, +1] (including +-Infinity) is NaN; atanh(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -249,7 +325,15 @@
             "Note that the return type is float64, not an integer type, so the result can exceed the integer range.",
             "Corresponds to Haskell's fromIntegral . ceiling :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.ceiling.roundsTowardPositiveInfinityAsFloat",
+              "kind": "requirement",
+              "statement": "ceiling returns the smallest integer value not less than the argument, as a float64."},
+            {
+              "name": "hydra.core.lib.math.ceiling.ieeeSpecialValuesPassThrough",
+              "kind": "requirement",
+              "statement": "ceiling of +-Infinity or NaN passes the value through unchanged."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -270,7 +354,15 @@
             "Cosine of an angle in radians, correctly rounded for finite arguments. The result is in [-1, +1]; cos(ଐ) = 1; cos(±∞) is NaN (with invalid-operation exception in IEEE 754); cos(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 cos operation and to Haskell's cos :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.cos.cosineOfAngleInRadians",
+              "kind": "requirement",
+              "statement": "cos returns the cosine of an angle in radians, correctly rounded for finite arguments, in the range [-1, +1]."},
+            {
+              "name": "hydra.core.lib.math.cos.undefinedAtInfinityNanPropagates",
+              "kind": "requirement",
+              "statement": "cos of +-Infinity is NaN; cos(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the angle in radians", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -286,7 +378,15 @@
             "Hyperbolic cosine. The result is in [1, +∞]; cosh(ଐ) = 1; cosh(±∞) = +∞; cosh(NaN) is NaN. Large-magnitude arguments overflow to +∞.",
             "Corresponds to the IEEE 754 ੹.2 cosh operation and to Haskell's cosh :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.cosh.hyperbolicCosineInRangeAtLeastOne",
+              "kind": "requirement",
+              "statement": "cosh returns the hyperbolic cosine, in [1, +Infinity), for any finite real argument."},
+            {
+              "name": "hydra.core.lib.math.cosh.evenSymmetryAtInfinityNanPropagates",
+              "kind": "requirement",
+              "statement": "cosh(+-Infinity) is +Infinity (even symmetry -- both signs saturate to the same value); cosh(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -310,7 +410,15 @@
             "Requires an 'integral' type-class constraint on the argument type.",
             "Corresponds to Haskell's div :: Integral a => a -> a -> a, wrapped in maybe to make the zero-divisor case total."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.div.flooredQuotientWhenDivisorNonzero",
+              "kind": "requirement",
+              "statement": "div returns the integer quotient of its two arguments rounded toward negative infinity (floor division), wrapped, for every integral type, when the divisor is non-zero."},
+            {
+              "name": "hydra.core.lib.math.div.noneOnZeroDivisorWraparoundAtMinBound",
+              "kind": "requirement",
+              "statement": "div is none when the divisor is zero, for every integral type; at a fixed-width signed integer type's boundary case (minimum value divided by -1), the result wraps to the minimum value rather than overflowing."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
           "parameters": [
@@ -330,7 +438,15 @@
             "Requires a 'fractional' type-class constraint on the argument type.",
             "Corresponds to Haskell's (/) :: Fractional a => a -> a -> a."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.divide.roundsToNearestPerIeee754",
+              "kind": "requirement",
+              "statement": "divide computes the IEEE 754 correctly-rounded quotient of its two float32/float64 arguments for finite, non-zero-divisor cases."},
+            {
+              "name": "hydra.core.lib.math.divide.ieeeSpecialValuesAndSignedZeroDivision",
+              "kind": "requirement",
+              "statement": "divide is total via IEEE 754 sentinels rather than a partial/optional result: dividing a finite non-zero value by signed zero yields signed infinity (sign = XOR of operand signs); zero divided by zero and infinity divided by infinity are NaN; infinity divided by a finite value is infinity (sign XOR); a finite value divided by infinity is signed zero; NaN propagates unconditionally."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "fractional"}]}],
           "parameters": [
@@ -348,7 +464,11 @@
             "The mathematical constant e ≈ 2.718281828459045, the base of the natural logarithm, as the nearest representable float64. Equal to exp(1).",
             "Corresponds to Haskell's exp 1 :: Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.e.isEulersConstant",
+              "kind": "requirement",
+              "statement": "e is the float64 value nearest to Euler's number, equal to exp(1)."}]},
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -363,7 +483,11 @@
             "Requires an 'integral' type-class constraint on the argument type.",
             "Corresponds to Haskell's even :: Integral a => a -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.even.testsDivisibilityByTwo",
+              "kind": "requirement",
+              "statement": "even returns true exactly when the argument is divisible by 2, for every integral type, including at the signed-integer minimum value and for negative values (parity is preserved under two's-complement wraparound)."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
           "parameters": [{"name": "x", "description": "the value to test for evenness", "type": {"variable": "x"}, "isLazy": false}],
@@ -379,7 +503,15 @@
             "The exponential function: exp(x) = e^x. exp(ଐ) = 1; exp(-∞) = +0; exp(+∞) = +∞; exp(NaN) is NaN. Large positive arguments overflow to +∞; large negative arguments underflow to +0.",
             "Corresponds to the IEEE 754 ੹.2 exp operation and to Haskell's exp :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.exp.exponentialFunctionBaseE",
+              "kind": "requirement",
+              "statement": "exp(x) returns e^x, correctly rounded, for finite x."},
+            {
+              "name": "hydra.core.lib.math.exp.saturatesAtInfinityNanPropagates",
+              "kind": "requirement",
+              "statement": "exp(-Infinity) underflows to +0; exp(+Infinity) is +Infinity; exp(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the exponent", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -396,7 +528,15 @@
             "Note that the return type is float64, not an integer type, so the result can exceed the integer range.",
             "Corresponds to Haskell's fromIntegral . floor :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.floor.roundsTowardNegativeInfinityAsFloat",
+              "kind": "requirement",
+              "statement": "floor returns the largest integer value not greater than the argument, as a float64."},
+            {
+              "name": "hydra.core.lib.math.floor.ieeeSpecialValuesPassThrough",
+              "kind": "requirement",
+              "statement": "floor of +-Infinity or NaN passes the value through unchanged."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -417,7 +557,15 @@
             "The natural (base-e) logarithm. log(1) = +0; log(+0) = log(-0) = -∞ (with division-by-zero exception in IEEE 754); log(x) for x < 0 is NaN (with invalid-operation exception); log(+∞) = +∞; log(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 log operation and to Haskell's log :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.log.naturalLogarithmOnPositiveDomain",
+              "kind": "requirement",
+              "statement": "log returns the natural (base-e) logarithm, correctly rounded, for positive finite arguments."},
+            {
+              "name": "hydra.core.lib.math.log.boundaryIsNegativeInfinityNegativeIsNan",
+              "kind": "requirement",
+              "statement": "log of zero (either sign) is -Infinity; log of a negative argument is NaN; log(+Infinity) is +Infinity; log(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -439,7 +587,15 @@
             "Inherits the special-case behavior of log for each argument (NaN propagation, sign of zeros, division by zero on log of a zero, NaN on negative arguments).",
             "Corresponds to Haskell's logBase :: Double -> Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.logBase.logarithmInArbitraryBase",
+              "kind": "requirement",
+              "statement": "logBase(b, x) computes the logarithm of x in base b, equivalent to log(x) / log(b), for positive finite b and x."},
+            {
+              "name": "hydra.core.lib.math.logBase.inheritsLogsSpecialCaseBehaviorInEachArgument",
+              "kind": "requirement",
+              "statement": "logBase inherits the special-case behavior of log independently in each argument position: a zero or negative x yields -Infinity/NaN respectively (per log's own rule), a non-positive base yields NaN, and NaN/+-Infinity in either argument propagate per log's own special-value rules."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -463,7 +619,15 @@
             "Requires an 'integral' type-class constraint on the argument type.",
             "Corresponds to Haskell's mod :: Integral a => a -> a -> a, wrapped in maybe to make the zero-divisor case total."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.mod.flooredRemainderSignFollowsDivisor",
+              "kind": "requirement",
+              "statement": "mod returns the integer remainder of floored division, wrapped, whose sign matches the sign of the divisor (Knuth-style floor division), for every integral type, when the divisor is non-zero."},
+            {
+              "name": "hydra.core.lib.math.mod.noneOnZeroDivisor",
+              "kind": "requirement",
+              "statement": "mod is none when the divisor is zero, for every integral type; at a fixed-width signed integer type's boundary case (minimum value divided by -1), the result is zero (no overflow -- the quotient's overflow is absorbed by div, not mod)."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
           "parameters": [
@@ -482,7 +646,15 @@
             "Requires a 'numeric' type-class constraint on the argument type.",
             "The operation is total. Corresponds to Haskell's (*) :: Num a => a -> a -> a."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.mul.wrapsOrRoundsPerType",
+              "kind": "requirement",
+              "statement": "mul computes the product of two values of a numeric type per that type's own arithmetic: two's-complement wraparound for fixed-width integers, arbitrary precision for bigint, IEEE 754 round-to-nearest for floating-point -- and dispatches correctly regardless of which numeric type is supplied at the call site."},
+            {
+              "name": "hydra.core.lib.math.mul.boundaryWraparoundAndIeeeSpecialValues",
+              "kind": "requirement",
+              "statement": "mul wraps silently at every fixed-width integer type's boundary; mul on bigint beyond int64/uint64 range remains exact; mul on float64/float32 follows IEEE 754 special-value rules (zero times infinity is NaN, any NaN operand yields NaN, sign of the result is the XOR of operand signs, results underflow to signed zero or overflow to signed infinity when out of representable range)."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [
@@ -503,7 +675,11 @@
             "Deprecated since 0.18. Use: hydra.core.lib.math.mul."],
           "seeAlso": [],
           "lifecycle": {"deprecatedSince": "0.18"},
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.mulFloat64.multipliesFloat64Values",
+              "kind": "requirement",
+              "statement": "mulFloat64 computes the IEEE 754 binary64 product of its two arguments."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -522,7 +698,15 @@
             "Requires a 'numeric' type-class constraint on the argument type.",
             "Corresponds to Haskell's negate :: Num a => a -> a."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.negate.arithmeticNegationPerType",
+              "kind": "requirement",
+              "statement": "negate returns the arithmetic inverse of its argument per the argument's numeric type: two's-complement negation for fixed-width integers, sign-bit flip for floating-point, arbitrary precision for bigint -- and dispatches correctly regardless of which numeric type is supplied at the call site."},
+            {
+              "name": "hydra.core.lib.math.negate.boundaryAndIeeeSpecialValues",
+              "kind": "requirement",
+              "statement": "negate at a signed fixed-width integer type's minimum value wraps to itself (not representable as its positive magnitude); negate on bigint beyond int64 range remains exact; negate on float64/float32 flips the sign of zero and of infinity, and preserves NaN."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
@@ -540,7 +724,11 @@
             "Deprecated since 0.18. Use: hydra.core.lib.math.negate."],
           "seeAlso": [],
           "lifecycle": {"deprecatedSince": "0.18"},
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.negateFloat64.negatesFloat64Values",
+              "kind": "requirement",
+              "statement": "negateFloat64 flips the sign of its float64 argument, including zero."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the value to negate", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -557,7 +745,11 @@
             "Total on all integral inputs including negative numbers and signed minBound. Requires an 'integral' type-class constraint on the argument type.",
             "Corresponds to Haskell's odd :: Integral a => a -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.odd.testsNonDivisibilityByTwo",
+              "kind": "requirement",
+              "statement": "odd returns true exactly when the argument is not divisible by 2, for every integral type, including at the signed-integer minimum value and for negative values."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
           "parameters": [{"name": "x", "description": "the value to test for oddness", "type": {"variable": "x"}, "isLazy": false}],
@@ -580,7 +772,11 @@
             "The mathematical constant π ≈ 3.141592653589793, the ratio of a circle's circumference to its diameter, as the nearest representable float64.",
             "Corresponds to Haskell's pi :: Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.pi.isPiConstant",
+              "kind": "requirement",
+              "statement": "pi is the float64 value nearest to the mathematical constant pi."}]},
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -594,7 +790,15 @@
             "Follows the IEEE 754 ੹.2 pow operation: pow(ଐ, y) for y < 0 is ±∞ (with division-by-zero exception); pow(ଐ, y) for y > 0 is ଐ if y is an odd integer, else +0; pow(1, y) = 1 for any y including NaN; pow(x, ଐ) = 1 for any x including NaN; pow(x, y) for negative x and non-integer y is NaN (with invalid-operation exception); pow(±∞, y) follows the limits in the usual way. Otherwise the result is x^y rounded to the nearest representable float64.",
             "Corresponds to Haskell's (**) :: Double -> Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.pow.exponentiationForFiniteArguments",
+              "kind": "requirement",
+              "statement": "pow(x, y) = x^y, correctly rounded, for finite x and y within pow's defined domain."},
+            {
+              "name": "hydra.core.lib.math.pow.ieeeSpecialValueMatrix",
+              "kind": "requirement",
+              "statement": "pow follows the IEEE 754 9.2 special-value table: 0^0 = 1; 0 raised to a negative exponent is +Infinity; a negative base raised to a non-integer exponent is NaN; 1 raised to any exponent (including NaN) is 1; any base raised to an exponent of 0 (including NaN) is 1; and NaN/+-Infinity in either argument otherwise follow the documented limit behavior."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -612,7 +816,15 @@
             "range(a, b) returns the list [a, a+1, ..., b-1]. The range is inclusive of the lower bound and exclusive of the upper bound; if a >= b the result is the empty list (i.e. the range does not count downward, and an empty range is the natural result of equal bounds). The length of the result is max(0, b - a).",
             "Does not directly correspond to Haskell's enumFromTo :: Int32 -> Int32 -> [Int32] (which is inclusive of both bounds, i.e. [a..b]); range(a, b) is equivalent to [a .. b-1]. This matches the half-open convention of Python's range, Rust's a..b, Go, and Java's IntStream.range."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.range.generatesHalfOpenAscendingSequence",
+              "kind": "requirement",
+              "statement": "range(a, b) returns the list [a, a+1, ..., b-1] -- inclusive of the lower bound and exclusive of the upper bound, with length max(0, b-a)."},
+            {
+              "name": "hydra.core.lib.math.range.emptyWhenBoundsEqualOrDescending",
+              "kind": "requirement",
+              "statement": "range(a, b) is the empty list whenever a >= b, including equal bounds and descending bounds -- the range never counts downward."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -641,7 +853,15 @@
             "Requires an 'integral' type-class constraint on the argument type.",
             "Corresponds to Haskell's rem :: Integral a => a -> a -> a, wrapped in maybe to make the zero-divisor case total."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.rem.truncatedRemainderSignFollowsDividend",
+              "kind": "requirement",
+              "statement": "rem returns the integer remainder of truncated division (toward zero), wrapped, whose sign matches the sign of the dividend (C-style remainder), for every integral type, when the divisor is non-zero."},
+            {
+              "name": "hydra.core.lib.math.rem.noneOnZeroDivisorNoOverflowAtMinBound",
+              "kind": "requirement",
+              "statement": "rem is none when the divisor is zero, for every integral type; at a fixed-width signed integer type's boundary case (minimum value divided by -1), the result is zero (no overflow -- the quotient's overflow is absorbed by div, not rem)."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
           "parameters": [
@@ -660,7 +880,15 @@
             "Note that the return type is float64, not an integer type, so the result can exceed the integer range.",
             "Corresponds to Haskell's fromIntegral . round :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.round.roundsToNearestTiesToEvenAsFloat",
+              "kind": "requirement",
+              "statement": "round returns the nearest integer value as a float64, with ties rounded to the nearest even integer (banker's rounding)."},
+            {
+              "name": "hydra.core.lib.math.round.ieeeSpecialValuesPassThrough",
+              "kind": "requirement",
+              "statement": "round of +-Infinity or NaN passes the value through unchanged."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -682,7 +910,15 @@
             "Special values pass through: roundFloat32(n, ଐ) = ଐ; roundFloat32(n, ±∞) = ±∞; roundFloat32(n, NaN) is NaN.",
             "Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.roundFloat32.roundsToGivenDecimalPlacesHalfToEven",
+              "kind": "requirement",
+              "statement": "roundFloat32(n, x) rounds the float32 value x to n decimal places using round-half-to-even, returning the nearest representable float32."},
+            {
+              "name": "hydra.core.lib.math.roundFloat32.specialValuesPassThroughUnrounded",
+              "kind": "requirement",
+              "statement": "roundFloat32 passes NaN and +-Infinity through unrounded, regardless of the requested decimal-place count."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -705,7 +941,15 @@
             "Special values pass through: roundFloat64(n, ଐ) = ଐ; roundFloat64(n, ±∞) = ±∞; roundFloat64(n, NaN) is NaN.",
             "Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.roundFloat64.roundsToGivenDecimalPlacesHalfToEven",
+              "kind": "requirement",
+              "statement": "roundFloat64(n, x) rounds the float64 value x to n decimal places using round-half-to-even, returning the nearest representable float64."},
+            {
+              "name": "hydra.core.lib.math.roundFloat64.specialValuesPassThroughUnrounded",
+              "kind": "requirement",
+              "statement": "roundFloat64 passes NaN and +-Infinity through unrounded, regardless of the requested decimal-place count."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -729,7 +973,15 @@
             "Requires a 'numeric' type-class constraint on the argument type.",
             "Corresponds to Haskell's signum :: Num a => a -> a."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.signum.signPerType",
+              "kind": "requirement",
+              "statement": "signum returns the sign of its argument per the argument's numeric type: -1/0/1 (same width) for integers, +-1.0 for nonzero finite or infinite floats -- satisfying abs(x) * signum(x) = x for every integer instance except signed minBound."},
+            {
+              "name": "hydra.core.lib.math.signum.preservesSignedZeroAndNan",
+              "kind": "requirement",
+              "statement": "signum of signed zero returns that same signed zero (not collapsed to a single zero), and signum(NaN) is NaN -- a naive positive/negative/else-zero branch implementation gets both of these cases wrong and must not be used."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
@@ -745,7 +997,15 @@
             "Sine of an angle in radians, correctly rounded for finite arguments. The result is in [-1, +1]; sin(ଐ) = ଐ; sin(±∞) is NaN (with invalid-operation exception in IEEE 754); sin(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 sin operation and to Haskell's sin :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.sin.sineOfAngleInRadians",
+              "kind": "requirement",
+              "statement": "sin returns the sine of an angle in radians, correctly rounded for finite arguments, in the range [-1, +1]."},
+            {
+              "name": "hydra.core.lib.math.sin.undefinedAtInfinityNanPropagates",
+              "kind": "requirement",
+              "statement": "sin of +-Infinity is NaN (not a finite oscillation); sin(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the angle in radians", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -761,7 +1021,15 @@
             "Hyperbolic sine. sinh(ଐ) = ଐ; sinh(±∞) = ±∞; sinh(NaN) is NaN. Large-magnitude arguments overflow to ±∞.",
             "Corresponds to the IEEE 754 ੹.2 sinh operation and to Haskell's sinh :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.sinh.hyperbolicSineDefinedForAllFiniteReals",
+              "kind": "requirement",
+              "statement": "sinh returns the hyperbolic sine, defined for every finite real argument."},
+            {
+              "name": "hydra.core.lib.math.sinh.oddSymmetryAtInfinityNanPropagates",
+              "kind": "requirement",
+              "statement": "sinh(+-Infinity) is +-Infinity respectively; sinh(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -783,7 +1051,15 @@
             "sqrt(+0) = +0; sqrt(-0) = -0 (sign preserved); sqrt(x) for x < 0 (including -∞) is NaN (with invalid-operation exception); sqrt(+∞) = +∞; sqrt(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੵ.4.1 squareRoot operation and to Haskell's sqrt :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.sqrt.nonnegativeSquareRootOnNonnegativeDomain",
+              "kind": "requirement",
+              "statement": "sqrt returns the non-negative, correctly-rounded square root for non-negative finite arguments."},
+            {
+              "name": "hydra.core.lib.math.sqrt.preservesSignOfZeroNegativeIsNan",
+              "kind": "requirement",
+              "statement": "sqrt(-0) is -0 (sign preserved, distinct from sqrt(+0) = +0); sqrt of a negative argument (including -Infinity) is NaN; sqrt(+Infinity) is +Infinity; sqrt(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -805,7 +1081,15 @@
             "Requires a 'numeric' type-class constraint on the argument type.",
             "The operation is total. Corresponds to Haskell's (-) :: Num a => a -> a -> a."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.sub.wrapsOrRoundsPerType",
+              "kind": "requirement",
+              "statement": "sub computes the difference of two values of a numeric type per that type's own arithmetic: two's-complement wraparound for fixed-width integers, arbitrary precision for bigint, IEEE 754 round-to-nearest for floating-point -- and dispatches correctly regardless of which numeric type is supplied at the call site."},
+            {
+              "name": "hydra.core.lib.math.sub.boundaryWraparoundAndIeeeSpecialValues",
+              "kind": "requirement",
+              "statement": "sub wraps silently at every fixed-width integer type's boundary; sub on bigint beyond int64/uint64 range remains exact; sub on float64/float32 follows IEEE 754 special-value rules (subtracting same-sign infinities or any NaN operand yields NaN, the difference of two equal finite values is +0, ties round to even)."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [
@@ -826,7 +1110,11 @@
             "Deprecated since 0.18. Use: hydra.core.lib.math.sub."],
           "seeAlso": [],
           "lifecycle": {"deprecatedSince": "0.18"},
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.subFloat64.subtractsFloat64Values",
+              "kind": "requirement",
+              "statement": "subFloat64 computes the IEEE 754 binary64 difference of its two arguments."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -844,7 +1132,15 @@
             "Tangent of an angle in radians, correctly rounded for finite arguments. tan(ଐ) = ଐ; near odd multiples of π/2 the result has large magnitude but remains finite (no exception is raised); tan(±∞) is NaN (with invalid-operation exception in IEEE 754); tan(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 tan operation and to Haskell's tan :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.tan.tangentOfAngleInRadians",
+              "kind": "requirement",
+              "statement": "tan returns the tangent of an angle in radians, correctly rounded for finite arguments; near odd multiples of pi/2 the result has large magnitude but remains finite (no exception is raised)."},
+            {
+              "name": "hydra.core.lib.math.tan.undefinedAtInfinityNanPropagates",
+              "kind": "requirement",
+              "statement": "tan of +-Infinity is NaN; tan(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the angle in radians", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -860,7 +1156,15 @@
             "Hyperbolic tangent. The result is in [-1, +1]; tanh(ଐ) = ଐ; tanh(±∞) = ଑; tanh(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 tanh operation and to Haskell's tanh :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.tanh.hyperbolicTangentInRangeNegOneToOne",
+              "kind": "requirement",
+              "statement": "tanh returns the hyperbolic tangent, in (-1, +1), for any finite real argument."},
+            {
+              "name": "hydra.core.lib.math.tanh.saturatesAtInfinityNanPropagates",
+              "kind": "requirement",
+              "statement": "tanh(+-Infinity) saturates to +-1 respectively; tanh(NaN) is NaN."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -882,7 +1186,15 @@
             "Note that the return type is float64, not an integer type, so the result can exceed the integer range.",
             "Corresponds to Haskell's fromIntegral . truncate :: Double -> Double."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.math.truncate.roundsTowardZeroAsFloat",
+              "kind": "requirement",
+              "statement": "truncate returns the argument with its fractional part discarded (rounded toward zero), as a float64, preserving the sign of the argument."},
+            {
+              "name": "hydra.core.lib.math.truncate.ieeeSpecialValuesPassThrough",
+              "kind": "requirement",
+              "statement": "truncate of +-Infinity or NaN passes the value through unchanged."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [

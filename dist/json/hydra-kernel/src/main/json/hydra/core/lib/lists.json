@@ -44,7 +44,15 @@
             "Equivalent to the applicative list instance.",
             "Total. Corresponds to Haskell's (<*>) :: [a -> b] -> [a] -> [b]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.apply.sequentialComposition",
+              "kind": "requirement",
+              "statement": "apply threads the input list through every function in the function list in order, concatenating each function's output."},
+            {
+              "name": "hydra.core.lib.lists.apply.identityCases",
+              "kind": "requirement",
+              "statement": "apply with an empty function list, or an empty input list, or a single function/input, degrades correctly: zero functions or zero inputs yields an empty result; one of either acts as a direct map."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -70,7 +78,15 @@
             "at(i, xs) returns Just(xs[i]) if 0 <= i < length(xs), or Nothing otherwise.",
             "Total. Wraps the Haskell (!!) operator, which is partial, in maybe to make out-of-bounds total."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.at.returnsElementAtIndex",
+              "kind": "requirement",
+              "statement": "at returns the element at the given zero-based index, wrapped, for any valid index including the first and last."},
+            {
+              "name": "hydra.core.lib.lists.at.noneWhenOutOfRange",
+              "kind": "requirement",
+              "statement": "at returns none when the index is negative, at or beyond the list's length, or when the list is empty."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -88,7 +104,15 @@
             "bind(xs, f) applies f to each element of xs and concatenates the resulting lists in order. Equivalent to concatMap.",
             "Total. Corresponds to Haskell's (>>=) :: [a] -> (a -> [b]) -> [b]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.bind.flatMapsOverElements",
+              "kind": "requirement",
+              "statement": "bind applies a list-producing function to each element and concatenates the results, in order, including when the function returns duplicate or negative values."},
+            {
+              "name": "hydra.core.lib.lists.bind.emptyInput",
+              "kind": "requirement",
+              "statement": "bind over an empty list is the empty list, regardless of the function supplied."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -165,7 +189,15 @@
             "concat(xss) returns the list obtained by appending all the lists in xss in order.",
             "Total. Corresponds to Haskell's concat :: [[a]] -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.concat.flattensPreservingOrder",
+              "kind": "requirement",
+              "statement": "concat flattens a list of lists into a single list, preserving element order within and across the constituent lists."},
+            {
+              "name": "hydra.core.lib.lists.concat.emptyInputs",
+              "kind": "requirement",
+              "statement": "concat of a list of lists in which every list is empty, or of an empty list of lists, is the empty list."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -184,7 +216,15 @@
           "description": "Concatenate two lists.",
           "comments": ["concat2(xs, ys) returns xs with ys appended.", "Total. Corresponds to Haskell's (++) :: [a] -> [a] -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.concat2.appendsPreservingOrder",
+              "kind": "requirement",
+              "statement": "concat2 appends its second list argument to its first, preserving the order of both, for both numeric and string element types."},
+            {
+              "name": "hydra.core.lib.lists.concat2.identityOnEmpty",
+              "kind": "requirement",
+              "statement": "concat2 with either or both arguments empty returns the other argument unchanged (the empty list is the identity element)."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -202,7 +242,11 @@
             "cons(x, xs) returns a list whose head is x and whose tail is xs.",
             "Total. Corresponds to Haskell's (:) :: a -> [a] -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.cons.prependsElement",
+              "kind": "requirement",
+              "statement": "cons prepends its first argument to the front of its second argument (the list), for empty and non-empty lists, any element type, and any value including negative numbers."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -221,7 +265,15 @@
             "Requires an 'equality' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.List.nub :: Eq a => [a] -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.distinct.removesDuplicatesPreservingFirstOccurrence",
+              "kind": "requirement",
+              "statement": "distinct removes repeated elements, keeping only the first occurrence of each distinct value and preserving the relative order of the survivors, for numeric and string element types."},
+            {
+              "name": "hydra.core.lib.lists.distinct.emptyInput",
+              "kind": "requirement",
+              "statement": "distinct of an empty list is the empty list."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
           "parameters": [{"name": "xs", "description": "the list to deduplicate", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -237,7 +289,15 @@
             "drop(n, xs) returns the suffix of xs after dropping the first n elements; if n is greater than or equal to length(xs) the result is the empty list; if n is non-positive the result is xs unchanged.",
             "Total. Corresponds to Haskell's drop :: Int -> [a] -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.drop.dropsFromFront",
+              "kind": "requirement",
+              "statement": "drop n removes the first n elements from the front of the list, or all elements if n is greater than or equal to the list's length."},
+            {
+              "name": "hydra.core.lib.lists.drop.nonPositiveIsIdentity",
+              "kind": "requirement",
+              "statement": "drop with n equal to zero or negative returns the list unchanged."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -259,7 +319,11 @@
             "dropWhile(p, xs) returns the suffix of xs starting at the first element for which p returns false. If p is true for every element, the result is the empty list.",
             "Total. Corresponds to Haskell's dropWhile :: (a -> Bool) -> [a] -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.dropWhile.dropsLeadingMatches",
+              "kind": "requirement",
+              "statement": "dropWhile removes elements from the front of the list for as long as the predicate holds, stopping at (and keeping) the first element for which it does not; an empty list, a predicate matching no elements, or a predicate matching every element are each handled correctly as boundary cases."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -294,7 +358,15 @@
             "filter(p, xs) returns the list of elements x in xs for which p(x) is true, in original order.",
             "Total. Corresponds to Haskell's filter :: (a -> Bool) -> [a] -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.filter.keepsMatchingElements",
+              "kind": "requirement",
+              "statement": "filter returns the sublist of elements satisfying the predicate, preserving their relative order, whether the predicate matches some, all, or none of the elements."},
+            {
+              "name": "hydra.core.lib.lists.filter.emptyInput",
+              "kind": "requirement",
+              "statement": "filter over an empty list is the empty list, regardless of the predicate."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -350,7 +422,15 @@
             "find(p, xs) returns Just(x) where x is the first element of xs for which p(x) is true, or Nothing if no such element exists.",
             "Total. Corresponds to Haskell's find :: (a -> Bool) -> [a] -> Maybe a."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.find.returnsFirstMatch",
+              "kind": "requirement",
+              "statement": "find returns the first element (wrapped) satisfying the predicate, scanning in list order."},
+            {
+              "name": "hydra.core.lib.lists.find.noneWhenNoMatchOrEmpty",
+              "kind": "requirement",
+              "statement": "find returns none when no element satisfies the predicate, including when the list is empty."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -431,7 +511,15 @@
             "Strict in the accumulator on hosts where laziness would otherwise leak space.",
             "Total on finite inputs. Corresponds to Haskell's foldl' :: (b -> a -> b) -> b -> [a] -> b."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.foldl.appliesLeftAssociatively",
+              "kind": "requirement",
+              "statement": "foldl combines the accumulator with each element left-to-right using the given binary operation, so order-sensitive operations (e.g. subtraction) reflect strict left associativity."},
+            {
+              "name": "hydra.core.lib.lists.foldl.emptyListReturnsAccumulator",
+              "kind": "requirement",
+              "statement": "foldl over an empty list returns the initial accumulator unchanged."}]},
         "signature": {
           "typeParameters": [{"name": "y", "constraints": []}, {"name": "x", "constraints": []}],
           "parameters": [
@@ -455,7 +543,15 @@
             "foldr(f, acc0, xs) reduces xs right-associatively: foldr(f, acc0, [x1, ..., xn]) = f(x1, f(x2, ..., f(xn, acc0))). For the empty list the result is acc0.",
             "Total on finite inputs. Corresponds to Haskell's foldr :: (a -> b -> b) -> b -> [a] -> b."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.foldr.appliesRightAssociatively",
+              "kind": "requirement",
+              "statement": "foldr combines each element with the accumulator right-to-left using the given binary operation, so order-sensitive operations (e.g. subtraction) reflect strict right associativity, and differ from the equivalent foldl where the operation is non-commutative."},
+            {
+              "name": "hydra.core.lib.lists.foldr.emptyListReturnsAccumulator",
+              "kind": "requirement",
+              "statement": "foldr over an empty list returns the initial accumulator unchanged."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -480,7 +576,15 @@
             "Equality is determined by the element type's 'equality' constraint.",
             "Total. Corresponds to Haskell's Data.List.group :: Eq a => [a] -> [[a]]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.group.groupsConsecutiveDuplicates",
+              "kind": "requirement",
+              "statement": "group partitions the list into maximal runs of consecutive equal elements, preserving overall order; non-adjacent duplicates (e.g. [1,1,2,2,2,3,1]) are not merged into the same run."},
+            {
+              "name": "hydra.core.lib.lists.group.emptyInput",
+              "kind": "requirement",
+              "statement": "group of an empty list is the empty list."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
           "parameters": [{"name": "xs", "description": "the list to group", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -496,7 +600,15 @@
             "head(xs) returns Just(x) where x is the first element of xs, or Nothing if xs is empty.",
             "Total. Wraps Haskell's partial head in maybe."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.head.returnsFirstElement",
+              "kind": "requirement",
+              "statement": "head returns the first element of a non-empty list, wrapped, for any element type."},
+            {
+              "name": "hydra.core.lib.lists.head.noneWhenEmpty",
+              "kind": "requirement",
+              "statement": "head of an empty list is none, for any element type."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "xs", "description": "the list to take the head of", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -512,7 +624,15 @@
             "init(xs) returns Just(ys) where ys is xs with its last element removed, or Nothing if xs is empty.",
             "Total. Wraps Haskell's partial init in maybe."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.init.returnsAllButLast",
+              "kind": "requirement",
+              "statement": "init returns all elements of a non-empty list except the last, wrapped, including the empty list when the input has exactly one element."},
+            {
+              "name": "hydra.core.lib.lists.init.noneWhenEmpty",
+              "kind": "requirement",
+              "statement": "init of an empty list is none."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -533,7 +653,15 @@
             "intersperse(sep, xs) returns xs with sep inserted between each pair of adjacent elements; for lists of length 0 or 1 the input is returned unchanged.",
             "Total. Corresponds to Haskell's intersperse :: a -> [a] -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.intersperse.insertsElementBetweenItems",
+              "kind": "requirement",
+              "statement": "intersperse inserts a copy of the given element between each pair of adjacent elements of the list (not before the first or after the last), for string and numeric element types."},
+            {
+              "name": "hydra.core.lib.lists.intersperse.noInsertionBelowTwoElements",
+              "kind": "requirement",
+              "statement": "intersperse on a list of zero or one elements returns the list unchanged -- there are no adjacent pairs to separate."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -549,7 +677,11 @@
           "description": "Test whether a list is empty.",
           "comments": ["isEmpty(xs) returns true iff xs is the empty list.", "Total. Corresponds to Haskell's null :: [a] -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.isEmpty.testsZeroLength",
+              "kind": "requirement",
+              "statement": "isEmpty returns true exactly when the list has no elements, for any element type."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "xs", "description": "the list to test", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -565,7 +697,15 @@
             "join(sep, xss) returns the concatenation of xss with sep inserted between consecutive lists. Equivalent to concat(intersperse(sep, xss)).",
             "Total. Corresponds to Haskell's intercalate :: [a] -> [[a]] -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.join.insertsSeparatorBetweenLists",
+              "kind": "requirement",
+              "statement": "join concatenates a list of lists with a copy of the separator list inserted between each pair of adjacent lists (not before the first or after the last), for separators of any length including empty, and skips the separator insertion where it has no visible effect (a single list, or lists containing empty lists)."},
+            {
+              "name": "hydra.core.lib.lists.join.emptyListOfLists",
+              "kind": "requirement",
+              "statement": "join of an empty list of lists is the empty list, regardless of the separator."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -587,7 +727,15 @@
             "last(xs) returns Just(x) where x is the last element of xs, or Nothing if xs is empty.",
             "Total. Wraps Haskell's partial last in maybe."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.last.returnsLastElement",
+              "kind": "requirement",
+              "statement": "last returns the final element of a non-empty list, wrapped, for any element type."},
+            {
+              "name": "hydra.core.lib.lists.last.noneWhenEmpty",
+              "kind": "requirement",
+              "statement": "last of an empty list is none."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -609,7 +757,11 @@
             "Total on finite inputs; the int32 result overflows for lists longer than 2^31-1 elements.",
             "Corresponds to Haskell's length :: [a] -> Int (with narrowing to Int32)."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.length.countsElements",
+              "kind": "requirement",
+              "statement": "length returns the number of elements in the list, for any element type, including zero for the empty list."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "xs", "description": "the list to measure", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -625,7 +777,15 @@
             "map(f, xs) returns the list of f(x) for each x in xs, in original order.",
             "Total. Corresponds to Haskell's map :: (a -> b) -> [a] -> [b] / fmap on lists."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.map.appliesFunctionElementwise",
+              "kind": "requirement",
+              "statement": "map applies the given function to each element of the list in place, preserving list order and length, for any element and function."},
+            {
+              "name": "hydra.core.lib.lists.map.identityAndEmptyCases",
+              "kind": "requirement",
+              "statement": "map with the identity function returns the list unchanged; map over an empty list is the empty list."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -716,7 +876,15 @@
             "Requires an 'equality' constraint on the element type.",
             "Total. Corresponds to Haskell's elem :: Eq a => a -> [a] -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.member.testsSetMembership",
+              "kind": "requirement",
+              "statement": "member returns true exactly when the given value occurs at least once in the list, for both numeric and string elements, including lists with duplicates."},
+            {
+              "name": "hydra.core.lib.lists.member.falseWhenAbsentOrEmpty",
+              "kind": "requirement",
+              "statement": "member returns false when the value does not occur in the list, including when the list is empty."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
           "parameters": [
@@ -734,7 +902,15 @@
             "partition(p, xs) returns a pair (yes, no) where yes is the list of elements of xs for which p is true and no is the list of elements for which p is false, each preserving original order.",
             "Total. Corresponds to Haskell's partition :: (a -> Bool) -> [a] -> ([a], [a])."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.partition.splitsBySatisfaction",
+              "kind": "requirement",
+              "statement": "partition returns a pair of (elements satisfying the predicate, elements not satisfying it), each sublist preserving the original relative order of its members."},
+            {
+              "name": "hydra.core.lib.lists.partition.boundaryCases",
+              "kind": "requirement",
+              "statement": "partition degrades correctly at the boundaries: a predicate matching every element yields (whole list, empty); matching none yields (empty, whole list); an empty input list yields (empty, empty)."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -799,7 +975,11 @@
             "replicate(n, x) returns a list of n copies of x; for n <= 0 the result is the empty list.",
             "Total. Corresponds to Haskell's replicate :: Int -> a -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.replicate.repeatsValueNTimes",
+              "kind": "requirement",
+              "statement": "replicate n x returns a list containing n copies of x, including the empty list when n is zero, for numeric and string element types."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -815,7 +995,11 @@
           "description": "Reverse a list.",
           "comments": ["reverse(xs) returns the elements of xs in reverse order.", "Total. Corresponds to Haskell's reverse :: [a] -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.reverse.reversesElementOrder",
+              "kind": "requirement",
+              "statement": "reverse returns the list with its elements in the opposite order, for any element type, including lists of zero or one elements (which are unaffected)."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "xs", "description": "the list to reverse", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -832,7 +1016,11 @@
             "The constructor for a single-element list; useful point-free (e.g. map singleton xs).",
             "Total. Corresponds to Haskell's singleton :: a -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.singleton.wrapsOneElement",
+              "kind": "requirement",
+              "statement": "singleton x returns a one-element list containing exactly x, for any value including negative numbers, zero, and strings."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "x", "description": "the value to wrap in a single-element list", "type": {"variable": "x"}, "isLazy": false}],
@@ -849,7 +1037,11 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.List.sort :: Ord a => [a] -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.sort.ordersAscending",
+              "kind": "requirement",
+              "statement": "sort returns the list's elements in ascending order under the type's natural ordering, preserving multiplicity (duplicates are kept), and leaves already-sorted or single-element lists unchanged."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [{"name": "xs", "description": "the list to sort", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -866,7 +1058,15 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.List.sortOn :: Ord b => (a -> b) -> [a] -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.sortBy.ordersByKeyFunction",
+              "kind": "requirement",
+              "statement": "sortBy returns the list ordered ascending by the natural ordering of the given key function's output, not the elements' own ordering, so the result changes with the key function (e.g. sorting strings by length, or numbers by absolute value, differs from sorting by natural value)."},
+            {
+              "name": "hydra.core.lib.lists.sortBy.boundaryInputs",
+              "kind": "requirement",
+              "statement": "sortBy on an empty or single-element list returns it unchanged, regardless of the key function."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -888,7 +1088,11 @@
             "span(p, xs) returns a pair (ys, zs) where ys is the longest prefix of xs whose elements all satisfy p, and zs is the remainder of xs starting at the first element that fails p (or zs is empty if all elements satisfy p).",
             "Total. Corresponds to Haskell's span :: (a -> Bool) -> [a] -> ([a], [a])."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.span.splitsAtFirstNonMatch",
+              "kind": "requirement",
+              "statement": "span returns a pair of (longest prefix for which the predicate holds, the remaining suffix), degrading correctly when the predicate matches every element (whole list, empty), no elements (empty, whole list), or the input is empty (empty, empty)."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -968,7 +1172,15 @@
             "tail(xs) returns Just(ys) where ys is xs with its first element removed, or Nothing if xs is empty.",
             "Total. Wraps Haskell's partial tail in maybe."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.tail.returnsAllButFirst",
+              "kind": "requirement",
+              "statement": "tail returns all elements of a non-empty list except the first, wrapped, including the empty list when the input has exactly one element."},
+            {
+              "name": "hydra.core.lib.lists.tail.noneWhenEmpty",
+              "kind": "requirement",
+              "statement": "tail of an empty list is none."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "xs", "description": "the list to take the tail of", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -984,7 +1196,15 @@
             "take(n, xs) returns the prefix of xs of length min(n, length(xs)); if n is non-positive the result is the empty list.",
             "Total. Corresponds to Haskell's take :: Int -> [a] -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.take.takesFromFront",
+              "kind": "requirement",
+              "statement": "take n returns the first n elements of the list, or the whole list if n is greater than or equal to its length."},
+            {
+              "name": "hydra.core.lib.lists.take.nonPositiveIsEmpty",
+              "kind": "requirement",
+              "statement": "take with n equal to zero or negative returns the empty list."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -1042,7 +1262,11 @@
             "transpose(xss) returns a list of lists where the i-th inner list contains the i-th element of every inner list of xss that has at least i+1 elements. Inner lists of differing lengths produce a ragged result rather than an error.",
             "Total. Corresponds to Haskell's Data.List.transpose :: [[a]] -> [[a]]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.transpose.swapsRowsAndColumns",
+              "kind": "requirement",
+              "statement": "transpose converts a list of rows into a list of columns, where column i holds the i-th element of every row that has one; rows need not be the same length (a ragged matrix is handled by omitting absent elements, not by padding or erroring), and an empty list of rows yields the empty list."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -1063,7 +1287,15 @@
             "uncons(xs) returns Just(head, tail) where head is the first element of xs and tail is the remaining list, or Nothing if xs is empty.",
             "Total. Corresponds to Haskell's Data.List.uncons :: [a] -> Maybe (a, [a])."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.uncons.splitsHeadAndTail",
+              "kind": "requirement",
+              "statement": "uncons on a non-empty list returns (wrapped) the pair of its first element and the remaining list, including when the remaining list is empty."},
+            {
+              "name": "hydra.core.lib.lists.uncons.noneWhenEmpty",
+              "kind": "requirement",
+              "statement": "uncons of an empty list is none."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "xs", "description": "the list to decompose", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -1079,7 +1311,15 @@
             "zip(xs, ys) returns the list of pairs (xs[i], ys[i]) for i from 0 to min(length(xs), length(ys))-1. The result has length equal to the shorter of the two inputs.",
             "Total. Corresponds to Haskell's zip :: [a] -> [b] -> [(a, b)]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.zip.pairsElementwise",
+              "kind": "requirement",
+              "statement": "zip combines two lists into a list of pairs by position, truncating to the length of the shorter list when the lengths differ."},
+            {
+              "name": "hydra.core.lib.lists.zip.emptyWhenEitherEmpty",
+              "kind": "requirement",
+              "statement": "zip is the empty list whenever either input list is empty."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -1097,7 +1337,15 @@
             "zipWith(f, xs, ys) returns the list of f(xs[i], ys[i]) for i from 0 to min(length(xs), length(ys))-1. The result has length equal to the shorter of the two inputs.",
             "Total. Corresponds to Haskell's zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.lists.zipWith.combinesElementwiseByFunction",
+              "kind": "requirement",
+              "statement": "zipWith combines two lists position-by-position using the given binary function, truncating to the length of the shorter list when the lengths differ, for numeric and string element/result types."},
+            {
+              "name": "hydra.core.lib.lists.zipWith.emptyWhenEitherEmpty",
+              "kind": "requirement",
+              "statement": "zipWith is the empty list whenever either input list is empty, regardless of the function."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [

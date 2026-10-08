@@ -43,7 +43,11 @@
             "sha256(bytes) returns the 32-byte SHA-256 digest of bytes. Total: hashing is pure and never fails.",
             "Pairs with hydra.core.lib.files.readFile, which returns raw bytes, to hash file contents."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.hashing.sha256.matchesKnownAnswerVectors",
+              "kind": "requirement",
+              "statement": "sha256 returns the correct 32-byte SHA-256 digest for known-answer input vectors, including the empty byte sequence."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "bytes", "description": "the sequence of bytes to hash", "type": {"literal": "binary"}, "isLazy": false}],
@@ -59,7 +63,15 @@
             "sha256Hex(bytes) returns the SHA-256 digest of bytes as a 64-character lowercase hexadecimal string. Equivalent to hex-encoding the output of sha256. Total: hashing is pure and never fails.",
             "Pairs with hydra.core.lib.files.readFile, which returns raw bytes, to hash file contents."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.hashing.sha256Hex.matchesKnownAnswerVectors",
+              "kind": "requirement",
+              "statement": "sha256Hex returns the correct 64-character lowercase hexadecimal SHA-256 digest for known-answer input vectors, including the empty byte sequence and a multi-block input."},
+            {
+              "name": "hydra.core.lib.hashing.sha256Hex.handlesPaddingBoundariesCorrectly",
+              "kind": "requirement",
+              "statement": "sha256Hex returns the correct digest at every SHA-256 message-padding boundary length (55 bytes, the largest message whose padding still fits one 64-byte block; 56 bytes, which forces a second block; and 63 and 64 bytes, straddling the block size), guarding against a padding-logic regression that would only surface at these specific lengths."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "bytes", "description": "the sequence of bytes to hash", "type": {"literal": "binary"}, "isLazy": false}],

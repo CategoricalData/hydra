@@ -44,7 +44,11 @@
             "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.",
             "Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.logic.and.trueOnlyWhenBothTrue",
+              "kind": "requirement",
+              "statement": "and(p, q) returns true exactly when both p and q are true; any false operand makes the result false."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -76,7 +80,11 @@
             "The unselected branch is not necessarily evaluated; ifElse is the standard way to express short-circuiting boolean logic and branching in Hydra.",
             "Total. Corresponds to Haskell's if/then/else."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.logic.ifElse.selectsBranchByCondition",
+              "kind": "requirement",
+              "statement": "ifElse(p, t, f) returns t when p is true and f when p is false, for any value type of t/f including booleans, integers, and strings -- the then/else branches may be of any (matching) type."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -93,7 +101,11 @@
           "description": "Compute the logical NOT of a boolean value.",
           "comments": ["not(p) returns false if p is true, or true if p is false.", "Total. Corresponds to Haskell's not :: Bool -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.logic.not.negatesBoolean",
+              "kind": "requirement",
+              "statement": "not(p) returns false when p is true and true when p is false."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "p", "description": "the boolean value to negate", "type": {"literal": "boolean"}, "isLazy": false}],
@@ -120,7 +132,11 @@
             "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.",
             "Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.logic.or.trueWhenEitherTrue",
+              "kind": "requirement",
+              "statement": "or(p, q) returns true when at least one of p and q is true; it returns false only when both are false."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [

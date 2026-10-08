@@ -109,7 +109,11 @@
             "Partially applied, const(x) is the constant function which returns x on every input.",
             "Total. Corresponds to Haskell's const :: a -> b -> a."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.functions.const.returnsFirstArgumentIgnoringSecond",
+              "kind": "requirement",
+              "statement": "const returns its first argument unchanged and ignores its second argument entirely, regardless of the second argument's type or value."}]},
         "signature": {
           "typeParameters": [{"name": "t1", "constraints": []}, {"name": "t2", "constraints": []}],
           "parameters": [
@@ -128,7 +132,11 @@
             "flip(f, x, y) = f(y, x); this defining equation is the specification.",
             "Total. Corresponds to Haskell's flip :: (a -> b -> c) -> b -> a -> c."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.functions.flip.swapsArgumentOrder",
+              "kind": "requirement",
+              "statement": "flip(f, x, y) applies f with its two arguments in reversed order, i.e. flip(f, x, y) = f(y, x)."}]},
         "signature": {
           "typeParameters": [{"name": "t1", "constraints": []}, {"name": "t2", "constraints": []}, {"name": "t3", "constraints": []}],
           "parameters": [
@@ -166,7 +174,11 @@
             "identity is the unit of compose: compose(identity, f) and compose(f, identity) are both f.",
             "Total. Corresponds to Haskell's id :: a -> a."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.functions.identity.returnsArgumentUnchanged",
+              "kind": "requirement",
+              "statement": "identity returns its argument completely unchanged, for any value."}]},
         "signature": {
           "typeParameters": [{"name": "t1", "constraints": []}],
           "parameters": [{"name": "x", "description": "the value to return unchanged", "type": {"variable": "t1"}, "isLazy": false}],
