@@ -313,13 +313,36 @@ def read_package_manifest(pkg_json_dir):
     return PackageManifest(package, main_modules, test_modules, dsl_modules, encoding_modules)
 
 
+def _fix_nested_module_paths(files):
+    """Rewrite file-per-module paths so a module that is a strict dotted prefix of
+    another generated module becomes a package (``a/b/__init__.py``) instead of a
+    plain module (``a/b.py``). Without this, Python resolves ``a.b`` to the plain
+    module, shadowing the ``a/b/`` namespace-package directory, which makes the
+    nested module (e.g. ``a.b.c``) unimportable. See #779."""
+    paths = [p for p, _ in files]
+    dir_prefixes = {os.path.dirname(p) for p in paths if os.path.dirname(p)}
+    fixed = []
+    for path, content in files:
+        if path.endswith(".py"):
+            stem = path[:-len(".py")]
+            if stem in dir_prefixes:
+                path = stem + "/__init__.py"
+        fixed.append((path, content))
+    return fixed
+
+
 def generate_sources(coder, language, do_infer,
-                     base_path, universe, modules_to_generate):
+                     base_path, universe, modules_to_generate,
+                     fix_nested_packages=False):
     """Generate source files and write them to disk.
 
     Emission flags (eta-expansion, case-hoisting, polymorphic-let-hoisting)
     are now read from ``language.supported_features`` inside
     ``generate_source_files``; the caller only supplies ``do_infer``.
+
+    ``fix_nested_packages`` applies the #779 nested-module-name workaround
+    (see ``_fix_nested_module_paths``); only file-per-module targets with
+    Python-style package semantics (currently just Python) need it.
     """
     import time as _time
     bs_graph = bootstrap_graph()
@@ -332,6 +355,8 @@ def generate_sources(coder, language, do_infer,
     files = unwrap_either(result)
     _t1 = _time.time()
     print(f"  Code generation took {_t1-_t0:.1f}s for {len(files)} files", flush=True)
+    if fix_nested_packages:
+        files = _fix_nested_module_paths(files)
     for path, content in files:
         file_path = os.path.join(base_path, path)
         if not content.endswith("\n"):
@@ -400,7 +425,8 @@ def write_python(base_path, universe, mods):
         (lambda mod, defs, cx, g: module_to_python(known_subs, mod, defs, cx, g)),
         python_language(),
         False,
-        base_path, universe, mods)
+        base_path, universe, mods,
+        fix_nested_packages=True)
 
 
 def write_haskell(base_path, universe, mods):
