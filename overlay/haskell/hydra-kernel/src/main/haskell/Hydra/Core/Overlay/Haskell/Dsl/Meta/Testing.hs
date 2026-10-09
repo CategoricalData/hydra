@@ -419,6 +419,20 @@ effectfulCaseWithTags cname tags actual expected = testCaseWithMetadata (Phantom
     retype :: TypedTerm x -> TypedTerm String
     retype (TypedTerm t) = TypedTerm t
 
+-- | As 'effectfulCase', but citing the provisions (by local segment, composed against the given
+-- primitive's own name) that this case confirms. Mirrors 'evalCaseWithProvisions' for the
+-- effectful test-case shape.
+effectfulCaseWithProvisions :: ToPrimName n => String -> [String] -> n -> TypedTerm a -> TypedTerm b -> TypedTerm TestCaseWithMetadata
+effectfulCaseWithProvisions cname localSegments prim actual expected =
+    testCaseWithMetadataAndProvisions (Phantoms.string cname)
+      (testCaseEffectful $ effectfulTestCase (retype actual) (retype expected))
+      nothing (Phantoms.list ([] :: [TypedTerm Tag])) provisions
+  where
+    pname = toPrimName prim
+    provisions = Phantoms.list $ Phantoms.nameLift . composeProvisionName pname <$> localSegments
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
 -- | Reference to the profile-aware core term validator. Used by
 -- 'validateCoreTermCase' (with 'kernelDefaultCoreProfileRef'-applied,
 -- head-extracted to preserve the legacy 'Maybe E' shape) and by

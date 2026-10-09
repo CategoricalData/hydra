@@ -144,7 +144,15 @@ mapOptional = withProvisions [
   \ applies f to the contained value and wraps the result in given."]
 
 mapSet :: PrimitiveDefinition
-mapSet = define "mapSet" "Map an effect-returning function over a set."
+mapSet = withProvisions [
+  requirement "appliesEffectReturningFunctionAndCollectsResultsAsSet"
+    "mapSet applies the effect-returning function to each element and collects the per-element\
+    \ results into a set, deduplicated by the result type's ordering.",
+  requirement "performsElementEffectsInAscendingOrderExactlyOnce"
+    "mapSet performs the element effects in ascending element order, each exactly once --\
+    \ observable via real host side effects, ruling out a host that reorders, double-runs, or\
+    \ skips an element's effect."]
+  $ define "mapSet" "Map an effect-returning function over a set."
   (sigWithParams [("f", "the effect-returning function to apply to each element"),
                   ("s", "the set to map over")]
     $ Types.polyConstrained [("x", [Name "ordering"]), ("y", [Name "ordering"])]

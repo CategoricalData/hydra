@@ -124,7 +124,12 @@ delete = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.delete :: Ord k => k -> Map k v -> Map k v."]
 
 difference :: PrimitiveDefinition
-difference = define "difference" "Compute the difference of two maps by key."
+difference = withProvisions [
+  requirement "removesBindingsWithKeysInSecondMap"
+    "difference returns the bindings of the first map whose keys do not occur in the second map.",
+  requirement "identityWhenSecondEmpty"
+    "difference with an empty second map returns the first map unchanged."]
+  $ define "difference" "Compute the difference of two maps by key."
   (ordKey [("m1", "the map whose bindings are retained"), ("m2", "the map whose keys are subtracted")]
     [("v", [])] (mp tk tv Types.~> mp tk tv Types.~> mp tk tv))
   ["difference(m1, m2) returns the map containing exactly the bindings of m1 whose keys do not appear\
@@ -255,7 +260,13 @@ insert = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.insert :: Ord k => k -> v -> Map k v -> Map k v."]
 
 intersection :: PrimitiveDefinition
-intersection = define "intersection" "Compute the intersection of two maps by key."
+intersection = withProvisions [
+  requirement "keepsBindingsWithKeysInBoth"
+    "intersection returns the bindings of the first map whose keys also occur in the second map,\
+    \ taking the value from the first map on each common key.",
+  requirement "emptyWhenNoOverlapOrEitherEmpty"
+    "intersection is the empty map when the two maps share no keys, or when either map is empty."]
+  $ define "intersection" "Compute the intersection of two maps by key."
   (ordKey [("m1", "the map whose bindings are retained"), ("m2", "the map whose key set is intersected")]
     [("v", [])] (mp tk tv Types.~> mp tk tv Types.~> mp tk tv))
   ["intersection(m1, m2) returns the map containing exactly the bindings of m1 whose keys also appear\
@@ -415,7 +426,13 @@ union = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.union :: Ord k => Map k v -> Map k v -> Map k v."]
 
 unions :: PrimitiveDefinition
-unions = define "unions" "Compute the left-biased union of a list of maps."
+unions = withProvisions [
+  requirement "earliestMapTakesPrecedence"
+    "unions returns the bindings of every map in the list; when a key occurs in more than one map,\
+    \ the binding from the earliest such map in the list is kept.",
+  requirement "emptyListOfMapsYieldsEmptyMap"
+    "unions of an empty list of maps is the empty map."]
+  $ define "unions" "Compute the left-biased union of a list of maps."
   (ordKey [("ms", "the list of maps to combine")]
     [("v", [])] (Types.list (mp tk tv) Types.~> mp tk tv))
   ["unions(ms) returns the map containing every binding of every map in ms; when a key occurs in more\
