@@ -73,11 +73,15 @@ module_ = Module {
      toDefinition checkingError,
      toDefinition decodingError,
      toDefinition error_,
+     toDefinition extractionError,
      toDefinition incorrectUnificationError,
+     toDefinition inferenceError,
      toDefinition notAForallTypeError,
      toDefinition notAFunctionTypeError,
      toDefinition otherError,
      toDefinition resolutionError,
+     toDefinition subtermPath,
+     toDefinition subtermStep,
      toDefinition typeArityMismatchError,
      toDefinition typeMismatchError,
      toDefinition unboundTypeVariablesError,
@@ -118,8 +122,8 @@ error_ = define "error" $
     _Error_decoding>>: decodingError,
     _Error_duplicateBinding>>: PrintErrorCore.duplicateBindingError,
     _Error_duplicateField>>: PrintErrorCore.duplicateFieldError,
-    _Error_extraction>>: constant $ string "extraction error",
-    _Error_inference>>: constant $ string "inference error",
+    _Error_extraction>>: extractionError,
+    _Error_inference>>: inferenceError,
     _Error_other>>: otherError,
     _Error_resolution>>: resolutionError,
     _Error_undefinedField>>: PrintErrorCore.undefinedFieldError,
@@ -129,12 +133,61 @@ error_ = define "error" $
     _Error_unexpectedTypeVariant>>: PrintErrorCore.unexpectedTypeVariantError,
     _Error_unification>>: unificationError]
 
+extractionError :: TypedTermDefinition (ExtractionError -> String)
+extractionError = define "extractionError" $
+  doc "Show an extraction error as a string" $
+  "e" ~> match _ExtractionError (var "e") Nothing [
+    _ExtractionError_emptyList>>: "_" ~>
+      string "empty list",
+    _ExtractionError_multipleBindings>>: "e" ~>
+      Strings.concat2 (string "multiple bindings with name: ")
+        (Core.unName $ project _MultipleBindingsError _MultipleBindingsError_name @@ var "e"),
+    _ExtractionError_multipleFields>>: "e" ~>
+      Strings.concat2 (string "multiple fields with name: ")
+        (Core.unName $ project _MultipleFieldsError _MultipleFieldsError_fieldName @@ var "e"),
+    _ExtractionError_noMatchingField>>: "e" ~>
+      Strings.concat2 (string "no matching field: ")
+        (Core.unName $ project _NoMatchingFieldError _NoMatchingFieldError_fieldName @@ var "e"),
+    _ExtractionError_noSuchBinding>>: "e" ~>
+      Strings.concat2 (string "no such binding: ")
+        (Core.unName $ project _NoSuchBindingError _NoSuchBindingError_name @@ var "e"),
+    _ExtractionError_notEnoughCases>>: "_" ~>
+      string "not enough cases",
+    _ExtractionError_unexpectedShape>>: "e" ~>
+      Strings.concat $ list [
+        string "unexpected shape: expected ",
+        project _UnexpectedShapeError _UnexpectedShapeError_expected @@ var "e",
+        string " but got ",
+        project _UnexpectedShapeError _UnexpectedShapeError_actual @@ var "e"]]
+
 incorrectUnificationError :: TypedTermDefinition (IncorrectUnificationError -> String)
 incorrectUnificationError = define "incorrectUnificationError" $
   doc "Show an incorrect unification error as a string" $
   "e" ~>
   "subst" <~ project _IncorrectUnificationError _IncorrectUnificationError_substitution @@ var "e" $
   Strings.concat2 (string "incorrect unification: ") (PrintTyping.typeSubst @@ var "subst")
+
+inferenceError :: TypedTermDefinition (InferenceError -> String)
+inferenceError = define "inferenceError" $
+  doc "Show an inference error as a string, including the subterm path where applicable" $
+  "e" ~> match _InferenceError (var "e") Nothing [
+    _InferenceError_checking>>: checkingError,
+    _InferenceError_other>>: "e" ~>
+      "path" <~ project _OtherInferenceError _OtherInferenceError_path @@ var "e" $
+      "msg" <~ project _OtherInferenceError _OtherInferenceError_message @@ var "e" $
+      Strings.concat $ list [
+        string "inference error at ",
+        subtermPath @@ var "path",
+        string ": ",
+        var "msg"],
+    _InferenceError_unification>>: "e" ~>
+      "path" <~ project _UnificationInferenceError _UnificationInferenceError_path @@ var "e" $
+      "cause" <~ project _UnificationInferenceError _UnificationInferenceError_cause @@ var "e" $
+      Strings.concat $ list [
+        string "inference error at ",
+        subtermPath @@ var "path",
+        string ": ",
+        unificationError @@ var "cause"]]
 
 notAForallTypeError :: TypedTermDefinition (NotAForallTypeError -> String)
 notAForallTypeError = define "notAForallTypeError" $
@@ -183,6 +236,38 @@ resolutionError = define "resolutionError" $
         project _UnexpectedShapeError _UnexpectedShapeError_expected @@ var "e",
         string " but got ",
         project _UnexpectedShapeError _UnexpectedShapeError_actual @@ var "e"]]
+
+subtermPath :: TypedTermDefinition (SubtermPath -> String)
+subtermPath = define "subtermPath" $
+  doc "Print a subterm path as its steps joined by '/'" $
+  "path" ~> Strings.join (string "/") (Lists.map (asTerm subtermStep) (unwrap _SubtermPath @@ var "path"))
+
+subtermStep :: TypedTermDefinition (SubtermStep -> String)
+subtermStep = define "subtermStep" $
+  doc "Print a subterm step in its round-trippable notation" $
+  "step" ~> match _SubtermStep (var "step") Nothing [
+    _SubtermStep_annotatedAnnotation>>: constant (string "annotatedAnnotation"),
+    _SubtermStep_annotatedBody>>: constant (string "annotatedBody"),
+    _SubtermStep_applicationArgument>>: constant (string "applicationArgument"),
+    _SubtermStep_applicationFunction>>: constant (string "applicationFunction"),
+    _SubtermStep_casesCase>>: "name" ~> Strings.concat2 (string "casesCase:") (Core.unName $ var "name"),
+    _SubtermStep_casesDefault>>: constant (string "casesDefault"),
+    _SubtermStep_eitherLeft>>: constant (string "eitherLeft"),
+    _SubtermStep_eitherRight>>: constant (string "eitherRight"),
+    _SubtermStep_injectField>>: "name" ~> Strings.concat2 (string "injectField:") (Core.unName $ var "name"),
+    _SubtermStep_lambdaBody>>: constant (string "lambdaBody"),
+    _SubtermStep_letBinding>>: "name" ~> Strings.concat2 (string "letBinding:") (Core.unName $ var "name"),
+    _SubtermStep_letBody>>: constant (string "letBody"),
+    _SubtermStep_listElement>>: "i" ~> Strings.concat2 (string "listElement:") (Literals.printInt32 $ var "i"),
+    _SubtermStep_mapEntry>>: "i" ~> Strings.concat2 (string "mapEntry:") (Literals.printInt32 $ var "i"),
+    _SubtermStep_optionalGiven>>: constant (string "optionalGiven"),
+    _SubtermStep_pairFirst>>: constant (string "pairFirst"),
+    _SubtermStep_pairSecond>>: constant (string "pairSecond"),
+    _SubtermStep_recordField>>: "name" ~> Strings.concat2 (string "recordField:") (Core.unName $ var "name"),
+    _SubtermStep_setElement>>: "i" ~> Strings.concat2 (string "setElement:") (Literals.printInt32 $ var "i"),
+    _SubtermStep_typeApplicationBody>>: constant (string "typeApplicationBody"),
+    _SubtermStep_typeLambdaBody>>: constant (string "typeLambdaBody"),
+    _SubtermStep_wrapBody>>: constant (string "wrapBody")]
 
 typeArityMismatchError :: TypedTermDefinition (TypeArityMismatchError -> String)
 typeArityMismatchError = define "typeArityMismatchError" $

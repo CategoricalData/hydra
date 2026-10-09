@@ -117,20 +117,8 @@
                           {"name": "decoding", "handler": {"variable": "hydra.core.print.errors.decodingError"}},
                           {"name": "duplicateBinding", "handler": {"variable": "hydra.core.print.error.model.duplicateBindingError"}},
                           {"name": "duplicateField", "handler": {"variable": "hydra.core.print.error.model.duplicateFieldError"}},
-                          {
-                            "name": "extraction",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "_",
-                                "domain": {"variable": "hydra.core.errors.ExtractionError"},
-                                "body": {"literal": {"string": "extraction error"}}}}},
-                          {
-                            "name": "inference",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "_",
-                                "domain": {"variable": "hydra.core.errors.InferenceError"},
-                                "body": {"literal": {"string": "inference error"}}}}},
+                          {"name": "extraction", "handler": {"variable": "hydra.core.print.errors.extractionError"}},
+                          {"name": "inference", "handler": {"variable": "hydra.core.print.errors.inferenceError"}},
                           {"name": "other", "handler": {"variable": "hydra.core.print.errors.otherError"}},
                           {"name": "resolution", "handler": {"variable": "hydra.core.print.errors.resolutionError"}},
                           {"name": "undefinedField", "handler": {"variable": "hydra.core.print.error.model.undefinedFieldError"}},
@@ -141,6 +129,135 @@
                           {"name": "unification", "handler": {"variable": "hydra.core.print.errors.unificationError"}}]}},
                     "argument": {"variable": "e"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.errors.extractionError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.errors.ExtractionError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.core.errors.ExtractionError"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.errors.ExtractionError",
+                        "cases": [
+                          {
+                            "name": "emptyList",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"variable": "hydra.core.errors.EmptyListError"},
+                                "body": {"literal": {"string": "empty list"}}}}},
+                          {
+                            "name": "multipleBindings",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "e",
+                                "domain": {"variable": "hydra.core.errors.MultipleBindingsError"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                        "argument": {"literal": {"string": "multiple bindings with name: "}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"unwrap": "hydra.core.model.Name"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.errors.MultipleBindingsError", "fieldName": "name"}},
+                                            "argument": {"variable": "e"}}}}}}}}}},
+                          {
+                            "name": "multipleFields",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "e",
+                                "domain": {"variable": "hydra.core.errors.MultipleFieldsError"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"variable": "hydra.core.lib.strings.concat2"},
+                                        "argument": {"literal": {"string": "multiple fields with name: "}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"unwrap": "hydra.core.model.Name"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.errors.MultipleFieldsError", "fieldName": "fieldName"}},
+                                            "argument": {"variable": "e"}}}}}}}}}},
+                          {
+                            "name": "noMatchingField",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "e",
+                                "domain": {"variable": "hydra.core.errors.NoMatchingFieldError"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "no matching field: "}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"unwrap": "hydra.core.model.Name"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.errors.NoMatchingFieldError", "fieldName": "fieldName"}},
+                                            "argument": {"variable": "e"}}}}}}}}}},
+                          {
+                            "name": "noSuchBinding",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "e",
+                                "domain": {"variable": "hydra.core.errors.NoSuchBindingError"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "no such binding: "}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"unwrap": "hydra.core.model.Name"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.errors.NoSuchBindingError", "fieldName": "name"}},
+                                            "argument": {"variable": "e"}}}}}}}}}},
+                          {
+                            "name": "notEnoughCases",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"variable": "hydra.core.errors.NotEnoughCasesError"},
+                                "body": {"literal": {"string": "not enough cases"}}}}},
+                          {
+                            "name": "unexpectedShape",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "e",
+                                "domain": {"variable": "hydra.core.errors.UnexpectedShapeError"},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.lib.strings.concat"},
+                                    "argument": {
+                                      "list": [
+                                        {"literal": {"string": "unexpected shape: expected "}},
+                                        {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.errors.UnexpectedShapeError", "fieldName": "expected"}},
+                                            "argument": {"variable": "e"}}},
+                                        {"literal": {"string": " but got "}},
+                                        {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.errors.UnexpectedShapeError", "fieldName": "actual"}},
+                                            "argument": {"variable": "e"}}}]}}}}}}]}},
+                    "argument": {"variable": "e"}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an extraction error as a string"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.print.errors.incorrectUnificationError",
@@ -176,6 +293,103 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Show an incorrect unification error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.errors.inferenceError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.errors.InferenceError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.core.errors.InferenceError"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.errors.InferenceError",
+                        "cases": [
+                          {"name": "checking", "handler": {"variable": "hydra.core.print.errors.checkingError"}},
+                          {
+                            "name": "other",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "e",
+                                "domain": {"variable": "hydra.core.errors.OtherInferenceError"},
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "path",
+                                        "term": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.errors.OtherInferenceError", "fieldName": "path"}},
+                                            "argument": {"variable": "e"}}},
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.paths.SubtermPath"}, "constraints": []}}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "msg",
+                                            "term": {
+                                              "application": {
+                                                "function": {"project": {"typeName": "hydra.core.errors.OtherInferenceError", "fieldName": "message"}},
+                                                "argument": {"variable": "e"}}},
+                                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                                        "body": {
+                                          "application": {
+                                            "function": {"variable": "hydra.core.lib.strings.concat"},
+                                            "argument": {
+                                              "list": [
+                                                {"literal": {"string": "inference error at "}},
+                                                {"application": {"function": {"variable": "hydra.core.print.errors.subtermPath"}, "argument": {"variable": "path"}}},
+                                                {"literal": {"string": ": "}},
+                                                {"variable": "msg"}]}}}}}}}}}},
+                          {
+                            "name": "unification",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "e",
+                                "domain": {"variable": "hydra.core.errors.UnificationInferenceError"},
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "path",
+                                        "term": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.errors.UnificationInferenceError", "fieldName": "path"}},
+                                            "argument": {"variable": "e"}}},
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.paths.SubtermPath"}, "constraints": []}}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "cause",
+                                            "term": {
+                                              "application": {
+                                                "function": {"project": {"typeName": "hydra.core.errors.UnificationInferenceError", "fieldName": "cause"}},
+                                                "argument": {"variable": "e"}}},
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.errors.UnificationError"}, "constraints": []}}],
+                                        "body": {
+                                          "application": {
+                                            "function": {"variable": "hydra.core.lib.strings.concat"},
+                                            "argument": {
+                                              "list": [
+                                                {"literal": {"string": "inference error at "}},
+                                                {"application": {"function": {"variable": "hydra.core.print.errors.subtermPath"}, "argument": {"variable": "path"}}},
+                                                {"literal": {"string": ": "}},
+                                                {
+                                                  "application": {"function": {"variable": "hydra.core.print.errors.unificationError"}, "argument": {"variable": "cause"}}}]}}}}}}}}}}]}},
+                    "argument": {"variable": "e"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an inference error as a string, including the subterm path where applicable"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.print.errors.notAForallTypeError",
@@ -391,6 +605,185 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Show a resolution error as a string, including the offending name or shape"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.errors.subtermPath",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.paths.SubtermPath"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "path",
+                "domain": {"variable": "hydra.core.paths.SubtermPath"},
+                "body": {
+                  "application": {
+                    "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "/"}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.paths.SubtermStep"}}},
+                                "type": {"literal": "string"}}},
+                            "argument": {"variable": "hydra.core.print.errors.subtermStep"}}},
+                        "argument": {"application": {"function": {"unwrap": "hydra.core.paths.SubtermPath"}, "argument": {"variable": "path"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Print a subterm path as its steps joined by '/'"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.errors.subtermStep",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.paths.SubtermStep"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "step",
+                "domain": {"variable": "hydra.core.paths.SubtermStep"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.paths.SubtermStep",
+                        "cases": [
+                          {
+                            "name": "annotatedAnnotation",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "annotatedAnnotation"}}}}},
+                          {
+                            "name": "annotatedBody",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "annotatedBody"}}}}},
+                          {
+                            "name": "applicationArgument",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "applicationArgument"}}}}},
+                          {
+                            "name": "applicationFunction",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "applicationFunction"}}}}},
+                          {
+                            "name": "casesCase",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "name",
+                                "domain": {"variable": "hydra.core.model.Name"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "casesCase:"}}}},
+                                    "argument": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "name"}}}}}}}},
+                          {
+                            "name": "casesDefault",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "casesDefault"}}}}},
+                          {
+                            "name": "eitherLeft",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "eitherLeft"}}}}},
+                          {
+                            "name": "eitherRight",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "eitherRight"}}}}},
+                          {
+                            "name": "injectField",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "name",
+                                "domain": {"variable": "hydra.core.model.Name"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "injectField:"}}}},
+                                    "argument": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "name"}}}}}}}},
+                          {
+                            "name": "lambdaBody",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "lambdaBody"}}}}},
+                          {
+                            "name": "letBinding",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "name",
+                                "domain": {"variable": "hydra.core.model.Name"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "letBinding:"}}}},
+                                    "argument": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "name"}}}}}}}},
+                          {
+                            "name": "letBody",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "letBody"}}}}},
+                          {
+                            "name": "listElement",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "i",
+                                "domain": {"literal": {"integer": "int32"}},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "listElement:"}}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "i"}}}}}}}},
+                          {
+                            "name": "mapEntry",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "i",
+                                "domain": {"literal": {"integer": "int32"}},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "mapEntry:"}}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "i"}}}}}}}},
+                          {
+                            "name": "optionalGiven",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "optionalGiven"}}}}},
+                          {
+                            "name": "pairFirst",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "pairFirst"}}}}},
+                          {
+                            "name": "pairSecond",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "pairSecond"}}}}},
+                          {
+                            "name": "recordField",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "name",
+                                "domain": {"variable": "hydra.core.model.Name"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "recordField:"}}}},
+                                    "argument": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "name"}}}}}}}},
+                          {
+                            "name": "setElement",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "i",
+                                "domain": {"literal": {"integer": "int32"}},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "setElement:"}}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "i"}}}}}}}},
+                          {
+                            "name": "typeApplicationBody",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "typeApplicationBody"}}}}},
+                          {
+                            "name": "typeLambdaBody",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "typeLambdaBody"}}}}},
+                          {
+                            "name": "wrapBody",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "wrapBody"}}}}}]}},
+                    "argument": {"variable": "step"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Print a subterm step in its round-trippable notation"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.print.errors.typeArityMismatchError",
