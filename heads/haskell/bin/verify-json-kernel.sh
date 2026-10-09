@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 # Wrapper script to verify kernel modules JSON export consistency
+#
+# NOT DEAD CODE: no automated callers by design. The documented manual "verify JSON
+# round-trips" tool, referenced by 8 docs. See docs/build-system.md § "Build & sync
+# scripts". (#714)
 
 set -e
 

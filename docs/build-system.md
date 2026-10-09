@@ -1021,6 +1021,22 @@ For slash-command shortcuts: `/sync`, `/sync-default`, `/sync-haskell`, `/sync-j
 `/sync-emacs-lisp`, `/sync-scheme`, `/sync-go`, `/sync-bench`. Each is a thin wrapper
 around the corresponding `bin/` script; see [CLAUDE.md §Shorthand commands](../CLAUDE.md#shorthand-commands).
 
+## Build & sync scripts: live entry points vs. orchestration
+
+Some scripts under `bin/` and `heads/*/bin/` have **no automated callers** yet are
+**not dead code** — they are documented manual entry points or thin presets. A periodic
+"dead script" audit (see #714) will re-flag these unless their role is recorded, so this
+table is the canonical context. Rule of thumb: **"no grep hits" ≠ dead** — check here and
+the script's own header before proposing a deletion.
+
+| Script | Callers | Why it's retained |
+|--------|---------|-------------------|
+| `heads/haskell/bin/update-json-main.sh` | none (manual) | Documented hand-regen of `dist/json` main modules — [json-kernel.md](recipes/json-kernel.md). Distinct from `/sync`, which invokes the *executable*. |
+| `heads/haskell/bin/update-json-test.sh` | none (manual) | Test-module companion to the above. |
+| `heads/haskell/bin/verify-json-kernel.sh` | none (manual) | The documented "verify JSON round-trips" tool; referenced by 8 docs. |
+| `bin/sync-all.sh` | none (manual) | Release-workflow Phase 2: exhaustive package × target regen **with tests** — a *different orchestration layer* than `bin/sync.sh` (the bootstrap matrix). No single `sync.sh` flag reproduces it. |
+| `bin/sync-<lang>.sh`, `bin/sync-default.sh` | slash commands | Thin `exec sync.sh --hosts X --targets X "$@"` presets. Argument-presets of the sync driver (per #416), not separately-maintained logic. |
+
 ## Remaining gaps
 
 ### 1. Definition-level source-dependency Merkle (A-side) — module-level resolved by #701
