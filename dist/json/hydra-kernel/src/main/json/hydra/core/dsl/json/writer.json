@@ -96,6 +96,213 @@
                   "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.colonOp"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.core.dsl.json.writer.compactColonOp",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.ast.Op"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.model.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {
+                        "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.json.writer.compactColonOp"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.compactColonOp"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.json.writer.compactCommaOp",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.ast.Op"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.model.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {
+                        "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.json.writer.compactCommaOp"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.compactCommaOp"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.json.writer.compactList",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.ast.Brackets"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"list": {"variable": "hydra.core.ast.Expr"}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.ast.Expr"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "arg0",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.ast.Brackets"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "arg1",
+                    "domain": {
+                      "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"list": {"variable": "hydra.core.ast.Expr"}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.core.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.model.Term",
+                            "field": {
+                              "name": "application",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Application",
+                                  "fields": [
+                                    {
+                                      "name": "function",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.model.Term",
+                                          "field": {
+                                            "name": "application",
+                                            "term": {
+                                              "record": {
+                                                "typeName": "hydra.core.model.Application",
+                                                "fields": [
+                                                  {
+                                                    "name": "function",
+                                                    "term": {
+                                                      "inject": {
+                                                        "typeName": "hydra.core.model.Term",
+                                                        "field": {
+                                                          "name": "variable",
+                                                          "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.json.writer.compactList"}}}}}}}},
+                                                  {
+                                                    "name": "argument",
+                                                    "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}},
+                                    {
+                                      "name": "argument",
+                                      "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg1"}}}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.compactList"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.json.writer.defaultJsonWriterOptions",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"variable": "hydra.core.json.model.JsonWriterOptions"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.model.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {
+                        "wrap": {
+                          "typeName": "hydra.core.model.Name",
+                          "body": {"literal": {"string": "hydra.core.json.writer.defaultJsonWriterOptions"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.defaultJsonWriterOptions"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.json.writer.halfBlockStyleWith",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {"variable": "hydra.core.json.model.JsonWriterOptions"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.ast.BlockStyle"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "arg0",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {"variable": "hydra.core.json.model.JsonWriterOptions"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.model.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {
+                                          "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.json.writer.halfBlockStyleWith"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.halfBlockStyleWith"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.core.dsl.json.writer.hexByte",
         "signature": {
           "typeParameters": [],
@@ -186,12 +393,23 @@
                   "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.jsonString"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.core.dsl.json.writer.keyValueToExpr",
+        "name": "hydra.core.dsl.json.writer.keyValueToExprWith",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {"variable": "hydra.core.json.model.JsonWriterOptions"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"literal": {"integer": "int32"}}}},
+              "isLazy": false},
+            {
+              "name": "arg2",
               "type": {
                 "application": {
                   "function": {"variable": "hydra.core.typed.TypedTerm"},
@@ -208,36 +426,75 @@
                 "domain": {
                   "application": {
                     "function": {"variable": "hydra.core.typed.TypedTerm"},
-                    "argument": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.core.json.model.Value"}}}}},
+                    "argument": {"variable": "hydra.core.json.model.JsonWriterOptions"}}},
                 "body": {
-                  "wrap": {
-                    "typeName": "hydra.core.typed.TypedTerm",
+                  "lambda": {
+                    "parameter": "arg1",
+                    "domain": {"application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"literal": {"integer": "int32"}}}},
                     "body": {
-                      "inject": {
-                        "typeName": "hydra.core.model.Term",
-                        "field": {
-                          "name": "application",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.model.Application",
-                              "fields": [
-                                {
-                                  "name": "function",
+                      "lambda": {
+                        "parameter": "arg2",
+                        "domain": {
+                          "application": {
+                            "function": {"variable": "hydra.core.typed.TypedTerm"},
+                            "argument": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.core.json.model.Value"}}}}},
+                        "body": {
+                          "wrap": {
+                            "typeName": "hydra.core.typed.TypedTerm",
+                            "body": {
+                              "inject": {
+                                "typeName": "hydra.core.model.Term",
+                                "field": {
+                                  "name": "application",
                                   "term": {
-                                    "inject": {
-                                      "typeName": "hydra.core.model.Term",
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.json.writer.keyValueToExpr"}}}}}}}},
-                                {
-                                  "name": "argument",
-                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}}}}},
+                                    "record": {
+                                      "typeName": "hydra.core.model.Application",
+                                      "fields": [
+                                        {
+                                          "name": "function",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.model.Term",
+                                              "field": {
+                                                "name": "application",
+                                                "term": {
+                                                  "record": {
+                                                    "typeName": "hydra.core.model.Application",
+                                                    "fields": [
+                                                      {
+                                                        "name": "function",
+                                                        "term": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.model.Term",
+                                                            "field": {
+                                                              "name": "application",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.model.Application",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "function",
+                                                                      "term": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.model.Term",
+                                                                          "field": {
+                                                                            "name": "variable",
+                                                                            "term": {
+                                                                              "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.json.writer.keyValueToExprWith"}}}}}}}},
+                                                                    {
+                                                                      "name": "argument",
+                                                                      "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}},
+                                                      {
+                                                        "name": "argument",
+                                                        "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg1"}}}}]}}}}}},
+                                        {
+                                          "name": "argument",
+                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg2"}}}}]}}}}}}}}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.keyValueToExpr"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.keyValueToExprWith"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.dsl.json.writer.printJson",
@@ -287,6 +544,204 @@
                   "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.printJson"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.core.dsl.json.writer.printJsonWith",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {"variable": "hydra.core.json.model.JsonWriterOptions"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+              "isLazy": false}],
+          "result": {"type": {"application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"literal": "string"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "arg0",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {"variable": "hydra.core.json.model.JsonWriterOptions"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "arg1",
+                    "domain": {
+                      "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.core.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.model.Term",
+                            "field": {
+                              "name": "application",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Application",
+                                  "fields": [
+                                    {
+                                      "name": "function",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.model.Term",
+                                          "field": {
+                                            "name": "application",
+                                            "term": {
+                                              "record": {
+                                                "typeName": "hydra.core.model.Application",
+                                                "fields": [
+                                                  {
+                                                    "name": "function",
+                                                    "term": {
+                                                      "inject": {
+                                                        "typeName": "hydra.core.model.Term",
+                                                        "field": {
+                                                          "name": "variable",
+                                                          "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.json.writer.printJsonWith"}}}}}}}},
+                                                  {
+                                                    "name": "argument",
+                                                    "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}},
+                                    {
+                                      "name": "argument",
+                                      "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg1"}}}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.printJsonWith"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.json.writer.styleForDepth",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {"variable": "hydra.core.json.model.JsonWriterOptions"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"literal": {"integer": "int32"}}}},
+              "isLazy": false},
+            {
+              "name": "arg2",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.ast.Expr"}}},
+              "isLazy": false},
+            {
+              "name": "arg3",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.ast.Expr"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.ast.Expr"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "arg0",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {"variable": "hydra.core.json.model.JsonWriterOptions"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "arg1",
+                    "domain": {"application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"literal": {"integer": "int32"}}}},
+                    "body": {
+                      "lambda": {
+                        "parameter": "arg2",
+                        "domain": {
+                          "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.ast.Expr"}}},
+                        "body": {
+                          "lambda": {
+                            "parameter": "arg3",
+                            "domain": {
+                              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.ast.Expr"}}},
+                            "body": {
+                              "wrap": {
+                                "typeName": "hydra.core.typed.TypedTerm",
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.core.model.Term",
+                                    "field": {
+                                      "name": "application",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.model.Application",
+                                          "fields": [
+                                            {
+                                              "name": "function",
+                                              "term": {
+                                                "inject": {
+                                                  "typeName": "hydra.core.model.Term",
+                                                  "field": {
+                                                    "name": "application",
+                                                    "term": {
+                                                      "record": {
+                                                        "typeName": "hydra.core.model.Application",
+                                                        "fields": [
+                                                          {
+                                                            "name": "function",
+                                                            "term": {
+                                                              "inject": {
+                                                                "typeName": "hydra.core.model.Term",
+                                                                "field": {
+                                                                  "name": "application",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.model.Application",
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "function",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Term",
+                                                                              "field": {
+                                                                                "name": "application",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "typeName": "hydra.core.model.Application",
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "function",
+                                                                                        "term": {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.model.Term",
+                                                                                            "field": {
+                                                                                              "name": "variable",
+                                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.json.writer.styleForDepth"}}}}}}}},
+                                                                                      {
+                                                                                        "name": "argument",
+                                                                                        "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}},
+                                                                        {
+                                                                          "name": "argument",
+                                                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg1"}}}}]}}}}}},
+                                                          {
+                                                            "name": "argument",
+                                                            "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg2"}}}}]}}}}}},
+                                            {
+                                              "name": "argument",
+                                              "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg3"}}}}]}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.styleForDepth"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.core.dsl.json.writer.valueToExpr",
         "signature": {
           "typeParameters": [],
@@ -333,4 +788,104 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.valueToExpr"}}}]}}}}}]}
+                  "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.valueToExpr"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.json.writer.valueToExprWith",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {"variable": "hydra.core.json.model.JsonWriterOptions"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"literal": {"integer": "int32"}}}},
+              "isLazy": false},
+            {
+              "name": "arg2",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.ast.Expr"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "arg0",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {"variable": "hydra.core.json.model.JsonWriterOptions"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "arg1",
+                    "domain": {"application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"literal": {"integer": "int32"}}}},
+                    "body": {
+                      "lambda": {
+                        "parameter": "arg2",
+                        "domain": {
+                          "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.json.model.Value"}}},
+                        "body": {
+                          "wrap": {
+                            "typeName": "hydra.core.typed.TypedTerm",
+                            "body": {
+                              "inject": {
+                                "typeName": "hydra.core.model.Term",
+                                "field": {
+                                  "name": "application",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.model.Application",
+                                      "fields": [
+                                        {
+                                          "name": "function",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.model.Term",
+                                              "field": {
+                                                "name": "application",
+                                                "term": {
+                                                  "record": {
+                                                    "typeName": "hydra.core.model.Application",
+                                                    "fields": [
+                                                      {
+                                                        "name": "function",
+                                                        "term": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.model.Term",
+                                                            "field": {
+                                                              "name": "application",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.model.Application",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "function",
+                                                                      "term": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.model.Term",
+                                                                          "field": {
+                                                                            "name": "variable",
+                                                                            "term": {
+                                                                              "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.json.writer.valueToExprWith"}}}}}}}},
+                                                                    {
+                                                                      "name": "argument",
+                                                                      "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}},
+                                                      {
+                                                        "name": "argument",
+                                                        "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg1"}}}}]}}}}}},
+                                        {
+                                          "name": "argument",
+                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg2"}}}}]}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.core.json.writer.valueToExprWith"}}}]}}}}}]}
