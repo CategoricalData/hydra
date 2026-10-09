@@ -25,7 +25,31 @@ module_ = Module {
             moduleMetadata = descriptionMetadata (Just "A JSON syntax model. See the BNF at https://www.json.org")}
   where
     definitions = [
+      jsonWriterOptions,
       value]
+
+jsonWriterOptions :: TypeDefinition
+jsonWriterOptions = define "JsonWriterOptions" $
+  doc "Layout options for hydra.core.json.writer.printJsonWith" $
+  T.record [
+    "compact">:
+      doc ("Whether to omit all insignificant whitespace. When true, the value is rendered "
+        ++ "on a single line with no space after ':' or ',' and the indent, maxLineWidth, and "
+        ++ "maxIndentDepth fields are ignored.") $
+      T.boolean,
+    "indent">:
+      doc "The string used to indent each level of nesting when pretty-printing" $
+      T.string,
+    "maxLineWidth">:
+      doc ("The maximum estimated line width before an object or array breaks onto multiple "
+        ++ "lines. Ignored when compact is true.") $
+      T.int32,
+    "maxIndentDepth">:
+      doc ("The nesting depth at or beyond which objects and arrays are always rendered "
+        ++ "inline, regardless of estimated width. Depth 0 is the top-level value, so "
+        ++ "maxIndentDepth = 0 renders the entire value on one line. None means no "
+        ++ "depth-based limit. Ignored when compact is true.") $
+      T.optional T.int32]
 
 value :: TypeDefinition
 value = define "Value" $

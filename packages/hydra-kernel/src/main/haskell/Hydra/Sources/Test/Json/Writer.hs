@@ -9,6 +9,7 @@ import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
 import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Literals      as Literals
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
 import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                ((@@))
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
@@ -20,7 +21,7 @@ import qualified Data.Map                     as M
 import qualified Data.Scientific              as Sci
 
 -- Additional imports specific to this module
-import Hydra.Core.Json.Model (Value)
+import Hydra.Core.Json.Model (JsonWriterOptions, Value)
 import Hydra.Core.Testing
 import qualified Hydra.Core.Dsl.Json.Model as Json
 import qualified Hydra.Sources.Json.Writer as JsonWriter
@@ -51,7 +52,8 @@ allTests = define "allTests" $
       stringsGroup,
       arraysGroup,
       objectsGroup,
-      nestedGroup]
+      nestedGroup,
+      layoutOptionsGroup]
 
 -- Local alias for polymorphic application
 
@@ -184,3 +186,96 @@ writerCaseWithTags :: String -> [Tag] -> TypedTerm Value -> String -> TypedTerm 
 writerCaseWithTags name tags jsonValue expectedStr = universalCaseWithTags name tags
   (JsonWriter.printJson @@ jsonValue)
   (Phantoms.string expectedStr)
+
+-- | A JSON writer test case which exercises printJsonWith against explicit layout options.
+writerCaseWith :: String -> TypedTerm JsonWriterOptions -> TypedTerm Value -> String -> TypedTerm TestCaseWithMetadata
+writerCaseWith name options jsonValue expectedStr = universalCaseWithTags name []
+  (JsonWriter.printJsonWith @@ options @@ jsonValue)
+  (Phantoms.string expectedStr)
+
+compactOptions :: TypedTerm JsonWriterOptions
+compactOptions = Json.jsonWriterOptions (Phantoms.boolean True) (Phantoms.string "  ") (Literals.int32 120) Phantoms.nothing
+
+-- | A narrow width (forcing a block layout) paired with a four-space indent, so the custom
+-- indent string is actually observable in the output.
+fourSpaceOptions :: TypedTerm JsonWriterOptions
+fourSpaceOptions = Json.jsonWriterOptions (Phantoms.boolean False) (Phantoms.string "    ") (Literals.int32 5) Phantoms.nothing
+
+narrowWidthOptions :: TypedTerm JsonWriterOptions
+narrowWidthOptions = Json.jsonWriterOptions (Phantoms.boolean False) (Phantoms.string "  ") (Literals.int32 5) Phantoms.nothing
+
+-- | A narrow width (which would otherwise force a block layout) paired with
+-- maxIndentDepth = 0, so the top-level value is forced inline regardless.
+maxDepthZeroOptions :: TypedTerm JsonWriterOptions
+maxDepthZeroOptions = Json.jsonWriterOptions (Phantoms.boolean False) (Phantoms.string "  ") (Literals.int32 5) (Phantoms.just $ Literals.int32 0)
+
+maxDepthOneOptions :: TypedTerm JsonWriterOptions
+maxDepthOneOptions = Json.jsonWriterOptions (Phantoms.boolean False) (Phantoms.string "  ") (Literals.int32 10) (Phantoms.just $ Literals.int32 1)
+
+layoutOptionsGroup :: TypedTerm TestGroup
+layoutOptionsGroup = subgroup "layout options" [
+    -- printJsonWith with the default-reproducing options matches printJson exactly,
+    -- across a variety of shapes (the key byte-identity regression check for #776).
+    writerCaseWith "default options match printJson: nested object with array"
+      (asTerm JsonWriter.defaultJsonWriterOptions)
+      (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "items") (Json.valueArray $ Phantoms.list [
+            Json.valueNumber $ Phantoms.decimal 1.0,
+            Json.valueNumber $ Phantoms.decimal 2.0])])
+      "{\"items\": [1, 2]}",
+
+    -- Compact mode: no space after ':' or ',', no newlines, regardless of nesting.
+    writerCaseWith "compact: empty array" compactOptions
+      (Json.valueArray $ Phantoms.list ([] :: [TypedTerm Value])) "[]",
+    writerCaseWith "compact: empty object" compactOptions
+      (Json.valueObject $ Phantoms.list ([] :: [TypedTerm (String, Value)])) "{}",
+    writerCaseWith "compact: array" compactOptions
+      (Json.valueArray $ Phantoms.list [
+        Json.valueNumber $ Phantoms.decimal 1.0,
+        Json.valueNumber $ Phantoms.decimal 2.0,
+        Json.valueNumber $ Phantoms.decimal 3.0]) "[1,2,3]",
+    writerCaseWith "compact: object" compactOptions
+      (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "a") (Json.valueNumber $ Phantoms.decimal 1.0),
+        Phantoms.pair (Phantoms.string "b") (Json.valueNumber $ Phantoms.decimal 2.0)])
+      "{\"a\":1,\"b\":2}",
+    writerCaseWith "compact: nested" compactOptions
+      (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "items") (Json.valueArray $ Phantoms.list [
+            Json.valueNumber $ Phantoms.decimal 1.0,
+            Json.valueNumber $ Phantoms.decimal 2.0])])
+      "{\"items\":[1,2]}",
+
+    -- Custom (narrow) line width forces a block layout that would stay inline by default.
+    writerCaseWith "narrow line width forces block layout" narrowWidthOptions
+      (Json.valueArray $ Phantoms.list [
+        Json.valueNumber $ Phantoms.decimal 1.0,
+        Json.valueNumber $ Phantoms.decimal 2.0,
+        Json.valueNumber $ Phantoms.decimal 3.0])
+      "[\n  1,\n  2,\n  3]",
+    writerCaseWith "custom indent string, forced block" fourSpaceOptions
+      (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "items") (Json.valueArray $ Phantoms.list [
+            Json.valueNumber $ Phantoms.decimal 1.0,
+            Json.valueNumber $ Phantoms.decimal 2.0])])
+      "{\n    \"items\": [\n        1,\n        2]}",
+
+    -- maxIndentDepth: depth 0 (the top-level value) forces the entire document inline,
+    -- even though it would otherwise break under the narrow width alone (as the previous
+    -- two cases demonstrate).
+    writerCaseWith "maxIndentDepth 0 forces top-level inline" maxDepthZeroOptions
+      (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "items") (Json.valueArray $ Phantoms.list [
+            Json.valueNumber $ Phantoms.decimal 1.0,
+            Json.valueNumber $ Phantoms.decimal 2.0])])
+      "{\"items\": [1, 2]}",
+
+    -- maxIndentDepth 1 with a narrow width: the top-level object still adapts (and here
+    -- breaks, since it doesn't fit in 10 columns), but its child array (depth 1) is forced
+    -- inline regardless of width.
+    writerCaseWith "maxIndentDepth 1 forces children inline under a narrow width" maxDepthOneOptions
+      (Json.valueObject $ Phantoms.list [
+        Phantoms.pair (Phantoms.string "items") (Json.valueArray $ Phantoms.list [
+            Json.valueNumber $ Phantoms.decimal 1.0,
+            Json.valueNumber $ Phantoms.decimal 2.0])])
+      "{\n  \"items\": [1, 2]}"]

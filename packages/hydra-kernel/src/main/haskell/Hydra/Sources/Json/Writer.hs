@@ -93,11 +93,19 @@ module_ = Module {
     ns = ModuleName "hydra.core.json.writer"
     definitions = [
       toDefinition colonOp,
+      toDefinition compactColonOp,
+      toDefinition compactCommaOp,
+      toDefinition compactList,
+      toDefinition defaultJsonWriterOptions,
+      toDefinition halfBlockStyleWith,
       toDefinition hexByte,
       toDefinition jsonString,
-      toDefinition keyValueToExpr,
+      toDefinition keyValueToExprWith,
       toDefinition printJson,
-      toDefinition valueToExpr]
+      toDefinition printJsonWith,
+      toDefinition styleForDepth,
+      toDefinition valueToExpr,
+      toDefinition valueToExprWith]
 
 colonOp :: TypedTermDefinition Op
 colonOp = jsonSerdeDefinition "colonOp" $
@@ -105,6 +113,15 @@ colonOp = jsonSerdeDefinition "colonOp" $
   Ast.op
     (Ast.symbol $ string ":")
     (Ast.padding Ast.wsNone Ast.wsSpace)
+    (Ast.precedence $ int32 0)
+    Ast.associativityNone
+
+compactColonOp :: TypedTermDefinition Op
+compactColonOp = jsonSerdeDefinition "compactColonOp" $
+  doc "Like colonOp, but with no padding on either side, for compact-mode output" $
+  Ast.op
+    (Ast.symbol $ string ":")
+    (Ast.padding Ast.wsNone Ast.wsNone)
     (Ast.precedence $ int32 0)
     Ast.associativityNone
 
@@ -168,28 +185,103 @@ jsonString = jsonSerdeDefinition "jsonString" $
   "escaped" <~ Strings.concat (Lists.map (var "escape") (Strings.toList $ var "s")) $
   string "\"" ++ var "escaped" ++ string "\""
 
-keyValueToExpr :: TypedTermDefinition ((String, J.Value) -> Expr)
-keyValueToExpr = jsonSerdeDefinition "keyValueToExpr" $
-  doc "Convert a key-value pair to an AST expression" $
-  "pair" ~>
+defaultJsonWriterOptions :: TypedTermDefinition J.JsonWriterOptions
+defaultJsonWriterOptions = jsonSerdeDefinition "defaultJsonWriterOptions" $
+  doc ("The default layout options, reproducing the historical, non-configurable behavior of"
+    <> " printJson byte-for-byte: pretty-printed, two-space indent, 120-column adaptive width,"
+    <> " no indent-depth limit.") $
+  Json.jsonWriterOptions false (string "  ") (int32 120) nothing
+
+-- | Choose between an inline and a block rendering of the same logical collection, given
+-- the (non-compact) writer options and the current nesting depth. Depths at or beyond
+-- maxIndentDepth always render inline; otherwise the width-adaptive choice from
+-- Serialization.chooseLayout applies, using the options' own line width in place of the
+-- fixed maxLineWidth constant. Callers are expected to have already special-cased compact
+-- mode themselves, since its rendering bypasses block styles entirely.
+styleForDepth :: TypedTermDefinition (J.JsonWriterOptions -> Int -> Expr -> Expr -> Expr)
+styleForDepth = jsonSerdeDefinition "styleForDepth" $
+  doc ("Choose between an inline and a block rendering of the same logical collection, given"
+    <> " the (non-compact) writer options and the current nesting depth. Depths at or beyond"
+    <> " maxIndentDepth always render inline; otherwise the width-adaptive choice from"
+    <> " chooseLayout applies, using the options' own line width in place of the fixed"
+    <> " maxLineWidth constant.") $
+  "options" ~> "depth" ~> "inlineExpr" ~> "blockExpr" ~>
+  "atMaxDepth" <~ Optionals.match (Json.jsonWriterOptionsMaxIndentDepth $ var "options")
+    false
+    ("maxDepth" ~> Ordering.gte (var "depth") (var "maxDepth")) $
+  Logic.ifElse (var "atMaxDepth")
+    (var "inlineExpr")
+    (Serialization.chooseLayout @@ (Json.jsonWriterOptionsMaxLineWidth $ var "options")
+      @@ var "inlineExpr"
+      @@ var "blockExpr")
+
+halfBlockStyleWith :: TypedTermDefinition (J.JsonWriterOptions -> BlockStyle)
+halfBlockStyleWith = jsonSerdeDefinition "halfBlockStyleWith" $
+  doc "A half-block style (newline before content, none after) using the options' indent string." $
+  "options" ~> Ast.blockStyle (just $ Json.jsonWriterOptionsIndent $ var "options") true false
+
+compactCommaOp :: TypedTermDefinition Op
+compactCommaOp = jsonSerdeDefinition "compactCommaOp" $
+  doc "A comma separator with no padding on either side, for compact-mode output" $
+  Ast.op
+    (Ast.symbol $ string ",")
+    (Ast.padding Ast.wsNone Ast.wsNone)
+    (Ast.precedence $ int32 0)
+    Ast.associativityNone
+
+-- | Comma-separate the elements inside the given bracket pair with no insignificant
+-- whitespace at all (unlike Serialization.bracketList/curlyBracesList, whose inline
+-- rendering still spaces elements out via symbolSep's default wsSpace padding). Renders as
+-- just the two bracket symbols with nothing between them when the list is empty.
+compactList :: TypedTermDefinition (Brackets -> [Expr] -> Expr)
+compactList = jsonSerdeDefinition "compactList" $
+  doc "Comma-separate the elements inside the given bracket pair with no insignificant whitespace at all." $
+  "br" ~> "els" ~>
+    Logic.ifElse (Lists.isEmpty $ var "els")
+      (Serialization.brackets @@ var "br" @@ asTerm Serialization.inlineStyle @@ (Serialization.cst @@ string ""))
+      (Serialization.brackets @@ var "br" @@ asTerm Serialization.inlineStyle @@ (Serialization.sep @@ compactCommaOp @@ var "els"))
+
+keyValueToExprWith :: TypedTermDefinition (J.JsonWriterOptions -> Int -> (String, J.Value) -> Expr)
+keyValueToExprWith = jsonSerdeDefinition "keyValueToExprWith" $
+  doc "Convert a key-value pair to an AST expression, honoring the given writer options and nesting depth." $
+  "options" ~> "depth" ~> "pair" ~>
   "key" <~ Pairs.first (var "pair") $
   "value" <~ Pairs.second (var "pair") $
-  Serialization.ifx @@ colonOp
+  "colon" <~ Logic.ifElse (Json.jsonWriterOptionsCompact $ var "options") (asTerm compactColonOp) (asTerm colonOp) $
+  Serialization.ifx @@ var "colon"
     @@ (Serialization.cst @@ (jsonString @@ var "key"))
-    @@ (valueToExpr @@ var "value")
+    @@ (valueToExprWith @@ var "options" @@ var "depth" @@ var "value")
 
 printJson :: TypedTermDefinition (J.Value -> String)
 printJson = jsonSerdeDefinition "printJson" $
-  doc "Serialize a JSON value to a string" $
-  "value" ~> Serialization.printExpr @@ (valueToExpr @@ var "value")
+  doc "Serialize a JSON value to a string, using the default (pretty-printed) layout options." $
+  "value" ~> printJsonWith @@ defaultJsonWriterOptions @@ var "value"
+
+printJsonWith :: TypedTermDefinition (J.JsonWriterOptions -> J.Value -> String)
+printJsonWith = jsonSerdeDefinition "printJsonWith" $
+  doc "Serialize a JSON value to a string using the given layout options." $
+  "options" ~> "value" ~> Serialization.printExpr @@ (valueToExprWith @@ var "options" @@ int32 0 @@ var "value")
 
 valueToExpr :: TypedTermDefinition (J.Value -> Expr)
 valueToExpr = jsonSerdeDefinition "valueToExpr" $
-  doc "Convert a JSON value to an AST expression for serialization" $
-  "value" ~>
+  doc "Convert a JSON value to an AST expression for serialization, using the default layout options." $
+  "value" ~> valueToExprWith @@ defaultJsonWriterOptions @@ int32 0 @@ var "value"
+
+valueToExprWith :: TypedTermDefinition (J.JsonWriterOptions -> Int -> J.Value -> Expr)
+valueToExprWith = jsonSerdeDefinition "valueToExprWith" $
+  doc "Convert a JSON value to an AST expression for serialization, honoring the given writer options and nesting depth." $
+  "options" ~> "depth" ~> "value" ~>
+  "childDepth" <~ Math.add (var "depth") (int32 1) $
+  "compact" <~ Json.jsonWriterOptionsCompact (var "options") $
+  "style" <~ Logic.ifElse (var "compact") (asTerm Serialization.inlineStyle) (halfBlockStyleWith @@ var "options") $
   match J._Value (var "value") Nothing [
     J._Value_array>>: "arr" ~>
-      Serialization.bracketListAdaptive @@ (Lists.map (asTerm valueToExpr) (var "arr")),
+      "els" <~ Lists.map (asTerm (valueToExprWith @@ var "options" @@ var "childDepth")) (var "arr") $
+      Logic.ifElse (var "compact")
+        (compactList @@ Serialization.squareBrackets @@ var "els")
+        (styleForDepth @@ var "options" @@ var "depth"
+          @@ (Serialization.bracketList @@ asTerm Serialization.inlineStyle @@ var "els")
+          @@ (Serialization.bracketList @@ var "style" @@ var "els")),
     J._Value_boolean>>: "b" ~>
       Serialization.cst @@ (Logic.ifElse (var "b") (string "true") (string "false")),
     J._Value_null>>: constant $
@@ -230,6 +322,11 @@ valueToExpr = jsonSerdeDefinition "valueToExpr" $
         (var "plain")
         (var "shown")),
     J._Value_object>>: "obj" ~>
-      Serialization.bracesListAdaptive @@ (Lists.map (asTerm keyValueToExpr) (var "obj")),
+      "els" <~ Lists.map (asTerm (keyValueToExprWith @@ var "options" @@ var "childDepth")) (var "obj") $
+      Logic.ifElse (var "compact")
+        (compactList @@ Serialization.curlyBraces @@ var "els")
+        (styleForDepth @@ var "options" @@ var "depth"
+          @@ (Serialization.curlyBracesList @@ nothing @@ asTerm Serialization.inlineStyle @@ var "els")
+          @@ (Serialization.curlyBracesList @@ nothing @@ var "style" @@ var "els")),
     J._Value_string>>: "s" ~>
       Serialization.cst @@ (jsonString @@ var "s")]
