@@ -55,80 +55,95 @@ allTests = define "allTests" $
       regexSplit,
       regexConformance]
     where
-      regexMatches = subgroup "matches" [
-        -- Basic matching
-        test2 "exact match" "hello" "hello" True,
-        test2 "pattern match" "[a-z]+" "hello" True,
-        test2 "no match" "[0-9]+" "hello" False,
-
-        -- Anchoring behavior (matches checks full string)
-        test2 "partial content does not match" "[a-z]+" "hello123" False,
-        test2 "digit pattern" "[0-9]+" "12345" True,
-        test2 "mixed pattern" "[a-z]+[0-9]+" "hello123" True,
-
-        -- Empty string
-        test2 "empty pattern matches empty" "" "" True,
-        test2 "empty pattern does not match non-empty" "" "hello" False,
-        test2 "star matches empty" "a*" "" True,
-
-        -- Special regex features
-        test2 "alternation" "cat|dog" "cat" True,
-        test2 "alternation second" "cat|dog" "dog" True,
-        test2 "alternation no match" "cat|dog" "bird" False,
-        test2 "quantifier" "ab?c" "ac" True,
-        test2 "quantifier with optional" "ab?c" "abc" True]
+      regexMatches = supergroup "matches" [
+        subgroup "isWholeStringAnchored" [
+          test2 "exact match" "hello" "hello" True,
+          test2 "partial content does not match" "[a-z]+" "hello123" False,
+          test2 "mixed pattern" "[a-z]+[0-9]+" "hello123" True],
+        subgroup "testsMinimalCoreGrammar" [
+          test2 "pattern match" "[a-z]+" "hello" True,
+          test2 "digit pattern" "[0-9]+" "12345" True,
+          test2 "empty pattern matches empty" "" "" True,
+          test2 "star matches empty" "a*" "" True,
+          test2 "alternation" "cat|dog" "cat" True,
+          test2 "alternation second" "cat|dog" "dog" True,
+          test2 "quantifier" "ab?c" "ac" True,
+          test2 "quantifier with optional" "ab?c" "abc" True],
+        subgroup "falseWhenNoMatchOrIllFormed" [
+          test2 "no match" "[0-9]+" "hello" False,
+          test2 "empty pattern does not match non-empty" "" "hello" False,
+          test2 "alternation no match" "cat|dog" "bird" False]]
         where
           test2 name pat input result =
-            primCase name DefRegex.matches [string pat, string input] (boolean result)
+            primCaseWithProvisions name [segmentOf name] DefRegex.matches [string pat, string input] (boolean result)
+          segmentOf n
+            | n `elem` ["exact match", "partial content does not match", "mixed pattern"] = "isWholeStringAnchored"
+            | n `elem` ["no match", "empty pattern does not match non-empty", "alternation no match"] = "falseWhenNoMatchOrIllFormed"
+            | otherwise = "testsMinimalCoreGrammar"
 
-      regexFind = subgroup "find" [
-        test2 "simple find" "[0-9]+" "abc123def" (Just "123"),
-        test2 "no match" "[0-9]+" "abcdef" Nothing,
-        test2 "find first" "[a-z]+" "123abc456def" (Just "abc"),
-        test2 "empty input" "[0-9]+" "" Nothing,
-        test2 "full match" ".*" "hello" (Just "hello")]
+      regexFind = supergroup "find" [
+        subgroup "returnsLeftmostLongestMatch" [
+          test2 "simple find" "[0-9]+" "abc123def" (Just "123"),
+          test2 "find first" "[a-z]+" "123abc456def" (Just "abc"),
+          test2 "full match" ".*" "hello" (Just "hello")],
+        subgroup "noneWhenNoMatch" [
+          test2 "no match" "[0-9]+" "abcdef" Nothing,
+          test2 "empty input" "[0-9]+" "" Nothing]]
         where
           test2 name pat input result =
-            primCase name DefRegex.find [string pat, string input] (Core.termOptional $ optStr result)
+            primCaseWithProvisions name [segmentOf result] DefRegex.find [string pat, string input] (Core.termOptional $ optStr result)
+          segmentOf (Just _) = "returnsLeftmostLongestMatch"
+          segmentOf Nothing = "noneWhenNoMatch"
           optStr Nothing = nothing
           optStr (Just s) = just (string s)
 
-      regexFindAll = subgroup "findAll" [
-        test2 "multiple matches" "[0-9]+" "a1b2c3" ["1", "2", "3"],
-        test2 "no matches" "[0-9]+" "abc" [],
-        test2 "overlapping words" "[a-z]+" "abc def ghi" ["abc", "def", "ghi"],
-        test2 "single match" "hello" "say hello world" ["hello"]]
+      regexFindAll = supergroup "findAll" [
+        subgroup "returnsAllNonOverlappingMatchesInOrder" [
+          test2 "multiple matches" "[0-9]+" "a1b2c3" ["1", "2", "3"],
+          test2 "overlapping words" "[a-z]+" "abc def ghi" ["abc", "def", "ghi"],
+          test2 "single match" "hello" "say hello world" ["hello"]],
+        subgroup "emptyListWhenNoMatch" [
+          test2 "no matches" "[0-9]+" "abc" []]]
         where
           test2 name pat input result =
-            primCase name DefRegex.findAll [string pat, string input] (list (string <$> result))
+            primCaseWithProvisions name [if null result then "emptyListWhenNoMatch" else "returnsAllNonOverlappingMatchesInOrder"] DefRegex.findAll [string pat, string input] (list (string <$> result))
 
-      regexReplace = subgroup "replace" [
-        test3 "basic replace" "[0-9]+" "X" "abc123def456" "abcXdef456",
-        test3 "no match" "[0-9]+" "X" "abcdef" "abcdef",
-        test3 "replace at start" "^[a-z]+" "X" "abc123" "X123",
-        test3 "empty replacement" "[0-9]+" "" "abc123def" "abcdef"]
+      regexReplace = supergroup "replace" [
+        subgroup "replacesLeftmostLongestMatch" [
+          test3 "basic replace" "[0-9]+" "X" "abc123def456" "abcXdef456",
+          test3 "replace at start" "^[a-z]+" "X" "abc123" "X123",
+          test3 "empty replacement" "[0-9]+" "" "abc123def" "abcdef"],
+        subgroup "unchangedWhenNoMatch" [
+          test3 "no match" "[0-9]+" "X" "abcdef" "abcdef"]]
         where
           test3 name pat repl input result =
-            primCase name DefRegex.replace [string pat, string repl, string input] (string result)
+            primCaseWithProvisions name [segmentOf name] DefRegex.replace [string pat, string repl, string input] (string result)
+          segmentOf n = if n == "no match" then "unchangedWhenNoMatch" else "replacesLeftmostLongestMatch"
 
-      regexReplaceAll = subgroup "replaceAll" [
-        test3 "replace all digits" "[0-9]+" "X" "a1b2c3" "aXbXcX",
-        test3 "no match" "[0-9]+" "X" "abc" "abc",
-        test3 "replace all words" "[a-z]+" "X" "abc 123 def" "X 123 X",
-        test3 "empty replacement" "[0-9]+" "" "a1b2c3" "abc"]
+      regexReplaceAll = supergroup "replaceAll" [
+        subgroup "replacesEveryNonOverlappingMatch" [
+          test3 "replace all digits" "[0-9]+" "X" "a1b2c3" "aXbXcX",
+          test3 "replace all words" "[a-z]+" "X" "abc 123 def" "X 123 X",
+          test3 "empty replacement" "[0-9]+" "" "a1b2c3" "abc"],
+        subgroup "unchangedWhenNoMatch" [
+          test3 "no match" "[0-9]+" "X" "abc" "abc"]]
         where
           test3 name pat repl input result =
-            primCase name DefRegex.replaceAll [string pat, string repl, string input] (string result)
+            primCaseWithProvisions name [segmentOf name] DefRegex.replaceAll [string pat, string repl, string input] (string result)
+          segmentOf n = if n == "no match" then "unchangedWhenNoMatch" else "replacesEveryNonOverlappingMatch"
 
-      regexSplit = subgroup "split" [
-        test2 "split on comma" "," "a,b,c" ["a", "b", "c"],
-        test2 "split on spaces" " +" "a b  c" ["a", "b", "c"],
-        test2 "no match" "," "abc" ["abc"],
-        test2 "split on digits" "[0-9]+" "a1b2c" ["a", "b", "c"],
-        test2 "trailing delimiter" "," "a,b," ["a", "b", ""]]
+      regexSplit = supergroup "split" [
+        subgroup "splitsOnEveryNonOverlappingMatch" [
+          test2 "split on comma" "," "a,b,c" ["a", "b", "c"],
+          test2 "split on spaces" " +" "a b  c" ["a", "b", "c"],
+          test2 "split on digits" "[0-9]+" "a1b2c" ["a", "b", "c"],
+          test2 "trailing delimiter" "," "a,b," ["a", "b", ""]],
+        subgroup "singleElementListWhenNoMatchOrIllFormed" [
+          test2 "no match" "," "abc" ["abc"]]]
         where
           test2 name pat input result =
-            primCase name DefRegex.split [string pat, string input] (list (string <$> result))
+            primCaseWithProvisions name [segmentOf name] DefRegex.split [string pat, string input] (list (string <$> result))
+          segmentOf n = if n == "no match" then "singleElementListWhenNoMatchOrIllFormed" else "splitsOnEveryNonOverlappingMatch"
 
       regexConformance = supergroup "conformance (docs/specification/regex.md)" [
           dotIncludesNewline,
@@ -215,28 +230,35 @@ allTests = define "allTests" $
           -- "no match" on every host -- never a host-specific engine exception -- per the portable
           -- failure channel (scope item 2).
           illFormedPatterns = subgroup "ill-formed patterns fail as portable no-match" [
-            matchesCase "unbalanced open paren is ill-formed, so matches is false" "(a" "a" False,
-            findCase "unbalanced open paren is ill-formed, so find is nothing" "(a" "a" Nothing,
-            findAllCase "unbalanced open paren is ill-formed, so findAll is empty" "(a" "aaa" [],
-            replaceCase "unbalanced open paren is ill-formed, so replace is a no-op" "(a" "X" "aaa" "aaa",
-            replaceAllCase "unbalanced open paren is ill-formed, so replaceAll is a no-op" "(a" "X" "aaa" "aaa",
-            splitCase "unbalanced open paren is ill-formed, so split returns the input unsplit" "(a" "aaa" ["aaa"],
-            matchesCase "empty alternation branch is ill-formed" "a|" "a" False,
-            matchesCase "empty character class is ill-formed" "a[]b" "ab" False,
-            matchesCase "up-to-m quantifier form is not in the minimal core, so it is ill-formed" "a{,2}" "a" False]
+            matchesCaseIllFormed "unbalanced open paren is ill-formed, so matches is false" "(a" "a" False,
+            findCaseIllFormed "unbalanced open paren is ill-formed, so find is nothing" "(a" "a" Nothing,
+            findAllCaseIllFormed "unbalanced open paren is ill-formed, so findAll is empty" "(a" "aaa" [],
+            replaceCaseIllFormed "unbalanced open paren is ill-formed, so replace is a no-op" "(a" "X" "aaa" "aaa",
+            replaceAllCaseIllFormed "unbalanced open paren is ill-formed, so replaceAll is a no-op" "(a" "X" "aaa" "aaa",
+            splitCaseIllFormed "unbalanced open paren is ill-formed, so split returns the input unsplit" "(a" "aaa" ["aaa"],
+            matchesCaseIllFormed "empty alternation branch is ill-formed" "a|" "a" False,
+            matchesCaseIllFormed "empty character class is ill-formed" "a[]b" "ab" False,
+            matchesCaseIllFormed "up-to-m quantifier form is not in the minimal core, so it is ill-formed" "a{,2}" "a" False]
 
           matchesCase name pat input result =
-            primCase name DefRegex.matches [string pat, string input] (boolean result)
+            primCaseWithProvisions name ["testsMinimalCoreGrammar"] DefRegex.matches [string pat, string input] (boolean result)
+          matchesCaseIllFormed name pat input result =
+            primCaseWithProvisions name ["falseWhenNoMatchOrIllFormed"] DefRegex.matches [string pat, string input] (boolean result)
           findCase name pat input result =
-            primCase name DefRegex.find [string pat, string input] (Core.termOptional $ optStr result)
+            primCaseWithProvisions name [if result == Nothing then "noneWhenNoMatch" else "returnsLeftmostLongestMatch"] DefRegex.find [string pat, string input] (Core.termOptional $ optStr result)
             where
               optStr Nothing = nothing
               optStr (Just s) = just (string s)
-          findAllCase name pat input result =
-            primCase name DefRegex.findAll [string pat, string input] (list (string <$> result))
-          replaceCase name pat repl input result =
-            primCase name DefRegex.replace [string pat, string repl, string input] (string result)
-          replaceAllCase name pat repl input result =
-            primCase name DefRegex.replaceAll [string pat, string repl, string input] (string result)
-          splitCase name pat input result =
-            primCase name DefRegex.split [string pat, string input] (list (string <$> result))
+          findCaseIllFormed name pat input result =
+            primCaseWithProvisions name ["noneWhenNoMatch"] DefRegex.find [string pat, string input] (Core.termOptional $ optStr result)
+            where
+              optStr Nothing = nothing
+              optStr (Just s) = just (string s)
+          findAllCaseIllFormed name pat input result =
+            primCaseWithProvisions name ["emptyListWhenNoMatch"] DefRegex.findAll [string pat, string input] (list (string <$> result))
+          replaceCaseIllFormed name pat repl input result =
+            primCaseWithProvisions name ["unchangedWhenNoMatch"] DefRegex.replace [string pat, string repl, string input] (string result)
+          replaceAllCaseIllFormed name pat repl input result =
+            primCaseWithProvisions name ["unchangedWhenNoMatch"] DefRegex.replaceAll [string pat, string repl, string input] (string result)
+          splitCaseIllFormed name pat input result =
+            primCaseWithProvisions name ["singleElementListWhenNoMatchOrIllFormed"] DefRegex.split [string pat, string input] (list (string <$> result))

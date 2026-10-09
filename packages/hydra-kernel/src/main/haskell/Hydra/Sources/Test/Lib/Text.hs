@@ -47,24 +47,26 @@ allTests = definitionInModule module_ "allTests" $
 -- decodeUtf8: valid byte sequences decode to right(text); an invalid sequence yields left(message),
 -- where the message itself is host-defined, so only isLeft is asserted for the invalid case.
 textDecodeUtf8 :: TypedTerm TestGroup
-textDecodeUtf8 = subgroup "decodeUtf8" [
-  test "empty bytes" B.empty (right (string "")),
-  test "ASCII text" (BC.pack "hello") (right (string "hello")),
-  test "multi-byte UTF-8 text"
-    (B.pack [0xC3, 0xA9, 0x76, 0xC3, 0xA9, 0x6E, 0x65, 0x6D, 0x65, 0x6E, 0x74])
-    (right (string "\233v\233nement")),
-  invalidCase "invalid lone continuation byte" (B.pack [0x80])]
+textDecodeUtf8 = supergroup "decodeUtf8" [
+  subgroup "decodesValidUtf8" [
+    test "empty bytes" B.empty (right (string "")),
+    test "ASCII text" (BC.pack "hello") (right (string "hello")),
+    test "multi-byte UTF-8 text"
+      (B.pack [0xC3, 0xA9, 0x76, 0xC3, 0xA9, 0x6E, 0x65, 0x6D, 0x65, 0x6E, 0x74])
+      (right (string "\233v\233nement"))],
+  subgroup "leftOnInvalidUtf8" [
+    invalidCase "invalid lone continuation byte" (B.pack [0x80])]]
   where
-    test name x expected = primCase name DefText.decodeUtf8 [binary x] expected
-    invalidCase name x = primCase name DefEithers.isLeft
-      [primitive DefText.decodeUtf8 @@ binary x]
+    test name x expected = primCaseWithProvisions name ["decodesValidUtf8"] DefText.decodeUtf8 [binary x] expected
+    invalidCase name x = evalCaseWithProvisions name ["leftOnInvalidUtf8"] DefText.decodeUtf8
+      (primitive DefEithers.isLeft @@ (primitive DefText.decodeUtf8 @@ binary x))
       (boolean True)
 
 -- encodeUtf8: total; asserts the exact byte sequence for ASCII and multi-byte (non-ASCII) text.
 textEncodeUtf8 :: TypedTerm TestGroup
-textEncodeUtf8 = subgroup "encodeUtf8" [
+textEncodeUtf8 = subgroup "encodesExactUtf8Bytes" [
   test "empty string" "" B.empty,
   test "ASCII text" "hello" (BC.pack "hello"),
   test "multi-byte UTF-8 text" "\233v\233nement" (B.pack [0xC3, 0xA9, 0x76, 0xC3, 0xA9, 0x6E, 0x65, 0x6D, 0x65, 0x6E, 0x74])]
   where
-    test name x result = primCase name DefText.encodeUtf8 [string x] (binary result)
+    test name x result = primCaseWithProvisions name ["encodesExactUtf8Bytes"] DefText.encodeUtf8 [string x] (binary result)
