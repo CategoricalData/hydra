@@ -222,7 +222,15 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.difference :: Ord k => Map k v -> Map k v -> Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.difference.removesBindingsWithKeysInSecondMap",
+              "kind": "requirement",
+              "statement": "difference returns the bindings of the first map whose keys do not occur in the second map."},
+            {
+              "name": "hydra.core.lib.maps.difference.identityWhenSecondEmpty",
+              "kind": "requirement",
+              "statement": "difference with an empty second map returns the first map unchanged."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -531,7 +539,15 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.intersection :: Ord k => Map k v -> Map k v -> Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.intersection.keepsBindingsWithKeysInBoth",
+              "kind": "requirement",
+              "statement": "intersection returns the bindings of the first map whose keys also occur in the second map, taking the value from the first map on each common key."},
+            {
+              "name": "hydra.core.lib.maps.intersection.emptyWhenNoOverlapOrEitherEmpty",
+              "kind": "requirement",
+              "statement": "intersection is the empty map when the two maps share no keys, or when either map is empty."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -917,7 +933,15 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.unions :: Ord k => [Map k v] -> Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.unions.earliestMapTakesPrecedence",
+              "kind": "requirement",
+              "statement": "unions returns the bindings of every map in the list; when a key occurs in more than one map, the binding from the earliest such map in the list is kept."},
+            {
+              "name": "hydra.core.lib.maps.unions.emptyListOfMapsYieldsEmptyMap",
+              "kind": "requirement",
+              "statement": "unions of an empty list of maps is the empty map."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [

@@ -56,7 +56,7 @@
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "apply"}}},
+                              {"name": "name", "term": {"literal": {"string": "appliesFunctionWhenBothGiven"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -69,7 +69,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "both just"}}},
+                                          {"name": "name", "term": {"literal": {"string": "both given"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -155,12 +155,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.apply.appliesFunctionWhenBothGiven"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing function"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none function"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -238,12 +243,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.apply.appliesFunctionWhenBothGiven"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none value"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -329,12 +339,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.apply.appliesFunctionWhenBothGiven"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "bind"}}},
+                              {"name": "name", "term": {"literal": {"string": "chainsOnGivenPropagatesNone"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -347,7 +362,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "just to just"}}},
+                                          {"name": "name", "term": {"literal": {"string": "given to given"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -433,12 +448,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.bind.chainsOnGivenPropagatesNone"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing to nothing"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none to none"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -524,12 +544,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.bind.chainsOnGivenPropagatesNone"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "compose"}}},
+                              {"name": "name", "term": {"literal": {"string": "kleisliComposesShortCircuitingOnNone"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -678,7 +703,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.compose.kleisliComposesShortCircuitingOnNone"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -819,7 +849,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.compose.kleisliComposesShortCircuitingOnNone"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -960,12 +995,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.compose.kleisliComposesShortCircuitingOnNone"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "given"}}},
+                              {"name": "name", "term": {"literal": {"string": "wrapsValueAsPresent"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -1047,7 +1087,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.given.wrapsValueAsPresent"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -1119,12 +1164,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.given.wrapsValueAsPresent"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "givens"}}},
+                              {"name": "name", "term": {"literal": {"string": "keepsPresentValuesPreservingOrder"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -1209,12 +1259,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.givens.keepsPresentValuesPreservingOrder"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "single just"}}},
+                                          {"name": "name", "term": {"literal": {"string": "single given"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -1282,7 +1337,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.givens.keepsPresentValuesPreservingOrder"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -1358,7 +1418,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.givens.keepsPresentValuesPreservingOrder"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -1431,12 +1496,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.givens.keepsPresentValuesPreservingOrder"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "isGiven"}}},
+                              {"name": "name", "term": {"literal": {"string": "testsPresentVariant"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -1449,7 +1519,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "just value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "given value"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -1497,12 +1567,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.isGiven.testsPresentVariant"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -1549,12 +1624,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.isGiven.testsPresentVariant"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "isNone"}}},
+                              {"name": "name", "term": {"literal": {"string": "testsAbsentVariant"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -1567,7 +1647,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "just value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "given value"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -1615,12 +1695,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.isNone.testsAbsentVariant"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -1667,12 +1752,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.isNone.testsAbsentVariant"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "map"}}},
+                              {"name": "name", "term": {"literal": {"string": "mapsGivenLeavesNoneUnchanged"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -1685,7 +1775,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "maps just value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "maps given value"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -1770,12 +1860,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.map.mapsGivenLeavesNoneUnchanged"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing unchanged"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none unchanged"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -1860,12 +1955,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.map.mapsGivenLeavesNoneUnchanged"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "mapOptional"}}},
+                              {"name": "name", "term": {"literal": {"string": "filtersAndTransformsKeepingGiven"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -1989,7 +2089,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.mapOptional.filtersAndTransformsKeepingGiven"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -2095,7 +2200,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.mapOptional.filtersAndTransformsKeepingGiven"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -2201,12 +2311,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.mapOptional.filtersAndTransformsKeepingGiven"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "match"}}},
+                              {"name": "name", "term": {"literal": {"string": "eliminatesByVariant"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -2219,7 +2334,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "just applies function"}}},
+                                          {"name": "name", "term": {"literal": {"string": "given applies function"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -2285,12 +2400,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.match.eliminatesByVariant"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing returns default"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none returns default"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -2356,12 +2476,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.match.eliminatesByVariant"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "toList"}}},
+                              {"name": "name", "term": {"literal": {"string": "convertsGivenToSingletonNoneToEmpty"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -2374,7 +2499,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "just value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "given value"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -2442,12 +2567,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.toList.convertsGivenToSingletonNoneToEmpty"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -2515,12 +2645,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.toList.convertsGivenToSingletonNoneToEmpty"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "withDefault"}}},
+                              {"name": "name", "term": {"literal": {"string": "returnsContainedValueOrDefault"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -2584,7 +2719,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.withDefault.returnsContainedValueOrDefault"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -2640,7 +2780,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.withDefault.returnsContainedValueOrDefault"}}}}]}}]}}]}}]}}]}},
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestCaseWithMetadata"}}}}]}},
