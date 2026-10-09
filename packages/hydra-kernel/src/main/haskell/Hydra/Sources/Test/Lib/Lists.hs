@@ -20,6 +20,7 @@ import Hydra.Core.Testing
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Core.Lib.Equality as DefEquality
 import qualified Hydra.Core.Lib.Functions as DefFunctions
+import qualified Hydra.Core.Lib.Logic as DefLogic
 import qualified Hydra.Core.Lib.Ordering as DefOrdering
 import qualified Hydra.Core.Lib.Lists as DefLists
 import qualified Hydra.Core.Lib.Math as DefMath
@@ -48,6 +49,7 @@ allTests = define "allTests" $
     supergroup "hydra.core.lib.lists primitives" [
       listsApply,
       listsBind,
+      listsCompose,
       listsConcat,
       listsConcat2,
       listsCons,
@@ -56,6 +58,7 @@ allTests = define "allTests" $
       listsElem,
       listsFilter,
       listsFind,
+      listsFoldList,
       listsFoldl,
       listsFoldr,
       listsGroup,
@@ -63,6 +66,10 @@ allTests = define "allTests" $
       listsIntersperse,
       listsLength,
       listsMap,
+      -- listsMapGivens intentionally omitted (see the commented-out definition below for why).
+      listsMapList,
+      listsMapOptional,
+      listsMapSet,
       listsMaybeAt,
       listsMaybeHead,
       listsMaybeInit,
@@ -101,6 +108,20 @@ allTests = define "allTests" $
         test "duplicate elements" [1, 1, 2] (lambda "x" (primitive DefLists.singleton @@ (primitive DefMath.negate @@ var "x"))) [-1, -1, -2]]
         where
           test name lst fun result = primCase name DefLists.bind [intList lst, fun] (intList result)
+
+      listsCompose = subgroup "compose" [
+        -- compose(f, g, x) = bind(f(x), g); f: a -> [a, a*10]; g: y -> [y, y+1]
+        test "composes two list-returning functions"
+          (lambda "x" (list [var "x", primitive DefMath.mul @@ var "x" @@ int32 10]))
+          (lambda "y" (list [var "y", primitive DefMath.add @@ var "y" @@ int32 1]))
+          3 [3, 4, 30, 31],
+        -- f always returns [] for this case, so the composed result is empty regardless of g
+        test "first arrow returns an empty list"
+          (lambda "_" (list ([] :: [TypedTerm a])))
+          (lambda "y" (list [var "y"]))
+          0 []]
+        where
+          test name f g x result = primCase name DefLists.compose [f, g, int32 x] (intList result)
 
       listsConcat = subgroup "concat" [
         test "multiple non-empty lists" [[1, 2, 3], [4, 5], [6, 7, 8]] [1, 2, 3, 4, 5, 6, 7, 8],
@@ -179,6 +200,17 @@ allTests = define "allTests" $
         where
           test name pred lst result = primCase name DefLists.find [pred, intList lst] (optionalInt32 result)
 
+      listsFoldList = subgroup "foldList" [
+        -- step: acc -> x -> [acc + x, acc - x] (branches the accumulator at each element)
+        -- acc0=0, xs=[1,2]: after 1 -> [1,-1]; after 2 -> [3,-1,1,-3]
+        test "branches the accumulator at each element" 0 [1, 2] [3, -1, 1, -3],
+        test "empty list yields the singleton initial accumulator" 10 [] [10]]
+        where
+          step = lambda "acc" (lambda "x" (list [
+            primitive DefMath.add @@ var "acc" @@ var "x",
+            primitive DefMath.sub @@ var "acc" @@ var "x"]))
+          test name acc0 xs result = primCase name DefLists.foldList [step, int32 acc0, intList xs] (intList result)
+
       listsFoldl = subgroup "foldl" [
         test "sum with addition" (primitive DefMath.add) 0 [1, 2, 3, 4] 10,
         test "product with multiplication" (primitive DefMath.mul) 1 [2, 3, 4] 24,
@@ -245,6 +277,64 @@ allTests = define "allTests" $
         where
           testStr name fun lst result = primCase name DefLists.map [fun, stringList lst] (stringList result)
           testInt name fun lst result = primCase name DefLists.map [fun, intList lst] (intList result)
+
+      {- listsMapGivens intentionally commented out (not just unreferenced): GHC type-checks every
+         `where`-bound definition regardless of whether allTests references it, so a mere removal
+         from the list above still fails to compile against the stale generated DefLists module.
+         Re-enable (both this block and its reference in allTests above) once a sync has
+         regenerated dist/haskell with the new lists.mapGivens primitive.
+      listsMapGivens = subgroup "mapGivens" [
+        test "filter and transform" [1, 2, 3, 4, 5] [6, 8, 10],
+        test "all filtered out" [1, 2] [],
+        test "empty input" [] []]
+        where
+          -- f: x -> if x > 2 then Just (x * 2) else Nothing
+          fn = lambda "x" (primitive DefLogic.ifElse
+            @@ (primitive DefOrdering.gt @@ var "x" @@ int32 2)
+            @@ (just (primitive DefMath.mul @@ var "x" @@ int32 2))
+            @@ (nothing :: TypedTerm (Maybe Int)))
+          test name xs result = primCase name DefLists.mapGivens [fn, intList xs] (intList result)
+      -}
+
+      listsMapList = subgroup "mapList" [
+        -- fn(1) = [11, 12], fn(2) = [12, 13]
+        test "two elements, two choices each" [1, 2] [[11, 12], [11, 13], [12, 12], [12, 13]],
+        test "an element with no choices yields no combinations" [1, 0] [],
+        test "empty input yields the single empty combination" [] [[]]]
+        where
+          -- f: x -> [x + 10, x + 11] for x /= 0; [] for x == 0 (to exercise the no-choices case)
+          fn = lambda "x" (primitive DefLogic.ifElse
+            @@ (primitive DefEquality.equal @@ var "x" @@ int32 0)
+            @@ (list ([] :: [TypedTerm a]))
+            @@ (list [primitive DefMath.add @@ var "x" @@ int32 10, primitive DefMath.add @@ var "x" @@ int32 11]))
+          test name xs result = primCase name DefLists.mapList [fn, intList xs] (intListList result)
+
+      listsMapOptional = subgroup "mapOptional" [
+        test "present value with choices" (Just 3) [Just 33, Just 34],
+        test "present value with no choices" (Just 0) [],
+        test "none yields a single-element list containing none" Nothing [Nothing]]
+        where
+          -- f: x -> [x + 30, x + 31] for x /= 0; [] for x == 0
+          fn = lambda "x" (primitive DefLogic.ifElse
+            @@ (primitive DefEquality.equal @@ var "x" @@ int32 0)
+            @@ (list ([] :: [TypedTerm a]))
+            @@ (list [primitive DefMath.add @@ var "x" @@ int32 30, primitive DefMath.add @@ var "x" @@ int32 31]))
+          test name m result = primCase name DefLists.mapOptional [fn, optionalMaybeInt m] (intOptionalList result)
+          optionalMaybeInt Nothing = Core.termOptional nothing
+          optionalMaybeInt (Just x) = Core.termOptional $ just (int32 x)
+
+      listsMapSet = subgroup "mapSet" [
+        -- elements traversed in ascending order (1, then 2): fn(1) = {12, 22}, fn(2) = {13, 23}
+        test "two elements, two choices each" [1, 2] [[12, 13], [12, 23], [22, 13], [22, 23]],
+        test "an element with no choices yields no combinations" [1, 0] [],
+        test "empty input yields the single empty combination" [] [[]]]
+        where
+          -- f: x -> {x + 11, x + 21} for x /= 0; {} for x == 0 (to exercise the no-choices case)
+          fn = lambda "x" (primitive DefLogic.ifElse
+            @@ (primitive DefEquality.equal @@ var "x" @@ int32 0)
+            @@ (list ([] :: [TypedTerm a]))
+            @@ (list [primitive DefMath.add @@ var "x" @@ int32 11, primitive DefMath.add @@ var "x" @@ int32 21]))
+          test name xs result = primCase name DefLists.mapSet [fn, intSet xs] (intSetList result)
 
       listsMaybeAt = subgroup "maybeAt" [
         test "valid index" 1 [10, 20, 30] (Just 20),

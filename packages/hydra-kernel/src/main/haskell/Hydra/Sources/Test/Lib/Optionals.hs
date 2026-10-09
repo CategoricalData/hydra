@@ -86,12 +86,15 @@ allTests = definitionInModule module_ "allTests" $
       optionalsApply,
       optionalsBind,
       optionalsCompose,
+      optionalsFoldList,
       optionalsGiven,
       optionalsGivens,
       optionalsIsGiven,
       optionalsIsNone,
       optionalsMap,
+      optionalsMapList,
       optionalsMapOptional,
+      optionalsMapSet,
       optionalsMatch,
       optionalsToList,
       optionalsWithDefault]
@@ -137,6 +140,21 @@ optionalsCompose = subgroup "compose" [
     testFails name input = evalPair name showMaybeInt
       (Optionals.compose funF funG (Phantoms.int32 input))
       nothingInt
+
+optionalsFoldList :: TypedTerm TestGroup
+optionalsFoldList = subgroup "foldList" [
+  test "all steps succeed" [1, 2, 3] (justInt 6),
+  test "a step fails, short-circuiting the rest" [1, 10, 3] nothingInt,
+  test "empty list returns the initial accumulator" [] (justInt 0)]
+  where
+    -- step: acc -> x -> if x <= 5 then Just (acc + x) else Nothing
+    step = Phantoms.lambda "acc" $ Phantoms.lambda "x" $
+      Logic.ifElse (Ordering.lte (Phantoms.var "x") (Phantoms.int32 5))
+        (Phantoms.just (Math.add (Phantoms.var "acc") (Phantoms.var "x")))
+        (Phantoms.nothing :: TypedTerm (Maybe Int))
+    test name xs expected = evalPair name showMaybeInt
+      (Optionals.foldList step (Phantoms.int32 0) (Phantoms.list $ Phantoms.int32 <$> xs))
+      expected
 
 optionalsGiven :: TypedTerm TestGroup
 optionalsGiven = subgroup "given" [
@@ -191,6 +209,21 @@ optionalsMap = subgroup "map" [
       (Optionals.map (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)) x)
       expected
 
+optionalsMapList :: TypedTerm TestGroup
+optionalsMapList = subgroup "mapList" [
+  test "all elements succeed" [1, 2, 3] (Phantoms.just (Phantoms.list [Phantoms.int32 2, Phantoms.int32 4, Phantoms.int32 6])),
+  test "an element fails, short-circuiting the traversal" [1, 10, 3] (Phantoms.nothing :: TypedTerm (Maybe [Int])),
+  test "empty list traverses to Just []" [] (Phantoms.just (Phantoms.list ([] :: [TypedTerm Int])))]
+  where
+    -- f: x -> if x <= 5 then Just (x * 2) else Nothing
+    fn = Phantoms.lambda "x" $
+      Logic.ifElse (Ordering.lte (Phantoms.var "x") (Phantoms.int32 5))
+        (Phantoms.just (Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
+        (Phantoms.nothing :: TypedTerm (Maybe Int))
+    test name xs expected = evalPair name showMaybeIntList
+      (Optionals.mapList fn (Phantoms.list $ Phantoms.int32 <$> xs))
+      expected
+
 optionalsMapOptional :: TypedTerm TestGroup
 optionalsMapOptional = subgroup "mapOptional" [
   test "filter and transform" [1, 2, 3, 4, 5] [6, 8, 10],
@@ -204,6 +237,21 @@ optionalsMapOptional = subgroup "mapOptional" [
     test name xs expected = evalPair name showIntList
       (Optionals.mapOptional filterFn (Phantoms.list $ Phantoms.int32 <$> xs))
       (Phantoms.list $ Phantoms.int32 <$> expected)
+
+optionalsMapSet :: TypedTerm TestGroup
+optionalsMapSet = subgroup "mapSet" [
+  test "all elements succeed" [1, 2, 3] (Phantoms.just (pIntSet [2, 4, 6])),
+  test "an element fails, short-circuiting the traversal" [1, 10, 3] (Phantoms.nothing :: TypedTerm (Maybe (S.Set Int))),
+  test "empty set traverses to Just {}" [] (Phantoms.just (pIntSet []))]
+  where
+    -- f: x -> if x <= 5 then Just (x * 2) else Nothing
+    fn = Phantoms.lambda "x" $
+      Logic.ifElse (Ordering.lte (Phantoms.var "x") (Phantoms.int32 5))
+        (Phantoms.just (Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
+        (Phantoms.nothing :: TypedTerm (Maybe Int))
+    test name xs expected = evalPair name showMaybeIntSet
+      (Optionals.mapSet fn (pIntSet xs))
+      expected
 
 optionalsMatch :: TypedTerm TestGroup
 optionalsMatch = subgroup "match" [

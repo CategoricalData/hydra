@@ -16,6 +16,7 @@ import qualified Data.Map                     as M
 import Hydra.Core.Testing
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Core.Lib.Functions as DefFunctions
+import qualified Hydra.Core.Lib.Math as DefMath
 import qualified Hydra.Core.Lib.Ordering as DefOrdering
 
 
@@ -44,6 +45,7 @@ allTests = definitionInModule module_ "allTests" $
     supergroup "hydra.core.lib.functions primitives" [
       functionsIdentity,
       functionsConst,
+      functionsCompose,
       functionsFlip]
 
 functionsIdentity :: TypedTerm TestGroup
@@ -61,6 +63,22 @@ functionsConst = subgroup "const" [
     (Terms.primitive DefFunctions.const @@ int32 5 @@ string "ignored") (int32 5),
   test "returns first argument, ignoring a string second argument"
     (Terms.primitive DefFunctions.const @@ string "a" @@ int32 99) (string "a")]
+  where
+    test name input result = evalCase name input result
+
+-- compose :: (b -> c) -> (a -> b) -> a -> c, where compose(g, f, x) = g(f(x)) (#775): had zero
+-- test coverage prior to this addition. Uses two distinct, order-sensitive unary primitives
+-- (negate and an increment via math.add) so a swapped-argument bug (f and g transposed) would
+-- produce a different, detectable result.
+functionsCompose :: TypedTerm TestGroup
+functionsCompose = subgroup "compose" [
+  -- compose(negate, increment, 5) = negate(increment(5)) = negate(6) = -6
+  test "compose(negate, increment, 5) = negate(increment(5))"
+    (Terms.primitive DefFunctions.compose
+      @@ Terms.primitive DefMath.negate
+      @@ (Terms.lambda "x" (Terms.primitive DefMath.add @@ Terms.var "x" @@ int32 1))
+      @@ int32 5)
+    (int32 (-6))]
   where
     test name input result = evalCase name input result
 

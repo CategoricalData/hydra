@@ -106,8 +106,10 @@ allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.core.lib.eithers primitives" $
     supergroup "hydra.core.lib.eithers primitives" [
+      eithersApply,
       eithersBind,
       eithersBimap,
+      eithersCompose,
       eithersIsLeft,
       eithersIsRight,
       eithersEither,
@@ -122,6 +124,20 @@ allTests = definitionInModule module_ "allTests" $
       eithersMapOptional,
       eithersMapSet]
 
+eithersApply :: TypedTerm TestGroup
+eithersApply = subgroup "apply" [
+  evalPair "apply Right function to Right argument" showEitherIntInt
+    (Eithers.apply mulBy2 (rightInt 5))
+    (rightInt 10),
+  evalPair "Left function short-circuits, argument not consulted" showEitherIntInt
+    (Eithers.apply (leftInt 7) (rightInt 5))
+    (leftInt 7),
+  evalPair "Right function with Left argument returns that Left" showEitherIntInt
+    (Eithers.apply mulBy2 (leftInt 9))
+    (leftInt 9)]
+  where
+    mulBy2 = Phantoms.right (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2))
+
 eithersBimap :: TypedTerm TestGroup
 eithersBimap = subgroup "bimap" [
   test "map left value" (leftInt 5) (leftInt 10),
@@ -133,6 +149,22 @@ eithersBimap = subgroup "bimap" [
         (Phantoms.lambda "s" $ Strings.length (Phantoms.var "s"))
         input)
       expected
+
+eithersCompose :: TypedTerm TestGroup
+eithersCompose = subgroup "compose" [
+  evalPair "both arrows succeed" showEitherIntInt
+    (Eithers.compose doubleArrow incrementArrow (Phantoms.int32 5))
+    (rightInt 11),
+  evalPair "first arrow fails" showEitherIntInt
+    (Eithers.compose failArrow incrementArrow (Phantoms.int32 5))
+    (leftInt 0),
+  evalPair "second arrow fails" showEitherIntInt
+    (Eithers.compose doubleArrow failArrow (Phantoms.int32 5))
+    (leftInt 0)]
+  where
+    doubleArrow = Phantoms.lambda "x" $ Phantoms.right (Math.mul (Phantoms.var "x") (Phantoms.int32 2))
+    incrementArrow = Phantoms.lambda "y" $ Phantoms.right (Math.add (Phantoms.var "y") (Phantoms.int32 1))
+    failArrow = Phantoms.lambda "_" $ Phantoms.left (Phantoms.int32 0)
 
 eithersBind :: TypedTerm TestGroup
 eithersBind = subgroup "bind" [

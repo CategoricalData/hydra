@@ -40,12 +40,24 @@ allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.core.lib.chars primitives" $
     supergroup "hydra.core.lib.chars primitives" [
+      charsIsAlpha,
       charsIsAlphaNum,
+      charsIsDigit,
       charsIsLower,
       charsIsSpace,
       charsIsUpper,
       charsToLower,
       charsToUpper]
+
+charsIsAlpha :: TypedTerm TestGroup
+charsIsAlpha = subgroup "isAlpha" [
+  test "lowercase letter" (ord 'a') true,
+  test "uppercase letter" (ord 'A') true,
+  test "digit" (ord '5') false,
+  test "space" (ord ' ') false,
+  test "punctuation" (ord '.') false]
+  where
+    test name x result = primCase name DefChars.isAlpha [int32 x] result
 
 charsIsAlphaNum :: TypedTerm TestGroup
 charsIsAlphaNum = subgroup "isAlphaNum" [
@@ -55,6 +67,17 @@ charsIsAlphaNum = subgroup "isAlphaNum" [
   test "punctuation" (ord '.') false]
   where
     test name x result = primCase name DefChars.isAlphaNum [int32 x] result
+
+charsIsDigit :: TypedTerm TestGroup
+charsIsDigit = subgroup "isDigit" [
+  test "ascii digit" (ord '5') true,
+  test "ascii zero" (ord '0') true,
+  test "ascii nine" (ord '9') true,
+  test "letter" (ord 'a') false,
+  -- U+0660 ARABIC-INDIC DIGIT ZERO is Unicode Nd but not ASCII, so isDigit is deliberately false.
+  test "non-ascii unicode digit" 0x0660 false]
+  where
+    test name x result = primCase name DefChars.isDigit [int32 x] result
 
 charsIsLower :: TypedTerm TestGroup
 charsIsLower = subgroup "isLower" [

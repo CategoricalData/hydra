@@ -83,6 +83,7 @@ allTests = definitionInModule module_ "allTests" $
     supergroup "hydra.core.lib.maps primitives" [
       mapsAlter,
       mapsBimap,
+      mapsDifference,
       mapsElems,
       mapsEmpty,
       mapsFilter,
@@ -90,6 +91,7 @@ allTests = definitionInModule module_ "allTests" $
       mapsFindWithDefault,
       mapsFromList,
       mapsInsert,
+      mapsIntersection,
       mapsKeys,
       mapsLookup,
       mapsMap,
@@ -100,7 +102,8 @@ allTests = definitionInModule module_ "allTests" $
       mapsSingleton,
       mapsSize,
       mapsToList,
-      mapsUnion]
+      mapsUnion,
+      mapsUnions]
 
 mapsAlter :: TypedTerm TestGroup
 mapsAlter = subgroup "alter" [
@@ -128,6 +131,17 @@ mapsBimap = subgroup "bimap" [
         (Phantoms.lambda "k" $ Math.mul (Phantoms.var "k") (Phantoms.int32 2))
         (Phantoms.lambda "v" $ Strings.toUpper (Phantoms.var "v"))
         (pMap m))
+      (pMap result)
+
+mapsDifference :: TypedTerm TestGroup
+mapsDifference = subgroup "difference" [
+  test "remove overlapping keys" [(1, "a"), (2, "b")] [(2, "x"), (3, "c")] [(1, "a")],
+  test "no overlap" [(1, "a")] [(2, "b")] [(1, "a")],
+  test "difference with empty" [(1, "a")] [] [(1, "a")],
+  test "empty with map" [] [(1, "a")] []]
+  where
+    test name m1 m2 result = evalPair name showIntStringMap
+      (Maps.difference (pMap m1) (pMap m2))
       (pMap result)
 
 mapsElems :: TypedTerm TestGroup
@@ -201,6 +215,17 @@ mapsInsert = subgroup "insert" [
   where
     test name k v m result = evalPair name showIntStringMap
       (Maps.insert (Phantoms.int32 k) (Phantoms.string v) (pMap m))
+      (pMap result)
+
+mapsIntersection :: TypedTerm TestGroup
+mapsIntersection = subgroup "intersection" [
+  test "keep overlapping keys" [(1, "a"), (2, "b")] [(2, "x"), (3, "c")] [(2, "b")],
+  test "no overlap" [(1, "a")] [(2, "b")] [],
+  test "intersection with empty" [(1, "a")] [] [],
+  test "empty with map" [] [(1, "a")] []]
+  where
+    test name m1 m2 result = evalPair name showIntStringMap
+      (Maps.intersection (pMap m1) (pMap m2))
       (pMap result)
 
 mapsKeys :: TypedTerm TestGroup
@@ -306,4 +331,17 @@ mapsUnion = subgroup "union" [
   where
     test name m1 m2 result = evalPair name showIntStringMap
       (Maps.union (pMap m1) (pMap m2))
+      (pMap result)
+
+mapsUnions :: TypedTerm TestGroup
+mapsUnions = subgroup "unions" [
+  test "earliest map wins on key collision"
+    [[(1, "a"), (2, "b")], [(2, "x"), (3, "c")], [(3, "y"), (4, "d")]]
+    [(1, "a"), (2, "b"), (3, "c"), (4, "d")],
+  test "single map" [[(1, "a")]] [(1, "a")],
+  test "empty list of maps" ([] :: [[(Int, String)]]) [],
+  test "list including an empty map" [[(1, "a")], []] [(1, "a")]]
+  where
+    test name ms result = evalPair name showIntStringMap
+      (Maps.unions (Phantoms.list $ pMap <$> ms))
       (pMap result)
