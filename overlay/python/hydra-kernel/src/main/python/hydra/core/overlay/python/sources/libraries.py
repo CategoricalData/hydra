@@ -26,8 +26,14 @@ def register_chars_primitives() -> dict[Name, Primitive]:
 
     primitives: dict[Name, Primitive] = {}
 
+    primitives[def_chars.is_alpha.name] = prims.prim1(
+        def_chars.is_alpha.name, chars.is_alpha, [], prims.int32(), prims.boolean()
+    )
     primitives[def_chars.is_alpha_num.name] = prims.prim1(
         def_chars.is_alpha_num.name, chars.is_alpha_num, [], prims.int32(), prims.boolean()
+    )
+    primitives[def_chars.is_digit.name] = prims.prim1(
+        def_chars.is_digit.name, chars.is_digit, [], prims.int32(), prims.boolean()
     )
     primitives[def_chars.is_lower.name] = prims.prim1(
         def_chars.is_lower.name, chars.is_lower, [], prims.int32(), prims.boolean()
@@ -164,6 +170,10 @@ def register_effects_primitives() -> dict[Name, Primitive]:
     primitives[def_effects.map.name] = unsupported_effect_primitive(def_effects.map)
     primitives[def_effects.map_list.name] = unsupported_effect_primitive(def_effects.map_list)
     primitives[def_effects.map_optional.name] = unsupported_effect_primitive(def_effects.map_optional)
+    # effects.map_set is NOT registered here: it is not declared as a kernel primitive at all
+    # right now (see Hydra.Sources.Kernel.Lib.Effects's definitions list, #775) because its
+    # signature trips a pre-existing Java-generator gap. Re-add both the kernel declaration and
+    # the map_set function in lib/effects.py once the generator is fixed.
     primitives[def_effects.pure.name] = unsupported_effect_primitive(def_effects.pure)
     return primitives
 
@@ -346,6 +356,11 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         def_lists.bind.name, lists.bind, [_a, _b],
         prims.list_(a), fun(a, prims.list_(b)), prims.list_(b)
     )
+    # prim3: compose :: (a -> [b]) -> (b -> [c]) -> a -> [c]
+    primitives[def_lists.compose.name] = prims.prim3(
+        def_lists.compose.name, lists.compose, [_a, _b, _c],
+        fun(a, prims.list_(b)), fun(b, prims.list_(c)), a, prims.list_(c)
+    )
     # prim1: concat :: [[a]] -> [a]
     primitives[def_lists.concat.name] = prims.prim1(
         def_lists.concat.name, lists.concat, [_a],
@@ -386,6 +401,12 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         def_lists.find.name, lists.find, [_a],
         fun(a, prims.boolean()), prims.list_(a), prims.optional(a)
     )
+    # prim3: foldList :: (x -> y -> [x]) -> x -> [y] -> [x]
+    primitives[def_lists.fold_list.name] = prims.prim3(
+        def_lists.fold_list.name,
+        lambda f, acc0, ys: lists.fold_list(lambda acc, el: f(acc)(el), acc0, ys), [_a, _b],
+        fun(a, fun(b, prims.list_(a))), a, prims.list_(b), prims.list_(a)
+    )
     # prim3: foldl :: (b -> a -> b) -> b -> [a] -> b
     primitives[def_lists.foldl.name] = prims.prim3(
         def_lists.foldl.name, lambda f, init, xs: lists.foldl(lambda acc, el: f(acc)(el), init, xs), [_b, _a],
@@ -419,6 +440,21 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     primitives[def_lists.map.name] = prims.prim2(
         def_lists.map.name, lists.map, [_a, _b],
         fun(a, b), prims.list_(a), prims.list_(b)
+    )
+    # prim2: mapList :: (x -> [y]) -> [x] -> [[y]]
+    primitives[def_lists.map_list.name] = prims.prim2(
+        def_lists.map_list.name, lists.map_list, [_a, _b],
+        fun(a, prims.list_(b)), prims.list_(a), prims.list_(prims.list_(b))
+    )
+    # prim2: mapOptional :: (x -> [y]) -> optional x -> [optional y]
+    primitives[def_lists.map_optional.name] = prims.prim2(
+        def_lists.map_optional.name, lists.map_optional, [_a, _b],
+        fun(a, prims.list_(b)), prims.optional(a), prims.list_(prims.optional(b))
+    )
+    # prim2: mapSet :: (x -> [y]) -> set x -> [set y]
+    primitives[def_lists.map_set.name] = prims.prim2(
+        def_lists.map_set.name, lists.map_set, [_aOrd, _bOrd],
+        fun(a, prims.list_(b)), prims.set_(a), prims.list_(prims.set_(b))
     )
     # prim2: at :: Int32 -> [a] -> optional a
     primitives[def_lists.at.name] = prims.prim2(
@@ -582,6 +618,11 @@ def register_maps_primitives() -> dict[Name, Primitive]:
         def_maps.delete.name, maps.delete, [_kOrd, _v],
         k, map_kv, map_kv
     )
+    # prim2: difference :: Ord k => Map k v -> Map k v -> Map k v
+    primitives[def_maps.difference.name] = prims.prim2(
+        def_maps.difference.name, maps.difference, [_kOrd, _v],
+        map_kv, map_kv, map_kv
+    )
     # prim1: elems :: Ord k => Map k v -> [v]
     primitives[def_maps.elems.name] = prims.prim1(
         def_maps.elems.name, maps.elems, [_kOrd, _v],
@@ -617,6 +658,11 @@ def register_maps_primitives() -> dict[Name, Primitive]:
     primitives[def_maps.insert.name] = prims.prim3(
         def_maps.insert.name, maps.insert, [_kOrd, _v],
         k, v, map_kv, map_kv
+    )
+    # prim2: intersection :: Ord k => Map k v -> Map k v -> Map k v
+    primitives[def_maps.intersection.name] = prims.prim2(
+        def_maps.intersection.name, maps.intersection, [_kOrd, _v],
+        map_kv, map_kv, map_kv
     )
     # prim1: keys :: Ord k => Map k v -> [k]
     primitives[def_maps.keys.name] = prims.prim1(
@@ -667,6 +713,11 @@ def register_maps_primitives() -> dict[Name, Primitive]:
     primitives[def_maps.union.name] = prims.prim2(
         def_maps.union.name, maps.union, [_kOrd, _v],
         map_kv, map_kv, map_kv
+    )
+    # prim1: unions :: Ord k => [Map k v] -> Map k v
+    primitives[def_maps.unions.name] = prims.prim1(
+        def_maps.unions.name, maps.unions, [_kOrd, _v],
+        prims.list_(map_kv), map_kv
     )
 
     return primitives
@@ -1355,17 +1406,23 @@ def register_default_fallback_primitives(already_native: dict[Name, Primitive]) 
     reduce_term rather than running Python logic.
 
     Spike (#609 Stage 2/3) validated lists.takeWhile; equality.notEqual and functions.{const,flip}
-    were added under #749. The remaining 8 Group-A primitives (eithers.{apply,compose,pure},
-    functions.compose, optionals.{foldList,mapList,mapSet}, sets.filter) are wired the same way
-    as needed.
+    were added under #749. eithers.{apply,compose}, functions.compose,
+    optionals.{foldList,mapList,mapSet}, and lists.mapGivens were added under #775. The
+    remaining Group-A primitives (eithers.pure, sets.filter) are wired the same way as needed.
     """
+    from hydra.core.lib import eithers as def_eithers
     from hydra.core.lib import equality as def_equality
     from hydra.core.lib import functions as def_functions
     from hydra.core.lib import lists as def_lists
+    from hydra.core.lib import optionals as def_optionals
     from hydra.core.overlay.python.dsl.python import Given
 
     primitives: dict[Name, Primitive] = {}
-    for definition in [def_lists.take_while, def_equality.not_equal, def_functions.const, def_functions.flip]:
+    for definition in [
+        def_lists.take_while, def_equality.not_equal, def_functions.const, def_functions.flip,
+        def_eithers.apply, def_eithers.compose, def_functions.compose, def_lists.map_givens,
+        def_optionals.fold_list, def_optionals.map_list, def_optionals.map_set,
+    ]:
         if definition.name not in already_native and isinstance(definition.default_implementation, Given):
             primitives[definition.name] = prims.default_fallback_primitive(definition)
     return primitives

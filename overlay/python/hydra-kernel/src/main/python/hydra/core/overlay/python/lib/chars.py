@@ -28,9 +28,20 @@ _SIMPLE_UPPER_OVERRIDES = {
 }
 
 
+def is_alpha(value: int) -> bool:
+    """Check whether a character is alphabetic."""
+    return chr(value).isalpha()
+
+
 def is_alpha_num(value: int) -> bool:
     """Check whether a character is alphanumeric."""
     return chr(value).isalnum()
+
+
+def is_digit(value: int) -> bool:
+    """Check whether a character is an ASCII decimal digit ('0' through '9'), deliberately
+    excluding other Unicode decimal digits that str.isdigit() would accept."""
+    return 0x30 <= value <= 0x39
 
 
 def is_lower(value: int) -> bool:

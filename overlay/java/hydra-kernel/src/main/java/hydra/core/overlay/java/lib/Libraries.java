@@ -10,7 +10,9 @@ import hydra.core.overlay.java.lib.ordering.Lt;
 import hydra.core.overlay.java.lib.ordering.Lte;
 import hydra.core.overlay.java.lib.ordering.Max;
 import hydra.core.overlay.java.lib.ordering.Min;
+import hydra.core.overlay.java.lib.chars.IsAlpha;
 import hydra.core.overlay.java.lib.chars.IsAlphaNum;
+import hydra.core.overlay.java.lib.chars.IsDigit;
 import hydra.core.overlay.java.lib.chars.IsLower;
 import hydra.core.overlay.java.lib.chars.IsSpace;
 import hydra.core.overlay.java.lib.chars.IsUpper;
@@ -77,9 +79,9 @@ public class Libraries {
      * default term via {@link hydra.Reduction#reduceTerm} rather than running Java logic.
      *
      * Spike (#609 Stage 2) validated lists.takeWhile; equality.notEqual and functions.{const,flip}
-     * were added under #749. The remaining 8 Group-A primitives (eithers.{apply,compose,pure},
-     * functions.compose, optionals.{foldList,mapList,mapSet}, sets.filter) are wired the same way
-     * as needed.
+     * were added under #749. eithers.{apply,compose}, functions.compose,
+     * optionals.{foldList,mapList,mapSet}, and lists.mapGivens were added under #775. The
+     * remaining Group-A primitives (eithers.pure, sets.filter) are wired the same way as needed.
      */
     private static List<PrimitiveFunction> defaultFallbackPrimitives() {
         Set<String> alreadyNative = new HashSet<>();
@@ -99,7 +101,14 @@ public class Libraries {
                 hydra.core.lib.Lists.takeWhile(),
                 hydra.core.lib.Equality.notEqual(),
                 hydra.core.lib.Functions.const_(),
-                hydra.core.lib.Functions.flip())) {
+                hydra.core.lib.Functions.flip(),
+                hydra.core.lib.Eithers.apply(),
+                hydra.core.lib.Eithers.compose(),
+                hydra.core.lib.Functions.compose(),
+                hydra.core.lib.Lists.mapGivens(),
+                hydra.core.lib.Optionals.foldList(),
+                hydra.core.lib.Optionals.mapList(),
+                hydra.core.lib.Optionals.mapSet())) {
             if (!alreadyNative.contains(def.name.value)) {
                 hydra.core.model.Term defaultImpl = hydra.core.lib.Defaults.defaultImplementations().get(def.name);
                 if (defaultImpl != null) {
@@ -113,7 +122,9 @@ public class Libraries {
 
     private static List<PrimitiveFunction> charsPrimitives() {
         return Arrays.asList(
+                new IsAlpha(),
                 new IsAlphaNum(),
+                new IsDigit(),
                 new IsLower(),
                 new IsSpace(),
                 new IsUpper(),
@@ -122,6 +133,10 @@ public class Libraries {
     }
 
     private static List<PrimitiveFunction> effectsPrimitives() {
+        // effects.mapSet is NOT registered here: it is not declared as a kernel primitive at
+        // all right now (see Hydra.Sources.Kernel.Lib.Effects's definitions list, #775) because
+        // its signature trips a pre-existing Java-generator gap. Re-add both the kernel
+        // declaration and a MapSet.java implementation once the generator is fixed.
         return Arrays.asList(
                 new hydra.core.overlay.java.lib.effects.Apply(),
                 new hydra.core.overlay.java.lib.effects.Bind(),
@@ -191,6 +206,7 @@ public class Libraries {
                 new hydra.core.overlay.java.lib.lists.Apply(),
                 new hydra.core.overlay.java.lib.lists.At(),
                 new hydra.core.overlay.java.lib.lists.Bind(),
+                new hydra.core.overlay.java.lib.lists.Compose(),
                 new hydra.core.overlay.java.lib.lists.Concat(),
                 new hydra.core.overlay.java.lib.lists.Concat2(),
                 new hydra.core.overlay.java.lib.lists.Cons(),
@@ -199,6 +215,7 @@ public class Libraries {
                 new hydra.core.overlay.java.lib.lists.DropWhile(),
                 new hydra.core.overlay.java.lib.lists.Filter(),
                 new hydra.core.overlay.java.lib.lists.Find(),
+                new hydra.core.overlay.java.lib.lists.FoldList(),
                 new hydra.core.overlay.java.lib.lists.Foldl(),
                 new hydra.core.overlay.java.lib.lists.Foldr(),
                 new hydra.core.overlay.java.lib.lists.Group(),
@@ -210,6 +227,9 @@ public class Libraries {
                 new hydra.core.overlay.java.lib.lists.Last(),
                 new hydra.core.overlay.java.lib.lists.Length(),
                 new hydra.core.overlay.java.lib.lists.Map(),
+                new hydra.core.overlay.java.lib.lists.MapList(),
+                new hydra.core.overlay.java.lib.lists.MapOptional(),
+                new hydra.core.overlay.java.lib.lists.MapSet(),
                 new hydra.core.overlay.java.lib.lists.Member(),
                 new hydra.core.overlay.java.lib.lists.Partition(),
                 new hydra.core.overlay.java.lib.lists.Replicate(),
@@ -298,6 +318,7 @@ public class Libraries {
                 new hydra.core.overlay.java.lib.maps.Alter(),
                 new hydra.core.overlay.java.lib.maps.Bimap(),
                 new hydra.core.overlay.java.lib.maps.Delete(),
+                new hydra.core.overlay.java.lib.maps.Difference(),
                 new Elems(),
                 new hydra.core.overlay.java.lib.maps.Empty(),
                 new hydra.core.overlay.java.lib.maps.Filter(),
@@ -305,6 +326,7 @@ public class Libraries {
                 new hydra.core.overlay.java.lib.maps.FindWithDefault(),
                 new hydra.core.overlay.java.lib.maps.FromList(),
                 new hydra.core.overlay.java.lib.maps.Insert(),
+                new hydra.core.overlay.java.lib.maps.Intersection(),
                 new hydra.core.overlay.java.lib.maps.IsEmpty(),
                 new hydra.core.overlay.java.lib.maps.Keys(),
                 new hydra.core.overlay.java.lib.maps.Lookup(),
@@ -314,7 +336,8 @@ public class Libraries {
                 new hydra.core.overlay.java.lib.maps.Singleton(),
                 new hydra.core.overlay.java.lib.maps.Size(),
                 new hydra.core.overlay.java.lib.maps.ToList(),
-                new hydra.core.overlay.java.lib.maps.Union());
+                new hydra.core.overlay.java.lib.maps.Union(),
+                new hydra.core.overlay.java.lib.maps.Unions());
     }
 
     private static List<PrimitiveFunction> mathPrimitives() {

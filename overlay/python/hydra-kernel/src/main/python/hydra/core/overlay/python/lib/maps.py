@@ -51,6 +51,12 @@ def delete(key: K, mapping: Mapping[K, V]) -> Mapping[K, V]:
     return _to_pmap(mapping).delete(key)
 
 
+def difference(map1: Mapping[K, V], map2: Mapping[K, V]) -> Mapping[K, V]:
+    """Compute the difference of two maps by key: bindings of map1 whose keys are not in map2."""
+    pmap2 = _to_pmap(map2)
+    return _to_pmap(map1).filter_with_key(lambda k, v: not pmap2.contains_key(k))
+
+
 def elems(mapping: Mapping[Any, V]) -> Sequence[V]:
     """Get the values of a map, in key order."""
     return ConsList.from_iterable(_to_pmap(mapping).values_list())
@@ -91,6 +97,12 @@ def from_list(pairs: Sequence[tuple[K, V]]) -> Mapping[K, V]:
 def insert(key: K, value: V, mapping: Mapping[K, V]) -> Mapping[K, V]:
     """Insert a key-value pair into a map. O(log n)."""
     return _to_pmap(mapping).insert(key, value)
+
+
+def intersection(map1: Mapping[K, V], map2: Mapping[K, V]) -> Mapping[K, V]:
+    """Compute the intersection of two maps by key: bindings of map1 whose keys are also in map2."""
+    pmap2 = _to_pmap(map2)
+    return _to_pmap(map1).filter_with_key(lambda k, v: pmap2.contains_key(k))
 
 
 def keys(mapping: Mapping[K, Any]) -> Sequence[K]:
@@ -149,3 +161,11 @@ def to_list(mapping: Mapping[K, V]) -> Sequence[tuple[K, V]]:
 def union(map1: Mapping[K, V], map2: Mapping[K, V]) -> Mapping[K, V]:
     """Union two maps, with the first taking precedence. O(m * log(m + n))."""
     return _to_pmap(map1).union(_to_pmap(map2))
+
+
+def unions(maps: Sequence[Mapping[K, V]]) -> Mapping[K, V]:
+    """Compute the left-biased union of a list of maps; the earliest map wins on key collision."""
+    result: PersistentMap[K, V] = PersistentMap.empty()
+    for mapping in maps:
+        result = result.union(_to_pmap(mapping))
+    return result

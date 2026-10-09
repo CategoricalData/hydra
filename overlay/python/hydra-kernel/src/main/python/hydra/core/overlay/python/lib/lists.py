@@ -8,11 +8,13 @@ full-tuple-copy that ``tuple``-based implementations would impose.
 
 from __future__ import annotations
 from collections.abc import Callable, Sequence
+from collections.abc import Set as AbstractSet
 from functools import cmp_to_key, reduce
+from itertools import product
 from typing import Any, TypeVar
 
 from hydra.core.overlay.python.dsl.python import Optional, Given, None_
-from hydra.core.overlay.python.util import ConsList
+from hydra.core.overlay.python.util import ConsList, PersistentSet
 from hydra.core.overlay.python.util._compare import compare as _compare_terms
 
 A = TypeVar('A')
@@ -34,6 +36,11 @@ def apply(fs: Sequence[Callable[[A], B]], values: Sequence[A]) -> Sequence[B]:
 def bind(values: Sequence[A], f: Callable[[A], Sequence[B]]) -> Sequence[B]:
     """Apply a function that returns lists to each element and flatten results."""
     return ConsList.from_iterable(s for v in values for s in f(v))
+
+
+def compose(f: Callable[[A], Sequence[B]], g: Callable[[B], Sequence[C]], x: A) -> Sequence[C]:
+    """Kleisli composition for the list monad: compose(f, g, x) = bind(f(x), g)."""
+    return bind(f(x), g)
 
 
 def concat(values: Sequence[Sequence[A]]) -> Sequence[A]:
@@ -88,6 +95,16 @@ def find(predicate: Callable[[A], bool], values: Sequence[A]) -> Optional[A]:
         if predicate(v):
             return Given(v)
     return None_()
+
+
+def fold_list(f: Callable[[A, B], Sequence[A]], acc0: A, values: Sequence[B]) -> Sequence[A]:
+    """Left-fold a list in the list monad (a nondeterministic fold): after each element, the set
+    of accumulators is replaced by all results of applying f to each current accumulator and
+    that element."""
+    accs: list[A] = [acc0]
+    for el in values:
+        accs = [next_acc for acc in accs for next_acc in f(acc, el)]
+    return ConsList.from_iterable(accs)
 
 
 def foldl(f: Callable[[B, A], B], initial: B, values: Sequence[A]) -> B:
@@ -159,6 +176,37 @@ def length(values: Sequence[Any]) -> int:
 def map(f: Callable[[A], B], values: Sequence[A]) -> Sequence[B]:
     """Map a function over a list."""
     return ConsList.from_iterable(f(v) for v in values)
+
+
+def map_list(f: Callable[[A], Sequence[B]], values: Sequence[A]) -> Sequence[Sequence[B]]:
+    """Traverse a list in the list monad: every combination obtainable by choosing one element
+    from f(x) for each x in values, in lexicographic order with the choice for the first element
+    varying slowest."""
+    choices_per_element = [list(f(x)) for x in values]
+    return ConsList.from_iterable(
+        ConsList.from_iterable(combo) for combo in product(*choices_per_element)
+    )
+
+
+def map_optional(f: Callable[[A], Sequence[B]], m: Optional[A]) -> Sequence[Optional[B]]:
+    """Traverse an optional value in the list monad: returns the single-element list containing
+    none when m is none; for given(x) returns given(y) for each element y of f(x), in order."""
+    match m:
+        case Given(val):
+            return ConsList.from_iterable(Given(y) for y in f(val))
+        case _:
+            return ConsList.from_iterable([None_()])
+
+
+def map_set(f: Callable[[A], Sequence[B]], s: AbstractSet[A]) -> Sequence[AbstractSet[B]]:
+    """Traverse a set in the list monad: every set obtainable by choosing one element from f(x)
+    for each element x of s. Elements of s are traversed in ascending order; a result set may
+    have fewer elements than s when distinct choices coincide."""
+    pset = s if isinstance(s, PersistentSet) else PersistentSet.from_iterable(s)
+    choices_per_element = [list(f(x)) for x in pset]
+    return ConsList.from_iterable(
+        PersistentSet.from_iterable(combo) for combo in product(*choices_per_element)
+    )
 
 
 def at(i: int, values: Sequence[A]) -> Optional[A]:
