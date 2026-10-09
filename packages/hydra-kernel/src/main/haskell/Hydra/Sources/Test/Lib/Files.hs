@@ -94,8 +94,8 @@ decodeBytes b = retype $
 
 -- writeFile then readFile: round-trip the contents.
 filesReadWrite :: TypedTerm TestGroup
-filesReadWrite = subgroup "readFile/writeFile" [
-  effectfulCase "writeFile then readFile round-trips the contents"
+filesReadWrite = subgroup "roundTripsWithWriteFile" [
+  effectfulCaseWithProvisions "writeFile then readFile round-trips the contents" ["roundTripsWithWriteFile"] DefFiles.readFile
     (primitive DefEffects.bind
       @@ (primitive DefFiles.writeFile @@ path "rw.txt" @@ bytes "hello world")
       @@ (lambda "_w" $ foldEither
@@ -105,8 +105,8 @@ filesReadWrite = subgroup "readFile/writeFile" [
 
 -- appendFile then readFile: contents are preserved and extended.
 filesAppendFile :: TypedTerm TestGroup
-filesAppendFile = subgroup "appendFile" [
-  effectfulCase "appendFile after writeFile preserves existing contents"
+filesAppendFile = subgroup "preservesExistingContentsAndAppends" [
+  effectfulCaseWithProvisions "appendFile after writeFile preserves existing contents" ["preservesExistingContentsAndAppends"] DefFiles.appendFile
     (primitive DefEffects.bind
       @@ (primitive DefFiles.writeFile @@ path "ap.txt" @@ bytes "AB")
       @@ (lambda "_w" $ primitive DefEffects.bind
@@ -118,68 +118,73 @@ filesAppendFile = subgroup "appendFile" [
 
 -- exists: false before a write, true after.
 filesExists :: TypedTerm TestGroup
-filesExists = subgroup "exists" [
-  effectfulCase "exists is false for a missing path"
-    (foldEither
-      (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
-      (primitive DefFiles.exists @@ path "nope.txt"))
-    (string "false"),
-  effectfulCase "exists is true after writeFile"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.writeFile @@ path "there.txt" @@ bytes "x")
-      @@ (lambda "_w" $ foldEither
-            (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
-            (primitive DefFiles.exists @@ path "there.txt")))
-    (string "true")]
+filesExists = supergroup "exists" [
+  subgroup "falseForMissingPath" [
+    effectfulCaseWithProvisions "exists is false for a missing path" ["falseForMissingPath"] DefFiles.exists
+      (foldEither
+        (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
+        (primitive DefFiles.exists @@ path "nope.txt"))
+      (string "false")],
+  subgroup "trueAfterCreation" [
+    effectfulCaseWithProvisions "exists is true after writeFile" ["trueAfterCreation"] DefFiles.exists
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.writeFile @@ path "there.txt" @@ bytes "x")
+        @@ (lambda "_w" $ foldEither
+              (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
+              (primitive DefFiles.exists @@ path "there.txt")))
+      (string "true")]]
 
 -- copy: a file, then a directory tree.
 filesCopy :: TypedTerm TestGroup
-filesCopy = subgroup "copy" [
-  effectfulCase "copy duplicates a single file"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.writeFile @@ path "cp-src.txt" @@ bytes "copied")
-      @@ (lambda "_w" $ primitive DefEffects.bind
-            @@ (primitive DefFiles.copy @@ false @@ path "cp-src.txt" @@ path "cp-dst.txt")
-            @@ (lambda "_c" $ foldEither
-                  (lambda "b" $ decodeBytes (var "b"))
-                  (primitive DefFiles.readFile @@ path "cp-dst.txt"))))
-    (string "copied"),
-  effectfulCase "copy with recursive=true duplicates a directory tree"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.createDirectory @@ false @@ path "cp-dir")
-      @@ (lambda "_d" $ primitive DefEffects.bind
-            @@ (primitive DefFiles.writeFile @@ path "cp-dir/inner.txt" @@ bytes "nested")
-            @@ (lambda "_w" $ primitive DefEffects.bind
-                  @@ (primitive DefFiles.copy @@ true @@ path "cp-dir" @@ path "cp-dir-2")
-                  @@ (lambda "_c" $ foldEither
-                        (lambda "b" $ decodeBytes (var "b"))
-                        (primitive DefFiles.readFile @@ path "cp-dir-2/inner.txt")))))
-    (string "nested"),
-  effectfulCase "copy with recursive=false on a directory yields an error"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.createDirectory @@ false @@ path "cp-src-dir")
-      @@ (lambda "_d" $ foldEither
-            (lambda "b" $ string "unexpected success")
-            (primitive DefFiles.copy @@ false @@ path "cp-src-dir" @@ path "cp-src-dir-copy")))
-    (string "ERR"),
-  effectfulCase "copy with recursive=true into an already-existing destination directory succeeds"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.createDirectory @@ false @@ path "cp-dir3")
-      @@ (lambda "_d1" $ primitive DefEffects.bind
-            @@ (primitive DefFiles.writeFile @@ path "cp-dir3/inner.txt" @@ bytes "again")
-            @@ (lambda "_w" $ primitive DefEffects.bind
-                  @@ (primitive DefFiles.createDirectory @@ false @@ path "cp-dir3-dst")
-                  @@ (lambda "_d2" $ primitive DefEffects.bind
-                        @@ (primitive DefFiles.copy @@ true @@ path "cp-dir3" @@ path "cp-dir3-dst")
-                        @@ (lambda "_c" $ foldEither
-                              (lambda "b" $ decodeBytes (var "b"))
-                              (primitive DefFiles.readFile @@ path "cp-dir3-dst/inner.txt"))))))
-    (string "again")]
+filesCopy = supergroup "copy" [
+  subgroup "copiesSingleFile" [
+    effectfulCaseWithProvisions "copy duplicates a single file" ["copiesSingleFile"] DefFiles.copy
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.writeFile @@ path "cp-src.txt" @@ bytes "copied")
+        @@ (lambda "_w" $ primitive DefEffects.bind
+              @@ (primitive DefFiles.copy @@ false @@ path "cp-src.txt" @@ path "cp-dst.txt")
+              @@ (lambda "_c" $ foldEither
+                    (lambda "b" $ decodeBytes (var "b"))
+                    (primitive DefFiles.readFile @@ path "cp-dst.txt"))))
+      (string "copied")],
+  subgroup "copiesDirectoryTreeWhenRecursive" [
+    effectfulCaseWithProvisions "copy with recursive=true duplicates a directory tree" ["copiesDirectoryTreeWhenRecursive"] DefFiles.copy
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.createDirectory @@ false @@ path "cp-dir")
+        @@ (lambda "_d" $ primitive DefEffects.bind
+              @@ (primitive DefFiles.writeFile @@ path "cp-dir/inner.txt" @@ bytes "nested")
+              @@ (lambda "_w" $ primitive DefEffects.bind
+                    @@ (primitive DefFiles.copy @@ true @@ path "cp-dir" @@ path "cp-dir-2")
+                    @@ (lambda "_c" $ foldEither
+                          (lambda "b" $ decodeBytes (var "b"))
+                          (primitive DefFiles.readFile @@ path "cp-dir-2/inner.txt")))))
+      (string "nested"),
+    effectfulCaseWithProvisions "copy with recursive=true into an already-existing destination directory succeeds" ["copiesDirectoryTreeWhenRecursive"] DefFiles.copy
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.createDirectory @@ false @@ path "cp-dir3")
+        @@ (lambda "_d1" $ primitive DefEffects.bind
+              @@ (primitive DefFiles.writeFile @@ path "cp-dir3/inner.txt" @@ bytes "again")
+              @@ (lambda "_w" $ primitive DefEffects.bind
+                    @@ (primitive DefFiles.createDirectory @@ false @@ path "cp-dir3-dst")
+                    @@ (lambda "_d2" $ primitive DefEffects.bind
+                          @@ (primitive DefFiles.copy @@ true @@ path "cp-dir3" @@ path "cp-dir3-dst")
+                          @@ (lambda "_c" $ foldEither
+                                (lambda "b" $ decodeBytes (var "b"))
+                                (primitive DefFiles.readFile @@ path "cp-dir3-dst/inner.txt"))))))
+      (string "again")],
+  subgroup "errorsOnNonRecursiveDirectory" [
+    effectfulCaseWithProvisions "copy with recursive=false on a directory yields an error" ["errorsOnNonRecursiveDirectory"] DefFiles.copy
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.createDirectory @@ false @@ path "cp-src-dir")
+        @@ (lambda "_d" $ foldEither
+              (lambda "b" $ string "unexpected success")
+              (primitive DefFiles.copy @@ false @@ path "cp-src-dir" @@ path "cp-src-dir-copy")))
+      (string "ERR")]]
 
 -- createDirectory then exists.
 filesCreateDirectory :: TypedTerm TestGroup
-filesCreateDirectory = subgroup "createDirectory" [
-  effectfulCase "createDirectory makes a directory that then exists"
+filesCreateDirectory = subgroup "createsDirectoryThatThenExists" [
+  effectfulCaseWithProvisions "createDirectory makes a directory that then exists" ["createsDirectoryThatThenExists"] DefFiles.createDirectory
     (primitive DefEffects.bind
       @@ (primitive DefFiles.createDirectory @@ false @@ path "sub")
       @@ (lambda "_c" $ foldEither
@@ -189,8 +194,8 @@ filesCreateDirectory = subgroup "createDirectory" [
 
 -- listDirectory: after writing one file, the directory lists exactly one entry.
 filesListDirectory :: TypedTerm TestGroup
-filesListDirectory = subgroup "listDirectory" [
-  effectfulCase "listDirectory reports the number of entries"
+filesListDirectory = subgroup "listsImmediateEntries" [
+  effectfulCaseWithProvisions "listDirectory reports the number of entries" ["listsImmediateEntries"] DefFiles.listDirectory
     (primitive DefEffects.bind
       @@ (primitive DefFiles.writeFile @@ path "only.txt" @@ bytes "x")
       @@ (lambda "_w" $ foldEither
@@ -200,41 +205,44 @@ filesListDirectory = subgroup "listDirectory" [
 
 -- removeDirectory: an empty directory with recursive=false, then a populated one with recursive=true.
 filesRemoveDirectory :: TypedTerm TestGroup
-filesRemoveDirectory = subgroup "removeDirectory" [
-  effectfulCase "removeDirectory with recursive=false removes an empty directory"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.createDirectory @@ false @@ path "rmdir-empty")
-      @@ (lambda "_d" $ primitive DefEffects.bind
-            @@ (primitive DefFiles.removeDirectory @@ false @@ path "rmdir-empty")
-            @@ (lambda "_r" $ foldEither
-                  (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
-                  (primitive DefFiles.exists @@ path "rmdir-empty"))))
-    (string "false"),
-  effectfulCase "removeDirectory with recursive=false on a non-empty directory yields an error"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.createDirectory @@ false @@ path "rmdir-nonempty")
-      @@ (lambda "_d" $ primitive DefEffects.bind
-            @@ (primitive DefFiles.writeFile @@ path "rmdir-nonempty/inner.txt" @@ bytes "x")
-            @@ (lambda "_w" $ foldEither
-                  (lambda "b" $ string "unexpected success")
-                  (primitive DefFiles.removeDirectory @@ false @@ path "rmdir-nonempty"))))
-    (string "ERR"),
-  effectfulCase "removeDirectory with recursive=true removes a populated directory"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.createDirectory @@ false @@ path "rmdir-full")
-      @@ (lambda "_d" $ primitive DefEffects.bind
-            @@ (primitive DefFiles.writeFile @@ path "rmdir-full/inner.txt" @@ bytes "x")
-            @@ (lambda "_w" $ primitive DefEffects.bind
-                  @@ (primitive DefFiles.removeDirectory @@ true @@ path "rmdir-full")
-                  @@ (lambda "_r" $ foldEither
-                        (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
-                        (primitive DefFiles.exists @@ path "rmdir-full")))))
-    (string "false")]
+filesRemoveDirectory = supergroup "removeDirectory" [
+  subgroup "removesEmptyDirectoryWhenNonRecursive" [
+    effectfulCaseWithProvisions "removeDirectory with recursive=false removes an empty directory" ["removesEmptyDirectoryWhenNonRecursive"] DefFiles.removeDirectory
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.createDirectory @@ false @@ path "rmdir-empty")
+        @@ (lambda "_d" $ primitive DefEffects.bind
+              @@ (primitive DefFiles.removeDirectory @@ false @@ path "rmdir-empty")
+              @@ (lambda "_r" $ foldEither
+                    (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
+                    (primitive DefFiles.exists @@ path "rmdir-empty"))))
+      (string "false")],
+  subgroup "errorsOnNonEmptyDirectoryWhenNonRecursive" [
+    effectfulCaseWithProvisions "removeDirectory with recursive=false on a non-empty directory yields an error" ["errorsOnNonEmptyDirectoryWhenNonRecursive"] DefFiles.removeDirectory
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.createDirectory @@ false @@ path "rmdir-nonempty")
+        @@ (lambda "_d" $ primitive DefEffects.bind
+              @@ (primitive DefFiles.writeFile @@ path "rmdir-nonempty/inner.txt" @@ bytes "x")
+              @@ (lambda "_w" $ foldEither
+                    (lambda "b" $ string "unexpected success")
+                    (primitive DefFiles.removeDirectory @@ false @@ path "rmdir-nonempty"))))
+      (string "ERR")],
+  subgroup "removesPopulatedDirectoryWhenRecursive" [
+    effectfulCaseWithProvisions "removeDirectory with recursive=true removes a populated directory" ["removesPopulatedDirectoryWhenRecursive"] DefFiles.removeDirectory
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.createDirectory @@ false @@ path "rmdir-full")
+        @@ (lambda "_d" $ primitive DefEffects.bind
+              @@ (primitive DefFiles.writeFile @@ path "rmdir-full/inner.txt" @@ bytes "x")
+              @@ (lambda "_w" $ primitive DefEffects.bind
+                    @@ (primitive DefFiles.removeDirectory @@ true @@ path "rmdir-full")
+                    @@ (lambda "_r" $ foldEither
+                          (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
+                          (primitive DefFiles.exists @@ path "rmdir-full")))))
+      (string "false")]]
 
 -- removeFile then exists is false.
 filesRemoveFile :: TypedTerm TestGroup
-filesRemoveFile = subgroup "removeFile" [
-  effectfulCase "removeFile deletes a file so it no longer exists"
+filesRemoveFile = subgroup "deletesFileSoItNoLongerExists" [
+  effectfulCaseWithProvisions "removeFile deletes a file so it no longer exists" ["deletesFileSoItNoLongerExists"] DefFiles.removeFile
     (primitive DefEffects.bind
       @@ (primitive DefFiles.writeFile @@ path "rm.txt" @@ bytes "x")
       @@ (lambda "_w" $ primitive DefEffects.bind
@@ -246,8 +254,8 @@ filesRemoveFile = subgroup "removeFile" [
 
 -- rename then read at the new location.
 filesRename :: TypedTerm TestGroup
-filesRename = subgroup "rename" [
-  effectfulCase "rename moves a file to a new path"
+filesRename = subgroup "movesToNewPathPreservingContents" [
+  effectfulCaseWithProvisions "rename moves a file to a new path" ["movesToNewPathPreservingContents"] DefFiles.rename
     (primitive DefEffects.bind
       @@ (primitive DefFiles.writeFile @@ path "old.txt" @@ bytes "moved")
       @@ (lambda "_w" $ primitive DefEffects.bind
@@ -270,113 +278,120 @@ showFileType = cases File._FileType Nothing [
 
 -- status: file type and size for a regular file, file type for a directory.
 filesStatus :: TypedTerm TestGroup
-filesStatus = subgroup "status" [
-  effectfulCase "status reports the type and size of a regular file"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.writeFile @@ path "stat.txt" @@ bytes "12345")
-      @@ (lambda "_w" $ foldEither
-            (lambda "s" $ primitive DefLiterals.printInt64 @@
-              (project File._FileStatus File._FileStatus_size @@ var "s"))
-            (primitive DefFiles.status @@ true @@ path "stat.txt")))
-    (string "5"),
-  effectfulCase "status reports directory as the file type"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.createDirectory @@ false @@ path "stat-dir")
-      @@ (lambda "_d" $ foldEither
-            (lambda "s" $ showFileType @@
-              (project File._FileStatus File._FileStatus_fileType @@ var "s"))
-            (primitive DefFiles.status @@ true @@ path "stat-dir")))
-    (string "directory"),
-  effectfulCase "status on a missing path yields an error"
-    (foldEither
-      (lambda "s" $ string "unexpected success")
-      (primitive DefFiles.status @@ true @@ path "stat-missing.txt"))
-    (string "ERR")]
+filesStatus = supergroup "status" [
+  subgroup "reportsCorrectTypeAndSizeForRegularFileAndDirectory" [
+    effectfulCaseWithProvisions "status reports the type and size of a regular file" ["reportsCorrectTypeAndSizeForRegularFileAndDirectory"] DefFiles.status
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.writeFile @@ path "stat.txt" @@ bytes "12345")
+        @@ (lambda "_w" $ foldEither
+              (lambda "s" $ primitive DefLiterals.printInt64 @@
+                (project File._FileStatus File._FileStatus_size @@ var "s"))
+              (primitive DefFiles.status @@ true @@ path "stat.txt")))
+      (string "5"),
+    effectfulCaseWithProvisions "status reports directory as the file type" ["reportsCorrectTypeAndSizeForRegularFileAndDirectory"] DefFiles.status
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.createDirectory @@ false @@ path "stat-dir")
+        @@ (lambda "_d" $ foldEither
+              (lambda "s" $ showFileType @@
+                (project File._FileStatus File._FileStatus_fileType @@ var "s"))
+              (primitive DefFiles.status @@ true @@ path "stat-dir")))
+      (string "directory")],
+  subgroup "notFoundOnMissingOrDanglingTarget" [
+    effectfulCaseWithProvisions "status on a missing path yields an error" ["notFoundOnMissingOrDanglingTarget"] DefFiles.status
+      (foldEither
+        (lambda "s" $ string "unexpected success")
+        (primitive DefFiles.status @@ true @@ path "stat-missing.txt"))
+      (string "ERR")]]
 
 -- Symbolic links: creation, inspection with and without following, dangling links, and errors.
 filesSymlinks :: TypedTerm TestGroup
-filesSymlinks = subgroup "symlinks" [
-  effectfulCase "createSymlink then status(false) reports fileType link"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.writeFile @@ path "link-target.txt" @@ bytes "target contents")
-      @@ (lambda "_w" $ primitive DefEffects.bind
-            @@ (primitive DefFiles.createSymlink @@ path "link-target.txt" @@ path "link-to-target")
-            @@ (lambda "_l" $ foldEither
-                  (lambda "s" $ showFileType @@
-                    (project File._FileStatus File._FileStatus_fileType @@ var "s"))
-                  (primitive DefFiles.status @@ false @@ path "link-to-target"))))
-    (string "link"),
-  effectfulCase "readSymlink returns the target verbatim"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.writeFile @@ path "link-target2.txt" @@ bytes "x")
-      @@ (lambda "_w" $ primitive DefEffects.bind
-            @@ (primitive DefFiles.createSymlink @@ path "link-target2.txt" @@ path "link-to-target2")
-            @@ (lambda "_l" $ foldEither
-                  (lambda "t" $ Phantoms.unwrap File._FilePath @@ var "t")
-                  (primitive DefFiles.readSymlink @@ path "link-to-target2"))))
-    (string (testDir ++ "/link-target2.txt")),
-  effectfulCase "status(true) on a symlink reports the target's status"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.writeFile @@ path "link-target3.txt" @@ bytes "1234")
-      @@ (lambda "_w" $ primitive DefEffects.bind
-            @@ (primitive DefFiles.createSymlink @@ path "link-target3.txt" @@ path "link-to-target3")
-            @@ (lambda "_l" $ foldEither
-                  (lambda "s" $ showFileType @@
-                    (project File._FileStatus File._FileStatus_fileType @@ var "s"))
-                  (primitive DefFiles.status @@ true @@ path "link-to-target3"))))
-    (string "regular"),
-  effectfulCase "createSymlink to a nonexistent target then status(false) reports link, not an error"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.createSymlink @@ path "does-not-exist.txt" @@ path "dangling-link")
-      @@ (lambda "_l" $ foldEither
-            (lambda "s" $ showFileType @@
-              (project File._FileStatus File._FileStatus_fileType @@ var "s"))
-            (primitive DefFiles.status @@ false @@ path "dangling-link")))
-    (string "link"),
-  effectfulCase "a dangling symlink is not found when followed with status(true)"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.createSymlink @@ path "still-does-not-exist.txt" @@ path "dangling-link2")
-      @@ (lambda "_l" $ foldEither
-            (lambda "s" $ string "unexpected success")
-            (primitive DefFiles.status @@ true @@ path "dangling-link2")))
-    (string "ERR"),
-  effectfulCase "a dangling symlink is reported absent by exists"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.createSymlink @@ path "yet-another-missing.txt" @@ path "dangling-link3")
-      @@ (lambda "_l" $ foldEither
-            (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
-            (primitive DefFiles.exists @@ path "dangling-link3")))
-    (string "false"),
-  effectfulCase "createSymlink over an existing file yields alreadyExists"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.writeFile @@ path "occupied.txt" @@ bytes "x")
-      @@ (lambda "_w" $ foldEither
-            (lambda "_u" $ string "unexpected success")
-            (primitive DefFiles.createSymlink @@ path "some-target" @@ path "occupied.txt")))
-    (string "ERR"),
-  effectfulCase "createSymlink over an existing dangling symlink yields alreadyExists"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.createSymlink @@ path "missing-target" @@ path "occupied-link")
-      @@ (lambda "_l" $ foldEither
-            (lambda "_u" $ string "unexpected success")
-            (primitive DefFiles.createSymlink @@ path "another-target" @@ path "occupied-link")))
-    (string "ERR"),
-  effectfulCase "readSymlink on a regular file yields invalidPath"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.writeFile @@ path "not-a-link.txt" @@ bytes "x")
-      @@ (lambda "_w" $ foldEither
-            (lambda "t" $ string "unexpected success")
-            (primitive DefFiles.readSymlink @@ path "not-a-link.txt")))
-    (string "ERR"),
-  effectfulCase "readSymlink on a missing path yields notFound"
-    (foldEither
-      (lambda "t" $ string "unexpected success")
-      (primitive DefFiles.readSymlink @@ path "no-such-link"))
-    (string "ERR"),
-  effectfulCase "createSymlink preserves a relative target verbatim"
-    (primitive DefEffects.bind
-      @@ (primitive DefFiles.createSymlink @@ (wrap File._FilePath (string "relative-target.txt")) @@ path "relative-link")
-      @@ (lambda "_l" $ foldEither
-            (lambda "t" $ Phantoms.unwrap File._FilePath @@ var "t")
-            (primitive DefFiles.readSymlink @@ path "relative-link")))
-    (string "relative-target.txt")]
+filesSymlinks = supergroup "symlinks" [
+  subgroup "createsLinkObservableAsLinkType" [
+    effectfulCaseWithProvisions "createSymlink then status(false) reports fileType link" ["createsLinkObservableAsLinkType"] DefFiles.createSymlink
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.writeFile @@ path "link-target.txt" @@ bytes "target contents")
+        @@ (lambda "_w" $ primitive DefEffects.bind
+              @@ (primitive DefFiles.createSymlink @@ path "link-target.txt" @@ path "link-to-target")
+              @@ (lambda "_l" $ foldEither
+                    (lambda "s" $ showFileType @@
+                      (project File._FileStatus File._FileStatus_fileType @@ var "s"))
+                    (primitive DefFiles.status @@ false @@ path "link-to-target"))))
+      (string "link"),
+    effectfulCaseWithProvisions "status(true) on a symlink reports the target's status" ["createsLinkObservableAsLinkType"] DefFiles.createSymlink
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.writeFile @@ path "link-target3.txt" @@ bytes "1234")
+        @@ (lambda "_w" $ primitive DefEffects.bind
+              @@ (primitive DefFiles.createSymlink @@ path "link-target3.txt" @@ path "link-to-target3")
+              @@ (lambda "_l" $ foldEither
+                    (lambda "s" $ showFileType @@
+                      (project File._FileStatus File._FileStatus_fileType @@ var "s"))
+                    (primitive DefFiles.status @@ true @@ path "link-to-target3"))))
+      (string "regular")],
+  subgroup "allowsDanglingTargets" [
+    effectfulCaseWithProvisions "createSymlink to a nonexistent target then status(false) reports link, not an error" ["allowsDanglingTargets"] DefFiles.createSymlink
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.createSymlink @@ path "does-not-exist.txt" @@ path "dangling-link")
+        @@ (lambda "_l" $ foldEither
+              (lambda "s" $ showFileType @@
+                (project File._FileStatus File._FileStatus_fileType @@ var "s"))
+              (primitive DefFiles.status @@ false @@ path "dangling-link")))
+      (string "link"),
+    effectfulCaseWithProvisions "a dangling symlink is not found when followed with status(true)" ["allowsDanglingTargets"] DefFiles.createSymlink
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.createSymlink @@ path "still-does-not-exist.txt" @@ path "dangling-link2")
+        @@ (lambda "_l" $ foldEither
+              (lambda "s" $ string "unexpected success")
+              (primitive DefFiles.status @@ true @@ path "dangling-link2")))
+      (string "ERR"),
+    effectfulCaseWithProvisions "a dangling symlink is reported absent by exists" ["allowsDanglingTargets"] DefFiles.createSymlink
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.createSymlink @@ path "yet-another-missing.txt" @@ path "dangling-link3")
+        @@ (lambda "_l" $ foldEither
+              (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
+              (primitive DefFiles.exists @@ path "dangling-link3")))
+      (string "false")],
+  subgroup "preservesTargetVerbatim" [
+    effectfulCaseWithProvisions "readSymlink returns the target verbatim" ["preservesTargetVerbatim"] DefFiles.createSymlink
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.writeFile @@ path "link-target2.txt" @@ bytes "x")
+        @@ (lambda "_w" $ primitive DefEffects.bind
+              @@ (primitive DefFiles.createSymlink @@ path "link-target2.txt" @@ path "link-to-target2")
+              @@ (lambda "_l" $ foldEither
+                    (lambda "t" $ Phantoms.unwrap File._FilePath @@ var "t")
+                    (primitive DefFiles.readSymlink @@ path "link-to-target2"))))
+      (string (testDir ++ "/link-target2.txt")),
+    effectfulCaseWithProvisions "createSymlink preserves a relative target verbatim" ["preservesTargetVerbatim"] DefFiles.createSymlink
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.createSymlink @@ (wrap File._FilePath (string "relative-target.txt")) @@ path "relative-link")
+        @@ (lambda "_l" $ foldEither
+              (lambda "t" $ Phantoms.unwrap File._FilePath @@ var "t")
+              (primitive DefFiles.readSymlink @@ path "relative-link")))
+      (string "relative-target.txt")],
+  subgroup "errorsOnExistingLinkPath" [
+    effectfulCaseWithProvisions "createSymlink over an existing file yields alreadyExists" ["errorsOnExistingLinkPath"] DefFiles.createSymlink
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.writeFile @@ path "occupied.txt" @@ bytes "x")
+        @@ (lambda "_w" $ foldEither
+              (lambda "_u" $ string "unexpected success")
+              (primitive DefFiles.createSymlink @@ path "some-target" @@ path "occupied.txt")))
+      (string "ERR"),
+    effectfulCaseWithProvisions "createSymlink over an existing dangling symlink yields alreadyExists" ["errorsOnExistingLinkPath"] DefFiles.createSymlink
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.createSymlink @@ path "missing-target" @@ path "occupied-link")
+        @@ (lambda "_l" $ foldEither
+              (lambda "_u" $ string "unexpected success")
+              (primitive DefFiles.createSymlink @@ path "another-target" @@ path "occupied-link")))
+      (string "ERR")],
+  subgroup "errorsOnNonLinkOrMissingPath" [
+    effectfulCaseWithProvisions "readSymlink on a regular file yields invalidPath" ["errorsOnNonLinkOrMissingPath"] DefFiles.readSymlink
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.writeFile @@ path "not-a-link.txt" @@ bytes "x")
+        @@ (lambda "_w" $ foldEither
+              (lambda "t" $ string "unexpected success")
+              (primitive DefFiles.readSymlink @@ path "not-a-link.txt")))
+      (string "ERR"),
+    effectfulCaseWithProvisions "readSymlink on a missing path yields notFound" ["errorsOnNonLinkOrMissingPath"] DefFiles.readSymlink
+      (foldEither
+        (lambda "t" $ string "unexpected success")
+        (primitive DefFiles.readSymlink @@ path "no-such-link"))
+      (string "ERR")]]

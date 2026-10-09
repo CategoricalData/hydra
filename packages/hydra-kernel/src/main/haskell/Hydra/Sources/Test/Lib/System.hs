@@ -173,66 +173,71 @@ resultExitCode r = retypeT $ Phantoms.unwrap System._StatusCode @@ (project Syst
 -- execute: process execution. Covers stdout/stderr capture, byte-exactness, exit codes (zero and
 -- non-zero as right), the workingDirectory and environment fields, and the launch-failure error path.
 systemExecute :: TypedTerm TestGroup
-systemExecute = subgroup "execute" [
-  -- stdout capture (the core happy path).
-  effectfulCase "captures stdout"
-    (foldEither (lambda "r" $ resultStdout (var "r"))
-      (primitive DefSystem.execute @@ echoCommand "hydra"))
-    (string "hydra\n"),
-  -- the argument vector is passed through in order.
-  effectfulCase "passes multiple arguments through to stdout"
-    (foldEither (lambda "r" $ resultStdout (var "r"))
-      (primitive DefSystem.execute @@ command "/bin/echo" ["a", "b", "c"]))
-    (string "a b c\n"),
-  -- output is byte-oriented: no trailing-newline added, no translation (printf emits exactly "abc").
-  effectfulCase "captures stdout byte-exactly (no newline translation)"
-    (foldEither (lambda "r" $ resultStdout (var "r"))
-      (primitive DefSystem.execute @@ command "/usr/bin/printf" ["abc"]))
-    (string "abc"),
-  -- a successful program reports exit status 0.
-  effectfulCase "reports exit status zero for a successful program"
-    (foldEither (lambda "r" $ primitive DefLiterals.printInt32 @@ resultExitCode (var "r"))
-      (primitive DefSystem.execute @@ command "/usr/bin/true" []))
-    (string "0"),
-  -- a program that runs and exits non-zero is right(result), NOT a SystemError; /usr/bin/false exits 1.
-  effectfulCase "reports a non-zero exit status as right (not an error)"
-    (foldEither (lambda "r" $ primitive DefLiterals.printBoolean
-        @@ (primitive DefOrdering.gt @@ resultExitCode (var "r") @@ int32 0))
-      (primitive DefSystem.execute @@ command "/usr/bin/false" []))
-    (string "true"),
-  -- stderr is captured separately; ls of a missing path writes a diagnostic to stderr.
-  effectfulCase "captures stderr separately from stdout"
-    (foldEither (lambda "r" $ primitive DefLiterals.printBoolean
-        @@ (primitive DefLogic.not @@ (primitive DefStrings.isEmpty @@ resultStderr (var "r"))))
-      (primitive DefSystem.execute @@ command "/bin/ls" ["/hydra-nonexistent-498"]))
-    (string "true"),
-  -- and that same run leaves stdout empty (the diagnostic did not leak into stdout).
-  effectfulCase "leaves stdout empty when a program writes only to stderr"
-    (foldEither (lambda "r" $ resultStdout (var "r"))
-      (primitive DefSystem.execute @@ command "/bin/ls" ["/hydra-nonexistent-498"]))
-    (string ""),
-  -- the workingDirectory field is honored: pwd run in the root directory prints "/". The root is used
-  -- rather than e.g. /tmp because /tmp is a symlink to /private/tmp on macOS, which pwd resolves.
-  effectfulCase "honors the workingDirectory field"
-    (foldEither (lambda "r" $ resultStdout (var "r"))
-      (primitive DefSystem.execute @@ commandInDir "/bin/pwd" [] "/"))
-    (string "/\n"),
-  -- the environment field replaces the child's environment: env prints exactly the one binding.
-  effectfulCase "honors the environment field (replacing the child environment)"
-    (foldEither (lambda "r" $ resultStdout (var "r"))
-      (primitive DefSystem.execute @@ commandWithEnv "/usr/bin/env" [] "HYDRA_X" "hydra-value"))
-    (string "HYDRA_X=hydra-value\n"),
-  -- a program that does not exist fails to LAUNCH, returning left(commandNotFound).
-  effectfulCase "yields left(commandNotFound) for a missing program"
-    (foldErrorVariant (lambda "_r" $ string "<ran>")
-      (primitive DefSystem.execute @@ command "/hydra/no/such/program-498" []))
-    (string "commandNotFound")]
+systemExecute = supergroup "execute" [
+  subgroup "capturesStdoutByteExactly" [
+    -- stdout capture (the core happy path).
+    effectfulCaseWithProvisions "captures stdout" ["capturesStdoutByteExactly"] DefSystem.execute
+      (foldEither (lambda "r" $ resultStdout (var "r"))
+        (primitive DefSystem.execute @@ echoCommand "hydra"))
+      (string "hydra\n"),
+    -- the argument vector is passed through in order.
+    effectfulCaseWithProvisions "passes multiple arguments through to stdout" ["capturesStdoutByteExactly"] DefSystem.execute
+      (foldEither (lambda "r" $ resultStdout (var "r"))
+        (primitive DefSystem.execute @@ command "/bin/echo" ["a", "b", "c"]))
+      (string "a b c\n"),
+    -- output is byte-oriented: no trailing-newline added, no translation (printf emits exactly "abc").
+    effectfulCaseWithProvisions "captures stdout byte-exactly (no newline translation)" ["capturesStdoutByteExactly"] DefSystem.execute
+      (foldEither (lambda "r" $ resultStdout (var "r"))
+        (primitive DefSystem.execute @@ command "/usr/bin/printf" ["abc"]))
+      (string "abc")],
+  subgroup "reportsExitStatusAsRight" [
+    -- a successful program reports exit status 0.
+    effectfulCaseWithProvisions "reports exit status zero for a successful program" ["reportsExitStatusAsRight"] DefSystem.execute
+      (foldEither (lambda "r" $ primitive DefLiterals.printInt32 @@ resultExitCode (var "r"))
+        (primitive DefSystem.execute @@ command "/usr/bin/true" []))
+      (string "0"),
+    -- a program that runs and exits non-zero is right(result), NOT a SystemError; /usr/bin/false exits 1.
+    effectfulCaseWithProvisions "reports a non-zero exit status as right (not an error)" ["reportsExitStatusAsRight"] DefSystem.execute
+      (foldEither (lambda "r" $ primitive DefLiterals.printBoolean
+          @@ (primitive DefOrdering.gt @@ resultExitCode (var "r") @@ int32 0))
+        (primitive DefSystem.execute @@ command "/usr/bin/false" []))
+      (string "true")],
+  subgroup "capturesStderrSeparately" [
+    -- stderr is captured separately; ls of a missing path writes a diagnostic to stderr.
+    effectfulCaseWithProvisions "captures stderr separately from stdout" ["capturesStderrSeparately"] DefSystem.execute
+      (foldEither (lambda "r" $ primitive DefLiterals.printBoolean
+          @@ (primitive DefLogic.not @@ (primitive DefStrings.isEmpty @@ resultStderr (var "r"))))
+        (primitive DefSystem.execute @@ command "/bin/ls" ["/hydra-nonexistent-498"]))
+      (string "true"),
+    -- and that same run leaves stdout empty (the diagnostic did not leak into stdout).
+    effectfulCaseWithProvisions "leaves stdout empty when a program writes only to stderr" ["capturesStderrSeparately"] DefSystem.execute
+      (foldEither (lambda "r" $ resultStdout (var "r"))
+        (primitive DefSystem.execute @@ command "/bin/ls" ["/hydra-nonexistent-498"]))
+      (string "")],
+  subgroup "honorsWorkingDirectoryAndEnvironmentFields" [
+    -- the workingDirectory field is honored: pwd run in the root directory prints "/". The root is used
+    -- rather than e.g. /tmp because /tmp is a symlink to /private/tmp on macOS, which pwd resolves.
+    effectfulCaseWithProvisions "honors the workingDirectory field" ["honorsWorkingDirectoryAndEnvironmentFields"] DefSystem.execute
+      (foldEither (lambda "r" $ resultStdout (var "r"))
+        (primitive DefSystem.execute @@ commandInDir "/bin/pwd" [] "/"))
+      (string "/\n"),
+    -- the environment field replaces the child's environment: env prints exactly the one binding.
+    effectfulCaseWithProvisions "honors the environment field (replacing the child environment)" ["honorsWorkingDirectoryAndEnvironmentFields"] DefSystem.execute
+      (foldEither (lambda "r" $ resultStdout (var "r"))
+        (primitive DefSystem.execute @@ commandWithEnv "/usr/bin/env" [] "HYDRA_X" "hydra-value"))
+      (string "HYDRA_X=hydra-value\n")],
+  subgroup "leftCommandNotFoundOnMissingProgram" [
+    -- a program that does not exist fails to LAUNCH, returning left(commandNotFound).
+    effectfulCaseWithProvisions "yields left(commandNotFound) for a missing program" ["leftCommandNotFoundOnMissingProgram"] DefSystem.execute
+      (foldErrorVariant (lambda "_r" $ string "<ran>")
+        (primitive DefSystem.execute @@ command "/hydra/no/such/program-498" []))
+      (string "commandNotFound")]]
 
 -- getEnvironment: the whole environment as a map. Asserted via a guaranteed-absent key (a present-key
 -- value would not be deterministic across hosts).
 systemGetEnvironment :: TypedTerm TestGroup
-systemGetEnvironment = subgroup "getEnvironment" [
-  effectfulCase "does not contain a guaranteed-absent variable"
+systemGetEnvironment = subgroup "returnsExactEnvironmentContents" [
+  effectfulCaseWithProvisions "does not contain a guaranteed-absent variable" ["returnsExactEnvironmentContents"] DefSystem.getEnvironment
     (primitive DefEffects.map
       @@ (lambda "m" $ primitive DefLiterals.printBoolean
             @@ (primitive DefMaps.member @@ Phantoms.wrap System._EnvironmentVariable (string absentVar) @@ var "m"))
@@ -242,8 +247,8 @@ systemGetEnvironment = subgroup "getEnvironment" [
 -- getEnvironmentVariable: lookup by name. The deterministic, cross-host case is the absent variable
 -- (a present variable's value varies by host and cannot be asserted portably).
 systemGetEnvironmentVariable :: TypedTerm TestGroup
-systemGetEnvironmentVariable = subgroup "getEnvironmentVariable" [
-  effectfulCase "yields none for a guaranteed-absent variable"
+systemGetEnvironmentVariable = subgroup "noneForAbsentVariable" [
+  effectfulCaseWithProvisions "yields none for a guaranteed-absent variable" ["noneForAbsentVariable"] DefSystem.getEnvironmentVariable
     (primitive DefEffects.map
       @@ (lambda "m" $ primitive DefOptionals.withDefault @@ string "absent" @@ var "m")
       @@ (primitive DefSystem.getEnvironmentVariable
@@ -253,30 +258,32 @@ systemGetEnvironmentVariable = subgroup "getEnvironmentVariable" [
 -- getTime: the wall clock. Covers the seconds field (a sane positive epoch value) and the nanoseconds
 -- field's documented range [0, 1000000000).
 systemGetTime :: TypedTerm TestGroup
-systemGetTime = subgroup "getTime" [
-  effectfulCase "returns a positive number of seconds since the epoch"
-    (primitive DefEffects.map
-      @@ (lambda "t" $ primitive DefLiterals.printBoolean
-            @@ (primitive DefOrdering.gt
-                  @@ (Phantoms.project Time._Timespec Time._Timespec_seconds @@ var "t")
-                  @@ int64 0))
-      @@ (primitive DefSystem.getTime))
-    (string "true"),
-  effectfulCase "returns nanoseconds within the range [0, 1000000000)"
-    (primitive DefEffects.map
-      @@ (lambda "t" $ primitive DefLiterals.printBoolean
-            @@ (primitive DefLogic.and
-                  @@ (primitive DefOrdering.gte
-                        @@ (Phantoms.project Time._Timespec Time._Timespec_nanoseconds @@ var "t") @@ uint32 0)
-                  @@ (primitive DefOrdering.lt
-                        @@ (Phantoms.project Time._Timespec Time._Timespec_nanoseconds @@ var "t") @@ uint32 1000000000)))
-      @@ (primitive DefSystem.getTime))
-    (string "true")]
+systemGetTime = supergroup "getTime" [
+  subgroup "returnsPositiveEpochSeconds" [
+    effectfulCaseWithProvisions "returns a positive number of seconds since the epoch" ["returnsPositiveEpochSeconds"] DefSystem.getTime
+      (primitive DefEffects.map
+        @@ (lambda "t" $ primitive DefLiterals.printBoolean
+              @@ (primitive DefOrdering.gt
+                    @@ (Phantoms.project Time._Timespec Time._Timespec_seconds @@ var "t")
+                    @@ int64 0))
+        @@ (primitive DefSystem.getTime))
+      (string "true")],
+  subgroup "returnsNanosecondsInValidRange" [
+    effectfulCaseWithProvisions "returns nanoseconds within the range [0, 1000000000)" ["returnsNanosecondsInValidRange"] DefSystem.getTime
+      (primitive DefEffects.map
+        @@ (lambda "t" $ primitive DefLiterals.printBoolean
+              @@ (primitive DefLogic.and
+                    @@ (primitive DefOrdering.gte
+                          @@ (Phantoms.project Time._Timespec Time._Timespec_nanoseconds @@ var "t") @@ uint32 0)
+                    @@ (primitive DefOrdering.lt
+                          @@ (Phantoms.project Time._Timespec Time._Timespec_nanoseconds @@ var "t") @@ uint32 1000000000)))
+        @@ (primitive DefSystem.getTime))
+      (string "true")]]
 
 -- getWorkingDirectory: the current directory as a non-empty FilePath.
 systemGetWorkingDirectory :: TypedTerm TestGroup
-systemGetWorkingDirectory = subgroup "getWorkingDirectory" [
-  effectfulCase "returns a non-empty path"
+systemGetWorkingDirectory = subgroup "returnsNonEmptyPath" [
+  effectfulCaseWithProvisions "returns a non-empty path" ["returnsNonEmptyPath"] DefSystem.getWorkingDirectory
     (foldEither
       (lambda "p" $ primitive DefLiterals.printBoolean
         @@ (primitive DefLogic.not
