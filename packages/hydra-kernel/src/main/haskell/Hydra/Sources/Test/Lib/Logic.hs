@@ -45,45 +45,46 @@ allTests = definitionInModule module_ "allTests" $
       logicOr]
 
 logicAnd :: TypedTerm TestGroup
-logicAnd = subgroup "and" [
-  test "true and true" true true true,
-  test "true and false" true false false,
-  test "false and true" false true false,
-  test "false and false" false false false]
+logicAnd = supergroup "and" [
+  subgroup "trueOnlyWhenBothTrue" [
+    test "true and true" "trueOnlyWhenBothTrue" true true true,
+    test "true and false" "trueOnlyWhenBothTrue" true false false,
+    test "false and true" "trueOnlyWhenBothTrue" false true false,
+    test "false and false" "trueOnlyWhenBothTrue" false false false]]
   where
-    test name x y result = primCase name DefLogic.and [x, y] (result)
+    test name segment x y result = primCaseWithProvisions name [segment] DefLogic.and [x, y] (result)
 
 logicIfElse :: TypedTerm TestGroup
 logicIfElse = supergroup "ifElse" [
-  subgroup "boolean values" [
+  subgroup "selectsBranchByCondition" [
     testBool "true condition returns then" true true false true,
-    testBool "false condition returns else" false true false false],
-  subgroup "integer values" [
+    testBool "false condition returns else" false true false false,
     testInt "true selects first int" true 42 0 42,
-    testInt "false selects second int" false 42 0 0],
-  subgroup "string values" [
+    testInt "false selects second int" false 42 0 0,
     testStr "true selects first string" true "yes" "no" "yes",
     testStr "false selects second string" false "yes" "no" "no"]]
   where
     testBool name cond thenVal elseVal result =
-      primCase name DefLogic.ifElse [cond, thenVal, elseVal] (result)
+      primCaseWithProvisions name ["selectsBranchByCondition"] DefLogic.ifElse [cond, thenVal, elseVal] (result)
     testInt name cond thenVal elseVal result =
-      primCase name DefLogic.ifElse [cond, int32 thenVal, int32 elseVal] (int32 result)
+      primCaseWithProvisions name ["selectsBranchByCondition"] DefLogic.ifElse [cond, int32 thenVal, int32 elseVal] (int32 result)
     testStr name cond thenVal elseVal result =
-      primCase name DefLogic.ifElse [cond, string thenVal, string elseVal] (string result)
+      primCaseWithProvisions name ["selectsBranchByCondition"] DefLogic.ifElse [cond, string thenVal, string elseVal] (string result)
 
 logicNot :: TypedTerm TestGroup
-logicNot = subgroup "not" [
-  test "not true" true false,
-  test "not false" false true]
+logicNot = supergroup "not" [
+  subgroup "negatesBoolean" [
+    test "not true" true false,
+    test "not false" false true]]
   where
-    test name x result = primCase name DefLogic.not [x] (result)
+    test name x result = primCaseWithProvisions name ["negatesBoolean"] DefLogic.not [x] (result)
 
 logicOr :: TypedTerm TestGroup
-logicOr = subgroup "or" [
-  test "true or true" true true true,
-  test "true or false" true false true,
-  test "false or true" false true true,
-  test "false or false" false false false]
+logicOr = supergroup "or" [
+  subgroup "trueWhenEitherTrue" [
+    test "true or true" true true true,
+    test "true or false" true false true,
+    test "false or true" false true true,
+    test "false or false" false false false]]
   where
-    test name x y result = primCase name DefLogic.or [x, y] (result)
+    test name x y result = primCaseWithProvisions name ["trueWhenEitherTrue"] DefLogic.or [x, y] (result)
