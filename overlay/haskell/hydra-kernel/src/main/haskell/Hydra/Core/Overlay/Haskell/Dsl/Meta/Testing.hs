@@ -144,6 +144,28 @@ evalPairWithTags cname tags showFn logicalActual logicalExpected = testCaseWithM
     retype :: TypedTerm x -> TypedTerm String
     retype (TypedTerm t) = TypedTerm t
 
+-- | As 'evalPair', but citing the provisions (by local segment, composed against the given
+-- primitive's own name) that this case confirms. For test cases comparing two show-rendered
+-- values directly (e.g. 'Pairs.bimap'/'Pairs.first'/'Pairs.second') rather than reducing an
+-- applied-primitive term via 'reduceTerm'.
+evalPairWithProvisions :: ToPrimName n => String -> [String] -> n -> TypedTerm (t -> String) -> TypedTerm t -> TypedTerm t -> TypedTerm TestCaseWithMetadata
+evalPairWithProvisions cname localSegments prim showFn logicalActual logicalExpected =
+    testCaseWithMetadataAndProvisions (Phantoms.string cname)
+      (testCaseUniversal $ universalTestCase (retype $ showFn @@ logicalActual) (retype $ showFn @@ logicalExpected))
+      nothing (Phantoms.list ([] :: [TypedTerm Tag])) provisions
+  where
+    pname = toPrimName prim
+    provisions = Phantoms.list $ Phantoms.nameLift . composeProvisionName pname <$> localSegments
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+-- | 'evalPairWithProvisions' specialized to string show (identity), mirroring 'stringEvalPair'.
+stringEvalPairWithProvisions :: ToPrimName n => String -> [String] -> n -> TypedTerm String -> TypedTerm String -> TypedTerm TestCaseWithMetadata
+stringEvalPairWithProvisions cname localSegments prim = evalPairWithProvisions cname localSegments prim (Phantoms.lambda "s" (Phantoms.var "s"))
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
 expectFailure :: AsTerm t Term => Int -> [Tag] -> t -> TypedTerm TestCaseWithMetadata
 expectFailure i tags term = infFailureTest ("#" ++ show i) tags (asTerm term)
 
@@ -277,6 +299,36 @@ primCaseWithTags cname tags prim args output = evalCaseWithTags cname tags input
 -- Example: primCaseWithProvisions "all empty lists" ["emptyInputs"] DefLists.concat [...] (intList [])
 primCaseWithProvisions :: ToPrimName n => String -> [String] -> n -> [TypedTerm Term] -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 primCaseWithProvisions cname localSegments prim args output =
+  primCaseWithTagsAndProvisions cname [] localSegments prim args output
+
+-- | As 'primCaseWithProvisions', but also attaching tags (for the rare case needing both, e.g. a
+-- decimal-scale-distinctness regression case that also cites a provision).
+primCaseWithTagsAndProvisions :: ToPrimName n => String -> [Tag] -> [String] -> n -> [TypedTerm Term] -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+primCaseWithTagsAndProvisions cname tags localSegments prim args output =
+    testCaseWithMetadataAndProvisions (Phantoms.string cname)
+      (testCaseUniversal $ universalTestCase
+        (retype $ Eithers.either
+          (Phantoms.lambda "e" (Phantoms.string "<<eval error>>"))
+          (Phantoms.lambda "t" (showTermRef @@ Phantoms.var "t"))
+          (reduceTermRef @@ testContextRef @@ testGraphRef @@ true @@ input))
+        (retype $ showTermRef @@ output))
+      nothing (Phantoms.list $ tag . unTag <$> tags) provisions
+  where
+    input = L.foldl (MetaTerms.@@) (MetaTerms.primitive prim) args
+    pname = toPrimName prim
+    provisions = Phantoms.list $ Phantoms.nameLift . composeProvisionName pname <$> localSegments
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+-- | Create a test case which cites the provisions (by local segment, composed against the
+-- given primitive's own name) that it confirms, from an already-applied input term (for cases
+-- built via @Terms.primitive p \@\@ arg1 \@\@ arg2@ rather than 'primCaseWithProvisions''s
+-- args list -- e.g. when one argument is itself another primitive, as with 'flip'/'const').
+-- Mirrors 'evalCaseWithTags''s body.
+-- Example: evalCaseWithProvisions "flip(gt, 5, 3) = gt(3, 5)" ["swapsArgumentOrder"] DefFunctions.flip
+--   (Terms.primitive DefFunctions.flip @@ Terms.primitive DefOrdering.gt @@ int32 5 @@ int32 3) false
+evalCaseWithProvisions :: ToPrimName n => String -> [String] -> n -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+evalCaseWithProvisions cname localSegments prim input output =
     testCaseWithMetadataAndProvisions (Phantoms.string cname)
       (testCaseUniversal $ universalTestCase
         (retype $ Eithers.either
@@ -286,7 +338,6 @@ primCaseWithProvisions cname localSegments prim args output =
         (retype $ showTermRef @@ output))
       nothing (Phantoms.list ([] :: [TypedTerm Tag])) provisions
   where
-    input = L.foldl (MetaTerms.@@) (MetaTerms.primitive prim) args
     pname = toPrimName prim
     provisions = Phantoms.list $ Phantoms.nameLift . composeProvisionName pname <$> localSegments
     retype :: TypedTerm x -> TypedTerm String
