@@ -640,6 +640,41 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.core.lib.lists.mapGivens",
+        "metadata": {
+          "description": "Map a partial function over a list, keeping only the present results.",
+          "comments": [
+            "mapGivens(f, xs) applies f to each element of xs and returns the list of contained values from given results in original order; none results are discarded.",
+            "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "f",
+              "description": "the partial function to apply to each element",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"optional": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "xs", "description": "the list to map over", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "y"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "f",
+            "body": {
+              "lambda": {
+                "parameter": "xs",
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.core.lib.optionals.givens"},
+                    "argument": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.core.lib.lists.map"}, "argument": {"variable": "f"}}},
+                        "argument": {"variable": "xs"}}}}}}}}}}},
+    {
+      "primitive": {
         "name": "hydra.core.lib.lists.mapList",
         "metadata": {
           "description": "Traverse a list in the list monad.",
