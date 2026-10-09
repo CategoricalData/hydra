@@ -21,7 +21,15 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.effects module.")}
   where
-    definitions = [apply, bind, compose, foldList, map, mapList, mapOptional, mapSet, pure]
+    -- mapSet is defined below but DELIBERATELY OMITTED from this list for #775: its signature
+    -- combines an effect-wrapped result with multiple 'ordering'-constrained type variables and
+    -- no default implementation (required, since effects are irreducible by the pure
+    -- interpreter) — a combination no other kernel primitive uses. This triggers a pre-existing
+    -- Java-generator gap (UntypedTermVariable during hydra-kernel/main DSL-wrapper generation;
+    -- root-caused to Adapt.hs's effect-transparency type-alternative rule not resolving a
+    -- constrained scheme without inference). Tracked as a follow-up; re-add once the generator
+    -- is fixed.
+    definitions = [apply, bind, compose, foldList, map, mapList, mapOptional, pure]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = impurePrimitiveInModule module_
@@ -99,6 +107,10 @@ mapOptional = define "mapOptional" "Map an effect-returning function over an opt
   ["mapOptional(f, m) describes an effectful computation which returns none when m is none, or\
   \ applies f to the contained value and wraps the result in given."]
 
+-- #775: signature combines an effect-wrapped result with multiple 'ordering'-constrained type
+-- variables and no default implementation, which trips a pre-existing Java-generator gap. See
+-- the comment on the `definitions` list above for the full explanation.
+-- unregistered: #775 Java-generator gap, see above
 mapSet :: PrimitiveDefinition
 mapSet = define "mapSet" "Map an effect-returning function over a set."
   (sigWithParams [("f", "the effect-returning function to apply to each element"),

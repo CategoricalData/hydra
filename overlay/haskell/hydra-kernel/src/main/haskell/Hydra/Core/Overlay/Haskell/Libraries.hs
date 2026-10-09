@@ -99,6 +99,9 @@ hydraLibChars = standardLibrary [
 
 hydraLibEffects :: Library
 hydraLibEffects = standardLibrary [
+    -- effects.mapSet is NOT registered here: it is not declared as a kernel primitive at all
+    -- right now (see Hydra.Sources.Kernel.Lib.Effects's definitions list, #775) because its
+    -- signature trips a pre-existing Java-generator gap. Re-add once the generator is fixed.
     unsupportedEffectPrimitive DefEffects.apply,
     unsupportedEffectPrimitive DefEffects.bind,
     unsupportedEffectPrimitive DefEffects.compose,
@@ -106,7 +109,6 @@ hydraLibEffects = standardLibrary [
     unsupportedEffectPrimitive DefEffects.map,
     unsupportedEffectPrimitive DefEffects.mapList,
     unsupportedEffectPrimitive DefEffects.mapOptional,
-    unsupportedEffectPrimitive DefEffects.mapSet,
     unsupportedEffectPrimitive DefEffects.pure]
 
 hydraLibFiles :: Library
