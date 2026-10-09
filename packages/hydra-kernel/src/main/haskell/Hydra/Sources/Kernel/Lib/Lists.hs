@@ -7,6 +7,7 @@ import Hydra.Kernel
 import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
 import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms hiding (apply, compose, map)
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
@@ -28,8 +29,8 @@ module_ = Module {
   where
     definitions = [apply, at, bind, compose, concat, concat2, cons, distinct, drop, dropWhile,
                    filter, find, foldList, foldl, foldr, group, head, init, intersperse,
-                   isEmpty, join, last, length, map, mapList, mapOptional, mapSet, member, partition,
-                   replicate, reverse, singleton, sort, sortBy, span, tail, take, takeWhile,
+                   isEmpty, join, last, length, map, mapGivens, mapList, mapOptional, mapSet, member,
+                   partition, replicate, reverse, singleton, sort, sortBy, span, tail, take, takeWhile,
                    transpose, uncons, zip, zipWith]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
@@ -246,6 +247,15 @@ map = define "map" "Map a function over a list."
     ((tx Types.~> ty) Types.~> l tx Types.~> l ty) mempty)
   ["map(f, xs) returns the list of f(x) for each x in xs, in original order.",
    "Total. Corresponds to Haskell's map :: (a -> b) -> [a] -> [b] / fmap on lists."]
+
+mapGivens :: PrimitiveDefinition
+mapGivens = defineWithDefault "mapGivens" "Map a partial function over a list, keeping only the present results."
+  (sigWithParams [("f", "the partial function to apply to each element"), ("xs", "the list to map over")] $ TypeScheme [Name "x", Name "y"]
+    ((tx Types.~> Types.optional ty) Types.~> l tx Types.~> l ty) mempty)
+  ["mapGivens(f, xs) applies f to each element of xs and returns the list of contained values from given\
+  \ results in original order; none results are discarded.",
+   "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."]
+  ("f" ~> "xs" ~> Optionals.givens (Lists.map (var "f") (var "xs")))
 
 mapList :: PrimitiveDefinition
 mapList = define "mapList" "Traverse a list in the list monad."
