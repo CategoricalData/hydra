@@ -28,6 +28,7 @@ import qualified Hydra.Core.Dsl.Lib.Math as Math
 import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Core.Dsl.Lib.Strings as Strings
 import qualified Hydra.Core.Dsl.Lib.Chars as Chars
+import qualified Hydra.Core.Lib.Maps as DefMaps
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 
 
@@ -103,27 +104,29 @@ allTests = definitionInModule module_ "allTests" $
       mapsUnion]
 
 mapsAlter :: TypedTerm TestGroup
-mapsAlter = subgroup "alter" [
+mapsAlter = subgroup "insertsUpdatesOrDeletes" [
   testInsert "insert new key" 3 [(1, "a"), (2, "b")] [(1, "a"), (2, "b"), (3, "new")],
   testUpdate "update existing key" 2 [(1, "a"), (2, "b")] [(1, "a"), (2, "updated")],
   testDelete "delete key" 2 [(1, "a"), (2, "b")] [(1, "a")]]
   where
-    testInsert name k m result = evalPair name showIntStringMap
+    testInsert name k m result = evalPairWithProvisions name ["insertsUpdatesOrDeletes"] DefMaps.alter showIntStringMap
       (Maps.alter (Phantoms.lambda "_" $ Phantoms.just (Phantoms.string "new")) (Phantoms.int32 k) (pMap m))
       (pMap result)
-    testUpdate name k m result = evalPair name showIntStringMap
+    testUpdate name k m result = evalPairWithProvisions name ["insertsUpdatesOrDeletes"] DefMaps.alter showIntStringMap
       (Maps.alter (Phantoms.lambda "_" $ Phantoms.just (Phantoms.string "updated")) (Phantoms.int32 k) (pMap m))
       (pMap result)
-    testDelete name k m result = evalPair name showIntStringMap
+    testDelete name k m result = evalPairWithProvisions name ["insertsUpdatesOrDeletes"] DefMaps.alter showIntStringMap
       (Maps.alter (Phantoms.lambda "_" $ (Phantoms.nothing :: TypedTerm (Maybe String))) (Phantoms.int32 k) (pMap m))
       (pMap result)
 
 mapsBimap :: TypedTerm TestGroup
-mapsBimap = subgroup "bimap" [
-  test "transform both" [(1, "a"), (2, "b")] [(2, "A"), (4, "B")],
-  test "empty map" [] []]
+mapsBimap = supergroup "bimap" [
+  subgroup "transformsKeysAndValues" [
+    test "transform both" "transformsKeysAndValues" [(1, "a"), (2, "b")] [(2, "A"), (4, "B")]],
+  subgroup "emptyInput" [
+    test "empty map" "emptyInput" [] []]]
   where
-    test name m result = evalPair name showIntStringMap
+    test name segment m result = evalPairWithProvisions name [segment] DefMaps.bimap showIntStringMap
       (Maps.bimap
         (Phantoms.lambda "k" $ Math.mul (Phantoms.var "k") (Phantoms.int32 2))
         (Phantoms.lambda "v" $ Strings.toUpper (Phantoms.var "v"))
@@ -131,30 +134,34 @@ mapsBimap = subgroup "bimap" [
       (pMap result)
 
 mapsElems :: TypedTerm TestGroup
-mapsElems = subgroup "elems" [
-  test "get all elements" [(1, "a"), (2, "b")] ["a", "b"],
-  test "unsorted keys" [(3, "c"), (1, "a"), (2, "b")] ["a", "b", "c"],
-  test "empty map" [] []]
+mapsElems = supergroup "elems" [
+  subgroup "returnsValuesInKeyOrder" [
+    test "get all elements" "returnsValuesInKeyOrder" [(1, "a"), (2, "b")] ["a", "b"],
+    test "unsorted keys" "returnsValuesInKeyOrder" [(3, "c"), (1, "a"), (2, "b")] ["a", "b", "c"]],
+  subgroup "emptyInput" [
+    test "empty map" "emptyInput" [] []]]
   where
-    test name m result = evalPair name showStringList
+    test name segment m result = evalPairWithProvisions name [segment] DefMaps.elems showStringList
       (Maps.elems (pMap m))
       (Phantoms.list $ Phantoms.string <$> result)
 
 mapsEmpty :: TypedTerm TestGroup
-mapsEmpty = subgroup "empty" [
-  test "empty map"]
+mapsEmpty = subgroup "hasNoBindings" [
+  test "empty map" "hasNoBindings"]
   where
-    test name = evalPair name showIntStringMap
+    test name segment = evalPairWithProvisions name [segment] DefMaps.empty showIntStringMap
       (Maps.empty :: TypedTerm (M.Map Int String))
       (pMap [])
 
 mapsFilter :: TypedTerm TestGroup
-mapsFilter = subgroup "filter" [
-  test "filter values starting with a" [(1, "a"), (2, "b"), (3, "ab")] [(1, "a"), (3, "ab")],
-  test "filter all" [(1, "b"), (2, "c")] [],
-  test "empty map" [] []]
+mapsFilter = supergroup "filter" [
+  subgroup "keepsMatchingValues" [
+    test "filter values starting with a" "keepsMatchingValues" [(1, "a"), (2, "b"), (3, "ab")] [(1, "a"), (3, "ab")]],
+  subgroup "boundaryCases" [
+    test "filter all" "boundaryCases" [(1, "b"), (2, "c")] [],
+    test "empty map" "boundaryCases" [] []]]
   where
-    test name m result = evalPair name showIntStringMap
+    test name segment m result = evalPairWithProvisions name [segment] DefMaps.filter showIntStringMap
       (Maps.filter
         (Phantoms.lambda "v" $ Equality.equal
           (Optionals.withDefault (Phantoms.int32 0)
@@ -165,145 +172,166 @@ mapsFilter = subgroup "filter" [
       (pMap result)
 
 mapsFilterWithKey :: TypedTerm TestGroup
-mapsFilterWithKey = subgroup "filterWithKey" [
-  test "filter by key > 1" [(1, "a"), (2, "b"), (3, "c")] [(2, "b"), (3, "c")],
-  test "filter all" [(1, "a")] [],
-  test "empty map" [] []]
+mapsFilterWithKey = supergroup "filterWithKey" [
+  subgroup "keepsMatchingBindings" [
+    test "filter by key > 1" "keepsMatchingBindings" [(1, "a"), (2, "b"), (3, "c")] [(2, "b"), (3, "c")]],
+  subgroup "boundaryCases" [
+    test "filter all" "boundaryCases" [(1, "a")] [],
+    test "empty map" "boundaryCases" [] []]]
   where
-    test name m result = evalPair name showIntStringMap
+    test name segment m result = evalPairWithProvisions name [segment] DefMaps.filterWithKey showIntStringMap
       (Maps.filterWithKey (Phantoms.lambda "k" $ Phantoms.lambda "v" $ Ordering.gt (Phantoms.var "k") (Phantoms.int32 1)) (pMap m))
       (pMap result)
 
 mapsFindWithDefault :: TypedTerm TestGroup
-mapsFindWithDefault = subgroup "findWithDefault" [
+mapsFindWithDefault = subgroup "returnsBoundValueOrDefault" [
   test "find existing" "default" 2 [(1, "a"), (2, "b")] "b",
   test "use default" "default" 3 [(1, "a"), (2, "b")] "default"]
   where
-    test name def k m result = stringEvalPair name
+    test name def k m result = stringEvalPairWithProvisions name ["returnsBoundValueOrDefault"] DefMaps.findWithDefault
       (Maps.findWithDefault (Phantoms.string def) (Phantoms.int32 k) (pMap m))
       (Phantoms.string result)
 
 mapsFromList :: TypedTerm TestGroup
-mapsFromList = subgroup "fromList" [
-  test "create from pairs" [(1, "a"), (2, "b")] [(1, "a"), (2, "b")],
-  test "duplicate keys" [(1, "a"), (1, "b")] [(1, "b")],
-  test "empty list" [] []]
+mapsFromList = supergroup "fromList" [
+  subgroup "buildsMapFromPairs" [
+    test "create from pairs" "buildsMapFromPairs" [(1, "a"), (2, "b")] [(1, "a"), (2, "b")]],
+  subgroup "lastDuplicateWins" [
+    test "duplicate keys" "lastDuplicateWins" [(1, "a"), (1, "b")] [(1, "b")]],
+  subgroup "emptyInput" [
+    test "empty list" "emptyInput" [] []]]
   where
-    test name input expected = evalPair name showIntStringMap
+    test name segment input expected = evalPairWithProvisions name [segment] DefMaps.fromList showIntStringMap
       (Maps.fromList (pPairList input))
       (pMap expected)
 
 mapsInsert :: TypedTerm TestGroup
-mapsInsert = subgroup "insert" [
+mapsInsert = subgroup "addsOrOverwritesBinding" [
   test "insert new key" 3 "c" [(1, "a"), (2, "b")] [(1, "a"), (2, "b"), (3, "c")],
   test "update existing" 2 "updated" [(1, "a"), (2, "b")] [(1, "a"), (2, "updated")],
   test "insert into empty" 1 "x" [] [(1, "x")]]
   where
-    test name k v m result = evalPair name showIntStringMap
+    test name k v m result = evalPairWithProvisions name ["addsOrOverwritesBinding"] DefMaps.insert showIntStringMap
       (Maps.insert (Phantoms.int32 k) (Phantoms.string v) (pMap m))
       (pMap result)
 
 mapsKeys :: TypedTerm TestGroup
-mapsKeys = subgroup "keys" [
-  test "get all keys" [(1, "a"), (2, "b"), (3, "c")] [1, 2, 3],
-  test "unsorted keys" [(3, "c"), (1, "a"), (2, "b")] [1, 2, 3],
-  test "empty map" [] []]
+mapsKeys = supergroup "keys" [
+  subgroup "returnsKeysInOrder" [
+    test "get all keys" "returnsKeysInOrder" [(1, "a"), (2, "b"), (3, "c")] [1, 2, 3],
+    test "unsorted keys" "returnsKeysInOrder" [(3, "c"), (1, "a"), (2, "b")] [1, 2, 3]],
+  subgroup "emptyInput" [
+    test "empty map" "emptyInput" [] []]]
   where
-    test name m result = evalPair name showIntList
+    test name segment m result = evalPairWithProvisions name [segment] DefMaps.keys showIntList
       (Maps.keys (pMap m))
       (Phantoms.list $ Phantoms.int32 <$> result)
 
 mapsLookup :: TypedTerm TestGroup
-mapsLookup = subgroup "lookup" [
-  test "find existing key" 2 [(1, "a"), (2, "b")] (Just "b"),
-  test "key not found" 3 [(1, "a"), (2, "b")] Nothing,
-  test "lookup in empty" 1 [] Nothing]
+mapsLookup = supergroup "lookup" [
+  subgroup "returnsBoundValue" [
+    test "find existing key" "returnsBoundValue" 2 [(1, "a"), (2, "b")] (Just "b")],
+  subgroup "noneWhenAbsentOrEmpty" [
+    test "key not found" "noneWhenAbsentOrEmpty" 3 [(1, "a"), (2, "b")] Nothing,
+    test "lookup in empty" "noneWhenAbsentOrEmpty" 1 [] Nothing]]
   where
-    test name k m result = evalPair name showMaybeString
+    test name segment k m result = evalPairWithProvisions name [segment] DefMaps.lookup showMaybeString
       (Maps.lookup (Phantoms.int32 k) (pMap m))
       (maybe Phantoms.nothing (Phantoms.just . Phantoms.string) result)
 
 mapsMap :: TypedTerm TestGroup
-mapsMap = subgroup "map" [
-  test "map over values" [(1, "a"), (2, "b")] [(1, "A"), (2, "B")],
-  test "map empty" [] []]
+mapsMap = supergroup "map" [
+  subgroup "appliesFunctionToValues" [
+    test "map over values" "appliesFunctionToValues" [(1, "a"), (2, "b")] [(1, "A"), (2, "B")]],
+  subgroup "emptyInput" [
+    test "map empty" "emptyInput" [] []]]
   where
-    test name m result = evalPair name showIntStringMap
+    test name segment m result = evalPairWithProvisions name [segment] DefMaps.map showIntStringMap
       (Maps.map (Phantoms.lambda "s" $ Strings.toUpper (Phantoms.var "s")) (pMap m))
       (pMap result)
 
 mapsMapKeys :: TypedTerm TestGroup
-mapsMapKeys = subgroup "mapKeys" [
-  test "double keys" [(1, "a"), (2, "b")] [(2, "a"), (4, "b")],
-  test "empty map" [] []]
+mapsMapKeys = supergroup "mapKeys" [
+  subgroup "appliesFunctionToKeys" [
+    test "double keys" "appliesFunctionToKeys" [(1, "a"), (2, "b")] [(2, "a"), (4, "b")]],
+  subgroup "emptyInput" [
+    test "empty map" "emptyInput" [] []]]
   where
-    test name m result = evalPair name showIntStringMap
+    test name segment m result = evalPairWithProvisions name [segment] DefMaps.mapKeys showIntStringMap
       (Maps.mapKeys (Phantoms.lambda "k" $ Math.mul (Phantoms.var "k") (Phantoms.int32 2)) (pMap m))
       (pMap result)
 
 mapsMember :: TypedTerm TestGroup
-mapsMember = subgroup "member" [
-  test "key exists" 2 [(1, "a"), (2, "b")] True,
-  test "key missing" 3 [(1, "a"), (2, "b")] False,
-  test "empty map" 1 [] False]
+mapsMember = supergroup "member" [
+  subgroup "testsKeyPresence" [
+    test "key exists" "testsKeyPresence" 2 [(1, "a"), (2, "b")] True],
+  subgroup "falseWhenAbsentOrEmpty" [
+    test "key missing" "falseWhenAbsentOrEmpty" 3 [(1, "a"), (2, "b")] False,
+    test "empty map" "falseWhenAbsentOrEmpty" 1 [] False]]
   where
-    test name k m result = evalPair name showBool
+    test name segment k m result = evalPairWithProvisions name [segment] DefMaps.member showBool
       (Maps.member (Phantoms.int32 k) (pMap m))
       (Phantoms.boolean result)
 
 mapsIsEmpty :: TypedTerm TestGroup
-mapsIsEmpty = subgroup "isEmpty" [
-  test "empty map" [] True,
-  test "non-empty map" [(1, "a")] False]
+mapsIsEmpty = subgroup "testsZeroBindings" [
+  test "empty map" "testsZeroBindings" [] True,
+  test "non-empty map" "testsZeroBindings" [(1, "a")] False]
   where
-    test name m result = evalPair name showBool
+    test name segment m result = evalPairWithProvisions name [segment] DefMaps.isEmpty showBool
       (Maps.isEmpty (pMap m))
       (Phantoms.boolean result)
 
 mapsRemove :: TypedTerm TestGroup
-mapsRemove = subgroup "remove" [
-  test "remove existing" 2 [(1, "a"), (2, "b"), (3, "c")] [(1, "a"), (3, "c")],
-  test "remove non-existing" 4 [(1, "a"), (2, "b")] [(1, "a"), (2, "b")],
-  test "remove from empty" 1 [] []]
+mapsRemove = supergroup "remove" [
+  subgroup "removesKeyIfPresent" [
+    test "remove existing" "removesKeyIfPresent" 2 [(1, "a"), (2, "b"), (3, "c")] [(1, "a"), (3, "c")]],
+  subgroup "noOpWhenAbsentOrEmpty" [
+    test "remove non-existing" "noOpWhenAbsentOrEmpty" 4 [(1, "a"), (2, "b")] [(1, "a"), (2, "b")],
+    test "remove from empty" "noOpWhenAbsentOrEmpty" 1 [] []]]
   where
-    test name k m result = evalPair name showIntStringMap
+    test name segment k m result = evalPairWithProvisions name [segment] DefMaps.delete showIntStringMap
       (Maps.delete (Phantoms.int32 k) (pMap m))
       (pMap result)
 
 mapsSingleton :: TypedTerm TestGroup
-mapsSingleton = subgroup "singleton" [
-  test "single entry" 42 "hello" [(42, "hello")]]
+mapsSingleton = subgroup "wrapsOneBinding" [
+  test "single entry" "wrapsOneBinding" 42 "hello" [(42, "hello")]]
   where
-    test name k v result = evalPair name showIntStringMap
+    test name segment k v result = evalPairWithProvisions name [segment] DefMaps.singleton showIntStringMap
       (Maps.singleton (Phantoms.int32 k) (Phantoms.string v))
       (pMap result)
 
 mapsSize :: TypedTerm TestGroup
-mapsSize = subgroup "size" [
-  test "three entries" [(1, "a"), (2, "b"), (3, "c")] 3,
-  test "single entry" [(42, "test")] 1,
-  test "empty map" [] 0]
+mapsSize = subgroup "countsBindings" [
+  test "three entries" "countsBindings" [(1, "a"), (2, "b"), (3, "c")] 3,
+  test "single entry" "countsBindings" [(42, "test")] 1,
+  test "empty map" "countsBindings" [] 0]
   where
-    test name m result = evalPair name showInt32
+    test name segment m result = evalPairWithProvisions name [segment] DefMaps.size showInt32
       (Maps.size (pMap m))
       (Phantoms.int32 result)
 
 mapsToList :: TypedTerm TestGroup
-mapsToList = subgroup "toList" [
-  test "convert to pairs" [(1, "a"), (2, "b")] [(1, "a"), (2, "b")],
-  test "unsorted keys" [(3, "c"), (1, "a"), (2, "b")] [(1, "a"), (2, "b"), (3, "c")],
-  test "empty map" [] []]
+mapsToList = supergroup "toList" [
+  subgroup "returnsPairsInKeyOrder" [
+    test "convert to pairs" "returnsPairsInKeyOrder" [(1, "a"), (2, "b")] [(1, "a"), (2, "b")],
+    test "unsorted keys" "returnsPairsInKeyOrder" [(3, "c"), (1, "a"), (2, "b")] [(1, "a"), (2, "b"), (3, "c")]],
+  subgroup "emptyInput" [
+    test "empty map" "emptyInput" [] []]]
   where
-    test name input expected = evalPair name showPairList
+    test name segment input expected = evalPairWithProvisions name [segment] DefMaps.toList showPairList
       (Maps.toList (pMap input))
       (pPairList expected)
 
 mapsUnion :: TypedTerm TestGroup
-mapsUnion = subgroup "union" [
-  test "union two maps" [(1, "a"), (2, "b")] [(2, "x"), (3, "c")] [(1, "a"), (2, "b"), (3, "c")],
-  test "union with empty" [(1, "a")] [] [(1, "a")],
-  test "empty with map" [] [(1, "a")] [(1, "a")]]
+mapsUnion = supergroup "union" [
+  subgroup "firstMapTakesPrecedence" [
+    test "union two maps" "firstMapTakesPrecedence" [(1, "a"), (2, "b")] [(2, "x"), (3, "c")] [(1, "a"), (2, "b"), (3, "c")]],
+  subgroup "identityWithEmpty" [
+    test "union with empty" "identityWithEmpty" [(1, "a")] [] [(1, "a")],
+    test "empty with map" "identityWithEmpty" [] [(1, "a")] [(1, "a")]]]
   where
-    test name m1 m2 result = evalPair name showIntStringMap
+    test name segment m1 m2 result = evalPairWithProvisions name [segment] DefMaps.union showIntStringMap
       (Maps.union (pMap m1) (pMap m2))
       (pMap result)

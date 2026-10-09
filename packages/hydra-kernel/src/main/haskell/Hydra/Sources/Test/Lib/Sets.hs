@@ -24,6 +24,7 @@ import Hydra.Core.Testing
 import qualified Hydra.Core.Dsl.Lib.Literals as Literals
 import qualified Hydra.Core.Dsl.Lib.Math as Math
 import qualified Hydra.Core.Dsl.Lib.Sets as Sets
+import qualified Hydra.Core.Lib.Sets as DefSets
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 
 ns :: ModuleName
@@ -77,136 +78,156 @@ allTests = definitionInModule module_ "allTests" $
       setsMap]
 
 setsDelete :: TypedTerm TestGroup
-setsDelete = subgroup "delete" [
-  test "delete existing" 2 [1, 2, 3] [1, 3],
-  test "delete non-existing" 4 [1, 2, 3] [1, 2, 3],
-  test "delete from empty" 1 [] []]
+setsDelete = supergroup "delete" [
+  subgroup "removesElement" [
+    test "delete existing" "removesElement" 2 [1, 2, 3] [1, 3]],
+  subgroup "noOpWhenAbsentOrEmpty" [
+    test "delete non-existing" "noOpWhenAbsentOrEmpty" 4 [1, 2, 3] [1, 2, 3],
+    test "delete from empty" "noOpWhenAbsentOrEmpty" 1 [] []]]
   where
-    test name x s result = evalPair name showIntSet
+    test name segment x s result = evalPairWithProvisions name [segment] DefSets.delete showIntSet
       (Sets.delete (Phantoms.int32 x) (pIntSet s))
       (pIntSet result)
 
 setsDifference :: TypedTerm TestGroup
-setsDifference = subgroup "difference" [
-  test "remove elements" [1, 2, 3] [2, 4] [1, 3],
-  test "no overlap" [1, 2] [3, 4] [1, 2],
-  test "difference with empty" [1, 2] [] [1, 2]]
+setsDifference = supergroup "difference" [
+  subgroup "removesElementsOfSecondSet" [
+    test "remove elements" "removesElementsOfSecondSet" [1, 2, 3] [2, 4] [1, 3],
+    test "no overlap" "removesElementsOfSecondSet" [1, 2] [3, 4] [1, 2]],
+  subgroup "identityWhenSecondEmpty" [
+    test "difference with empty" "identityWhenSecondEmpty" [1, 2] [] [1, 2]]]
   where
-    test name s1 s2 result = evalPair name showIntSet
+    test name segment s1 s2 result = evalPairWithProvisions name [segment] DefSets.difference showIntSet
       (Sets.difference (pIntSet s1) (pIntSet s2))
       (pIntSet result)
 
 setsEmpty :: TypedTerm TestGroup
-setsEmpty = subgroup "empty" [
-  test "empty set" []]
+setsEmpty = subgroup "hasNoElements" [
+  test "empty set" "hasNoElements" []]
   where
-    test name expected = evalPair name showIntSet
+    test name segment expected = evalPairWithProvisions name [segment] DefSets.empty showIntSet
       (Sets.empty :: TypedTerm (S.Set Int))
       (pIntSet expected)
 
 setsFromList :: TypedTerm TestGroup
-setsFromList = subgroup "fromList" [
-  test "create from list" [1, 2, 3] [1, 2, 3],
-  test "duplicates removed" [1, 2, 1, 3] [1, 2, 3],
-  test "empty list" [] []]
+setsFromList = supergroup "fromList" [
+  subgroup "collectsDistinctElements" [
+    test "create from list" "collectsDistinctElements" [1, 2, 3] [1, 2, 3],
+    test "duplicates removed" "collectsDistinctElements" [1, 2, 1, 3] [1, 2, 3]],
+  subgroup "emptyListYieldsEmptySet" [
+    test "empty list" "emptyListYieldsEmptySet" [] []]]
   where
-    test name input expected = evalPair name showIntSet
+    test name segment input expected = evalPairWithProvisions name [segment] DefSets.fromList showIntSet
       (Sets.fromList (Phantoms.list $ Phantoms.int32 <$> input))
       (pIntSet expected)
 
 setsInsert :: TypedTerm TestGroup
-setsInsert = subgroup "insert" [
-  test "insert new element" 4 [1, 2, 3] [1, 2, 3, 4],
-  test "insert existing element" 2 [1, 2, 3] [1, 2, 3],
-  test "insert into empty" 1 [] [1]]
+setsInsert = supergroup "insert" [
+  subgroup "addsElement" [
+    test "insert new element" "addsElement" 4 [1, 2, 3] [1, 2, 3, 4],
+    test "insert into empty" "addsElement" 1 [] [1]],
+  subgroup "noOpWhenAlreadyPresent" [
+    test "insert existing element" "noOpWhenAlreadyPresent" 2 [1, 2, 3] [1, 2, 3]]]
   where
-    test name x s result = evalPair name showIntSet
+    test name segment x s result = evalPairWithProvisions name [segment] DefSets.insert showIntSet
       (Sets.insert (Phantoms.int32 x) (pIntSet s))
       (pIntSet result)
 
 setsIntersection :: TypedTerm TestGroup
-setsIntersection = subgroup "intersection" [
-  test "common elements" [1, 2, 3] [2, 3, 4] [2, 3],
-  test "no common elements" [1, 2] [3, 4] [],
-  test "intersection with empty" [1, 2] [] []]
+setsIntersection = supergroup "intersection" [
+  subgroup "keepsElementsInBoth" [
+    test "common elements" "keepsElementsInBoth" [1, 2, 3] [2, 3, 4] [2, 3]],
+  subgroup "emptyWhenNoOverlapOrEitherEmpty" [
+    test "no common elements" "emptyWhenNoOverlapOrEitherEmpty" [1, 2] [3, 4] [],
+    test "intersection with empty" "emptyWhenNoOverlapOrEitherEmpty" [1, 2] [] []]]
   where
-    test name s1 s2 result = evalPair name showIntSet
+    test name segment s1 s2 result = evalPairWithProvisions name [segment] DefSets.intersection showIntSet
       (Sets.intersection (pIntSet s1) (pIntSet s2))
       (pIntSet result)
 
 setsMap :: TypedTerm TestGroup
-setsMap = subgroup "map" [
-  test "map function" [1, 2, 3] [2, 4, 6],
-  test "map on empty" [] []]
+setsMap = supergroup "map" [
+  subgroup "appliesFunctionToEachElement" [
+    test "map function" "appliesFunctionToEachElement" [1, 2, 3] [2, 4, 6]],
+  subgroup "emptyInput" [
+    test "map on empty" "emptyInput" [] []]]
   where
-    test name s result = evalPair name showIntSet
+    test name segment s result = evalPairWithProvisions name [segment] DefSets.map showIntSet
       (Sets.map (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)) (pIntSet s))
       (pIntSet result)
 
 setsMember :: TypedTerm TestGroup
-setsMember = subgroup "member" [
-  test "element exists" 2 [1, 2, 3] True,
-  test "element missing" 4 [1, 2, 3] False,
-  test "empty set" 1 [] False]
+setsMember = supergroup "member" [
+  subgroup "testsSetMembership" [
+    test "element exists" "testsSetMembership" 2 [1, 2, 3] True],
+  subgroup "falseWhenAbsentOrEmpty" [
+    test "element missing" "falseWhenAbsentOrEmpty" 4 [1, 2, 3] False,
+    test "empty set" "falseWhenAbsentOrEmpty" 1 [] False]]
   where
-    test name x s result = evalPair name showBool
+    test name segment x s result = evalPairWithProvisions name [segment] DefSets.member showBool
       (Sets.member (Phantoms.int32 x) (pIntSet s))
       (Phantoms.boolean result)
 
 setsIsEmpty :: TypedTerm TestGroup
-setsIsEmpty = subgroup "isEmpty" [
-  test "empty set" [] True,
-  test "non-empty set" [1, 2] False]
+setsIsEmpty = subgroup "testsZeroSize" [
+  test "empty set" "testsZeroSize" [] True,
+  test "non-empty set" "testsZeroSize" [1, 2] False]
   where
-    test name s result = evalPair name showBool
+    test name segment s result = evalPairWithProvisions name [segment] DefSets.isEmpty showBool
       (Sets.isEmpty (pIntSet s))
       (Phantoms.boolean result)
 
 setsSingleton :: TypedTerm TestGroup
-setsSingleton = subgroup "singleton" [
-  test "single element" 42 [42]]
+setsSingleton = subgroup "wrapsOneElement" [
+  test "single element" "wrapsOneElement" 42 [42]]
   where
-    test name x result = evalPair name showIntSet
+    test name segment x result = evalPairWithProvisions name [segment] DefSets.singleton showIntSet
       (Sets.singleton (Phantoms.int32 x))
       (pIntSet result)
 
 setsSize :: TypedTerm TestGroup
-setsSize = subgroup "size" [
-  test "three elements" [1, 2, 3] 3,
-  test "single element" [42] 1,
-  test "empty set" [] 0]
+setsSize = subgroup "countsElements" [
+  test "three elements" "countsElements" [1, 2, 3] 3,
+  test "single element" "countsElements" [42] 1,
+  test "empty set" "countsElements" [] 0]
   where
-    test name s result = evalPair name showInt32
+    test name segment s result = evalPairWithProvisions name [segment] DefSets.size showInt32
       (Sets.size (pIntSet s))
       (Phantoms.int32 result)
 
 setsToList :: TypedTerm TestGroup
-setsToList = subgroup "toList" [
-  test "convert to list" [1, 2, 3] [1, 2, 3],
-  test "unsorted input" [3, 1, 2] [1, 2, 3],
-  test "empty set" [] []]
+setsToList = supergroup "toList" [
+  subgroup "ordersAscending" [
+    test "convert to list" "ordersAscending" [1, 2, 3] [1, 2, 3],
+    test "unsorted input" "ordersAscending" [3, 1, 2] [1, 2, 3]],
+  subgroup "emptySetYieldsEmptyList" [
+    test "empty set" "emptySetYieldsEmptyList" [] []]]
   where
-    test name input expected = evalPair name showIntList
+    test name segment input expected = evalPairWithProvisions name [segment] DefSets.toList showIntList
       (Sets.toList (pIntSet input))
       (Phantoms.list $ Phantoms.int32 <$> expected)
 
 setsUnion :: TypedTerm TestGroup
-setsUnion = subgroup "union" [
-  test "union two sets" [1, 2] [2, 3] [1, 2, 3],
-  test "union with empty" [1, 2] [] [1, 2],
-  test "empty with non-empty" [] [1, 2] [1, 2]]
+setsUnion = supergroup "union" [
+  subgroup "keepsElementsInEither" [
+    test "union two sets" "keepsElementsInEither" [1, 2] [2, 3] [1, 2, 3]],
+  subgroup "identityWhenEitherEmpty" [
+    test "union with empty" "identityWhenEitherEmpty" [1, 2] [] [1, 2],
+    test "empty with non-empty" "identityWhenEitherEmpty" [] [1, 2] [1, 2]]]
   where
-    test name s1 s2 result = evalPair name showIntSet
+    test name segment s1 s2 result = evalPairWithProvisions name [segment] DefSets.union showIntSet
       (Sets.union (pIntSet s1) (pIntSet s2))
       (pIntSet result)
 
 setsUnions :: TypedTerm TestGroup
-setsUnions = subgroup "unions" [
-  test "union of multiple sets" [[1, 2], [2, 3], [3, 4]] [1, 2, 3, 4],
-  test "union with empty sets" [[1, 2], [], [3]] [1, 2, 3],
-  test "empty list of sets" [] [],
-  test "single set" [[1, 2, 3]] [1, 2, 3]]
+setsUnions = supergroup "unions" [
+  subgroup "keepsElementsInAny" [
+    test "union of multiple sets" "keepsElementsInAny" [[1, 2], [2, 3], [3, 4]] [1, 2, 3, 4],
+    test "union with empty sets" "keepsElementsInAny" [[1, 2], [], [3]] [1, 2, 3],
+    test "single set" "keepsElementsInAny" [[1, 2, 3]] [1, 2, 3]],
+  subgroup "emptyListOfSetsYieldsEmptySet" [
+    test "empty list of sets" "emptyListOfSetsYieldsEmptySet" [] []]]
   where
-    test name sets result = evalPair name showIntSet
+    test name segment sets result = evalPairWithProvisions name [segment] DefSets.unions showIntSet
       (Sets.unions (Phantoms.list $ pIntSet <$> sets))
       (pIntSet result)

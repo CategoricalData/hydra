@@ -66,227 +66,203 @@ allTests = define "allTests" $
       showIntList :: TypedTerm ([Int] -> String)
       showIntList = Phantoms.lambda "xs" $ Strings.join (Phantoms.string ", ") (Lists.map (Phantoms.lambda "n" $ Literals.printInt32 (Phantoms.var "n")) (Phantoms.var "xs"))
 
-      stringsConcat = subgroup "concat" [
-        -- Basic functionality
-        test "basic concatenation" ["one", "two", "three"] "onetwothree",
-        test "single string" ["hello"] "hello",
-        test "empty list" [] "",
-
-        -- Empty string handling
-        test "with empty strings" ["", "one", "", ""] "one",
-        test "all empty strings" ["", "", "", ""] "",
-
-        -- Unicode correctness
-        test "unicode strings" ["\241", "\19990", "\127757"] "\241\19990\127757",  -- ñ, 世, 🌍
-        test "combining characters" ["e", "\769"] "e\769",  -- e + combining acute accent
-
-        -- Special characters (control characters may be handled specially)
-        test "control characters" ["\n", "\t", "\r"] "\n\t\r",
-        test "null character" ["hello", "\0", "world"] "hello\0world"]
+      stringsConcat = supergroup "concat" [
+        subgroup "flattensPreservingOrderAndContent" [
+          test "basic concatenation" "flattensPreservingOrderAndContent" ["one", "two", "three"] "onetwothree",
+          test "single string" "flattensPreservingOrderAndContent" ["hello"] "hello",
+          test "unicode strings" "flattensPreservingOrderAndContent" ["\241", "\19990", "\127757"] "\241\19990\127757",  -- ñ, 世, 🌍
+          test "combining characters" "flattensPreservingOrderAndContent" ["e", "\769"] "e\769",  -- e + combining acute accent
+          test "control characters" "flattensPreservingOrderAndContent" ["\n", "\t", "\r"] "\n\t\r",
+          test "null character" "flattensPreservingOrderAndContent" ["hello", "\0", "world"] "hello\0world"],
+        subgroup "emptyInputs" [
+          test "empty list" "emptyInputs" [] "",
+          test "with empty strings" "emptyInputs" ["", "one", "", ""] "one",
+          test "all empty strings" "emptyInputs" ["", "", "", ""] ""]]
         where
-          test name ls result = stringEvalPair name
+          test name segment ls result = stringEvalPairWithProvisions name [segment] DefStrings.concat
             (Strings.concat (Phantoms.list (Phantoms.string <$> ls)))
             (Phantoms.string result)
   
-      stringsConcat2 = subgroup "concat2" [
-        test "basic concatenation" "hello" "world" "helloworld",
-        test "empty first string" "" "world" "world",
-        test "empty second string" "hello" "" "hello",
-        test "both empty strings" "" "" "",
-        test "unicode characters" "\241" "\19990" "\241\19990",  -- ñ, 世
-        test "special characters" "\n" "\t" "\n\t",
-        test "null characters" "hello\0" "world" "hello\0world"]
+      stringsConcat2 = supergroup "concat2" [
+        subgroup "appendsPreservingContent" [
+          test "basic concatenation" "appendsPreservingContent" "hello" "world" "helloworld",
+          test "unicode characters" "appendsPreservingContent" "\241" "\19990" "\241\19990",  -- ñ, 世
+          test "special characters" "appendsPreservingContent" "\n" "\t" "\n\t",
+          test "null characters" "appendsPreservingContent" "hello\0" "world" "hello\0world"],
+        subgroup "identityOnEmpty" [
+          test "empty first string" "identityOnEmpty" "" "world" "world",
+          test "empty second string" "identityOnEmpty" "hello" "" "hello",
+          test "both empty strings" "identityOnEmpty" "" "" ""]]
         where
-          test name s1 s2 result = stringEvalPair name
+          test name segment s1 s2 result = stringEvalPairWithProvisions name [segment] DefStrings.concat2
             (Strings.concat2 (Phantoms.string s1) (Phantoms.string s2))
             (Phantoms.string result)
   
-      stringsFromList = subgroup "fromList" [
-        test "basic ascii string" [104, 101, 108, 108, 111] "hello",
-        test "empty code point list" [] "",
-        test "single character" [97] "a",
-        test "unicode characters" [241, 19990, 127757] "\241\19990\127757",  -- ñ, 世, 🌍
-        test "combining character sequence" [101, 769] "e\769",  -- e + combining acute
-        test "special characters" [10, 9, 13] "\n\t\r",
-        test "null character" [104, 0, 105] "h\0i"]  -- h, null, i
+      stringsFromList = supergroup "fromList" [
+        subgroup "buildsStringFromCodePoints" [
+          test "basic ascii string" "buildsStringFromCodePoints" [104, 101, 108, 108, 111] "hello",
+          test "single character" "buildsStringFromCodePoints" [97] "a",
+          test "unicode characters" "buildsStringFromCodePoints" [241, 19990, 127757] "\241\19990\127757",  -- ñ, 世, 🌍
+          test "combining character sequence" "buildsStringFromCodePoints" [101, 769] "e\769",  -- e + combining acute
+          test "special characters" "buildsStringFromCodePoints" [10, 9, 13] "\n\t\r",
+          test "null character" "buildsStringFromCodePoints" [104, 0, 105] "h\0i"],  -- h, null, i
+        subgroup "emptyInput" [
+          test "empty code point list" "emptyInput" [] ""]]
         where
-          test name codePoints result = stringEvalPair name
+          test name segment codePoints result = stringEvalPairWithProvisions name [segment] DefStrings.fromList
             (Strings.fromList (Phantoms.list (Phantoms.int32 <$> codePoints)))
             (Phantoms.string result)
   
-      stringsJoin = subgroup "join" [
-        -- Basic functionality
-        test "comma separator" "," ["one", "two", "three"] "one,two,three",
-        test "empty separator" "" ["a", "b", "c"] "abc",
-        test "multi-character separator" " | " ["A", "B", "C"] "A | B | C",
-
-        -- Edge cases
-        test "empty string list" "," [] "",
-        test "single item list" "," ["only"] "only",
-        test "empty strings in list" "," ["", "a", ""] ",a,",
-
-        -- Unicode and special characters
-        test "unicode separator" "\127757" ["link1", "link2"] "link1\127757link2",  -- 🌍
-        test "newline separator" "\n" ["line1", "line2"] "line1\nline2"]
+      stringsJoin = supergroup "join" [
+        subgroup "insertsSeparatorBetweenStrings" [
+          test "comma separator" "insertsSeparatorBetweenStrings" "," ["one", "two", "three"] "one,two,three",
+          test "empty separator" "insertsSeparatorBetweenStrings" "" ["a", "b", "c"] "abc",
+          test "multi-character separator" "insertsSeparatorBetweenStrings" " | " ["A", "B", "C"] "A | B | C",
+          test "empty strings in list" "insertsSeparatorBetweenStrings" "," ["", "a", ""] ",a,",
+          test "unicode separator" "insertsSeparatorBetweenStrings" "\127757" ["link1", "link2"] "link1\127757link2",  -- 🌍
+          test "newline separator" "insertsSeparatorBetweenStrings" "\n" ["line1", "line2"] "line1\nline2"],
+        subgroup "boundaryInputs" [
+          test "empty string list" "boundaryInputs" "," [] "",
+          test "single item list" "boundaryInputs" "," ["only"] "only"]]
         where
-          test name sep strs result = stringEvalPair name
+          test name segment sep strs result = stringEvalPairWithProvisions name [segment] DefStrings.join
             (Strings.join (Phantoms.string sep) (Phantoms.list (Phantoms.string <$> strs)))
             (Phantoms.string result)
   
-      stringsLength = subgroup "length" [
-        test "empty string" "" 0,
-        test "single character" "a" 1,
-        test "basic word" "hello" 5,
-        test "unicode characters" "\241\19990\127757" 3,  -- ñ, 世, 🌍 (verifies code point count)
-        test "combining character sequence" "e\769" 2,  -- e + combining acute (separate code points)
-        test "special characters" "\n\t\r" 3]
+      stringsLength = subgroup "countsCodePoints" [
+        test "empty string" "countsCodePoints" "" 0,
+        test "single character" "countsCodePoints" "a" 1,
+        test "basic word" "countsCodePoints" "hello" 5,
+        test "unicode characters" "countsCodePoints" "\241\19990\127757" 3,  -- ñ, 世, 🌍 (verifies code point count)
+        test "combining character sequence" "countsCodePoints" "e\769" 2,  -- e + combining acute (separate code points)
+        test "special characters" "countsCodePoints" "\n\t\r" 3]
         where
-          test name s result = evalPair name showInt32
+          test name segment s result = evalPairWithProvisions name [segment] DefStrings.length showInt32
             (Strings.length (Phantoms.string s))
             (Phantoms.int32 result)
   
-      stringsCharAt = subgroup "charAt" [
-        test "first character" 0 "hello" (Just 104),
-        test "middle character" 2 "hello" (Just 108),
-        test "last character" 4 "hello" (Just 111),
-        test "single character string" 0 "a" (Just 97),
-        test "unicode character" 0 "\241" (Just 241),           -- ñ
-        test "multi-byte unicode" 0 "\19990" (Just 19990),      -- 世
-        test "second of combining pair" 1 "e\769" (Just 769),   -- combining acute accent
-        test "out of bounds" 5 "hello" Nothing,
-        test "negative index" (-1) "hello" Nothing,
-        test "empty string" 0 "" Nothing,
-        -- Astral (non-BMP) characters (#745): an index scheme that counts
-        -- UTF-16 code units instead of code points desyncs once an astral
-        -- character (outside the Basic Multilingual Plane) appears before
-        -- the target index.
-        test "before an astral character" 0 "\127757a" (Just 127757),  -- 🌍
-        test "after an astral character" 1 "\127757a" (Just 97)]       -- 🌍, a
+      stringsCharAt = supergroup "charAt" [
+        subgroup "returnsCodePointAtIndex" [
+          test "first character" "returnsCodePointAtIndex" 0 "hello" (Just 104),
+          test "middle character" "returnsCodePointAtIndex" 2 "hello" (Just 108),
+          test "last character" "returnsCodePointAtIndex" 4 "hello" (Just 111),
+          test "single character string" "returnsCodePointAtIndex" 0 "a" (Just 97),
+          test "unicode character" "returnsCodePointAtIndex" 0 "\241" (Just 241),           -- ñ
+          test "multi-byte unicode" "returnsCodePointAtIndex" 0 "\19990" (Just 19990),      -- 世
+          test "second of combining pair" "returnsCodePointAtIndex" 1 "e\769" (Just 769),   -- combining acute accent
+          -- Astral (non-BMP) characters (#745): an index scheme that counts
+          -- UTF-16 code units instead of code points desyncs once an astral
+          -- character (outside the Basic Multilingual Plane) appears before
+          -- the target index.
+          test "before an astral character" "returnsCodePointAtIndex" 0 "\127757a" (Just 127757),  -- 🌍
+          test "after an astral character" "returnsCodePointAtIndex" 1 "\127757a" (Just 97)],       -- 🌍, a
+        subgroup "noneWhenOutOfRange" [
+          test "out of bounds" "noneWhenOutOfRange" 5 "hello" Nothing,
+          test "negative index" "noneWhenOutOfRange" (-1) "hello" Nothing,
+          test "empty string" "noneWhenOutOfRange" 0 "" Nothing]]
         where
-          test name idx s result = primCase name DefStrings.charAt [int32 idx, string s] (optionalInt32 result)
+          test name segment idx s result = primCaseWithProvisions name [segment] DefStrings.charAt [int32 idx, string s] (optionalInt32 result)
           optionalInt32 Nothing = Core.termOptional nothing
           optionalInt32 (Just x) = Core.termOptional $ just (int32 x)
 
-      stringsIsEmpty = subgroup "isEmpty" [
-        test "empty string" "" True,
-        test "single character" "a" False,
-        test "space" " " False,
-        test "unicode space" "\160" False,  -- non-breaking space
-        test "newline" "\n" False,
-        test "null character" "\0" False,
-        test "multi-character" "hello" False]
+      stringsIsEmpty = subgroup "testsZeroLength" [
+        test "empty string" "testsZeroLength" "" True,
+        test "single character" "testsZeroLength" "a" False,
+        test "space" "testsZeroLength" " " False,
+        test "unicode space" "testsZeroLength" "\160" False,  -- non-breaking space
+        test "newline" "testsZeroLength" "\n" False,
+        test "null character" "testsZeroLength" "\0" False,
+        test "multi-character" "testsZeroLength" "hello" False]
         where
-          test name s result = evalPair name showBool
+          test name segment s result = evalPairWithProvisions name [segment] DefStrings.isEmpty showBool
             (Strings.isEmpty (Phantoms.string s))
             (Phantoms.boolean result)
   
-      stringsSplitOn = subgroup "splitOn" [
-        -- Basic functionality
-        test "basic separator" "ss" "Mississippi" ["Mi", "i", "ippi"],
-        test "single char separator" " " "one two three" ["one", "two", "three"],
-        test "multi-char separator" "  " "a  b  c" ["a", "b", "c"],
-        test "separator not found" "x" "hello" ["hello"],
-
-        -- Edge cases with separator positions
-        test "separator at start" "h" "hello" ["", "ello"],
-        test "separator at end" "o" "hello" ["hell", ""],
-        test "leading and trailing separator" " " " one two " ["", "one", "two", ""],
-        test "whole string as separator" "Mississippi" "Mississippi" ["", ""],
-
-        -- Consecutive and overlapping separators
-        test "consecutive separators" " " "a  b" ["a", "", "b"],
-        test "multiple occurrences" "l" "hello" ["he", "", "o"],
-        test "overlapping pattern" "aa" "aaa" ["", "a"],
-
-        -- Empty string cases
-        test "empty separator" "" "abc" ["", "a", "b", "c"],
-        test "separator on empty string" "x" "" [""],
-        test "both empty" "" "" [""],
-
-        -- Single character cases
-        test "single char both" "a" "a" ["", ""],
-
-        -- Unicode
-        test "unicode separator" "\19990" "hello\19990world" ["hello", "world"],  -- 世
-        test "unicode content" "," "\241,\19990,\127757" ["\241", "\19990", "\127757"],  -- ñ,世,🌍
-
-        -- Special characters
-        test "newline separator" "\n" "line1\nline2\nline3" ["line1", "line2", "line3"],
-
-        -- Astral (non-BMP) characters (#745): an empty-separator split that
-        -- operates on UTF-16 code units instead of code points breaks a
-        -- surrogate pair apart.
-        test "empty separator with astral character" "" "a\127757b" ["", "a", "\127757", "b"]]
+      stringsSplitOn = supergroup "splitOn" [
+        subgroup "splitsOnEveryOccurrence" [
+          test "basic separator" "splitsOnEveryOccurrence" "ss" "Mississippi" ["Mi", "i", "ippi"],
+          test "single char separator" "splitsOnEveryOccurrence" " " "one two three" ["one", "two", "three"],
+          test "multi-char separator" "splitsOnEveryOccurrence" "  " "a  b  c" ["a", "b", "c"],
+          test "separator at start" "splitsOnEveryOccurrence" "h" "hello" ["", "ello"],
+          test "separator at end" "splitsOnEveryOccurrence" "o" "hello" ["hell", ""],
+          test "leading and trailing separator" "splitsOnEveryOccurrence" " " " one two " ["", "one", "two", ""],
+          test "whole string as separator" "splitsOnEveryOccurrence" "Mississippi" "Mississippi" ["", ""],
+          test "consecutive separators" "splitsOnEveryOccurrence" " " "a  b" ["a", "", "b"],
+          test "multiple occurrences" "splitsOnEveryOccurrence" "l" "hello" ["he", "", "o"],
+          test "overlapping pattern" "splitsOnEveryOccurrence" "aa" "aaa" ["", "a"],
+          test "single char both" "splitsOnEveryOccurrence" "a" "a" ["", ""],
+          test "unicode separator" "splitsOnEveryOccurrence" "\19990" "hello\19990world" ["hello", "world"],  -- 世
+          test "unicode content" "splitsOnEveryOccurrence" "," "\241,\19990,\127757" ["\241", "\19990", "\127757"],  -- ñ,世,🌍
+          test "newline separator" "splitsOnEveryOccurrence" "\n" "line1\nline2\nline3" ["line1", "line2", "line3"]],
+        subgroup "noSplitWhenAbsent" [
+          test "separator not found" "noSplitWhenAbsent" "x" "hello" ["hello"]],
+        subgroup "emptyStringOperands" [
+          test "empty separator" "emptyStringOperands" "" "abc" ["", "a", "b", "c"],
+          test "separator on empty string" "emptyStringOperands" "x" "" [""],
+          test "both empty" "emptyStringOperands" "" "" [""],
+          -- Astral (non-BMP) characters (#745): an empty-separator split that
+          -- operates on UTF-16 code units instead of code points breaks a
+          -- surrogate pair apart.
+          test "empty separator with astral character" "emptyStringOperands" "" "a\127757b" ["", "a", "\127757", "b"]]]
         where
-          test name s0 s1 result = evalPair name showStringList
+          test name segment s0 s1 result = evalPairWithProvisions name [segment] DefStrings.splitOn showStringList
             (Strings.splitOn (Phantoms.string s0) (Phantoms.string s1))
             (Phantoms.list (Phantoms.string <$> result))
   
-      stringsToList = subgroup "toList" [
-        -- Basic functionality
-        test "empty string" "" [],
-        test "single character" "a" [97],
-        test "basic word" "hello" [104, 101, 108, 108, 111],
-
-        -- Unicode
-        test "unicode characters" "\241\19990\127757" [241, 19990, 127757],  -- ñ, 世, 🌍
-        test "combining character sequence" "e\769" [101, 769],  -- e + combining acute
-
-        -- Special characters
-        test "control characters" "\n\t\r" [10, 9, 13],
-        test "null character" "h\0i" [104, 0, 105]]
+      stringsToList = supergroup "toList" [
+        subgroup "decomposesIntoCodePoints" [
+          test "single character" "decomposesIntoCodePoints" "a" [97],
+          test "basic word" "decomposesIntoCodePoints" "hello" [104, 101, 108, 108, 111],
+          test "unicode characters" "decomposesIntoCodePoints" "\241\19990\127757" [241, 19990, 127757],  -- ñ, 世, 🌍
+          test "combining character sequence" "decomposesIntoCodePoints" "e\769" [101, 769],  -- e + combining acute
+          test "control characters" "decomposesIntoCodePoints" "\n\t\r" [10, 9, 13],
+          test "null character" "decomposesIntoCodePoints" "h\0i" [104, 0, 105]],
+        subgroup "emptyInput" [
+          test "empty string" "emptyInput" "" []]]
         where
-          test name s result = evalPair name showIntList
+          test name segment s result = evalPairWithProvisions name [segment] DefStrings.toList showIntList
             (Strings.toList (Phantoms.string s))
             (Phantoms.list (Phantoms.int32 <$> result))
   
-      stringsToLower = subgroup "toLower" [
-        -- Basic functionality
-        test "mixed case" "Hello World" "hello world",
-        test "all uppercase" "HELLO" "hello",
-        test "all lowercase" "hello" "hello",
-        test "empty string" "" "",
-
-        -- Non-letter characters unchanged
-        test "with numbers and punctuation" "Abc123, XYZ!" "abc123, xyz!",
-        test "control characters" "\n\t\r" "\n\t\r",
-
-        -- Unicode
-        test "unicode accented chars" "\209\193\201\205\211\218" "\241\225\233\237\243\250",  -- ÑÁÉÍÓÚ -> ñáéíóú
-
-        -- Simple (one-to-one) case mapping only (#782): U+0130 "İ" has a
-        -- two-code-point full lowercase mapping ("i̇"), but the simple
-        -- mapping used here is plain "i".
-        test "dotted capital I has a simple, single-codepoint mapping" "\304" "i"]  -- İ -> i
+      stringsToLower = supergroup "toLower" [
+        subgroup "appliesSimpleLowercaseMapping" [
+          test "mixed case" "appliesSimpleLowercaseMapping" "Hello World" "hello world",
+          test "all uppercase" "appliesSimpleLowercaseMapping" "HELLO" "hello",
+          test "all lowercase" "appliesSimpleLowercaseMapping" "hello" "hello",
+          test "empty string" "appliesSimpleLowercaseMapping" "" "",
+          test "with numbers and punctuation" "appliesSimpleLowercaseMapping" "Abc123, XYZ!" "abc123, xyz!",
+          test "control characters" "appliesSimpleLowercaseMapping" "\n\t\r" "\n\t\r",
+          test "unicode accented chars" "appliesSimpleLowercaseMapping" "\209\193\201\205\211\218" "\241\225\233\237\243\250"],  -- ÑÁÉÍÓÚ -> ñáéíóú
+        subgroup "noFullCaseFoldingExpansion" [
+          -- Simple (one-to-one) case mapping only (#782): U+0130 "İ" has a
+          -- two-code-point full lowercase mapping ("i̇"), but the simple
+          -- mapping used here is plain "i".
+          test "dotted capital I has a simple, single-codepoint mapping" "noFullCaseFoldingExpansion" "\304" "i"]]  -- İ -> i
         where
-          test name s result = stringEvalPair name
+          test name segment s result = stringEvalPairWithProvisions name [segment] DefStrings.toLower
             (Strings.toLower (Phantoms.string s))
             (Phantoms.string result)
 
-      stringsToUpper = subgroup "toUpper" [
-        -- Basic functionality
-        test "mixed case" "hello World" "HELLO WORLD",
-        test "all lowercase" "hello" "HELLO",
-        test "all uppercase" "HELLO" "HELLO",
-        test "empty string" "" "",
-
-        -- Non-letter characters unchanged
-        test "with numbers and punctuation" "abc123, xyz!" "ABC123, XYZ!",
-        test "control characters" "\n\t\r" "\n\t\r",
-
-        -- Unicode
-        test "unicode accented chars" "\241\225\233\237\243\250" "\209\193\201\205\211\218",  -- ñáéíóú -> ÑÁÉÍÓÚ
-
-        -- Code-point-by-code-point, not full Unicode case conversion (#782):
-        -- U+00DF "ß" has no single-code-point uppercase mapping, so it is
-        -- returned unchanged rather than expanded to "SS".
-        test "sharp s is not expanded to SS" "stra\223e" "STRA\223E",  -- straße -> STRAße
-        -- U+0149 "ŉ" likewise has no simple uppercase mapping.
-        test "n preceded by apostrophe is unchanged" "\329" "\329",
-        -- U+1F80's simple uppercase mapping is the single code point
-        -- U+1F88, not the two-code-point full mapping "ἈΙ".
-        test "greek alpha with psili and ypogegrammeni" "\8064" "\8072"]
+      stringsToUpper = supergroup "toUpper" [
+        subgroup "appliesSimpleUppercaseMapping" [
+          test "mixed case" "appliesSimpleUppercaseMapping" "hello World" "HELLO WORLD",
+          test "all lowercase" "appliesSimpleUppercaseMapping" "hello" "HELLO",
+          test "all uppercase" "appliesSimpleUppercaseMapping" "HELLO" "HELLO",
+          test "empty string" "appliesSimpleUppercaseMapping" "" "",
+          test "with numbers and punctuation" "appliesSimpleUppercaseMapping" "abc123, xyz!" "ABC123, XYZ!",
+          test "control characters" "appliesSimpleUppercaseMapping" "\n\t\r" "\n\t\r",
+          test "unicode accented chars" "appliesSimpleUppercaseMapping" "\241\225\233\237\243\250" "\209\193\201\205\211\218"],  -- ñáéíóú -> ÑÁÉÍÓÚ
+        subgroup "noFullCaseFoldingExpansion" [
+          -- Code-point-by-code-point, not full Unicode case conversion (#782):
+          -- U+00DF "ß" has no single-code-point uppercase mapping, so it is
+          -- returned unchanged rather than expanded to "SS".
+          test "sharp s is not expanded to SS" "noFullCaseFoldingExpansion" "stra\223e" "STRA\223E",  -- straße -> STRAße
+          -- U+0149 "ŉ" likewise has no simple uppercase mapping.
+          test "n preceded by apostrophe is unchanged" "noFullCaseFoldingExpansion" "\329" "\329",
+          -- U+1F80's simple uppercase mapping is the single code point
+          -- U+1F88, not the two-code-point full mapping "ἈΙ".
+          test "greek alpha with psili and ypogegrammeni" "noFullCaseFoldingExpansion" "\8064" "\8072"]]
         where
-          test name s result = stringEvalPair name
+          test name segment s result = stringEvalPairWithProvisions name [segment] DefStrings.toUpper
             (Strings.toUpper (Phantoms.string s))
             (Phantoms.string result)
