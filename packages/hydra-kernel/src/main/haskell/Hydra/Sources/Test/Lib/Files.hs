@@ -67,7 +67,8 @@ allTests = definitionInModule module_ "allTests" $
       filesRemoveFile,
       filesRename,
       filesStatus,
-      filesSymlinks]
+      filesSymlinks,
+      filesWriteFile]
 
 -- Fold an effect<either<FileError, T>> into an effect<string> via the eithers eliminator, with the
 -- right branch passed through a (T -> string) function and the left branch rendered as "ERR".
@@ -102,6 +103,20 @@ filesReadWrite = subgroup "roundTripsWithWriteFile" [
             (lambda "b" $ decodeBytes (var "b"))
             (primitive DefFiles.readFile @@ path "rw.txt")))
     (string "hello world")]
+
+-- writeFile replaces the complete contents of an existing file, rather than appending: writing a
+-- shorter string over a longer one leaves no trace of the original contents.
+filesWriteFile :: TypedTerm TestGroup
+filesWriteFile = subgroup "replacesCompleteFileContents" [
+  effectfulCaseWithProvisions "writeFile replaces existing contents entirely, not appends" ["replacesCompleteFileContents"] DefFiles.writeFile
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.writeFile @@ path "overwrite.txt" @@ bytes "a much longer original string")
+      @@ (lambda "_w1" $ primitive DefEffects.bind
+            @@ (primitive DefFiles.writeFile @@ path "overwrite.txt" @@ bytes "short")
+            @@ (lambda "_w2" $ foldEither
+                  (lambda "b" $ decodeBytes (var "b"))
+                  (primitive DefFiles.readFile @@ path "overwrite.txt"))))
+    (string "short")]
 
 -- appendFile then readFile: contents are preserved and extended.
 filesAppendFile :: TypedTerm TestGroup
@@ -316,8 +331,19 @@ filesSymlinks = supergroup "symlinks" [
                     (lambda "s" $ showFileType @@
                       (project File._FileStatus File._FileStatus_fileType @@ var "s"))
                     (primitive DefFiles.status @@ false @@ path "link-to-target"))))
+      (string "link")],
+  subgroup "followLinksControlsLinkResolution" [
+    effectfulCaseWithProvisions "status(false) on a symlink reports fileType link, not the target's type" ["followLinksControlsLinkResolution"] DefFiles.status
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.writeFile @@ path "link-target4.txt" @@ bytes "4321")
+        @@ (lambda "_w" $ primitive DefEffects.bind
+              @@ (primitive DefFiles.createSymlink @@ path "link-target4.txt" @@ path "link-to-target4")
+              @@ (lambda "_l" $ foldEither
+                    (lambda "s" $ showFileType @@
+                      (project File._FileStatus File._FileStatus_fileType @@ var "s"))
+                    (primitive DefFiles.status @@ false @@ path "link-to-target4"))))
       (string "link"),
-    effectfulCaseWithProvisions "status(true) on a symlink reports the target's status" ["createsLinkObservableAsLinkType"] DefFiles.createSymlink
+    effectfulCaseWithProvisions "status(true) on a symlink reports the target's status" ["followLinksControlsLinkResolution"] DefFiles.status
       (primitive DefEffects.bind
         @@ (primitive DefFiles.writeFile @@ path "link-target3.txt" @@ bytes "1234")
         @@ (lambda "_w" $ primitive DefEffects.bind
@@ -351,15 +377,6 @@ filesSymlinks = supergroup "symlinks" [
               (primitive DefFiles.exists @@ path "dangling-link3")))
       (string "false")],
   subgroup "preservesTargetVerbatim" [
-    effectfulCaseWithProvisions "readSymlink returns the target verbatim" ["preservesTargetVerbatim"] DefFiles.createSymlink
-      (primitive DefEffects.bind
-        @@ (primitive DefFiles.writeFile @@ path "link-target2.txt" @@ bytes "x")
-        @@ (lambda "_w" $ primitive DefEffects.bind
-              @@ (primitive DefFiles.createSymlink @@ path "link-target2.txt" @@ path "link-to-target2")
-              @@ (lambda "_l" $ foldEither
-                    (lambda "t" $ Phantoms.unwrap File._FilePath @@ var "t")
-                    (primitive DefFiles.readSymlink @@ path "link-to-target2"))))
-      (string (testDir ++ "/link-target2.txt")),
     effectfulCaseWithProvisions "createSymlink preserves a relative target verbatim" ["preservesTargetVerbatim"] DefFiles.createSymlink
       (primitive DefEffects.bind
         @@ (primitive DefFiles.createSymlink @@ (wrap File._FilePath (string "relative-target.txt")) @@ path "relative-link")
@@ -367,6 +384,16 @@ filesSymlinks = supergroup "symlinks" [
               (lambda "t" $ Phantoms.unwrap File._FilePath @@ var "t")
               (primitive DefFiles.readSymlink @@ path "relative-link")))
       (string "relative-target.txt")],
+  subgroup "returnsStoredTargetVerbatim" [
+    effectfulCaseWithProvisions "readSymlink returns the target verbatim" ["returnsStoredTargetVerbatim"] DefFiles.readSymlink
+      (primitive DefEffects.bind
+        @@ (primitive DefFiles.writeFile @@ path "link-target2.txt" @@ bytes "x")
+        @@ (lambda "_w" $ primitive DefEffects.bind
+              @@ (primitive DefFiles.createSymlink @@ path "link-target2.txt" @@ path "link-to-target2")
+              @@ (lambda "_l" $ foldEither
+                    (lambda "t" $ Phantoms.unwrap File._FilePath @@ var "t")
+                    (primitive DefFiles.readSymlink @@ path "link-to-target2"))))
+      (string (testDir ++ "/link-target2.txt"))],
   subgroup "errorsOnExistingLinkPath" [
     effectfulCaseWithProvisions "createSymlink over an existing file yields alreadyExists" ["errorsOnExistingLinkPath"] DefFiles.createSymlink
       (primitive DefEffects.bind

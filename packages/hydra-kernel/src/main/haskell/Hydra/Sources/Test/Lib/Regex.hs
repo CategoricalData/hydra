@@ -211,27 +211,27 @@ allTests = define "allTests" $
           -- A dash is NOT special at top level (outside a class): "a-b" there is three literals, not
           -- a range -- ranges only exist inside character classes.
           escapingRules = subgroup "escaping rules" [
-            matchesCase "escaped metacharacter matches literally" "a\\.b" "a.b" True,
-            matchesCase "escaped metacharacter does not match the wildcard behavior" "a\\.b" "aXb" False,
-            matchesCase "escaped star matches a literal star" "a\\*b" "a*b" True,
-            matchesCase "escaped open-paren matches a literal paren" "a\\(b" "a(b" True,
-            matchesCase "escaped pipe matches a literal pipe, not alternation" "a\\|b" "a|b" True,
-            matchesCase "unescaped dash at top level is a literal, not a range" "a-b" "a-b" True,
-            matchesCase "top-level dash does not form a range" "a-b" "aXb" False,
-            matchesCase "escaped dash inside a class is a literal dash" "[a\\-z]" "-" True,
-            matchesCase "unescaped dash forms a range inside a class" "[a-z]" "-" False,
-            matchesCase "escaped bracket inside a class is a literal bracket" "[\\]]" "]" True,
-            matchesCase "escaped caret inside a class is a literal caret (not negation)" "[a\\^]" "^" True,
+            matchesCaseEscaping "escaped metacharacter matches literally" "a\\.b" "a.b" True,
+            matchesCaseEscaping "escaped metacharacter does not match the wildcard behavior" "a\\.b" "aXb" False,
+            matchesCaseEscaping "escaped star matches a literal star" "a\\*b" "a*b" True,
+            matchesCaseEscaping "escaped open-paren matches a literal paren" "a\\(b" "a(b" True,
+            matchesCaseEscaping "escaped pipe matches a literal pipe, not alternation" "a\\|b" "a|b" True,
+            matchesCaseEscaping "unescaped dash at top level is a literal, not a range" "a-b" "a-b" True,
+            matchesCaseEscaping "top-level dash does not form a range" "a-b" "aXb" False,
+            matchesCaseEscaping "escaped dash inside a class is a literal dash" "[a\\-z]" "-" True,
+            matchesCaseEscaping "unescaped dash forms a range inside a class" "[a-z]" "-" False,
+            matchesCaseEscaping "escaped bracket inside a class is a literal bracket" "[\\]]" "]" True,
+            matchesCaseEscaping "escaped caret inside a class is a literal caret (not negation)" "[a\\^]" "^" True,
             -- Pattern text (Hydra regex syntax) is: [a\\] -- a class containing 'a' and an escaped
             -- backslash. backslash1 is Haskell's own string escape, backslash2 is Hydra's.
-            matchesCase "escaped backslash inside a class is a literal backslash" "[a\\\\]" "\\" True]
+            matchesCaseEscaping "escaped backslash inside a class is a literal backslash" "[a\\\\]" "\\" True]
 
           -- Ill-formed patterns (ones that do not parse under hydra.core.parse.regex) fail uniformly as
           -- "no match" on every host -- never a host-specific engine exception -- per the portable
           -- failure channel (scope item 2).
           illFormedPatterns = subgroup "ill-formed patterns fail as portable no-match" [
             matchesCaseIllFormed "unbalanced open paren is ill-formed, so matches is false" "(a" "a" False,
-            findCaseIllFormed "unbalanced open paren is ill-formed, so find is nothing" "(a" "a" Nothing,
+            findCaseIllFormed "unbalanced open paren is ill-formed, so find is none" "(a" "a" Nothing,
             findAllCaseIllFormed "unbalanced open paren is ill-formed, so findAll is empty" "(a" "aaa" [],
             replaceCaseIllFormed "unbalanced open paren is ill-formed, so replace is a no-op" "(a" "X" "aaa" "aaa",
             replaceAllCaseIllFormed "unbalanced open paren is ill-formed, so replaceAll is a no-op" "(a" "X" "aaa" "aaa",
@@ -242,6 +242,8 @@ allTests = define "allTests" $
 
           matchesCase name pat input result =
             primCaseWithProvisions name ["testsMinimalCoreGrammar"] DefRegex.matches [string pat, string input] (boolean result)
+          matchesCaseEscaping name pat input result =
+            primCaseWithProvisions name ["treatsEscapedMetacharactersAsLiterals"] DefRegex.matches [string pat, string input] (boolean result)
           matchesCaseIllFormed name pat input result =
             primCaseWithProvisions name ["falseWhenNoMatchOrIllFormed"] DefRegex.matches [string pat, string input] (boolean result)
           findCase name pat input result =

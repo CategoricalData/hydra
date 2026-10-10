@@ -71,6 +71,7 @@ allTests = definitionInModule module_ "allTests" $
       effectsMapOptional,
       effectsMapOptionalOrder,
       effectsMapSet,
+      effectsMapSetOrder,
       effectsPure]
 
 -- ============================================================================
@@ -165,6 +166,21 @@ effectsMapListOrder = subgroup "performsElementEffectsLeftToRightExactlyOnce" [
                   @@ (lambda "x" $ primitive DefFiles.appendFile @@ path "maplist-order.txt" @@ var "x")
                   @@ list [bytes "A", bytes "B", bytes "C"])
             @@ (lambda "_m" $ readBack "maplist-order.txt")))
+    (string "ABC")]
+
+-- mapSet: element effects performed in ascending element order, each exactly once.
+-- Vehicle: append each set element (in ascending order) to one file; ignore the collected results
+-- and read the file. Observed "ABC" proves ascending order, once each.
+effectsMapSetOrder :: TypedTerm TestGroup
+effectsMapSetOrder = subgroup "performsElementEffectsInAscendingOrderExactlyOnce" [
+  effectfulCaseWithProvisions "mapSet performs element effects in ascending order, each once" ["performsElementEffectsInAscendingOrderExactlyOnce"] DefEffects.mapSet
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.writeFile @@ path "mapset-order.txt" @@ bytes "")
+      @@ (lambda "_w" $ primitive DefEffects.bind
+            @@ (primitive DefEffects.mapSet
+                  @@ (lambda "x" $ primitive DefFiles.appendFile @@ path "mapset-order.txt" @@ var "x")
+                  @@ (set [bytes "C", bytes "A", bytes "B"] :: TypedTerm (S.Set Binary)))
+            @@ (lambda "_m" $ readBack "mapset-order.txt")))
     (string "ABC")]
 
 -- mapOptional: none performs no effect (zero appends); given performs exactly one effect.

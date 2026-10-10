@@ -84,6 +84,7 @@ allTests = definitionInModule module_ "allTests" $
     supergroup "hydra.core.lib.maps primitives" [
       mapsAlter,
       mapsBimap,
+      mapsDifference,
       mapsElems,
       mapsEmpty,
       mapsFilter,
@@ -91,6 +92,7 @@ allTests = definitionInModule module_ "allTests" $
       mapsFindWithDefault,
       mapsFromList,
       mapsInsert,
+      mapsIntersection,
       mapsKeys,
       mapsLookup,
       mapsMap,
@@ -101,7 +103,8 @@ allTests = definitionInModule module_ "allTests" $
       mapsSingleton,
       mapsSize,
       mapsToList,
-      mapsUnion]
+      mapsUnion,
+      mapsUnions]
 
 mapsAlter :: TypedTerm TestGroup
 mapsAlter = subgroup "insertsUpdatesOrDeletes" [
@@ -131,6 +134,18 @@ mapsBimap = supergroup "bimap" [
         (Phantoms.lambda "k" $ Math.mul (Phantoms.var "k") (Phantoms.int32 2))
         (Phantoms.lambda "v" $ Strings.toUpper (Phantoms.var "v"))
         (pMap m))
+      (pMap result)
+
+mapsDifference :: TypedTerm TestGroup
+mapsDifference = supergroup "difference" [
+  subgroup "removesBindingsWithKeysInSecondMap" [
+    test "remove bindings" "removesBindingsWithKeysInSecondMap" [(1, "a"), (2, "b"), (3, "c")] [(2, "x"), (4, "y")] [(1, "a"), (3, "c")],
+    test "no overlap" "removesBindingsWithKeysInSecondMap" [(1, "a"), (2, "b")] [(3, "x"), (4, "y")] [(1, "a"), (2, "b")]],
+  subgroup "identityWhenSecondEmpty" [
+    test "difference with empty" "identityWhenSecondEmpty" [(1, "a"), (2, "b")] [] [(1, "a"), (2, "b")]]]
+  where
+    test name segment m1 m2 result = evalPairWithProvisions name [segment] DefMaps.difference showIntStringMap
+      (Maps.difference (pMap m1) (pMap m2))
       (pMap result)
 
 mapsElems :: TypedTerm TestGroup
@@ -213,6 +228,18 @@ mapsInsert = subgroup "addsOrOverwritesBinding" [
   where
     test name k v m result = evalPairWithProvisions name ["addsOrOverwritesBinding"] DefMaps.insert showIntStringMap
       (Maps.insert (Phantoms.int32 k) (Phantoms.string v) (pMap m))
+      (pMap result)
+
+mapsIntersection :: TypedTerm TestGroup
+mapsIntersection = supergroup "intersection" [
+  subgroup "keepsBindingsWithKeysInBoth" [
+    test "common keys" "keepsBindingsWithKeysInBoth" [(1, "a"), (2, "b"), (3, "c")] [(2, "x"), (3, "y"), (4, "z")] [(2, "b"), (3, "c")]],
+  subgroup "emptyWhenNoOverlapOrEitherEmpty" [
+    test "no common keys" "emptyWhenNoOverlapOrEitherEmpty" [(1, "a"), (2, "b")] [(3, "x"), (4, "y")] [],
+    test "intersection with empty" "emptyWhenNoOverlapOrEitherEmpty" [(1, "a"), (2, "b")] [] []]]
+  where
+    test name segment m1 m2 result = evalPairWithProvisions name [segment] DefMaps.intersection showIntStringMap
+      (Maps.intersection (pMap m1) (pMap m2))
       (pMap result)
 
 mapsKeys :: TypedTerm TestGroup
@@ -334,4 +361,17 @@ mapsUnion = supergroup "union" [
   where
     test name segment m1 m2 result = evalPairWithProvisions name [segment] DefMaps.union showIntStringMap
       (Maps.union (pMap m1) (pMap m2))
+      (pMap result)
+
+mapsUnions :: TypedTerm TestGroup
+mapsUnions = supergroup "unions" [
+  subgroup "earliestMapTakesPrecedence" [
+    test "union of multiple maps" "earliestMapTakesPrecedence" [[(1, "a"), (2, "b")], [(2, "x"), (3, "c")], [(3, "y"), (4, "d")]] [(1, "a"), (2, "b"), (3, "c"), (4, "d")],
+    test "union with empty maps" "earliestMapTakesPrecedence" [[(1, "a")], [], [(2, "b")]] [(1, "a"), (2, "b")],
+    test "single map" "earliestMapTakesPrecedence" [[(1, "a"), (2, "b")]] [(1, "a"), (2, "b")]],
+  subgroup "emptyListOfMapsYieldsEmptyMap" [
+    test "empty list of maps" "emptyListOfMapsYieldsEmptyMap" [] []]]
+  where
+    test name segment maps result = evalPairWithProvisions name [segment] DefMaps.unions showIntStringMap
+      (Maps.unions (Phantoms.list $ pMap <$> maps))
       (pMap result)
