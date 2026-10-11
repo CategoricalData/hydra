@@ -25,6 +25,9 @@
 #                                              external consumer config; no literal host branch in dispatch)
 #   bin/test-decimal-scale-conformance.sh     (guards #719/#735, needs synced dist/json; SKIPs cleanly
 #                                              otherwise or if the Java transform can't run)
+#   bin/test-inference-cost-guard.sh          (guards #700, hermetic by default — baseline-file sanity
+#                                              only; live measurement opt-in via
+#                                              HYDRA_INFERENCE_COST_ORACLE=1 + stack slot)
 #
 # The first five build their own Haskell executables from current source
 # before exec'ing them, so this script does not require a pre-built stack
@@ -60,6 +63,7 @@ SCRIPTS=(
     "test-build-host-independence.sh"
     "test-generator-config-conformance.sh"
     "test-decimal-scale-conformance.sh"
+    "test-inference-cost-guard.sh"
 )
 
 declare -a RESULTS=()

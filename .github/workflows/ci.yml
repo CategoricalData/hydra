@@ -398,6 +398,11 @@ jobs:
       - name: Restore overlay kernel runtime
         run: heads/haskell/bin/overlay-kernel-runtime.sh
       - name: Run regression harnesses
+        # #700: this CI runner is already an isolated machine (no shared fleet
+        # ~/.stack to contend over, unlike local worktrees), so it's safe to opt
+        # into the live inference-cost-guard measurement unconditionally here.
+        env:
+          HYDRA_INFERENCE_COST_ORACLE: "1"
         run: bin/test-regressions.sh
 
   # #376/#703: durable cold-clone gate. dist/haskell/ is untracked (gitignored) —

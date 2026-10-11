@@ -1,0 +1,11 @@
+{
+  "description": "Baseline + absolute budget for the #700 CI inference-cost guard. Measured by heads/haskell/src/exec/inference-cost-guard (stack exec inference-cost-guard), which runs the flat, cache-bypassing CodeGeneration.inferModules over the whole hydra-kernel module set (All.mainModules) -- the worst-case 'one let over the whole universe' path that update-json-kernel takes on a cache miss, and that update-json-main's per-package incremental path (#381) normally avoids.",
+  "budget": {
+    "max_elapsed_seconds": 120,
+    "max_mem_in_use_bytes": 6442450944
+  },
+  "budget_rationale": "max_mem_in_use_bytes mirrors the existing -M6G RTS cap in bin/lib/common.sh (RTS_FLAGS), itself set below the 7GB GitHub Actions runner ceiling; this is the first time that number is measured and asserted rather than only crashed into -- a real, justified number. max_elapsed_seconds=120 is a PLACEHOLDER, not derived from a real measurement -- the shared fleet build slot was unavailable for the whole implementation window. Tracked as a known follow-up (see the branch plan / a filed follow-up issue) to replace it with a real number once a build is run. Do not treat 120 as meaningful; it exists only so the guard has *some* time assertion rather than none from day one.",
+  "placeholder_fields": ["budget.max_elapsed_seconds"],
+  "baseline": null,
+  "history": []
+}

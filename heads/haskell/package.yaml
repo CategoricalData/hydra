@@ -224,6 +224,17 @@ executables:
     dependencies:
       - hydra
 
+  inference-cost-guard:
+    main: Main.hs
+    source-dirs:
+      - src/exec/inference-cost-guard
+    # -T is required for GHC.Stats.getRTSStats to report real numbers (#700);
+    # -with-rtsopts bakes it in so callers don't need to pass +RTS -T -RTS.
+    ghc-options: [-rtsopts, "-with-rtsopts=-T"]
+    dependencies:
+      - hydra
+      - time
+
 tests:
   hydra-test:
     main: Spec.hs
