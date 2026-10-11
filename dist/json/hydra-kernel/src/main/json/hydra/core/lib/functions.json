@@ -1,6 +1,11 @@
 {
   "name": "hydra.core.lib.functions",
-  "metadata": {"description": "Primitives in the hydra.core.lib.functions module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.functions module.",
+    "comments": [
+      "Function combinators: the identity/compose/const/flip basis. These primitives manipulate functions themselves, independently of any particular data type."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -45,6 +50,7 @@
             "The eliminator dual to the (nonexistent) introducer for void.",
             "Total, vacuously: there is no well-typed argument on which absurd could be called. Corresponds to Haskell's Data.Void.absurd :: Void -> a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": []},
         "signature": {
           "typeParameters": [{"name": "t1", "constraints": []}],
@@ -68,6 +74,7 @@
             "This is ordinary function composition, distinct from the Kleisli compose primitives of the monad modules.",
             "Total. Corresponds to Haskell's (.) :: (b -> c) -> (a -> b) -> a -> c."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": []},
         "signature": {
           "typeParameters": [{"name": "t1", "constraints": []}, {"name": "t2", "constraints": []}, {"name": "t3", "constraints": []}],
@@ -109,6 +116,7 @@
             "Partially applied, const(x) is the constant function which returns x on every input.",
             "Total. Corresponds to Haskell's const :: a -> b -> a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.functions.const.returnsFirstArgumentIgnoringSecond",
@@ -132,6 +140,7 @@
             "flip(f, x, y) = f(y, x); this defining equation is the specification.",
             "Total. Corresponds to Haskell's flip :: (a -> b -> c) -> b -> a -> c."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.functions.flip.swapsArgumentOrder",
@@ -172,8 +181,10 @@
           "comments": [
             "identity(x) = x; this defining equation is the specification. The polymorphic identity function.",
             "identity is the unit of compose: compose(identity, f) and compose(f, identity) are both f.",
-            "Total. Corresponds to Haskell's id :: a -> a."],
+            "Total. Corresponds to Haskell's id :: a -> a.",
+            "Moved from hydra.lib.equality.identity."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.functions.identity.returnsArgumentUnchanged",

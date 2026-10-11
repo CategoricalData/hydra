@@ -1,6 +1,12 @@
 {
   "name": "hydra.core.lib.hashing",
-  "metadata": {"description": "Primitives in the hydra.core.lib.hashing module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.hashing module.",
+    "comments": [
+      "Digests are computed with SHA-256 as defined in FIPS 180-4; results are deterministic and bit-identical across hosts.",
+      "Hashing is pure: both primitives are ordinary total functions of their input bytes, and hashing never fails."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -43,6 +49,7 @@
             "sha256(bytes) returns the 32-byte SHA-256 digest of bytes. Total: hashing is pure and never fails.",
             "Pairs with hydra.core.lib.files.readFile, which returns raw bytes, to hash file contents."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17"},
           "provisions": [
             {
               "name": "hydra.core.lib.hashing.sha256.matchesKnownAnswerVectors",
@@ -61,8 +68,10 @@
           "description": "Compute the SHA-256 digest of a sequence of bytes as a lowercase hex string.",
           "comments": [
             "sha256Hex(bytes) returns the SHA-256 digest of bytes as a 64-character lowercase hexadecimal string. Equivalent to hex-encoding the output of sha256. Total: hashing is pure and never fails.",
+            "sha256Hex(bytes) is the lowercase hexadecimal rendering of the 32 bytes of sha256(bytes); this equivalence is the specification.",
             "Pairs with hydra.core.lib.files.readFile, which returns raw bytes, to hash file contents."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17"},
           "provisions": [
             {
               "name": "hydra.core.lib.hashing.sha256Hex.matchesKnownAnswerVectors",

@@ -1,6 +1,13 @@
 {
   "name": "hydra.core.lib.regex",
-  "metadata": {"description": "Primitives in the hydra.core.lib.regex module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.regex module.",
+    "comments": [
+      "Pattern syntax and semantics are Hydra-defined and translingual: they are specified once, in Hydra's regular-expression specification, and the same pattern means the same thing on every host.",
+      "Matching is leftmost-longest: a match begins at the earliest possible position in the string, and among the matches beginning at that position the longest is chosen.",
+      "findAll, replaceAll, and split operate on non-overlapping matches, found left to right."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -44,6 +51,7 @@
             "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
             "Total; a pattern that does not parse under the Hydra regex grammar is treated as not matching anywhere, the same as a well-formed pattern with no match."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.regex.find.returnsLeftmostLongestMatch",
@@ -71,6 +79,7 @@
             "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
             "Total; an unparseable pattern yields the empty list, the same as a well-formed pattern with no matches."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.regex.findAll.returnsAllNonOverlappingMatchesInOrder",
@@ -98,6 +107,7 @@
             "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
             "Total; an unparseable pattern yields false, the same as a well-formed pattern with no match."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.regex.matches.isWholeStringAnchored",
@@ -134,6 +144,7 @@
             "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
             "Total; an unparseable pattern leaves s unchanged, the same as a well-formed pattern with no match."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.regex.replace.replacesLeftmostLongestMatch",
@@ -163,6 +174,7 @@
             "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
             "Total; an unparseable pattern leaves s unchanged, the same as a well-formed pattern with no match."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.regex.replaceAll.replacesEveryNonOverlappingMatch",
@@ -192,6 +204,7 @@
             "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
             "Total; an unparseable pattern yields the single-element list containing s, the same as a well-formed pattern with no match."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.regex.split.splitsOnEveryNonOverlappingMatch",

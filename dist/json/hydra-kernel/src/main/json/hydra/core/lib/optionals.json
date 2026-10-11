@@ -1,6 +1,12 @@
 {
   "name": "hydra.core.lib.optionals",
-  "metadata": {"description": "Primitives in the hydra.core.lib.optionals module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.optionals module.",
+    "comments": [
+      "The optional type is Hydra's presence/absence type: a value of optional<t> is either given(x), carrying a value x of type t, or none, carrying nothing.",
+      "The optional type is a monad, and this module provides the full monad row -- given (the unit), map, apply, bind, and compose -- together with elimination (match), predicates, and traversal."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -44,6 +50,7 @@
             "The applicative apply for optionals; threads a function-in-context with a value-in-context.",
             "Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.optionals.apply.appliesFunctionWhenBothGiven",
@@ -90,6 +97,7 @@
             "The monadic bind for optionals; used to chain computations that may be absent.",
             "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.optionals.bind.chainsOnGivenPropagatesNone",
@@ -130,6 +138,7 @@
             "If either f or the second stage produces none, the result is none.",
             "Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.optionals.compose.kleisliComposesShortCircuitingOnNone",
@@ -178,6 +187,7 @@
             "foldList(f, acc, xs) is lists.foldl(\\m y -> bind(m, \\x -> f(x, y)), given(acc), xs); this defining equation is the specification, and the default implementation.",
             "Total. Corresponds to a short-circuiting foldM specialised to Maybe."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
@@ -239,6 +249,7 @@
             "The constructor for the present case of an optional value.",
             "Total. Corresponds to Haskell's Just :: a -> Maybe a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.optionals.given.wrapsValueAsPresent",
@@ -257,8 +268,10 @@
           "description": "Concatenate optionals, keeping only the present values.",
           "comments": [
             "givens(xs) returns the list of contained values from given elements of xs, in original order; none elements are discarded.",
-            "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."],
+            "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a].",
+            "Renamed from hydra.lib.optionals.cat."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.optionals.givens.keepsPresentValuesPreservingOrder",
@@ -315,6 +328,7 @@
             "isGiven(m) returns true iff m is a given variant.",
             "Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.optionals.isGiven.testsPresentVariant",
@@ -345,6 +359,7 @@
             "isNone(m) returns true iff m is the none variant.",
             "Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.optionals.isNone.testsAbsentVariant",
@@ -376,6 +391,7 @@
             "The functor instance for optionals.",
             "Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.optionals.map.mapsGivenLeavesNoneUnchanged",
@@ -418,6 +434,7 @@
             "mapList(f, xs) applies f to each element of xs. If every application yields given, the result is given of the list of contained values, in their original order. The result is none as soon as any application yields none.",
             "Total. Corresponds to Haskell's traverse :: (a -> Maybe b) -> [a] -> Maybe [b]."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
@@ -525,6 +542,7 @@
             "Requires 'ordering' constraints on both element types (the set type contract).",
             "Total. Corresponds to a traverse-style operation specialised to Set in the Maybe monad."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
@@ -600,6 +618,7 @@
             "The fundamental eliminator for the optional type; every other primitive in this namespace can be derived from it. The optional value is the first argument, matching the convention for case-statement-like elimination.",
             "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.optionals.match.eliminatesByVariant",
@@ -635,6 +654,7 @@
             "toList(m) returns [x] when m is given(x), and the empty list when m is none.",
             "Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.optionals.toList.convertsGivenToSingletonNoneToEmpty",
@@ -663,8 +683,10 @@
           "description": "Return the value contained in an optional, falling back to a default if absent.",
           "comments": [
             "withDefault(def, m) returns x when m is given(x), and def when m is none.",
-            "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."],
+            "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a.",
+            "Renamed from hydra.lib.optionals.fromOptional."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.optionals.withDefault.returnsContainedValueOrDefault",

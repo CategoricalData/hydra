@@ -1,6 +1,13 @@
 {
   "name": "hydra.core.lib.equality",
-  "metadata": {"description": "Primitives in the hydra.core.lib.equality module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.equality module.",
+    "comments": [
+      "Equality of values.",
+      "Equality is structural: two values are equal exactly when they are the same value of the same type.",
+      "For floating-point values equality is value identity."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -45,6 +52,7 @@
             "Equality is reflexive, symmetric, and transitive (no NaN-style exception on floating-point: floating-point equality is provided per the underlying host's IEEE 754 comparison rules, so NaN /= NaN at the level of float64/float32).",
             "Total. Corresponds to Haskell's (==) :: Eq a => a -> a -> Bool."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.equality.equal.structuralEquivalence",
@@ -80,6 +88,7 @@
             "Requires an 'equality' type-class constraint on the argument type.",
             "Total. Corresponds to Haskell's (/=) :: Eq a => a -> a -> Bool."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.equality.notEqual.negatesEqual",

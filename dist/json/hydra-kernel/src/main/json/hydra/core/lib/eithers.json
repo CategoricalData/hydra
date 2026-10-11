@@ -1,6 +1,14 @@
 {
   "name": "hydra.core.lib.eithers",
-  "metadata": {"description": "Primitives in the hydra.core.lib.eithers module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.eithers module.",
+    "comments": [
+      "The either type is Hydra's error/alternative type: a value of either<t1, t2> is either left(x), conventionally carrying an error or alternative of type t1, or right(y), carrying a success value of type t2.",
+      "The either type is a right-biased monad: right (the unit), map, apply, and bind operate on the right side, and the left type is held fixed through a computation, so a chain of steps shares a common error type.",
+      "This module provides the full monad row -- right, map, apply, bind, and compose -- together with the dual constructor left, elimination (cases), predicates, and traversal.",
+      "The fundamental eliminator is cases; every other primitive in this module can be derived from it."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -45,6 +53,7 @@
             "apply(ef, ex) is bind(ef, \\f -> map(f, ex)); this defining equation is the specification, and the default implementation.",
             "Total. Corresponds to Haskell's (<*>) :: Either a (b -> c) -> Either a b -> Either a c."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
@@ -88,6 +97,7 @@
             "bimap(f, g, e) applies f to the contained value if e is a Left, or g if e is a Right; the result retains the same Left/Right variant.",
             "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.eithers.bimap.mapsBothSidesIndependently",
@@ -153,6 +163,7 @@
             "Used to chain computations that may fail with a common error type.",
             "Total. Corresponds to Haskell's (>>=) :: Either a b -> (b -> Either a c) -> Either a c."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.eithers.bind.chainsOnRightShortCircuitsOnLeft",
@@ -201,6 +212,7 @@
             "If either f(x) or the second stage produces a left, the result is that left.",
             "Total. Corresponds to Kleisli composition (>=>) specialised to Either with a fixed Left type."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": []},
         "signature": {
           "typeParameters": [
@@ -250,7 +262,8 @@
             "either(f, g, e) returns f(x) if e is Left x and g(y) if e is Right y.",
             "The fundamental eliminator for the either type; every other primitive in this namespace can be derived from it.",
             "Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c.",
-            "Deprecated since 0.18. Use: cases."],
+            "Deprecated since 0.18. Use: cases.",
+            "Note that the argument order also changed in the replacement: cases takes the scrutinee first."],
           "seeAlso": [],
           "lifecycle": {"deprecatedSince": "0.18"},
           "provisions": [
@@ -286,8 +299,10 @@
           "description": "Left-fold over a list with an Either-returning function, short-circuiting on Left.",
           "comments": [
             "foldList(f, acc0, xs) folds f over xs from the left, threading an accumulator of type a, where each application may fail with Left e: it iterates while f returns Right, propagates Left on the first failure, and returns Right (final accumulator) if all elements were processed.",
-            "Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either."],
+            "Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either.",
+            "Renamed from hydra.lib.eithers.foldl, to distinguish the monadic fold from the plain list fold hydra.lib.lists.foldl."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.eithers.foldList.foldsLeftShortCircuitingOnLeft",
@@ -353,6 +368,7 @@
             "True if the argument is a Left variant, false if a Right.",
             "Total. Corresponds to Haskell's Data.Either.isLeft :: Either a b -> Bool."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.eithers.isLeft.testsLeftVariant",
@@ -391,6 +407,7 @@
             "True if the argument is a Right variant, false if a Left.",
             "Total. Corresponds to Haskell's Data.Either.isRight :: Either a b -> Bool."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.eithers.isRight.testsRightVariant",
@@ -429,6 +446,7 @@
             "left(x) is Left x. The dual constructor to right, injecting into the Left (error/exceptional) side of an either.",
             "Total. Corresponds to Haskell's Left :: a -> Either a b."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.eithers.left.constructsLeftVariant",
@@ -449,6 +467,7 @@
             "lefts(xs) returns a list containing every Left value in xs, in original order, with Right values discarded.",
             "Total. Corresponds to Haskell's Data.Either.lefts :: [Either a b] -> [a]."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.eithers.lefts.extractsLeftValuesPreservingOrder",
@@ -509,6 +528,7 @@
             "The functor instance for either; treats the Right variant as the focus and leaves the Left variant alone.",
             "Total. Corresponds to Haskell's fmap :: (a -> b) -> Either e a -> Either e b."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.eithers.map.mapsRightPreservesLeft",
@@ -558,6 +578,7 @@
             "mapList(f, xs) applies f to each element of xs. If every application returns Right, the result is Right of the list of contained values, in original order. The first application that returns Left short-circuits the whole result to that Left.",
             "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> [a] -> Either e [b]."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.eithers.mapList.traversesCollectingOrShortCircuiting",
@@ -628,6 +649,7 @@
             "mapOptional(f, m) returns Right none if m is none; otherwise applies f to the contained value and returns the result with Right wrapped around given.",
             "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.eithers.mapOptional.traversesOptionalCollectingOrShortCircuiting",
@@ -678,6 +700,7 @@
             "Requires an 'ordering' constraint on the input and output element types.",
             "Total. Corresponds to Haskell's traverse-style operation specialised to Set."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.eithers.mapSet.traversesSetCollectingOrShortCircuiting",
@@ -758,8 +781,10 @@
           "description": "Partition a list of either values into lefts and rights.",
           "comments": [
             "partition(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs in original order and rights contains every Right value from xs in original order.",
-            "Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b])."],
+            "Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b]).",
+            "Renamed from hydra.lib.eithers.partitionEithers."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.eithers.partition.splitsIntoLeftsAndRights",
@@ -831,6 +856,7 @@
             "right(x) is Right x. The dual constructor to left, injecting into the Right (success/normal) side of an either.",
             "Total. Corresponds to Haskell's Right :: b -> Either a b."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.eithers.right.constructsRightVariant",
@@ -851,6 +877,7 @@
             "rights(xs) returns a list containing every Right value in xs, in original order, with Left values discarded.",
             "Total. Corresponds to Haskell's Data.Either.rights :: [Either a b] -> [b]."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.eithers.rights.extractsRightValuesPreservingOrder",

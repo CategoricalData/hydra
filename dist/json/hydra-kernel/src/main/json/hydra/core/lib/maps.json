@@ -1,6 +1,13 @@
 {
   "name": "hydra.core.lib.maps",
-  "metadata": {"description": "Primitives in the hydra.core.lib.maps module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.maps module.",
+    "comments": [
+      "Ordered maps: finite collections of key-value bindings, with at most one value per key.",
+      "Hydra maps are ordered collections: iteration -- elems, keys, toList -- is in ascending key order, under the total order defined in the ordering-and-equality specification.",
+      "Because key ordering is part of the map type's contract, every map-typed variable in this module's signatures carries the ordering constraint on its key type, including in primitives that perform no comparison themselves."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -45,6 +52,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.alter :: Ord k => (Maybe v -> Maybe v) -> k -> Map k v -> Map k v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.alter.insertsUpdatesOrDeletes",
@@ -115,6 +123,7 @@
             "Requires 'ordering' constraints on both the input and output key types.",
             "Total. Corresponds to a key-and-value lift of Haskell's Data.Map.fromList . map (\\(k,v) -> (fk k, fv v)) . toList."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.bimap.transformsKeysAndValues",
@@ -190,6 +199,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.delete :: Ord k => k -> Map k v -> Map k v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.delete.removesKeyIfPresent",
@@ -222,6 +232,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.difference :: Ord k => Map k v -> Map k v -> Map k v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.difference.removesBindingsWithKeysInSecondMap",
@@ -257,6 +268,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.elems :: Map k v -> [v]."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.elems.returnsValuesInKeyOrder",
@@ -287,6 +299,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.empty :: Map k v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.empty.hasNoBindings",
@@ -308,6 +321,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.filter :: (v -> Bool) -> Map k v -> Map k v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.filter.keepsMatchingValues",
@@ -365,6 +379,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.filterWithKey.keepsMatchingBindings",
@@ -428,6 +443,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.findWithDefault :: Ord k => v -> k -> Map k v -> v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.findWithDefault.returnsBoundValueOrDefault",
@@ -476,6 +492,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.fromList :: Ord k => [(k, v)] -> Map k v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.fromList.buildsMapFromPairs",
@@ -510,6 +527,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.insert :: Ord k => k -> v -> Map k v -> Map k v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.insert.addsOrOverwritesBinding",
@@ -539,6 +557,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.intersection :: Ord k => Map k v -> Map k v -> Map k v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.intersection.keepsBindingsWithKeysInBoth",
@@ -574,6 +593,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.isEmpty.testsZeroBindings",
@@ -600,6 +620,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.keys :: Map k v -> [k]."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.keys.returnsKeysInOrder",
@@ -630,6 +651,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.lookup :: Ord k => k -> Map k v -> Maybe v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.lookup.returnsBoundValue",
@@ -661,6 +683,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.map :: (v -> w) -> Map k v -> Map k w / fmap on Map."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.map.appliesFunctionToValues",
@@ -724,6 +747,7 @@
             "Requires 'ordering' constraints on both the input and output key types.",
             "Total. Corresponds to Haskell's Data.Map.mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> Map k1 v -> Map k2 v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.mapKeys.appliesFunctionToKeys",
@@ -787,6 +811,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.member :: Ord k => k -> Map k v -> Bool."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.member.testsKeyPresence",
@@ -818,6 +843,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.singleton :: k -> v -> Map k v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.singleton.wrapsOneBinding",
@@ -841,6 +867,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.size :: Map k v -> Int (with narrowing to int32)."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.size.countsBindings",
@@ -867,6 +894,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.toList :: Map k v -> [(k, v)]."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.toList.returnsPairsInKeyOrder",
@@ -897,6 +925,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.union :: Ord k => Map k v -> Map k v -> Map k v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.union.firstMapTakesPrecedence",
@@ -933,6 +962,7 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.unions :: Ord k => [Map k v] -> Map k v."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.maps.unions.earliestMapTakesPrecedence",

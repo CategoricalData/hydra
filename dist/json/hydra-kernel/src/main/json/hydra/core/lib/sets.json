@@ -1,6 +1,13 @@
 {
   "name": "hydra.core.lib.sets",
-  "metadata": {"description": "Primitives in the hydra.core.lib.sets module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.sets module.",
+    "comments": [
+      "Ordered sets: finite collections of distinct elements.",
+      "Hydra sets are ordered collections: iteration (toList) is in ascending element order, under the type's total order.",
+      "Because element ordering is part of the set type's contract, every set-typed variable in this module's signatures carries the ordering constraint on its element type, including in primitives that perform no comparison themselves."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -44,6 +51,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.delete :: Ord a => a -> Set a -> Set a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.sets.delete.removesElement",
@@ -71,6 +79,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.difference :: Ord a => Set a -> Set a -> Set a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.sets.difference.removesElementsOfSecondSet",
@@ -135,6 +144,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.empty :: Set a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.sets.empty.hasNoElements",
@@ -156,6 +166,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.filter :: (a -> Bool) -> Set a -> Set a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
@@ -192,6 +203,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.fromList :: Ord a => [a] -> Set a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.sets.fromList.collectsDistinctElements",
@@ -222,6 +234,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.insert :: Ord a => a -> Set a -> Set a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.sets.insert.addsElement",
@@ -249,6 +262,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.intersection :: Ord a => Set a -> Set a -> Set a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.sets.intersection.keepsElementsInBoth",
@@ -313,6 +327,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.null :: Set a -> Bool."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.sets.isEmpty.testsZeroSize",
@@ -334,6 +349,7 @@
             "Requires 'ordering' constraints on both the input and output element types.",
             "Total. Corresponds to Haskell's Data.Set.map :: (Ord a, Ord b) => (a -> b) -> Set a -> Set b."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.sets.map.appliesFunctionToEachElement",
@@ -378,6 +394,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.member :: Ord a => a -> Set a -> Bool."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.sets.member.testsSetMembership",
@@ -405,6 +422,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.singleton :: a -> Set a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.sets.singleton.wrapsOneElement",
@@ -426,6 +444,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.size :: Set a -> Int (with narrowing to int32)."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.sets.size.countsElements",
@@ -447,6 +466,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.toAscList :: Set a -> [a]."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.sets.toList.ordersAscending",
@@ -472,6 +492,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.union :: Ord a => Set a -> Set a -> Set a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.sets.union.keepsElementsInEither",
@@ -524,6 +545,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.unions :: Ord a => [Set a] -> Set a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.sets.unions.keepsElementsInAny",

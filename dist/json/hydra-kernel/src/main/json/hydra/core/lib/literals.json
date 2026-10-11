@@ -1,6 +1,13 @@
 {
   "name": "hydra.core.lib.literals",
-  "metadata": {"description": "Primitives in the hydra.core.lib.literals module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.literals module.",
+    "comments": [
+      "Conversion and parse/print for literal values.",
+      "The numeric conversion primitives (bigintToInt32, float64ToFloat32, ...) convert between Hydra's literal numeric types; lossless conversions are exact, and each lossy conversion states its truncation or rounding behavior in its own documentation.",
+      "The parseX primitives are pure conversions from text to values, with an optional codomain wherever parsing can fail; the printX primitives are the pure conversions back from values to text."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -41,8 +48,10 @@
           "description": "Decode a base64 ASCII string to binary data.",
           "comments": [
             "base64ToBinary(s) decodes the standard base64 (RFC 4648) ASCII string s and returns the resulting bytes as binary data.",
-            "Inverse of binaryToBase64: base64ToBinary(binaryToBase64(b)) is b for every binary value. Behavior on strings which are not valid base64 is host-defined."],
+            "Inverse of binaryToBase64: base64ToBinary(binaryToBase64(b)) is b for every binary value. Behavior on strings which are not valid base64 is host-defined.",
+            "Renamed from hydra.lib.literals.stringToBinary."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.18"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.base64ToBinary.decodesStandardBase64",
@@ -63,6 +72,7 @@
             "bigintToDecimal(x) returns the exact decimal representation of x. Since decimal is arbitrary-precision and bigint is also arbitrary-precision, the conversion is lossless.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.bigintToDecimal.losslessConversion",
@@ -83,6 +93,7 @@
             "bigintToInt16(x) returns x reduced modulo 2^16 and reinterpreted as a signed two's-complement int16. Values outside [-2^15, 2^15-1] wrap silently with no exception.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.bigintToInt16.convertsInRange",
@@ -107,6 +118,7 @@
             "bigintToInt32(x) returns x reduced modulo 2^32 and reinterpreted as a signed two's-complement int32. Values outside [-2^31, 2^31-1] wrap silently with no exception.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.bigintToInt32.convertsInRange",
@@ -131,6 +143,7 @@
             "bigintToInt64(x) returns x reduced modulo 2^64 and reinterpreted as a signed two's-complement int64. Values outside [-2^63, 2^63-1] wrap silently with no exception.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.bigintToInt64.convertsInRange",
@@ -151,6 +164,7 @@
             "bigintToInt8(x) returns x reduced modulo 2^8 and reinterpreted as a signed two's-complement int8. Values outside [-128, 127] wrap silently with no exception.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.bigintToInt8.convertsInRange",
@@ -175,6 +189,7 @@
             "bigintToUint16(x) returns x reduced modulo 2^16 as an unsigned uint16. Values outside [0, 2^16-1] wrap silently with no exception.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.bigintToUint16.convertsInRange",
@@ -195,6 +210,7 @@
             "bigintToUint32(x) returns x reduced modulo 2^32 as an unsigned uint32. Values outside [0, 2^32-1] wrap silently with no exception.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.bigintToUint32.convertsInRange",
@@ -215,6 +231,7 @@
             "bigintToUint64(x) returns x reduced modulo 2^64 as an unsigned uint64. Values outside [0, 2^64-1] wrap silently with no exception.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.bigintToUint64.convertsInRange",
@@ -235,6 +252,7 @@
             "bigintToUint8(x) returns x reduced modulo 2^8 as an unsigned uint8. Values outside [0, 255] wrap silently with no exception.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.bigintToUint8.convertsInRange",
@@ -253,8 +271,10 @@
           "description": "Encode binary data as a base64 ASCII string.",
           "comments": [
             "binaryToBase64(b) encodes the bytes of b using standard base64 (RFC 4648) and returns the result as an ASCII string.",
-            "Total and round-trippable: base64ToBinary(binaryToBase64(b)) is b for every binary value. Use this to embed arbitrary binary data in a string context (e.g. a JSON value). For interpreting bytes as text, use hydra.core.lib.text.decodeUtf8 instead."],
+            "Total and round-trippable: base64ToBinary(binaryToBase64(b)) is b for every binary value. Use this to embed arbitrary binary data in a string context (e.g. a JSON value). For interpreting bytes as text, use hydra.core.lib.text.decodeUtf8 instead.",
+            "Renamed from hydra.lib.literals.binaryToString."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.18"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.binaryToBase64.encodesStandardBase64",
@@ -276,6 +296,7 @@
             "The result list element type is int32 rather than uint8 because Hydra's primitive collections work most naturally with int32 indices.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.binaryToBytes.returnsUnsignedByteValues",
@@ -294,6 +315,7 @@
           "description": "Convert a decimal to a bigint (truncating).",
           "comments": ["decimalToBigint(x) returns x truncated toward zero. Fractional parts are discarded.", "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.decimalToBigint.convertsWholeNumbers",
@@ -318,6 +340,7 @@
             "decimalToFloat32(x) returns the IEEE 754 binary32 value closest to x under roundTiesToEven. Values outside the float32 representable range overflow to ±∞. Subnormal precision loss is silent.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.decimalToFloat32.convertsExactlyRepresentableValues",
@@ -338,6 +361,7 @@
             "decimalToFloat64(x) returns the IEEE 754 binary64 value closest to x under roundTiesToEven. Values outside the float64 representable range overflow to ±∞. Subnormal precision loss is silent.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.decimalToFloat64.convertsExactlyRepresentableValues",
@@ -358,6 +382,7 @@
             "float32ToDecimal(x) returns the exact decimal representation of the binary32 value x. Special float32 values (±∞, NaN) have a host-defined decimal representation; finite values convert exactly since binary32 values are dyadic rationals.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.float32ToDecimal.convertsExactlyRepresentableValues",
@@ -378,6 +403,7 @@
             "float32ToFloat64(x) returns the binary64 value with the same numeric value as x; ±∞ and NaN pass through. The conversion is exact and lossless.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.float32ToFloat64.losslessWidening",
@@ -398,6 +424,7 @@
             "float64ToDecimal(x) returns the exact decimal representation of the binary64 value x. Special float64 values (±∞, NaN) have a host-defined decimal representation; finite values convert exactly since binary64 values are dyadic rationals.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.float64ToDecimal.convertsExactlyRepresentableValues",
@@ -418,6 +445,7 @@
             "float64ToFloat32(x) returns the binary32 value closest to x under roundTiesToEven. Values outside the binary32 range overflow to ±∞; subnormal precision loss is silent; NaN payload may be canonicalized by the host.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.float64ToFloat32.convertsExactlyRepresentableValues",
@@ -438,6 +466,7 @@
             "int16ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.int16ToBigint.losslessConversion",
@@ -458,6 +487,7 @@
             "int32ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.int32ToBigint.losslessConversion",
@@ -478,6 +508,7 @@
             "int64ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.int64ToBigint.losslessConversion",
@@ -496,6 +527,7 @@
           "description": "Convert an int8 to a bigint.",
           "comments": ["int8ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.", "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.int8ToBigint.losslessConversion",
@@ -515,8 +547,10 @@
           "comments": [
             "parseBigint(s) returns Just(x) where x is the bigint parsed from s, or Nothing if s is not a valid bigint literal.",
             "Accepted syntax follows the Haskell Show/Read convention: an optional leading minus sign followed by a sequence of decimal digits. Whitespace is not stripped; leading or trailing whitespace causes parse failure.",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.readBigint."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.parseBigint.parsesValidLiterals",
@@ -539,8 +573,10 @@
           "description": "Parse a string as a boolean.",
           "comments": [
             "parseBoolean(s) returns Just(true) for \"true\", Just(false) for \"false\", and Nothing for any other input (including \"True\"/\"False\" with capital initial letter on some hosts; behavior on capitalized forms is host-defined and should not be relied upon).",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.readBoolean."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.parseBoolean.parsesExactLowercaseLiterals",
@@ -564,8 +600,10 @@
           "comments": [
             "parseDecimal(s) returns Just(x) where x is the decimal parsed from s, or Nothing on parse failure.",
             "Accepted syntax is the standard decimal literal: an optional sign, an integer part, an optional fractional part, and an optional exponent (e.g. -1.5, 2e10, 0.0).",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.readDecimal."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.parseDecimal.parsesValidLiterals",
@@ -589,8 +627,10 @@
           "comments": [
             "parseFloat32(s) returns Just(x) where x is the IEEE 754 binary32 value closest to the number parsed from s under roundTiesToEven, or Nothing on parse failure.",
             "Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their capitalization are host-defined.",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.readFloat32."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.parseFloat32.parsesValidLiterals",
@@ -614,8 +654,10 @@
           "comments": [
             "parseFloat64(s) returns Just(x) where x is the IEEE 754 binary64 value closest to the number parsed from s under roundTiesToEven, or Nothing on parse failure.",
             "Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their capitalization are host-defined.",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.readFloat64."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.parseFloat64.parsesValidLiterals",
@@ -638,8 +680,10 @@
           "description": "Parse a string as an int16.",
           "comments": [
             "parseInt16(s) returns Just(x) where x is the int16 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^15, 2^15-1].",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.readInt16."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.parseInt16.parsesValidLiterals",
@@ -662,8 +706,10 @@
           "description": "Parse a string as an int32.",
           "comments": [
             "parseInt32(s) returns Just(x) where x is the int32 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^31, 2^31-1].",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.readInt32."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.parseInt32.parsesValidLiterals",
@@ -686,8 +732,10 @@
           "description": "Parse a string as an int64.",
           "comments": [
             "parseInt64(s) returns Just(x) where x is the int64 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^63, 2^63-1].",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.readInt64."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.parseInt64.parsesValidLiterals",
@@ -710,8 +758,10 @@
           "description": "Parse a string as an int8.",
           "comments": [
             "parseInt8(s) returns Just(x) where x is the int8 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-128, 127].",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.readInt8."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.parseInt8.parsesValidLiterals",
@@ -734,8 +784,10 @@
           "description": "Parse a string-literal token to a plain string (Just) or Nothing on parse failure.",
           "comments": [
             "parseString(s) parses s as a Haskell-syntax string literal token: an opening double-quote, escaped characters per the Haskell lexical grammar (backslash escapes for special characters and Unicode code points), and a closing double-quote. Returns Just of the decoded payload on success or Nothing on malformed input.",
-            "Total. The inverse of printString."],
+            "Total. The inverse of printString.",
+            "Renamed from hydra.lib.literals.readString."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.parseString.parsesQuotedLiterals",
@@ -758,8 +810,10 @@
           "description": "Parse a string as a uint16.",
           "comments": [
             "parseUint16(s) returns Just(x) where x is the uint16 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^16-1].",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.readUint16."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.parseUint16.parsesValidLiterals",
@@ -782,8 +836,10 @@
           "description": "Parse a string as a uint32.",
           "comments": [
             "parseUint32(s) returns Just(x) where x is the uint32 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^32-1].",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.readUint32."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.parseUint32.parsesValidLiterals",
@@ -810,8 +866,10 @@
           "description": "Parse a string as a uint64.",
           "comments": [
             "parseUint64(s) returns Just(x) where x is the uint64 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^64-1].",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.readUint64."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.parseUint64.parsesValidLiterals",
@@ -838,8 +896,10 @@
           "description": "Parse a string as a uint8.",
           "comments": [
             "parseUint8(s) returns Just(x) where x is the uint8 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 255].",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.readUint8."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.parseUint8.parsesValidLiterals",
@@ -862,8 +922,10 @@
           "description": "Render a bigint as a string.",
           "comments": [
             "printBigint(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. No leading zeros are produced (except for the value 0 itself, which renders as \"0\").",
-            "Total. The inverse of parseBigint."],
+            "Total. The inverse of parseBigint.",
+            "Renamed from hydra.lib.literals.showBigint."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.printBigint.rendersCanonicalDecimal",
@@ -880,8 +942,12 @@
         "name": "hydra.core.lib.literals.printBoolean",
         "metadata": {
           "description": "Render a boolean as a string.",
-          "comments": ["printBoolean(true) = \"true\"; printBoolean(false) = \"false\".", "Total. The inverse of parseBoolean."],
+          "comments": [
+            "printBoolean(true) = \"true\"; printBoolean(false) = \"false\".",
+            "Total. The inverse of parseBoolean.",
+            "Renamed from hydra.lib.literals.showBoolean."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.printBoolean.rendersLowercaseLiterals",
@@ -900,8 +966,10 @@
           "description": "Render a decimal as a string.",
           "comments": [
             "printDecimal(x) returns the canonical decimal representation of x as a string. The exact form (use of scientific notation, trailing zeros, etc.) is host-defined but always round-trips with parseDecimal.",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.showDecimal."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.printDecimal.rendersCanonicalDecimal",
@@ -920,8 +988,10 @@
           "description": "Render a float32 as a string.",
           "comments": [
             "printFloat32(x) returns a string representation of x. Finite values use the shortest decimal that round-trips through parseFloat32 back to x. Special values render as \"NaN\", \"Infinity\", or \"-Infinity\" (capitalization is host-defined).",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.showFloat32."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.printFloat32.rendersRoundTrippableRepresentation",
@@ -940,8 +1010,10 @@
           "description": "Render a float64 as a string.",
           "comments": [
             "printFloat64(x) returns a string representation of x. Finite values use the shortest decimal that round-trips through parseFloat64 back to x. Special values render as \"NaN\", \"Infinity\", or \"-Infinity\" (capitalization is host-defined).",
-            "Total."],
+            "Total.",
+            "Renamed from hydra.lib.literals.showFloat64."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.printFloat64.rendersRoundTrippableRepresentation",
@@ -960,8 +1032,10 @@
           "description": "Render an int16 as a string.",
           "comments": [
             "printInt16(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
-            "Total. The inverse of parseInt16."],
+            "Total. The inverse of parseInt16.",
+            "Renamed from hydra.lib.literals.showInt16."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.printInt16.rendersCanonicalDecimal",
@@ -980,8 +1054,10 @@
           "description": "Render an int32 as a string.",
           "comments": [
             "printInt32(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
-            "Total. The inverse of parseInt32."],
+            "Total. The inverse of parseInt32.",
+            "Renamed from hydra.lib.literals.showInt32."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.printInt32.rendersCanonicalDecimal",
@@ -1000,8 +1076,10 @@
           "description": "Render an int64 as a string.",
           "comments": [
             "printInt64(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
-            "Total. The inverse of parseInt64."],
+            "Total. The inverse of parseInt64.",
+            "Renamed from hydra.lib.literals.showInt64."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.printInt64.rendersCanonicalDecimal",
@@ -1020,8 +1098,10 @@
           "description": "Render an int8 as a string.",
           "comments": [
             "printInt8(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
-            "Total. The inverse of parseInt8."],
+            "Total. The inverse of parseInt8.",
+            "Renamed from hydra.lib.literals.showInt8."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.printInt8.rendersCanonicalDecimal",
@@ -1040,8 +1120,10 @@
           "description": "Render a string as a string-literal token (escaped and quoted).",
           "comments": [
             "printString(s) returns a Haskell-syntax string literal token representing s: an opening double-quote, the characters of s with special characters escaped (backslash sequences for control characters, quotes, and non-printable Unicode code points), and a closing double-quote.",
-            "Total. The inverse of parseString."],
+            "Total. The inverse of parseString.",
+            "Renamed from hydra.lib.literals.showString."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.printString.quotesAndPassesThroughPlainCharacters",
@@ -1066,8 +1148,12 @@
         "name": "hydra.core.lib.literals.printUint16",
         "metadata": {
           "description": "Render a uint16 as a string.",
-          "comments": ["printUint16(x) returns the canonical decimal representation of x.", "Total. The inverse of parseUint16."],
+          "comments": [
+            "printUint16(x) returns the canonical decimal representation of x.",
+            "Total. The inverse of parseUint16.",
+            "Renamed from hydra.lib.literals.showUint16."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.printUint16.rendersCanonicalDecimal",
@@ -1084,8 +1170,12 @@
         "name": "hydra.core.lib.literals.printUint32",
         "metadata": {
           "description": "Render a uint32 as a string.",
-          "comments": ["printUint32(x) returns the canonical decimal representation of x.", "Total. The inverse of parseUint32."],
+          "comments": [
+            "printUint32(x) returns the canonical decimal representation of x.",
+            "Total. The inverse of parseUint32.",
+            "Renamed from hydra.lib.literals.showUint32."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.printUint32.rendersCanonicalDecimal",
@@ -1102,8 +1192,12 @@
         "name": "hydra.core.lib.literals.printUint64",
         "metadata": {
           "description": "Render a uint64 as a string.",
-          "comments": ["printUint64(x) returns the canonical decimal representation of x.", "Total. The inverse of parseUint64."],
+          "comments": [
+            "printUint64(x) returns the canonical decimal representation of x.",
+            "Total. The inverse of parseUint64.",
+            "Renamed from hydra.lib.literals.showUint64."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.printUint64.rendersCanonicalDecimal",
@@ -1120,8 +1214,12 @@
         "name": "hydra.core.lib.literals.printUint8",
         "metadata": {
           "description": "Render a uint8 as a string.",
-          "comments": ["printUint8(x) returns the canonical decimal representation of x.", "Total. The inverse of parseUint8."],
+          "comments": [
+            "printUint8(x) returns the canonical decimal representation of x.",
+            "Total. The inverse of parseUint8.",
+            "Renamed from hydra.lib.literals.showUint8."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.printUint8.rendersCanonicalDecimal",
@@ -1142,6 +1240,7 @@
             "uint16ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.uint16ToBigint.losslessConversion",
@@ -1162,6 +1261,7 @@
             "uint32ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.uint32ToBigint.losslessConversion",
@@ -1182,6 +1282,7 @@
             "uint64ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.uint64ToBigint.losslessConversion",
@@ -1202,6 +1303,7 @@
             "uint8ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
             "Total."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.literals.uint8ToBigint.losslessConversion",

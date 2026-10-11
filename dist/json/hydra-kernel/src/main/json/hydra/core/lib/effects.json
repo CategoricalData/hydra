@@ -1,6 +1,15 @@
 {
   "name": "hydra.core.lib.effects",
-  "metadata": {"description": "Primitives in the hydra.core.lib.effects module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.effects module.",
+    "comments": [
+      "A value of effect<t> describes a deferred, executable computation which, when executed by a host interpreter, produces a value of type t; describing a computation is separate from executing it, and Hydra uses the effect type to keep that boundary explicit.",
+      "There is no eliminator (cases) for effects: an effect value is opaque, consumable only by further composition within this module or by an executor outside the language.",
+      "Every primitive in this module is pure: constructing or composing an effect description is a referentially transparent operation on ordinary values, and nothing observable happens until an executor runs the description. Effect descriptions have no identity semantics -- two equal descriptions are interchangeable -- so the usual pure-term transformations are valid over effect-building code. (Purity is independent of implementation strategy: a host may implement these combinators natively rather than from a default implementation.)",
+      "A host interpreter of effect<t> must honor, in addition to the purity of the combinators above: purity of construction (building or composing a description performs no host interaction; only an executor performing the described computation may interact with the host); order (when a combinator specifies an order between the effects it composes, an executor performs them in exactly that order); exactly-once (each composed effect is performed exactly once per execution, never skipped, never repeated); and deferral (an effect specified to run after another must not be performed, nor its producing function evaluated for effect, until the prior effect has run to completion and its value is available). These obligations are observable -- the effects are real host interactions -- so they are normative, not advisory.",
+      "effect<t> is total: a leaf effect always completes and yields a value (for hydra.lib.files, an either<FileError, t>); the obligations above govern order, multiplicity, and deferral, not failure short-circuiting."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -42,6 +51,7 @@
           "comments": [
             "apply(ef, ex) describes an effectful computation which first interprets ef to produce a function, then interprets ex to produce an argument, and returns the result of applying the function to the argument."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17"},
           "provisions": [
             {
               "name": "hydra.core.lib.effects.apply.appliesEffectfulFunctionToEffectfulArgument",
@@ -72,6 +82,7 @@
             "bind(e, f) describes an effectful computation which first interprets e, then passes its result to f to obtain the next effect.",
             "Host interpreters provide the operational meaning; Hydra uses the type effect<t> to keep the effect boundary explicit."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17"},
           "provisions": [
             {
               "name": "hydra.core.lib.effects.bind.threadsResultIntoNextEffect",
@@ -100,6 +111,7 @@
           "description": "Kleisli composition for effects.",
           "comments": ["compose(f, g, x) describes an effectful computation equivalent to bind(f(x), g)."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17"},
           "provisions": [
             {
               "name": "hydra.core.lib.effects.compose.sequencesTwoKleisliArrows",
@@ -127,8 +139,11 @@
         "name": "hydra.core.lib.effects.foldList",
         "metadata": {
           "description": "Left-fold over a list with an effect-returning function.",
-          "comments": ["foldList(f, acc0, xs) describes an effectful left fold over xs, sequencing applications of f from left to right."],
+          "comments": [
+            "foldList(f, acc0, xs) describes an effectful left fold over xs, sequencing applications of f from left to right.",
+            "Renamed from hydra.lib.effects.foldl."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.effects.foldList.sequencesEffectReturningStepOverList",
@@ -163,6 +178,7 @@
             "map(f, e) describes an effectful computation which interprets e and applies f to its result.",
             "Equivalent to bind(e, \\x -> pure(f x))."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17"},
           "provisions": [
             {
               "name": "hydra.core.lib.effects.map.appliesPureFunctionToEffectResult",
@@ -188,6 +204,7 @@
           "comments": [
             "mapList(f, xs) describes an effectful computation which applies f to each element of xs from left to right and collects the results."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17"},
           "provisions": [
             {
               "name": "hydra.core.lib.effects.mapList.appliesEffectReturningFunctionAndCollectsResults",
@@ -217,6 +234,7 @@
           "comments": [
             "mapOptional(f, m) describes an effectful computation which returns none when m is none, or applies f to the contained value and wraps the result in given."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17"},
           "provisions": [
             {
               "name": "hydra.core.lib.effects.mapOptional.appliesFunctionWhenPresentPassesThroughNoneWhenAbsent",
@@ -247,6 +265,7 @@
             "mapSet(f, s) describes an effectful computation which applies f to each element of s, sequencing the effects in ascending element order (the order is normative, since the effects are observable), and collects the results as a set, deduplicated by the result type's ordering.",
             "Requires 'ordering' constraints on both element types (the set type contract)."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.effects.mapSet.appliesEffectReturningFunctionAndCollectsResultsAsSet",
@@ -275,6 +294,7 @@
           "description": "Lift a pure value into an effect.",
           "comments": ["pure(x) describes an effectful computation which succeeds with x without requiring host interaction."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17"},
           "provisions": [
             {
               "name": "hydra.core.lib.effects.pure.liftsValueWithoutHostInteraction",

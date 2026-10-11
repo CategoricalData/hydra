@@ -44,6 +44,7 @@
             "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.",
             "Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.logic.and.trueOnlyWhenBothTrue",
@@ -80,6 +81,7 @@
             "The unselected branch is not necessarily evaluated; ifElse is the standard way to express short-circuiting boolean logic and branching in Hydra.",
             "Total. Corresponds to Haskell's if/then/else."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.logic.ifElse.selectsBranchByCondition",
@@ -101,6 +103,7 @@
           "description": "Compute the logical NOT of a boolean value.",
           "comments": ["not(p) returns false if p is true, or true if p is false.", "Total. Corresponds to Haskell's not :: Bool -> Bool."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.logic.not.negatesBoolean",
@@ -132,6 +135,7 @@
             "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.",
             "Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.logic.or.trueWhenEitherTrue",

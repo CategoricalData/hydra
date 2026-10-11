@@ -1,6 +1,11 @@
 {
   "name": "hydra.core.lib.pairs",
-  "metadata": {"description": "Primitives in the hydra.core.lib.pairs module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.pairs module.",
+    "comments": [
+      "Pairs: the two-component product type. This module provides the two projections, the bifunctor map, and the constructor."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -43,6 +48,7 @@
             "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.",
             "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.pairs.bimap.mapsBothElementsIndependently",
@@ -99,6 +105,7 @@
           "description": "Get the first element of a pair.",
           "comments": ["first(p) returns the first component of the pair p.", "Total. Corresponds to Haskell's fst :: (a, b) -> a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.pairs.first.returnsFirstComponent",
@@ -125,6 +132,7 @@
             "The type-free pair constructor, useful point-free (e.g. zipWith(pair, xs, ys)).",
             "Total. Corresponds to Haskell's (,) :: a -> b -> (a, b)."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": [
             {
               "name": "hydra.core.lib.pairs.pair.constructsFromTwoValues",
@@ -145,6 +153,7 @@
           "description": "Get the second element of a pair.",
           "comments": ["second(p) returns the second component of the pair p.", "Total. Corresponds to Haskell's snd :: (a, b) -> b."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.15"},
           "provisions": [
             {
               "name": "hydra.core.lib.pairs.second.returnsSecondComponent",
