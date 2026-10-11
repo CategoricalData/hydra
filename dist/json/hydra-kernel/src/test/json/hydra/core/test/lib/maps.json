@@ -712,6 +712,382 @@
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
+                              {"name": "name", "term": {"literal": {"string": "difference"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestGroup",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "removesBindingsWithKeysInSecondMap"}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {
+                                            "name": "subgroups",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestGroup"}}}},
+                                          {
+                                            "name": "cases",
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "record": {
+                                                    "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                                    "fields": [
+                                                      {"name": "name", "term": {"literal": {"string": "remove bindings"}}},
+                                                      {
+                                                        "name": "case",
+                                                        "term": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.testing.TestCase",
+                                                            "field": {
+                                                              "name": "universal",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.testing.UniversalTestCase",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "actual",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.maps.difference"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                          "type": {"literal": "string"}}},
+                                                                                      "argument": {
+                                                                                        "map": [
+                                                                                          {"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}},
+                                                                                          {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}},
+                                                                                          {"key": {"literal": {"integer": {"int32": 3}}}, "value": {"literal": {"string": "c"}}}]}}},
+                                                                                  "argument": {
+                                                                                    "map": [
+                                                                                      {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "x"}}},
+                                                                                      {"key": {"literal": {"integer": {"int32": 4}}}, "value": {"literal": {"string": "y"}}}]}}}}}}}},
+                                                                    {
+                                                                      "name": "expected",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "map": [
+                                                                                  {"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}},
+                                                                                  {"key": {"literal": {"integer": {"int32": 3}}}, "value": {"literal": {"string": "c"}}}]}}}}}}]}}}}}},
+                                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                                      {
+                                                        "name": "provisions",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "wrap": {
+                                                                "typeName": "hydra.core.model.Name",
+                                                                "body": {"literal": {"string": "hydra.core.lib.maps.difference.removesBindingsWithKeysInSecondMap"}}}}]}}]}},
+                                                {
+                                                  "record": {
+                                                    "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                                    "fields": [
+                                                      {"name": "name", "term": {"literal": {"string": "no overlap"}}},
+                                                      {
+                                                        "name": "case",
+                                                        "term": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.testing.TestCase",
+                                                            "field": {
+                                                              "name": "universal",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.testing.UniversalTestCase",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "actual",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.maps.difference"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                          "type": {"literal": "string"}}},
+                                                                                      "argument": {
+                                                                                        "map": [
+                                                                                          {"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}},
+                                                                                          {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}}]}}},
+                                                                                  "argument": {
+                                                                                    "map": [
+                                                                                      {"key": {"literal": {"integer": {"int32": 3}}}, "value": {"literal": {"string": "x"}}},
+                                                                                      {"key": {"literal": {"integer": {"int32": 4}}}, "value": {"literal": {"string": "y"}}}]}}}}}}}},
+                                                                    {
+                                                                      "name": "expected",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "map": [
+                                                                                  {"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}},
+                                                                                  {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}}]}}}}}}]}}}}}},
+                                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                                      {
+                                                        "name": "provisions",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "wrap": {
+                                                                "typeName": "hydra.core.model.Name",
+                                                                "body": {"literal": {"string": "hydra.core.lib.maps.difference.removesBindingsWithKeysInSecondMap"}}}}]}}]}}]}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestGroup",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "identityWhenSecondEmpty"}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {
+                                            "name": "subgroups",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestGroup"}}}},
+                                          {
+                                            "name": "cases",
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "record": {
+                                                    "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                                    "fields": [
+                                                      {"name": "name", "term": {"literal": {"string": "difference with empty"}}},
+                                                      {
+                                                        "name": "case",
+                                                        "term": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.testing.TestCase",
+                                                            "field": {
+                                                              "name": "universal",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.testing.UniversalTestCase",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "actual",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.maps.difference"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                          "type": {"literal": "string"}}},
+                                                                                      "argument": {
+                                                                                        "map": [
+                                                                                          {"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}},
+                                                                                          {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}}]}}},
+                                                                                  "argument": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"typeApplication": {"body": {"map": []}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                      "type": {"literal": "string"}}}}}}}}}},
+                                                                    {
+                                                                      "name": "expected",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "map": [
+                                                                                  {"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}},
+                                                                                  {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}}]}}}}}}]}}}}}},
+                                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                                      {
+                                                        "name": "provisions",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "wrap": {
+                                                                "typeName": "hydra.core.model.Name",
+                                                                "body": {"literal": {"string": "hydra.core.lib.maps.difference.identityWhenSecondEmpty"}}}}]}}]}}]}}]}}]}},
+                              {
+                                "name": "cases",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestCaseWithMetadata"}}}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestGroup",
+                            "fields": [
                               {"name": "name", "term": {"literal": {"string": "elems"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
@@ -2841,6 +3217,386 @@
                                                   "wrap": {
                                                     "typeName": "hydra.core.model.Name",
                                                     "body": {"literal": {"string": "hydra.core.lib.maps.insert.addsOrOverwritesBinding"}}}}]}}]}}]}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestGroup",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "intersection"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestGroup",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "keepsBindingsWithKeysInBoth"}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {
+                                            "name": "subgroups",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestGroup"}}}},
+                                          {
+                                            "name": "cases",
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "record": {
+                                                    "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                                    "fields": [
+                                                      {"name": "name", "term": {"literal": {"string": "common keys"}}},
+                                                      {
+                                                        "name": "case",
+                                                        "term": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.testing.TestCase",
+                                                            "field": {
+                                                              "name": "universal",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.testing.UniversalTestCase",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "actual",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {"body": {"variable": "hydra.core.lib.maps.intersection"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                          "type": {"literal": "string"}}},
+                                                                                      "argument": {
+                                                                                        "map": [
+                                                                                          {"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}},
+                                                                                          {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}},
+                                                                                          {"key": {"literal": {"integer": {"int32": 3}}}, "value": {"literal": {"string": "c"}}}]}}},
+                                                                                  "argument": {
+                                                                                    "map": [
+                                                                                      {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "x"}}},
+                                                                                      {"key": {"literal": {"integer": {"int32": 3}}}, "value": {"literal": {"string": "y"}}},
+                                                                                      {"key": {"literal": {"integer": {"int32": 4}}}, "value": {"literal": {"string": "z"}}}]}}}}}}}},
+                                                                    {
+                                                                      "name": "expected",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "map": [
+                                                                                  {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}},
+                                                                                  {"key": {"literal": {"integer": {"int32": 3}}}, "value": {"literal": {"string": "c"}}}]}}}}}}]}}}}}},
+                                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                                      {
+                                                        "name": "provisions",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "wrap": {
+                                                                "typeName": "hydra.core.model.Name",
+                                                                "body": {"literal": {"string": "hydra.core.lib.maps.intersection.keepsBindingsWithKeysInBoth"}}}}]}}]}}]}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestGroup",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "emptyWhenNoOverlapOrEitherEmpty"}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {
+                                            "name": "subgroups",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestGroup"}}}},
+                                          {
+                                            "name": "cases",
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "record": {
+                                                    "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                                    "fields": [
+                                                      {"name": "name", "term": {"literal": {"string": "no common keys"}}},
+                                                      {
+                                                        "name": "case",
+                                                        "term": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.testing.TestCase",
+                                                            "field": {
+                                                              "name": "universal",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.testing.UniversalTestCase",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "actual",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {"body": {"variable": "hydra.core.lib.maps.intersection"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                          "type": {"literal": "string"}}},
+                                                                                      "argument": {
+                                                                                        "map": [
+                                                                                          {"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}},
+                                                                                          {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}}]}}},
+                                                                                  "argument": {
+                                                                                    "map": [
+                                                                                      {"key": {"literal": {"integer": {"int32": 3}}}, "value": {"literal": {"string": "x"}}},
+                                                                                      {"key": {"literal": {"integer": {"int32": 4}}}, "value": {"literal": {"string": "y"}}}]}}}}}}}},
+                                                                    {
+                                                                      "name": "expected",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                  "type": {"literal": "string"}}}}}}}}]}}}}}},
+                                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                                      {
+                                                        "name": "provisions",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "wrap": {
+                                                                "typeName": "hydra.core.model.Name",
+                                                                "body": {"literal": {"string": "hydra.core.lib.maps.intersection.emptyWhenNoOverlapOrEitherEmpty"}}}}]}}]}},
+                                                {
+                                                  "record": {
+                                                    "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                                    "fields": [
+                                                      {"name": "name", "term": {"literal": {"string": "intersection with empty"}}},
+                                                      {
+                                                        "name": "case",
+                                                        "term": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.testing.TestCase",
+                                                            "field": {
+                                                              "name": "universal",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.testing.UniversalTestCase",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "actual",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {"body": {"variable": "hydra.core.lib.maps.intersection"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                          "type": {"literal": "string"}}},
+                                                                                      "argument": {
+                                                                                        "map": [
+                                                                                          {"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}},
+                                                                                          {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}}]}}},
+                                                                                  "argument": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"typeApplication": {"body": {"map": []}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                      "type": {"literal": "string"}}}}}}}}}},
+                                                                    {
+                                                                      "name": "expected",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                  "type": {"literal": "string"}}}}}}}}]}}}}}},
+                                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                                      {
+                                                        "name": "provisions",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "wrap": {
+                                                                "typeName": "hydra.core.model.Name",
+                                                                "body": {"literal": {"string": "hydra.core.lib.maps.intersection.emptyWhenNoOverlapOrEitherEmpty"}}}}]}}]}}]}}]}}]}},
+                              {
+                                "name": "cases",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestCaseWithMetadata"}}}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
@@ -5815,6 +6571,485 @@
                                                           "list": [
                                                             {
                                                               "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.lib.maps.union.identityWithEmpty"}}}}]}}]}}]}}]}}]}},
+                              {
+                                "name": "cases",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestCaseWithMetadata"}}}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestGroup",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "unions"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestGroup",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "earliestMapTakesPrecedence"}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {
+                                            "name": "subgroups",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestGroup"}}}},
+                                          {
+                                            "name": "cases",
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "record": {
+                                                    "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                                    "fields": [
+                                                      {"name": "name", "term": {"literal": {"string": "union of multiple maps"}}},
+                                                      {
+                                                        "name": "case",
+                                                        "term": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.testing.TestCase",
+                                                            "field": {
+                                                              "name": "universal",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.testing.UniversalTestCase",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "actual",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.maps.unions"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                      "type": {"literal": "string"}}},
+                                                                                  "argument": {
+                                                                                    "list": [
+                                                                                      {
+                                                                                        "map": [
+                                                                                          {"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}},
+                                                                                          {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}}]},
+                                                                                      {
+                                                                                        "map": [
+                                                                                          {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "x"}}},
+                                                                                          {"key": {"literal": {"integer": {"int32": 3}}}, "value": {"literal": {"string": "c"}}}]},
+                                                                                      {
+                                                                                        "map": [
+                                                                                          {"key": {"literal": {"integer": {"int32": 3}}}, "value": {"literal": {"string": "y"}}},
+                                                                                          {"key": {"literal": {"integer": {"int32": 4}}}, "value": {"literal": {"string": "d"}}}]}]}}}}}}}},
+                                                                    {
+                                                                      "name": "expected",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "map": [
+                                                                                  {"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}},
+                                                                                  {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}},
+                                                                                  {"key": {"literal": {"integer": {"int32": 3}}}, "value": {"literal": {"string": "c"}}},
+                                                                                  {"key": {"literal": {"integer": {"int32": 4}}}, "value": {"literal": {"string": "d"}}}]}}}}}}]}}}}}},
+                                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                                      {
+                                                        "name": "provisions",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "wrap": {
+                                                                "typeName": "hydra.core.model.Name",
+                                                                "body": {"literal": {"string": "hydra.core.lib.maps.unions.earliestMapTakesPrecedence"}}}}]}}]}},
+                                                {
+                                                  "record": {
+                                                    "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                                    "fields": [
+                                                      {"name": "name", "term": {"literal": {"string": "union with empty maps"}}},
+                                                      {
+                                                        "name": "case",
+                                                        "term": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.testing.TestCase",
+                                                            "field": {
+                                                              "name": "universal",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.testing.UniversalTestCase",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "actual",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.maps.unions"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                      "type": {"literal": "string"}}},
+                                                                                  "argument": {
+                                                                                    "list": [
+                                                                                      {"map": [{"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}}]},
+                                                                                      {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                          "type": {"literal": "string"}}},
+                                                                                      {"map": [{"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}}]}]}}}}}}}},
+                                                                    {
+                                                                      "name": "expected",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "map": [
+                                                                                  {"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}},
+                                                                                  {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}}]}}}}}}]}}}}}},
+                                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                                      {
+                                                        "name": "provisions",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "wrap": {
+                                                                "typeName": "hydra.core.model.Name",
+                                                                "body": {"literal": {"string": "hydra.core.lib.maps.unions.earliestMapTakesPrecedence"}}}}]}}]}},
+                                                {
+                                                  "record": {
+                                                    "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                                    "fields": [
+                                                      {"name": "name", "term": {"literal": {"string": "single map"}}},
+                                                      {
+                                                        "name": "case",
+                                                        "term": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.testing.TestCase",
+                                                            "field": {
+                                                              "name": "universal",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.testing.UniversalTestCase",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "actual",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.maps.unions"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                      "type": {"literal": "string"}}},
+                                                                                  "argument": {
+                                                                                    "list": [
+                                                                                      {
+                                                                                        "map": [
+                                                                                          {"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}},
+                                                                                          {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}}]}]}}}}}}}},
+                                                                    {
+                                                                      "name": "expected",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "map": [
+                                                                                  {"key": {"literal": {"integer": {"int32": 1}}}, "value": {"literal": {"string": "a"}}},
+                                                                                  {"key": {"literal": {"integer": {"int32": 2}}}, "value": {"literal": {"string": "b"}}}]}}}}}}]}}}}}},
+                                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                                      {
+                                                        "name": "provisions",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "wrap": {
+                                                                "typeName": "hydra.core.model.Name",
+                                                                "body": {"literal": {"string": "hydra.core.lib.maps.unions.earliestMapTakesPrecedence"}}}}]}}]}}]}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestGroup",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "emptyListOfMapsYieldsEmptyMap"}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {
+                                            "name": "subgroups",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestGroup"}}}},
+                                          {
+                                            "name": "cases",
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "record": {
+                                                    "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                                    "fields": [
+                                                      {"name": "name", "term": {"literal": {"string": "empty list of maps"}}},
+                                                      {
+                                                        "name": "case",
+                                                        "term": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.testing.TestCase",
+                                                            "field": {
+                                                              "name": "universal",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.testing.UniversalTestCase",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "actual",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.maps.unions"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                      "type": {"literal": "string"}}},
+                                                                                  "argument": {
+                                                                                    "typeApplication": {"body": {"list": []}, "type": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}}}}}}}}}}},
+                                                                    {
+                                                                      "name": "expected",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "parameter": "m",
+                                                                                  "domain": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.print.model.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "n",
+                                                                                                  "domain": {"literal": {"integer": "int32"}},
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "s",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printString"}, "argument": {"variable": "s"}}}}}}},
+                                                                                      "argument": {"variable": "m"}}}}},
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"typeApplication": {"body": {"map": []}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                  "type": {"literal": "string"}}}}}}}}]}}}}}},
+                                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                                      {
+                                                        "name": "provisions",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "wrap": {
+                                                                "typeName": "hydra.core.model.Name",
+                                                                "body": {"literal": {"string": "hydra.core.lib.maps.unions.emptyListOfMapsYieldsEmptyMap"}}}}]}}]}}]}}]}}]}},
                               {
                                 "name": "cases",
                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestCaseWithMetadata"}}}}]}}]}},

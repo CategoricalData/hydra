@@ -9739,7 +9739,7 @@
                                                             {
                                                               "wrap": {
                                                                 "typeName": "hydra.core.model.Name",
-                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}}}}]}}]}},
+                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}}}}]}}]}},
                                                 {
                                                   "record": {
                                                     "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -9867,7 +9867,7 @@
                                                             {
                                                               "wrap": {
                                                                 "typeName": "hydra.core.model.Name",
-                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}}}}]}}]}},
+                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}}}}]}}]}},
                                                 {
                                                   "record": {
                                                     "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -9995,7 +9995,7 @@
                                                             {
                                                               "wrap": {
                                                                 "typeName": "hydra.core.model.Name",
-                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}}}}]}}]}},
+                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}}}}]}}]}},
                                                 {
                                                   "record": {
                                                     "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -10123,7 +10123,7 @@
                                                             {
                                                               "wrap": {
                                                                 "typeName": "hydra.core.model.Name",
-                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}}}}]}}]}},
+                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}}}}]}}]}},
                                                 {
                                                   "record": {
                                                     "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -10251,7 +10251,7 @@
                                                             {
                                                               "wrap": {
                                                                 "typeName": "hydra.core.model.Name",
-                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}}}}]}}]}},
+                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}}}}]}}]}},
                                                 {
                                                   "record": {
                                                     "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -10379,7 +10379,7 @@
                                                             {
                                                               "wrap": {
                                                                 "typeName": "hydra.core.model.Name",
-                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}}}}]}}]}},
+                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}}}}]}}]}},
                                                 {
                                                   "record": {
                                                     "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -10507,7 +10507,7 @@
                                                             {
                                                               "wrap": {
                                                                 "typeName": "hydra.core.model.Name",
-                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}}}}]}}]}},
+                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}}}}]}}]}},
                                                 {
                                                   "record": {
                                                     "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -10634,7 +10634,7 @@
                                                             {
                                                               "wrap": {
                                                                 "typeName": "hydra.core.model.Name",
-                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}}}}]}}]}},
+                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}}}}]}}]}},
                                                 {
                                                   "record": {
                                                     "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -10761,7 +10761,7 @@
                                                             {
                                                               "wrap": {
                                                                 "typeName": "hydra.core.model.Name",
-                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}}}}]}}]}},
+                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}}}}]}}]}},
                                                 {
                                                   "record": {
                                                     "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -10888,7 +10888,7 @@
                                                             {
                                                               "wrap": {
                                                                 "typeName": "hydra.core.model.Name",
-                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}}}}]}}]}},
+                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}}}}]}}]}},
                                                 {
                                                   "record": {
                                                     "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -11015,7 +11015,7 @@
                                                             {
                                                               "wrap": {
                                                                 "typeName": "hydra.core.model.Name",
-                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}}}}]}}]}},
+                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}}}}]}}]}},
                                                 {
                                                   "record": {
                                                     "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -11142,7 +11142,7 @@
                                                             {
                                                               "wrap": {
                                                                 "typeName": "hydra.core.model.Name",
-                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}}}}]}}]}}]}}]}},
+                                                                "body": {"literal": {"string": "hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}}}}]}}]}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestGroup",
@@ -11286,7 +11286,7 @@
                                                   "record": {
                                                     "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                                     "fields": [
-                                                      {"name": "name", "term": {"literal": {"string": "unbalanced open paren is ill-formed, so find is nothing"}}},
+                                                      {"name": "name", "term": {"literal": {"string": "unbalanced open paren is ill-formed, so find is none"}}},
                                                       {
                                                         "name": "case",
                                                         "term": {
