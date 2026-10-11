@@ -21,7 +21,11 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.equality module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.equality module.") [
+              "Equality of values.",
+              "Equality is structural: two values are equal exactly when they are the same value of the\
+              \ same type.",
+              "For floating-point values equality is value identity."]}
   where
     definitions = [equal, notEqual]
 
@@ -38,7 +42,7 @@ tx :: Type
 tx = Types.var "x"
 
 equal :: PrimitiveDefinition
-equal = withProvisions [
+equal = availableSince "0.15" $ withProvisions [
   requirement "structuralEquivalence"
     "equal returns true exactly when its two arguments are structurally equivalent under the\
     \ type's equality notion -- identical scalars, or recursively equivalent collection contents\
@@ -68,7 +72,7 @@ equal = withProvisions [
    "Total. Corresponds to Haskell's (==) :: Eq a => a -> a -> Bool."]
 
 notEqual :: PrimitiveDefinition
-notEqual = withProvisions [
+notEqual = availableSince "0.17.6" $ withProvisions [
   requirement "negatesEqual"
     "notEqual(x, y) = not(equal(x, y)) for scalar values of any type -- integers, strings, and\
     \ floats.",

@@ -24,7 +24,12 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.lists module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.lists module.") [
+              "Lists form a monad: singleton is its unit and bind its bind, with map, apply, and compose\
+              \ completing the functor, applicative, and Kleisli structure.",
+              "The traversal family mapList, mapOptional, and mapSet traverses a container in the list\
+              \ monad, and foldList is the monadic fold.",
+              "The bare foldl and foldr are the plain, non-monadic folds."]}
   where
     definitions = [apply, at, bind, compose, concat, concat2, cons, distinct, drop, dropWhile,
                    filter, find, foldList, foldl, foldr, group, head, init, intersperse,
@@ -48,7 +53,7 @@ ty = Types.var "y"
 tz = Types.var "z"
 
 apply :: PrimitiveDefinition
-apply = withProvisions [
+apply = availableSince "0.15" $ withProvisions [
   requirement "sequentialComposition"
     "apply threads the input list through every function in the function list in order,\
     \ concatenating each function's output.",
@@ -65,7 +70,9 @@ apply = withProvisions [
    "Total. Corresponds to Haskell's (<*>) :: [a -> b] -> [a] -> [b]."]
 
 at :: PrimitiveDefinition
-at = withProvisions [
+at = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.lists.maybeAt."]
+  $ withProvisions [
   requirement "returnsElementAtIndex"
     "at returns the element at the given zero-based index, wrapped, for any valid index including\
     \ the first and last.",
@@ -79,7 +86,7 @@ at = withProvisions [
    "Total. Wraps the Haskell (!!) operator, which is partial, in maybe to make out-of-bounds total."]
 
 bind :: PrimitiveDefinition
-bind = withProvisions [
+bind = availableSince "0.15" $ withProvisions [
   requirement "flatMapsOverElements"
     "bind applies a list-producing function to each element and concatenates the results, in order,\
     \ including when the function returns duplicate or negative values.",
@@ -98,7 +105,7 @@ bind = withProvisions [
       (var "xs"))
 
 compose :: PrimitiveDefinition
-compose = define "compose" "Compose two functions that return lists (Kleisli composition in the list monad)."
+compose = availableSince "0.17.6" $ define "compose" "Compose two functions that return lists (Kleisli composition in the list monad)."
   (sigWithParams [("f", "the first list-returning function"), ("g", "the second list-returning function"), ("x", "the input value")] $ TypeScheme [Name "x", Name "y", Name "z"]
     ((tx Types.~> l ty) Types.~> (ty Types.~> l tz) Types.~> tx Types.~> l tz) mempty)
   ["compose(f, g, x) is bind(f(x), g); this defining equation is the specification. The results of\
@@ -106,7 +113,7 @@ compose = define "compose" "Compose two functions that return lists (Kleisli com
    "Total. Corresponds to Kleisli composition (>=>) in the list monad."]
 
 concat :: PrimitiveDefinition
-concat = withProvisions [
+concat = availableSince "0.15" $ withProvisions [
   requirement "flattensPreservingOrder"
     "concat flattens a list of lists into a single list, preserving element order within and\
     \ across the constituent lists.",
@@ -119,7 +126,7 @@ concat = withProvisions [
    "Total. Corresponds to Haskell's concat :: [[a]] -> [a]."]
 
 concat2 :: PrimitiveDefinition
-concat2 = withProvisions [
+concat2 = availableSince "0.15" $ withProvisions [
   requirement "appendsPreservingOrder"
     "concat2 appends its second list argument to its first, preserving the order of both, for both\
     \ numeric and string element types.",
@@ -132,7 +139,7 @@ concat2 = withProvisions [
    "Total. Corresponds to Haskell's (++) :: [a] -> [a] -> [a]."]
 
 cons :: PrimitiveDefinition
-cons = withProvisions [
+cons = availableSince "0.15" $ withProvisions [
   requirement "prependsElement"
     "cons prepends its first argument to the front of its second argument (the list), for empty and\
     \ non-empty lists, any element type, and any value including negative numbers."]
@@ -142,7 +149,9 @@ cons = withProvisions [
    "Total. Corresponds to Haskell's (:) :: a -> [a] -> [a]."]
 
 distinct :: PrimitiveDefinition
-distinct = withProvisions [
+distinct = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.lists.nub."]
+  $ withProvisions [
   requirement "removesDuplicatesPreservingFirstOccurrence"
     "distinct removes repeated elements, keeping only the first occurrence of each distinct value\
     \ and preserving the relative order of the survivors, for numeric and string element types.",
@@ -155,7 +164,7 @@ distinct = withProvisions [
    "Total. Corresponds to Haskell's Data.List.nub :: Eq a => [a] -> [a]."]
 
 drop :: PrimitiveDefinition
-drop = withProvisions [
+drop = availableSince "0.15" $ withProvisions [
   requirement "dropsFromFront"
     "drop n removes the first n elements from the front of the list, or all elements if n is\
     \ greater than or equal to the list's length.",
@@ -169,7 +178,7 @@ drop = withProvisions [
    "Total. Corresponds to Haskell's drop :: Int -> [a] -> [a]."]
 
 dropWhile :: PrimitiveDefinition
-dropWhile = withProvisions [
+dropWhile = availableSince "0.15" $ withProvisions [
   requirement "dropsLeadingMatches"
     "dropWhile removes elements from the front of the list for as long as the predicate holds,\
     \ stopping at (and keeping) the first element for which it does not; an empty list, a predicate\
@@ -184,7 +193,7 @@ dropWhile = withProvisions [
   ("p" ~> "xs" ~> Pairs.second (Lists.span (var "p") (var "xs")))
 
 filter :: PrimitiveDefinition
-filter = withProvisions [
+filter = availableSince "0.15" $ withProvisions [
   requirement "keepsMatchingElements"
     "filter returns the sublist of elements satisfying the predicate, preserving their relative\
     \ order, whether the predicate matches some, all, or none of the elements.",
@@ -204,7 +213,7 @@ filter = withProvisions [
       (var "xs"))
 
 find :: PrimitiveDefinition
-find = withProvisions [
+find = availableSince "0.15" $ withProvisions [
   requirement "returnsFirstMatch"
     "find returns the first element (wrapped) satisfying the predicate, scanning in list order.",
   requirement "noneWhenNoMatchOrEmpty"
@@ -224,7 +233,7 @@ find = withProvisions [
       (var "xs"))
 
 foldList :: PrimitiveDefinition
-foldList = define "foldList" "Left-fold a list in the list monad (a nondeterministic fold)."
+foldList = availableSince "0.17.6" $ define "foldList" "Left-fold a list in the list monad (a nondeterministic fold)."
   (sigWithParams [("f", "the branching step function"), ("acc0", "the initial accumulator"), ("xs", "the list to fold")] $ TypeScheme [Name "x", Name "y"]
     ((tx Types.~> ty Types.~> l tx) Types.~> tx Types.~> l ty Types.~> l tx) mempty)
   ["foldList(f, acc0, xs) folds xs from the left, branching the accumulator over every result of the\
@@ -232,10 +241,12 @@ foldList = define "foldList" "Left-fold a list in the list monad (a nondetermini
   \ results of applying f to each current accumulator and that element.",
    "foldList(f, acc0, xs) is foldl(\\macc el -> bind(macc, \\acc -> f(acc, el)), singleton(acc0), xs);\
   \ this defining equation is the specification. For the empty list the result is singleton(acc0).",
-   "Total on finite inputs. The list-monad instance of the monadic left fold."]
+   "Total on finite inputs. The list-monad instance of the monadic left fold.",
+   "For example, if f(acc, x) returns the two-element list containing acc and the sum of acc and x,\
+  \ then foldList(f, 0, xs) computes the sums of all subsets of xs."]
 
 foldl :: PrimitiveDefinition
-foldl = withProvisions [
+foldl = availableSince "0.15" $ withProvisions [
   requirement "appliesLeftAssociatively"
     "foldl combines the accumulator with each element left-to-right using the given binary\
     \ operation, so order-sensitive operations (e.g. subtraction) reflect strict left\
@@ -251,7 +262,7 @@ foldl = withProvisions [
    "Total on finite inputs. Corresponds to Haskell's foldl' :: (b -> a -> b) -> b -> [a] -> b."]
 
 foldr :: PrimitiveDefinition
-foldr = withProvisions [
+foldr = availableSince "0.15" $ withProvisions [
   requirement "appliesRightAssociatively"
     "foldr combines each element with the accumulator right-to-left using the given binary\
     \ operation, so order-sensitive operations (e.g. subtraction) reflect strict right\
@@ -266,7 +277,7 @@ foldr = withProvisions [
    "Total on finite inputs. Corresponds to Haskell's foldr :: (a -> b -> b) -> b -> [a] -> b."]
 
 group :: PrimitiveDefinition
-group = withProvisions [
+group = availableSince "0.15" $ withProvisions [
   requirement "groupsConsecutiveDuplicates"
     "group partitions the list into maximal runs of consecutive equal elements, preserving overall\
     \ order; non-adjacent duplicates (e.g. [1,1,2,2,2,3,1]) are not merged into the same run.",
@@ -282,7 +293,9 @@ group = withProvisions [
    "Total. Corresponds to Haskell's Data.List.group :: Eq a => [a] -> [[a]]."]
 
 head :: PrimitiveDefinition
-head = withProvisions [
+head = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.lists.maybeHead."]
+  $ withProvisions [
   requirement "returnsFirstElement"
     "head returns the first element of a non-empty list, wrapped, for any element type.",
   requirement "noneWhenEmpty"
@@ -293,7 +306,9 @@ head = withProvisions [
    "Total. Wraps Haskell's partial head in maybe."]
 
 init :: PrimitiveDefinition
-init = withProvisions [
+init = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.lists.maybeInit."]
+  $ withProvisions [
   requirement "returnsAllButLast"
     "init returns all elements of a non-empty list except the last, wrapped, including the empty\
     \ list when the input has exactly one element.",
@@ -305,7 +320,7 @@ init = withProvisions [
    "Total. Wraps Haskell's partial init in maybe."]
 
 intersperse :: PrimitiveDefinition
-intersperse = withProvisions [
+intersperse = availableSince "0.15" $ withProvisions [
   requirement "insertsElementBetweenItems"
     "intersperse inserts a copy of the given element between each pair of adjacent elements of the\
     \ list (not before the first or after the last), for string and numeric element types.",
@@ -320,7 +335,7 @@ intersperse = withProvisions [
    "Total. Corresponds to Haskell's intersperse :: a -> [a] -> [a]."]
 
 isEmpty :: PrimitiveDefinition
-isEmpty = withProvisions [
+isEmpty = availableSince "0.15" $ withProvisions [
   requirement "testsZeroLength"
     "isEmpty returns true exactly when the list has no elements, for any element type."]
   $ define "isEmpty" "Test whether a list is empty."
@@ -329,7 +344,9 @@ isEmpty = withProvisions [
    "Total. Corresponds to Haskell's null :: [a] -> Bool."]
 
 join :: PrimitiveDefinition
-join = withProvisions [
+join = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.lists.intercalate."]
+  $ withProvisions [
   requirement "insertsSeparatorBetweenLists"
     "join concatenates a list of lists with a copy of the separator list inserted between each pair\
     \ of adjacent lists (not before the first or after the last), for separators of any length\
@@ -345,7 +362,9 @@ join = withProvisions [
    "Total. Corresponds to Haskell's intercalate :: [a] -> [[a]] -> [a]."]
 
 last :: PrimitiveDefinition
-last = withProvisions [
+last = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.lists.maybeLast."]
+  $ withProvisions [
   requirement "returnsLastElement"
     "last returns the final element of a non-empty list, wrapped, for any element type.",
   requirement "noneWhenEmpty"
@@ -356,7 +375,7 @@ last = withProvisions [
    "Total. Wraps Haskell's partial last in maybe."]
 
 length :: PrimitiveDefinition
-length = withProvisions [
+length = availableSince "0.15" $ withProvisions [
   requirement "countsElements"
     "length returns the number of elements in the list, for any element type, including zero for\
     \ the empty list."]
@@ -367,7 +386,7 @@ length = withProvisions [
    "Corresponds to Haskell's length :: [a] -> Int (with narrowing to Int32)."]
 
 map :: PrimitiveDefinition
-map = withProvisions [
+map = availableSince "0.15" $ withProvisions [
   requirement "appliesFunctionElementwise"
     "map applies the given function to each element of the list in place, preserving list order\
     \ and length, for any element and function.",
@@ -381,7 +400,7 @@ map = withProvisions [
    "Total. Corresponds to Haskell's map :: (a -> b) -> [a] -> [b] / fmap on lists."]
 
 mapList :: PrimitiveDefinition
-mapList = define "mapList" "Traverse a list in the list monad."
+mapList = availableSince "0.17.6" $ define "mapList" "Traverse a list in the list monad."
   (sigWithParams [("f", "the list-returning function to apply to each element"), ("xs", "the list to traverse")] $ TypeScheme [Name "x", Name "y"]
     ((tx Types.~> l ty) Types.~> l tx Types.~> l (l ty)) mempty)
   ["mapList(f, xs) returns all combinations obtainable by choosing one element from f(x) for each x in\
@@ -393,7 +412,7 @@ mapList = define "mapList" "Traverse a list in the list monad."
    "Total on finite inputs. The list-monad instance of the traversal family."]
 
 mapOptional :: PrimitiveDefinition
-mapOptional = define "mapOptional" "Traverse an optional value in the list monad."
+mapOptional = availableSince "0.17.6" $ define "mapOptional" "Traverse an optional value in the list monad."
   (sigWithParams [("f", "the list-returning function to apply"), ("m", "the optional value to traverse")] $ TypeScheme [Name "x", Name "y"]
     ((tx Types.~> l ty) Types.~> Types.optional tx Types.~> l (Types.optional ty)) mempty)
   ["mapOptional(f, m) returns the single-element list containing none when m is none; for given(x) it\
@@ -402,7 +421,7 @@ mapOptional = define "mapOptional" "Traverse an optional value in the list monad
   \ container."]
 
 mapSet :: PrimitiveDefinition
-mapSet = define "mapSet" "Traverse a set in the list monad."
+mapSet = availableSince "0.17.6" $ define "mapSet" "Traverse a set in the list monad."
   (sigWithParams [("f", "the list-returning function to apply to each element"), ("s", "the set to traverse")] $ Types.polyConstrained [("x", [Name "ordering"]), ("y", [Name "ordering"])]
     ((tx Types.~> l ty) Types.~> Types.set tx Types.~> l (Types.set ty)))
   ["mapSet(f, s) returns all sets obtainable by choosing one element from f(x) for each element x of s.\
@@ -414,7 +433,9 @@ mapSet = define "mapSet" "Traverse a set in the list monad."
    "Requires 'ordering' constraints on both element types (the set type contract)."]
 
 member :: PrimitiveDefinition
-member = withProvisions [
+member = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.lists.elem."]
+  $ withProvisions [
   requirement "testsSetMembership"
     "member returns true exactly when the given value occurs at least once in the list, for both\
     \ numeric and string elements, including lists with duplicates.",
@@ -429,7 +450,7 @@ member = withProvisions [
    "Total. Corresponds to Haskell's elem :: Eq a => a -> [a] -> Bool."]
 
 partition :: PrimitiveDefinition
-partition = withProvisions [
+partition = availableSince "0.15" $ withProvisions [
   requirement "splitsBySatisfaction"
     "partition returns a pair of (elements satisfying the predicate, elements not satisfying it),\
     \ each sublist preserving the original relative order of its members.",
@@ -452,7 +473,7 @@ partition = withProvisions [
       (var "xs"))
 
 replicate :: PrimitiveDefinition
-replicate = withProvisions [
+replicate = availableSince "0.15" $ withProvisions [
   requirement "repeatsValueNTimes"
     "replicate n x returns a list containing n copies of x, including the empty list when n is\
     \ zero, for numeric and string element types."]
@@ -462,7 +483,7 @@ replicate = withProvisions [
    "Total. Corresponds to Haskell's replicate :: Int -> a -> [a]."]
 
 reverse :: PrimitiveDefinition
-reverse = withProvisions [
+reverse = availableSince "0.15" $ withProvisions [
   requirement "reversesElementOrder"
     "reverse returns the list with its elements in the opposite order, for any element type,\
     \ including lists of zero or one elements (which are unaffected)."]
@@ -472,7 +493,7 @@ reverse = withProvisions [
    "Total. Corresponds to Haskell's reverse :: [a] -> [a]."]
 
 singleton :: PrimitiveDefinition
-singleton = withProvisions [
+singleton = availableSince "0.15" $ withProvisions [
   requirement "wrapsOneElement"
     "singleton x returns a one-element list containing exactly x, for any value including negative\
     \ numbers, zero, and strings."]
@@ -483,7 +504,7 @@ singleton = withProvisions [
    "Total. Corresponds to Haskell's singleton :: a -> [a]."]
 
 sort :: PrimitiveDefinition
-sort = withProvisions [
+sort = availableSince "0.15" $ withProvisions [
   requirement "ordersAscending"
     "sort returns the list's elements in ascending order under the type's natural ordering,\
     \ preserving multiplicity (duplicates are kept), and leaves already-sorted or single-element\
@@ -496,7 +517,9 @@ sort = withProvisions [
    "Total. Corresponds to Haskell's Data.List.sort :: Ord a => [a] -> [a]."]
 
 sortBy :: PrimitiveDefinition
-sortBy = withProvisions [
+sortBy = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.lists.sortOn."]
+  $ withProvisions [
   requirement "ordersByKeyFunction"
     "sortBy returns the list ordered ascending by the natural ordering of the given key function's\
     \ output, not the elements' own ordering, so the result changes with the key function (e.g.\
@@ -514,7 +537,7 @@ sortBy = withProvisions [
    "Total. Corresponds to Haskell's Data.List.sortOn :: Ord b => (a -> b) -> [a] -> [a]."]
 
 span :: PrimitiveDefinition
-span = withProvisions [
+span = availableSince "0.15" $ withProvisions [
   requirement "splitsAtFirstNonMatch"
     "span returns a pair of (longest prefix for which the predicate holds, the remaining suffix),\
     \ degrading correctly when the predicate matches every element (whole list, empty), no elements\
@@ -536,7 +559,9 @@ span = withProvisions [
       (var "xs"))
 
 tail :: PrimitiveDefinition
-tail = withProvisions [
+tail = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.lists.maybeTail."]
+  $ withProvisions [
   requirement "returnsAllButFirst"
     "tail returns all elements of a non-empty list except the first, wrapped, including the empty\
     \ list when the input has exactly one element.",
@@ -548,7 +573,7 @@ tail = withProvisions [
    "Total. Wraps Haskell's partial tail in maybe."]
 
 take :: PrimitiveDefinition
-take = withProvisions [
+take = availableSince "0.15" $ withProvisions [
   requirement "takesFromFront"
     "take n returns the first n elements of the list, or the whole list if n is greater than or\
     \ equal to its length.",
@@ -561,7 +586,7 @@ take = withProvisions [
    "Total. Corresponds to Haskell's take :: Int -> [a] -> [a]."]
 
 takeWhile :: PrimitiveDefinition
-takeWhile = defineWithDefault "takeWhile" "Take elements from the beginning of a list while a predicate holds."
+takeWhile = availableSince "0.17.6" $ defineWithDefault "takeWhile" "Take elements from the beginning of a list while a predicate holds."
   (sigWithParams [("p", "the predicate to test each element"), ("xs", "the list to take from")] $ TypeScheme [Name "x"]
     ((tx Types.~> Types.boolean) Types.~> l tx Types.~> l tx) mempty)
   ["takeWhile(p, xs) returns the longest prefix of xs whose elements all satisfy p. If p fails for the\
@@ -573,7 +598,7 @@ takeWhile = defineWithDefault "takeWhile" "Take elements from the beginning of a
   ("p" ~> "xs" ~> Pairs.first (Lists.span (var "p") (var "xs")))
 
 transpose :: PrimitiveDefinition
-transpose = withProvisions [
+transpose = availableSince "0.15" $ withProvisions [
   requirement "swapsRowsAndColumns"
     "transpose converts a list of rows into a list of columns, where column i holds the i-th\
     \ element of every row that has one; rows need not be the same length (a ragged matrix is\
@@ -587,7 +612,7 @@ transpose = withProvisions [
    "Total. Corresponds to Haskell's Data.List.transpose :: [[a]] -> [[a]]."]
 
 uncons :: PrimitiveDefinition
-uncons = withProvisions [
+uncons = availableSince "0.15" $ withProvisions [
   requirement "splitsHeadAndTail"
     "uncons on a non-empty list returns (wrapped) the pair of its first element and the remaining\
     \ list, including when the remaining list is empty.",
@@ -601,7 +626,7 @@ uncons = withProvisions [
    "Total. Corresponds to Haskell's Data.List.uncons :: [a] -> Maybe (a, [a])."]
 
 zip :: PrimitiveDefinition
-zip = withProvisions [
+zip = availableSince "0.15" $ withProvisions [
   requirement "pairsElementwise"
     "zip combines two lists into a list of pairs by position, truncating to the length of the\
     \ shorter list when the lengths differ.",
@@ -615,7 +640,7 @@ zip = withProvisions [
    "Total. Corresponds to Haskell's zip :: [a] -> [b] -> [(a, b)]."]
 
 zipWith :: PrimitiveDefinition
-zipWith = withProvisions [
+zipWith = availableSince "0.15" $ withProvisions [
   requirement "combinesElementwiseByFunction"
     "zipWith combines two lists position-by-position using the given binary function, truncating\
     \ to the length of the shorter list when the lengths differ, for numeric and string\

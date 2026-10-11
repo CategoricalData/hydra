@@ -31,7 +31,7 @@ defineWithDefault :: String -> String -> TermSignature -> [String] -> TypedTerm 
 defineWithDefault = primitiveWithDefaultInModule module_
 
 and :: PrimitiveDefinition
-and = withProvisions [
+and = availableSince "0.15" $ withProvisions [
   requirement "trueOnlyWhenBothTrue"
     "and(p, q) returns true exactly when both p and q are true; any false operand makes the result\
     \ false."]
@@ -47,7 +47,7 @@ and = withProvisions [
 -- ifElse is lazy in its then/else branches (positions 1, 2): only the
 -- selected branch is evaluated. The condition (position 0) is strict.
 ifElse :: PrimitiveDefinition
-ifElse = withProvisions [
+ifElse = availableSince "0.15" $ withProvisions [
   requirement "selectsBranchByCondition"
     "ifElse(p, t, f) returns t when p is true and f when p is false, for any value type of t/f\
     \ including booleans, integers, and strings -- the then/else branches may be of any (matching)\
@@ -64,7 +64,7 @@ ifElse = withProvisions [
    "Total. Corresponds to Haskell's if/then/else."]
 
 not_ :: PrimitiveDefinition
-not_ = withProvisions [
+not_ = availableSince "0.15" $ withProvisions [
   requirement "negatesBoolean"
     "not(p) returns false when p is true and true when p is false."]
   $ defineWithDefault "not" "Compute the logical NOT of a boolean value."
@@ -74,7 +74,7 @@ not_ = withProvisions [
   ("a" ~> Logic.ifElse (var "a") false true)
 
 or_ :: PrimitiveDefinition
-or_ = withProvisions [
+or_ = availableSince "0.15" $ withProvisions [
   requirement "trueWhenEitherTrue"
     "or(p, q) returns true when at least one of p and q is true; it returns false only when both\
     \ are false."]

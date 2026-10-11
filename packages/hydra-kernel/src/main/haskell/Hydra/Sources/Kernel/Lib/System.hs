@@ -19,7 +19,12 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.system module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.system module.") [
+              "Process and environment access.",
+              "Every primitive in this module is effectful: it describes a computation against the\
+              \ ambient state of the running process -- its environment, its working directory, the\
+              \ system clock, child processes -- and executing that computation is separate from\
+              \ describing it."]}
   where
     definitions = [execute, exit, getEnvironment, getEnvironmentVariable, getTime, getWorkingDirectory,
       readStdin, writeStderr, writeStdout]
@@ -41,7 +46,7 @@ result :: Type -> Type
 result t = effect (Types.either_ systemError t)
 
 execute :: PrimitiveDefinition
-execute = withProvisions [
+execute = availableSince "0.17" $ withProvisions [
   requirement "capturesStdoutByteExactly"
     "execute captures the child program's standard output as raw bytes, byte-exactly, with no\
     \ newline translation, including the full argument vector being passed through to the child\
@@ -78,7 +83,7 @@ execute = withProvisions [
   \ syntax in arguments is not interpreted."]
 
 exit :: PrimitiveDefinition
-exit = define "exit" "Terminate the current process with a status code."
+exit = availableSince "0.17" $ define "exit" "Terminate the current process with a status code."
   (sigWithParams [("code", "the status code to terminate the process with")] $
     TypeScheme [] (statusCode Types.~> effect Types.unit) mempty)
   ["exit(code) describes an effectful computation which terminates the current process immediately\
@@ -89,7 +94,7 @@ exit = define "exit" "Terminate the current process with a status code."
   \ are not performed."]
 
 getEnvironment :: PrimitiveDefinition
-getEnvironment = withProvisions [
+getEnvironment = availableSince "0.17" $ withProvisions [
   requirement "returnsExactEnvironmentContents"
     "getEnvironment returns a map containing exactly the current process's environment, with no\
     \ entries for variables that are not actually set (observed by the absence of a\
@@ -104,7 +109,7 @@ getEnvironment = withProvisions [
   \ computation does not fail; an empty environment yields an empty map."]
 
 getEnvironmentVariable :: PrimitiveDefinition
-getEnvironmentVariable = withProvisions [
+getEnvironmentVariable = availableSince "0.17" $ withProvisions [
   requirement "noneForAbsentVariable"
     "getEnvironmentVariable returns none when the named environment variable is not set."]
   $ define "getEnvironmentVariable" "Look up a single environment variable by name."
@@ -117,7 +122,7 @@ getEnvironmentVariable = withProvisions [
   \ POSIX getenv signals with a null pointer. This computation does not fail."]
 
 getTime :: PrimitiveDefinition
-getTime = withProvisions [
+getTime = availableSince "0.17" $ withProvisions [
   requirement "returnsPositiveEpochSeconds"
     "getTime returns a Timespec whose seconds field is a positive number of seconds since the\
     \ Unix epoch.",
@@ -135,7 +140,7 @@ getTime = withProvisions [
   \ clock is adjusted. This computation does not fail."]
 
 getWorkingDirectory :: PrimitiveDefinition
-getWorkingDirectory = withProvisions [
+getWorkingDirectory = availableSince "0.17" $ withProvisions [
   requirement "returnsNonEmptyPath"
     "getWorkingDirectory returns a non-empty absolute path for the current working directory."]
   $ define "getWorkingDirectory" "Get the current working directory."
@@ -147,7 +152,7 @@ getWorkingDirectory = withProvisions [
   \ returned as left(error); success is returned as right(path)."]
 
 readStdin :: PrimitiveDefinition
-readStdin = define "readStdin" "Read the complete contents of standard input as raw bytes."
+readStdin = availableSince "0.17.6" $ define "readStdin" "Read the complete contents of standard input as raw bytes."
   (sig $ TypeScheme [] (result Types.binary) mempty)
   ["readStdin describes an effectful computation which reads standard input (POSIX file descriptor\
   \ 0) until end-of-file and returns the complete contents as raw bytes, with no character decoding\
@@ -158,7 +163,7 @@ readStdin = define "readStdin" "Read the complete contents of standard input as 
   \ returned as right(contents), including the empty byte string if stdin is closed or empty."]
 
 writeStderr :: PrimitiveDefinition
-writeStderr = define "writeStderr" "Write raw bytes to standard error."
+writeStderr = availableSince "0.17.6" $ define "writeStderr" "Write raw bytes to standard error."
   (sigWithParams [("bytes", "the raw bytes to write to standard error")] $
     TypeScheme [] (Types.binary Types.~> result Types.unit) mempty)
   ["writeStderr(bytes) describes an effectful computation which writes bytes to standard error\
@@ -170,7 +175,7 @@ writeStderr = define "writeStderr" "Write raw bytes to standard error."
   \ is returned as left(error); success is returned as right(unit)."]
 
 writeStdout :: PrimitiveDefinition
-writeStdout = define "writeStdout" "Write raw bytes to standard output."
+writeStdout = availableSince "0.17.6" $ define "writeStdout" "Write raw bytes to standard output."
   (sigWithParams [("bytes", "the raw bytes to write to standard output")] $
     TypeScheme [] (Types.binary Types.~> result Types.unit) mempty)
   ["writeStdout(bytes) describes an effectful computation which writes bytes to standard output\

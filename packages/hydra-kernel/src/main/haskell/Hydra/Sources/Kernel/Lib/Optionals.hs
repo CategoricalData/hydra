@@ -23,7 +23,12 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.optionals module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.optionals module.") [
+              "The optional type is Hydra's presence/absence type: a value of optional<t> is either\
+              \ given(x), carrying a value x of type t, or none, carrying nothing.",
+              "The optional type is a monad, and this module provides the full monad row -- given (the\
+              \ unit), map, apply, bind, and compose -- together with elimination (match), predicates, and\
+              \ traversal."]}
   where
     definitions = [apply, bind, compose, foldList, given, givens, isGiven, isNone,
                    map, mapList, mapOptional, mapSet, match, toList, withDefault]
@@ -41,7 +46,7 @@ ty = Types.var "y"
 tz = Types.var "z"
 
 apply :: PrimitiveDefinition
-apply = withProvisions [
+apply = availableSince "0.15" $ withProvisions [
   requirement "appliesFunctionWhenBothGiven"
     "apply returns given of the function applied to the value when both the function and the\
     \ argument are given, and none when either side is none."]
@@ -57,7 +62,7 @@ apply = withProvisions [
     ("f" ~> Optionals.map ("x" ~> var "f" @@ var "x") (var "mx")))
 
 bind :: PrimitiveDefinition
-bind = withProvisions [
+bind = availableSince "0.15" $ withProvisions [
   requirement "chainsOnGivenPropagatesNone"
     "bind applies the continuation to the contained value when the optional is given,\
     \ returning the continuation's own result; when the optional is none, bind returns none\
@@ -72,7 +77,7 @@ bind = withProvisions [
   ("m" ~> "f" ~> Optionals.match (var "m") nothing (var "f"))
 
 compose :: PrimitiveDefinition
-compose = withProvisions [
+compose = availableSince "0.15" $ withProvisions [
   requirement "kleisliComposesShortCircuitingOnNone"
     "compose(f, g, x) applies f to x, then g to the result of f, short-circuiting to none as\
     \ soon as either stage yields none."]
@@ -87,7 +92,7 @@ compose = withProvisions [
   ("f" ~> "g" ~> "x" ~> Optionals.bind (var "f" @@ var "x") (var "g"))
 
 foldList :: PrimitiveDefinition
-foldList = defineWithDefault "foldList" "Left-fold over a list with an optional-returning function, short-circuiting on none."
+foldList = availableSince "0.17.6" $ defineWithDefault "foldList" "Left-fold over a list with an optional-returning function, short-circuiting on none."
   (sigWithParams [("f", "the optional-returning step function"), ("acc", "the initial accumulator"), ("xs", "the list to fold over")] $ TypeScheme [Name "x", Name "y"]
     ((tx Types.~> ty Types.~> Types.optional tx) Types.~> tx Types.~> Types.list ty Types.~> Types.optional tx)
     mempty)
@@ -104,7 +109,7 @@ foldList = defineWithDefault "foldList" "Left-fold over a list with an optional-
       (var "xs"))
 
 given :: PrimitiveDefinition
-given = withProvisions [
+given = availableSince "0.17.6" $ withProvisions [
   requirement "wrapsValueAsPresent"
     "given wraps a value as the present variant of an optional, for any value type including\
     \ integers and strings."]
@@ -115,7 +120,9 @@ given = withProvisions [
    "Total. Corresponds to Haskell's Just :: a -> Maybe a."]
 
 givens :: PrimitiveDefinition
-givens = withProvisions [
+givens = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.optionals.cat."]
+  $ withProvisions [
   requirement "keepsPresentValuesPreservingOrder"
     "givens returns the list of contained values from every given element of the input list,\
     \ in original order, discarding none elements; an all-none or empty input list yields the\
@@ -135,7 +142,7 @@ givens = withProvisions [
     (var "xs"))
 
 isGiven :: PrimitiveDefinition
-isGiven = withProvisions [
+isGiven = availableSince "0.15" $ withProvisions [
   requirement "testsPresentVariant"
     "isGiven returns true exactly when the optional is the given variant, and false for\
     \ none."]
@@ -146,7 +153,7 @@ isGiven = withProvisions [
   ("m" ~> Optionals.match (var "m") false ("_" ~> true))
 
 isNone :: PrimitiveDefinition
-isNone = withProvisions [
+isNone = availableSince "0.15" $ withProvisions [
   requirement "testsAbsentVariant"
     "isNone returns true exactly when the optional is the none variant, and false for given."]
   $ defineWithDefault "isNone" "Test whether an optional is absent (none)."
@@ -156,7 +163,7 @@ isNone = withProvisions [
   ("m" ~> Optionals.match (var "m") true ("_" ~> false))
 
 map :: PrimitiveDefinition
-map = withProvisions [
+map = availableSince "0.15" $ withProvisions [
   requirement "mapsGivenLeavesNoneUnchanged"
     "map applies the given function to the contained value when the optional is given, and\
     \ leaves none completely unchanged."]
@@ -170,7 +177,7 @@ map = withProvisions [
   ("f" ~> "m" ~> Optionals.match (var "m") nothing ("x" ~> just (var "f" @@ var "x")))
 
 mapList :: PrimitiveDefinition
-mapList = defineWithDefault "mapList" "Traverse a list in the optional monad."
+mapList = availableSince "0.17.6" $ defineWithDefault "mapList" "Traverse a list in the optional monad."
   (sigWithParams [("f", "the optional-returning function to apply to each element"), ("xs", "the list to traverse")] $ TypeScheme [Name "x", Name "y"]
     ((tx Types.~> Types.optional ty) Types.~> Types.list tx Types.~> Types.optional (Types.list ty))
     mempty)
@@ -203,7 +210,7 @@ mapOptional = withProvisions [
   ("f" ~> "xs" ~> Optionals.givens (Lists.map (var "f") (var "xs")))
 
 mapSet :: PrimitiveDefinition
-mapSet = defineWithDefault "mapSet" "Traverse a set in the optional monad."
+mapSet = availableSince "0.17.6" $ defineWithDefault "mapSet" "Traverse a set in the optional monad."
   (sigWithParams [("f", "the optional-returning function to apply to each element"), ("s", "the set to traverse")] $ Types.polyConstrained [("x", [Name "ordering"]), ("y", [Name "ordering"])]
     ((tx Types.~> Types.optional ty) Types.~> Types.set tx Types.~> Types.optional (Types.set ty)))
   ["mapSet(f, s) applies f to each element of s. If every application yields given, the result is given\
@@ -223,7 +230,7 @@ mapSet = defineWithDefault "mapSet" "Traverse a set in the optional monad."
 
 -- The default value (position 1) is lazy: it is only evaluated when the optional is empty.
 match :: PrimitiveDefinition
-match = withProvisions [
+match = availableSince "0.15" $ withProvisions [
   requirement "eliminatesByVariant"
     "match returns the result of applying the given function to the contained value when the\
     \ optional is given, and returns the default value unevaluated-until-needed when the\
@@ -239,7 +246,7 @@ match = withProvisions [
    "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."]
 
 toList :: PrimitiveDefinition
-toList = withProvisions [
+toList = availableSince "0.15" $ withProvisions [
   requirement "convertsGivenToSingletonNoneToEmpty"
     "toList converts a given value to a one-element list containing it, and none to the empty\
     \ list."]
@@ -252,7 +259,9 @@ toList = withProvisions [
     ("x" ~> list [var "x"]))
 
 withDefault :: PrimitiveDefinition
-withDefault = withProvisions [
+withDefault = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.optionals.fromOptional."]
+  $ withProvisions [
   requirement "returnsContainedValueOrDefault"
     "withDefault returns the contained value when the optional is given, and the supplied\
     \ default when the optional is none."]

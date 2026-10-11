@@ -19,7 +19,30 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.effects module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.effects module.") [
+              "A value of effect<t> describes a deferred, executable computation which, when executed by a host\
+              \ interpreter, produces a value of type t; describing a computation is separate from executing it,\
+              \ and Hydra uses the effect type to keep that boundary explicit.",
+              "There is no eliminator (cases) for effects: an effect value is opaque, consumable only by further\
+              \ composition within this module or by an executor outside the language.",
+              "Every primitive in this module is pure: constructing or composing an effect description is a\
+              \ referentially transparent operation on ordinary values, and nothing observable happens until an\
+              \ executor runs the description. Effect descriptions have no identity semantics -- two equal\
+              \ descriptions are interchangeable -- so the usual pure-term transformations are valid over\
+              \ effect-building code. (Purity is independent of implementation strategy: a host may implement\
+              \ these combinators natively rather than from a default implementation.)",
+              "A host interpreter of effect<t> must honor, in addition to the purity of the combinators above:\
+              \ purity of construction (building or composing a description performs no host interaction; only\
+              \ an executor performing the described computation may interact with the host); order (when a\
+              \ combinator specifies an order between the effects it composes, an executor performs them in\
+              \ exactly that order); exactly-once (each composed effect is performed exactly once per execution,\
+              \ never skipped, never repeated); and deferral (an effect specified to run after another must not\
+              \ be performed, nor its producing function evaluated for effect, until the prior effect has run to\
+              \ completion and its value is available). These obligations are observable -- the effects are real\
+              \ host interactions -- so they are normative, not advisory.",
+              "effect<t> is total: a leaf effect always completes and yields a value (for hydra.lib.files, an\
+              \ either<FileError, t>); the obligations above govern order, multiplicity, and deferral, not\
+              \ failure short-circuiting."]}
   where
     definitions = [apply, bind, compose, foldList, map, mapList, mapOptional, mapSet, pure]
 
@@ -33,7 +56,7 @@ ty = Types.var "y"
 tz = Types.var "z"
 
 apply :: PrimitiveDefinition
-apply = withProvisions [
+apply = availableSince "0.17" $ withProvisions [
   requirement "appliesEffectfulFunctionToEffectfulArgument"
     "apply interprets the function-producing effect and the argument-producing effect, then\
     \ applies the resulting function to the resulting argument."]
@@ -47,7 +70,7 @@ apply = withProvisions [
   \ function to the argument."]
 
 bind :: PrimitiveDefinition
-bind = withProvisions [
+bind = availableSince "0.17" $ withProvisions [
   requirement "threadsResultIntoNextEffect"
     "bind passes the result of the first effect to the given function to obtain the next effect,\
     \ whose result is the overall result.",
@@ -66,7 +89,7 @@ bind = withProvisions [
    \ effect boundary explicit."]
 
 compose :: PrimitiveDefinition
-compose = withProvisions [
+compose = availableSince "0.17" $ withProvisions [
   requirement "sequencesTwoKleisliArrows"
     "compose(f, g, x) runs f on x to obtain the first effect, then runs g on that effect's result\
     \ to obtain the second effect, equivalent to bind(f(x), g)."]
@@ -79,7 +102,9 @@ compose = withProvisions [
   ["compose(f, g, x) describes an effectful computation equivalent to bind(f(x), g)."]
 
 foldList :: PrimitiveDefinition
-foldList = withProvisions [
+foldList = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.effects.foldl."]
+  $ withProvisions [
   requirement "sequencesEffectReturningStepOverList"
     "foldList sequences an effect-returning step function over the list's elements, threading the\
     \ accumulator through, and the overall result is the final accumulator.",
@@ -97,7 +122,7 @@ foldList = withProvisions [
   \ left to right."]
 
 map :: PrimitiveDefinition
-map = withProvisions [
+map = availableSince "0.17" $ withProvisions [
   requirement "appliesPureFunctionToEffectResult"
     "map interprets the given effect and applies the pure function to its result; equivalent to\
     \ bind(e, \\x -> pure(f x))."]
@@ -110,7 +135,7 @@ map = withProvisions [
    "Equivalent to bind(e, \\x -> pure(f x))."]
 
 mapList :: PrimitiveDefinition
-mapList = withProvisions [
+mapList = availableSince "0.17" $ withProvisions [
   requirement "appliesEffectReturningFunctionAndCollectsResults"
     "mapList applies the effect-returning function to each element and collects the per-element\
     \ results into a list of the same length, in order.",
@@ -127,7 +152,7 @@ mapList = withProvisions [
   \ left to right and collects the results."]
 
 mapOptional :: PrimitiveDefinition
-mapOptional = withProvisions [
+mapOptional = availableSince "0.17" $ withProvisions [
   requirement "appliesFunctionWhenPresentPassesThroughNoneWhenAbsent"
     "mapOptional over a present value applies the effect-returning function and wraps the result\
     \ in given; mapOptional over none yields none, with the function not applied.",
@@ -144,7 +169,7 @@ mapOptional = withProvisions [
   \ applies f to the contained value and wraps the result in given."]
 
 mapSet :: PrimitiveDefinition
-mapSet = withProvisions [
+mapSet = availableSince "0.17.6" $ withProvisions [
   requirement "appliesEffectReturningFunctionAndCollectsResultsAsSet"
     "mapSet applies the effect-returning function to each element and collects the per-element\
     \ results into a set, deduplicated by the result type's ordering.",
@@ -163,7 +188,7 @@ mapSet = withProvisions [
    "Requires 'ordering' constraints on both element types (the set type contract)."]
 
 pure :: PrimitiveDefinition
-pure = withProvisions [
+pure = availableSince "0.17" $ withProvisions [
   requirement "liftsValueWithoutHostInteraction"
     "pure(x) succeeds with exactly x, without requiring any host interaction."]
   $ define "pure" "Lift a pure value into an effect."

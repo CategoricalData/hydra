@@ -18,7 +18,13 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.regex module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.regex module.") [
+              "Pattern syntax and semantics are Hydra-defined and translingual: they are specified once,\
+              \ in Hydra's regular-expression specification, and the same pattern means the same thing\
+              \ on every host.",
+              "Matching is leftmost-longest: a match begins at the earliest possible position in the\
+              \ string, and among the matches beginning at that position the longest is chosen.",
+              "findAll, replaceAll, and split operate on non-overlapping matches, found left to right."]}
   where
     definitions = [find, findAll, matches, replace, replaceAll, split]
 
@@ -36,7 +42,7 @@ str3 :: Type -> Type
 str3 result = Types.string Types.~> Types.string Types.~> Types.string Types.~> result
 
 find :: PrimitiveDefinition
-find = withProvisions [
+find = availableSince "0.15" $ withProvisions [
   requirement "returnsLeftmostLongestMatch"
     "find returns the leftmost-longest substring matching the pattern, wrapped, when the pattern\
     \ matches anywhere in the string, including alternation where the longer branch wins and\
@@ -54,7 +60,7 @@ find = withProvisions [
   \ anywhere, the same as a well-formed pattern with no match."]
 
 findAll :: PrimitiveDefinition
-findAll = withProvisions [
+findAll = availableSince "0.15" $ withProvisions [
   requirement "returnsAllNonOverlappingMatchesInOrder"
     "findAll returns every leftmost-longest, non-overlapping match of the pattern in the string,\
     \ in the order they appear.",
@@ -71,7 +77,7 @@ findAll = withProvisions [
   \ matches."]
 
 matches :: PrimitiveDefinition
-matches = withProvisions [
+matches = availableSince "0.15" $ withProvisions [
   requirement "isWholeStringAnchored"
     "matches is always anchored to the whole string at both ends, regardless of explicit ^/$ in\
     \ the pattern: a match of a proper substring does not suffice, and ^/$ never match at an\
@@ -99,7 +105,7 @@ matches = withProvisions [
    "Total; an unparseable pattern yields false, the same as a well-formed pattern with no match."]
 
 replace :: PrimitiveDefinition
-replace = withProvisions [
+replace = availableSince "0.15" $ withProvisions [
   requirement "replacesLeftmostLongestMatch"
     "replace replaces the first (leftmost-longest) match of the pattern with the replacement\
     \ string, including an anchored match at the start of the string.",
@@ -118,7 +124,7 @@ replace = withProvisions [
   \ match."]
 
 replaceAll :: PrimitiveDefinition
-replaceAll = withProvisions [
+replaceAll = availableSince "0.15" $ withProvisions [
   requirement "replacesEveryNonOverlappingMatch"
     "replaceAll replaces every leftmost-longest, non-overlapping match of the pattern with the\
     \ replacement string, including when the replacement string is empty.",
@@ -136,7 +142,7 @@ replaceAll = withProvisions [
   \ match."]
 
 split :: PrimitiveDefinition
-split = withProvisions [
+split = availableSince "0.15" $ withProvisions [
   requirement "splitsOnEveryNonOverlappingMatch"
     "split returns the substrings of the string obtained by splitting on every leftmost-longest,\
     \ non-overlapping match of the pattern, including splitting on a fixed delimiter, on a\

@@ -23,7 +23,13 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.sets module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.sets module.") [
+              "Ordered sets: finite collections of distinct elements.",
+              "Hydra sets are ordered collections: iteration (toList) is in ascending element order,\
+              \ under the type's total order.",
+              "Because element ordering is part of the set type's contract, every set-typed variable in\
+              \ this module's signatures carries the ordering constraint on its element type, including\
+              \ in primitives that perform no comparison themselves."]}
   where
     -- The default-impl args below (difference/intersection/map/union/unions) carry an `:: ...Int...`
     -- placeholder instantiation. The generated `Hydra.Core.Dsl.Lib.Sets` (unlike the old `Meta.Lib.Sets`)
@@ -50,7 +56,7 @@ ssx :: Type
 ssx = Types.set sx
 
 delete :: PrimitiveDefinition
-delete = withProvisions [
+delete = availableSince "0.15" $ withProvisions [
   requirement "removesElement"
     "delete removes the given element from the set if present, leaving every other element\
     \ unchanged.",
@@ -64,7 +70,7 @@ delete = withProvisions [
    "Total. Corresponds to Haskell's Data.Set.delete :: Ord a => a -> Set a -> Set a."]
 
 difference :: PrimitiveDefinition
-difference = withProvisions [
+difference = availableSince "0.15" $ withProvisions [
   requirement "removesElementsOfSecondSet"
     "difference returns the elements of the first set that do not occur in the second set.",
   requirement "identityWhenSecondEmpty"
@@ -83,7 +89,7 @@ difference = withProvisions [
       (Sets.toList (var "s1" :: TypedTerm (S.Set Int)))) :: TypedTerm (S.Set Int -> S.Set Int -> S.Set Int))
 
 empty :: PrimitiveDefinition
-empty = withProvisions [
+empty = availableSince "0.15" $ withProvisions [
   requirement "hasNoElements"
     "empty is the set containing no elements, for any element type."]
   $ define "empty" "The empty set."
@@ -93,7 +99,7 @@ empty = withProvisions [
    "Total. Corresponds to Haskell's Data.Set.empty :: Set a."]
 
 filter :: PrimitiveDefinition
-filter = defineWithDefault "filter" "Filter a set by a predicate."
+filter = availableSince "0.17.6" $ defineWithDefault "filter" "Filter a set by a predicate."
   (setOp [("predicate", "the predicate to test each element"), ("s", "the set to filter")] ((sx Types.~> Types.boolean) Types.~> ssx Types.~> ssx))
   ["filter(p, s) returns the subset of s containing exactly the elements x for which p(x) is true.",
    "Requires an 'ordering' constraint on the element type.",
@@ -102,7 +108,7 @@ filter = defineWithDefault "filter" "Filter a set by a predicate."
     :: TypedTerm ((Int -> Bool) -> S.Set Int -> S.Set Int))
 
 fromList :: PrimitiveDefinition
-fromList = withProvisions [
+fromList = availableSince "0.15" $ withProvisions [
   requirement "collectsDistinctElements"
     "fromList returns the set of the distinct elements of the given list, discarding duplicates\
     \ and order.",
@@ -116,7 +122,7 @@ fromList = withProvisions [
    "Total. Corresponds to Haskell's Data.Set.fromList :: Ord a => [a] -> Set a."]
 
 insert :: PrimitiveDefinition
-insert = withProvisions [
+insert = availableSince "0.15" $ withProvisions [
   requirement "addsElement"
     "insert adds the given element to the set, leaving every other element unchanged.",
   requirement "noOpWhenAlreadyPresent"
@@ -128,7 +134,7 @@ insert = withProvisions [
    "Total. Corresponds to Haskell's Data.Set.insert :: Ord a => a -> Set a -> Set a."]
 
 intersection :: PrimitiveDefinition
-intersection = withProvisions [
+intersection = availableSince "0.15" $ withProvisions [
   requirement "keepsElementsInBoth"
     "intersection returns exactly the elements present in both sets.",
   requirement "emptyWhenNoOverlapOrEitherEmpty"
@@ -148,7 +154,7 @@ intersection = withProvisions [
       (Sets.toList (var "s1" :: TypedTerm (S.Set Int)))) :: TypedTerm (S.Set Int -> S.Set Int -> S.Set Int))
 
 isEmpty :: PrimitiveDefinition
-isEmpty = withProvisions [
+isEmpty = availableSince "0.15" $ withProvisions [
   requirement "testsZeroSize"
     "isEmpty returns true exactly when the set has no elements."]
   $ define "isEmpty" "Test whether a set is empty."
@@ -158,7 +164,7 @@ isEmpty = withProvisions [
    "Total. Corresponds to Haskell's Data.Set.null :: Set a -> Bool."]
 
 map :: PrimitiveDefinition
-map = withProvisions [
+map = availableSince "0.15" $ withProvisions [
   requirement "appliesFunctionToEachElement"
     "map returns the set of applying the given function to each element, deduplicating results\
     \ that collide under the output type's ordering.",
@@ -175,7 +181,7 @@ map = withProvisions [
     :: TypedTerm ((Int -> Int) -> S.Set Int -> S.Set Int))
 
 member :: PrimitiveDefinition
-member = withProvisions [
+member = availableSince "0.15" $ withProvisions [
   requirement "testsSetMembership"
     "member returns true exactly when the given value is an element of the set.",
   requirement "falseWhenAbsentOrEmpty"
@@ -188,7 +194,7 @@ member = withProvisions [
    "Total. Corresponds to Haskell's Data.Set.member :: Ord a => a -> Set a -> Bool."]
 
 singleton :: PrimitiveDefinition
-singleton = withProvisions [
+singleton = availableSince "0.15" $ withProvisions [
   requirement "wrapsOneElement"
     "singleton x returns the set containing exactly the element x."]
   $ define "singleton" "Construct a set containing a single element."
@@ -198,7 +204,7 @@ singleton = withProvisions [
    "Total. Corresponds to Haskell's Data.Set.singleton :: a -> Set a."]
 
 size :: PrimitiveDefinition
-size = withProvisions [
+size = availableSince "0.15" $ withProvisions [
   requirement "countsElements"
     "size returns the number of elements in the set, including zero for the empty set."]
   $ define "size" "Return the number of elements in a set."
@@ -208,7 +214,7 @@ size = withProvisions [
    "Total. Corresponds to Haskell's Data.Set.size :: Set a -> Int (with narrowing to int32)."]
 
 toList :: PrimitiveDefinition
-toList = withProvisions [
+toList = availableSince "0.15" $ withProvisions [
   requirement "ordersAscending"
     "toList returns the elements of the set as a list in ascending order under the element type's\
     \ ordering, regardless of insertion order.",
@@ -222,7 +228,7 @@ toList = withProvisions [
    "Total. Corresponds to Haskell's Data.Set.toAscList :: Set a -> [a]."]
 
 union :: PrimitiveDefinition
-union = withProvisions [
+union = availableSince "0.15" $ withProvisions [
   requirement "keepsElementsInEither"
     "union returns the elements that are in either set (or both), with no duplicates.",
   requirement "identityWhenEitherEmpty"
@@ -239,7 +245,7 @@ union = withProvisions [
       (Sets.toList (var "s1" :: TypedTerm (S.Set Int)))) :: TypedTerm (S.Set Int -> S.Set Int -> S.Set Int))
 
 unions :: PrimitiveDefinition
-unions = withProvisions [
+unions = availableSince "0.15" $ withProvisions [
   requirement "keepsElementsInAny"
     "unions returns the elements that occur in at least one of the given sets, equivalent to\
     \ folding union over the list starting from empty.",

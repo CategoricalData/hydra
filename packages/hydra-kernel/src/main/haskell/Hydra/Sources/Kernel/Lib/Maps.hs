@@ -24,7 +24,13 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.maps module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.maps module.") [
+              "Ordered maps: finite collections of key-value bindings, with at most one value per key.",
+              "Hydra maps are ordered collections: iteration -- elems, keys, toList -- is in ascending key\
+              \ order, under the total order defined in the ordering-and-equality specification.",
+              "Because key ordering is part of the map type's contract, every map-typed variable in this\
+              \ module's signatures carries the ordering constraint on its key type, including in primitives\
+              \ that perform no comparison themselves."]}
   where
     -- The default-impl args below carry an ':: ...Int...' placeholder: the generated 'Hydra.Dsl.Lib.*'
     -- (unlike old 'Meta.Lib.*') exposes the primitive's Ord constraint, so these polymorphic defs need a
@@ -57,7 +63,7 @@ ordKey :: [(String, String)] -> [(String, [Name])] -> Type -> TermSignature
 ordKey params extra body = sigWithParams params $ Types.polyConstrained (("k", [Name "ordering"]) : extra) body
 
 alter :: PrimitiveDefinition
-alter = withProvisions [
+alter = availableSince "0.15" $ withProvisions [
   requirement "insertsUpdatesOrDeletes"
     "alter applies the given function to the optional current value at the key: if the function\
     \ returns given(v'), that binding is set (inserting if absent, overwriting if present); if it\
@@ -83,7 +89,7 @@ alter = withProvisions [
     :: TypedTerm ((Maybe v -> Maybe v) -> Int -> M.Map Int v -> M.Map Int v))
 
 bimap :: PrimitiveDefinition
-bimap = withProvisions [
+bimap = availableSince "0.15" $ withProvisions [
   requirement "transformsKeysAndValues"
     "bimap returns a new map where each binding (k, v) becomes (fk(k), fv(v)), applying the key\
     \ function and value function independently to every binding.",
@@ -109,7 +115,7 @@ bimap = withProvisions [
     :: TypedTerm ((Int -> Int) -> (v1 -> v2) -> M.Map Int v1 -> M.Map Int v2))
 
 delete :: PrimitiveDefinition
-delete = withProvisions [
+delete = availableSince "0.15" $ withProvisions [
   requirement "removesKeyIfPresent"
     "delete removes the binding for the given key if present, leaving the rest of the map\
     \ unchanged.",
@@ -124,7 +130,7 @@ delete = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.delete :: Ord k => k -> Map k v -> Map k v."]
 
 difference :: PrimitiveDefinition
-difference = withProvisions [
+difference = availableSince "0.17.6" $ withProvisions [
   requirement "removesBindingsWithKeysInSecondMap"
     "difference returns the bindings of the first map whose keys do not occur in the second map.",
   requirement "identityWhenSecondEmpty"
@@ -139,7 +145,7 @@ difference = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.difference :: Ord k => Map k v -> Map k v -> Map k v."]
 
 elems :: PrimitiveDefinition
-elems = withProvisions [
+elems = availableSince "0.15" $ withProvisions [
   requirement "returnsValuesInKeyOrder"
     "elems returns the map's values as a list ordered by ascending key, including when keys were\
     \ inserted out of order.",
@@ -153,7 +159,7 @@ elems = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.elems :: Map k v -> [v]."]
 
 empty :: PrimitiveDefinition
-empty = withProvisions [
+empty = availableSince "0.15" $ withProvisions [
   requirement "hasNoBindings"
     "empty is the map containing no bindings."]
   $ define "empty" "The empty map."
@@ -163,7 +169,7 @@ empty = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.empty :: Map k v."]
 
 filter :: PrimitiveDefinition
-filter = withProvisions [
+filter = availableSince "0.15" $ withProvisions [
   requirement "keepsMatchingValues"
     "filter returns the submap containing exactly the bindings whose value satisfies the\
     \ predicate, preserving all matching keys.",
@@ -186,7 +192,7 @@ filter = withProvisions [
     :: TypedTerm ((v -> Bool) -> M.Map Int v -> M.Map Int v))
 
 filterWithKey :: PrimitiveDefinition
-filterWithKey = withProvisions [
+filterWithKey = availableSince "0.15" $ withProvisions [
   requirement "keepsMatchingBindings"
     "filterWithKey returns the submap containing exactly the bindings for which the predicate,\
     \ given both key and value, is true.",
@@ -210,7 +216,7 @@ filterWithKey = withProvisions [
 
 -- The default value (position 0) is lazy: it is only evaluated when the key is absent.
 findWithDefault :: PrimitiveDefinition
-findWithDefault = withProvisions [
+findWithDefault = availableSince "0.15" $ withProvisions [
   requirement "returnsBoundValueOrDefault"
     "findWithDefault returns the value bound to the key when present, or the supplied default\
     \ value when the key is absent."]
@@ -229,7 +235,7 @@ findWithDefault = withProvisions [
     :: TypedTerm (v -> Int -> M.Map Int v -> v))
 
 fromList :: PrimitiveDefinition
-fromList = withProvisions [
+fromList = availableSince "0.15" $ withProvisions [
   requirement "buildsMapFromPairs"
     "fromList returns the map containing exactly the bindings in the input list of key-value\
     \ pairs.",
@@ -247,7 +253,7 @@ fromList = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.fromList :: Ord k => [(k, v)] -> Map k v."]
 
 insert :: PrimitiveDefinition
-insert = withProvisions [
+insert = availableSince "0.15" $ withProvisions [
   requirement "addsOrOverwritesBinding"
     "insert adds the given key-value binding to the map, overwriting any existing value at that\
     \ key, including when the map was empty."]
@@ -260,7 +266,7 @@ insert = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.insert :: Ord k => k -> v -> Map k v -> Map k v."]
 
 intersection :: PrimitiveDefinition
-intersection = withProvisions [
+intersection = availableSince "0.17.6" $ withProvisions [
   requirement "keepsBindingsWithKeysInBoth"
     "intersection returns the bindings of the first map whose keys also occur in the second map,\
     \ taking the value from the first map on each common key.",
@@ -277,7 +283,7 @@ intersection = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.intersection :: Ord k => Map k v -> Map k v -> Map k v."]
 
 isEmpty :: PrimitiveDefinition
-isEmpty = withProvisions [
+isEmpty = availableSince "0.15" $ withProvisions [
   requirement "testsZeroBindings"
     "isEmpty returns true exactly when the map has no bindings."]
   $ define "isEmpty" "Test whether a map is empty."
@@ -288,7 +294,7 @@ isEmpty = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool."]
 
 keys :: PrimitiveDefinition
-keys = withProvisions [
+keys = availableSince "0.15" $ withProvisions [
   requirement "returnsKeysInOrder"
     "keys returns the map's keys as a list in ascending order, including when keys were\
     \ inserted out of order.",
@@ -302,7 +308,7 @@ keys = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.keys :: Map k v -> [k]."]
 
 lookup :: PrimitiveDefinition
-lookup = withProvisions [
+lookup = availableSince "0.15" $ withProvisions [
   requirement "returnsBoundValue"
     "lookup returns the value bound to the given key, wrapped, when the key is present.",
   requirement "noneWhenAbsentOrEmpty"
@@ -316,7 +322,7 @@ lookup = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.lookup :: Ord k => k -> Map k v -> Maybe v."]
 
 map :: PrimitiveDefinition
-map = withProvisions [
+map = availableSince "0.15" $ withProvisions [
   requirement "appliesFunctionToValues"
     "map applies the given function to every value in the map, leaving keys unchanged.",
   requirement "emptyInput"
@@ -336,7 +342,7 @@ map = withProvisions [
     :: TypedTerm ((v1 -> v2) -> M.Map Int v1 -> M.Map Int v2))
 
 mapKeys :: PrimitiveDefinition
-mapKeys = withProvisions [
+mapKeys = availableSince "0.15" $ withProvisions [
   requirement "appliesFunctionToKeys"
     "mapKeys applies the given function to every key in the map, leaving the bound values\
     \ unchanged.",
@@ -361,7 +367,7 @@ mapKeys = withProvisions [
     :: TypedTerm ((Int -> Int) -> M.Map Int v -> M.Map Int v))
 
 member :: PrimitiveDefinition
-member = withProvisions [
+member = availableSince "0.15" $ withProvisions [
   requirement "testsKeyPresence"
     "member returns true exactly when the given key is present in the map.",
   requirement "falseWhenAbsentOrEmpty"
@@ -374,7 +380,7 @@ member = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.member :: Ord k => k -> Map k v -> Bool."]
 
 singleton :: PrimitiveDefinition
-singleton = withProvisions [
+singleton = availableSince "0.15" $ withProvisions [
   requirement "wrapsOneBinding"
     "singleton returns the map containing exactly the one given key-value binding."]
   $ define "singleton" "Construct a map with a single key-value pair."
@@ -385,7 +391,7 @@ singleton = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.singleton :: k -> v -> Map k v."]
 
 size :: PrimitiveDefinition
-size = withProvisions [
+size = availableSince "0.15" $ withProvisions [
   requirement "countsBindings"
     "size returns the number of bindings in the map, including zero for the empty map."]
   $ define "size" "Return the number of key-value pairs in a map."
@@ -396,7 +402,7 @@ size = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.size :: Map k v -> Int (with narrowing to int32)."]
 
 toList :: PrimitiveDefinition
-toList = withProvisions [
+toList = availableSince "0.15" $ withProvisions [
   requirement "returnsPairsInKeyOrder"
     "toList returns the map's bindings as a list of key-value pairs ordered by ascending key,\
     \ including when keys were inserted out of order.",
@@ -410,7 +416,7 @@ toList = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.toList :: Map k v -> [(k, v)]."]
 
 union :: PrimitiveDefinition
-union = withProvisions [
+union = availableSince "0.15" $ withProvisions [
   requirement "firstMapTakesPrecedence"
     "union returns the map containing all bindings from the first map plus the bindings of the\
     \ second map whose keys are not in the first; on key collision the first map's binding is\
@@ -426,7 +432,7 @@ union = withProvisions [
    "Total. Corresponds to Haskell's Data.Map.union :: Ord k => Map k v -> Map k v -> Map k v."]
 
 unions :: PrimitiveDefinition
-unions = withProvisions [
+unions = availableSince "0.17.6" $ withProvisions [
   requirement "earliestMapTakesPrecedence"
     "unions returns the bindings of every map in the list; when a key occurs in more than one map,\
     \ the binding from the earliest such map in the list is kept.",

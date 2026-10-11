@@ -20,7 +20,9 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.pairs module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.pairs module.") [
+              "Pairs: the two-component product type. This module provides the two projections, the\
+              \ bifunctor map, and the constructor."]}
   where
     definitions = [bimap, first, Hydra.Sources.Kernel.Lib.Pairs.pair, second]
 
@@ -31,7 +33,7 @@ defineWithDefault :: String -> String -> TermSignature -> [String] -> TypedTerm 
 defineWithDefault = primitiveWithDefaultInModule module_
 
 bimap :: PrimitiveDefinition
-bimap = withProvisions [
+bimap = availableSince "0.15" $ withProvisions [
   requirement "mapsBothElementsIndependently"
     "bimap applies the first function to the pair's first element and the second function to\
     \ the pair's second element, producing a new pair of the two results, for any element and\
@@ -52,7 +54,7 @@ bimap = withProvisions [
     (var "g" @@ Pairs.second (var "p")))
 
 first :: PrimitiveDefinition
-first = withProvisions [
+first = availableSince "0.15" $ withProvisions [
   requirement "returnsFirstComponent"
     "first returns the first component of the pair unchanged, for any element type and value."]
   $ define "first" "Get the first element of a pair."
@@ -63,7 +65,7 @@ first = withProvisions [
    "Total. Corresponds to Haskell's fst :: (a, b) -> a."]
 
 pair :: PrimitiveDefinition
-pair = withProvisions [
+pair = availableSince "0.17.6" $ withProvisions [
   requirement "constructsFromTwoValues"
     "pair x y constructs the pair (x, y), preserving both components exactly as given, for any\
     \ value."]
@@ -76,7 +78,7 @@ pair = withProvisions [
    "Total. Corresponds to Haskell's (,) :: a -> b -> (a, b)."]
 
 second :: PrimitiveDefinition
-second = withProvisions [
+second = availableSince "0.15" $ withProvisions [
   requirement "returnsSecondComponent"
     "second returns the second component of the pair unchanged, for any element type and\
     \ value."]

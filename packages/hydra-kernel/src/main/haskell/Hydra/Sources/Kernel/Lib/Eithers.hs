@@ -25,7 +25,16 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.eithers module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.eithers module.") [
+              "The either type is Hydra's error/alternative type: a value of either<t1, t2> is either left(x),\
+              \ conventionally carrying an error or alternative of type t1, or right(y), carrying a success value\
+              \ of type t2.",
+              "The either type is a right-biased monad: right (the unit), map, apply, and bind operate on the\
+              \ right side, and the left type is held fixed through a computation, so a chain of steps shares a\
+              \ common error type.",
+              "This module provides the full monad row -- right, map, apply, bind, and compose -- together with\
+              \ the dual constructor left, elimination (cases), predicates, and traversal.",
+              "The fundamental eliminator is cases; every other primitive in this module can be derived from it."]}
   where
     -- The mapSet default-impl arg below carries an `:: ...Int...` placeholder instantiation: the
     -- generated `Hydra.Core.Dsl.Lib.Sets` (unlike the old `Meta.Lib.Sets`) exposes the primitive's `Ord`
@@ -52,7 +61,7 @@ ee :: Type -> Type -> Type
 ee = Types.either_
 
 apply :: PrimitiveDefinition
-apply = defineWithDefault "apply" "Applicative apply for either: combine a function under either and an argument under either."
+apply = availableSince "0.17.6" $ defineWithDefault "apply" "Applicative apply for either: combine a function under either and an argument under either."
   (sigWithParams [("ef", "the either containing the function to apply"), ("ex", "the either containing the argument")] $ TypeScheme [Name "x", Name "y", Name "z"]
     (ee tx (ty Types.~> tz) Types.~> ee tx ty Types.~> ee tx tz) mempty)
   ["apply(ef, ex) returns right(f(x)) when ef is right(f) and ex is right(x).",
@@ -66,7 +75,7 @@ apply = defineWithDefault "apply" "Applicative apply for either: combine a funct
     Eithers.bind (var "ef") ("f" ~> Eithers.map (var "f") (var "ex")))
 
 bimap :: PrimitiveDefinition
-bimap = withProvisions [
+bimap = availableSince "0.15" $ withProvisions [
   requirement "mapsBothSidesIndependently"
     "bimap applies the first function if the either is a left and the second function if it is\
     \ a right, preserving the left/right variant of the result."]
@@ -84,7 +93,7 @@ bimap = withProvisions [
       (var "e"))
 
 bind :: PrimitiveDefinition
-bind = withProvisions [
+bind = availableSince "0.15" $ withProvisions [
   requirement "chainsOnRightShortCircuitsOnLeft"
     "bind applies the continuation function when the either is a right, propagating the\
     \ continuation's own result (which may itself be a left or right); when the either is a\
@@ -103,7 +112,7 @@ bind = withProvisions [
       (var "e"))
 
 compose :: PrimitiveDefinition
-compose = defineWithDefault "compose" "Kleisli composition for either."
+compose = availableSince "0.17.6" $ defineWithDefault "compose" "Kleisli composition for either."
   (sigWithParams [("f", "the first Kleisli arrow to apply"), ("g", "the second Kleisli arrow to apply"), ("x", "the input value")] $ TypeScheme [Name "x", Name "y", Name "z", Name "w"]
     ((tx Types.~> ee tw ty) Types.~> (ty Types.~> ee tw tz) Types.~> tx Types.~> ee tw tz) mempty)
   ["compose(f, g, x) is bind(f(x), g); this defining equation is the specification, and the default\
@@ -114,7 +123,9 @@ compose = defineWithDefault "compose" "Kleisli composition for either."
     Eithers.bind (var "f" @@ var "x") (var "g"))
 
 either :: PrimitiveDefinition
-either = withProvisions [
+either = withComments [
+  "Note that the argument order also changed in the replacement: cases takes the scrutinee first."]
+  $ withProvisions [
   requirement "eliminatesByVariant"
     "either applies the first function if given a left value and the second function if given\
     \ a right value, returning that function's result directly."]
@@ -127,7 +138,10 @@ either = withProvisions [
    "Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c."]
 
 foldList :: PrimitiveDefinition
-foldList = withProvisions [
+foldList = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.eithers.foldl, to distinguish the monadic fold from the plain list fold\
+  \ hydra.lib.lists.foldl."]
+  $ withProvisions [
   requirement "foldsLeftShortCircuitingOnLeft"
     "foldList folds the given function over the list from the left, threading an accumulator\
     \ through successive right results; the first left result returned by the step function\
@@ -148,7 +162,7 @@ foldList = withProvisions [
       (var "xs"))
 
 isLeft :: PrimitiveDefinition
-isLeft = withProvisions [
+isLeft = availableSince "0.15" $ withProvisions [
   requirement "testsLeftVariant"
     "isLeft returns true exactly when the either is a left value, and false for a right\
     \ value."]
@@ -159,7 +173,7 @@ isLeft = withProvisions [
   ("e" ~> Eithers.either ("_" ~> true) ("_" ~> false) (var "e"))
 
 isRight :: PrimitiveDefinition
-isRight = withProvisions [
+isRight = availableSince "0.15" $ withProvisions [
   requirement "testsRightVariant"
     "isRight returns true exactly when the either is a right value, and false for a left\
     \ value."]
@@ -170,7 +184,7 @@ isRight = withProvisions [
   ("e" ~> Eithers.either ("_" ~> false) ("_" ~> true) (var "e"))
 
 left :: PrimitiveDefinition
-left = withProvisions [
+left = availableSince "0.17.6" $ withProvisions [
   requirement "constructsLeftVariant"
     "left wraps a value as the left (error/exceptional) variant of an either."]
   $ define "left" "Construct a left (error/exceptional) either value."
@@ -180,7 +194,7 @@ left = withProvisions [
    "Total. Corresponds to Haskell's Left :: a -> Either a b."]
 
 lefts :: PrimitiveDefinition
-lefts = withProvisions [
+lefts = availableSince "0.15" $ withProvisions [
   requirement "extractsLeftValuesPreservingOrder"
     "lefts returns the list of every left value in the input list, in original order,\
     \ discarding right values; given a list of only right values, or an empty list, the result\
@@ -202,7 +216,7 @@ lefts = withProvisions [
       (var "xs"))
 
 map :: PrimitiveDefinition
-map = withProvisions [
+map = availableSince "0.15" $ withProvisions [
   requirement "mapsRightPreservesLeft"
     "map applies the given function to the contained value when the either is a right, and\
     \ leaves a left value completely unchanged."]
@@ -220,7 +234,7 @@ map = withProvisions [
       (var "e"))
 
 mapList :: PrimitiveDefinition
-mapList = withProvisions [
+mapList = availableSince "0.15" $ withProvisions [
   requirement "traversesCollectingOrShortCircuiting"
     "mapList applies the given either-returning function to each element of the list; if every\
     \ application returns a right, the result is a right of the list of contained values in\
@@ -242,7 +256,7 @@ mapList = withProvisions [
       (var "xs"))
 
 mapOptional :: PrimitiveDefinition
-mapOptional = withProvisions [
+mapOptional = availableSince "0.15" $ withProvisions [
   requirement "traversesOptionalCollectingOrShortCircuiting"
     "mapOptional returns a right of none when the input optional is none; when the input is\
     \ given a value, it applies the given function to that value and lifts a right result back\
@@ -259,7 +273,7 @@ mapOptional = withProvisions [
       ("x" ~> Eithers.map ("y" ~> just (var "y")) (var "f" @@ var "x")))
 
 mapSet :: PrimitiveDefinition
-mapSet = withProvisions [
+mapSet = availableSince "0.15" $ withProvisions [
   requirement "traversesSetCollectingOrShortCircuiting"
     "mapSet applies the given either-returning function to each element of the set; if every\
     \ application returns a right, the result is a right of the set of contained values\
@@ -286,7 +300,9 @@ mapSet = withProvisions [
         (Sets.toList (var "s" :: TypedTerm (S.Set Int))))) :: TypedTerm ((Int -> Either Int Int) -> S.Set Int -> Either Int (S.Set Int)))
 
 partition :: PrimitiveDefinition
-partition = withProvisions [
+partition = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.eithers.partitionEithers."]
+  $ withProvisions [
   requirement "splitsIntoLeftsAndRights"
     "partition returns a pair of (every left value in the input, every right value in the\
     \ input), each preserving original relative order; an all-left, all-right, or empty input\
@@ -309,7 +325,7 @@ partition = withProvisions [
       (var "xs"))
 
 right :: PrimitiveDefinition
-right = withProvisions [
+right = availableSince "0.17.6" $ withProvisions [
   requirement "constructsRightVariant"
     "right wraps a value as the right (success/normal) variant of an either."]
   $ define "right" "Construct a right (success/normal) either value."
@@ -319,7 +335,7 @@ right = withProvisions [
    "Total. Corresponds to Haskell's Right :: b -> Either a b."]
 
 rights :: PrimitiveDefinition
-rights = withProvisions [
+rights = availableSince "0.15" $ withProvisions [
   requirement "extractsRightValuesPreservingOrder"
     "rights returns the list of every right value in the input list, in original order,\
     \ discarding left values; given a list of only left values, or an empty list, the result\

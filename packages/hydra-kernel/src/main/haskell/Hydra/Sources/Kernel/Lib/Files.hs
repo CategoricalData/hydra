@@ -21,7 +21,9 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.files module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.files module.") [
+              "Every primitive in this module is effectful: it describes a computation against the file system,\
+              \ and executing that computation is separate from describing it."]}
   where
     definitions = [appendFile, copy, createDirectory, createSymlink, exists, listDirectory,
                    readFile, readSymlink, removeDirectory, removeFile, rename, status, writeFile]
@@ -38,7 +40,7 @@ result :: Type -> Type
 result t = effect (Types.either_ fileError t)
 
 appendFile :: PrimitiveDefinition
-appendFile = withProvisions [
+appendFile = availableSince "0.17" $ withProvisions [
   requirement "preservesExistingContentsAndAppends"
     "appendFile adds the given bytes to the end of a file's existing contents, preserving what\
     \ was already there, rather than replacing it as writeFile does."]
@@ -76,7 +78,10 @@ copy = withProvisions [
   \ returned as left(error); success is returned as right(unit)."]
 
 createDirectory :: PrimitiveDefinition
-createDirectory = withProvisions [
+createDirectory = availableSince "0.17" $ withComments [
+  "0.18 is planned to drop the leading recursive flag in favor of a flagless createDirectoryTree\
+  \ primitive, mirroring the copy/copyFile+copyTree split; not yet implemented."]
+  $ withProvisions [
   requirement "createsDirectoryThatThenExists"
     "createDirectory creates a directory at the given path such that a subsequent exists check on\
     \ that path reports true."]
@@ -93,7 +98,7 @@ createDirectory = withProvisions [
   \ right(unit)."]
 
 createSymlink :: PrimitiveDefinition
-createSymlink = withProvisions [
+createSymlink = availableSince "0.17.6" $ withProvisions [
   requirement "createsLinkObservableAsLinkType"
     "createSymlink creates a symbolic link such that status(followLinks=false) on the link path\
     \ reports fileType link; status(followLinks=true) on the link path reports the metadata of the\
@@ -126,7 +131,7 @@ createSymlink = withProvisions [
   \ right(unit)."]
 
 exists :: PrimitiveDefinition
-exists = withProvisions [
+exists = availableSince "0.17" $ withProvisions [
   requirement "falseForMissingPath"
     "exists returns right(false) for a missing path, without erroring on absence.",
   requirement "trueAfterCreation"
@@ -141,7 +146,7 @@ exists = withProvisions [
   \ A recoverable file-system failure is returned as left(error)."]
 
 listDirectory :: PrimitiveDefinition
-listDirectory = withProvisions [
+listDirectory = availableSince "0.17" $ withProvisions [
   requirement "listsImmediateEntries"
     "listDirectory returns exactly the immediate entries of the directory, one entry per file\
     \ actually present, excluding the special \".\" and \"..\" entries."]
@@ -154,7 +159,7 @@ listDirectory = withProvisions [
   \ file-system failure is returned as left(error)."]
 
 readFile :: PrimitiveDefinition
-readFile = withProvisions [
+readFile = availableSince "0.17" $ withProvisions [
   requirement "roundTripsWithWriteFile"
     "readFile returns exactly the bytes most recently written to a file via writeFile (and any\
     \ subsequent appendFile calls), byte-exactly, with no character decoding or translation."]
@@ -167,7 +172,7 @@ readFile = withProvisions [
   \ failure is returned as left(error); success is returned as right(contents)."]
 
 readSymlink :: PrimitiveDefinition
-readSymlink = withProvisions [
+readSymlink = availableSince "0.17.6" $ withProvisions [
   requirement "returnsStoredTargetVerbatim"
     "readSymlink returns the target exactly as stored by createSymlink, with no chain resolution\
     \ or canonicalization, including a relative target returned relative.",
@@ -188,7 +193,11 @@ readSymlink = withProvisions [
   \ success is returned as right(target)."]
 
 removeDirectory :: PrimitiveDefinition
-removeDirectory = withProvisions [
+removeDirectory = availableSince "0.17" $ withComments [
+  "0.18 is planned to drop the leading recursive flag in favor of a flagless\
+  \ removeDirectoryTree primitive, mirroring the copy/copyFile+copyTree split; not yet\
+  \ implemented."]
+  $ withProvisions [
   requirement "removesEmptyDirectoryWhenNonRecursive"
     "removeDirectory with recursive=false removes an empty directory, so that it no longer\
     \ exists.",
@@ -211,7 +220,7 @@ removeDirectory = withProvisions [
   \ success is returned as right(unit)."]
 
 removeFile :: PrimitiveDefinition
-removeFile = withProvisions [
+removeFile = availableSince "0.17" $ withProvisions [
   requirement "deletesFileSoItNoLongerExists"
     "removeFile deletes the file at the given path, so that a subsequent exists check reports\
     \ false."]
@@ -223,7 +232,7 @@ removeFile = withProvisions [
   \ returned as right(unit)."]
 
 rename :: PrimitiveDefinition
-rename = withProvisions [
+rename = availableSince "0.17" $ withProvisions [
   requirement "movesToNewPathPreservingContents"
     "rename moves a file (or directory) from source to destination, such that the original\
     \ contents are readable at the destination path afterward."]
@@ -238,7 +247,7 @@ rename = withProvisions [
   \ right(unit)."]
 
 status :: PrimitiveDefinition
-status = withProvisions [
+status = availableSince "0.17" $ withProvisions [
   requirement "reportsCorrectTypeAndSizeForRegularFileAndDirectory"
     "status reports the correct fileType and size for a regular file (size equal to its byte\
     \ count) and reports directory as the fileType for a directory.",
@@ -270,7 +279,7 @@ status = withProvisions [
   \ left(error). Use exists for a boolean presence check that does not error on absence."]
 
 writeFile :: PrimitiveDefinition
-writeFile = withProvisions [
+writeFile = availableSince "0.17" $ withProvisions [
   requirement "replacesCompleteFileContents"
     "writeFile replaces the complete contents of the file at the given path with the given bytes,\
     \ creating the file if it does not already exist."]

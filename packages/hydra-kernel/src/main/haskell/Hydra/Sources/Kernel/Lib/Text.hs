@@ -17,7 +17,15 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.text module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.text module.") [
+              "Text encoding.",
+              "These primitives are the canonical UTF-8 conversions between Hydra's binary and string\
+              \ types, for interpreting bytes as text. They are distinct from\
+              \ hydra.lib.literals.binaryToBase64 / base64ToBinary, which are total, round-trippable\
+              \ base64 conversions for embedding arbitrary binary in a string context (e.g. a JSON\
+              \ value) -- use those when the bytes are not necessarily text.",
+              "Both text primitives are pure: file and other byte-oriented I/O is performed separately\
+              \ (see hydra.lib.files), with encoding and decoding applied before or after."]}
   where
     definitions = [decodeUtf8, encodeUtf8]
 
@@ -25,7 +33,7 @@ define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
 
 decodeUtf8 :: PrimitiveDefinition
-decodeUtf8 = withProvisions [
+decodeUtf8 = availableSince "0.17" $ withProvisions [
   requirement "decodesValidUtf8"
     "decodeUtf8 decodes a valid UTF-8 byte sequence to its text, wrapped in right, including the\
     \ empty byte sequence, ASCII-only text, and multi-byte (non-ASCII) text.",
@@ -40,7 +48,7 @@ decodeUtf8 = withProvisions [
    "Pairs with hydra.core.lib.files.readFile, which returns raw bytes."]
 
 encodeUtf8 :: PrimitiveDefinition
-encodeUtf8 = withProvisions [
+encodeUtf8 = availableSince "0.17" $ withProvisions [
   requirement "encodesExactUtf8Bytes"
     "encodeUtf8 returns the exact UTF-8 byte sequence for the given text, for the empty string,\
     \ ASCII-only text, and multi-byte (non-ASCII) text."]

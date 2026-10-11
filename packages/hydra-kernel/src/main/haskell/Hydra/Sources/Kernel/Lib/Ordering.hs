@@ -21,7 +21,13 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.ordering module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.ordering module.") [
+              "Every type admitted by the ordering constraint has a total order, defined per type\
+              \ constructor: integers numerically; strings lexicographically by code point; lists\
+              \ element-wise; records by field in declaration order; union variants by declaration\
+              \ order; floats per the extended total order.",
+              "For floating-point values the order is the extended total order, under which compare(x,\
+              \ y) is equalTo exactly when hydra.lib.equality.equal(x, y) is true."]}
   where
     definitions = [compare, gt, gte, lt, lte, max, min]
 
@@ -36,7 +42,9 @@ tx :: Type
 tx = Types.var "x"
 
 compare :: PrimitiveDefinition
-compare = withProvisions [
+compare = availableSince "0.17.6" $ withComments [
+  "Moved from hydra.lib.equality.compare."]
+  $ withProvisions [
   requirement "threeWayClassification"
     "compare(x, y) returns lessThan, equalTo, or greaterThan classifying x relative to y under\
     \ the type's ordering, for integers, strings (lexicographic, by Unicode code point), floats,\
@@ -60,7 +68,9 @@ compare = withProvisions [
    "Total. Corresponds to Haskell's compare :: Ord a => a -> a -> Ordering."]
 
 gt :: PrimitiveDefinition
-gt = withProvisions [
+gt = availableSince "0.17.6" $ withComments [
+  "Moved from hydra.lib.equality.gt."]
+  $ withProvisions [
   requirement "strictGreaterThan"
     "gt(x, y) returns true exactly when x is strictly greater than y under the type's ordering,\
     \ for integers, floats, and strings; equal values and lesser values both return false."]
@@ -72,7 +82,9 @@ gt = withProvisions [
    "Total. Corresponds to Haskell's (>) :: Ord a => a -> a -> Bool."]
 
 gte :: PrimitiveDefinition
-gte = withProvisions [
+gte = availableSince "0.17.6" $ withComments [
+  "Moved from hydra.lib.equality.gte."]
+  $ withProvisions [
   requirement "greaterThanOrEqual"
     "gte(x, y) returns true when x is greater than or strictly equal to y under the type's\
     \ ordering, for integers, floats, strings, and decimals -- including the decimal\
@@ -86,7 +98,9 @@ gte = withProvisions [
    "Total. Corresponds to Haskell's (>=) :: Ord a => a -> a -> Bool."]
 
 lt :: PrimitiveDefinition
-lt = withProvisions [
+lt = availableSince "0.17.6" $ withComments [
+  "Moved from hydra.lib.equality.lt."]
+  $ withProvisions [
   requirement "strictLessThan"
     "lt(x, y) returns true exactly when x is strictly less than y under the type's ordering, for\
     \ integers, floats, and strings; equal values and greater values both return false."]
@@ -98,7 +112,9 @@ lt = withProvisions [
    "Total. Corresponds to Haskell's (<) :: Ord a => a -> a -> Bool."]
 
 lte :: PrimitiveDefinition
-lte = withProvisions [
+lte = availableSince "0.17.6" $ withComments [
+  "Moved from hydra.lib.equality.lte."]
+  $ withProvisions [
   requirement "lessThanOrEqual"
     "lte(x, y) returns true when x is less than or strictly equal to y under the type's\
     \ ordering, for integers, floats, strings, and decimals -- including the decimal\
@@ -111,7 +127,9 @@ lte = withProvisions [
    "Total. Corresponds to Haskell's (<=) :: Ord a => a -> a -> Bool."]
 
 max :: PrimitiveDefinition
-max = withProvisions [
+max = availableSince "0.17.6" $ withComments [
+  "Moved from hydra.lib.equality.max."]
+  $ withProvisions [
   requirement "returnsLargerOperand"
     "max(x, y) returns whichever of x and y is larger under the type's ordering; when x and y\
     \ are equal, max returns y (matching Haskell's tie-breaking convention) -- holds for\
@@ -126,7 +144,9 @@ max = withProvisions [
   ("x" ~> "y" ~> Logic.ifElse (Ordering.gte (var "x") (var "y")) (var "x" :: TypedTerm a) (var "y"))
 
 min :: PrimitiveDefinition
-min = withProvisions [
+min = availableSince "0.17.6" $ withComments [
+  "Moved from hydra.lib.equality.min."]
+  $ withProvisions [
   requirement "returnsSmallerOperand"
     "min(x, y) returns whichever of x and y is smaller under the type's ordering; when x and y\
     \ are equal, min returns x (matching Haskell's tie-breaking convention) -- holds for\

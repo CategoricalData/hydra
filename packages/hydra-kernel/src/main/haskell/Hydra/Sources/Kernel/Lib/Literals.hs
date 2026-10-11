@@ -18,7 +18,14 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.literals module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.literals module.") [
+              "Conversion and parse/print for literal values.",
+              "The numeric conversion primitives (bigintToInt32, float64ToFloat32, ...) convert between\
+              \ Hydra's literal numeric types; lossless conversions are exact, and each lossy conversion\
+              \ states its truncation or rounding behavior in its own documentation.",
+              "The parseX primitives are pure conversions from text to values, with an optional codomain\
+              \ wherever parsing can fail; the printX primitives are the pure conversions back from\
+              \ values to text."]}
   where
     definitions = [base64ToBinary,
                    bigintToDecimal, bigintToInt16, bigintToInt32, bigintToInt64, bigintToInt8,
@@ -46,7 +53,9 @@ fn :: (String, String) -> Type -> Type -> TermSignature
 fn param a b = sigWithParams [param] $ TypeScheme [] (a Types.~> b) mempty
 
 base64ToBinary :: PrimitiveDefinition
-base64ToBinary = withProvisions [
+base64ToBinary = availableSince "0.18" $ withComments [
+  "Renamed from hydra.lib.literals.stringToBinary."]
+  $ withProvisions [
   requirement "decodesStandardBase64"
     "base64ToBinary decodes a standard base64 (RFC 4648) ASCII string to the binary data it\
     \ represents, including the empty string decoding to empty binary data."]
@@ -57,7 +66,7 @@ base64ToBinary = withProvisions [
   \ on strings which are not valid base64 is host-defined."]
 
 bigintToDecimal :: PrimitiveDefinition
-bigintToDecimal = withProvisions [
+bigintToDecimal = availableSince "0.15" $ withProvisions [
   requirement "losslessConversion"
     "bigintToDecimal returns the exact decimal representation of a bigint, with no precision loss,\
     \ for positive, negative, and zero values."]
@@ -67,7 +76,7 @@ bigintToDecimal = withProvisions [
    "Total."]
 
 bigintToInt16 :: PrimitiveDefinition
-bigintToInt16 = withProvisions [
+bigintToInt16 = availableSince "0.15" $ withProvisions [
   requirement "convertsInRange"
     "bigintToInt16 returns the int16 with the same numeric value as the bigint, for positive and\
     \ negative values within the int16 range.",
@@ -81,7 +90,7 @@ bigintToInt16 = withProvisions [
    "Total."]
 
 bigintToInt32 :: PrimitiveDefinition
-bigintToInt32 = withProvisions [
+bigintToInt32 = availableSince "0.15" $ withProvisions [
   requirement "convertsInRange"
     "bigintToInt32 returns the int32 with the same numeric value as the bigint, for positive and\
     \ negative values within the int32 range.",
@@ -96,7 +105,7 @@ bigintToInt32 = withProvisions [
    "Total."]
 
 bigintToInt64 :: PrimitiveDefinition
-bigintToInt64 = withProvisions [
+bigintToInt64 = availableSince "0.15" $ withProvisions [
   requirement "convertsInRange"
     "bigintToInt64 returns the int64 with the same numeric value as the bigint, for positive and\
     \ negative values within the int64 range."]
@@ -106,7 +115,7 @@ bigintToInt64 = withProvisions [
    "Total."]
 
 bigintToInt8 :: PrimitiveDefinition
-bigintToInt8 = withProvisions [
+bigintToInt8 = availableSince "0.15" $ withProvisions [
   requirement "convertsInRange"
     "bigintToInt8 returns the int8 with the same numeric value as the bigint, for positive and\
     \ negative values within the int8 range.",
@@ -120,7 +129,7 @@ bigintToInt8 = withProvisions [
    "Total."]
 
 bigintToUint16 :: PrimitiveDefinition
-bigintToUint16 = withProvisions [
+bigintToUint16 = availableSince "0.15" $ withProvisions [
   requirement "convertsInRange"
     "bigintToUint16 returns the uint16 with the same numeric value as the bigint, for a zero or\
     \ typical in-range value."]
@@ -130,7 +139,7 @@ bigintToUint16 = withProvisions [
    "Total."]
 
 bigintToUint32 :: PrimitiveDefinition
-bigintToUint32 = withProvisions [
+bigintToUint32 = availableSince "0.15" $ withProvisions [
   requirement "convertsInRange"
     "bigintToUint32 returns the uint32 with the same numeric value as the bigint, for a zero or\
     \ typical in-range value."]
@@ -140,7 +149,7 @@ bigintToUint32 = withProvisions [
    "Total."]
 
 bigintToUint64 :: PrimitiveDefinition
-bigintToUint64 = withProvisions [
+bigintToUint64 = availableSince "0.15" $ withProvisions [
   requirement "convertsInRange"
     "bigintToUint64 returns the uint64 with the same numeric value as the bigint, for a zero or\
     \ typical in-range value."]
@@ -150,7 +159,7 @@ bigintToUint64 = withProvisions [
    "Total."]
 
 bigintToUint8 :: PrimitiveDefinition
-bigintToUint8 = withProvisions [
+bigintToUint8 = availableSince "0.15" $ withProvisions [
   requirement "convertsInRange"
     "bigintToUint8 returns the uint8 with the same numeric value as the bigint, for a zero or\
     \ typical in-range value."]
@@ -160,7 +169,9 @@ bigintToUint8 = withProvisions [
    "Total."]
 
 binaryToBase64 :: PrimitiveDefinition
-binaryToBase64 = withProvisions [
+binaryToBase64 = availableSince "0.18" $ withComments [
+  "Renamed from hydra.lib.literals.binaryToString."]
+  $ withProvisions [
   requirement "encodesStandardBase64"
     "binaryToBase64 encodes binary data as a standard base64 (RFC 4648) ASCII string, including\
     \ empty binary data encoding to the empty string."]
@@ -172,7 +183,7 @@ binaryToBase64 = withProvisions [
   \ text, use hydra.core.lib.text.decodeUtf8 instead."]
 
 binaryToBytes :: PrimitiveDefinition
-binaryToBytes = withProvisions [
+binaryToBytes = availableSince "0.15" $ withProvisions [
   requirement "returnsUnsignedByteValues"
     "binaryToBytes returns the bytes of the binary data as a list of int32 values in [0, 255],\
     \ preserving byte order, including byte values above 127 (which remain unsigned, not\
@@ -186,7 +197,7 @@ binaryToBytes = withProvisions [
    "Total."]
 
 decimalToBigint :: PrimitiveDefinition
-decimalToBigint = withProvisions [
+decimalToBigint = availableSince "0.15" $ withProvisions [
   requirement "convertsWholeNumbers"
     "decimalToBigint returns the bigint with the same numeric value as a whole-number decimal, for\
     \ positive, negative, and zero values.",
@@ -198,7 +209,7 @@ decimalToBigint = withProvisions [
    "Total."]
 
 decimalToFloat32 :: PrimitiveDefinition
-decimalToFloat32 = withProvisions [
+decimalToFloat32 = availableSince "0.15" $ withProvisions [
   requirement "convertsExactlyRepresentableValues"
     "decimalToFloat32 returns the float32 value with the same numeric value as a decimal that is\
     \ exactly representable in binary32, for zero and whole-number values."]
@@ -208,7 +219,7 @@ decimalToFloat32 = withProvisions [
    "Total."]
 
 decimalToFloat64 :: PrimitiveDefinition
-decimalToFloat64 = withProvisions [
+decimalToFloat64 = availableSince "0.15" $ withProvisions [
   requirement "convertsExactlyRepresentableValues"
     "decimalToFloat64 returns the float64 value with the same numeric value as a decimal that is\
     \ exactly representable in binary64, for zero and whole-number values."]
@@ -218,7 +229,7 @@ decimalToFloat64 = withProvisions [
    "Total."]
 
 float32ToDecimal :: PrimitiveDefinition
-float32ToDecimal = withProvisions [
+float32ToDecimal = availableSince "0.15" $ withProvisions [
   requirement "convertsExactlyRepresentableValues"
     "float32ToDecimal returns the exact decimal representation of a binary32 value, for zero and\
     \ whole-number values."]
@@ -229,7 +240,7 @@ float32ToDecimal = withProvisions [
    "Total."]
 
 float32ToFloat64 :: PrimitiveDefinition
-float32ToFloat64 = withProvisions [
+float32ToFloat64 = availableSince "0.15" $ withProvisions [
   requirement "losslessWidening"
     "float32ToFloat64 returns the float64 value with the same numeric value as a float32, with no\
     \ precision loss, for positive, negative, and zero values."]
@@ -239,7 +250,7 @@ float32ToFloat64 = withProvisions [
    "Total."]
 
 float64ToDecimal :: PrimitiveDefinition
-float64ToDecimal = withProvisions [
+float64ToDecimal = availableSince "0.15" $ withProvisions [
   requirement "convertsExactlyRepresentableValues"
     "float64ToDecimal returns the exact decimal representation of a binary64 value, for zero and\
     \ whole-number values."]
@@ -250,7 +261,7 @@ float64ToDecimal = withProvisions [
    "Total."]
 
 float64ToFloat32 :: PrimitiveDefinition
-float64ToFloat32 = withProvisions [
+float64ToFloat32 = availableSince "0.15" $ withProvisions [
   requirement "convertsExactlyRepresentableValues"
     "float64ToFloat32 returns the float32 value with the same numeric value as a float64 that is\
     \ exactly representable in binary32, for positive, negative, and zero values."]
@@ -261,7 +272,7 @@ float64ToFloat32 = withProvisions [
    "Total."]
 
 int16ToBigint :: PrimitiveDefinition
-int16ToBigint = withProvisions [
+int16ToBigint = availableSince "0.15" $ withProvisions [
   requirement "losslessConversion"
     "int16ToBigint returns the bigint with the same numeric value as the int16, with no precision\
     \ loss, for positive and negative values."]
@@ -271,7 +282,7 @@ int16ToBigint = withProvisions [
    "Total."]
 
 int32ToBigint :: PrimitiveDefinition
-int32ToBigint = withProvisions [
+int32ToBigint = availableSince "0.15" $ withProvisions [
   requirement "losslessConversion"
     "int32ToBigint returns the bigint with the same numeric value as the int32, with no precision\
     \ loss, for positive, negative, and zero values."]
@@ -281,7 +292,7 @@ int32ToBigint = withProvisions [
    "Total."]
 
 int64ToBigint :: PrimitiveDefinition
-int64ToBigint = withProvisions [
+int64ToBigint = availableSince "0.15" $ withProvisions [
   requirement "losslessConversion"
     "int64ToBigint returns the bigint with the same numeric value as the int64, with no precision\
     \ loss, for positive and negative values."]
@@ -291,7 +302,7 @@ int64ToBigint = withProvisions [
    "Total."]
 
 int8ToBigint :: PrimitiveDefinition
-int8ToBigint = withProvisions [
+int8ToBigint = availableSince "0.15" $ withProvisions [
   requirement "losslessConversion"
     "int8ToBigint returns the bigint with the same numeric value as the int8, with no precision\
     \ loss, for positive and negative values including the int8 min/max boundary."]
@@ -301,7 +312,9 @@ int8ToBigint = withProvisions [
    "Total."]
 
 parseBigint :: PrimitiveDefinition
-parseBigint = withProvisions [
+parseBigint = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.readBigint."]
+  $ withProvisions [
   requirement "parsesValidLiterals"
     "parseBigint returns the bigint parsed from a valid bigint literal, wrapped, for positive,\
     \ negative, zero, and arbitrarily large values.",
@@ -317,7 +330,9 @@ parseBigint = withProvisions [
    "Total."]
 
 parseBoolean :: PrimitiveDefinition
-parseBoolean = withProvisions [
+parseBoolean = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.readBoolean."]
+  $ withProvisions [
   requirement "parsesExactLowercaseLiterals"
     "parseBoolean returns the wrapped boolean true for the exact string \"true\" and false for\
     \ \"false\".",
@@ -332,7 +347,9 @@ parseBoolean = withProvisions [
    "Total."]
 
 parseDecimal :: PrimitiveDefinition
-parseDecimal = withProvisions [
+parseDecimal = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.readDecimal."]
+  $ withProvisions [
   requirement "parsesValidLiterals"
     "parseDecimal returns the decimal parsed from a valid decimal literal, wrapped, for positive,\
     \ negative, and zero values.",
@@ -346,7 +363,9 @@ parseDecimal = withProvisions [
    "Total."]
 
 parseFloat32 :: PrimitiveDefinition
-parseFloat32 = withProvisions [
+parseFloat32 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.readFloat32."]
+  $ withProvisions [
   requirement "parsesValidLiterals"
     "parseFloat32 returns the float32 value closest to the number parsed from a valid literal,\
     \ wrapped, for positive and negative values.",
@@ -361,7 +380,9 @@ parseFloat32 = withProvisions [
    "Total."]
 
 parseFloat64 :: PrimitiveDefinition
-parseFloat64 = withProvisions [
+parseFloat64 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.readFloat64."]
+  $ withProvisions [
   requirement "parsesValidLiterals"
     "parseFloat64 returns the float64 value closest to the number parsed from a valid literal,\
     \ wrapped, for positive and negative values.",
@@ -376,7 +397,9 @@ parseFloat64 = withProvisions [
    "Total."]
 
 parseInt16 :: PrimitiveDefinition
-parseInt16 = withProvisions [
+parseInt16 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.readInt16."]
+  $ withProvisions [
   requirement "parsesValidLiterals"
     "parseInt16 returns the int16 parsed from a valid integer literal within range, wrapped, for\
     \ positive and negative values.",
@@ -389,7 +412,9 @@ parseInt16 = withProvisions [
    "Total."]
 
 parseInt32 :: PrimitiveDefinition
-parseInt32 = withProvisions [
+parseInt32 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.readInt32."]
+  $ withProvisions [
   requirement "parsesValidLiterals"
     "parseInt32 returns the int32 parsed from a valid integer literal within range, wrapped, for\
     \ positive and negative values.",
@@ -402,7 +427,9 @@ parseInt32 = withProvisions [
    "Total."]
 
 parseInt64 :: PrimitiveDefinition
-parseInt64 = withProvisions [
+parseInt64 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.readInt64."]
+  $ withProvisions [
   requirement "parsesValidLiterals"
     "parseInt64 returns the int64 parsed from a valid integer literal within range, wrapped, for\
     \ positive and negative values.",
@@ -415,7 +442,9 @@ parseInt64 = withProvisions [
    "Total."]
 
 parseInt8 :: PrimitiveDefinition
-parseInt8 = withProvisions [
+parseInt8 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.readInt8."]
+  $ withProvisions [
   requirement "parsesValidLiterals"
     "parseInt8 returns the int8 parsed from a valid integer literal within range, wrapped, for\
     \ positive and negative values including the int8 min/max boundary.",
@@ -429,7 +458,9 @@ parseInt8 = withProvisions [
    "Total."]
 
 parseString :: PrimitiveDefinition
-parseString = withProvisions [
+parseString = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.readString."]
+  $ withProvisions [
   requirement "parsesQuotedLiterals"
     "parseString returns the decoded payload of a double-quoted string literal, wrapped.",
   requirement "noneOnUnquotedInput"
@@ -445,7 +476,9 @@ parseString = withProvisions [
    "Total. The inverse of printString."]
 
 parseUint16 :: PrimitiveDefinition
-parseUint16 = withProvisions [
+parseUint16 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.readUint16."]
+  $ withProvisions [
   requirement "parsesValidLiterals"
     "parseUint16 returns the uint16 parsed from a valid non-negative integer literal within range,\
     \ wrapped.",
@@ -459,7 +492,9 @@ parseUint16 = withProvisions [
    "Total."]
 
 parseUint32 :: PrimitiveDefinition
-parseUint32 = withProvisions [
+parseUint32 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.readUint32."]
+  $ withProvisions [
   requirement "parsesValidLiterals"
     "parseUint32 returns the uint32 parsed from a valid non-negative integer literal within range,\
     \ wrapped, including at the maximum representable value (2^32-1).",
@@ -476,7 +511,9 @@ parseUint32 = withProvisions [
    "Total."]
 
 parseUint64 :: PrimitiveDefinition
-parseUint64 = withProvisions [
+parseUint64 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.readUint64."]
+  $ withProvisions [
   requirement "parsesValidLiterals"
     "parseUint64 returns the uint64 parsed from a valid non-negative integer literal within range,\
     \ wrapped, including large in-range values.",
@@ -493,7 +530,9 @@ parseUint64 = withProvisions [
    "Total."]
 
 parseUint8 :: PrimitiveDefinition
-parseUint8 = withProvisions [
+parseUint8 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.readUint8."]
+  $ withProvisions [
   requirement "parsesValidLiterals"
     "parseUint8 returns the uint8 parsed from a valid non-negative integer literal within range,\
     \ wrapped, including at the maximum representable value (255).",
@@ -507,7 +546,9 @@ parseUint8 = withProvisions [
    "Total."]
 
 printBigint :: PrimitiveDefinition
-printBigint = withProvisions [
+printBigint = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.showBigint."]
+  $ withProvisions [
   requirement "rendersCanonicalDecimal"
     "printBigint renders a bigint as its canonical decimal string, with a leading minus sign for\
     \ negative values and no leading sign for positive values or zero."]
@@ -518,7 +559,9 @@ printBigint = withProvisions [
    "Total. The inverse of parseBigint."]
 
 printBoolean :: PrimitiveDefinition
-printBoolean = withProvisions [
+printBoolean = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.showBoolean."]
+  $ withProvisions [
   requirement "rendersLowercaseLiterals"
     "printBoolean renders true as the exact string \"true\" and false as \"false\"."]
   $ define "printBoolean" "Render a boolean as a string." (fn ("b", "the boolean to render") Types.boolean Types.string)
@@ -526,7 +569,9 @@ printBoolean = withProvisions [
    "Total. The inverse of parseBoolean."]
 
 printDecimal :: PrimitiveDefinition
-printDecimal = withProvisions [
+printDecimal = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.showDecimal."]
+  $ withProvisions [
   requirement "rendersCanonicalDecimal"
     "printDecimal renders a decimal as a string, for positive and negative whole and fractional\
     \ values, that always round-trips through parseDecimal back to the original value."]
@@ -537,7 +582,9 @@ printDecimal = withProvisions [
    "Total."]
 
 printFloat32 :: PrimitiveDefinition
-printFloat32 = withProvisions [
+printFloat32 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.showFloat32."]
+  $ withProvisions [
   requirement "rendersRoundTrippableRepresentation"
     "printFloat32 renders a float32 as a string, for positive, negative, zero, and small-magnitude\
     \ values, that round-trips through parseFloat32 back to the original value."]
@@ -548,7 +595,9 @@ printFloat32 = withProvisions [
    "Total."]
 
 printFloat64 :: PrimitiveDefinition
-printFloat64 = withProvisions [
+printFloat64 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.showFloat64."]
+  $ withProvisions [
   requirement "rendersRoundTrippableRepresentation"
     "printFloat64 renders a float64 as a string, for positive, zero, and small-magnitude values,\
     \ that round-trips through parseFloat64 back to the original value."]
@@ -559,7 +608,9 @@ printFloat64 = withProvisions [
    "Total."]
 
 printInt16 :: PrimitiveDefinition
-printInt16 = withProvisions [
+printInt16 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.showInt16."]
+  $ withProvisions [
   requirement "rendersCanonicalDecimal"
     "printInt16 renders an int16 as its canonical decimal string, with a leading minus sign for\
     \ negative values."]
@@ -569,7 +620,9 @@ printInt16 = withProvisions [
    "Total. The inverse of parseInt16."]
 
 printInt32 :: PrimitiveDefinition
-printInt32 = withProvisions [
+printInt32 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.showInt32."]
+  $ withProvisions [
   requirement "rendersCanonicalDecimal"
     "printInt32 renders an int32 as its canonical decimal string, with a leading minus sign for\
     \ negative values and no sign for zero."]
@@ -579,7 +632,9 @@ printInt32 = withProvisions [
    "Total. The inverse of parseInt32."]
 
 printInt64 :: PrimitiveDefinition
-printInt64 = withProvisions [
+printInt64 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.showInt64."]
+  $ withProvisions [
   requirement "rendersCanonicalDecimal"
     "printInt64 renders an int64 as its canonical decimal string, with a leading minus sign for\
     \ negative values."]
@@ -589,7 +644,9 @@ printInt64 = withProvisions [
    "Total. The inverse of parseInt64."]
 
 printInt8 :: PrimitiveDefinition
-printInt8 = withProvisions [
+printInt8 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.showInt8."]
+  $ withProvisions [
   requirement "rendersCanonicalDecimal"
     "printInt8 renders an int8 as its canonical decimal string, with a leading minus sign for\
     \ negative values."]
@@ -599,7 +656,9 @@ printInt8 = withProvisions [
    "Total. The inverse of parseInt8."]
 
 printString :: PrimitiveDefinition
-printString = withProvisions [
+printString = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.showString."]
+  $ withProvisions [
   requirement "quotesAndPassesThroughPlainCharacters"
     "printString wraps a string in double quotes, passing plain ASCII characters through\
     \ unescaped, for the empty string and ordinary text.",
@@ -618,7 +677,9 @@ printString = withProvisions [
    "Total. The inverse of parseString."]
 
 printUint16 :: PrimitiveDefinition
-printUint16 = withProvisions [
+printUint16 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.showUint16."]
+  $ withProvisions [
   requirement "rendersCanonicalDecimal"
     "printUint16 renders a uint16 as its canonical unsigned decimal string, for zero and typical\
     \ values."]
@@ -627,7 +688,9 @@ printUint16 = withProvisions [
    "Total. The inverse of parseUint16."]
 
 printUint32 :: PrimitiveDefinition
-printUint32 = withProvisions [
+printUint32 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.showUint32."]
+  $ withProvisions [
   requirement "rendersCanonicalDecimal"
     "printUint32 renders a uint32 as its canonical unsigned decimal string, for zero and typical\
     \ values."]
@@ -636,7 +699,9 @@ printUint32 = withProvisions [
    "Total. The inverse of parseUint32."]
 
 printUint64 :: PrimitiveDefinition
-printUint64 = withProvisions [
+printUint64 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.showUint64."]
+  $ withProvisions [
   requirement "rendersCanonicalDecimal"
     "printUint64 renders a uint64 as its canonical unsigned decimal string, for zero and typical\
     \ values."]
@@ -645,7 +710,9 @@ printUint64 = withProvisions [
    "Total. The inverse of parseUint64."]
 
 printUint8 :: PrimitiveDefinition
-printUint8 = withProvisions [
+printUint8 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.literals.showUint8."]
+  $ withProvisions [
   requirement "rendersCanonicalDecimal"
     "printUint8 renders a uint8 as its canonical unsigned decimal string, for zero and the maximum\
     \ representable value (255)."]
@@ -654,7 +721,7 @@ printUint8 = withProvisions [
    "Total. The inverse of parseUint8."]
 
 uint16ToBigint :: PrimitiveDefinition
-uint16ToBigint = withProvisions [
+uint16ToBigint = availableSince "0.15" $ withProvisions [
   requirement "losslessConversion"
     "uint16ToBigint returns the bigint with the same numeric value as the uint16, with no\
     \ precision loss, for zero and typical in-range values."]
@@ -664,7 +731,7 @@ uint16ToBigint = withProvisions [
    "Total."]
 
 uint32ToBigint :: PrimitiveDefinition
-uint32ToBigint = withProvisions [
+uint32ToBigint = availableSince "0.15" $ withProvisions [
   requirement "losslessConversion"
     "uint32ToBigint returns the bigint with the same numeric value as the uint32, with no\
     \ precision loss, for zero and typical in-range values."]
@@ -674,7 +741,7 @@ uint32ToBigint = withProvisions [
    "Total."]
 
 uint64ToBigint :: PrimitiveDefinition
-uint64ToBigint = withProvisions [
+uint64ToBigint = availableSince "0.15" $ withProvisions [
   requirement "losslessConversion"
     "uint64ToBigint returns the bigint with the same numeric value as the uint64, with no\
     \ precision loss, for zero and typical in-range values."]
@@ -684,7 +751,7 @@ uint64ToBigint = withProvisions [
    "Total."]
 
 uint8ToBigint :: PrimitiveDefinition
-uint8ToBigint = withProvisions [
+uint8ToBigint = availableSince "0.15" $ withProvisions [
   requirement "losslessConversion"
     "uint8ToBigint returns the bigint with the same numeric value as the uint8, with no precision\
     \ loss, for zero and the maximum representable value (255)."]

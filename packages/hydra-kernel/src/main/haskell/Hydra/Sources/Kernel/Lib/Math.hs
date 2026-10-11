@@ -24,7 +24,15 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.math module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.math module.") [
+              "The core arithmetic operations -- add, sub, mul, negate -- are polymorphic over the numeric\
+              \ class: fixed-width integer types wrap in two's complement, bigint is arbitrary-precision,\
+              \ and floating-point types follow IEEE 754.",
+              "The sign and magnitude operations abs and signum are likewise polymorphic over the numeric\
+              \ class.",
+              "The integer-division and parity operations (div, mod, rem, even, odd) are polymorphic over\
+              \ the integral class (the fixed-width integer types plus bigint).",
+              "Only range remains int32-typed."]}
   where
     definitions = [abs, acos, acosh, add, addFloat64, asin, asinh, atan, atan2, atanh,
                    ceiling, cos, cosh, div, divide, e, even, exp, floor, log, logBase, mod,
@@ -100,7 +108,7 @@ integralToBool params = sigWithParams params $ Types.polyConstrained [("x", [Nam
   (tx Types.~> Types.boolean)
 
 abs :: PrimitiveDefinition
-abs = withProvisions [
+abs = availableSince "0.15" $ withProvisions [
   requirement "preservesMagnitudeAcrossTypes"
     "abs returns the non-negative magnitude of the argument, for every numeric type with a\
     \ 'numeric' instance (signed/unsigned integers of every width, bigint, float32/float64).",
@@ -119,7 +127,7 @@ abs = withProvisions [
    "Corresponds to Haskell's abs :: Num a => a -> a."]
 
 acos :: PrimitiveDefinition
-acos = withProvisions [
+acos = availableSince "0.15" $ withProvisions [
   requirement "inverseCosineInPrincipalRange"
     "acos returns the principal value of the inverse cosine, in radians, in [0, pi], for\
     \ arguments in its domain [-1, +1].",
@@ -131,7 +139,7 @@ acos = withProvisions [
    "Corresponds to the IEEE 754 \xA79.2 acos operation and to Haskell's acos :: Double -> Double."]
 
 acosh :: PrimitiveDefinition
-acosh = withProvisions [
+acosh = availableSince "0.15" $ withProvisions [
   requirement "inverseHyperbolicCosineInNonnegativeRange"
     "acosh returns the principal value of the inverse hyperbolic cosine, in [0, +Infinity), for\
     \ arguments in its domain [1, +Infinity).",
@@ -145,7 +153,9 @@ acosh = withProvisions [
    "Corresponds to the IEEE 754 \xA79.2 acosh operation and to Haskell's acosh :: Double -> Double."]
 
 add :: PrimitiveDefinition
-add = withProvisions [
+add = availableSince "0.17.6" $ withComments [
+  "Generalized from int32-only; the numeric class is #566."]
+  $ withProvisions [
   requirement "wrapsOrRoundsPerType"
     "add combines two values of a numeric type per that type's own arithmetic: two's-complement\
     \ wraparound for fixed-width integers, arbitrary precision for bigint, IEEE 754\
@@ -178,7 +188,7 @@ addFloat64 = withProvisions [
   \ \xA75.4.1 addition operation and to Haskell's (+) :: Double -> Double -> Double."]
 
 asin :: PrimitiveDefinition
-asin = withProvisions [
+asin = availableSince "0.15" $ withProvisions [
   requirement "inverseSineInPrincipalRange"
     "asin returns the principal value of the inverse sine, in radians, in [-pi/2, +pi/2], for\
     \ arguments in its domain [-1, +1].",
@@ -191,7 +201,7 @@ asin = withProvisions [
    "Corresponds to the IEEE 754 \xA79.2 asin operation and to Haskell's asin :: Double -> Double."]
 
 asinh :: PrimitiveDefinition
-asinh = withProvisions [
+asinh = availableSince "0.15" $ withProvisions [
   requirement "inverseHyperbolicSineDefinedForAllFiniteReals"
     "asinh returns the principal value of the inverse hyperbolic sine, defined for every finite\
     \ real argument.",
@@ -204,7 +214,7 @@ asinh = withProvisions [
    "Corresponds to the IEEE 754 \xA79.2 asinh operation and to Haskell's asinh :: Double -> Double."]
 
 atan :: PrimitiveDefinition
-atan = withProvisions [
+atan = availableSince "0.15" $ withProvisions [
   requirement "inverseTangentInPrincipalRange"
     "atan returns the principal value of the inverse tangent, in radians, in (-pi/2, +pi/2), for\
     \ any finite argument.",
@@ -216,7 +226,7 @@ atan = withProvisions [
    "Corresponds to the IEEE 754 \xA79.2 atan operation and to Haskell's atan :: Double -> Double."]
 
 atan2 :: PrimitiveDefinition
-atan2 = withProvisions [
+atan2 = availableSince "0.15" $ withProvisions [
   requirement "quadrantAwareArcTangentOfTwoArguments"
     "atan2(y, x) returns the angle in radians, in (-pi, +pi], from the positive x-axis to the\
     \ point (x, y), using the signs of both arguments to determine the quadrant.",
@@ -234,7 +244,7 @@ atan2 = withProvisions [
    "Corresponds to Haskell's atan2 :: Double -> Double -> Double."]
 
 atanh :: PrimitiveDefinition
-atanh = withProvisions [
+atanh = availableSince "0.15" $ withProvisions [
   requirement "inverseHyperbolicTangentOnOpenInterval"
     "atanh returns the principal value of the inverse hyperbolic tangent, defined on the open\
     \ interval (-1, +1).",
@@ -248,7 +258,7 @@ atanh = withProvisions [
    "Corresponds to the IEEE 754 \xA79.2 atanh operation and to Haskell's atanh :: Double -> Double."]
 
 ceiling :: PrimitiveDefinition
-ceiling = withProvisions [
+ceiling = availableSince "0.15" $ withProvisions [
   requirement "roundsTowardPositiveInfinityAsFloat"
     "ceiling returns the smallest integer value not less than the argument, as a float64.",
   requirement "ieeeSpecialValuesPassThrough"
@@ -263,7 +273,7 @@ ceiling = withProvisions [
    "Corresponds to Haskell's fromIntegral . ceiling :: Double -> Double."]
 
 cos :: PrimitiveDefinition
-cos = withProvisions [
+cos = availableSince "0.15" $ withProvisions [
   requirement "cosineOfAngleInRadians"
     "cos returns the cosine of an angle in radians, correctly rounded for finite arguments, in\
     \ the range [-1, +1].",
@@ -276,7 +286,7 @@ cos = withProvisions [
    "Corresponds to the IEEE 754 \xA79.2 cos operation and to Haskell's cos :: Double -> Double."]
 
 cosh :: PrimitiveDefinition
-cosh = withProvisions [
+cosh = availableSince "0.15" $ withProvisions [
   requirement "hyperbolicCosineInRangeAtLeastOne"
     "cosh returns the hyperbolic cosine, in [1, +Infinity), for any finite real argument.",
   requirement "evenSymmetryAtInfinityNanPropagates"
@@ -288,7 +298,9 @@ cosh = withProvisions [
    "Corresponds to the IEEE 754 \xA79.2 cosh operation and to Haskell's cosh :: Double -> Double."]
 
 divide :: PrimitiveDefinition
-divide = withProvisions [
+divide = availableSince "0.17.6" $ withComments [
+  "Generalized from int32-only; the numeric class is #566."]
+  $ withProvisions [
   requirement "roundsToNearestPerIeee754"
     "divide computes the IEEE 754 correctly-rounded quotient of its two float32/float64\
     \ arguments for finite, non-zero-divisor cases.",
@@ -310,7 +322,7 @@ divide = withProvisions [
    "Corresponds to Haskell's (/) :: Fractional a => a -> a -> a."]
 
 e :: PrimitiveDefinition
-e = withProvisions [
+e = availableSince "0.15" $ withProvisions [
   requirement "isEulersConstant"
     "e is the float64 value nearest to Euler's number, equal to exp(1)."]
   $ define "e" "Euler's constant (the base of the natural logarithm)." f64Const
@@ -319,7 +331,7 @@ e = withProvisions [
    "Corresponds to Haskell's exp 1 :: Double."]
 
 even :: PrimitiveDefinition
-even = withProvisions [
+even = availableSince "0.15" $ withProvisions [
   requirement "testsDivisibilityByTwo"
     "even returns true exactly when the argument is divisible by 2, for every integral type,\
     \ including at the signed-integer minimum value and for negative values (parity is\
@@ -333,7 +345,7 @@ even = withProvisions [
    "Corresponds to Haskell's even :: Integral a => a -> Bool."]
 
 exp :: PrimitiveDefinition
-exp = withProvisions [
+exp = availableSince "0.15" $ withProvisions [
   requirement "exponentialFunctionBaseE"
     "exp(x) returns e^x, correctly rounded, for finite x.",
   requirement "saturatesAtInfinityNanPropagates"
@@ -345,7 +357,7 @@ exp = withProvisions [
    "Corresponds to the IEEE 754 \xA79.2 exp operation and to Haskell's exp :: Double -> Double."]
 
 floor :: PrimitiveDefinition
-floor = withProvisions [
+floor = availableSince "0.15" $ withProvisions [
   requirement "roundsTowardNegativeInfinityAsFloat"
     "floor returns the largest integer value not greater than the argument, as a float64.",
   requirement "ieeeSpecialValuesPassThrough"
@@ -359,7 +371,7 @@ floor = withProvisions [
    "Corresponds to Haskell's fromIntegral . floor :: Double -> Double."]
 
 log :: PrimitiveDefinition
-log = withProvisions [
+log = availableSince "0.15" $ withProvisions [
   requirement "naturalLogarithmOnPositiveDomain"
     "log returns the natural (base-e) logarithm, correctly rounded, for positive finite\
     \ arguments.",
@@ -373,7 +385,7 @@ log = withProvisions [
    "Corresponds to the IEEE 754 \xA79.2 log operation and to Haskell's log :: Double -> Double."]
 
 logBase :: PrimitiveDefinition
-logBase = withProvisions [
+logBase = availableSince "0.15" $ withProvisions [
   requirement "logarithmInArbitraryBase"
     "logBase(b, x) computes the logarithm of x in base b, equivalent to log(x) / log(b), for\
     \ positive finite b and x.",
@@ -389,7 +401,9 @@ logBase = withProvisions [
    "Corresponds to Haskell's logBase :: Double -> Double -> Double."]
 
 div :: PrimitiveDefinition
-div = withProvisions [
+div = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.math.maybeDiv."]
+  $ withProvisions [
   requirement "flooredQuotientWhenDivisorNonzero"
     "div returns the integer quotient of its two arguments rounded toward negative infinity\
     \ (floor division), wrapped, for every integral type, when the divisor is non-zero.",
@@ -409,7 +423,9 @@ div = withProvisions [
   \ zero-divisor case total."]
 
 mod :: PrimitiveDefinition
-mod = withProvisions [
+mod = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.math.maybeMod."]
+  $ withProvisions [
   requirement "flooredRemainderSignFollowsDivisor"
     "mod returns the integer remainder of floored division, wrapped, whose sign matches the\
     \ sign of the divisor (Knuth-style floor division), for every integral type, when the\
@@ -429,7 +445,9 @@ mod = withProvisions [
   \ zero-divisor case total."]
 
 rem :: PrimitiveDefinition
-rem = withProvisions [
+rem = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.math.maybeRem."]
+  $ withProvisions [
   requirement "truncatedRemainderSignFollowsDividend"
     "rem returns the integer remainder of truncated division (toward zero), wrapped, whose\
     \ sign matches the sign of the dividend (C-style remainder), for every integral type, when\
@@ -451,7 +469,9 @@ rem = withProvisions [
   \ zero-divisor case total."]
 
 mul :: PrimitiveDefinition
-mul = withProvisions [
+mul = availableSince "0.17.6" $ withComments [
+  "Generalized from int32-only; the numeric class is #566."]
+  $ withProvisions [
   requirement "wrapsOrRoundsPerType"
     "mul computes the product of two values of a numeric type per that type's own arithmetic:\
     \ two's-complement wraparound for fixed-width integers, arbitrary precision for bigint, IEEE\
@@ -485,7 +505,9 @@ mulFloat64 = withProvisions [
   \ IEEE 754 \xA75.4.1 multiplication operation and to Haskell's (*) :: Double -> Double -> Double."]
 
 negate :: PrimitiveDefinition
-negate = withProvisions [
+negate = availableSince "0.17.6" $ withComments [
+  "Generalized from int32-only; the numeric class is #566."]
+  $ withProvisions [
   requirement "arithmeticNegationPerType"
     "negate returns the arithmetic inverse of its argument per the argument's numeric type:\
     \ two's-complement negation for fixed-width integers, sign-bit flip for floating-point,\
@@ -517,7 +539,7 @@ negateFloat64 = withProvisions [
   \ Haskell's negate :: Double -> Double."]
 
 odd :: PrimitiveDefinition
-odd = withProvisions [
+odd = availableSince "0.15" $ withProvisions [
   requirement "testsNonDivisibilityByTwo"
     "odd returns true exactly when the argument is not divisible by 2, for every integral\
     \ type, including at the signed-integer minimum value and for negative values."]
@@ -530,7 +552,7 @@ odd = withProvisions [
   ("x" ~> Logic.not (Math.even (var "x")))
 
 pi :: PrimitiveDefinition
-pi = withProvisions [
+pi = availableSince "0.15" $ withProvisions [
   requirement "isPiConstant"
     "pi is the float64 value nearest to the mathematical constant pi."]
   $ define "pi" "The mathematical constant pi." f64Const
@@ -539,7 +561,7 @@ pi = withProvisions [
    "Corresponds to Haskell's pi :: Double."]
 
 pow :: PrimitiveDefinition
-pow = withProvisions [
+pow = availableSince "0.15" $ withProvisions [
   requirement "exponentiationForFiniteArguments"
     "pow(x, y) = x^y, correctly rounded, for finite x and y within pow's defined domain.",
   requirement "ieeeSpecialValueMatrix"
@@ -558,7 +580,7 @@ pow = withProvisions [
    "Corresponds to Haskell's (**) :: Double -> Double -> Double."]
 
 range :: PrimitiveDefinition
-range = withProvisions [
+range = availableSince "0.15" $ withProvisions [
   requirement "generatesHalfOpenAscendingSequence"
     "range(a, b) returns the list [a, a+1, ..., b-1] -- inclusive of the lower bound and\
     \ exclusive of the upper bound, with length max(0, b-a).",
@@ -575,7 +597,7 @@ range = withProvisions [
   \ half-open convention of Python's range, Rust's a..b, Go, and Java's IntStream.range."]
 
 round :: PrimitiveDefinition
-round = withProvisions [
+round = availableSince "0.15" $ withProvisions [
   requirement "roundsToNearestTiesToEvenAsFloat"
     "round returns the nearest integer value as a float64, with ties rounded to the nearest\
     \ even integer (banker's rounding).",
@@ -590,7 +612,7 @@ round = withProvisions [
    "Corresponds to Haskell's fromIntegral . round :: Double -> Double."]
 
 roundFloat32 :: PrimitiveDefinition
-roundFloat32 = withProvisions [
+roundFloat32 = availableSince "0.15" $ withProvisions [
   requirement "roundsToGivenDecimalPlacesHalfToEven"
     "roundFloat32(n, x) rounds the float32 value x to n decimal places using\
     \ round-half-to-even, returning the nearest representable float32.",
@@ -608,7 +630,7 @@ roundFloat32 = withProvisions [
   \ differ on out-of-range n."]
 
 roundFloat64 :: PrimitiveDefinition
-roundFloat64 = withProvisions [
+roundFloat64 = availableSince "0.15" $ withProvisions [
   requirement "roundsToGivenDecimalPlacesHalfToEven"
     "roundFloat64(n, x) rounds the float64 value x to n decimal places using\
     \ round-half-to-even, returning the nearest representable float64.",
@@ -626,7 +648,7 @@ roundFloat64 = withProvisions [
   \ differ on out-of-range n."]
 
 signum :: PrimitiveDefinition
-signum = withProvisions [
+signum = availableSince "0.15" $ withProvisions [
   requirement "signPerType"
     "signum returns the sign of its argument per the argument's numeric type: -1/0/1 (same\
     \ width) for integers, +-1.0 for nonzero finite or infinite floats -- satisfying\
@@ -649,7 +671,7 @@ signum = withProvisions [
    "Corresponds to Haskell's signum :: Num a => a -> a."]
 
 sin :: PrimitiveDefinition
-sin = withProvisions [
+sin = availableSince "0.15" $ withProvisions [
   requirement "sineOfAngleInRadians"
     "sin returns the sine of an angle in radians, correctly rounded for finite arguments, in\
     \ the range [-1, +1].",
@@ -662,7 +684,7 @@ sin = withProvisions [
    "Corresponds to the IEEE 754 \xA79.2 sin operation and to Haskell's sin :: Double -> Double."]
 
 sinh :: PrimitiveDefinition
-sinh = withProvisions [
+sinh = availableSince "0.15" $ withProvisions [
   requirement "hyperbolicSineDefinedForAllFiniteReals"
     "sinh returns the hyperbolic sine, defined for every finite real argument.",
   requirement "oddSymmetryAtInfinityNanPropagates"
@@ -673,7 +695,7 @@ sinh = withProvisions [
    "Corresponds to the IEEE 754 \xA79.2 sinh operation and to Haskell's sinh :: Double -> Double."]
 
 sqrt :: PrimitiveDefinition
-sqrt = withProvisions [
+sqrt = availableSince "0.15" $ withProvisions [
   requirement "nonnegativeSquareRootOnNonnegativeDomain"
     "sqrt returns the non-negative, correctly-rounded square root for non-negative finite\
     \ arguments.",
@@ -689,7 +711,9 @@ sqrt = withProvisions [
   \ Double."]
 
 sub :: PrimitiveDefinition
-sub = withProvisions [
+sub = availableSince "0.17.6" $ withComments [
+  "Generalized from int32-only; the numeric class is #566."]
+  $ withProvisions [
   requirement "wrapsOrRoundsPerType"
     "sub computes the difference of two values of a numeric type per that type's own\
     \ arithmetic: two's-complement wraparound for fixed-width integers, arbitrary precision for\
@@ -722,7 +746,7 @@ subFloat64 = withProvisions [
   \ \xA75.4.1 subtraction operation and to Haskell's (-) :: Double -> Double -> Double."]
 
 tan :: PrimitiveDefinition
-tan = withProvisions [
+tan = availableSince "0.15" $ withProvisions [
   requirement "tangentOfAngleInRadians"
     "tan returns the tangent of an angle in radians, correctly rounded for finite arguments;\
     \ near odd multiples of pi/2 the result has large magnitude but remains finite (no\
@@ -736,7 +760,7 @@ tan = withProvisions [
    "Corresponds to the IEEE 754 \xA79.2 tan operation and to Haskell's tan :: Double -> Double."]
 
 tanh :: PrimitiveDefinition
-tanh = withProvisions [
+tanh = availableSince "0.15" $ withProvisions [
   requirement "hyperbolicTangentInRangeNegOneToOne"
     "tanh returns the hyperbolic tangent, in (-1, +1), for any finite real argument.",
   requirement "saturatesAtInfinityNanPropagates"
@@ -747,7 +771,7 @@ tanh = withProvisions [
    "Corresponds to the IEEE 754 \xA79.2 tanh operation and to Haskell's tanh :: Double -> Double."]
 
 truncate :: PrimitiveDefinition
-truncate = withProvisions [
+truncate = availableSince "0.15" $ withProvisions [
   requirement "roundsTowardZeroAsFloat"
     "truncate returns the argument with its fractional part discarded (rounded toward zero),\
     \ as a float64, preserving the sign of the argument.",

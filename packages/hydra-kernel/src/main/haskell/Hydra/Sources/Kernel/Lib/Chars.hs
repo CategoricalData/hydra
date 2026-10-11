@@ -18,19 +18,18 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Just (EntityMetadata
-              (Just "Primitives in the hydra.core.lib.chars module.")
-              [ "Characters are represented as Unicode code points carried in an int32. Each primitive interprets its\
-                \ argument as a code point; arguments outside the valid range [0, 0x10FFFF] yield an\
-                \ implementation-defined result (typically false for the predicates).",
-                "All classification predicates in this module are total functions: every int32 argument maps to a\
-                \ defined Boolean result, with no partiality or exceptions.",
-                "Character classification follows the Unicode general categories, matching the behaviour of Haskell's\
-                \ Data.Char functions of the same names. Hosts are expected to reproduce these categories rather than\
-                \ a locale- or ASCII-only notion of letter, digit, or whitespace." ]
-              []
-              Nothing
-              [])}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.chars module.") [
+              "Characters are represented as Unicode code points carried in an int32. Each primitive interprets its\
+              \ argument as a code point; arguments outside the valid range [0, 0x10FFFF] yield an\
+              \ implementation-defined result (typically false for the predicates).",
+              "All classification predicates in this module are total functions: every int32 argument maps to a\
+              \ defined Boolean result, with no partiality or exceptions.",
+              "Character classification follows the Unicode general categories, matching the behaviour of Haskell's\
+              \ Data.Char functions of the same names. Hosts are expected to reproduce these categories rather than\
+              \ a locale- or ASCII-only notion of letter, digit, or whitespace -- with the deliberate exception of\
+              \ isDigit, which is ASCII-only.",
+              "Case mapping (toLower/toUpper) is the simple (one-to-one) single-code-point Unicode case mapping,\
+              \ not full case folding."]}
   where
     definitions = [isAlpha, isAlphaNum, isDigit, isLower, isSpace, isUpper, toLower, toUpper]
 
@@ -46,7 +45,7 @@ intToInt :: [(String, String)] -> TermSignature
 intToInt params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.int32) mempty
 
 isAlpha :: PrimitiveDefinition
-isAlpha = define "isAlpha" "Check whether a character is alphabetic."
+isAlpha = availableSince "0.17.6" $ define "isAlpha" "Check whether a character is alphabetic."
   (intToBool [("char", "the character to test, as a Unicode code point")])
   ["True if the argument is a Unicode letter — any of the general categories L* (Lu, Ll, Lt, Lm, Lo) —\
    \ and false otherwise.",
@@ -57,7 +56,7 @@ isAlpha = define "isAlpha" "Check whether a character is alphabetic."
    "Total. Corresponds to Haskell's Data.Char.isAlpha :: Char -> Bool."]
 
 isAlphaNum :: PrimitiveDefinition
-isAlphaNum = withProvisions [
+isAlphaNum = availableSince "0.15" $ withProvisions [
   requirement "classifiesAlphanumeric"
     "isAlphaNum returns true for a code point that is a Unicode letter or digit.",
   requirement "classifiesNonAlphanumeric"
@@ -72,7 +71,7 @@ isAlphaNum = withProvisions [
    "Total. Corresponds to Haskell's Data.Char.isAlphaNum :: Char -> Bool."]
 
 isDigit :: PrimitiveDefinition
-isDigit = define "isDigit" "Check whether a character is an ASCII decimal digit."
+isDigit = availableSince "0.17.6" $ define "isDigit" "Check whether a character is an ASCII decimal digit."
   (intToBool [("char", "the character to test, as a Unicode code point")])
   ["True if the argument is one of the ten code points '0' through '9' (U+0030 to U+0039), and false\
    \ otherwise.",
@@ -81,7 +80,7 @@ isDigit = define "isDigit" "Check whether a character is an ASCII decimal digit.
    "Total. Corresponds to Haskell's Data.Char.isDigit :: Char -> Bool."]
 
 isLower :: PrimitiveDefinition
-isLower = withProvisions [
+isLower = availableSince "0.15" $ withProvisions [
   requirement "classifiesLowercase"
     "isLower returns true for a code point that is a Unicode lowercase letter.",
   requirement "classifiesNonLowercase"
@@ -97,7 +96,7 @@ isLower = withProvisions [
    "Total. Corresponds to Haskell's Data.Char.isLower :: Char -> Bool."]
 
 isSpace :: PrimitiveDefinition
-isSpace = withProvisions [
+isSpace = availableSince "0.15" $ withProvisions [
   requirement "classifiesWhitespace"
     "isSpace returns true for a code point that is a Unicode whitespace character, including the\
     \ space, tab, and newline characters.",
@@ -113,7 +112,7 @@ isSpace = withProvisions [
    "Total. Corresponds to Haskell's Data.Char.isSpace :: Char -> Bool."]
 
 isUpper :: PrimitiveDefinition
-isUpper = withProvisions [
+isUpper = availableSince "0.15" $ withProvisions [
   requirement "classifiesUppercase"
     "isUpper returns true for a code point that is a Unicode uppercase letter.",
   requirement "classifiesNonUppercase"
@@ -128,7 +127,7 @@ isUpper = withProvisions [
    "Total. Corresponds to Haskell's Data.Char.isUpper :: Char -> Bool."]
 
 toLower :: PrimitiveDefinition
-toLower = withProvisions [
+toLower = availableSince "0.15" $ withProvisions [
   requirement "mapsToLowercaseOrUnchanged"
     "toLower returns the lowercase mapping of an uppercase code point, and returns a code point\
     \ with no lowercase mapping (e.g. a digit, or an already-lowercase letter) unchanged.",
@@ -146,7 +145,7 @@ toLower = withProvisions [
    "Total. Corresponds to Haskell's Data.Char.toLower :: Char -> Char."]
 
 toUpper :: PrimitiveDefinition
-toUpper = withProvisions [
+toUpper = availableSince "0.15" $ withProvisions [
   requirement "mapsToUppercaseOrUnchanged"
     "toUpper returns the uppercase mapping of a lowercase code point, and returns a code point\
     \ with no uppercase mapping (e.g. a digit, or an already-uppercase letter) unchanged.",

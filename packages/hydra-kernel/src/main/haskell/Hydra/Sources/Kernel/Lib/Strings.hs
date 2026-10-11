@@ -18,7 +18,14 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.strings module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.strings module.") [
+              "Strings as sequences of Unicode code points: a Hydra string is a sequence of Unicode\
+              \ code points -- not UTF-16 code units and not grapheme clusters -- and length and index\
+              \ positions count code points.",
+              "The general split/join pair (splitOn and join) is the primary line-and-token machinery;\
+              \ the newline-specific lines and unlines were removed as primitives in its favor, their\
+              \ exact semantics preserved as the non-primitive term helpers hydra.formatting.lines and\
+              \ hydra.formatting.unlines."]}
   where
     definitions = [charAt, concat, concat2, fromList, isEmpty, join, length,
                    splitOn, toList, toLower, toUpper]
@@ -34,7 +41,9 @@ fn2 :: [(String, String)] -> Type -> Type -> Type -> TermSignature
 fn2 params a b c = sigWithParams params $ TypeScheme [] (a Types.~> b Types.~> c) mempty
 
 charAt :: PrimitiveDefinition
-charAt = withProvisions [
+charAt = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.strings.maybeCharAt."]
+  $ withProvisions [
   requirement "returnsCodePointAtIndex"
     "charAt returns the Unicode code point at the given zero-based index, wrapped, indexing by code\
     \ point (not UTF-16 code unit), so an index after an astral (non-BMP) character is unaffected by\
@@ -49,7 +58,9 @@ charAt = withProvisions [
    "Total."]
 
 concat :: PrimitiveDefinition
-concat = withProvisions [
+concat = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.strings.cat."]
+  $ withProvisions [
   requirement "flattensPreservingOrderAndContent"
     "concat concatenates every string in the list in order, preserving all content exactly including\
     \ control characters, null characters, and multi-code-point Unicode sequences (combining\
@@ -63,7 +74,9 @@ concat = withProvisions [
    "Total. Corresponds to Haskell's concat :: [String] -> String."]
 
 concat2 :: PrimitiveDefinition
-concat2 = withProvisions [
+concat2 = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.strings.cat2."]
+  $ withProvisions [
   requirement "appendsPreservingContent"
     "concat2 appends its second string argument to its first, preserving all content exactly\
     \ including Unicode, control, and null characters.",
@@ -76,7 +89,7 @@ concat2 = withProvisions [
    "Total. Corresponds to Haskell's (++) :: String -> String -> String."]
 
 fromList :: PrimitiveDefinition
-fromList = withProvisions [
+fromList = availableSince "0.15" $ withProvisions [
   requirement "buildsStringFromCodePoints"
     "fromList constructs a string whose characters are exactly the given Unicode code points, in\
     \ order, including multi-code-point sequences (combining characters), control characters, and\
@@ -91,7 +104,7 @@ fromList = withProvisions [
    "Total. The inverse of toList."]
 
 isEmpty :: PrimitiveDefinition
-isEmpty = withProvisions [
+isEmpty = availableSince "0.15" $ withProvisions [
   requirement "testsZeroLength"
     "isEmpty returns true exactly when the string has no code points; any non-empty content —\
     \ including whitespace, control characters, or a null character — makes it false."]
@@ -101,7 +114,9 @@ isEmpty = withProvisions [
    "Total. Corresponds to Haskell's null :: String -> Bool."]
 
 join :: PrimitiveDefinition
-join = withProvisions [
+join = availableSince "0.17.6" $ withComments [
+  "Renamed from hydra.lib.strings.intercalate."]
+  $ withProvisions [
   requirement "insertsSeparatorBetweenStrings"
     "join concatenates a list of strings with a copy of the separator inserted between each pair of\
     \ adjacent strings (not before the first or after the last), for separators of any content\
@@ -117,7 +132,7 @@ join = withProvisions [
    "Total. Corresponds to Haskell's Data.List.intercalate :: String -> [String] -> String."]
 
 length :: PrimitiveDefinition
-length = withProvisions [
+length = availableSince "0.15" $ withProvisions [
   requirement "countsCodePoints"
     "length returns the number of Unicode code points in the string, not the byte count or\
     \ grapheme-cluster count — so a multi-byte character counts as one code point and a\
@@ -131,7 +146,7 @@ length = withProvisions [
    "Total on strings shorter than 2^31-1 code points."]
 
 splitOn :: PrimitiveDefinition
-splitOn = withProvisions [
+splitOn = availableSince "0.15" $ withProvisions [
   requirement "splitsOnEveryOccurrence"
     "splitOn splits the string into the list of substrings between every occurrence of a non-empty\
     \ delimiter, including when occurrences are consecutive, overlapping, at a boundary, or span the\
@@ -153,7 +168,7 @@ splitOn = withProvisions [
    "Total. Corresponds to Haskell's Data.List.Split.splitOn :: String -> String -> [String]."]
 
 toList :: PrimitiveDefinition
-toList = withProvisions [
+toList = availableSince "0.15" $ withProvisions [
   requirement "decomposesIntoCodePoints"
     "toList returns the list of Unicode code points making up the string, in order, as the exact\
     \ inverse of fromList, including for multi-code-point sequences and control/null characters.",
@@ -166,7 +181,7 @@ toList = withProvisions [
    "Total. The inverse of fromList."]
 
 toLower :: PrimitiveDefinition
-toLower = withProvisions [
+toLower = availableSince "0.15" $ withProvisions [
   requirement "appliesSimpleLowercaseMapping"
     "toLower replaces each character with its Unicode simple (one-to-one) lowercase mapping, leaving\
     \ a character with no lowercase mapping unchanged — including letters, accented Unicode\
@@ -187,7 +202,7 @@ toLower = withProvisions [
    "Total."]
 
 toUpper :: PrimitiveDefinition
-toUpper = withProvisions [
+toUpper = availableSince "0.15" $ withProvisions [
   requirement "appliesSimpleUppercaseMapping"
     "toUpper replaces each character with its Unicode simple (one-to-one) uppercase mapping, leaving\
     \ a character with no uppercase mapping unchanged — including letters, accented Unicode\
