@@ -13,6 +13,7 @@
 # Usage:
 #   source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 #   assemble_check_fresh <input_digest> <output_dir> <output_digest>
+#   assemble_check_fresh_readonly <input_digest> <output_dir> <output_digest>
 #   assemble_refresh_digest <input_digest> <output_dir> <output_digest>
 #   compute_generator_stamp <target_lang>
 #   batch_emit_packages
@@ -353,6 +354,27 @@ assemble_check_fresh() {
         --output-dir "$output_dir" \
         --output-digest "$output_digest" \
         ${keep_args[@]+"${keep_args[@]}"}
+}
+
+# Read-only freshness probe (#797): like assemble_check_fresh, but for a caller
+# that wants to know "is this fresh?" WITHOUT the #393 orphan reconcile — which
+# deletes any on-disk file under output_dir that it doesn't recognize as either
+# a recorded output or a keep-paths manifest entry. A probe with no (or a
+# just-approximated) keep manifest must not trigger that side effect merely by
+# asking the question; the real assembler's own assemble_check_fresh call still
+# performs the full reconcile when it actually runs. See sync.sh's #773
+# fast-path warm-check, which must probe hydra-build's freshness on every sync
+# regardless of whether this run will ever reach the real assembler.
+assemble_check_fresh_readonly() {
+    local input_digest="$1" output_dir="$2" output_digest="$3"
+    if [ ! -f "$input_digest" ] || [ ! -f "$output_digest" ]; then
+        return 1
+    fi
+    "$HYDRA_ROOT_DIR/bin/digest.sh" fresh \
+        --inputs "$input_digest" \
+        --output-dir "$output_dir" \
+        --output-digest "$output_digest" \
+        --check-only
 }
 
 # Write the per-source-set output digest after a (re)generation. Called in

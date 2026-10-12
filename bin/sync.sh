@@ -265,15 +265,17 @@ LANG_UNION=$(printf '%s\n' $HOSTS $TARGETS | awk '!seen[$0]++' | xargs)
 #     asking to build the Haskell host from source, AND
 #   - dist/json is present (the transform source of truth; it is git-tracked, so
 #     this holds on any checkout — guarded defensively regardless), AND
-#   - dist/<L>/hydra-build already exists for every in-scope non-Haskell language L.
+#   - dist/<L>/hydra-build already exists AND is FRESH for every in-scope non-Haskell
+#     language L (verified via assemble_check_fresh_readonly, #797 — presence of the
+#     output digest alone is not sufficient; see the condition's own comment below).
 #     This last condition is load-bearing: hydra-build is self-referential, so
 #     bin/lib/assemble-common.sh's run_layer1_transform routes its generation through
 #     generators.bootstrapSeedHost=haskell (the #459/#559 circular-seed guard) REGARDLESS
 #     of GENERATOR_HOST — and that Haskell seed (bootstrap-from-json) needs the 930-module
 #     library. So a sync that must *generate* hydra-build cannot be Haskell-free. When
-#     dist/<L>/hydra-build is already present (warm), the Phase 3 assembler's freshness
-#     check skips hydra-build regeneration and never invokes the Haskell seed; when it is
-#     absent (cold), we must NOT take the fast path and instead let the normal path build
+#     dist/<L>/hydra-build is fresh (warm), the Phase 3 assembler's freshness check skips
+#     hydra-build regeneration and never invokes the Haskell seed; when it is absent OR
+#     stale (cold), we must NOT take the fast path and instead let the normal path build
 #     the execs in Phase 0. This narrows the fast path to a WARM-tree Haskell-elimination —
 #     exactly where the fleet pain (repeated cold-ish syncs each paying stack test + the
 #     slot) actually is; the one-time cold 930-module build is unavoidable (see the issue).
@@ -291,24 +293,80 @@ if [ "$HOST_MODE" != "local" ] \
    && ! printf '%s\n' $LANG_UNION | grep -qx haskell \
    && [ -d "$HYDRA_ROOT/dist/json" ]; then
     # Every in-scope non-Haskell language must already have a FRESH dist/<L>/hydra-build
-    # — specifically its OUTPUT digest (dist/<L>/hydra-build/build/main/digest.json). That
-    # file's presence is the signal a prior full sync already generated hydra-build and
-    # recorded its digest; with both input (dist/json/...) and output digests on disk, the
-    # Phase 3 assembler's assemble_check_fresh short-circuits and NEVER invokes
-    # run_layer1_transform (the #459 Haskell seed). The source dir existing is not enough —
-    # a transform without a recorded output digest would still force a regen → Haskell.
-    # go is a kernel-only head bud (no hydra-build). (Option A, #773.)
+    # — not merely a PRESENT output digest (dist/<L>/hydra-build/build/main/digest.json),
+    # but one that the same freshness gate the Phase 3 assembler itself uses
+    # (assemble_check_fresh_readonly, the non-mutating twin of assemble_check_fresh — see
+    # #797) agrees is still current against the input digest
+    # (dist/json/hydra-build/build/{main,test}/digest.json) and L's generator stamp.
+    # Presence alone is NOT enough (#797): a .stack-work wipe, or any routine upstream
+    # DSL/JSON change since the last haskell-inclusive sync, leaves a stale-but-present
+    # output digest on disk. Taking the fast path on a stale digest skips the #730
+    # build-slot guard below, and then the Phase 3 assembler's own assemble_check_fresh
+    # call (later in this same run) correctly detects the staleness and invokes
+    # run_layer1_transform (the #459 Haskell seed) — an unguarded `stack build
+    # hydra:exe:bootstrap-from-json` racing the fleet's shared ~/.stack. Calling the real
+    # gate here, once, up front, closes that gap by construction: the two checks can no
+    # longer disagree. Both main AND test source sets are checked — Phase 3 assembles
+    # hydra-build's test modules unconditionally when dist/json/hydra-build/src/test/json
+    # exists, independently of --no-tests (which only skips the downstream target-language
+    # test *run*, not this generation step), so a main-only check would miss a stale test
+    # digest and still fall through to the same unguarded build.
+    # go is a kernel-only head bud (no hydra-build). (Option A, #773; guard fix, #797.)
+    source "$HYDRA_ROOT/bin/lib/assemble-common.sh"
+    # language_config/component_identity/etc. (assemble-common.sh) all resolve
+    # hydra.json and other paths via $HYDRA_ROOT_DIR, not sync.sh's own $HYDRA_ROOT —
+    # export it for the rest of this fast-path block so those helpers (called both
+    # directly below and inside the probe subshells) see the right root instead of
+    # silently resolving against an unset/empty path (jq failures are swallowed by
+    # language_config's own `2>/dev/null`, so this would otherwise fail SILENTLY:
+    # _EXT would come back empty, HASKELL_FREE_FAST_PATH would always end up false,
+    # and the fast path would never be taken — functionally harmless [it only costs
+    # the fast-path's speed win] but worth exporting correctly rather than relying on
+    # that fallback).
+    export HYDRA_ROOT_DIR="$HYDRA_ROOT"
     HASKELL_FREE_FAST_PATH=true
     for _L in $LANG_UNION; do
         case "$_L" in
             haskell|go) continue ;;
         esac
-        if [ ! -f "$HYDRA_ROOT/dist/$_L/hydra-build/build/main/digest.json" ]; then
+        _EXT="$(language_config "$_L" sourceExtension 2>/dev/null || true)"
+        if [ -z "$_EXT" ]; then
             HASKELL_FREE_FAST_PATH=false
             break
         fi
+        _OUT_MAIN_DIR="$HYDRA_ROOT/dist/$_L/hydra-build/src/main/$_EXT"
+        _OUT_MAIN_DIGEST="$HYDRA_ROOT/dist/$_L/hydra-build/build/main/digest.json"
+        # Subshell: export_generation_env mutates the shell's environment
+        # (HYDRA_GENERATOR_STAMP etc.), and this is a speculative check for a
+        # language whose real assembly, if it happens later in this run, will
+        # call export_generation_env itself. Isolate the probe so it can't leak
+        # a stale stamp for a different language into the rest of the script.
+        # (HYDRA_ROOT_DIR is already exported above, inherited here.)
+        if ! ( export_generation_env "$_L"
+               assemble_check_fresh_readonly \
+                   "$HYDRA_ROOT/dist/json/hydra-build/build/main/digest.json" \
+                   "$_OUT_MAIN_DIR" \
+                   "$_OUT_MAIN_DIGEST" ); then
+            HASKELL_FREE_FAST_PATH=false
+            break
+        fi
+        # Test source set: only checked when dist/json/hydra-build has a test tree
+        # (matches the real assembler's own "no test sources; skipping" guard).
+        _TEST_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-build/src/test/json"
+        if [ -d "$_TEST_JSON_DIR" ]; then
+            _OUT_TEST_DIR="$HYDRA_ROOT/dist/$_L/hydra-build/src/test/$_EXT"
+            _OUT_TEST_DIGEST="$HYDRA_ROOT/dist/$_L/hydra-build/build/test/digest.json"
+            if ! ( export_generation_env "$_L"
+                   assemble_check_fresh_readonly \
+                       "$HYDRA_ROOT/dist/json/hydra-build/build/test/digest.json" \
+                       "$_OUT_TEST_DIR" \
+                       "$_OUT_TEST_DIGEST" ); then
+                HASKELL_FREE_FAST_PATH=false
+                break
+            fi
+        fi
     done
-    unset _L
+    unset _L _EXT _OUT_MAIN_DIR _OUT_MAIN_DIGEST _TEST_JSON_DIR _OUT_TEST_DIR _OUT_TEST_DIGEST
 fi
 
 # --- #730 build-slot guard: serialize shared-~/.stack GHC builds fleet-wide. ---
@@ -727,9 +785,10 @@ fi  # end: Haskell-free fast path skips Phases 0–2 (#773)
 # a warm tree already has these but re-seeding is the honest on-disk digest.
 #
 # hydra-build is DELIBERATELY EXCLUDED: the fast-path gate guarantees
-# dist/<L>/hydra-build already exists (it is only taken when so), meaning a prior
-# full sync both generated it AND wrote its input+output digests. Re-seeding its
-# input digest here with refresh-input's shape could DIFFER from what that full
+# dist/<L>/hydra-build already exists AND IS FRESH (it is only taken when so, verified
+# via assemble_check_fresh_readonly, #797), meaning a prior full sync both generated it
+# AND wrote its input+output digests, still current against today's inputs. Re-seeding
+# its input digest here with refresh-input's shape could DIFFER from what that full
 # sync's update-json-main wrote, flip assemble_check_fresh to "stale", and trigger
 # a regeneration — which for hydra-build routes through the Haskell bootstrapSeedHost
 # (#459) and re-introduces the 930-module build the fast path exists to avoid. Leave
