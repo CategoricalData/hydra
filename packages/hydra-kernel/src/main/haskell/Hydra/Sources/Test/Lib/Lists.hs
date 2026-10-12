@@ -124,13 +124,6 @@ allTests = define "allTests" $
         where
           test name f g x result = primCase name DefLists.compose [f, g, int32 x] (intList result)
 
-      listsConcat = subgroup "concat" [
-        test "multiple non-empty lists" [[1, 2, 3], [4, 5], [6, 7, 8]] [1, 2, 3, 4, 5, 6, 7, 8],
-        test "empty lists included" [[], [1, 2], [], [3]] [1, 2, 3],
-        test "single list" [[1, 2, 3]] [1, 2, 3],
-        test "all empty lists" [[], [], []] [],
-        test "empty list of lists" [] []]
-
       listsConcat = supergroup "concat" [
         subgroup "flattensPreservingOrder" [
           test "multiple non-empty lists" "flattensPreservingOrder" [[1, 2, 3], [4, 5], [6, 7, 8]] [1, 2, 3, 4, 5, 6, 7, 8],

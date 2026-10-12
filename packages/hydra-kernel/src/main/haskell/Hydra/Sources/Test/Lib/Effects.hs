@@ -70,8 +70,8 @@ allTests = definitionInModule module_ "allTests" $
       effectsMapListOrder,
       effectsMapOptional,
       effectsMapOptionalOrder,
-      effectsMapSet,
-      effectsMapSetOrder,
+      -- effectsMapSet, effectsMapSetOrder intentionally omitted (see the commented-out
+      -- definitions below for why).
       effectsPure]
 
 -- ============================================================================
@@ -171,6 +171,10 @@ effectsMapListOrder = subgroup "performsElementEffectsLeftToRightExactlyOnce" [
 -- mapSet: element effects performed in ascending element order, each exactly once.
 -- Vehicle: append each set element (in ascending order) to one file; ignore the collected results
 -- and read the file. Observed "ABC" proves ascending order, once each.
+-- effects.mapSet is scoped out of the kernel's registered definitions (see bee346247e, #775) --
+-- a pre-existing Java-generator gap, not a #775 regression. Commented out for the same reason as
+-- effectsMapSet above; re-enable once the generator gap is fixed and mapSet is re-registered.
+{-
 effectsMapSetOrder :: TypedTerm TestGroup
 effectsMapSetOrder = subgroup "performsElementEffectsInAscendingOrderExactlyOnce" [
   effectfulCaseWithProvisions "mapSet performs element effects in ascending order, each once" ["performsElementEffectsInAscendingOrderExactlyOnce"] DefEffects.mapSet
@@ -182,6 +186,7 @@ effectsMapSetOrder = subgroup "performsElementEffectsInAscendingOrderExactlyOnce
                   @@ (set [bytes "C", bytes "A", bytes "B"] :: TypedTerm (S.Set Binary)))
             @@ (lambda "_m" $ readBack "mapset-order.txt")))
     (string "ABC")]
+-}
 
 -- mapOptional: none performs no effect (zero appends); given performs exactly one effect.
 -- Vehicle: seed the file with "seed", run mapOptional (append "X") over none / given, then read.
@@ -294,6 +299,12 @@ effectsMapOptional = subgroup "appliesFunctionWhenPresentPassesThroughNoneWhenAb
 
 -- mapSet : (a -> effect<b>) -> set<a> -> effect<set<b>>
 -- The resulting effect<set<int32>> is mapped to a string via sorted-list printing for comparison.
+-- effects.mapSet is scoped out of the kernel's registered definitions (see bee346247e, #775) --
+-- a pre-existing Java-generator gap, not a #775 regression. Commented out (not just unreferenced)
+-- rather than deleted: GHC type-checks every `where`-bound definition regardless of whether
+-- allTests references it, so this would fail to compile against the kernel's own unregistered
+-- DefEffects.mapSet. Re-enable once the generator gap is fixed and mapSet is re-registered.
+{-
 effectsMapSet :: TypedTerm TestGroup
 effectsMapSet = subgroup "appliesEffectReturningFunctionAndCollectsResultsAsSet" [
   effectfulCaseWithProvisions "mapSet applies an effect-returning function across a set and collects results" ["appliesEffectReturningFunctionAndCollectsResultsAsSet"] DefEffects.mapSet
@@ -303,3 +314,4 @@ effectsMapSet = subgroup "appliesEffectReturningFunctionAndCollectsResultsAsSet"
         @@ (lambda "x" $ primitive DefEffects.pure @@ (primitive DefStrings.concat2 @@ var "x" @@ string "."))
         @@ (set [string "a", string "b"] :: TypedTerm (S.Set String))))
     (string "a.b.")]
+-}
