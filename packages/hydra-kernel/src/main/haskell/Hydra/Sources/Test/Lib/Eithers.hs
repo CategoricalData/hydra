@@ -125,22 +125,16 @@ allTests = definitionInModule module_ "allTests" $
       eithersMapOptional,
       eithersMapSet]
 
--- eithers.apply is registered only via the default-fallback mechanism (#775), with no native
--- Python function -- calling it through the DSL combinator (Eithers.apply) compiles to a direct
--- Python module-attribute call that bypasses the primitive registry for fallback-only primitives,
--- raising AttributeError at the Python target. The primitive-reference style (Terms.primitive
--- DefEithers.apply @@ ...), as functionsCompose already uses for the analogous functions.compose,
--- routes through the registry correctly, matching every host's actual runtime behavior.
 eithersApply :: TypedTerm TestGroup
 eithersApply = subgroup "apply" [
   evalPair "apply Right function to Right argument" showEitherIntInt
-    (Terms.primitive DefEithers.apply @@ mulBy2 @@ rightInt 5)
+    (Eithers.apply mulBy2 (rightInt 5))
     (rightInt 10),
   evalPair "Left function short-circuits, argument not consulted" showEitherIntInt
-    (Terms.primitive DefEithers.apply @@ leftInt 7 @@ rightInt 5)
+    (Eithers.apply (leftInt 7) (rightInt 5))
     (leftInt 7),
   evalPair "Right function with Left argument returns that Left" showEitherIntInt
-    (Terms.primitive DefEithers.apply @@ mulBy2 @@ leftInt 9)
+    (Eithers.apply mulBy2 (leftInt 9))
     (leftInt 9)]
   where
     mulBy2 = Phantoms.right (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2))
@@ -157,17 +151,16 @@ eithersBimap = subgroup "mapsBothSidesIndependently" [
         input)
       expected
 
--- eithers.compose is likewise fallback-only (see eithersApply's comment above); same fix.
 eithersCompose :: TypedTerm TestGroup
 eithersCompose = subgroup "compose" [
   evalPair "both arrows succeed" showEitherIntInt
-    (Terms.primitive DefEithers.compose @@ doubleArrow @@ incrementArrow @@ Phantoms.int32 5)
+    (Eithers.compose doubleArrow incrementArrow (Phantoms.int32 5))
     (rightInt 11),
   evalPair "first arrow fails" showEitherIntInt
-    (Terms.primitive DefEithers.compose @@ failArrow @@ incrementArrow @@ Phantoms.int32 5)
+    (Eithers.compose failArrow incrementArrow (Phantoms.int32 5))
     (leftInt 0),
   evalPair "second arrow fails" showEitherIntInt
-    (Terms.primitive DefEithers.compose @@ doubleArrow @@ failArrow @@ Phantoms.int32 5)
+    (Eithers.compose doubleArrow failArrow (Phantoms.int32 5))
     (leftInt 0)]
   where
     doubleArrow = Phantoms.lambda "x" $ Phantoms.right (Math.mul (Phantoms.var "x") (Phantoms.int32 2))
