@@ -188,7 +188,11 @@ hsvar = haskellUtilsDefinition "hsvar" $
 
 namespacesForModule :: TypedTermDefinition (Module -> InferenceContext -> Graph -> Either Error HaskellNamespaces)
 namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
-  doc "Compute the Haskell module namespaces for a Hydra module" $
+  doc ("Compute the Haskell module namespaces for a Hydra module. The alias-collision rule below"
+    <> " (shortest original module name wins the shortest alias) is the canonical algorithm"
+    <> " documented in docs/specification/syntax.md, \"Printer alias choice\" -- the textual"
+    <> " syntax's own printer reuses it unchanged, skipping only the PascalCase-join step this"
+    <> " Haskell-specific encoding needs on top.") $
   "mod" ~> "cx" ~> "g" ~>
     -- Collect dependency namespaces by walking the module's term/type
     -- contents (the primary source) AND from its declared
