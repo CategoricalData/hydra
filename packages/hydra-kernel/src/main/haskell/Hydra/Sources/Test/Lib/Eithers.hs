@@ -22,6 +22,7 @@ import qualified Data.Set                     as S
 -- Additional imports specific to this file
 import Hydra.Core.Testing
 import qualified Hydra.Core.Dsl.Lib.Eithers as Eithers
+import qualified Hydra.Core.Lib.Eithers as DefEithers
 import qualified Hydra.Core.Dsl.Lib.Equality as Equality
 import qualified Hydra.Core.Dsl.Lib.Literals as Literals
 import qualified Hydra.Core.Dsl.Lib.Logic as Logic
@@ -139,11 +140,11 @@ eithersApply = subgroup "apply" [
     mulBy2 = Phantoms.right (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2))
 
 eithersBimap :: TypedTerm TestGroup
-eithersBimap = subgroup "bimap" [
+eithersBimap = subgroup "mapsBothSidesIndependently" [
   test "map left value" (leftInt 5) (leftInt 10),
   test "map right value" (rightStr "ab") (rightInt 2)]
   where
-    test name input expected = evalPair name showEitherIntInt
+    test name input expected = evalPairWithProvisions name ["mapsBothSidesIndependently"] DefEithers.bimap showEitherIntInt
       (Eithers.bimap
         (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2))
         (Phantoms.lambda "s" $ Strings.length (Phantoms.var "s"))
@@ -167,7 +168,7 @@ eithersCompose = subgroup "compose" [
     failArrow = Phantoms.lambda "_" $ Phantoms.left (Phantoms.int32 0)
 
 eithersBind :: TypedTerm TestGroup
-eithersBind = subgroup "bind" [
+eithersBind = subgroup "chainsOnRightShortCircuitsOnLeft" [
   test "bind Right with success" (rightStr "ab") (rightInt 2),
   test "bind Right with failure" (rightStr "") (leftInt 0),
   test "bind Left returns Left unchanged" (leftInt 42) (leftInt 42)]
@@ -176,16 +177,16 @@ eithersBind = subgroup "bind" [
       Logic.ifElse (Strings.isEmpty (Phantoms.var "s"))
         (Phantoms.left (Phantoms.int32 0))
         (Phantoms.right (Strings.length (Phantoms.var "s")))
-    test name input expected = evalPair name showEitherIntInt
+    test name input expected = evalPairWithProvisions name ["chainsOnRightShortCircuitsOnLeft"] DefEithers.bind showEitherIntInt
       (Eithers.bind input bindFn)
       expected
 
 eithersEither :: TypedTerm TestGroup
-eithersEither = subgroup "either" [
+eithersEither = subgroup "eliminatesByVariant" [
   test "apply left function" (leftInt 5) 10,
   test "apply right function" (rightStr "ab") 2]
   where
-    test name x result = evalPair name showInt32
+    test name x result = evalPairWithProvisions name ["eliminatesByVariant"] DefEithers.either showInt32
       (Eithers.either
         (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2))
         (Phantoms.lambda "s" $ Strings.length (Phantoms.var "s"))
@@ -193,7 +194,7 @@ eithersEither = subgroup "either" [
       (Phantoms.int32 result)
 
 eithersFoldList :: TypedTerm TestGroup
-eithersFoldList = subgroup "foldList" [
+eithersFoldList = subgroup "foldsLeftShortCircuitingOnLeft" [
   test "fold succeeds on all elements" [1, 2, 3] (Phantoms.right (Phantoms.int32 6)),
   test "fold short-circuits on failure" [1, 0, 3] (Phantoms.left (Phantoms.string "zero")),
   test "fold empty list" [] (Phantoms.right (Phantoms.int32 0))]
@@ -202,60 +203,60 @@ eithersFoldList = subgroup "foldList" [
       Logic.ifElse (Equality.equal (Phantoms.var "el") (Phantoms.int32 0))
         (Phantoms.left (Phantoms.string "zero"))
         (Phantoms.right (Math.add (Phantoms.var "acc") (Phantoms.var "el")))
-    test name input expected = evalPair name showEitherStringInt
+    test name input expected = evalPairWithProvisions name ["foldsLeftShortCircuitingOnLeft"] DefEithers.foldList showEitherStringInt
       (Eithers.foldList stepFn (Phantoms.int32 0) (Phantoms.list (Phantoms.int32 <$> input)))
       expected
 
 eithersIsLeft :: TypedTerm TestGroup
-eithersIsLeft = subgroup "isLeft" [
+eithersIsLeft = subgroup "testsLeftVariant" [
   test "left value" (leftInt 42) True,
   test "right value" (rightStr "test") False]
   where
-    test name x result = evalPair name showBool
+    test name x result = evalPairWithProvisions name ["testsLeftVariant"] DefEithers.isLeft showBool
       (Eithers.isLeft x)
       (Phantoms.boolean result)
 
 eithersIsRight :: TypedTerm TestGroup
-eithersIsRight = subgroup "isRight" [
+eithersIsRight = subgroup "testsRightVariant" [
   test "right value" (rightStr "test") True,
   test "left value" (leftInt 42) False]
   where
-    test name x result = evalPair name showBool
+    test name x result = evalPairWithProvisions name ["testsRightVariant"] DefEithers.isRight showBool
       (Eithers.isRight x)
       (Phantoms.boolean result)
 
 eithersLeft :: TypedTerm TestGroup
-eithersLeft = subgroup "left" [
+eithersLeft = subgroup "constructsLeftVariant" [
   test "wrap a value as left" 5 (leftInt 5)]
   where
-    test name x expected = evalPair name showEitherIntInt
+    test name x expected = evalPairWithProvisions name ["constructsLeftVariant"] DefEithers.left showEitherIntInt
       (Eithers.left (Phantoms.int32 x))
       expected
 
 eithersLefts :: TypedTerm TestGroup
-eithersLefts = subgroup "lefts" [
+eithersLefts = subgroup "extractsLeftValuesPreservingOrder" [
   test "filter left values" [leftInt 1, rightStr "a", leftInt 2, rightStr "b"] [1, 2],
   test "all lefts" [leftInt 1, leftInt 2] [1, 2],
   test "all rights" [rightStr "a", rightStr "b"] [],
   test "empty list" ([] :: [TypedTerm (Either Int String)]) []]
   where
-    test name input expected = evalPair name showIntList
+    test name input expected = evalPairWithProvisions name ["extractsLeftValuesPreservingOrder"] DefEithers.lefts showIntList
       (Eithers.lefts (Phantoms.list input))
       (Phantoms.list (Phantoms.int32 <$> expected))
 
 eithersMap :: TypedTerm TestGroup
-eithersMap = subgroup "map" [
+eithersMap = subgroup "mapsRightPreservesLeft" [
   test "map right value" (rightInt 5) (rightInt 10),
   test "preserve left" (leftInt 99) (leftInt 99)]
   where
-    test name input expected = evalPair name showEitherIntInt
+    test name input expected = evalPairWithProvisions name ["mapsRightPreservesLeft"] DefEithers.map showEitherIntInt
       (Eithers.map
         (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2))
         input)
       expected
 
 eithersMapList :: TypedTerm TestGroup
-eithersMapList = subgroup "mapList" [
+eithersMapList = subgroup "traversesCollectingOrShortCircuiting" [
   test "all succeed" [1, 2, 3] (Phantoms.right (Phantoms.list [Phantoms.int32 2, Phantoms.int32 4, Phantoms.int32 6])),
   test "first fails" [1, 0, 3] (Phantoms.left (Phantoms.string "zero")),
   test "empty list" [] (Phantoms.right (Phantoms.list ([] :: [TypedTerm Int])))]
@@ -264,26 +265,26 @@ eithersMapList = subgroup "mapList" [
       Logic.ifElse (Equality.equal (Phantoms.var "x") (Phantoms.int32 0))
         (Phantoms.left (Phantoms.string "zero"))
         (Phantoms.right (Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
-    test name input expected = evalPair name showEitherStringIntList
+    test name input expected = evalPairWithProvisions name ["traversesCollectingOrShortCircuiting"] DefEithers.mapList showEitherStringIntList
       (Eithers.mapList mapFn (Phantoms.list (Phantoms.int32 <$> input)))
       expected
 
 eithersMapOptional :: TypedTerm TestGroup
-eithersMapOptional = subgroup "mapOptional" [
-  test "just succeeds" (Phantoms.just (Phantoms.int32 5)) (Phantoms.right (Phantoms.just (Phantoms.int32 10))),
-  test "just fails" (Phantoms.just (Phantoms.int32 0)) (Phantoms.left (Phantoms.string "zero")),
-  test "nothing" (Phantoms.nothing :: TypedTerm (Maybe Int)) (Phantoms.right (Phantoms.nothing :: TypedTerm (Maybe Int)))]
+eithersMapOptional = subgroup "traversesOptionalCollectingOrShortCircuiting" [
+  test "given succeeds" (Phantoms.just (Phantoms.int32 5)) (Phantoms.right (Phantoms.just (Phantoms.int32 10))),
+  test "given fails" (Phantoms.just (Phantoms.int32 0)) (Phantoms.left (Phantoms.string "zero")),
+  test "none" (Phantoms.nothing :: TypedTerm (Maybe Int)) (Phantoms.right (Phantoms.nothing :: TypedTerm (Maybe Int)))]
   where
     mapFn = Phantoms.lambda "x" $
       Logic.ifElse (Equality.equal (Phantoms.var "x") (Phantoms.int32 0))
         (Phantoms.left (Phantoms.string "zero"))
         (Phantoms.right (Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
-    test name input expected = evalPair name showEitherStringMaybeInt
+    test name input expected = evalPairWithProvisions name ["traversesOptionalCollectingOrShortCircuiting"] DefEithers.mapOptional showEitherStringMaybeInt
       (Eithers.mapOptional mapFn input)
       expected
 
 eithersMapSet :: TypedTerm TestGroup
-eithersMapSet = subgroup "mapSet" [
+eithersMapSet = subgroup "traversesSetCollectingOrShortCircuiting" [
   test "all succeed" [1, 2, 3] (Phantoms.right (pIntSet [2, 4, 6])),
   test "one fails" [1, 0, 3] (Phantoms.left (Phantoms.int32 (-1))),
   test "empty set" [] (Phantoms.right (pIntSet []))]
@@ -293,36 +294,36 @@ eithersMapSet = subgroup "mapSet" [
       Logic.ifElse (Equality.equal (Phantoms.var "x") (Phantoms.int32 0))
         (Phantoms.left (Phantoms.int32 (-1)))
         (Phantoms.right (Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
-    test name input expected = evalPair name showEitherIntIntSet
+    test name input expected = evalPairWithProvisions name ["traversesSetCollectingOrShortCircuiting"] DefEithers.mapSet showEitherIntIntSet
       (Eithers.mapSet mapFn (pIntSet input))
       expected
 
 eithersPartition :: TypedTerm TestGroup
-eithersPartition = subgroup "partition" [
+eithersPartition = subgroup "splitsIntoLeftsAndRights" [
   test "partition mixed" [leftInt 1, rightStr "a", leftInt 2, rightStr "b"] ([1, 2], ["a", "b"]),
   test "all lefts" [leftInt 1, leftInt 2] ([1, 2], []),
   test "all rights" [rightStr "a", rightStr "b"] ([], ["a", "b"]),
   test "empty list" ([] :: [TypedTerm (Either Int String)]) ([], [])]
   where
-    test name input (lefts, rights) = evalPair name showPairIntListStringList
+    test name input (lefts, rights) = evalPairWithProvisions name ["splitsIntoLeftsAndRights"] DefEithers.partition showPairIntListStringList
       (Eithers.partition (Phantoms.list input))
       (Phantoms.pair (Phantoms.list (Phantoms.int32 <$> lefts)) (Phantoms.list (Phantoms.string <$> rights)))
 
 eithersRight :: TypedTerm TestGroup
-eithersRight = subgroup "right" [
+eithersRight = subgroup "constructsRightVariant" [
   test "wrap a value as right" 5 (rightInt 5)]
   where
-    test name x expected = evalPair name showEitherIntInt
+    test name x expected = evalPairWithProvisions name ["constructsRightVariant"] DefEithers.right showEitherIntInt
       (Eithers.right (Phantoms.int32 x))
       expected
 
 eithersRights :: TypedTerm TestGroup
-eithersRights = subgroup "rights" [
+eithersRights = subgroup "extractsRightValuesPreservingOrder" [
   test "filter right values" [leftInt 1, rightStr "a", leftInt 2, rightStr "b"] ["a", "b"],
   test "all rights" [rightStr "a", rightStr "b"] ["a", "b"],
   test "all lefts" [leftInt 1, leftInt 2] [],
   test "empty list" ([] :: [TypedTerm (Either Int String)]) []]
   where
-    test name input expected = evalPair name showStrList
+    test name input expected = evalPairWithProvisions name ["extractsRightValuesPreservingOrder"] DefEithers.rights showStrList
       (Eithers.rights (Phantoms.list input))
       (Phantoms.list (Phantoms.string <$> expected))

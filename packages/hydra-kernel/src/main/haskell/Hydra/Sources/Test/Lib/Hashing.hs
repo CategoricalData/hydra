@@ -53,13 +53,13 @@ allTests = definitionInModule module_ "allTests" $
 -- 32 raw digest bytes would need every host to emit high bytes (128..255) correctly, which the Java
 -- coder cannot (byte-literal overflow) — the string form sidesteps that entirely.
 hashingSha256 :: TypedTerm TestGroup
-hashingSha256 = subgroup "sha256" [
+hashingSha256 = subgroup "matchesKnownAnswerVectors" [
     test "empty input" ""
       "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
     test "abc" "abc"
       "ungWv48Bz+pBQUDeXa4iI7ADYaOWF3qctBD/YfIAFa0="]
   where
-    test name input expected = stringEvalPair name
+    test name input expected = stringEvalPairWithProvisions name ["matchesKnownAnswerVectors"] DefHashing.sha256
       (retype (primitive DefLiterals.binaryToBase64 @@ (primitive DefHashing.sha256 @@ bytes input)))
       (string expected)
     retype :: TypedTerm x -> TypedTerm String
@@ -71,14 +71,16 @@ hashingSha256 = subgroup "sha256" [
 -- straddle the block size. These guard the hand-rolled Common Lisp and Scheme implementations
 -- against a future padding-logic regression that would pass on shorter inputs.
 hashingSha256Hex :: TypedTerm TestGroup
-hashingSha256Hex = subgroup "sha256Hex" [
+hashingSha256Hex = supergroup "sha256Hex" [
+  subgroup "matchesKnownAnswerVectors" [
     test "empty input" ""
       "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     test "abc" "abc"
       "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
     test "multi-block input (spans two SHA-256 blocks)"
       "The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs."
-      "d51712a8d1852b5acf942c19caddf168f80120d2f3a72c2d917227fd37f22788",
+      "d51712a8d1852b5acf942c19caddf168f80120d2f3a72c2d917227fd37f22788"],
+  subgroup "handlesPaddingBoundariesCorrectly" [
     test "padding boundary: 55 bytes (fills one block)" (replicate 55 'a')
       "9f4390f8d30c2dd92ec9f095b65e2b9ae9b0a925a5258e241c9f1e910f734318",
     test "padding boundary: 56 bytes (forces a second block)" (replicate 56 'a')
@@ -86,10 +88,11 @@ hashingSha256Hex = subgroup "sha256Hex" [
     test "padding boundary: 63 bytes (one below block size)" (replicate 63 'a')
       "7d3e74a05d7db15bce4ad9ec0658ea98e3f06eeecf16b4c6fff2da457ddc2f34",
     test "padding boundary: 64 bytes (exactly one block)" (replicate 64 'a')
-      "ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb"]
+      "ffe054fe7ae0cb6dc65c3af9b61d5209f439851db43d0ba5997337df154668eb"]]
   where
-    test name input expected = stringEvalPair name
+    test name input expected = stringEvalPairWithProvisions name [segmentOf name] DefHashing.sha256Hex
       (retype (primitive DefHashing.sha256Hex @@ bytes input))
       (string expected)
     retype :: TypedTerm x -> TypedTerm String
     retype (TypedTerm t) = TypedTerm t
+    segmentOf n = if "padding boundary" `L.isPrefixOf` n then "handlesPaddingBoundariesCorrectly" else "matchesKnownAnswerVectors"

@@ -5,7 +5,8 @@
     "comments": [
       "Characters are represented as Unicode code points carried in an int32. Each primitive interprets its argument as a code point; arguments outside the valid range [0, 0x10FFFF] yield an implementation-defined result (typically false for the predicates).",
       "All classification predicates in this module are total functions: every int32 argument maps to a defined Boolean result, with no partiality or exceptions.",
-      "Character classification follows the Unicode general categories, matching the behaviour of Haskell's Data.Char functions of the same names. Hosts are expected to reproduce these categories rather than a locale- or ASCII-only notion of letter, digit, or whitespace."],
+      "Character classification follows the Unicode general categories, matching the behaviour of Haskell's Data.Char functions of the same names. Hosts are expected to reproduce these categories rather than a locale- or ASCII-only notion of letter, digit, or whitespace -- with the deliberate exception of isDigit, which is ASCII-only.",
+      "Case mapping (toLower/toUpper) is the simple (one-to-one) single-code-point Unicode case mapping, not full case folding."],
     "seeAlso": [],
     "provisions": []},
   "dependencies": [
@@ -52,6 +53,7 @@
             "Alphabetic is broader than cased: letters in scripts without a case distinction are included. isAlphaNum is true whenever isAlpha is true.",
             "Total. Corresponds to Haskell's Data.Char.isAlpha :: Char -> Bool."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": []},
         "signature": {
           "typeParameters": [],
@@ -75,7 +77,16 @@
             "The classification is based on Unicode general categories (any of L*, Nd, Nl, No).",
             "Total. Corresponds to Haskell's Data.Char.isAlphaNum :: Char -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.chars.isAlphaNum.classifiesAlphanumeric",
+              "kind": "requirement",
+              "statement": "isAlphaNum returns true for a code point that is a Unicode letter or digit."},
+            {
+              "name": "hydra.core.lib.chars.isAlphaNum.classifiesNonAlphanumeric",
+              "kind": "requirement",
+              "statement": "isAlphaNum returns false for a code point that is neither a Unicode letter nor a digit, such as whitespace or punctuation."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -97,6 +108,7 @@
             "Unlike the other predicates in this module, this one is deliberately ASCII-only: decimal digits outside the ASCII range (general category Nd) are rejected here, though isAlphaNum accepts them.",
             "Total. Corresponds to Haskell's Data.Char.isDigit :: Char -> Bool."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": []},
         "signature": {
           "typeParameters": [],
@@ -120,7 +132,16 @@
             "Note that not every letter is classified as uppercase or lowercase (e.g. titlecase letters, modifier letters, and letters in scripts without a case distinction are neither).",
             "Total. Corresponds to Haskell's Data.Char.isLower :: Char -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.chars.isLower.classifiesLowercase",
+              "kind": "requirement",
+              "statement": "isLower returns true for a code point that is a Unicode lowercase letter."},
+            {
+              "name": "hydra.core.lib.chars.isLower.classifiesNonLowercase",
+              "kind": "requirement",
+              "statement": "isLower returns false for a code point that is not a Unicode lowercase letter, including uppercase letters and digits."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -142,7 +163,16 @@
             "The whitespace set follows Haskell's Data.Char.isSpace, which recognises U+0020 (space), U+0009 (tab), U+000A (line feed), U+000B (vertical tab), U+000C (form feed), U+000D (carriage return), U+00A0 (no-break space), and other Unicode characters with general category Zs, Zl, or Zp.",
             "Total. Corresponds to Haskell's Data.Char.isSpace :: Char -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.chars.isSpace.classifiesWhitespace",
+              "kind": "requirement",
+              "statement": "isSpace returns true for a code point that is a Unicode whitespace character, including the space, tab, and newline characters."},
+            {
+              "name": "hydra.core.lib.chars.isSpace.classifiesNonWhitespace",
+              "kind": "requirement",
+              "statement": "isSpace returns false for a code point that is not a Unicode whitespace character, such as a letter."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -165,7 +195,16 @@
             "Note that titlecase letters (Lt) are not classified as uppercase by this predicate.",
             "Total. Corresponds to Haskell's Data.Char.isUpper :: Char -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.chars.isUpper.classifiesUppercase",
+              "kind": "requirement",
+              "statement": "isUpper returns true for a code point that is a Unicode uppercase letter."},
+            {
+              "name": "hydra.core.lib.chars.isUpper.classifiesNonUppercase",
+              "kind": "requirement",
+              "statement": "isUpper returns false for a code point that is not a Unicode uppercase letter, including lowercase letters and digits."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -188,7 +227,16 @@
             "The argument is interpreted as a Unicode code point.",
             "Total. Corresponds to Haskell's Data.Char.toLower :: Char -> Char."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.chars.toLower.mapsToLowercaseOrUnchanged",
+              "kind": "requirement",
+              "statement": "toLower returns the lowercase mapping of an uppercase code point, and returns a code point with no lowercase mapping (e.g. a digit, or an already-lowercase letter) unchanged."},
+            {
+              "name": "hydra.core.lib.chars.toLower.usesSimpleNotFullMapping",
+              "kind": "requirement",
+              "statement": "toLower uses the simple (one-to-one) Unicode case mapping, not full case folding: a code point whose full lowercase mapping would expand to multiple code points instead maps to its single-code-point simple mapping."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -211,7 +259,16 @@
             "The argument is interpreted as a Unicode code point.",
             "Total. Corresponds to Haskell's Data.Char.toUpper :: Char -> Char."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.chars.toUpper.mapsToUppercaseOrUnchanged",
+              "kind": "requirement",
+              "statement": "toUpper returns the uppercase mapping of a lowercase code point, and returns a code point with no uppercase mapping (e.g. a digit, or an already-uppercase letter) unchanged."},
+            {
+              "name": "hydra.core.lib.chars.toUpper.usesSimpleNotFullMapping",
+              "kind": "requirement",
+              "statement": "toUpper uses the simple (one-to-one) Unicode case mapping, not full case folding: a code point with no single-code-point uppercase mapping (e.g. sharp s, n preceded by apostrophe) is returned unchanged rather than expanded to a multi-code-point full mapping, and a code point whose simple mapping is itself a different single code point maps to that code point."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [

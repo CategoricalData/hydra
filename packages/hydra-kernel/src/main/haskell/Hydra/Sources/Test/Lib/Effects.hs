@@ -27,6 +27,7 @@ import qualified Hydra.Core.Lib.Effects as DefEffects
 import qualified Hydra.Core.Lib.Eithers as DefEithers
 import qualified Hydra.Core.Lib.Files as DefFiles
 import qualified Hydra.Core.Lib.Optionals as DefOptionals
+import qualified Hydra.Core.Lib.Sets as DefSets
 import qualified Hydra.Core.Lib.Strings as DefStrings
 import qualified Hydra.Core.Lib.Text as DefText
 
@@ -69,6 +70,8 @@ allTests = definitionInModule module_ "allTests" $
       effectsMapListOrder,
       effectsMapOptional,
       effectsMapOptionalOrder,
+      effectsMapSet,
+      effectsMapSetOrder,
       effectsPure]
 
 -- ============================================================================
@@ -121,8 +124,8 @@ readBack rel = foldEither (lambda "b" $ decodeBytes (var "b")) (primitive DefFil
 -- once each. A host that ran the continuation first would observe "BA"; a double-run would observe
 -- a repeated append; an eager/skipped effect would diverge.
 effectsBindOrder :: TypedTerm TestGroup
-effectsBindOrder = subgroup "bind (ordering)" [
-  effectfulCase "bind performs the first effect before the second, each once"
+effectsBindOrder = subgroup "performsEffectsInOrderExactlyOnce" [
+  effectfulCaseWithProvisions "bind performs the first effect before the second, each once" ["performsEffectsInOrderExactlyOnce"] DefEffects.bind
     (primitive DefEffects.bind
       @@ (primitive DefFiles.writeFile @@ path "bind-order.txt" @@ bytes "")
       @@ (lambda "_w" $ primitive DefEffects.bind
@@ -136,8 +139,8 @@ effectsBindOrder = subgroup "bind (ordering)" [
 -- Vehicle: append each list element to one file, threading the accumulator unchanged, then read.
 -- Observed "ABC" proves left-to-right, once each.
 effectsFoldListOrder :: TypedTerm TestGroup
-effectsFoldListOrder = subgroup "foldList (ordering)" [
-  effectfulCase "foldList performs element effects left-to-right, each once"
+effectsFoldListOrder = subgroup "performsElementEffectsLeftToRightExactlyOnce" [
+  effectfulCaseWithProvisions "foldList performs element effects left-to-right, each once" ["performsElementEffectsLeftToRightExactlyOnce"] DefEffects.foldList
     (primitive DefEffects.bind
       @@ (primitive DefFiles.writeFile @@ path "fold-order.txt" @@ bytes "")
       @@ (lambda "_w" $ primitive DefEffects.bind
@@ -154,8 +157,8 @@ effectsFoldListOrder = subgroup "foldList (ordering)" [
 -- Vehicle: append each list element to one file; ignore the collected results and read the file.
 -- Observed "ABC" proves left-to-right, once each.
 effectsMapListOrder :: TypedTerm TestGroup
-effectsMapListOrder = subgroup "mapList (ordering)" [
-  effectfulCase "mapList performs element effects left-to-right, each once"
+effectsMapListOrder = subgroup "performsElementEffectsLeftToRightExactlyOnce" [
+  effectfulCaseWithProvisions "mapList performs element effects left-to-right, each once" ["performsElementEffectsLeftToRightExactlyOnce"] DefEffects.mapList
     (primitive DefEffects.bind
       @@ (primitive DefFiles.writeFile @@ path "maplist-order.txt" @@ bytes "")
       @@ (lambda "_w" $ primitive DefEffects.bind
@@ -165,12 +168,27 @@ effectsMapListOrder = subgroup "mapList (ordering)" [
             @@ (lambda "_m" $ readBack "maplist-order.txt")))
     (string "ABC")]
 
+-- mapSet: element effects performed in ascending element order, each exactly once.
+-- Vehicle: append each set element (in ascending order) to one file; ignore the collected results
+-- and read the file. Observed "ABC" proves ascending order, once each.
+effectsMapSetOrder :: TypedTerm TestGroup
+effectsMapSetOrder = subgroup "performsElementEffectsInAscendingOrderExactlyOnce" [
+  effectfulCaseWithProvisions "mapSet performs element effects in ascending order, each once" ["performsElementEffectsInAscendingOrderExactlyOnce"] DefEffects.mapSet
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.writeFile @@ path "mapset-order.txt" @@ bytes "")
+      @@ (lambda "_w" $ primitive DefEffects.bind
+            @@ (primitive DefEffects.mapSet
+                  @@ (lambda "x" $ primitive DefFiles.appendFile @@ path "mapset-order.txt" @@ var "x")
+                  @@ (set [bytes "C", bytes "A", bytes "B"] :: TypedTerm (S.Set Binary)))
+            @@ (lambda "_m" $ readBack "mapset-order.txt")))
+    (string "ABC")]
+
 -- mapOptional: none performs no effect (zero appends); given performs exactly one effect.
 -- Vehicle: seed the file with "seed", run mapOptional (append "X") over none / given, then read.
 -- Observed "seed" (none) vs "seedX" (given) proves 0 vs exactly-1 appends.
 effectsMapOptionalOrder :: TypedTerm TestGroup
-effectsMapOptionalOrder = subgroup "mapOptional (ordering)" [
-  effectfulCase "mapOptional over none performs no effect"
+effectsMapOptionalOrder = subgroup "performsExactlyZeroOrOneEffect" [
+  effectfulCaseWithProvisions "mapOptional over none performs no effect" ["performsExactlyZeroOrOneEffect"] DefEffects.mapOptional
     (primitive DefEffects.bind
       @@ (primitive DefFiles.writeFile @@ path "mapopt-none.txt" @@ bytes "seed")
       @@ (lambda "_w" $ primitive DefEffects.bind
@@ -179,7 +197,7 @@ effectsMapOptionalOrder = subgroup "mapOptional (ordering)" [
                   @@ (nothing :: TypedTerm (Maybe Binary)))
             @@ (lambda "_m" $ readBack "mapopt-none.txt")))
     (string "seed"),
-  effectfulCase "mapOptional over a present value performs exactly one effect"
+  effectfulCaseWithProvisions "mapOptional over a given value performs exactly one effect" ["performsExactlyZeroOrOneEffect"] DefEffects.mapOptional
     (primitive DefEffects.bind
       @@ (primitive DefFiles.writeFile @@ path "mapopt-given.txt" @@ bytes "seed")
       @@ (lambda "_w" $ primitive DefEffects.bind
@@ -191,15 +209,15 @@ effectsMapOptionalOrder = subgroup "mapOptional (ordering)" [
 
 -- pure : a -> effect<a>
 effectsPure :: TypedTerm TestGroup
-effectsPure = subgroup "pure" [
-  effectfulCase "pure of a string yields the string"
+effectsPure = subgroup "liftsValueWithoutHostInteraction" [
+  effectfulCaseWithProvisions "pure of a string yields the string" ["liftsValueWithoutHostInteraction"] DefEffects.pure
     (primitive DefEffects.pure @@ string "hello")
     (string "hello")]
 
 -- bind : effect<a> -> (a -> effect<b>) -> effect<b>
 effectsBind :: TypedTerm TestGroup
-effectsBind = subgroup "bind" [
-  effectfulCase "bind threads a pure value into the next effect"
+effectsBind = subgroup "threadsResultIntoNextEffect" [
+  effectfulCaseWithProvisions "bind threads a pure value into the next effect" ["threadsResultIntoNextEffect"] DefEffects.bind
     (primitive DefEffects.bind
       @@ (primitive DefEffects.pure @@ string "abc")
       @@ (lambda "s" $ primitive DefEffects.pure @@ (primitive DefStrings.concat2 @@ var "s" @@ string "!")))
@@ -207,8 +225,8 @@ effectsBind = subgroup "bind" [
 
 -- map : (a -> b) -> effect<a> -> effect<b>
 effectsMap :: TypedTerm TestGroup
-effectsMap = subgroup "map" [
-  effectfulCase "map applies a pure function to an effect result"
+effectsMap = subgroup "appliesPureFunctionToEffectResult" [
+  effectfulCaseWithProvisions "map applies a pure function to an effect result" ["appliesPureFunctionToEffectResult"] DefEffects.map
     (primitive DefEffects.map
       @@ (lambda "s" $ primitive DefStrings.concat2 @@ var "s" @@ string "-mapped")
       @@ (primitive DefEffects.pure @@ string "x"))
@@ -216,8 +234,8 @@ effectsMap = subgroup "map" [
 
 -- apply : effect<(a -> b)> -> effect<a> -> effect<b>
 effectsApply :: TypedTerm TestGroup
-effectsApply = subgroup "apply" [
-  effectfulCase "apply applies an effectful function to an effectful argument"
+effectsApply = subgroup "appliesEffectfulFunctionToEffectfulArgument" [
+  effectfulCaseWithProvisions "apply applies an effectful function to an effectful argument" ["appliesEffectfulFunctionToEffectfulArgument"] DefEffects.apply
     (primitive DefEffects.apply
       @@ (primitive DefEffects.pure @@ (lambda "s" $ primitive DefStrings.concat2 @@ string ">" @@ var "s"))
       @@ (primitive DefEffects.pure @@ string "y"))
@@ -225,8 +243,8 @@ effectsApply = subgroup "apply" [
 
 -- compose : (a -> effect<b>) -> (b -> effect<c>) -> a -> effect<c>
 effectsCompose :: TypedTerm TestGroup
-effectsCompose = subgroup "compose" [
-  effectfulCase "compose runs two Kleisli arrows in sequence"
+effectsCompose = subgroup "sequencesTwoKleisliArrows" [
+  effectfulCaseWithProvisions "compose runs two Kleisli arrows in sequence" ["sequencesTwoKleisliArrows"] DefEffects.compose
     (primitive DefEffects.compose
       @@ (lambda "a" $ primitive DefEffects.pure @@ (primitive DefStrings.concat2 @@ var "a" @@ string "1"))
       @@ (lambda "b" $ primitive DefEffects.pure @@ (primitive DefStrings.concat2 @@ var "b" @@ string "2"))
@@ -235,8 +253,8 @@ effectsCompose = subgroup "compose" [
 
 -- foldl : (a -> b -> effect<a>) -> a -> list<b> -> effect<a>
 effectsFoldl :: TypedTerm TestGroup
-effectsFoldl = subgroup "foldl" [
-  effectfulCase "foldl sequences an effect-returning step over a list"
+effectsFoldl = subgroup "sequencesEffectReturningStepOverList" [
+  effectfulCaseWithProvisions "foldl sequences an effect-returning step over a list" ["sequencesEffectReturningStepOverList"] DefEffects.foldList
     (primitive DefEffects.foldList
       @@ (lambda "acc" $ lambda "x" $ primitive DefEffects.pure @@ (primitive DefStrings.concat2 @@ var "acc" @@ var "x"))
       @@ string ""
@@ -246,8 +264,8 @@ effectsFoldl = subgroup "foldl" [
 -- mapList : (a -> effect<b>) -> list<a> -> effect<list<b>>
 -- The resulting effect<list<string>> is mapped to a string via concatenation for comparison.
 effectsMapList :: TypedTerm TestGroup
-effectsMapList = subgroup "mapList" [
-  effectfulCase "mapList applies an effect-returning function across a list and collects results"
+effectsMapList = subgroup "appliesEffectReturningFunctionAndCollectsResults" [
+  effectfulCaseWithProvisions "mapList applies an effect-returning function across a list and collects results" ["appliesEffectReturningFunctionAndCollectsResults"] DefEffects.mapList
     (primitive DefEffects.map
       @@ (lambda "xs" $ primitive DefStrings.concat @@ var "xs")
       @@ (primitive DefEffects.mapList
@@ -258,18 +276,30 @@ effectsMapList = subgroup "mapList" [
 -- mapOptional : (a -> effect<b>) -> optional<a> -> effect<optional<b>>
 -- The resulting effect<optional<string>> is mapped to a string via fromOptional for comparison.
 effectsMapOptional :: TypedTerm TestGroup
-effectsMapOptional = subgroup "mapOptional" [
-  effectfulCase "mapOptional over a present value applies the function"
+effectsMapOptional = subgroup "appliesFunctionWhenPresentPassesThroughNoneWhenAbsent" [
+  effectfulCaseWithProvisions "mapOptional over a given value applies the function" ["appliesFunctionWhenPresentPassesThroughNoneWhenAbsent"] DefEffects.mapOptional
     (primitive DefEffects.map
       @@ (lambda "m" $ primitive DefOptionals.withDefault @@ string "<none>" @@ var "m")
       @@ (primitive DefEffects.mapOptional
         @@ (lambda "x" $ primitive DefEffects.pure @@ (primitive DefStrings.concat2 @@ var "x" @@ string "!"))
         @@ (just $ string "present")))
     (string "present!"),
-  effectfulCase "mapOptional over none yields none"
+  effectfulCaseWithProvisions "mapOptional over none yields none" ["appliesFunctionWhenPresentPassesThroughNoneWhenAbsent"] DefEffects.mapOptional
     (primitive DefEffects.map
       @@ (lambda "m" $ primitive DefOptionals.withDefault @@ string "<none>" @@ var "m")
       @@ (primitive DefEffects.mapOptional
         @@ (lambda "x" $ primitive DefEffects.pure @@ var "x")
         @@ nothing))
     (string "<none>")]
+
+-- mapSet : (a -> effect<b>) -> set<a> -> effect<set<b>>
+-- The resulting effect<set<int32>> is mapped to a string via sorted-list printing for comparison.
+effectsMapSet :: TypedTerm TestGroup
+effectsMapSet = subgroup "appliesEffectReturningFunctionAndCollectsResultsAsSet" [
+  effectfulCaseWithProvisions "mapSet applies an effect-returning function across a set and collects results" ["appliesEffectReturningFunctionAndCollectsResultsAsSet"] DefEffects.mapSet
+    (primitive DefEffects.map
+      @@ (lambda "s" $ primitive DefStrings.concat @@ (primitive DefSets.toList @@ var "s"))
+      @@ (primitive DefEffects.mapSet
+        @@ (lambda "x" $ primitive DefEffects.pure @@ (primitive DefStrings.concat2 @@ var "x" @@ string "."))
+        @@ (set [string "a", string "b"] :: TypedTerm (S.Set String))))
+    (string "a.b.")]

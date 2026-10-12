@@ -506,6 +506,92 @@ primitiveMetadata :: String -> [String] -> Maybe EntityMetadata
 primitiveMetadata description comments =
   Just (EntityMetadata (Just description) comments [] Nothing [])
 
+-- | Author a requirement-class provision (a MUST) by its local name segment and normative
+-- statement. The segment is composed into the provision's fully-qualified name by 'withProvisions',
+-- which knows the enclosing primitive's own name; a bare call site only supplies the two authored
+-- fields.
+-- Example: requirement "emptyInputs" "concat of a list of lists in which every list is empty ..."
+requirement :: String -> String -> (String, ProvisionKind, String)
+requirement localName statement = (localName, ProvisionKindRequirement, statement)
+
+-- | Author a recommendation-class provision (a SHOULD) by its local name segment and normative
+-- statement. See 'requirement'.
+-- Example: recommendation "sortedOutputIsStable" "sort is stable: equal elements preserve ..."
+recommendation :: String -> String -> (String, ProvisionKind, String)
+recommendation localName statement = (localName, ProvisionKindRecommendation, statement)
+
+-- | Attach provisions to a primitive definition, composing each provision's fully-qualified name
+-- from the primitive's own name plus the authored local segment (the same composition rule the
+-- spec generator and test harness both use; see 'Hydra.Names.composeProvisionName'). Mirrors
+-- 'deprecatedSince' in patching 'primitiveDefinitionMetadata' after the primitive is built, so it
+-- composes with any 'primitiveInModule'-family call without changing that call's own signature.
+-- Example: concat = withProvisions [
+--   requirement "flattensPreservingOrder" "concat flattens a list of lists ...",
+--   requirement "emptyInputs" "concat of a list of lists in which every list is empty ..."]
+--   $ define "concat" "Concatenate a list of lists." sig comments
+withProvisions :: [(String, ProvisionKind, String)] -> PrimitiveDefinition -> PrimitiveDefinition
+withProvisions authored pd =
+    pd {primitiveDefinitionMetadata = Just meta'}
+  where
+    pname = primitiveDefinitionName pd
+    toProvision (localName, kind, statement) =
+      Provision (composeProvisionName pname localName) kind statement
+    provisions = toProvision <$> authored
+    meta' = case primitiveDefinitionMetadata pd of
+      Just m -> m {entityMetadataProvisions = entityMetadataProvisions m L.++ provisions}
+      Nothing -> EntityMetadata Nothing [] [] Nothing provisions
+
+-- | Stamp a primitive as available (introduced) since the given version. Sets
+-- @LifecycleInfo.availableSince@, preserving any existing @deprecatedSince@ already set by
+-- 'deprecatedSince' (composable in either application order). Unlike 'deprecatedSince', this adds
+-- no comment of its own -- the version alone is the normative fact; use 'withComments' alongside
+-- it for prose explaining a rename or other history.
+-- Example: cases = availableSince "0.18" $ withProvisions [...] $ define "cases" ...
+availableSince :: String -> PrimitiveDefinition -> PrimitiveDefinition
+availableSince ver pd =
+    pd {primitiveDefinitionMetadata = Just meta'}
+  where
+    meta' = case primitiveDefinitionMetadata pd of
+      Just m -> m {entityMetadataLifecycle = Just (mergeLifecycle (entityMetadataLifecycle m))}
+      Nothing -> EntityMetadata Nothing [] [] (Just (LifecycleInfo (Just (Version ver)) Nothing)) []
+    mergeLifecycle Nothing = LifecycleInfo (Just (Version ver)) Nothing
+    mergeLifecycle (Just existing) = existing {lifecycleInfoAvailableSince = Just (Version ver)}
+
+-- | Append free-form explanatory comments (prose not captured by the one-line description or by
+-- any 'Provision') to a primitive's entity metadata -- e.g. rename history, or elaboration ported
+-- from a hand-authored specification page. Composes with 'withProvisions'/'deprecatedSince'/
+-- 'availableSince' regardless of application order.
+-- Example: cases = withComments ["Renamed from either; the scrutinee moved first."] $ ...
+withComments :: [String] -> PrimitiveDefinition -> PrimitiveDefinition
+withComments authored pd =
+    pd {primitiveDefinitionMetadata = Just meta'}
+  where
+    meta' = case primitiveDefinitionMetadata pd of
+      Just m -> m {entityMetadataComments = entityMetadataComments m L.++ authored}
+      Nothing -> EntityMetadata Nothing authored [] Nothing []
+
+-- | Record that a primitive's prior name still resolves to another primitive (e.g. after a
+-- rename), as an @EntityReferenceDefinition@ in @EntityMetadata.seeAlso@. Only call this when the
+-- prior name still exists as a live definition; a fully deleted alias has no entity reference to
+-- point to and belongs in a changelog instead, not here.
+-- Example: cases = seeAlsoPrimitive "hydra.core.lib.eithers.either" $ ...
+seeAlsoPrimitive :: String -> PrimitiveDefinition -> PrimitiveDefinition
+seeAlsoPrimitive priorName pd =
+    pd {primitiveDefinitionMetadata = Just meta'}
+  where
+    ref = EntityReferenceDefinition (DefinitionReferencePrimitive (Name priorName))
+    meta' = case primitiveDefinitionMetadata pd of
+      Just m -> m {entityMetadataSeeAlso = entityMetadataSeeAlso m L.++ [ref]}
+      Nothing -> EntityMetadata Nothing [] [ref] Nothing []
+
+-- | Build module-level entity metadata with both a one-line description and long-form comments
+-- (e.g. module-level introductory prose ported from a hand-authored specification page). Mirrors
+-- 'Hydra.Core.Overlay.Haskell.Bootstrap.descriptionMetadata', which hardcodes empty comments; use
+-- this instead when a module has intro prose beyond its one-liner.
+-- Example: moduleMetadata = descriptionMetadataWithComments (Just "...") ["The either type is ..."]
+descriptionMetadataWithComments :: Maybe String -> [String] -> Maybe EntityMetadata
+descriptionMetadataWithComments desc comments = Just (EntityMetadata desc comments [] Nothing [])
+
 -- | Convert a phantom-typed term definition to a primitive Definition, using the term body as the
 -- declarative default implementation.
 -- Example: toPrimitive "logical AND" andSig [] and_

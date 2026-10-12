@@ -49,22 +49,24 @@ allTests = definitionInModule module_ "allTests" $
       functionsFlip]
 
 functionsIdentity :: TypedTerm TestGroup
-functionsIdentity = subgroup "identity" [
-  test "integer" 42 42]
+functionsIdentity = supergroup "identity" [
+  subgroup "returnsArgumentUnchanged" [
+    test "integer" 42 42]]
   where
-    test name x result = primCase name DefFunctions.identity [int32 x] (int32 result)
+    test name x result = primCaseWithProvisions name ["returnsArgumentUnchanged"] DefFunctions.identity [int32 x] (int32 result)
 
 -- const :: x -> y -> x (#749): had zero test coverage prior to this addition. Cases
 -- confirm both argument positions independently, since a monomorphization bug could
 -- pass one and fail the other (e.g. if the second, ignored argument's type leaked in).
 functionsConst :: TypedTerm TestGroup
-functionsConst = subgroup "const" [
-  test "returns first argument, ignoring an int second argument"
-    (Terms.primitive DefFunctions.const @@ int32 5 @@ string "ignored") (int32 5),
-  test "returns first argument, ignoring a string second argument"
-    (Terms.primitive DefFunctions.const @@ string "a" @@ int32 99) (string "a")]
+functionsConst = supergroup "const" [
+  subgroup "returnsFirstArgumentIgnoringSecond" [
+    test "returns first argument, ignoring an int second argument"
+      (Terms.primitive DefFunctions.const @@ int32 5 @@ string "ignored") (int32 5),
+    test "returns first argument, ignoring a string second argument"
+      (Terms.primitive DefFunctions.const @@ string "a" @@ int32 99) (string "a")]]
   where
-    test name input result = evalCase name input result
+    test name input result = evalCaseWithProvisions name ["returnsFirstArgumentIgnoringSecond"] DefFunctions.const input result
 
 -- compose :: (b -> c) -> (a -> b) -> a -> c, where compose(g, f, x) = g(f(x)) (#775): had zero
 -- test coverage prior to this addition. Uses two distinct, order-sensitive unary primitives
@@ -88,12 +90,13 @@ functionsCompose = subgroup "compose" [
 -- actually swaps argument order, rather than merely passing its two value arguments
 -- through unchanged.
 functionsFlip :: TypedTerm TestGroup
-functionsFlip = subgroup "flip" [
-  -- flip(f, x, y) = f(y, x): flip(gt, 5, 3) = gt(3, 5) = false
-  test "flip(gt, 5, 3) = gt(3, 5)"
-    (Terms.primitive DefFunctions.flip @@ Terms.primitive DefOrdering.gt @@ int32 5 @@ int32 3) false,
-  -- flip(gt, 3, 5) = gt(5, 3) = true
-  test "flip(gt, 3, 5) = gt(5, 3)"
-    (Terms.primitive DefFunctions.flip @@ Terms.primitive DefOrdering.gt @@ int32 3 @@ int32 5) true]
+functionsFlip = supergroup "flip" [
+  subgroup "swapsArgumentOrder" [
+    -- flip(f, x, y) = f(y, x): flip(gt, 5, 3) = gt(3, 5) = false
+    test "flip(gt, 5, 3) = gt(3, 5)"
+      (Terms.primitive DefFunctions.flip @@ Terms.primitive DefOrdering.gt @@ int32 5 @@ int32 3) false,
+    -- flip(gt, 3, 5) = gt(5, 3) = true
+    test "flip(gt, 3, 5) = gt(5, 3)"
+      (Terms.primitive DefFunctions.flip @@ Terms.primitive DefOrdering.gt @@ int32 3 @@ int32 5) true]]
   where
-    test name input result = evalCase name input result
+    test name input result = evalCaseWithProvisions name ["swapsArgumentOrder"] DefFunctions.flip input result

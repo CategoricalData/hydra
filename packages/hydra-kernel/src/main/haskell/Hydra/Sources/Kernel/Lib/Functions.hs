@@ -19,7 +19,9 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.functions module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.functions module.") [
+              "Function combinators: the identity/compose/const/flip basis. These primitives manipulate\
+              \ functions themselves, independently of any particular data type."]}
   where
     definitions = [absurd, compose, const, flip, identity]
 
@@ -36,7 +38,7 @@ t2 = Types.var "t2"
 t3 = Types.var "t3"
 
 absurd :: PrimitiveDefinition
-absurd = define "absurd" "Eliminate a value of the uninhabited void type, producing any type."
+absurd = availableSince "0.17.6" $ define "absurd" "Eliminate a value of the uninhabited void type, producing any type."
   (sigWithParams [("v", "a value of the void type; unreachable in any well-typed program")] $
     TypeScheme [Name "t1"] (Types.void Types.~> t1) mempty)
   ["absurd(v) is the unique function from void to any type t1; since void has no\
@@ -48,7 +50,7 @@ absurd = define "absurd" "Eliminate a value of the uninhabited void type, produc
   \ Corresponds to Haskell's Data.Void.absurd :: Void -> a."]
 
 compose :: PrimitiveDefinition
-compose = defineWithDefault "compose" "Compose two functions."
+compose = availableSince "0.17.6" $ defineWithDefault "compose" "Compose two functions."
   (sigWithParams [("g", "the outer function, applied to the result of f"),
                   ("f", "the inner function, applied to x first"),
                   ("x", "the argument to which f is applied")] $ TypeScheme [Name "t1", Name "t2", Name "t3"]
@@ -61,7 +63,11 @@ compose = defineWithDefault "compose" "Compose two functions."
   ("g" ~> "f" ~> "x" ~> (var "g" @@ (var "f" @@ var "x")))
 
 const :: PrimitiveDefinition
-const = defineWithDefault "const" "Return the first argument, ignoring the second."
+const = availableSince "0.17.6" $ withProvisions [
+  requirement "returnsFirstArgumentIgnoringSecond"
+    "const returns its first argument unchanged and ignores its second argument entirely,\
+    \ regardless of the second argument's type or value."]
+  $ defineWithDefault "const" "Return the first argument, ignoring the second."
   (sigWithParams [("x", "the value to return"),
                   ("y", "the ignored second argument")] $ TypeScheme [Name "t1", Name "t2"]
     (t1 Types.~> t2 Types.~> t1) mempty)
@@ -71,7 +77,11 @@ const = defineWithDefault "const" "Return the first argument, ignoring the secon
   ("x" ~> "y" ~> var "x")
 
 flip :: PrimitiveDefinition
-flip = defineWithDefault "flip" "Swap the argument order of a binary function."
+flip = availableSince "0.17.6" $ withProvisions [
+  requirement "swapsArgumentOrder"
+    "flip(f, x, y) applies f with its two arguments in reversed order, i.e. flip(f, x, y) =\
+    \ f(y, x)."]
+  $ defineWithDefault "flip" "Swap the argument order of a binary function."
   (sigWithParams [("f", "the binary function whose argument order is swapped"),
                   ("x", "the argument passed as f's second argument"),
                   ("y", "the argument passed as f's first argument")] $ TypeScheme [Name "t1", Name "t2", Name "t3"]
@@ -81,7 +91,12 @@ flip = defineWithDefault "flip" "Swap the argument order of a binary function."
   ("f" ~> "x" ~> "y" ~> (var "f" @@ var "y" @@ var "x"))
 
 identity :: PrimitiveDefinition
-identity = defineWithDefault "identity" "Return the argument unchanged."
+identity = availableSince "0.17.6" $ withComments [
+  "Moved from hydra.lib.equality.identity."]
+  $ withProvisions [
+  requirement "returnsArgumentUnchanged"
+    "identity returns its argument completely unchanged, for any value."]
+  $ defineWithDefault "identity" "Return the argument unchanged."
   (sigWithParams [("x", "the value to return unchanged")] $ TypeScheme [Name "t1"] (t1 Types.~> t1) mempty)
   ["identity(x) = x; this defining equation is the specification. The polymorphic identity function.",
    "identity is the unit of compose: compose(identity, f) and compose(f, identity) are both f.",

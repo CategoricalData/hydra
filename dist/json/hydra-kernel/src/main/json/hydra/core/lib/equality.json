@@ -1,6 +1,13 @@
 {
   "name": "hydra.core.lib.equality",
-  "metadata": {"description": "Primitives in the hydra.core.lib.equality module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.equality module.",
+    "comments": [
+      "Equality of values.",
+      "Equality is structural: two values are equal exactly when they are the same value of the same type.",
+      "For floating-point values equality is value identity."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -45,7 +52,24 @@
             "Equality is reflexive, symmetric, and transitive (no NaN-style exception on floating-point: floating-point equality is provided per the underlying host's IEEE 754 comparison rules, so NaN /= NaN at the level of float64/float32).",
             "Total. Corresponds to Haskell's (==) :: Eq a => a -> a -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.equality.equal.structuralEquivalence",
+              "kind": "requirement",
+              "statement": "equal returns true exactly when its two arguments are structurally equivalent under the type's equality notion -- identical scalars, or recursively equivalent collection contents regardless of construction/insertion order for sets and maps, and in the same order for lists."},
+            {
+              "name": "hydra.core.lib.equality.equal.collectionContentsCompared",
+              "kind": "requirement",
+              "statement": "equal compares collection (map/set) values structurally, not by a proxy such as a stringified representation -- two non-empty collections with different contents are never reported equal, including when a decimal value is nested inside a collection rather than appearing at the top level."},
+            {
+              "name": "hydra.core.lib.equality.equal.decimalScaleSensitive",
+              "kind": "requirement",
+              "statement": "equal treats two decimals of equal numeric value but different scale as unequal -- decimal equality is exact (value and scale), not numeric-value equality."},
+            {
+              "name": "hydra.core.lib.equality.equal.ieee754ExtendedFloatSemantics",
+              "kind": "requirement",
+              "statement": "equal on float64/float32 follows IEEE 754 extended totalOrder semantics rather than native host ==: NaN is equal to itself, and -0.0 is unequal to +0.0; ordinary finite values compare by numeric value."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
           "parameters": [
@@ -64,7 +88,16 @@
             "Requires an 'equality' type-class constraint on the argument type.",
             "Total. Corresponds to Haskell's (/=) :: Eq a => a -> a -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.17.6"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.equality.notEqual.negatesEqual",
+              "kind": "requirement",
+              "statement": "notEqual(x, y) = not(equal(x, y)) for scalar values of any type -- integers, strings, and floats."},
+            {
+              "name": "hydra.core.lib.equality.notEqual.negatesEqualOnCollections",
+              "kind": "requirement",
+              "statement": "notEqual on collection values (lists, sets, maps) is likewise the negation of equal: order-sensitivity for lists and order-independence for sets/maps carry through unchanged."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
           "parameters": [

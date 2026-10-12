@@ -56,7 +56,7 @@
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "apply"}}},
+                              {"name": "name", "term": {"literal": {"string": "appliesFunctionWhenBothGiven"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -69,7 +69,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "both just"}}},
+                                          {"name": "name", "term": {"literal": {"string": "both given"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -155,12 +155,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.apply.appliesFunctionWhenBothGiven"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing function"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none function"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -238,12 +243,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.apply.appliesFunctionWhenBothGiven"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none value"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -329,12 +339,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.apply.appliesFunctionWhenBothGiven"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "bind"}}},
+                              {"name": "name", "term": {"literal": {"string": "chainsOnGivenPropagatesNone"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -347,7 +362,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "just to just"}}},
+                                          {"name": "name", "term": {"literal": {"string": "given to given"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -433,12 +448,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.bind.chainsOnGivenPropagatesNone"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing to nothing"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none to none"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -524,12 +544,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.bind.chainsOnGivenPropagatesNone"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "compose"}}},
+                              {"name": "name", "term": {"literal": {"string": "kleisliComposesShortCircuitingOnNone"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -678,7 +703,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.compose.kleisliComposesShortCircuitingOnNone"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -819,7 +849,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.compose.kleisliComposesShortCircuitingOnNone"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -960,375 +995,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.compose.kleisliComposesShortCircuitingOnNone"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "foldList"}}},
-                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                              {
-                                "name": "subgroups",
-                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestGroup"}}}},
-                              {
-                                "name": "cases",
-                                "term": {
-                                  "list": [
-                                    {
-                                      "record": {
-                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
-                                        "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "all steps succeed"}}},
-                                          {
-                                            "name": "case",
-                                            "term": {
-                                              "inject": {
-                                                "typeName": "hydra.core.testing.TestCase",
-                                                "field": {
-                                                  "name": "universal",
-                                                  "term": {
-                                                    "record": {
-                                                      "typeName": "hydra.core.testing.UniversalTestCase",
-                                                      "fields": [
-                                                        {
-                                                          "name": "actual",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"literal": {"integer": "int32"}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "n",
-                                                                                  "domain": {"literal": {"integer": "int32"}},
-                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {
-                                                                    "application": {
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {
-                                                                                  "body": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.foldList"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                  "type": {"literal": {"integer": "int32"}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "acc",
-                                                                                  "domain": {"literal": {"integer": "int32"}},
-                                                                                  "body": {
-                                                                                    "lambda": {
-                                                                                      "parameter": "x",
-                                                                                      "domain": {"literal": {"integer": "int32"}},
-                                                                                      "body": {
-                                                                                        "application": {
-                                                                                          "function": {
-                                                                                            "application": {
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "function": {
-                                                                                                    "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
-                                                                                                  "argument": {
-                                                                                                    "application": {
-                                                                                                      "function": {
-                                                                                                        "application": {
-                                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                          "argument": {"variable": "x"}}},
-                                                                                                      "argument": {"literal": {"integer": {"int32": 5}}}}}}},
-                                                                                              "argument": {
-                                                                                                "optional": {
-                                                                                                  "application": {
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                        "argument": {"variable": "acc"}}},
-                                                                                                    "argument": {"variable": "x"}}}}}},
-                                                                                          "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": "int32"}}}}}}}}}}}},
-                                                                          "argument": {"literal": {"integer": {"int32": 0}}}}},
-                                                                      "argument": {
-                                                                        "list": [{"literal": {"integer": {"int32": 1}}}, {"literal": {"integer": {"int32": 2}}}, {"literal": {"integer": {"int32": 3}}}]}}}}}}}},
-                                                        {
-                                                          "name": "expected",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"literal": {"integer": "int32"}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "n",
-                                                                                  "domain": {"literal": {"integer": "int32"}},
-                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {"optional": {"literal": {"integer": {"int32": 6}}}}}}}}}]}}}}}},
-                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
-                                          {
-                                            "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
-                                    {
-                                      "record": {
-                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
-                                        "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "a step fails, short-circuiting the rest"}}},
-                                          {
-                                            "name": "case",
-                                            "term": {
-                                              "inject": {
-                                                "typeName": "hydra.core.testing.TestCase",
-                                                "field": {
-                                                  "name": "universal",
-                                                  "term": {
-                                                    "record": {
-                                                      "typeName": "hydra.core.testing.UniversalTestCase",
-                                                      "fields": [
-                                                        {
-                                                          "name": "actual",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"literal": {"integer": "int32"}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "n",
-                                                                                  "domain": {"literal": {"integer": "int32"}},
-                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {
-                                                                    "application": {
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {
-                                                                                  "body": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.foldList"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                  "type": {"literal": {"integer": "int32"}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "acc",
-                                                                                  "domain": {"literal": {"integer": "int32"}},
-                                                                                  "body": {
-                                                                                    "lambda": {
-                                                                                      "parameter": "x",
-                                                                                      "domain": {"literal": {"integer": "int32"}},
-                                                                                      "body": {
-                                                                                        "application": {
-                                                                                          "function": {
-                                                                                            "application": {
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "function": {
-                                                                                                    "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
-                                                                                                  "argument": {
-                                                                                                    "application": {
-                                                                                                      "function": {
-                                                                                                        "application": {
-                                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                          "argument": {"variable": "x"}}},
-                                                                                                      "argument": {"literal": {"integer": {"int32": 5}}}}}}},
-                                                                                              "argument": {
-                                                                                                "optional": {
-                                                                                                  "application": {
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                        "argument": {"variable": "acc"}}},
-                                                                                                    "argument": {"variable": "x"}}}}}},
-                                                                                          "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": "int32"}}}}}}}}}}}},
-                                                                          "argument": {"literal": {"integer": {"int32": 0}}}}},
-                                                                      "argument": {
-                                                                        "list": [
-                                                                          {"literal": {"integer": {"int32": 1}}},
-                                                                          {"literal": {"integer": {"int32": 10}}},
-                                                                          {"literal": {"integer": {"int32": 3}}}]}}}}}}}},
-                                                        {
-                                                          "name": "expected",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"literal": {"integer": "int32"}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "n",
-                                                                                  "domain": {"literal": {"integer": "int32"}},
-                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": "int32"}}}}}}}}}]}}}}}},
-                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
-                                          {
-                                            "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
-                                    {
-                                      "record": {
-                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
-                                        "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "empty list returns the initial accumulator"}}},
-                                          {
-                                            "name": "case",
-                                            "term": {
-                                              "inject": {
-                                                "typeName": "hydra.core.testing.TestCase",
-                                                "field": {
-                                                  "name": "universal",
-                                                  "term": {
-                                                    "record": {
-                                                      "typeName": "hydra.core.testing.UniversalTestCase",
-                                                      "fields": [
-                                                        {
-                                                          "name": "actual",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"literal": {"integer": "int32"}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "n",
-                                                                                  "domain": {"literal": {"integer": "int32"}},
-                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {
-                                                                    "application": {
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {
-                                                                                  "body": {
-                                                                                    "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.foldList"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                  "type": {"literal": {"integer": "int32"}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "acc",
-                                                                                  "domain": {"literal": {"integer": "int32"}},
-                                                                                  "body": {
-                                                                                    "lambda": {
-                                                                                      "parameter": "x",
-                                                                                      "domain": {"literal": {"integer": "int32"}},
-                                                                                      "body": {
-                                                                                        "application": {
-                                                                                          "function": {
-                                                                                            "application": {
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "function": {
-                                                                                                    "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
-                                                                                                  "argument": {
-                                                                                                    "application": {
-                                                                                                      "function": {
-                                                                                                        "application": {
-                                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                          "argument": {"variable": "x"}}},
-                                                                                                      "argument": {"literal": {"integer": {"int32": 5}}}}}}},
-                                                                                              "argument": {
-                                                                                                "optional": {
-                                                                                                  "application": {
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                        "argument": {"variable": "acc"}}},
-                                                                                                    "argument": {"variable": "x"}}}}}},
-                                                                                          "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": "int32"}}}}}}}}}}}},
-                                                                          "argument": {"literal": {"integer": {"int32": 0}}}}},
-                                                                      "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": "int32"}}}}}}}}}}},
-                                                        {
-                                                          "name": "expected",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"literal": {"integer": "int32"}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "n",
-                                                                                  "domain": {"literal": {"integer": "int32"}},
-                                                                                  "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {"optional": {"literal": {"integer": {"int32": 0}}}}}}}}}]}}}}}},
-                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
-                                          {
-                                            "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
-                        {
-                          "record": {
-                            "typeName": "hydra.core.testing.TestGroup",
-                            "fields": [
-                              {"name": "name", "term": {"literal": {"string": "given"}}},
+                              {"name": "name", "term": {"literal": {"string": "wrapsValueAsPresent"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -1410,7 +1087,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.given.wrapsValueAsPresent"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -1482,12 +1164,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.given.wrapsValueAsPresent"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "givens"}}},
+                              {"name": "name", "term": {"literal": {"string": "keepsPresentValuesPreservingOrder"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -1572,12 +1259,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.givens.keepsPresentValuesPreservingOrder"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "single just"}}},
+                                          {"name": "name", "term": {"literal": {"string": "single given"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -1645,7 +1337,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.givens.keepsPresentValuesPreservingOrder"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -1721,7 +1418,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.givens.keepsPresentValuesPreservingOrder"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -1794,12 +1496,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.givens.keepsPresentValuesPreservingOrder"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "isGiven"}}},
+                              {"name": "name", "term": {"literal": {"string": "testsPresentVariant"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -1812,7 +1519,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "just value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "given value"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -1860,12 +1567,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.isGiven.testsPresentVariant"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -1912,12 +1624,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.isGiven.testsPresentVariant"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "isNone"}}},
+                              {"name": "name", "term": {"literal": {"string": "testsAbsentVariant"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -1930,7 +1647,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "just value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "given value"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -1978,12 +1695,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.isNone.testsAbsentVariant"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -2030,12 +1752,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.isNone.testsAbsentVariant"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "map"}}},
+                              {"name": "name", "term": {"literal": {"string": "mapsGivenLeavesNoneUnchanged"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -2048,7 +1775,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "maps just value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "maps given value"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -2133,12 +1860,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.map.mapsGivenLeavesNoneUnchanged"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing unchanged"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none unchanged"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -2223,416 +1955,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.map.mapsGivenLeavesNoneUnchanged"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "mapList"}}},
-                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                              {
-                                "name": "subgroups",
-                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestGroup"}}}},
-                              {
-                                "name": "cases",
-                                "term": {
-                                  "list": [
-                                    {
-                                      "record": {
-                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
-                                        "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "all elements succeed"}}},
-                                          {
-                                            "name": "case",
-                                            "term": {
-                                              "inject": {
-                                                "typeName": "hydra.core.testing.TestCase",
-                                                "field": {
-                                                  "name": "universal",
-                                                  "term": {
-                                                    "record": {
-                                                      "typeName": "hydra.core.testing.UniversalTestCase",
-                                                      "fields": [
-                                                        {
-                                                          "name": "actual",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"list": {"literal": {"integer": "int32"}}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"list": {"literal": {"integer": "int32"}}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "xs",
-                                                                                  "domain": {"list": {"literal": {"integer": "int32"}}},
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.print.model.list"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                          "argument": {
-                                                                                            "lambda": {
-                                                                                              "parameter": "n",
-                                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                                      "argument": {"variable": "xs"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {
-                                                                    "application": {
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.mapList"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                              "type": {"literal": {"integer": "int32"}}}},
-                                                                          "argument": {
-                                                                            "lambda": {
-                                                                              "parameter": "x",
-                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                              "body": {
-                                                                                "application": {
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
-                                                                                          "argument": {
-                                                                                            "application": {
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                  "argument": {"variable": "x"}}},
-                                                                                              "argument": {"literal": {"integer": {"int32": 5}}}}}}},
-                                                                                      "argument": {
-                                                                                        "optional": {
-                                                                                          "application": {
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                "argument": {"variable": "x"}}},
-                                                                                            "argument": {"literal": {"integer": {"int32": 2}}}}}}}},
-                                                                                  "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": "int32"}}}}}}}}}},
-                                                                      "argument": {
-                                                                        "list": [{"literal": {"integer": {"int32": 1}}}, {"literal": {"integer": {"int32": 2}}}, {"literal": {"integer": {"int32": 3}}}]}}}}}}}},
-                                                        {
-                                                          "name": "expected",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"list": {"literal": {"integer": "int32"}}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"list": {"literal": {"integer": "int32"}}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "xs",
-                                                                                  "domain": {"list": {"literal": {"integer": "int32"}}},
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.print.model.list"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                          "argument": {
-                                                                                            "lambda": {
-                                                                                              "parameter": "n",
-                                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                                      "argument": {"variable": "xs"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {
-                                                                    "optional": {
-                                                                      "list": [{"literal": {"integer": {"int32": 2}}}, {"literal": {"integer": {"int32": 4}}}, {"literal": {"integer": {"int32": 6}}}]}}}}}}}]}}}}}},
-                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
-                                          {
-                                            "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
-                                    {
-                                      "record": {
-                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
-                                        "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "an element fails, short-circuiting the traversal"}}},
-                                          {
-                                            "name": "case",
-                                            "term": {
-                                              "inject": {
-                                                "typeName": "hydra.core.testing.TestCase",
-                                                "field": {
-                                                  "name": "universal",
-                                                  "term": {
-                                                    "record": {
-                                                      "typeName": "hydra.core.testing.UniversalTestCase",
-                                                      "fields": [
-                                                        {
-                                                          "name": "actual",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"list": {"literal": {"integer": "int32"}}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"list": {"literal": {"integer": "int32"}}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "xs",
-                                                                                  "domain": {"list": {"literal": {"integer": "int32"}}},
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.print.model.list"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                          "argument": {
-                                                                                            "lambda": {
-                                                                                              "parameter": "n",
-                                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                                      "argument": {"variable": "xs"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {
-                                                                    "application": {
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.mapList"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                              "type": {"literal": {"integer": "int32"}}}},
-                                                                          "argument": {
-                                                                            "lambda": {
-                                                                              "parameter": "x",
-                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                              "body": {
-                                                                                "application": {
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
-                                                                                          "argument": {
-                                                                                            "application": {
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                  "argument": {"variable": "x"}}},
-                                                                                              "argument": {"literal": {"integer": {"int32": 5}}}}}}},
-                                                                                      "argument": {
-                                                                                        "optional": {
-                                                                                          "application": {
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                "argument": {"variable": "x"}}},
-                                                                                            "argument": {"literal": {"integer": {"int32": 2}}}}}}}},
-                                                                                  "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": "int32"}}}}}}}}}},
-                                                                      "argument": {
-                                                                        "list": [
-                                                                          {"literal": {"integer": {"int32": 1}}},
-                                                                          {"literal": {"integer": {"int32": 10}}},
-                                                                          {"literal": {"integer": {"int32": 3}}}]}}}}}}}},
-                                                        {
-                                                          "name": "expected",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"list": {"literal": {"integer": "int32"}}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"list": {"literal": {"integer": "int32"}}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "xs",
-                                                                                  "domain": {"list": {"literal": {"integer": "int32"}}},
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.print.model.list"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                          "argument": {
-                                                                                            "lambda": {
-                                                                                              "parameter": "n",
-                                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                                      "argument": {"variable": "xs"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {"typeApplication": {"body": {"optional": null}, "type": {"list": {"literal": {"integer": "int32"}}}}}}}}}}]}}}}}},
-                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
-                                          {
-                                            "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
-                                    {
-                                      "record": {
-                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
-                                        "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "empty list traverses to Just []"}}},
-                                          {
-                                            "name": "case",
-                                            "term": {
-                                              "inject": {
-                                                "typeName": "hydra.core.testing.TestCase",
-                                                "field": {
-                                                  "name": "universal",
-                                                  "term": {
-                                                    "record": {
-                                                      "typeName": "hydra.core.testing.UniversalTestCase",
-                                                      "fields": [
-                                                        {
-                                                          "name": "actual",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"list": {"literal": {"integer": "int32"}}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"list": {"literal": {"integer": "int32"}}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "xs",
-                                                                                  "domain": {"list": {"literal": {"integer": "int32"}}},
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.print.model.list"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                          "argument": {
-                                                                                            "lambda": {
-                                                                                              "parameter": "n",
-                                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                                      "argument": {"variable": "xs"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {
-                                                                    "application": {
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.mapList"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                              "type": {"literal": {"integer": "int32"}}}},
-                                                                          "argument": {
-                                                                            "lambda": {
-                                                                              "parameter": "x",
-                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                              "body": {
-                                                                                "application": {
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
-                                                                                          "argument": {
-                                                                                            "application": {
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                  "argument": {"variable": "x"}}},
-                                                                                              "argument": {"literal": {"integer": {"int32": 5}}}}}}},
-                                                                                      "argument": {
-                                                                                        "optional": {
-                                                                                          "application": {
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                "argument": {"variable": "x"}}},
-                                                                                            "argument": {"literal": {"integer": {"int32": 2}}}}}}}},
-                                                                                  "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": "int32"}}}}}}}}}},
-                                                                      "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": "int32"}}}}}}}}}}},
-                                                        {
-                                                          "name": "expected",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"list": {"literal": {"integer": "int32"}}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"list": {"literal": {"integer": "int32"}}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "xs",
-                                                                                  "domain": {"list": {"literal": {"integer": "int32"}}},
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.print.model.list"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                          "argument": {
-                                                                                            "lambda": {
-                                                                                              "parameter": "n",
-                                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                                      "argument": {"variable": "xs"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {"optional": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": "int32"}}}}}}}}}}]}}}}}},
-                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
-                                          {
-                                            "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
-                        {
-                          "record": {
-                            "typeName": "hydra.core.testing.TestGroup",
-                            "fields": [
-                              {"name": "name", "term": {"literal": {"string": "mapOptional"}}},
+                              {"name": "name", "term": {"literal": {"string": "filtersAndTransformsKeepingGiven"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -2756,7 +2089,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.mapOptional.filtersAndTransformsKeepingGiven"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -2862,7 +2200,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.mapOptional.filtersAndTransformsKeepingGiven"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -2968,12 +2311,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.mapOptional.filtersAndTransformsKeepingGiven"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "mapSet"}}},
+                              {"name": "name", "term": {"literal": {"string": "eliminatesByVariant"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -2986,411 +2334,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "all elements succeed"}}},
-                                          {
-                                            "name": "case",
-                                            "term": {
-                                              "inject": {
-                                                "typeName": "hydra.core.testing.TestCase",
-                                                "field": {
-                                                  "name": "universal",
-                                                  "term": {
-                                                    "record": {
-                                                      "typeName": "hydra.core.testing.UniversalTestCase",
-                                                      "fields": [
-                                                        {
-                                                          "name": "actual",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"set": {"literal": {"integer": "int32"}}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"set": {"literal": {"integer": "int32"}}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "s",
-                                                                                  "domain": {"set": {"literal": {"integer": "int32"}}},
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.print.model.set"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                          "argument": {
-                                                                                            "lambda": {
-                                                                                              "parameter": "n",
-                                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                                      "argument": {"variable": "s"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {
-                                                                    "application": {
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.mapSet"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                              "type": {"literal": {"integer": "int32"}}}},
-                                                                          "argument": {
-                                                                            "lambda": {
-                                                                              "parameter": "x",
-                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                              "body": {
-                                                                                "application": {
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
-                                                                                          "argument": {
-                                                                                            "application": {
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                  "argument": {"variable": "x"}}},
-                                                                                              "argument": {"literal": {"integer": {"int32": 5}}}}}}},
-                                                                                      "argument": {
-                                                                                        "optional": {
-                                                                                          "application": {
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                "argument": {"variable": "x"}}},
-                                                                                            "argument": {"literal": {"integer": {"int32": 2}}}}}}}},
-                                                                                  "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": "int32"}}}}}}}}}},
-                                                                      "argument": {
-                                                                        "set": [{"literal": {"integer": {"int32": 1}}}, {"literal": {"integer": {"int32": 2}}}, {"literal": {"integer": {"int32": 3}}}]}}}}}}}},
-                                                        {
-                                                          "name": "expected",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"set": {"literal": {"integer": "int32"}}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"set": {"literal": {"integer": "int32"}}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "s",
-                                                                                  "domain": {"set": {"literal": {"integer": "int32"}}},
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.print.model.set"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                          "argument": {
-                                                                                            "lambda": {
-                                                                                              "parameter": "n",
-                                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                                      "argument": {"variable": "s"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {
-                                                                    "optional": {
-                                                                      "set": [{"literal": {"integer": {"int32": 2}}}, {"literal": {"integer": {"int32": 4}}}, {"literal": {"integer": {"int32": 6}}}]}}}}}}}]}}}}}},
-                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
-                                          {
-                                            "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
-                                    {
-                                      "record": {
-                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
-                                        "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "an element fails, short-circuiting the traversal"}}},
-                                          {
-                                            "name": "case",
-                                            "term": {
-                                              "inject": {
-                                                "typeName": "hydra.core.testing.TestCase",
-                                                "field": {
-                                                  "name": "universal",
-                                                  "term": {
-                                                    "record": {
-                                                      "typeName": "hydra.core.testing.UniversalTestCase",
-                                                      "fields": [
-                                                        {
-                                                          "name": "actual",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"set": {"literal": {"integer": "int32"}}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"set": {"literal": {"integer": "int32"}}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "s",
-                                                                                  "domain": {"set": {"literal": {"integer": "int32"}}},
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.print.model.set"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                          "argument": {
-                                                                                            "lambda": {
-                                                                                              "parameter": "n",
-                                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                                      "argument": {"variable": "s"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {
-                                                                    "application": {
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.mapSet"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                              "type": {"literal": {"integer": "int32"}}}},
-                                                                          "argument": {
-                                                                            "lambda": {
-                                                                              "parameter": "x",
-                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                              "body": {
-                                                                                "application": {
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
-                                                                                          "argument": {
-                                                                                            "application": {
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                  "argument": {"variable": "x"}}},
-                                                                                              "argument": {"literal": {"integer": {"int32": 5}}}}}}},
-                                                                                      "argument": {
-                                                                                        "optional": {
-                                                                                          "application": {
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                "argument": {"variable": "x"}}},
-                                                                                            "argument": {"literal": {"integer": {"int32": 2}}}}}}}},
-                                                                                  "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": "int32"}}}}}}}}}},
-                                                                      "argument": {
-                                                                        "set": [
-                                                                          {"literal": {"integer": {"int32": 1}}},
-                                                                          {"literal": {"integer": {"int32": 3}}},
-                                                                          {"literal": {"integer": {"int32": 10}}}]}}}}}}}},
-                                                        {
-                                                          "name": "expected",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"set": {"literal": {"integer": "int32"}}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"set": {"literal": {"integer": "int32"}}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "s",
-                                                                                  "domain": {"set": {"literal": {"integer": "int32"}}},
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.print.model.set"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                          "argument": {
-                                                                                            "lambda": {
-                                                                                              "parameter": "n",
-                                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                                      "argument": {"variable": "s"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {"typeApplication": {"body": {"optional": null}, "type": {"set": {"literal": {"integer": "int32"}}}}}}}}}}]}}}}}},
-                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
-                                          {
-                                            "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
-                                    {
-                                      "record": {
-                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
-                                        "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "empty set traverses to Just {}"}}},
-                                          {
-                                            "name": "case",
-                                            "term": {
-                                              "inject": {
-                                                "typeName": "hydra.core.testing.TestCase",
-                                                "field": {
-                                                  "name": "universal",
-                                                  "term": {
-                                                    "record": {
-                                                      "typeName": "hydra.core.testing.UniversalTestCase",
-                                                      "fields": [
-                                                        {
-                                                          "name": "actual",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"set": {"literal": {"integer": "int32"}}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"set": {"literal": {"integer": "int32"}}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "s",
-                                                                                  "domain": {"set": {"literal": {"integer": "int32"}}},
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.print.model.set"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                          "argument": {
-                                                                                            "lambda": {
-                                                                                              "parameter": "n",
-                                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                                      "argument": {"variable": "s"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {
-                                                                    "application": {
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.mapSet"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                              "type": {"literal": {"integer": "int32"}}}},
-                                                                          "argument": {
-                                                                            "lambda": {
-                                                                              "parameter": "x",
-                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                              "body": {
-                                                                                "application": {
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {
-                                                                                            "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
-                                                                                          "argument": {
-                                                                                            "application": {
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                  "argument": {"variable": "x"}}},
-                                                                                              "argument": {"literal": {"integer": {"int32": 5}}}}}}},
-                                                                                      "argument": {
-                                                                                        "optional": {
-                                                                                          "application": {
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                                "argument": {"variable": "x"}}},
-                                                                                            "argument": {"literal": {"integer": {"int32": 2}}}}}}}},
-                                                                                  "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": "int32"}}}}}}}}}},
-                                                                      "argument": {"typeApplication": {"body": {"set": []}, "type": {"literal": {"integer": "int32"}}}}}}}}}}},
-                                                        {
-                                                          "name": "expected",
-                                                          "term": {
-                                                            "lambda": {
-                                                              "parameter": "_",
-                                                              "domain": "unit",
-                                                              "body": {
-                                                                "application": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "parameter": "mx",
-                                                                      "domain": {"optional": {"set": {"literal": {"integer": "int32"}}}},
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "typeApplication": {"body": {"variable": "hydra.core.print.model.optional"}, "type": {"set": {"literal": {"integer": "int32"}}}}},
-                                                                              "argument": {
-                                                                                "lambda": {
-                                                                                  "parameter": "s",
-                                                                                  "domain": {"set": {"literal": {"integer": "int32"}}},
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.print.model.set"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                          "argument": {
-                                                                                            "lambda": {
-                                                                                              "parameter": "n",
-                                                                                              "domain": {"literal": {"integer": "int32"}},
-                                                                                              "body": {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
-                                                                                      "argument": {"variable": "s"}}}}}}},
-                                                                          "argument": {"variable": "mx"}}}}},
-                                                                  "argument": {"optional": {"typeApplication": {"body": {"set": []}, "type": {"literal": {"integer": "int32"}}}}}}}}}}]}}}}}},
-                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
-                                          {
-                                            "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
-                        {
-                          "record": {
-                            "typeName": "hydra.core.testing.TestGroup",
-                            "fields": [
-                              {"name": "name", "term": {"literal": {"string": "match"}}},
-                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                              {
-                                "name": "subgroups",
-                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestGroup"}}}},
-                              {
-                                "name": "cases",
-                                "term": {
-                                  "list": [
-                                    {
-                                      "record": {
-                                        "typeName": "hydra.core.testing.TestCaseWithMetadata",
-                                        "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "just applies function"}}},
+                                          {"name": "name", "term": {"literal": {"string": "given applies function"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3456,12 +2400,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.match.eliminatesByVariant"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing returns default"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none returns default"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3527,12 +2476,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.match.eliminatesByVariant"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "toList"}}},
+                              {"name": "name", "term": {"literal": {"string": "convertsGivenToSingletonNoneToEmpty"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -3545,7 +2499,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "just value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "given value"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3613,12 +2567,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.toList.convertsGivenToSingletonNoneToEmpty"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "nothing"}}},
+                                          {"name": "name", "term": {"literal": {"string": "none"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3686,12 +2645,17 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.toList.convertsGivenToSingletonNoneToEmpty"}}}}]}}]}}]}}]}},
                         {
                           "record": {
                             "typeName": "hydra.core.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "withDefault"}}},
+                              {"name": "name", "term": {"literal": {"string": "returnsContainedValueOrDefault"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -3755,7 +2719,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.withDefault.returnsContainedValueOrDefault"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
@@ -3811,7 +2780,12 @@
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                                           {
                                             "name": "provisions",
-                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}}]}},
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.model.Name",
+                                                    "body": {"literal": {"string": "hydra.core.lib.optionals.withDefault.returnsContainedValueOrDefault"}}}}]}}]}}]}}]}}]}},
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestCaseWithMetadata"}}}}]}},

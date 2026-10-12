@@ -60,13 +60,15 @@ charsIsAlpha = subgroup "isAlpha" [
     test name x result = primCase name DefChars.isAlpha [int32 x] result
 
 charsIsAlphaNum :: TypedTerm TestGroup
-charsIsAlphaNum = subgroup "isAlphaNum" [
-  test "letter" (ord 'a') true,
-  test "digit" (ord '5') true,
-  test "space" (ord ' ') false,
-  test "punctuation" (ord '.') false]
+charsIsAlphaNum = supergroup "isAlphaNum" [
+  subgroup "classifiesAlphanumeric" [
+    test "letter" "classifiesAlphanumeric" (ord 'a') true,
+    test "digit" "classifiesAlphanumeric" (ord '5') true],
+  subgroup "classifiesNonAlphanumeric" [
+    test "space" "classifiesNonAlphanumeric" (ord ' ') false,
+    test "punctuation" "classifiesNonAlphanumeric" (ord '.') false]]
   where
-    test name x result = primCase name DefChars.isAlphaNum [int32 x] result
+    test name segment x result = primCaseWithProvisions name [segment] DefChars.isAlphaNum [int32 x] result
 
 charsIsDigit :: TypedTerm TestGroup
 charsIsDigit = subgroup "isDigit" [
@@ -80,56 +82,66 @@ charsIsDigit = subgroup "isDigit" [
     test name x result = primCase name DefChars.isDigit [int32 x] result
 
 charsIsLower :: TypedTerm TestGroup
-charsIsLower = subgroup "isLower" [
-  test "lowercase" (ord 'a') true,
-  test "uppercase" (ord 'A') false,
-  test "digit" (ord '5') false]
+charsIsLower = supergroup "isLower" [
+  subgroup "classifiesLowercase" [
+    test "lowercase" "classifiesLowercase" (ord 'a') true],
+  subgroup "classifiesNonLowercase" [
+    test "uppercase" "classifiesNonLowercase" (ord 'A') false,
+    test "digit" "classifiesNonLowercase" (ord '5') false]]
   where
-    test name x result = primCase name DefChars.isLower [int32 x] result
+    test name segment x result = primCaseWithProvisions name [segment] DefChars.isLower [int32 x] result
 
 charsIsSpace :: TypedTerm TestGroup
-charsIsSpace = subgroup "isSpace" [
-  test "space" (ord ' ') true,
-  test "tab" (ord '\t') true,
-  test "newline" (ord '\n') true,
-  test "letter" (ord 'a') false]
+charsIsSpace = supergroup "isSpace" [
+  subgroup "classifiesWhitespace" [
+    test "space" "classifiesWhitespace" (ord ' ') true,
+    test "tab" "classifiesWhitespace" (ord '\t') true,
+    test "newline" "classifiesWhitespace" (ord '\n') true],
+  subgroup "classifiesNonWhitespace" [
+    test "letter" "classifiesNonWhitespace" (ord 'a') false]]
   where
-    test name x result = primCase name DefChars.isSpace [int32 x] result
+    test name segment x result = primCaseWithProvisions name [segment] DefChars.isSpace [int32 x] result
 
 charsIsUpper :: TypedTerm TestGroup
-charsIsUpper = subgroup "isUpper" [
-  test "uppercase" (ord 'A') true,
-  test "lowercase" (ord 'a') false,
-  test "digit" (ord '5') false]
+charsIsUpper = supergroup "isUpper" [
+  subgroup "classifiesUppercase" [
+    test "uppercase" "classifiesUppercase" (ord 'A') true],
+  subgroup "classifiesNonUppercase" [
+    test "lowercase" "classifiesNonUppercase" (ord 'a') false,
+    test "digit" "classifiesNonUppercase" (ord '5') false]]
   where
-    test name x result = primCase name DefChars.isUpper [int32 x] result
+    test name segment x result = primCaseWithProvisions name [segment] DefChars.isUpper [int32 x] result
 
 charsToLower :: TypedTerm TestGroup
-charsToLower = subgroup "toLower" [
-  test "uppercase" (ord 'A') (ord 'a'),
-  test "lowercase" (ord 'a') (ord 'a'),
-  test "digit" (ord '5') (ord '5'),
-  -- U+0130 LATIN CAPITAL LETTER I WITH DOT ABOVE: the simple lowercase
-  -- mapping is plain 'i' (U+0069), not the two-code-point full mapping "i̇".
-  test "dotted capital I" 0x130 (ord 'i')]
+charsToLower = supergroup "toLower" [
+  subgroup "mapsToLowercaseOrUnchanged" [
+    test "uppercase" "mapsToLowercaseOrUnchanged" (ord 'A') (ord 'a'),
+    test "lowercase" "mapsToLowercaseOrUnchanged" (ord 'a') (ord 'a'),
+    test "digit" "mapsToLowercaseOrUnchanged" (ord '5') (ord '5')],
+  subgroup "usesSimpleNotFullMapping" [
+    -- U+0130 LATIN CAPITAL LETTER I WITH DOT ABOVE: the simple lowercase
+    -- mapping is plain 'i' (U+0069), not the two-code-point full mapping "i̇".
+    test "dotted capital I" "usesSimpleNotFullMapping" 0x130 (ord 'i')]]
   where
-    test name x result = primCase name DefChars.toLower [int32 x] (int32 result)
+    test name segment x result = primCaseWithProvisions name [segment] DefChars.toLower [int32 x] (int32 result)
 
 charsToUpper :: TypedTerm TestGroup
-charsToUpper = subgroup "toUpper" [
-  test "lowercase" (ord 'a') (ord 'A'),
-  test "uppercase" (ord 'A') (ord 'A'),
-  test "digit" (ord '5') (ord '5'),
-  -- U+00DF LATIN SMALL LETTER SHARP S ("ß") has no single-code-point
-  -- uppercase mapping, so it is returned unchanged rather than expanded
-  -- to "SS" (#782).
-  test "sharp s" 0xDF 0xDF,
-  -- U+0149 LATIN SMALL LETTER N PRECEDED BY APOSTROPHE ("ŉ") likewise has
-  -- no simple uppercase mapping.
-  test "n preceded by apostrophe" 0x149 0x149,
-  -- U+1F80 GREEK SMALL LETTER ALPHA WITH PSILI AND YPOGEGRAMMENI: the simple
-  -- uppercase mapping is the single code point U+1F88, not the two-code-point
-  -- full mapping "ἈΙ" (capital alpha with psili, followed by capital iota).
-  test "greek alpha with psili and ypogegrammeni" 0x1F80 0x1F88]
+charsToUpper = supergroup "toUpper" [
+  subgroup "mapsToUppercaseOrUnchanged" [
+    test "lowercase" "mapsToUppercaseOrUnchanged" (ord 'a') (ord 'A'),
+    test "uppercase" "mapsToUppercaseOrUnchanged" (ord 'A') (ord 'A'),
+    test "digit" "mapsToUppercaseOrUnchanged" (ord '5') (ord '5')],
+  subgroup "usesSimpleNotFullMapping" [
+    -- U+00DF LATIN SMALL LETTER SHARP S ("ß") has no single-code-point
+    -- uppercase mapping, so it is returned unchanged rather than expanded
+    -- to "SS" (#782).
+    test "sharp s" "usesSimpleNotFullMapping" 0xDF 0xDF,
+    -- U+0149 LATIN SMALL LETTER N PRECEDED BY APOSTROPHE ("ŉ") likewise has
+    -- no simple uppercase mapping.
+    test "n preceded by apostrophe" "usesSimpleNotFullMapping" 0x149 0x149,
+    -- U+1F80 GREEK SMALL LETTER ALPHA WITH PSILI AND YPOGEGRAMMENI: the simple
+    -- uppercase mapping is the single code point U+1F88, not the two-code-point
+    -- full mapping "ἈΙ" (capital alpha with psili, followed by capital iota).
+    test "greek alpha with psili and ypogegrammeni" "usesSimpleNotFullMapping" 0x1F80 0x1F88]]
   where
-    test name x result = primCase name DefChars.toUpper [int32 x] (int32 result)
+    test name segment x result = primCaseWithProvisions name [segment] DefChars.toUpper [int32 x] (int32 result)

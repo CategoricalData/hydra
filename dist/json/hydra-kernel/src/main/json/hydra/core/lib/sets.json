@@ -1,6 +1,13 @@
 {
   "name": "hydra.core.lib.sets",
-  "metadata": {"description": "Primitives in the hydra.core.lib.sets module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.sets module.",
+    "comments": [
+      "Ordered sets: finite collections of distinct elements.",
+      "Hydra sets are ordered collections: iteration (toList) is in ascending element order, under the type's total order.",
+      "Because element ordering is part of the set type's contract, every set-typed variable in this module's signatures carries the ordering constraint on its element type, including in primitives that perform no comparison themselves."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -44,7 +51,16 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.delete :: Ord a => a -> Set a -> Set a."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.sets.delete.removesElement",
+              "kind": "requirement",
+              "statement": "delete removes the given element from the set if present, leaving every other element unchanged."},
+            {
+              "name": "hydra.core.lib.sets.delete.noOpWhenAbsentOrEmpty",
+              "kind": "requirement",
+              "statement": "delete returns the set unchanged when the element is not present, including when the set is empty."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -63,7 +79,16 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.difference :: Ord a => Set a -> Set a -> Set a."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.sets.difference.removesElementsOfSecondSet",
+              "kind": "requirement",
+              "statement": "difference returns the elements of the first set that do not occur in the second set."},
+            {
+              "name": "hydra.core.lib.sets.difference.identityWhenSecondEmpty",
+              "kind": "requirement",
+              "statement": "difference with an empty second set returns the first set unchanged."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -119,7 +144,12 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.empty :: Set a."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.sets.empty.hasNoElements",
+              "kind": "requirement",
+              "statement": "empty is the set containing no elements, for any element type."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [],
@@ -136,6 +166,7 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.filter :: (a -> Bool) -> Set a -> Set a."],
           "seeAlso": [],
+          "lifecycle": {"availableSince": "0.17.6"},
           "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
@@ -172,7 +203,16 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.fromList :: Ord a => [a] -> Set a."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.sets.fromList.collectsDistinctElements",
+              "kind": "requirement",
+              "statement": "fromList returns the set of the distinct elements of the given list, discarding duplicates and order."},
+            {
+              "name": "hydra.core.lib.sets.fromList.emptyListYieldsEmptySet",
+              "kind": "requirement",
+              "statement": "fromList of the empty list is the empty set."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -194,7 +234,16 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.insert :: Ord a => a -> Set a -> Set a."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.sets.insert.addsElement",
+              "kind": "requirement",
+              "statement": "insert adds the given element to the set, leaving every other element unchanged."},
+            {
+              "name": "hydra.core.lib.sets.insert.noOpWhenAlreadyPresent",
+              "kind": "requirement",
+              "statement": "insert returns the set unchanged when the element is already present."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -213,7 +262,16 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.intersection :: Ord a => Set a -> Set a -> Set a."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.sets.intersection.keepsElementsInBoth",
+              "kind": "requirement",
+              "statement": "intersection returns exactly the elements present in both sets."},
+            {
+              "name": "hydra.core.lib.sets.intersection.emptyWhenNoOverlapOrEitherEmpty",
+              "kind": "requirement",
+              "statement": "intersection is the empty set when the two sets share no elements, or when either set is empty."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -269,7 +327,12 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.null :: Set a -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.sets.isEmpty.testsZeroSize",
+              "kind": "requirement",
+              "statement": "isEmpty returns true exactly when the set has no elements."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [{"name": "s", "description": "the set to test for emptiness", "type": {"set": {"variable": "x"}}, "isLazy": false}],
@@ -286,7 +349,16 @@
             "Requires 'ordering' constraints on both the input and output element types.",
             "Total. Corresponds to Haskell's Data.Set.map :: (Ord a, Ord b) => (a -> b) -> Set a -> Set b."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.sets.map.appliesFunctionToEachElement",
+              "kind": "requirement",
+              "statement": "map returns the set of applying the given function to each element, deduplicating results that collide under the output type's ordering."},
+            {
+              "name": "hydra.core.lib.sets.map.emptyInput",
+              "kind": "requirement",
+              "statement": "map over the empty set is the empty set, regardless of the function."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -322,7 +394,16 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.member :: Ord a => a -> Set a -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.sets.member.testsSetMembership",
+              "kind": "requirement",
+              "statement": "member returns true exactly when the given value is an element of the set."},
+            {
+              "name": "hydra.core.lib.sets.member.falseWhenAbsentOrEmpty",
+              "kind": "requirement",
+              "statement": "member returns false when the value is not an element of the set, including when the set is empty."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -341,7 +422,12 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.singleton :: a -> Set a."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.sets.singleton.wrapsOneElement",
+              "kind": "requirement",
+              "statement": "singleton x returns the set containing exactly the element x."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [{"name": "x", "description": "the single element of the set", "type": {"variable": "x"}, "isLazy": false}],
@@ -358,7 +444,12 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.size :: Set a -> Int (with narrowing to int32)."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.sets.size.countsElements",
+              "kind": "requirement",
+              "statement": "size returns the number of elements in the set, including zero for the empty set."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [{"name": "s", "description": "the set whose size is returned", "type": {"set": {"variable": "x"}}, "isLazy": false}],
@@ -375,7 +466,16 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.toAscList :: Set a -> [a]."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.sets.toList.ordersAscending",
+              "kind": "requirement",
+              "statement": "toList returns the elements of the set as a list in ascending order under the element type's ordering, regardless of insertion order."},
+            {
+              "name": "hydra.core.lib.sets.toList.emptySetYieldsEmptyList",
+              "kind": "requirement",
+              "statement": "toList of the empty set is the empty list."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [{"name": "s", "description": "the set to convert to a list", "type": {"set": {"variable": "x"}}, "isLazy": false}],
@@ -392,7 +492,16 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.union :: Ord a => Set a -> Set a -> Set a."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.sets.union.keepsElementsInEither",
+              "kind": "requirement",
+              "statement": "union returns the elements that are in either set (or both), with no duplicates."},
+            {
+              "name": "hydra.core.lib.sets.union.identityWhenEitherEmpty",
+              "kind": "requirement",
+              "statement": "union with either set empty returns the other set unchanged."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -436,7 +545,16 @@
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.unions :: Ord a => [Set a] -> Set a."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.sets.unions.keepsElementsInAny",
+              "kind": "requirement",
+              "statement": "unions returns the elements that occur in at least one of the given sets, equivalent to folding union over the list starting from empty."},
+            {
+              "name": "hydra.core.lib.sets.unions.emptyListOfSetsYieldsEmptySet",
+              "kind": "requirement",
+              "statement": "unions of an empty list of sets is the empty set."}]},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [

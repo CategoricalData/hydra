@@ -23,6 +23,7 @@ import qualified Hydra.Core.Dsl.Lib.Literals as Literals
 import qualified Hydra.Core.Dsl.Lib.Math as Math
 import qualified Hydra.Core.Dsl.Lib.Pairs as Pairs
 import qualified Hydra.Core.Dsl.Lib.Strings as Strings
+import qualified Hydra.Core.Lib.Pairs as DefPairs
 
 
 ns :: ModuleName
@@ -70,11 +71,11 @@ allTests = definitionInModule module_ "allTests" $
       pairsSecond]
 
 pairsBimap :: TypedTerm TestGroup
-pairsBimap = subgroup "bimap" [
+pairsBimap = subgroup "mapsBothElementsIndependently" [
   test "transform both elements" 5 "ab" 10 2,
   test "with zero" 0 "hello" 0 5]
   where
-    test name fst snd resultFst resultSnd = evalPair name showIntIntPair
+    test name fst snd resultFst resultSnd = evalPairWithProvisions name ["mapsBothElementsIndependently"] DefPairs.bimap showIntIntPair
       (Pairs.bimap
         (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2))
         (Phantoms.lambda "s" $ Strings.length (Phantoms.var "s"))
@@ -82,31 +83,31 @@ pairsBimap = subgroup "bimap" [
       (Phantoms.pair (Phantoms.int32 resultFst) (Phantoms.int32 resultSnd))
 
 pairsFirst :: TypedTerm TestGroup
-pairsFirst = subgroup "first" [
+pairsFirst = subgroup "returnsFirstComponent" [
   test "extract first element" 42 "hello" 42,
   test "with zero" 0 "world" 0,
   test "negative number" (-5) "test" (-5)]
   where
-    test name fst snd result = evalPair name showInt32
+    test name fst snd result = evalPairWithProvisions name ["returnsFirstComponent"] DefPairs.first showInt32
       (Pairs.first (Phantoms.pair (Phantoms.int32 fst) (Phantoms.string snd)))
       (Phantoms.int32 result)
 
 pairsPair :: TypedTerm TestGroup
-pairsPair = subgroup "pair" [
+pairsPair = subgroup "constructsFromTwoValues" [
   test "construct a pair" 42 "hello",
   test "with zero" 0 "world",
   test "negative number" (-5) "test"]
   where
-    test name fst snd = evalPair name showIntStrPair
+    test name fst snd = evalPairWithProvisions name ["constructsFromTwoValues"] DefPairs.pair showIntStrPair
       (Pairs.pair (Phantoms.int32 fst) (Phantoms.string snd))
       (Phantoms.pair (Phantoms.int32 fst) (Phantoms.string snd))
 
 pairsSecond :: TypedTerm TestGroup
-pairsSecond = subgroup "second" [
+pairsSecond = subgroup "returnsSecondComponent" [
   test "extract second element" 42 "hello" "hello",
   test "empty string" 0 "" "",
   test "long string" 123 "testing" "testing"]
   where
-    test name fst snd result = stringEvalPair name
+    test name fst snd result = stringEvalPairWithProvisions name ["returnsSecondComponent"] DefPairs.second
       (Pairs.second (Phantoms.pair (Phantoms.int32 fst) (Phantoms.string snd)))
       (Phantoms.string result)

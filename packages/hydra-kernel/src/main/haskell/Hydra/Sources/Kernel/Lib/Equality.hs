@@ -21,7 +21,11 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.equality module.")}
+            moduleMetadata = descriptionMetadataWithComments (Just "Primitives in the hydra.core.lib.equality module.") [
+              "Equality of values.",
+              "Equality is structural: two values are equal exactly when they are the same value of the\
+              \ same type.",
+              "For floating-point values equality is value identity."]}
   where
     definitions = [equal, notEqual]
 
@@ -38,7 +42,25 @@ tx :: Type
 tx = Types.var "x"
 
 equal :: PrimitiveDefinition
-equal = define "equal" "Check whether two values are equal."
+equal = availableSince "0.15" $ withProvisions [
+  requirement "structuralEquivalence"
+    "equal returns true exactly when its two arguments are structurally equivalent under the\
+    \ type's equality notion -- identical scalars, or recursively equivalent collection contents\
+    \ regardless of construction/insertion order for sets and maps, and in the same order for\
+    \ lists.",
+  requirement "collectionContentsCompared"
+    "equal compares collection (map/set) values structurally, not by a proxy such as a\
+    \ stringified representation -- two non-empty collections with different contents are never\
+    \ reported equal, including when a decimal value is nested inside a collection rather than\
+    \ appearing at the top level.",
+  requirement "decimalScaleSensitive"
+    "equal treats two decimals of equal numeric value but different scale as unequal -- decimal\
+    \ equality is exact (value and scale), not numeric-value equality.",
+  requirement "ieee754ExtendedFloatSemantics"
+    "equal on float64/float32 follows IEEE 754 extended totalOrder semantics rather than native\
+    \ host ==: NaN is equal to itself, and -0.0 is unequal to +0.0; ordinary finite values compare\
+    \ by numeric value."]
+  $ define "equal" "Check whether two values are equal."
   (sigWithParams [("x", "the first value to compare"), ("y", "the second value to compare")] $ Types.polyConstrained [("x", [Name "equality"])]
     (tx Types.~> tx Types.~> Types.boolean))
   ["equal(x, y) returns true if x and y are structurally equal under the type's notion of equality.",
@@ -50,7 +72,14 @@ equal = define "equal" "Check whether two values are equal."
    "Total. Corresponds to Haskell's (==) :: Eq a => a -> a -> Bool."]
 
 notEqual :: PrimitiveDefinition
-notEqual = defineWithDefault "notEqual" "Check whether two values are unequal."
+notEqual = availableSince "0.17.6" $ withProvisions [
+  requirement "negatesEqual"
+    "notEqual(x, y) = not(equal(x, y)) for scalar values of any type -- integers, strings, and\
+    \ floats.",
+  requirement "negatesEqualOnCollections"
+    "notEqual on collection values (lists, sets, maps) is likewise the negation of equal:\
+    \ order-sensitivity for lists and order-independence for sets/maps carry through unchanged."]
+  $ defineWithDefault "notEqual" "Check whether two values are unequal."
   (sigWithParams [("x", "the first value to compare"), ("y", "the second value to compare")] $ Types.polyConstrained [("x", [Name "equality"])]
     (tx Types.~> tx Types.~> Types.boolean))
   ["notEqual(x, y) = logic.not(equal(x, y)); this defining equation is the specification, and the\

@@ -1,6 +1,13 @@
 {
   "name": "hydra.core.lib.maps",
-  "metadata": {"description": "Primitives in the hydra.core.lib.maps module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.maps module.",
+    "comments": [
+      "Ordered maps: finite collections of key-value bindings, with at most one value per key.",
+      "Hydra maps are ordered collections: iteration -- elems, keys, toList -- is in ascending key order, under the total order defined in the ordering-and-equality specification.",
+      "Because key ordering is part of the map type's contract, every map-typed variable in this module's signatures carries the ordering constraint on its key type, including in primitives that perform no comparison themselves."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -45,7 +52,12 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.alter :: Ord k => (Maybe v -> Maybe v) -> k -> Map k v -> Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.alter.insertsUpdatesOrDeletes",
+              "kind": "requirement",
+              "statement": "alter applies the given function to the optional current value at the key: if the function returns given(v'), that binding is set (inserting if absent, overwriting if present); if it returns none, the key is removed."}]},
         "signature": {
           "typeParameters": [{"name": "v", "constraints": []}, {"name": "k", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -111,7 +123,16 @@
             "Requires 'ordering' constraints on both the input and output key types.",
             "Total. Corresponds to a key-and-value lift of Haskell's Data.Map.fromList . map (\\(k,v) -> (fk k, fv v)) . toList."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.bimap.transformsKeysAndValues",
+              "kind": "requirement",
+              "statement": "bimap returns a new map where each binding (k, v) becomes (fk(k), fv(v)), applying the key function and value function independently to every binding."},
+            {
+              "name": "hydra.core.lib.maps.bimap.emptyInput",
+              "kind": "requirement",
+              "statement": "bimap of the empty map is the empty map, regardless of the key and value functions."}]},
         "signature": {
           "typeParameters": [
             {"name": "k1", "constraints": [{"simple": "ordering"}]},
@@ -178,7 +199,16 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.delete :: Ord k => k -> Map k v -> Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.delete.removesKeyIfPresent",
+              "kind": "requirement",
+              "statement": "delete removes the binding for the given key if present, leaving the rest of the map unchanged."},
+            {
+              "name": "hydra.core.lib.maps.delete.noOpWhenAbsentOrEmpty",
+              "kind": "requirement",
+              "statement": "delete leaves the map unchanged when the key is absent, including when the map is empty."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -202,7 +232,16 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.difference :: Ord k => Map k v -> Map k v -> Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.17.6"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.difference.removesBindingsWithKeysInSecondMap",
+              "kind": "requirement",
+              "statement": "difference returns the bindings of the first map whose keys do not occur in the second map."},
+            {
+              "name": "hydra.core.lib.maps.difference.identityWhenSecondEmpty",
+              "kind": "requirement",
+              "statement": "difference with an empty second map returns the first map unchanged."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -229,7 +268,16 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.elems :: Map k v -> [v]."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.elems.returnsValuesInKeyOrder",
+              "kind": "requirement",
+              "statement": "elems returns the map's values as a list ordered by ascending key, including when keys were inserted out of order."},
+            {
+              "name": "hydra.core.lib.maps.elems.emptyInput",
+              "kind": "requirement",
+              "statement": "elems of the empty map is the empty list."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -251,7 +299,12 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.empty :: Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.empty.hasNoBindings",
+              "kind": "requirement",
+              "statement": "empty is the map containing no bindings."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [],
@@ -268,7 +321,16 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.filter :: (v -> Bool) -> Map k v -> Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.filter.keepsMatchingValues",
+              "kind": "requirement",
+              "statement": "filter returns the submap containing exactly the bindings whose value satisfies the predicate, preserving all matching keys."},
+            {
+              "name": "hydra.core.lib.maps.filter.boundaryCases",
+              "kind": "requirement",
+              "statement": "filter degrades correctly at the boundaries: a predicate matching no value yields the empty map; filtering the empty map yields the empty map."}]},
         "signature": {
           "typeParameters": [{"name": "v", "constraints": []}, {"name": "k", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -317,7 +379,16 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.filterWithKey.keepsMatchingBindings",
+              "kind": "requirement",
+              "statement": "filterWithKey returns the submap containing exactly the bindings for which the predicate, given both key and value, is true."},
+            {
+              "name": "hydra.core.lib.maps.filterWithKey.boundaryCases",
+              "kind": "requirement",
+              "statement": "filterWithKey degrades correctly at the boundaries: a predicate matching no binding yields the empty map; filtering the empty map yields the empty map."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -372,7 +443,12 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.findWithDefault :: Ord k => v -> k -> Map k v -> v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.findWithDefault.returnsBoundValueOrDefault",
+              "kind": "requirement",
+              "statement": "findWithDefault returns the value bound to the key when present, or the supplied default value when the key is absent."}]},
         "signature": {
           "typeParameters": [{"name": "v", "constraints": []}, {"name": "k", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -416,7 +492,20 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.fromList :: Ord k => [(k, v)] -> Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.fromList.buildsMapFromPairs",
+              "kind": "requirement",
+              "statement": "fromList returns the map containing exactly the bindings in the input list of key-value pairs."},
+            {
+              "name": "hydra.core.lib.maps.fromList.lastDuplicateWins",
+              "kind": "requirement",
+              "statement": "fromList resolves multiple entries for the same key by keeping the value from the last occurrence in the input list."},
+            {
+              "name": "hydra.core.lib.maps.fromList.emptyInput",
+              "kind": "requirement",
+              "statement": "fromList of the empty list of pairs is the empty map."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -438,7 +527,12 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.insert :: Ord k => k -> v -> Map k v -> Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.insert.addsOrOverwritesBinding",
+              "kind": "requirement",
+              "statement": "insert adds the given key-value binding to the map, overwriting any existing value at that key, including when the map was empty."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -463,7 +557,16 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.intersection :: Ord k => Map k v -> Map k v -> Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.17.6"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.intersection.keepsBindingsWithKeysInBoth",
+              "kind": "requirement",
+              "statement": "intersection returns the bindings of the first map whose keys also occur in the second map, taking the value from the first map on each common key."},
+            {
+              "name": "hydra.core.lib.maps.intersection.emptyWhenNoOverlapOrEitherEmpty",
+              "kind": "requirement",
+              "statement": "intersection is the empty map when the two maps share no keys, or when either map is empty."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -490,7 +593,12 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.isEmpty.testsZeroBindings",
+              "kind": "requirement",
+              "statement": "isEmpty returns true exactly when the map has no bindings."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -512,7 +620,16 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.keys :: Map k v -> [k]."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.keys.returnsKeysInOrder",
+              "kind": "requirement",
+              "statement": "keys returns the map's keys as a list in ascending order, including when keys were inserted out of order."},
+            {
+              "name": "hydra.core.lib.maps.keys.emptyInput",
+              "kind": "requirement",
+              "statement": "keys of the empty map is the empty list."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -534,7 +651,16 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.lookup :: Ord k => k -> Map k v -> Maybe v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.lookup.returnsBoundValue",
+              "kind": "requirement",
+              "statement": "lookup returns the value bound to the given key, wrapped, when the key is present."},
+            {
+              "name": "hydra.core.lib.maps.lookup.noneWhenAbsentOrEmpty",
+              "kind": "requirement",
+              "statement": "lookup returns none when the key is absent, including when the map is empty."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -557,7 +683,16 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.map :: (v -> w) -> Map k v -> Map k w / fmap on Map."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.map.appliesFunctionToValues",
+              "kind": "requirement",
+              "statement": "map applies the given function to every value in the map, leaving keys unchanged."},
+            {
+              "name": "hydra.core.lib.maps.map.emptyInput",
+              "kind": "requirement",
+              "statement": "map over the empty map is the empty map, regardless of the function."}]},
         "signature": {
           "typeParameters": [
             {"name": "v1", "constraints": []},
@@ -612,7 +747,16 @@
             "Requires 'ordering' constraints on both the input and output key types.",
             "Total. Corresponds to Haskell's Data.Map.mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> Map k1 v -> Map k2 v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.mapKeys.appliesFunctionToKeys",
+              "kind": "requirement",
+              "statement": "mapKeys applies the given function to every key in the map, leaving the bound values unchanged."},
+            {
+              "name": "hydra.core.lib.maps.mapKeys.emptyInput",
+              "kind": "requirement",
+              "statement": "mapKeys over the empty map is the empty map, regardless of the function."}]},
         "signature": {
           "typeParameters": [
             {"name": "k1", "constraints": [{"simple": "ordering"}]},
@@ -667,7 +811,16 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.member :: Ord k => k -> Map k v -> Bool."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.member.testsKeyPresence",
+              "kind": "requirement",
+              "statement": "member returns true exactly when the given key is present in the map."},
+            {
+              "name": "hydra.core.lib.maps.member.falseWhenAbsentOrEmpty",
+              "kind": "requirement",
+              "statement": "member returns false when the key is absent, including when the map is empty."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -690,7 +843,12 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.singleton :: k -> v -> Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.singleton.wrapsOneBinding",
+              "kind": "requirement",
+              "statement": "singleton returns the map containing exactly the one given key-value binding."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -709,7 +867,12 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.size :: Map k v -> Int (with narrowing to int32)."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.size.countsBindings",
+              "kind": "requirement",
+              "statement": "size returns the number of bindings in the map, including zero for the empty map."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -731,7 +894,16 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.toList :: Map k v -> [(k, v)]."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.toList.returnsPairsInKeyOrder",
+              "kind": "requirement",
+              "statement": "toList returns the map's bindings as a list of key-value pairs ordered by ascending key, including when keys were inserted out of order."},
+            {
+              "name": "hydra.core.lib.maps.toList.emptyInput",
+              "kind": "requirement",
+              "statement": "toList of the empty map is the empty list."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -753,7 +925,16 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.union :: Ord k => Map k v -> Map k v -> Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.union.firstMapTakesPrecedence",
+              "kind": "requirement",
+              "statement": "union returns the map containing all bindings from the first map plus the bindings of the second map whose keys are not in the first; on key collision the first map's binding is kept."},
+            {
+              "name": "hydra.core.lib.maps.union.identityWithEmpty",
+              "kind": "requirement",
+              "statement": "union with either map empty returns the other map unchanged."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -781,7 +962,16 @@
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.unions :: Ord k => [Map k v] -> Map k v."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.17.6"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.maps.unions.earliestMapTakesPrecedence",
+              "kind": "requirement",
+              "statement": "unions returns the bindings of every map in the list; when a key occurs in more than one map, the binding from the earliest such map in the list is kept."},
+            {
+              "name": "hydra.core.lib.maps.unions.emptyListOfMapsYieldsEmptyMap",
+              "kind": "requirement",
+              "statement": "unions of an empty list of maps is the empty map."}]},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [

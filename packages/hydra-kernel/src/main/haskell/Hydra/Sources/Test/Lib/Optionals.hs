@@ -26,6 +26,7 @@ import qualified Hydra.Core.Dsl.Lib.Literals as Literals
 import qualified Hydra.Core.Dsl.Lib.Logic as Logic
 import qualified Hydra.Core.Dsl.Lib.Math as Math
 import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Core.Lib.Optionals as DefOptionals
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Data.Set as S
 
@@ -100,44 +101,44 @@ allTests = definitionInModule module_ "allTests" $
       optionalsWithDefault]
 
 optionalsApply :: TypedTerm TestGroup
-optionalsApply = subgroup "apply" [
-  test "both just" (Phantoms.just (Phantoms.lambda "x" $ Math.add (Phantoms.int32 3) (Phantoms.var "x"))) (justInt 5) (justInt 8),
-  test "nothing function" (Phantoms.nothing :: TypedTerm (Maybe (Int -> Int))) (justInt 5) nothingInt,
-  test "nothing value" (Phantoms.just (Phantoms.lambda "x" $ Math.add (Phantoms.int32 3) (Phantoms.var "x"))) nothingInt nothingInt]
+optionalsApply = subgroup "appliesFunctionWhenBothGiven" [
+  test "both given" (Phantoms.just (Phantoms.lambda "x" $ Math.add (Phantoms.int32 3) (Phantoms.var "x"))) (justInt 5) (justInt 8),
+  test "none function" (Phantoms.nothing :: TypedTerm (Maybe (Int -> Int))) (justInt 5) nothingInt,
+  test "none value" (Phantoms.just (Phantoms.lambda "x" $ Math.add (Phantoms.int32 3) (Phantoms.var "x"))) nothingInt nothingInt]
   where
-    test name f x expected = evalPair name showMaybeInt
+    test name f x expected = evalPairWithProvisions name ["appliesFunctionWhenBothGiven"] DefOptionals.apply showMaybeInt
       (Optionals.apply f x)
       expected
 
 optionalsBind :: TypedTerm TestGroup
-optionalsBind = subgroup "bind" [
-  test "just to just" (justInt 5) (justInt 10),
-  test "nothing to nothing" nothingInt nothingInt]
+optionalsBind = subgroup "chainsOnGivenPropagatesNone" [
+  test "given to given" (justInt 5) (justInt 10),
+  test "none to none" nothingInt nothingInt]
   where
-    test name x expected = evalPair name showMaybeInt
+    test name x expected = evalPairWithProvisions name ["chainsOnGivenPropagatesNone"] DefOptionals.bind showMaybeInt
       (Optionals.bind x (Phantoms.lambda "x" $ Phantoms.just (Math.mul (Phantoms.var "x") (Phantoms.int32 2))))
       expected
 
 optionalsCompose :: TypedTerm TestGroup
-optionalsCompose = subgroup "compose" [
+optionalsCompose = subgroup "kleisliComposesShortCircuitingOnNone" [
   test "both succeed" 5 (justInt 12),
   testFails "first fails" 10,
   testFails "second fails" 3]
   where
-    -- f: x -> if x <= 5 then Just (x + 1) else Nothing
+    -- f: x -> if x <= 5 then given (x + 1) else none
     funF = Phantoms.lambda "x" $
       Logic.ifElse (Ordering.lte (Phantoms.var "x") (Phantoms.int32 5))
         (Phantoms.just (Math.add (Phantoms.var "x") (Phantoms.int32 1)))
         (Phantoms.nothing :: TypedTerm (Maybe Int))
-    -- g: y -> if y >= 5 then Just (y * 2) else Nothing
+    -- g: y -> if y >= 5 then given (y * 2) else none
     funG = Phantoms.lambda "y" $
       Logic.ifElse (Ordering.gte (Phantoms.var "y") (Phantoms.int32 5))
         (Phantoms.just (Math.mul (Phantoms.var "y") (Phantoms.int32 2)))
         (Phantoms.nothing :: TypedTerm (Maybe Int))
-    test name input expected = evalPair name showMaybeInt
+    test name input expected = evalPairWithProvisions name ["kleisliComposesShortCircuitingOnNone"] DefOptionals.compose showMaybeInt
       (Optionals.compose funF funG (Phantoms.int32 input))
       expected
-    testFails name input = evalPair name showMaybeInt
+    testFails name input = evalPairWithProvisions name ["kleisliComposesShortCircuitingOnNone"] DefOptionals.compose showMaybeInt
       (Optionals.compose funF funG (Phantoms.int32 input))
       nothingInt
 
@@ -157,25 +158,25 @@ optionalsFoldList = subgroup "foldList" [
       expected
 
 optionalsGiven :: TypedTerm TestGroup
-optionalsGiven = subgroup "given" [
+optionalsGiven = subgroup "wrapsValueAsPresent" [
   testInt "wraps integer" 42 42,
   testStr "wraps string" "hello" "hello"]
   where
-    testInt name x expected = evalPair name showMaybeInt
+    testInt name x expected = evalPairWithProvisions name ["wrapsValueAsPresent"] DefOptionals.given showMaybeInt
       (Optionals.given (Phantoms.int32 x))
       (justInt expected)
-    testStr name x expected = evalPair name showMaybeString
+    testStr name x expected = evalPairWithProvisions name ["wrapsValueAsPresent"] DefOptionals.given showMaybeString
       (Optionals.given (Phantoms.string x))
       (Phantoms.just (Phantoms.string expected))
 
 optionalsGivens :: TypedTerm TestGroup
-optionalsGivens = subgroup "givens" [
+optionalsGivens = subgroup "keepsPresentValuesPreservingOrder" [
   test "keeps present values" [Just 1, Nothing, Just 3] [1, 3],
-  test "single just" [Just 5] [5],
+  test "single given" [Just 5] [5],
   test "all none" [Nothing, Nothing] [],
   test "empty list" [] []]
   where
-    test name xs expected = evalPair name showIntList
+    test name xs expected = evalPairWithProvisions name ["keepsPresentValuesPreservingOrder"] DefOptionals.givens showIntList
       (Optionals.givens (Phantoms.list $ toOpt <$> xs))
       (Phantoms.list $ Phantoms.int32 <$> expected)
     toOpt m = case m of
@@ -183,29 +184,29 @@ optionalsGivens = subgroup "givens" [
       Nothing -> nothingInt
 
 optionalsIsGiven :: TypedTerm TestGroup
-optionalsIsGiven = subgroup "isGiven" [
-  test "just value" (justInt 42) True,
-  test "nothing" nothingInt False]
+optionalsIsGiven = subgroup "testsPresentVariant" [
+  test "given value" (justInt 42) True,
+  test "none" nothingInt False]
   where
-    test name x result = evalPair name showBool
+    test name x result = evalPairWithProvisions name ["testsPresentVariant"] DefOptionals.isGiven showBool
       (Optionals.isGiven x)
       (Phantoms.boolean result)
 
 optionalsIsNone :: TypedTerm TestGroup
-optionalsIsNone = subgroup "isNone" [
-  test "just value" (justInt 42) False,
-  test "nothing" nothingInt True]
+optionalsIsNone = subgroup "testsAbsentVariant" [
+  test "given value" (justInt 42) False,
+  test "none" nothingInt True]
   where
-    test name x result = evalPair name showBool
+    test name x result = evalPairWithProvisions name ["testsAbsentVariant"] DefOptionals.isNone showBool
       (Optionals.isNone x)
       (Phantoms.boolean result)
 
 optionalsMap :: TypedTerm TestGroup
-optionalsMap = subgroup "map" [
-  test "maps just value" (justInt 5) (justInt 10),
-  test "nothing unchanged" nothingInt nothingInt]
+optionalsMap = subgroup "mapsGivenLeavesNoneUnchanged" [
+  test "maps given value" (justInt 5) (justInt 10),
+  test "none unchanged" nothingInt nothingInt]
   where
-    test name x expected = evalPair name showMaybeInt
+    test name x expected = evalPairWithProvisions name ["mapsGivenLeavesNoneUnchanged"] DefOptionals.map showMaybeInt
       (Optionals.map (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)) x)
       expected
 
@@ -225,7 +226,7 @@ optionalsMapList = subgroup "mapList" [
       expected
 
 optionalsMapOptional :: TypedTerm TestGroup
-optionalsMapOptional = subgroup "mapOptional" [
+optionalsMapOptional = subgroup "filtersAndTransformsKeepingGiven" [
   test "filter and transform" [1, 2, 3, 4, 5] [6, 8, 10],
   test "empty result" [1, 2] [],
   test "empty input" [] []]
@@ -234,7 +235,7 @@ optionalsMapOptional = subgroup "mapOptional" [
       Logic.ifElse (Ordering.gt (Phantoms.var "x") (Phantoms.int32 2))
         (Phantoms.just (Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
         (Phantoms.nothing :: TypedTerm (Maybe Int))
-    test name xs expected = evalPair name showIntList
+    test name xs expected = evalPairWithProvisions name ["filtersAndTransformsKeepingGiven"] DefOptionals.mapOptional showIntList
       (Optionals.mapOptional filterFn (Phantoms.list $ Phantoms.int32 <$> xs))
       (Phantoms.list $ Phantoms.int32 <$> expected)
 
@@ -254,28 +255,28 @@ optionalsMapSet = subgroup "mapSet" [
       expected
 
 optionalsMatch :: TypedTerm TestGroup
-optionalsMatch = subgroup "match" [
-  test "just applies function" (justInt 5) 0 10,
-  test "nothing returns default" nothingInt 99 99]
+optionalsMatch = subgroup "eliminatesByVariant" [
+  test "given applies function" (justInt 5) 0 10,
+  test "none returns default" nothingInt 99 99]
   where
-    test name opt def expected = evalPair name showInt32
+    test name opt def expected = evalPairWithProvisions name ["eliminatesByVariant"] DefOptionals.match showInt32
       (Optionals.match opt (Phantoms.int32 def) (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
       (Phantoms.int32 expected)
 
 optionalsToList :: TypedTerm TestGroup
-optionalsToList = subgroup "toList" [
-  test "just value" (justInt 42) [42],
-  test "nothing" nothingInt []]
+optionalsToList = subgroup "convertsGivenToSingletonNoneToEmpty" [
+  test "given value" (justInt 42) [42],
+  test "none" nothingInt []]
   where
-    test name x expected = evalPair name showIntList
+    test name x expected = evalPairWithProvisions name ["convertsGivenToSingletonNoneToEmpty"] DefOptionals.toList showIntList
       (Optionals.toList x)
       (Phantoms.list $ Phantoms.int32 <$> expected)
 
 optionalsWithDefault :: TypedTerm TestGroup
-optionalsWithDefault = subgroup "withDefault" [
+optionalsWithDefault = subgroup "returnsContainedValueOrDefault" [
   test "given returns value" 0 (justInt 7) 7,
   test "none returns default" 99 nothingInt 99]
   where
-    test name def m expected = evalPair name showInt32
+    test name def m expected = evalPairWithProvisions name ["returnsContainedValueOrDefault"] DefOptionals.withDefault showInt32
       (Optionals.withDefault (Phantoms.int32 def) m)
       (Phantoms.int32 expected)

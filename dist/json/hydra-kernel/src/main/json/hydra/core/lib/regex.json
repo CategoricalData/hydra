@@ -1,6 +1,13 @@
 {
   "name": "hydra.core.lib.regex",
-  "metadata": {"description": "Primitives in the hydra.core.lib.regex module.", "comments": [], "seeAlso": [], "provisions": []},
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.regex module.",
+    "comments": [
+      "Pattern syntax and semantics are Hydra-defined and translingual: they are specified once, in Hydra's regular-expression specification, and the same pattern means the same thing on every host.",
+      "Matching is leftmost-longest: a match begins at the earliest possible position in the string, and among the matches beginning at that position the longest is chosen.",
+      "findAll, replaceAll, and split operate on non-overlapping matches, found left to right."],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
@@ -44,7 +51,16 @@
             "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
             "Total; a pattern that does not parse under the Hydra regex grammar is treated as not matching anywhere, the same as a well-formed pattern with no match."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.regex.find.returnsLeftmostLongestMatch",
+              "kind": "requirement",
+              "statement": "find returns the leftmost-longest substring matching the pattern, wrapped, when the pattern matches anywhere in the string, including alternation where the longer branch wins and greedy quantifiers that pick the longest run."},
+            {
+              "name": "hydra.core.lib.regex.find.noneWhenNoMatch",
+              "kind": "requirement",
+              "statement": "find returns none when the pattern does not match anywhere in the string, including on the empty string, and when the pattern is ill-formed under the Hydra regex grammar (treated the same as a well-formed pattern with no match, never a host-specific parse error)."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -63,7 +79,16 @@
             "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
             "Total; an unparseable pattern yields the empty list, the same as a well-formed pattern with no matches."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.regex.findAll.returnsAllNonOverlappingMatchesInOrder",
+              "kind": "requirement",
+              "statement": "findAll returns every leftmost-longest, non-overlapping match of the pattern in the string, in the order they appear."},
+            {
+              "name": "hydra.core.lib.regex.findAll.emptyListWhenNoMatch",
+              "kind": "requirement",
+              "statement": "findAll returns the empty list when the pattern does not match anywhere, including when the pattern is ill-formed under the Hydra regex grammar (treated the same as a well-formed pattern with no matches)."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -82,7 +107,24 @@
             "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
             "Total; an unparseable pattern yields false, the same as a well-formed pattern with no match."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.regex.matches.isWholeStringAnchored",
+              "kind": "requirement",
+              "statement": "matches is always anchored to the whole string at both ends, regardless of explicit ^/$ in the pattern: a match of a proper substring does not suffice, and ^/$ never match at an internal line break (string-boundary anchors, not line-boundary)."},
+            {
+              "name": "hydra.core.lib.regex.matches.testsMinimalCoreGrammar",
+              "kind": "requirement",
+              "statement": "matches correctly evaluates every construct in the minimal-core regex grammar: literals, character classes (including negation and ranges), the wildcard (matching any character including newline), quantifiers (?, *, +, {n}, {n,}, {n,m}), alternation (leftmost-longest preference, not leftmost-first), and non-capturing grouping (including nested and quantified groups)."},
+            {
+              "name": "hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals",
+              "kind": "requirement",
+              "statement": "matches treats a backslash-escaped metacharacter as the literal character, both at top level and inside a character class, and treats an unescaped dash as a literal at top level (never forming a range outside a class) while forming a range only inside a class."},
+            {
+              "name": "hydra.core.lib.regex.matches.falseWhenNoMatchOrIllFormed",
+              "kind": "requirement",
+              "statement": "matches returns false when the pattern does not match the whole string, including when the pattern is ill-formed under the Hydra regex grammar (treated the same as a well-formed pattern with no match, never a host-specific parse error) and for constructs outside the minimal core (such as the {,m} quantifier form)."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -102,7 +144,16 @@
             "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
             "Total; an unparseable pattern leaves s unchanged, the same as a well-formed pattern with no match."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.regex.replace.replacesLeftmostLongestMatch",
+              "kind": "requirement",
+              "statement": "replace replaces the first (leftmost-longest) match of the pattern with the replacement string, including an anchored match at the start of the string."},
+            {
+              "name": "hydra.core.lib.regex.replace.unchangedWhenNoMatch",
+              "kind": "requirement",
+              "statement": "replace returns the string unchanged when the pattern does not match anywhere, including when the pattern is ill-formed under the Hydra regex grammar (treated the same as a well-formed pattern with no match)."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -123,7 +174,16 @@
             "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
             "Total; an unparseable pattern leaves s unchanged, the same as a well-formed pattern with no match."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.regex.replaceAll.replacesEveryNonOverlappingMatch",
+              "kind": "requirement",
+              "statement": "replaceAll replaces every leftmost-longest, non-overlapping match of the pattern with the replacement string, including when the replacement string is empty."},
+            {
+              "name": "hydra.core.lib.regex.replaceAll.unchangedWhenNoMatch",
+              "kind": "requirement",
+              "statement": "replaceAll returns the string unchanged when the pattern does not match anywhere, including when the pattern is ill-formed under the Hydra regex grammar (treated the same as a well-formed pattern with no match)."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -144,7 +204,16 @@
             "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
             "Total; an unparseable pattern yields the single-element list containing s, the same as a well-formed pattern with no match."],
           "seeAlso": [],
-          "provisions": []},
+          "lifecycle": {"availableSince": "0.15"},
+          "provisions": [
+            {
+              "name": "hydra.core.lib.regex.split.splitsOnEveryNonOverlappingMatch",
+              "kind": "requirement",
+              "statement": "split returns the substrings of the string obtained by splitting on every leftmost-longest, non-overlapping match of the pattern, including splitting on a fixed delimiter, on a character class, and splitting into a trailing empty substring when the pattern matches at the end of the string."},
+            {
+              "name": "hydra.core.lib.regex.split.singleElementListWhenNoMatchOrIllFormed",
+              "kind": "requirement",
+              "statement": "split returns the single-element list containing the original string unchanged when the pattern does not match anywhere, including when the pattern is ill-formed under the Hydra regex grammar (treated the same as a well-formed pattern with no match)."}]},
         "signature": {
           "typeParameters": [],
           "parameters": [

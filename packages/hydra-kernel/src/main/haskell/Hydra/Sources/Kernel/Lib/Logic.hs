@@ -31,7 +31,11 @@ defineWithDefault :: String -> String -> TermSignature -> [String] -> TypedTerm 
 defineWithDefault = primitiveWithDefaultInModule module_
 
 and :: PrimitiveDefinition
-and = defineWithDefault "and" "Compute the logical AND of two boolean values."
+and = availableSince "0.15" $ withProvisions [
+  requirement "trueOnlyWhenBothTrue"
+    "and(p, q) returns true exactly when both p and q are true; any false operand makes the result\
+    \ false."]
+  $ defineWithDefault "and" "Compute the logical AND of two boolean values."
   (sigWithParams [("p", "the first boolean operand"),
                   ("q", "the second boolean operand")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) mempty)
   ["and(p, q) returns true iff both p and q are true.",
@@ -43,7 +47,12 @@ and = defineWithDefault "and" "Compute the logical AND of two boolean values."
 -- ifElse is lazy in its then/else branches (positions 1, 2): only the
 -- selected branch is evaluated. The condition (position 0) is strict.
 ifElse :: PrimitiveDefinition
-ifElse = define "ifElse" "Compute a conditional expression."
+ifElse = availableSince "0.15" $ withProvisions [
+  requirement "selectsBranchByCondition"
+    "ifElse(p, t, f) returns t when p is true and f when p is false, for any value type of t/f\
+    \ including booleans, integers, and strings -- the then/else branches may be of any (matching)\
+    \ type."]
+  $ define "ifElse" "Compute a conditional expression."
   (markLazyParams [1, 2] $ sigWithParams [("p", "the boolean condition"),
                                           ("t", "the value returned when p is true"),
                                           ("f", "the value returned when p is false")] $ TypeScheme [Name "x"]
@@ -55,14 +64,21 @@ ifElse = define "ifElse" "Compute a conditional expression."
    "Total. Corresponds to Haskell's if/then/else."]
 
 not_ :: PrimitiveDefinition
-not_ = defineWithDefault "not" "Compute the logical NOT of a boolean value."
+not_ = availableSince "0.15" $ withProvisions [
+  requirement "negatesBoolean"
+    "not(p) returns false when p is true and true when p is false."]
+  $ defineWithDefault "not" "Compute the logical NOT of a boolean value."
   (sigWithParams [("p", "the boolean value to negate")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean) mempty)
   ["not(p) returns false if p is true, or true if p is false.",
    "Total. Corresponds to Haskell's not :: Bool -> Bool."]
   ("a" ~> Logic.ifElse (var "a") false true)
 
 or_ :: PrimitiveDefinition
-or_ = defineWithDefault "or" "Compute the logical OR of two boolean values."
+or_ = availableSince "0.15" $ withProvisions [
+  requirement "trueWhenEitherTrue"
+    "or(p, q) returns true when at least one of p and q is true; it returns false only when both\
+    \ are false."]
+  $ defineWithDefault "or" "Compute the logical OR of two boolean values."
   (sigWithParams [("p", "the first boolean operand"),
                   ("q", "the second boolean operand")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) mempty)
   ["or(p, q) returns true iff at least one of p and q is true.",
