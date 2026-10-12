@@ -5,7 +5,7 @@
 # assemble / test freshness gate dragged a Haskell toolchain to run:
 #
 #   digest.sh fresh         --inputs <file> --output-dir <dir> --output-digest <file>
-#                           [--keep-paths-from <manifest>]
+#                           [--keep-paths-from <manifest>] [--check-only]
 #   digest.sh refresh       --inputs <file> --output-dir <dir> --output-digest <file>
 #   digest.sh refresh-input --package <pkg> --dist-json-root <dir> [--source-set main|test]
 #
@@ -49,12 +49,15 @@ err() { echo "digest.sh: $*" >&2; }
 usage() {
   cat >&2 <<'EOF'
 Usage:
-  digest.sh fresh   --inputs <file> --output-dir <dir> --output-digest <file> [--keep-paths-from <manifest>]
+  digest.sh fresh   --inputs <file> --output-dir <dir> --output-digest <file> [--keep-paths-from <manifest>] [--check-only]
   digest.sh refresh --inputs <file> --output-dir <dir> --output-digest <file>
 
   fresh:   exit 0 if cache hit (skip work), exit 1 if miss (do work). On an
            otherwise-hit with extra (orphan) files present, deletes them,
-           refreshes the digest, and reports a hit (#393 reconcile).
+           refreshes the digest, and reports a hit (#393 reconcile). --check-only
+           reports the hit/miss verdict WITHOUT the orphan reconcile — for a
+           caller that only wants to know "is this fresh?" without mutating
+           output-dir (e.g. a probe that runs whether or not it will assemble).
   refresh: walk <output-dir>, hash every file, write <output-digest> with
            paths relative to <output-dir>, plus the generation record.
   refresh-input: rewrite <dir>/<pkg>/build/<set>/digest.json from the current
@@ -264,7 +267,7 @@ do_refresh() {
 # match, and every recorded output exists with a matching hash. On an
 # otherwise-hit with orphan files present, reconcile (#393) and still report hit.
 do_fresh() {
-  local input_digest="$1" output_dir="$2" output_digest="$3" keep_manifest="${4:-}"
+  local input_digest="$1" output_dir="$2" output_digest="$3" keep_manifest="${4:-}" check_only="${5:-}"
 
   # Unreadable input or output digest => cache miss (never an error).
   if [ ! -f "$input_digest" ]; then
@@ -322,6 +325,19 @@ do_fresh() {
       echo "  digest.sh: output files missing or modified; cache miss"; return 1
     fi
   done < <(read_entry_hashes "$output_digest" outputs)
+
+  # check-only (#797): report the hit WITHOUT the #393 orphan reconcile below.
+  # A caller doing a read-only freshness probe (e.g. sync.sh's #773 fast-path
+  # warm-check, which runs on every sync regardless of whether anything will
+  # actually be assembled) must not mutate output_dir as a side effect of
+  # merely asking "is this fresh?" — the reconcile deletes any on-disk file it
+  # doesn't recognize, including hand-written overlay files, when no (or a
+  # mismatched) keep-paths manifest is supplied. check_only skips straight to
+  # reporting the hit; it does not delete orphans or refresh the digest.
+  if [ -n "$check_only" ]; then
+    echo "  digest.sh: cache hit (check-only; orphan reconcile skipped)"
+    return 0
+  fi
 
   # 5. #393 orphan reconcile. Every recorded file is present and correct and all
   #    inputs match — but extra files may linger (a renamed-away namespace dir).
@@ -703,7 +719,7 @@ do_refresh_input_test() {
 main() {
   [ $# -ge 1 ] || { usage; exit 1; }
   local cmd="$1"; shift
-  local inputs="" output_dir="" output_digest="" keep_from=""
+  local inputs="" output_dir="" output_digest="" keep_from="" check_only=""
   local package="" dist_json_root="" source_set="main"
   while [ $# -gt 0 ]; do
     case "$1" in
@@ -711,6 +727,7 @@ main() {
       --output-dir)      output_dir="$2"; shift 2 ;;
       --output-digest)   output_digest="$2"; shift 2 ;;
       --keep-paths-from) keep_from="$2"; shift 2 ;;
+      --check-only)      check_only=1; shift ;;
       --package)         package="$2"; shift 2 ;;
       --dist-json-root)  dist_json_root="$2"; shift 2 ;;
       --source-set)      source_set="$2"; shift 2 ;;
@@ -737,7 +754,7 @@ main() {
   esac
 
   case "$cmd" in
-    fresh)         do_fresh         "$inputs" "$output_dir" "$output_digest" "$keep_from" ;;
+    fresh)         do_fresh         "$inputs" "$output_dir" "$output_digest" "$keep_from" "$check_only" ;;
     refresh)       do_refresh       "$inputs" "$output_dir" "$output_digest" ;;
     refresh-input)
       if [ "$source_set" = "test" ]; then
