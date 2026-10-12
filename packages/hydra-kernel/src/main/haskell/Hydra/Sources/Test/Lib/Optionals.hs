@@ -87,14 +87,15 @@ allTests = definitionInModule module_ "allTests" $
       optionalsApply,
       optionalsBind,
       optionalsCompose,
-      -- optionalsFoldList, optionalsMapList, optionalsMapSet intentionally omitted (see the
-      -- commented-out definitions below for why).
+      optionalsFoldList,
       optionalsGiven,
       optionalsGivens,
       optionalsIsGiven,
       optionalsIsNone,
       optionalsMap,
+      optionalsMapList,
       optionalsMapOptional,
+      optionalsMapSet,
       optionalsMatch,
       optionalsToList,
       optionalsWithDefault]
@@ -141,15 +142,12 @@ optionalsCompose = subgroup "kleisliComposesShortCircuitingOnNone" [
       (Optionals.compose funF funG (Phantoms.int32 input))
       nothingInt
 
--- optionals.{foldList,mapList,mapSet} are registered only via the default-fallback mechanism
--- (#775), not as native Python functions. Calling them through the DSL combinator triggers an
--- AttributeError at the Python target (module 'hydra.core.overlay.python.lib.optionals' has no
--- attribute 'map_list'/'map_set'/'fold_list') -- a pre-existing generator gap in how fallback-only
--- primitives' DSL wrappers resolve for Python, the same class of issue as effects.mapSet's Java
--- gap (see Lib/Effects.hs). Commented out (not just unreferenced) rather than deleted: GHC
--- type-checks every `where`-bound definition regardless of whether allTests references it.
--- Re-enable once the Python DSL-wrapper generator is fixed for fallback-only primitives.
-{-
+-- optionals.foldList is registered only via the default-fallback mechanism (#775), with no
+-- native Python function -- calling it through the DSL combinator (Optionals.foldList) compiles
+-- to a direct Python module-attribute call that bypasses the primitive registry for fallback-only
+-- primitives, raising AttributeError at the Python target. The primitive-reference style
+-- (Terms.primitive DefOptionals.foldList @@ ...), as functionsCompose/eithersApply already use
+-- for their own fallback-only primitives, routes through the registry correctly.
 optionalsFoldList :: TypedTerm TestGroup
 optionalsFoldList = subgroup "foldList" [
   test "all steps succeed" [1, 2, 3] (justInt 6),
@@ -162,9 +160,8 @@ optionalsFoldList = subgroup "foldList" [
         (Phantoms.just (Math.add (Phantoms.var "acc") (Phantoms.var "x")))
         (Phantoms.nothing :: TypedTerm (Maybe Int))
     test name xs expected = evalPair name showMaybeInt
-      (Optionals.foldList step (Phantoms.int32 0) (Phantoms.list $ Phantoms.int32 <$> xs))
+      (Terms.primitive DefOptionals.foldList @@ step @@ Phantoms.int32 0 @@ Phantoms.list (Phantoms.int32 <$> xs))
       expected
--}
 
 optionalsGiven :: TypedTerm TestGroup
 optionalsGiven = subgroup "wrapsValueAsPresent" [
@@ -219,7 +216,7 @@ optionalsMap = subgroup "mapsGivenLeavesNoneUnchanged" [
       (Optionals.map (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)) x)
       expected
 
-{-
+-- optionals.mapList is likewise fallback-only (see optionalsFoldList's comment above); same fix.
 optionalsMapList :: TypedTerm TestGroup
 optionalsMapList = subgroup "mapList" [
   test "all elements succeed" [1, 2, 3] (Phantoms.just (Phantoms.list [Phantoms.int32 2, Phantoms.int32 4, Phantoms.int32 6])),
@@ -232,9 +229,8 @@ optionalsMapList = subgroup "mapList" [
         (Phantoms.just (Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
         (Phantoms.nothing :: TypedTerm (Maybe Int))
     test name xs expected = evalPair name showMaybeIntList
-      (Optionals.mapList fn (Phantoms.list $ Phantoms.int32 <$> xs))
+      (Terms.primitive DefOptionals.mapList @@ fn @@ Phantoms.list (Phantoms.int32 <$> xs))
       expected
--}
 
 optionalsMapOptional :: TypedTerm TestGroup
 optionalsMapOptional = subgroup "filtersAndTransformsKeepingGiven" [
@@ -250,7 +246,7 @@ optionalsMapOptional = subgroup "filtersAndTransformsKeepingGiven" [
       (Optionals.mapOptional filterFn (Phantoms.list $ Phantoms.int32 <$> xs))
       (Phantoms.list $ Phantoms.int32 <$> expected)
 
-{-
+-- optionals.mapSet is likewise fallback-only (see optionalsFoldList's comment above); same fix.
 optionalsMapSet :: TypedTerm TestGroup
 optionalsMapSet = subgroup "mapSet" [
   test "all elements succeed" [1, 2, 3] (Phantoms.just (pIntSet [2, 4, 6])),
@@ -263,9 +259,8 @@ optionalsMapSet = subgroup "mapSet" [
         (Phantoms.just (Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
         (Phantoms.nothing :: TypedTerm (Maybe Int))
     test name xs expected = evalPair name showMaybeIntSet
-      (Optionals.mapSet fn (pIntSet xs))
+      (Terms.primitive DefOptionals.mapSet @@ fn @@ pIntSet xs)
       expected
--}
 
 optionalsMatch :: TypedTerm TestGroup
 optionalsMatch = subgroup "eliminatesByVariant" [
