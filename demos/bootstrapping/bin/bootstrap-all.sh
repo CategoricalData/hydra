@@ -604,15 +604,15 @@ capitalize() {
 # create_run_dir is defined earlier (the prep block needs it). See the
 # "Run-directory + JSON utilities" section above.
 
-# If the output base directory already exists, rename it to <dir>.1, .2, etc.
+# Remove any output base directory left over from a prior run. OUTPUT_BASE holds
+# disposable generated code (nothing in this script or its callers reads a prior
+# run's output back), so there's no reason to keep it around — a previous version
+# of this function renamed it to <dir>.1, .2, etc. "to preserve" it, but nothing
+# ever read those either, so they just accumulated (multiple GB per kill/retry
+# cycle) until disk ran out. Clean up before each run instead.
 preserve_existing_output() {
     if [ -d "$OUTPUT_BASE" ]; then
-        local n=1
-        while [ -e "${OUTPUT_BASE}.${n}" ]; do
-            n=$((n + 1))
-        done
-        mv "$OUTPUT_BASE" "${OUTPUT_BASE}.${n}"
-        echo "  Preserved existing output as ${OUTPUT_BASE}.${n}"
+        rm -rf "$OUTPUT_BASE"
     fi
 }
 
