@@ -258,37 +258,6 @@
         "isTotal": true}},
     {
       "primitive": {
-        "name": "hydra.core.lib.effects.mapSet",
-        "metadata": {
-          "description": "Map an effect-returning function over a set.",
-          "comments": [
-            "mapSet(f, s) describes an effectful computation which applies f to each element of s, sequencing the effects in ascending element order (the order is normative, since the effects are observable), and collects the results as a set, deduplicated by the result type's ordering.",
-            "Requires 'ordering' constraints on both element types (the set type contract)."],
-          "seeAlso": [],
-          "lifecycle": {"availableSince": "0.17.6"},
-          "provisions": [
-            {
-              "name": "hydra.core.lib.effects.mapSet.appliesEffectReturningFunctionAndCollectsResultsAsSet",
-              "kind": "requirement",
-              "statement": "mapSet applies the effect-returning function to each element and collects the per-element results into a set, deduplicated by the result type's ordering."},
-            {
-              "name": "hydra.core.lib.effects.mapSet.performsElementEffectsInAscendingOrderExactlyOnce",
-              "kind": "requirement",
-              "statement": "mapSet performs the element effects in ascending element order, each exactly once -- observable via real host side effects, ruling out a host that reorders, double-runs, or skips an element's effect."}]},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [
-            {
-              "name": "f",
-              "description": "the effect-returning function to apply to each element",
-              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
-              "isLazy": false},
-            {"name": "s", "description": "the set to map over", "type": {"set": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"effect": {"set": {"variable": "y"}}}}},
-        "isPure": false,
-        "isTotal": true}},
-    {
-      "primitive": {
         "name": "hydra.core.lib.effects.pure",
         "metadata": {
           "description": "Lift a pure value into an effect.",
