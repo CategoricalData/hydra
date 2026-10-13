@@ -1857,7 +1857,9 @@
                   "map": [
                     {
                       "key": {"variable": "description"},
-                      "value": {"literal": {"string": "Compute the Haskell module namespaces for a Hydra module"}}}]}}}}}}},
+                      "value": {
+                        "literal": {
+                          "string": "Compute the Haskell module namespaces for a Hydra module. The alias-collision rule below (shortest original module name wins the shortest alias) is the canonical algorithm documented in docs/specification/syntax.md, \"Printer alias choice\" -- the textual syntax's own printer reuses it unchanged, skipping only the PascalCase-join step this Haskell-specific encoding needs on top."}}}]}}}}}}},
     {
       "term": {
         "name": "hydra.haskell.utils.newtypeAccessorName",

@@ -59,9 +59,12 @@ import qualified Hydra.Sources.Kernel.Terms.Scoping         as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Strip           as Strip
 import qualified Hydra.Sources.Kernel.Terms.Subterms        as Subterms
+import qualified Hydra.Sources.Kernel.Terms.Parse.Core        as ParseCore
 import qualified Hydra.Sources.Kernel.Terms.Parse.Docs        as ParseDocs
+import qualified Hydra.Sources.Kernel.Terms.Parse.Packaging   as ParsePackaging
 import qualified Hydra.Sources.Kernel.Terms.Print.Docs        as PrintDocs
 import qualified Hydra.Sources.Kernel.Terms.Print.Markdown    as PrintMarkdown
+import qualified Hydra.Sources.Kernel.Terms.Print.Packaging  as PrintPackaging
 import qualified Hydra.Sources.Kernel.Terms.Print.Paths      as PrintPaths
 import qualified Hydra.Sources.Kernel.Terms.Print.Core       as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Print.Errors      as PrintError
@@ -147,9 +150,12 @@ kernelPrimaryTermsModules = [
   Serialization.module_,
   Strip.module_,
   Subterms.module_,
+  ParseCore.module_,
   ParseDocs.module_,
+  ParsePackaging.module_,
   PrintDocs.module_,
   PrintMarkdown.module_,
+  PrintPackaging.module_,
   PrintPaths.module_,
   PrintCore.module_,
   PrintError.module_,
