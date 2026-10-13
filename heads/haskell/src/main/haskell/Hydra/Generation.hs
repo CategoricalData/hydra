@@ -42,6 +42,7 @@ import qualified Control.Monad as CM
 import qualified Data.Aeson as A
 import qualified Data.Aeson.KeyMap as AKM
 import qualified Data.Aeson.Key as AK
+import qualified Data.ByteString as BSS
 import qualified Data.ByteString.Lazy as BS
 import qualified Data.Set as S
 import qualified Data.Scientific as SC
@@ -51,6 +52,7 @@ import qualified Data.List as L
 import qualified Data.List.Split as LS
 import qualified Data.Map as M
 import qualified Data.Text as T
+import qualified Data.Text.Encoding as TE
 import qualified Data.Text.IO as TIO
 import qualified System.Directory as SD
 import qualified Data.Maybe as Y
@@ -110,36 +112,81 @@ generateSourcesWithTransform transform printDefinitions lang doInfer basePath un
             Right _ -> return ()
         fail $ "Failed to generate source files: " ++ showError err
       Right files -> do
-        mapM_ writePair files
+        mapM_ (writePair basePath transform) files
+        -- #789: verify every file this call meant to write actually landed on
+        -- disk with the expected content, before reporting success. Without
+        -- this, a write that's interrupted partway through (ENOSPC, kill,
+        -- OOM) leaves a truncated tree with no signal at the point of
+        -- failure -- the only symptom is a confusing downstream error (e.g.
+        -- "Could not find module X") several steps later. This is a cheap
+        -- stat+size check, not a re-generation: generateSourceFiles already
+        -- computed the full expected (path, content) set above, so we just
+        -- confirm reality matches it.
+        missing <- verifyWrittenFiles basePath transform files
+        CM.unless (Prelude.null missing) $
+          fail $ "generateSourcesWithTransform: wrote "
+            ++ show (length files - length missing) ++ " of " ++ show (length files)
+            ++ " expected file(s) under " ++ basePath ++ "; missing or truncated: "
+            ++ L.intercalate ", " missing
         return $ map fst files
+
+-- | Trailing whitespace is the coder's responsibility. The Hydra
+-- serialization layer in `hydra.core.serialization` and per-coder
+-- writers (e.g. the Haskell `toHaskellComments` formatter)
+-- avoid emitting trailing whitespace at the source. This
+-- writer just adds the final newline.
+expectedFileContent :: (String -> String) -> String -> String
+expectedFileContent transform raw = let s = transform raw in if L.isSuffixOf "\n" s then s else s ++ "\n"
+
+writePair :: FilePath -> (String -> String) -> (FilePath, String) -> IO ()
+writePair basePath transform (path, raw) = do
+    let fullPath = FP.combine basePath path
+    SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
+    -- Skip writes when content is byte-identical. Rewriting the file with
+    -- the same bytes bumps its mtime and triggers Stack (and every other
+    -- mtime-based incremental build tool) to invalidate downstream
+    -- artifacts, even though nothing actually changed. Hashing the file
+    -- and comparing would be stricter but reading + comparing is
+    -- adequate for generated source files under 1 MB.
+    exists <- SD.doesFileExist fullPath
+    -- Data.Text.IO.readFile is STRICT: it reads the whole file and closes
+    -- the handle before returning, unlike Prelude.readFile (lazy String IO,
+    -- whose handle closes only on GC finalization -- not deterministically
+    -- on end-of-input).
+    skip <- if exists
+              then do old <- TIO.readFile fullPath
+                      return (old == T.pack withNewline)
+              else return False
+    CM.unless skip $ TIO.writeFile fullPath (T.pack withNewline)
   where
-    writePair (path, raw) = do
+    withNewline = expectedFileContent transform raw
+
+-- | #789: given the (path, rawContent) pairs a generation pass meant to write
+-- (relative to basePath), return the subset of relative paths that are
+-- missing from disk or whose on-disk size doesn't match the expected
+-- (post-transform, newline-terminated) content's byte length.
+--
+-- Size-match (not just existence) is the point -- a write truncated
+-- mid-flush by ENOSPC still creates the file, just short of its intended
+-- content. Existence-only would miss exactly the failure mode #789
+-- reported. Compares UTF-8 byte length (not Char count) since that's what
+-- the filesystem reports.
+--
+-- Exported (not a 'where' clause of 'generateSourcesWithTransform') so it
+-- can be unit-tested directly against a scratch directory without needing
+-- a full module-inference pipeline to produce the (path, content) pairs.
+verifyWrittenFiles :: FilePath -> (String -> String) -> [(FilePath, String)] -> IO [FilePath]
+verifyWrittenFiles basePath transform files = map fst <$> CM.filterM (fmap not . verifyOne) files
+  where
+    verifyOne (path, raw) = do
         let fullPath = FP.combine basePath path
-        SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
-        -- Skip writes when content is byte-identical. Rewriting the file with
-        -- the same bytes bumps its mtime and triggers Stack (and every other
-        -- mtime-based incremental build tool) to invalidate downstream
-        -- artifacts, even though nothing actually changed. Hashing the file
-        -- and comparing would be stricter but reading + comparing is
-        -- adequate for generated source files under 1 MB.
+            expectedBytes = BSS.length (TE.encodeUtf8 (T.pack (expectedFileContent transform raw)))
         exists <- SD.doesFileExist fullPath
-        -- Data.Text.IO.readFile is STRICT: it reads the whole file and closes
-        -- the handle before returning, unlike Prelude.readFile (lazy String IO,
-        -- whose handle closes only on GC finalization -- not deterministically
-        -- on end-of-input).
-        skip <- if exists
-                  then do old <- TIO.readFile fullPath
-                          return (old == T.pack withNewline)
-                  else return False
-        CM.unless skip $ TIO.writeFile fullPath (T.pack withNewline)
-      where
-        s = transform raw
-        -- Trailing whitespace is the coder's responsibility. The Hydra
-        -- serialization layer in `hydra.core.serialization` and per-coder
-        -- writers (e.g. the Haskell `toHaskellComments` formatter)
-        -- avoid emitting trailing whitespace at the source. This
-        -- writer just adds the final newline.
-        withNewline = if L.isSuffixOf "\n" s then s else s ++ "\n"
+        if not exists
+          then return False
+          else do
+            actualBytes <- SD.getFileSize fullPath
+            return (actualBytes == fromIntegral expectedBytes)
 
 -- | Build a graph from a list of modules using the Haskell bootstrapGraph.
 -- Thin wrapper around modulesToGraphWith.
