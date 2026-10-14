@@ -116,11 +116,23 @@ fi
 # hydra.sources.java.* DSL-authoring classes, e.g. Language.java), which imports
 # hydra.core.model.* from dist/java/hydra-kernel — but on a fresh checkout dist/java/ is
 # gitignored and doesn't exist yet, and this main-source seed call is one of the first
-# steps that would populate it (seed-dist-haskell.sh, #703). CI hit this exactly: the
-# cold-seed of dist/haskell/hydra-kernel (main) forced a local headsExtras compile before
-# dist/java/hydra-kernel existed, failing with "package hydra.core.model does not exist".
-# Using the published+pinned-version classpath for `main` breaks the circularity without
-# reintroducing the #719 bug (which never affected `main` generation in the first place).
+# steps that would populate it (seed-dist-haskell.sh, #703).
+#
+# ALSO gated on HYDRA_HOST_VERSION being unset (#747, re-fix): the #703 cold-seed path
+# always sets HYDRA_HOST_VERSION (see its own header comment — "needed only because the
+# shim blocks hydra-packages.py's... resolution, not because the cold-seed path itself
+# is shimmed"), i.e. that path was always meant to stay on the published host regardless
+# of hostOverrides["java"]. #761 removed the HYDRA_HOST_VERSION-empty gate to fix a
+# different problem (the override being silently skipped for every OTHER caller) but in
+# doing so also made the cold-seed path's test-set call eligible for FORCE_LOCAL — and
+# that call's `compileHeadsExtrasJava` task compiles packages/hydra-java's full main
+# source set against dist/java/hydra-kernel, which plus the overlay/stack-build chain it
+# pulls in, cold-seed has no simple way to pre-populate without reaching back into
+# sync.sh's own later-phase machinery (overlay-kernel-runtime.sh, Phase 0's stack build).
+# Simplest correct fix, preserving #761's actual intent (every OTHER local-mode caller,
+# e.g. a real --local-host sync, still forces local on test): treat HYDRA_HOST_VERSION as
+# the unambiguous "this is the #703 cold-seed path" signal and restore its immunity,
+# narrowly, rather than trying to make the cold-seed path itself locally-buildable.
 OVERRIDE_RAW=$(python3 -c "
 import json
 try:
@@ -131,7 +143,7 @@ except Exception:
     pass
 " 2>/dev/null || true)
 FORCE_LOCAL=0
-if [ "$OVERRIDE_RAW" = "local" ] && [ "$SOURCE_SET" = "test" ]; then
+if [ "$OVERRIDE_RAW" = "local" ] && [ "$SOURCE_SET" = "test" ] && [ -z "${HYDRA_HOST_VERSION:-}" ]; then
     FORCE_LOCAL=1
 fi
 
