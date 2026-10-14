@@ -145,6 +145,33 @@ export const union = (a: any, b: any): any => {
   return mkCanon(next);
 };
 
+// Left-biased union of a list of maps: the earliest map in the list wins on
+// key collision (mirrors Haskell's Data.Map.unions applied left to right).
+export const unions = (ms: readonly any[]): any => {
+  const next: any = new Map();
+  for (let i = ms.length - 1; i >= 0; i--) {
+    const c = toCanon(ms[i]);
+    for (const [ck, e] of c._internal) next.set(ck, e);
+  }
+  return mkCanon(next);
+};
+
+export const intersection = (a: any, b: any): any => {
+  const ca = toCanon(a);
+  const cb = toCanon(b);
+  const next: any = new Map();
+  for (const [ck, e] of ca._internal) if (cb._internal.has(ck)) next.set(ck, e);
+  return mkCanon(next);
+};
+
+export const difference = (a: any, b: any): any => {
+  const ca = toCanon(a);
+  const cb = toCanon(b);
+  const next: any = new Map();
+  for (const [ck, e] of ca._internal) if (!cb._internal.has(ck)) next.set(ck, e);
+  return mkCanon(next);
+};
+
 export const filter = (p: (v: any) => boolean, m: any): any => {
   const c = toCanon(m);
   const next: any = new Map();

@@ -1022,6 +1022,15 @@ object Libraries:
       hydra.core.lib.maps.union.name -> mkPrimImpl(hydra.core.lib.maps.union.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(mapKV, tFun(mapKV, mapKV))),
         impl2((m1, m2) => mkMapTerm(exMap(m2) ++ exMap(m1)))),
+      hydra.core.lib.maps.unions.name -> mkPrimImpl(hydra.core.lib.maps.unions.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
+        tFun(tList(mapKV), mapKV)),
+        impl1(ms => mkMapTerm(exList(ms).map(exMap).foldLeft(Map.empty[Term, Term])((acc, m) => m ++ acc)))),
+      hydra.core.lib.maps.intersection.name -> mkPrimImpl(hydra.core.lib.maps.intersection.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
+        tFun(mapKV, tFun(mapKV, mapKV))),
+        impl2((m1, m2) => mkMapTerm(exMap(m1).filter((k, _) => exMap(m2).contains(k))))),
+      hydra.core.lib.maps.difference.name -> mkPrimImpl(hydra.core.lib.maps.difference.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
+        tFun(mapKV, tFun(mapKV, mapKV))),
+        impl2((m1, m2) => mkMapTerm(exMap(m1).filter((k, _) => !exMap(m2).contains(k))))),
     )
 
   // ===== Math primitives =====

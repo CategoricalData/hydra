@@ -302,6 +302,15 @@
      (prim-name 'hydra.core.lib.maps/hydra_core_lib_maps_to_list)         (p/prim1 (prim-name 'hydra.core.lib.maps/hydra_core_lib_maps_to_list) maps/hydra_overlay_clojure_lib_maps_to_list [] map-kv (p/tc-list (p/tc-pair k v)) ord-k)
      (prim-name 'hydra.core.lib.maps/hydra_core_lib_maps_union)          (p/prim2 (prim-name 'hydra.core.lib.maps/hydra_core_lib_maps_union)
                                             (fn [m1 m2] ((maps/hydra_overlay_clojure_lib_maps_union m1) m2))
+                                            [] map-kv map-kv map-kv ord-k)
+     (prim-name 'hydra.core.lib.maps/hydra_core_lib_maps_unions)         (p/prim1 (prim-name 'hydra.core.lib.maps/hydra_core_lib_maps_unions)
+                                            maps/hydra_overlay_clojure_lib_maps_unions
+                                            [] (p/tc-list map-kv) map-kv ord-k)
+     (prim-name 'hydra.core.lib.maps/hydra_core_lib_maps_intersection)    (p/prim2 (prim-name 'hydra.core.lib.maps/hydra_core_lib_maps_intersection)
+                                            (fn [m1 m2] ((maps/hydra_overlay_clojure_lib_maps_intersection m1) m2))
+                                            [] map-kv map-kv map-kv ord-k)
+     (prim-name 'hydra.core.lib.maps/hydra_core_lib_maps_difference)      (p/prim2 (prim-name 'hydra.core.lib.maps/hydra_core_lib_maps_difference)
+                                            (fn [m1 m2] ((maps/hydra_overlay_clojure_lib_maps_difference m1) m2))
                                             [] map-kv map-kv map-kv ord-k)}))
 
 ;; ============================================================

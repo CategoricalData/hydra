@@ -22,7 +22,10 @@
           hydra_overlay_scheme_lib_maps_size
           hydra_overlay_scheme_lib_maps_to_list
           hydra_overlay_scheme_lib_maps_map_keys
-          hydra_overlay_scheme_lib_maps_union)
+          hydra_overlay_scheme_lib_maps_union
+          hydra_overlay_scheme_lib_maps_unions
+          hydra_overlay_scheme_lib_maps_intersection
+          hydra_overlay_scheme_lib_maps_difference)
   (begin
 
     ;; Maps use Guile's vhash for O(1) amortized lookup/insert.
@@ -286,4 +289,40 @@
                            (cons (vhash-cons k #t seen)
                                  (vhash-cons k v out)))))
                    (cons vlist-null vh2)
-                   vh1))))))))
+                   vh1))))))
+
+    ;; unions :: [Map k v] -> Map k v
+    ;; Left-biased: the earliest map in the list wins on key collision.
+    (define hydra_overlay_scheme_lib_maps_unions
+      (lambda (ms)
+        (let loop ((rest (reverse ms)) (acc vlist-null))
+          (if (null? rest) acc
+              (loop (cdr rest) ((hydra_overlay_scheme_lib_maps_union (car rest)) acc))))))
+
+    ;; intersection :: Map k v -> Map k v -> Map k v
+    ;; Bindings of m1 whose keys also appear in m2.
+    (define hydra_overlay_scheme_lib_maps_intersection
+      (lambda (m1)
+        (lambda (m2)
+          (let ((vh2 (ensure-vhash m2)))
+            (let loop ((rest (vhash-unique-entries (ensure-vhash m1))) (vh vlist-null))
+              (if (null? rest) vh
+                  (let ((p (car rest)))
+                    (loop (cdr rest)
+                          (if (vhash-assoc (car p) vh2)
+                              (vhash-cons (car p) (cdr p) vh)
+                              vh)))))))))
+
+    ;; difference :: Map k v -> Map k v -> Map k v
+    ;; Bindings of m1 whose keys do not appear in m2.
+    (define hydra_overlay_scheme_lib_maps_difference
+      (lambda (m1)
+        (lambda (m2)
+          (let ((vh2 (ensure-vhash m2)))
+            (let loop ((rest (vhash-unique-entries (ensure-vhash m1))) (vh vlist-null))
+              (if (null? rest) vh
+                  (let ((p (car rest)))
+                    (loop (cdr rest)
+                          (if (vhash-assoc (car p) vh2)
+                              vh
+                              (vhash-cons (car p) (cdr p) vh))))))))))))

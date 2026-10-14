@@ -454,6 +454,15 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
         (cons (prim-name hydra_core_lib_maps_to_list)         (prim1 (prim-name hydra_core_lib_maps_to_list) hydra_overlay_emacs_lisp_lib_maps_to_list nil map-kv (tc-list (tc-pair k v)) ord-k))
         (cons (prim-name hydra_core_lib_maps_union)          (prim2 (prim-name hydra_core_lib_maps_union)
                                                    hydra_overlay_emacs_lisp_lib_maps_union
+                                                   nil map-kv map-kv map-kv ord-k))
+        (cons (prim-name hydra_core_lib_maps_unions)         (prim1 (prim-name hydra_core_lib_maps_unions)
+                                                   hydra_overlay_emacs_lisp_lib_maps_unions
+                                                   nil (tc-list map-kv) map-kv ord-k))
+        (cons (prim-name hydra_core_lib_maps_intersection)   (prim2 (prim-name hydra_core_lib_maps_intersection)
+                                                   hydra_overlay_emacs_lisp_lib_maps_intersection
+                                                   nil map-kv map-kv map-kv ord-k))
+        (cons (prim-name hydra_core_lib_maps_difference)     (prim2 (prim-name hydra_core_lib_maps_difference)
+                                                   hydra_overlay_emacs_lisp_lib_maps_difference
                                                    nil map-kv map-kv map-kv ord-k))))))
 
 ;; ============================================================================

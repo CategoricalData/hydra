@@ -154,3 +154,26 @@
   (fn [m1] (fn [m2]
     ;; merge m2 into m1; m1 takes precedence (left-biased)
     (merge (to-hash-map m2) (to-hash-map m1)))))
+
+;; unions :: [Map k v] -> Map k v (left-biased: earliest map in the list wins)
+(def hydra_overlay_clojure_lib_maps_unions
+  (fn [maps]
+    (reduce (fn [acc m] (merge acc (to-hash-map m)))
+            {}
+            (reverse maps))))
+
+;; intersection :: Map k v -> Map k v -> Map k v (bindings of m1 whose keys are also in m2)
+(def hydra_overlay_clojure_lib_maps_intersection
+  (fn [m1] (fn [m2]
+    (let [hm1 (to-hash-map m1) hm2 (to-hash-map m2)]
+      (reduce-kv (fn [acc k v] (if (contains? hm2 k) (assoc acc k v) acc))
+                 {}
+                 hm1)))))
+
+;; difference :: Map k v -> Map k v -> Map k v (bindings of m1 whose keys are not in m2)
+(def hydra_overlay_clojure_lib_maps_difference
+  (fn [m1] (fn [m2]
+    (let [hm1 (to-hash-map m1) hm2 (to-hash-map m2)]
+      (reduce-kv (fn [acc k v] (if (contains? hm2 k) acc (assoc acc k v)))
+                 {}
+                 hm1)))))

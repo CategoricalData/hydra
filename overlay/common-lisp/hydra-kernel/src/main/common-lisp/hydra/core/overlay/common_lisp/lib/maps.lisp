@@ -560,3 +560,44 @@
               (dolist (pair m1)
                 (setf result (rb-insert result (car pair) (cdr pair))))))
            result))))))
+
+;; unions :: [Map k v] -> Map k v (left-biased: earliest map in the list wins)
+(defvar hydra_overlay_common_lisp_lib_maps_unions
+  (lambda (ms)
+    (let ((result nil))
+      (dolist (m (reverse ms) result)
+        (setf result (funcall (funcall hydra_overlay_common_lisp_lib_maps_union m) result))))))
+
+;; intersection :: Map k v -> Map k v -> Map k v
+;; Bindings of m1 whose keys also appear in m2.
+(defvar hydra_overlay_common_lisp_lib_maps_intersection
+  (lambda (m1)
+    (lambda (m2)
+      (let ((result nil))
+        (cond
+          ((rbnode-p m1)
+           (rb-for-each m1 (lambda (k v)
+                              (when (nth-value 1 (maps-lookup-raw k m2))
+                                (setf result (rb-insert result k v))))))
+          ((maps-alist-p m1)
+           (dolist (pair m1)
+             (when (nth-value 1 (maps-lookup-raw (car pair) m2))
+               (setf result (rb-insert result (car pair) (cdr pair)))))))
+        result))))
+
+;; difference :: Map k v -> Map k v -> Map k v
+;; Bindings of m1 whose keys do not appear in m2.
+(defvar hydra_overlay_common_lisp_lib_maps_difference
+  (lambda (m1)
+    (lambda (m2)
+      (let ((result nil))
+        (cond
+          ((rbnode-p m1)
+           (rb-for-each m1 (lambda (k v)
+                              (unless (nth-value 1 (maps-lookup-raw k m2))
+                                (setf result (rb-insert result k v))))))
+          ((maps-alist-p m1)
+           (dolist (pair m1)
+             (unless (nth-value 1 (maps-lookup-raw (car pair) m2))
+               (setf result (rb-insert result (car pair) (cdr pair)))))))
+        result))))

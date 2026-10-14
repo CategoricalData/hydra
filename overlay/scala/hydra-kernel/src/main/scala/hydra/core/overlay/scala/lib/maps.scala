@@ -29,3 +29,7 @@ object maps:
   // We sort using the same comparator as ordering.lt for consistency.
   def toList[K, V](m: Map[K, V]): Seq[(K, V)] = m.toSeq.sortWith((a, b) => ordering.lt(a._1)(b._1))
   def union[K, V](m1: Map[K, V])(m2: Map[K, V]): Map[K, V] = m2 ++ m1
+  // Earliest map in the list wins on key collision, matching Java/Python's left-biased semantics.
+  def unions[K, V](maps: Seq[Map[K, V]]): Map[K, V] = maps.foldLeft(Map.empty[K, V])((acc, m) => m ++ acc)
+  def intersection[K, V](m1: Map[K, V])(m2: Map[K, V]): Map[K, V] = m1.filter((k, _) => m2.contains(k))
+  def difference[K, V](m1: Map[K, V])(m2: Map[K, V]): Map[K, V] = m1.filter((k, _) => !m2.contains(k))

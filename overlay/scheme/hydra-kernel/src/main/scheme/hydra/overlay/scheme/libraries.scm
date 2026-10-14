@@ -499,6 +499,15 @@
             (cons (prim-name def:hydra_core_lib_maps_to_list)         (prim1 (prim-name def:hydra_core_lib_maps_to_list) hydra_overlay_scheme_lib_maps_to_list #f map-kv (tc-list (tc-pair k v)) ord-k))
             (cons (prim-name def:hydra_core_lib_maps_union)          (prim2 (prim-name def:hydra_core_lib_maps_union)
                                                       hydra_overlay_scheme_lib_maps_union
+                                                      #f map-kv map-kv map-kv ord-k))
+            (cons (prim-name def:hydra_core_lib_maps_unions)         (prim1 (prim-name def:hydra_core_lib_maps_unions)
+                                                      hydra_overlay_scheme_lib_maps_unions
+                                                      #f (tc-list map-kv) map-kv ord-k))
+            (cons (prim-name def:hydra_core_lib_maps_intersection)   (prim2 (prim-name def:hydra_core_lib_maps_intersection)
+                                                      hydra_overlay_scheme_lib_maps_intersection
+                                                      #f map-kv map-kv map-kv ord-k))
+            (cons (prim-name def:hydra_core_lib_maps_difference)     (prim2 (prim-name def:hydra_core_lib_maps_difference)
+                                                      hydra_overlay_scheme_lib_maps_difference
                                                       #f map-kv map-kv map-kv ord-k))))))
 
     ;; ============================================================================

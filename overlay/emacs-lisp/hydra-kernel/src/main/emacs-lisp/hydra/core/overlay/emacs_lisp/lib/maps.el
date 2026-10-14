@@ -283,4 +283,34 @@
       ;; no copy of m2.
       (append m1 m2))))
 
+;; unions :: [Map k v] -> Map k v (left-biased: earliest map in the list wins)
+(defvar hydra_overlay_emacs_lisp_lib_maps_unions
+  (lambda (ms)
+    "Union a list of maps, with earlier maps taking precedence."
+    (apply #'append ms)))
+
+;; intersection :: Map k v -> Map k v -> Map k v
+;; Bindings of m1 whose keys also appear in m2.
+(defvar hydra_overlay_emacs_lisp_lib_maps_intersection
+  (lambda (m1)
+    "Intersect two maps by key, keeping m1's values."
+    (lambda (m2)
+      (let (result)
+        (hydra-map-foreach
+         (lambda (k v) (when (hydra-map-lookup k m2) (push (cons k v) result)))
+         m1)
+        result))))
+
+;; difference :: Map k v -> Map k v -> Map k v
+;; Bindings of m1 whose keys do not appear in m2.
+(defvar hydra_overlay_emacs_lisp_lib_maps_difference
+  (lambda (m1)
+    "Compute the difference of two maps by key."
+    (lambda (m2)
+      (let (result)
+        (hydra-map-foreach
+         (lambda (k v) (unless (hydra-map-lookup k m2) (push (cons k v) result)))
+         m1)
+        result))))
+
 (provide 'hydra.core.lib.maps)
