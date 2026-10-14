@@ -2,7 +2,9 @@
 # Run all bootstrapping paths and compare output against baselines.
 #
 # This script demonstrates bootstrapping paths:
-#   host languages (Haskell, Java, Python) × target languages (Haskell, Java, Python, Clojure, Scheme, Common Lisp, Emacs Lisp)
+#   host languages x target languages. Default scope is Java x Python (the
+#   2x2 matrix); Haskell is opt-in via --hosts/--targets, reserved for changes
+#   that specifically concern Haskell-authoring source.
 #
 # Each path: loads Hydra modules from language-independent JSON, generates code
 # for a target language, builds, runs tests, and compares the output against
@@ -49,8 +51,8 @@ case "${1:-}" in
 esac
 
 # Parse arguments
-HOSTS="haskell,java,python"
-TARGETS="haskell,java,python"
+HOSTS="java,python"
+TARGETS="java,python"
 EXTRA_FLAGS=""
 TAG=""
 RUNS_DIR="$HYDRA_ROOT/bootstrap/runs"

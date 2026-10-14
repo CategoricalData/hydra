@@ -1021,6 +1021,34 @@ For slash-command shortcuts: `/sync`, `/sync-default`, `/sync-haskell`, `/sync-j
 `/sync-emacs-lisp`, `/sync-scheme`, `/sync-go`, `/sync-bench`. Each is a thin wrapper
 around the corresponding `bin/` script; see [CLAUDE.md §Shorthand commands](../CLAUDE.md#shorthand-commands).
 
+### Haskell is opt-in for ordinary local dev, not a default step
+
+`/bootstrap`, `/sync-default`, and `/test`'s no-argument scope default to a **Java ×
+Python matrix**, not the historical `haskell,java,python` triad — `demos/bootstrapping/
+bin/bootstrap-all.sh`'s `HOSTS`/`TARGETS` defaults, `bin/sync-default.sh`'s wrapped
+`sync.sh` call, and `bin/test.sh`'s no-arg target set are all `java,python`. The
+pre-push bootstrap gate (`bin/pre-push-bootstrap-gate.sh`) correspondingly requires
+only `{java, python}` coverage as its minimum bar, not the full triad (a run that also
+covers Haskell still satisfies it, since `{java,python}` is a subset).
+
+Haskell stays opt-in — pass it explicitly (`--hosts haskell,...` / `--targets
+haskell,...`, or `bin/sync-haskell.sh`) for a change that specifically concerns
+Haskell-authoring source (`packages/*/src/main/haskell/`, `heads/haskell/`). CI's own
+"Haskell tests" job keeps running on every push regardless of this policy — it's
+centralized and doesn't multiply per developer, unlike a local sync/test/bootstrap
+invocation, which every worktree pays independently. The goal is to stop the shared
+`~/.hydra-stack-slot.lock`-gated Haskell build from serializing the whole fleet on
+every ordinary iteration, not to relax CI.
+
+This narrows, rather than contradicts, [hard rule #2 in CLAUDE.md](../CLAUDE.md)
+("Haskell must pass first") — that rule still applies in full whenever a change
+actually touches Haskell source; it no longer means every sync/test/bootstrap
+invocation should include Haskell "just in case." See #773 (`bin/sync.sh`'s own
+Haskell-free fast path) for the deeper mechanism that lets a Java/Python-only sync
+skip the Haskell kernel build entirely on a warm tree, and #747 for a real ordering
+bug this exact area produced when a `hostOverrides["java"]="local"` pin interacted
+with the `#703` cold-seed path's own Haskell dependency.
+
 ## Build & sync scripts: live entry points vs. orchestration
 
 Some scripts under `bin/` and `heads/*/bin/` have **no automated callers** yet are

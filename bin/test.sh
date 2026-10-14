@@ -11,7 +11,7 @@
 # Resolves #387.
 #
 # Usage:
-#   bin/test.sh                          # bootstrapping triad: haskell,java,python
+#   bin/test.sh                          # default matrix: java,python (Haskell opt-in)
 #   bin/test.sh java                     # Java only
 #   bin/test.sh lang1,lang2[,...]        # comma-separated list
 #   bin/test.sh lisp                     # expands to all four Lisp dialects
@@ -33,8 +33,10 @@
 # per-language test cache hits).
 #
 # Compared with /sync (defaults to all × all):
-#   /test defaults to the bootstrapping triad — matches /bootstrap's
-#   default. /test all is a deliberate ask for pre-release validation.
+#   /test defaults to java,python — matches /bootstrap's default. Haskell is
+#   opt-in (pass it explicitly), reserved for changes that specifically
+#   concern Haskell-authoring source. /test all is a deliberate ask for
+#   pre-release validation.
 
 set -euo pipefail
 
@@ -100,14 +102,14 @@ if [ "$REGRESSIONS" = "1" ]; then
 fi
 
 # Expand the scope argument.
-#   (no arg)    -> haskell,java,python (the bootstrapping triad)
+#   (no arg)    -> java,python (the default matrix; Haskell is opt-in)
 #   "all"       -> every target
 #   "lisp"      -> all four Lisp dialects
 #   "X,Y,Z"     -> verbatim
 expand_targets() {
     local arg="$1"
     if [ -z "$arg" ]; then
-        echo "haskell java python"
+        echo "java python"
         return
     fi
     local out=""
@@ -151,6 +153,17 @@ echo ""
 # compileHeadsExtrasJava imports from them. To stay safe and simple, we
 # always go through bin/sync.sh, which knows how to populate those
 # dependencies; warm-cache runs are nearly free anyway.
+#
+# --hosts haskell is intentionally kept here even though java,python is now
+# the no-arg default scope (TARGETS): this pre-sync call's own Haskell
+# dependency is a SEPARATE question from what /test's default target set is,
+# and changing it needs its own careful verification (the compileHeadsExtrasJava
+# source set pulls in dist/java/hydra-{kernel,haskell,jvm,java,python,scala,
+# lisp,typescript} regardless of which host generated them -- a java/python-only
+# HOST scope here would not by itself address that TARGET-side need). Left
+# as a deliberate follow-up rather than changed under time pressure, given
+# this exact sync.sh/transform-json-to-target.sh ordering machinery just caused
+# a real multi-hour CI outage (#747) from an under-verified change.
 if [ "$DO_SYNC" = "1" ]; then
     echo "=== Pre-sync via bin/sync.sh (warm-cache fast) ==="
     "$HYDRA_ROOT/bin/sync.sh" --no-tests --hosts haskell --targets "$(echo $TARGETS | tr ' ' ',')"

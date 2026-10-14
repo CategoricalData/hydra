@@ -315,7 +315,9 @@ is in [`claude/agent-hierarchy.md`](claude/agent-hierarchy.md).
 After modifying Haskell sources, regenerate downstream implementations.
 Use `./bin/sync.sh --hosts <H1,H2,...> --targets <T1,T2,...>` (or
 `--no-tests` to skip the Haskell-side `stack test` step).
-For the haskell/java/python bootstrapping triad, `./bin/sync-default.sh` is shorthand.
+For the default java/python matrix, `./bin/sync-default.sh` is shorthand. Haskell is opt-in
+(pass it explicitly via `--hosts`/`--targets`), reserved for changes that specifically concern
+Haskell-authoring source — see [docs/build-system.md](docs/build-system.md) for the policy.
 Per-language wrappers (`bin/sync-java.sh`, `bin/sync-python.sh`, etc.) cover host == target.
 
 `bin/sync.sh` regenerates code into every target language but does **not** run
@@ -426,8 +428,8 @@ Common rules across all of them:
 
 Current commands:
 
-- `/bootstrap` — cross-host bootstrap demo (default: triad; modes
-  include `all`, `others`, and arbitrary scoped lang lists)
+- `/bootstrap` — cross-host bootstrap demo (default: java/python 2x2 matrix,
+  Haskell opt-in; modes include `all`, `others`, and arbitrary scoped lang lists)
 - `/improve-docs` — end-of-session documentation pass
 - `/inference-bench` — cross-host inference benchmark
 - `/issues` — drain the pending issue-proposal queue with the user: present
@@ -444,7 +446,7 @@ Current commands:
 - `/squash` — squash WIP commits to focused topic commits
 - `/sync` — full host × target sync (default: all × all; opposite
   of `/bootstrap`'s default — note the asymmetry)
-- `/sync-default` — the haskell/java/python triad
+- `/sync-default` — the default java/python matrix (Haskell opt-in)
 - `/sync-haskell`, `/sync-java`, `/sync-python`, `/sync-scala`,
   `/sync-go` — per-language sync wrappers
 - `/sync-typescript` — TypeScript sync (DSL → Haskell + TypeScript, post-#126).
@@ -452,7 +454,7 @@ Current commands:
 - `/sync-clojure`, `/sync-common-lisp`, `/sync-emacs-lisp`,
   `/sync-scheme` — Lisp dialect sync wrappers
 - `/sync-bench` — regenerate hydra-bench (opt-in; not part of `/sync`)
-- `/test` — target-language test validation (default: triad; closes the
+- `/test` — target-language test validation (default: java/python; closes the
   `/sync` ↔ CI gap where sync only runs Haskell `stack test`)
 
 ## Coding style (read the full guide!)
@@ -497,10 +499,17 @@ Ordered roughly by violation frequency — the first few are the ones every sess
    scope estimates set your check-in cadence; they never justify asking whether to proceed.
    (Every "should I fix this or call it good?" this project has seen wasted hours. See
    [[feedback_never_stop_to_ask_whether_to_fix]].)
-2. **Haskell must pass first.** Always ensure `stack test` passes in `heads/haskell`
-   before syncing downstream implementations. A downstream failure traced to a
-   Haskell-side bug burns hours of cross-host investigation that the Haskell test
-   would have caught in seconds.
+2. **Haskell must pass first, for changes that touch it.** Whenever a change edits
+   Haskell-authoring source (`packages/*/src/main/haskell/`, `heads/haskell/`), ensure
+   `stack test` passes in `heads/haskell` before syncing downstream implementations — a
+   downstream failure traced to a Haskell-side bug burns hours of cross-host
+   investigation that the Haskell test would have caught in seconds. For ordinary
+   changes that do NOT touch Haskell source, Haskell is opt-in, not a default step:
+   `/sync`, `/test`, and `/bootstrap` default to a Java/Python matrix, and the shared
+   `~/.hydra-stack-slot.lock`-gated Haskell build should not be invoked or waited on
+   just "to be safe." CI's own Haskell job still runs on every push regardless (that's
+   fine — it's centralized, not per-worktree) but per-worktree local iteration should
+   not pay that cost by default. See [docs/build-system.md](docs/build-system.md).
 3. **Never edit generated files** (anything under `dist/`) except for deliberate
    bootstrap patches that the next regeneration will overwrite.
    A `sed_inplace` call in a sync script that rewrites a generated file is an edit —

@@ -1,5 +1,5 @@
 ---
-description: Run bin/test.sh to validate target-language test suites against the dist/ tree. Default is the bootstrapping triad (haskell,java,python). Pass language names to scope. Pre-syncs unless --no-sync is given.
+description: Run bin/test.sh to validate target-language test suites against the dist/ tree. Default is java,python (Haskell opt-in). Pass language names to scope. Pre-syncs unless --no-sync is given.
 argument-hint: [lang1,lang2,...] [--no-sync]
 allowed-tools:
   - Bash(bin/test.sh*)
@@ -26,16 +26,19 @@ every other target's runtime.
 
 ## Procedure
 
-If `$ARGUMENTS` is empty (no scoping list passed), run the bootstrapping
-triad:
+If `$ARGUMENTS` is empty (no scoping list passed), run the default matrix:
 
 ```bash
 bin/test.sh
 ```
 
-Defaults to `haskell, java, python` — matches `/bootstrap`'s default,
-which is **not** the same as `/sync`'s default of `all × all`. `/test
-all` is a deliberate ask, typically reserved for pre-release validation.
+Defaults to `java, python` — matches `/bootstrap`'s default, which is
+**not** the same as `/sync`'s default of `all × all`. Haskell is opt-in
+(pass it explicitly, e.g. `/test haskell,java,python`), reserved for
+changes that specifically concern Haskell-authoring source — see
+[docs/build-system.md §Haskell is opt-in](../../docs/build-system.md).
+`/test all` is a deliberate ask, typically reserved for pre-release
+validation.
 
 If `$ARGUMENTS` is a comma-separated language list, scope to those:
 
@@ -45,7 +48,7 @@ bin/test.sh $ARGUMENTS
 
 ## Examples
 
-- `/test` — bootstrapping triad
+- `/test` — default java/python matrix
 - `/test java` — Java only
 - `/test java,python,scala` — three targets
 - `/test lisp` — all four Lisp dialects

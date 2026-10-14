@@ -1,5 +1,5 @@
 ---
-description: Run bin/run-bootstrapping-demo.sh to exercise cross-host code generation plus tests. Default is the haskell/java/python triad (NOT the full matrix — note this is opposite to /sync's default). Several invocation modes — see below.
+description: Run bin/run-bootstrapping-demo.sh to exercise cross-host code generation plus tests. Default is the java/python 2x2 matrix (NOT the full matrix, and NOT the haskell/java/python triad — Haskell is opt-in). Several invocation modes — see below.
 argument-hint: [lang1,lang2,... | all | others]
 allowed-tools:
   - Bash(bin/run-bootstrapping-demo.sh*)
@@ -23,16 +23,19 @@ User-invoked. Typical triggers:
 
 Dispatch on `$ARGUMENTS`:
 
-### No argument — bootstrapping triad (default)
+### No argument — java/python matrix (default)
 
 ```bash
 bin/run-bootstrapping-demo.sh
 ```
 
-Default hosts and targets: `haskell,java,python` × `haskell,java,python`
-— the bootstrapping triad, **NOT** the full matrix. Note the asymmetry
-with `/sync`: `/sync` defaults to `all × all`, this command
-defaults to the triad.
+Default hosts and targets: `java,python` × `java,python` — the 2x2 matrix,
+**NOT** the full matrix and **NOT** the historical haskell/java/python triad.
+Haskell is opt-in (pass it explicitly in `--hosts`/`--targets`), reserved for
+changes that specifically concern Haskell-authoring source — see
+[docs/build-system.md §Haskell is opt-in](../../docs/build-system.md). Note
+the asymmetry with `/sync`: `/sync` defaults to `all × all`, this command
+defaults to java/python.
 
 ### `lang1,lang2[,...]` — scoped
 

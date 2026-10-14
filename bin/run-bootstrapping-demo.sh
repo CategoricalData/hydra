@@ -2,7 +2,7 @@
 # Run the bootstrapping demo and display the dashboard.
 #
 # Usage:
-#   bin/run-bootstrapping-demo.sh                         # Run all 9 paths (generate + test)
+#   bin/run-bootstrapping-demo.sh                         # Run the 4 Java/Python paths (generate + test)
 #   bin/run-bootstrapping-demo.sh generate [options]      # Generation phase only
 #   bin/run-bootstrapping-demo.sh test [options]          # Testing phase only
 #   bin/run-bootstrapping-demo.sh dashboard [options]     # Just show the dashboard

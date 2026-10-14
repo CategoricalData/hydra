@@ -28,9 +28,11 @@
 #     to exact commit match. metadata.json records `commit`; we derive its tree.
 #   - We scan ALL sibling worktrees' bootstrap/runs/, since a bootstrap may have
 #     run in the worktree that produced the SHA (459, 566, ...), not in staging.
-#   - We require the run to cover at least the {haskell,java,python} triad —
-#     the minimum bar the staging cycle runs. A partial/single-host run does
-#     not clear the gate.
+#   - We require the run to cover at least the {java,python} matrix — the
+#     minimum bar the staging cycle runs (Haskell is opt-in, for changes that
+#     specifically concern Haskell-authoring source; a run covering Haskell
+#     too still satisfies this gate, since {java,python} is a subset).
+#     A partial/single-host run does not clear the gate.
 #
 # Legitimate bypass (logged): doc-only rides and emergency revert-to-a-
 # previously-green-tree do not need a fresh bootstrap. Bypass with:
@@ -41,7 +43,7 @@ set -euo pipefail
 
 remote_name="${1:-}"
 GATED_REF="refs/heads/main"
-TRIAD=(haskell java python)
+TRIAD=(java python)
 # Staging worktrees are named differently per machine (staging here,
 # hydra-staging on marvin7). Match any name CONTAINING
 # "staging" (case-insensitive) so every machine's staging worktree is gated
@@ -79,8 +81,8 @@ log_bypass() {
 # tree_of <sha> — the tree hash a bootstrap would have validated.
 tree_of() { git rev-parse "$1^{tree}" 2>/dev/null || true; }
 
-# Does any bootstrap run in any worktree validate this tree with a triad-covering
-# status:ok? Prints the matching run dir on success.
+# Does any bootstrap run in any worktree validate this tree with a
+# java,python-covering status:ok? Prints the matching run dir on success.
 find_passing_run() {
   local want_tree="$1" want_commit="$2"
   local md
@@ -98,8 +100,8 @@ if d.get("status") != "ok":
     sys.exit(1)
 hosts = set(d.get("hosts") or [])
 targets = set(d.get("targets") or [])
-triad = {"haskell", "java", "python"}
-if not (triad <= hosts and triad <= targets):
+minimum = {"java", "python"}
+if not (minimum <= hosts and minimum <= targets):
     sys.exit(1)
 c = d.get("commit")
 if not c:
@@ -146,7 +148,7 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     echo "" >&2
     echo "pre-push: ✗ BOOTSTRAP GATE — refusing to push $short to origin/main" >&2
     echo "          No passing /bootstrap run validates this commit's tree" >&2
-    echo "          (${want_tree:0:12}) across the {haskell,java,python} triad." >&2
+    echo "          (${want_tree:0:12}) across the {java,python} matrix." >&2
     echo "" >&2
     echo "          Run /bootstrap on THIS commit and let it pass, then re-push." >&2
     echo "          Legitimate exception (doc-only ride, revert-to-green)? Re-push with:" >&2
