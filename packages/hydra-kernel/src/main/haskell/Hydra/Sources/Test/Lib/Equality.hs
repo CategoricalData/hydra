@@ -127,7 +127,7 @@ equalityEqualFloats = subgroup "ieee754ExtendedFloatSemantics" [
 equalityEqualLists :: TypedTerm TestGroup
 equalityEqualLists = subgroup "structuralEquivalence" [
   test "equal lists" (intList [1, 2, 3]) (intList [1, 2, 3]) true,
-  test "different elements" (intList [1, 2, 3]) (intList [1, 2, 4]) false,
+  test "different elements (lists)" (intList [1, 2, 3]) (intList [1, 2, 4]) false,
   test "different length (prefix)" (intList [1, 2, 3]) (intList [1, 2]) false,
   test "same elements, different order" (intList [1, 2, 3]) (intList [3, 2, 1]) false,
   test "nested lists, equal" (intListList [[1, 2], [3]]) (intListList [[1, 2], [3]]) true,
@@ -143,7 +143,7 @@ equalityEqualSets :: TypedTerm TestGroup
 equalityEqualSets = subgroup "structuralEquivalence" [
   test "equal sets, same construction order" (intSet [1, 2, 3]) (intSet [1, 2, 3]) true,
   test "equal sets, different construction order" (intSet [1, 2, 3]) (intSet [3, 2, 1]) true,
-  test "different elements" (intSet [1, 2, 3]) (intSet [1, 2, 4]) false,
+  test "different elements (sets)" (intSet [1, 2, 3]) (intSet [1, 2, 4]) false,
   test "subset, not equal" (intSet [1, 2, 3]) (intSet [1, 2]) false]
   where
     test name x y result = primCaseWithProvisions name ["structuralEquivalence"] DefEquality.equal [x, y] result

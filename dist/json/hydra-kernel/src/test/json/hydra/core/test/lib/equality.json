@@ -2339,7 +2339,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "different elements"}}},
+                                          {"name": "name", "term": {"literal": {"string": "different elements (lists)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3878,7 +3878,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "different elements"}}},
+                                          {"name": "name", "term": {"literal": {"string": "different elements (sets)"}}},
                                           {
                                             "name": "case",
                                             "term": {
