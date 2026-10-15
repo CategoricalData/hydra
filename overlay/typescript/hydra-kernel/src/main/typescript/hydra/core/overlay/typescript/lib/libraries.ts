@@ -1809,16 +1809,18 @@ const mapsPrimitives = (): readonly Primitive[] => {
                 right(mkMap(libMaps.union(ma, mb) as ReadonlyMap<unknown, Term>))))))),
     prim("hydra.core.lib.maps.unions", schemeC(tyFn(tyList(tyMap(tyVar("k"), tyVar("v"))), tyMap(tyVar("k"), tyVar("v"))), ["k", "v"], [["k", ["ordering"]]]),
       (_g, args) =>
-        bind(need(args, 0, "unions"), (a0) =>
-          bind(asList(a0), (ms) => {
-            const maps: ReadonlyMap<unknown, Term>[] = [];
-            for (const m of ms) {
-              const r = asMap(m);
-              if (r.tag === "left") return r;
-              maps.push(r.value);
-            }
-            return right(mkMap(libMaps.unions(maps) as ReadonlyMap<unknown, Term>));
-          }))),
+        bind(need(args, 0, "unions"), (a0) => {
+          const x = a0 as { tag: string; value?: readonly Term[] };
+          if (x.tag !== "list") return left({ tag: "other", value: "expected a list" } as never);
+          const ms = x.value ?? [];
+          const maps: ReadonlyMap<unknown, Term>[] = [];
+          for (const m of ms) {
+            const r = asMap(m);
+            if (r.tag === "left") return r;
+            maps.push(r.value);
+          }
+          return right(mkMap(libMaps.unions(maps) as ReadonlyMap<unknown, Term>));
+        })),
     prim("hydra.core.lib.maps.intersection", schemeC(tyFnCurried(tyMap(tyVar("k"), tyVar("v")), tyMap(tyVar("k"), tyVar("v")), tyMap(tyVar("k"), tyVar("v"))), ["k", "v"], [["k", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "intersection"), (a) =>
