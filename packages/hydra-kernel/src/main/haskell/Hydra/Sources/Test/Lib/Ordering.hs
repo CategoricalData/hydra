@@ -49,18 +49,18 @@ allTests = definitionInModule module_ "allTests" $
 
 orderingCompare :: TypedTerm TestGroup
 orderingCompare = subgroup "threeWayClassification" [
-  test "less than" 3 5 "lessThan",
-  test "equal" 5 5 "equalTo",
-  test "greater than" 5 3 "greaterThan"]
+  test "less than (int32)" 3 5 "lessThan",
+  test "equal (int32)" 5 5 "equalTo",
+  test "greater than (int32)" 5 3 "greaterThan"]
   where
     test testName x y resultField = primCaseWithProvisions testName ["threeWayClassification"] DefOrdering.compare [int32 x, int32 y] (injectUnit (name "hydra.core.util.Comparison") resultField)
 
 -- Tests for ordering with float values
 orderingCompareFloats :: TypedTerm TestGroup
 orderingCompareFloats = subgroup "threeWayClassification" [
-  test "less than" 1.5 2.5 "lessThan",
-  test "equal" 3.14 3.14 "equalTo",
-  test "greater than" 5.0 3.0 "greaterThan",
+  test "less than (float64)" 1.5 2.5 "lessThan",
+  test "equal (float64)" 3.14 3.14 "equalTo",
+  test "greater than (float64)" 5.0 3.0 "greaterThan",
   test "negative vs positive" (-1.0) 1.0 "lessThan"]
   where
     test testName x y resultField = primCaseWithProvisions testName ["threeWayClassification"] DefOrdering.compare [float64 x, float64 y] (injectUnit (name "hydra.core.util.Comparison") resultField)
@@ -83,7 +83,7 @@ orderingCompareDecimals = subgroup "decimalScaleTiebreak" [
 orderingCompareStrings :: TypedTerm TestGroup
 orderingCompareStrings = subgroup "threeWayClassification" [
   test "less than (lexicographic)" "apple" "banana" "lessThan",
-  test "equal" "hello" "hello" "equalTo",
+  test "equal (string)" "hello" "hello" "equalTo",
   test "greater than (lexicographic)" "zebra" "apple" "greaterThan",
   test "empty vs non-empty" "" "a" "lessThan",
   test "prefix vs longer" "ab" "abc" "lessThan",
@@ -97,184 +97,184 @@ orderingCompareStrings = subgroup "threeWayClassification" [
 
 orderingGt :: TypedTerm TestGroup
 orderingGt = subgroup "strictGreaterThan" [
-  test "greater" 5 3 true,
-  test "equal" 5 5 false,
-  test "less" 3 5 false]
+  test "greater (int32)" 5 3 true,
+  test "equal (int32)" 5 5 false,
+  test "less (int32)" 3 5 false]
   where
     test name x y result = primCaseWithProvisions name ["strictGreaterThan"] DefOrdering.gt [int32 x, int32 y] result
 
 orderingGtFloats :: TypedTerm TestGroup
 orderingGtFloats = subgroup "strictGreaterThan" [
-  test "greater" 5.0 3.0 true,
-  test "equal" 3.14 3.14 false,
-  test "less" 1.5 2.5 false]
+  test "greater (float64)" 5.0 3.0 true,
+  test "equal (float64)" 3.14 3.14 false,
+  test "less (float64)" 1.5 2.5 false]
   where
     test name x y result = primCaseWithProvisions name ["strictGreaterThan"] DefOrdering.gt [float64 x, float64 y] result
 
 orderingGtStrings :: TypedTerm TestGroup
 orderingGtStrings = subgroup "strictGreaterThan" [
   test "greater (lexicographic)" "zebra" "apple" true,
-  test "equal" "hello" "hello" false,
-  test "less" "apple" "banana" false]
+  test "equal (string)" "hello" "hello" false,
+  test "less (string)" "apple" "banana" false]
   where
     test name x y result = primCaseWithProvisions name ["strictGreaterThan"] DefOrdering.gt [string x, string y] result
 
 orderingGte :: TypedTerm TestGroup
 orderingGte = subgroup "greaterThanOrEqual" [
-  test "greater" 5 3 true,
-  test "equal" 5 5 true,
-  test "less" 3 5 false]
+  test "greater (int32)" 5 3 true,
+  test "equal (int32)" 5 5 true,
+  test "less (int32)" 3 5 false]
   where
     test name x y result = primCaseWithProvisions name ["greaterThanOrEqual"] DefOrdering.gte [int32 x, int32 y] result
 
 -- gte on floats/strings/decimals (#749): gte was previously int-only.
 orderingGteFloats :: TypedTerm TestGroup
 orderingGteFloats = subgroup "greaterThanOrEqual" [
-  test "greater" 5.0 3.0 true,
-  test "equal" 3.14 3.14 true,
-  test "less" 1.5 2.5 false]
+  test "greater (float64)" 5.0 3.0 true,
+  test "equal (float64)" 3.14 3.14 true,
+  test "less (float64)" 1.5 2.5 false]
   where
     test name x y result = primCaseWithProvisions name ["greaterThanOrEqual"] DefOrdering.gte [float64 x, float64 y] result
 
 orderingGteStrings :: TypedTerm TestGroup
 orderingGteStrings = subgroup "greaterThanOrEqual" [
   test "greater (lexicographic)" "zebra" "apple" true,
-  test "equal" "hello" "hello" true,
-  test "less" "apple" "banana" false]
+  test "equal (string)" "hello" "hello" true,
+  test "less (string)" "apple" "banana" false]
   where
     test name x y result = primCaseWithProvisions name ["greaterThanOrEqual"] DefOrdering.gte [string x, string y] result
 
 orderingGteDecimals :: TypedTerm TestGroup
 orderingGteDecimals = subgroup "greaterThanOrEqual" [
-  test "greater" (decimalOf 12 1) (decimalOf 11 1) true,
+  test "greater (decimal)" (decimalOf 12 1) (decimalOf 11 1) true,
   test "equal, same scale" (decimalOf 11 1) (decimalOf 11 1) true,
   test "equal value, scale tiebreak (smaller scale wins)" (decimalOf 110 2) (decimalOf 11 1) true,
-  test "less" (decimalOf 11 1) (decimalOf 12 1) false]
+  test "less (decimal)" (decimalOf 11 1) (decimalOf 12 1) false]
   where
     test name x y result = primCaseWithProvisions name ["greaterThanOrEqual"] DefOrdering.gte [x, y] result
     decimalOf coefficient scale = decimal (Sci.scientific coefficient (negate scale))
 
 orderingLt :: TypedTerm TestGroup
 orderingLt = subgroup "strictLessThan" [
-  test "less" 3 5 true,
-  test "equal" 5 5 false,
-  test "greater" 5 3 false]
+  test "less (int32)" 3 5 true,
+  test "equal (int32)" 5 5 false,
+  test "greater (int32)" 5 3 false]
   where
     test name x y result = primCaseWithProvisions name ["strictLessThan"] DefOrdering.lt [int32 x, int32 y] result
 
 orderingLtFloats :: TypedTerm TestGroup
 orderingLtFloats = subgroup "strictLessThan" [
-  test "less" 1.5 2.5 true,
-  test "equal" 3.14 3.14 false,
-  test "greater" 5.0 3.0 false]
+  test "less (float64)" 1.5 2.5 true,
+  test "equal (float64)" 3.14 3.14 false,
+  test "greater (float64)" 5.0 3.0 false]
   where
     test name x y result = primCaseWithProvisions name ["strictLessThan"] DefOrdering.lt [float64 x, float64 y] result
 
 orderingLtStrings :: TypedTerm TestGroup
 orderingLtStrings = subgroup "strictLessThan" [
   test "less (lexicographic)" "apple" "banana" true,
-  test "equal" "hello" "hello" false,
-  test "greater" "zebra" "apple" false]
+  test "equal (string)" "hello" "hello" false,
+  test "greater (string)" "zebra" "apple" false]
   where
     test name x y result = primCaseWithProvisions name ["strictLessThan"] DefOrdering.lt [string x, string y] result
 
 orderingLte :: TypedTerm TestGroup
 orderingLte = subgroup "lessThanOrEqual" [
-  test "less" 3 5 true,
-  test "equal" 5 5 true,
-  test "greater" 5 3 false]
+  test "less (int32)" 3 5 true,
+  test "equal (int32)" 5 5 true,
+  test "greater (int32)" 5 3 false]
   where
     test name x y result = primCaseWithProvisions name ["lessThanOrEqual"] DefOrdering.lte [int32 x, int32 y] result
 
 -- lte on floats/strings/decimals (#749): lte was previously int-only.
 orderingLteFloats :: TypedTerm TestGroup
 orderingLteFloats = subgroup "lessThanOrEqual" [
-  test "less" 1.5 2.5 true,
-  test "equal" 3.14 3.14 true,
-  test "greater" 5.0 3.0 false]
+  test "less (float64)" 1.5 2.5 true,
+  test "equal (float64)" 3.14 3.14 true,
+  test "greater (float64)" 5.0 3.0 false]
   where
     test name x y result = primCaseWithProvisions name ["lessThanOrEqual"] DefOrdering.lte [float64 x, float64 y] result
 
 orderingLteStrings :: TypedTerm TestGroup
 orderingLteStrings = subgroup "lessThanOrEqual" [
   test "less (lexicographic)" "apple" "banana" true,
-  test "equal" "hello" "hello" true,
-  test "greater" "zebra" "apple" false]
+  test "equal (string)" "hello" "hello" true,
+  test "greater (string)" "zebra" "apple" false]
   where
     test name x y result = primCaseWithProvisions name ["lessThanOrEqual"] DefOrdering.lte [string x, string y] result
 
 orderingLteDecimals :: TypedTerm TestGroup
 orderingLteDecimals = subgroup "lessThanOrEqual" [
-  test "less" (decimalOf 11 1) (decimalOf 12 1) true,
+  test "less (decimal)" (decimalOf 11 1) (decimalOf 12 1) true,
   test "equal, same scale" (decimalOf 11 1) (decimalOf 11 1) true,
   test "equal value, scale tiebreak (smaller scale wins)" (decimalOf 11 1) (decimalOf 110 2) true,
-  test "greater" (decimalOf 12 1) (decimalOf 11 1) false]
+  test "greater (decimal)" (decimalOf 12 1) (decimalOf 11 1) false]
   where
     test name x y result = primCaseWithProvisions name ["lessThanOrEqual"] DefOrdering.lte [x, y] result
     decimalOf coefficient scale = decimal (Sci.scientific coefficient (negate scale))
 
 orderingMax :: TypedTerm TestGroup
 orderingMax = subgroup "returnsLargerOperand" [
-  test "first greater" 5 3 5,
-  test "second greater" 3 5 5,
-  test "equal" 5 5 5]
+  test "first greater (int32)" 5 3 5,
+  test "second greater (int32)" 3 5 5,
+  test "equal (int32)" 5 5 5]
   where
     test name x y result = primCaseWithProvisions name ["returnsLargerOperand"] DefOrdering.max [int32 x, int32 y] (int32 result)
 
 orderingMaxStrings :: TypedTerm TestGroup
 orderingMaxStrings = subgroup "returnsLargerOperand" [
-  test "first greater" "zebra" "apple" "zebra",
-  test "second greater" "apple" "zebra" "zebra",
-  test "equal" "hello" "hello" "hello"]
+  test "first greater (string)" "zebra" "apple" "zebra",
+  test "second greater (string)" "apple" "zebra" "zebra",
+  test "equal (string)" "hello" "hello" "hello"]
   where
     test name x y result = primCaseWithProvisions name ["returnsLargerOperand"] DefOrdering.max [string x, string y] (string result)
 
 -- max on floats/decimals (#749): max previously had no float variant.
 orderingMaxFloats :: TypedTerm TestGroup
 orderingMaxFloats = subgroup "returnsLargerOperand" [
-  test "first greater" 5.0 3.0 5.0,
-  test "second greater" 3.0 5.0 5.0,
-  test "equal" 3.14 3.14 3.14]
+  test "first greater (float64)" 5.0 3.0 5.0,
+  test "second greater (float64)" 3.0 5.0 5.0,
+  test "equal (float64)" 3.14 3.14 3.14]
   where
     test name x y result = primCaseWithProvisions name ["returnsLargerOperand"] DefOrdering.max [float64 x, float64 y] (float64 result)
 
 orderingMaxDecimals :: TypedTerm TestGroup
 orderingMaxDecimals = subgroup "returnsLargerOperand" [
-  test "first greater" (decimalOf 12 1) (decimalOf 11 1) (decimalOf 12 1),
-  test "second greater" (decimalOf 11 1) (decimalOf 12 1) (decimalOf 12 1)]
+  test "first greater (decimal)" (decimalOf 12 1) (decimalOf 11 1) (decimalOf 12 1),
+  test "second greater (decimal)" (decimalOf 11 1) (decimalOf 12 1) (decimalOf 12 1)]
   where
     test name x y result = primCaseWithProvisions name ["returnsLargerOperand"] DefOrdering.max [x, y] result
     decimalOf coefficient scale = decimal (Sci.scientific coefficient (negate scale))
 
 orderingMin :: TypedTerm TestGroup
 orderingMin = subgroup "returnsSmallerOperand" [
-  test "first less" 3 5 3,
-  test "second less" 5 3 3,
-  test "equal" 5 5 5]
+  test "first less (int32)" 3 5 3,
+  test "second less (int32)" 5 3 3,
+  test "equal (int32)" 5 5 5]
   where
     test name x y result = primCaseWithProvisions name ["returnsSmallerOperand"] DefOrdering.min [int32 x, int32 y] (int32 result)
 
 orderingMinStrings :: TypedTerm TestGroup
 orderingMinStrings = subgroup "returnsSmallerOperand" [
-  test "first less" "apple" "zebra" "apple",
-  test "second less" "zebra" "apple" "apple",
-  test "equal" "hello" "hello" "hello"]
+  test "first less (string)" "apple" "zebra" "apple",
+  test "second less (string)" "zebra" "apple" "apple",
+  test "equal (string)" "hello" "hello" "hello"]
   where
     test name x y result = primCaseWithProvisions name ["returnsSmallerOperand"] DefOrdering.min [string x, string y] (string result)
 
 -- min on floats/decimals (#749): min previously had no float variant.
 orderingMinFloats :: TypedTerm TestGroup
 orderingMinFloats = subgroup "returnsSmallerOperand" [
-  test "first less" 1.5 2.5 1.5,
-  test "second less" 2.5 1.5 1.5,
-  test "equal" 3.14 3.14 3.14]
+  test "first less (float64)" 1.5 2.5 1.5,
+  test "second less (float64)" 2.5 1.5 1.5,
+  test "equal (float64)" 3.14 3.14 3.14]
   where
     test name x y result = primCaseWithProvisions name ["returnsSmallerOperand"] DefOrdering.min [float64 x, float64 y] (float64 result)
 
 orderingMinDecimals :: TypedTerm TestGroup
 orderingMinDecimals = subgroup "returnsSmallerOperand" [
-  test "first less" (decimalOf 11 1) (decimalOf 12 1) (decimalOf 11 1),
-  test "second less" (decimalOf 12 1) (decimalOf 11 1) (decimalOf 11 1)]
+  test "first less (decimal)" (decimalOf 11 1) (decimalOf 12 1) (decimalOf 11 1),
+  test "second less (decimal)" (decimalOf 12 1) (decimalOf 11 1) (decimalOf 11 1)]
   where
     test name x y result = primCaseWithProvisions name ["returnsSmallerOperand"] DefOrdering.min [x, y] result
     decimalOf coefficient scale = decimal (Sci.scientific coefficient (negate scale))
@@ -286,8 +286,8 @@ orderingCompareLists :: TypedTerm TestGroup
 orderingCompareLists = subgroup "threeWayClassification" [
   test "less than (elementwise)" (intList [1, 2]) (intList [1, 3]) "lessThan",
   test "less than (shorter prefix)" (intList [1, 2]) (intList [1, 2, 3]) "lessThan",
-  test "equal" (intList [1, 2, 3]) (intList [1, 2, 3]) "equalTo",
-  test "greater than" (intList [1, 3]) (intList [1, 2]) "greaterThan"]
+  test "equal (list)" (intList [1, 2, 3]) (intList [1, 2, 3]) "equalTo",
+  test "greater than (list)" (intList [1, 3]) (intList [1, 2]) "greaterThan"]
   where
     test testName x y resultField = primCaseWithProvisions testName ["threeWayClassification"] DefOrdering.compare [x, y] (injectUnit (name "hydra.core.util.Comparison") resultField)
     intList els = Terms.list (int32 <$> els)

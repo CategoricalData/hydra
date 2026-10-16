@@ -2009,7 +2009,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (bigint to uint8)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -2132,7 +2132,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "typical value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "typical value (bigint to uint8)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -2268,7 +2268,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (bigint to uint16)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -2391,7 +2391,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "typical value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "typical value (bigint to uint16)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -2527,7 +2527,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (bigint to uint32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -2650,7 +2650,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "typical value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "typical value (bigint to uint32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -2786,7 +2786,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (bigint to uint64)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -2909,7 +2909,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "typical value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "typical value (bigint to uint64)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3045,7 +3045,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive (int8 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3165,7 +3165,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative (int8 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3287,7 +3287,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "max value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "max value (int8 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3409,7 +3409,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "min value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "min value (int8 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3544,7 +3544,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive (int16 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3667,7 +3667,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative (int16 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3803,7 +3803,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive (int32 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3926,7 +3926,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative (int32 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -4049,7 +4049,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (int32 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -4185,7 +4185,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive (int64 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -4308,7 +4308,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative (int64 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -4444,7 +4444,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (uint8 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -4567,7 +4567,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "max value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "max value (uint8 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -4703,7 +4703,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (uint16 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -4826,7 +4826,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "typical value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "typical value (uint16 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -4962,7 +4962,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (uint32 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -5085,7 +5085,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "typical value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "typical value (uint32 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -5221,7 +5221,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (uint64 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -5344,7 +5344,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "typical value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "typical value (uint64 to bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -5862,7 +5862,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive (float64 to float32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -5985,7 +5985,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative (float64 to float32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -6108,7 +6108,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (float64 to float32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -6244,7 +6244,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive (bigint to decimal)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -6359,7 +6359,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative (bigint to decimal)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -6475,7 +6475,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (bigint to decimal)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -7220,7 +7220,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (decimal to float32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -7335,7 +7335,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive whole"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive whole (decimal to float32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -7450,7 +7450,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative whole"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative whole (decimal to float32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -7578,7 +7578,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (decimal to float64)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -7693,7 +7693,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive whole"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive whole (decimal to float64)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -7808,7 +7808,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative whole"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative whole (decimal to float64)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -7936,7 +7936,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (float32 to decimal)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -8051,7 +8051,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive whole"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive whole (float32 to decimal)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -8166,7 +8166,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative whole"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative whole (float32 to decimal)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -8294,7 +8294,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (float64 to decimal)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -8409,7 +8409,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive whole"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive whole (float64 to decimal)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -8524,7 +8524,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative whole"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative whole (float64 to decimal)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -8652,7 +8652,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (decimal)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -8758,7 +8758,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive whole"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive whole (decimal)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -8864,7 +8864,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative whole"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative whole (decimal)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -9687,7 +9687,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive (int8)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -9799,7 +9799,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative (int8)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -9927,7 +9927,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive (int16)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -10042,7 +10042,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative (int16)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -10170,7 +10170,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive (int32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -10284,7 +10284,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative (int32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -10399,7 +10399,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (int32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -10526,7 +10526,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive (int64)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -10641,7 +10641,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative (int64)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -10769,7 +10769,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (uint8)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -10883,7 +10883,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "max value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "max value (uint8)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -11011,7 +11011,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (uint16)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -11125,7 +11125,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "typical value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "typical value (uint16)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -11253,7 +11253,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (uint32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -11367,7 +11367,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "typical value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "typical value (uint32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -11495,7 +11495,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (uint64)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -11609,7 +11609,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "typical value"}}},
+                                          {"name": "name", "term": {"literal": {"string": "typical value (uint64)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -11737,7 +11737,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive (bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -11851,7 +11851,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative (bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -11966,7 +11966,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (bigint)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -12093,7 +12093,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive (float32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -12208,7 +12208,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "negative"}}},
+                                          {"name": "name", "term": {"literal": {"string": "negative (float32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -12323,7 +12323,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (float32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -12438,7 +12438,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "small positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "small positive (float32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -12553,7 +12553,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "small positive 2"}}},
+                                          {"name": "name", "term": {"literal": {"string": "small positive 2 (float32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -12668,7 +12668,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "very small"}}},
+                                          {"name": "name", "term": {"literal": {"string": "very small (float32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -12783,7 +12783,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "normal decimal"}}},
+                                          {"name": "name", "term": {"literal": {"string": "normal decimal (float32)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -12911,7 +12911,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "positive (float64)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -13026,7 +13026,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "zero"}}},
+                                          {"name": "name", "term": {"literal": {"string": "zero (float64)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -13141,7 +13141,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "small positive"}}},
+                                          {"name": "name", "term": {"literal": {"string": "small positive (float64)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -13256,7 +13256,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "small positive 2"}}},
+                                          {"name": "name", "term": {"literal": {"string": "small positive 2 (float64)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -13371,7 +13371,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "very small"}}},
+                                          {"name": "name", "term": {"literal": {"string": "very small (float64)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -13486,7 +13486,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "normal decimal"}}},
+                                          {"name": "name", "term": {"literal": {"string": "normal decimal (float64)"}}},
                                           {
                                             "name": "case",
                                             "term": {

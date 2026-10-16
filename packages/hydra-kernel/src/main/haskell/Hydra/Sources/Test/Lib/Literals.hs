@@ -55,9 +55,9 @@ literalsBigintToInt32 = supergroup "bigintToInt32" [
 
 literalsInt32ToBigint :: TypedTerm TestGroup
 literalsInt32ToBigint = subgroup "losslessConversion" [
-  test "positive" "losslessConversion" 42 42,
-  test "negative" "losslessConversion" (-42) (-42),
-  test "zero" "losslessConversion" 0 0]
+  test "positive (int32 to bigint)" "losslessConversion" 42 42,
+  test "negative (int32 to bigint)" "losslessConversion" (-42) (-42),
+  test "zero (int32 to bigint)" "losslessConversion" 0 0]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.int32ToBigint [int32 x] (bigint result)
 
@@ -65,24 +65,24 @@ literalsInt32ToBigint = subgroup "losslessConversion" [
 
 literalsInt16ToBigint :: TypedTerm TestGroup
 literalsInt16ToBigint = subgroup "losslessConversion" [
-  test "positive" "losslessConversion" 1000 1000,
-  test "negative" "losslessConversion" (-1000) (-1000)]
+  test "positive (int16 to bigint)" "losslessConversion" 1000 1000,
+  test "negative (int16 to bigint)" "losslessConversion" (-1000) (-1000)]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.int16ToBigint [int16 x] (bigint result)
 
 literalsInt64ToBigint :: TypedTerm TestGroup
 literalsInt64ToBigint = subgroup "losslessConversion" [
-  test "positive" "losslessConversion" 1000000 1000000,
-  test "negative" "losslessConversion" (-1000000) (-1000000)]
+  test "positive (int64 to bigint)" "losslessConversion" 1000000 1000000,
+  test "negative (int64 to bigint)" "losslessConversion" (-1000000) (-1000000)]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.int64ToBigint [int64 x] (bigint result)
 
 literalsInt8ToBigint :: TypedTerm TestGroup
 literalsInt8ToBigint = subgroup "losslessConversion" [
-  test "positive" "losslessConversion" 42 42,
-  test "negative" "losslessConversion" (-42) (-42),
-  test "max value" "losslessConversion" 127 127,
-  test "min value" "losslessConversion" (-128) (-128)]
+  test "positive (int8 to bigint)" "losslessConversion" 42 42,
+  test "negative (int8 to bigint)" "losslessConversion" (-42) (-42),
+  test "max value (int8 to bigint)" "losslessConversion" 127 127,
+  test "min value (int8 to bigint)" "losslessConversion" (-128) (-128)]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.int8ToBigint [int8 x] (bigint result)
 
@@ -90,29 +90,29 @@ literalsInt8ToBigint = subgroup "losslessConversion" [
 
 literalsUint16ToBigint :: TypedTerm TestGroup
 literalsUint16ToBigint = subgroup "losslessConversion" [
-  test "zero" "losslessConversion" 0 0,
-  test "typical value" "losslessConversion" 1000 1000]
+  test "zero (uint16 to bigint)" "losslessConversion" 0 0,
+  test "typical value (uint16 to bigint)" "losslessConversion" 1000 1000]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.uint16ToBigint [uint16 x] (bigint result)
 
 literalsUint32ToBigint :: TypedTerm TestGroup
 literalsUint32ToBigint = subgroup "losslessConversion" [
-  test "zero" "losslessConversion" 0 0,
-  test "typical value" "losslessConversion" 100000 100000]
+  test "zero (uint32 to bigint)" "losslessConversion" 0 0,
+  test "typical value (uint32 to bigint)" "losslessConversion" 100000 100000]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.uint32ToBigint [uint32 x] (bigint result)
 
 literalsUint64ToBigint :: TypedTerm TestGroup
 literalsUint64ToBigint = subgroup "losslessConversion" [
-  test "zero" "losslessConversion" 0 0,
-  test "typical value" "losslessConversion" 1000000 1000000]
+  test "zero (uint64 to bigint)" "losslessConversion" 0 0,
+  test "typical value (uint64 to bigint)" "losslessConversion" 1000000 1000000]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.uint64ToBigint [uint64 x] (bigint result)
 
 literalsUint8ToBigint :: TypedTerm TestGroup
 literalsUint8ToBigint = subgroup "losslessConversion" [
-  test "zero" "losslessConversion" 0 0,
-  test "max value" "losslessConversion" 255 255]
+  test "zero (uint8 to bigint)" "losslessConversion" 0 0,
+  test "max value (uint8 to bigint)" "losslessConversion" 255 255]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.uint8ToBigint [uint8 x] (bigint result)
 
@@ -160,29 +160,29 @@ literalsBigintToInt8 = supergroup "bigintToInt8" [
 
 literalsBigintToUint16 :: TypedTerm TestGroup
 literalsBigintToUint16 = subgroup "convertsInRange" [
-  test "zero" "convertsInRange" 0 0,
-  test "typical value" "convertsInRange" 1000 1000]
+  test "zero (bigint to uint16)" "convertsInRange" 0 0,
+  test "typical value (bigint to uint16)" "convertsInRange" 1000 1000]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.bigintToUint16 [bigint x] (uint16 result)
 
 literalsBigintToUint32 :: TypedTerm TestGroup
 literalsBigintToUint32 = subgroup "convertsInRange" [
-  test "zero" "convertsInRange" 0 0,
-  test "typical value" "convertsInRange" 100000 100000]
+  test "zero (bigint to uint32)" "convertsInRange" 0 0,
+  test "typical value (bigint to uint32)" "convertsInRange" 100000 100000]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.bigintToUint32 [bigint x] (uint32 result)
 
 literalsBigintToUint64 :: TypedTerm TestGroup
 literalsBigintToUint64 = subgroup "convertsInRange" [
-  test "zero" "convertsInRange" 0 0,
-  test "typical value" "convertsInRange" 1000000 1000000]
+  test "zero (bigint to uint64)" "convertsInRange" 0 0,
+  test "typical value (bigint to uint64)" "convertsInRange" 1000000 1000000]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.bigintToUint64 [bigint x] (uint64 result)
 
 literalsBigintToUint8 :: TypedTerm TestGroup
 literalsBigintToUint8 = subgroup "convertsInRange" [
-  test "zero" "convertsInRange" 0 0,
-  test "typical value" "convertsInRange" 100 100]
+  test "zero (bigint to uint8)" "convertsInRange" 0 0,
+  test "typical value (bigint to uint8)" "convertsInRange" 100 100]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.bigintToUint8 [bigint x] (uint8 result)
 
@@ -198,9 +198,9 @@ literalsFloat32ToFloat64 = subgroup "losslessWidening" [
 
 literalsFloat64ToFloat32 :: TypedTerm TestGroup
 literalsFloat64ToFloat32 = subgroup "convertsExactlyRepresentableValues" [
-  test "positive" "convertsExactlyRepresentableValues" 2.5 2.5,
-  test "negative" "convertsExactlyRepresentableValues" (-2.5) (-2.5),
-  test "zero" "convertsExactlyRepresentableValues" 0.0 0.0]
+  test "positive (float64 to float32)" "convertsExactlyRepresentableValues" 2.5 2.5,
+  test "negative (float64 to float32)" "convertsExactlyRepresentableValues" (-2.5) (-2.5),
+  test "zero (float64 to float32)" "convertsExactlyRepresentableValues" 0.0 0.0]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.float64ToFloat32 [float64 x] (float32 result)
 
@@ -208,9 +208,9 @@ literalsFloat64ToFloat32 = subgroup "convertsExactlyRepresentableValues" [
 
 literalsBigintToDecimal :: TypedTerm TestGroup
 literalsBigintToDecimal = subgroup "losslessConversion" [
-  test "positive" "losslessConversion" 42 42,
-  test "negative" "losslessConversion" (-42) (-42),
-  test "zero" "losslessConversion" 0 0]
+  test "positive (bigint to decimal)" "losslessConversion" 42 42,
+  test "negative (bigint to decimal)" "losslessConversion" (-42) (-42),
+  test "zero (bigint to decimal)" "losslessConversion" 0 0]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.bigintToDecimal [bigint x] (decimal result)
 
@@ -228,33 +228,33 @@ literalsDecimalToBigint = supergroup "decimalToBigint" [
 
 literalsDecimalToFloat32 :: TypedTerm TestGroup
 literalsDecimalToFloat32 = subgroup "convertsExactlyRepresentableValues" [
-  test "zero" "convertsExactlyRepresentableValues" 0 0.0,
-  test "positive whole" "convertsExactlyRepresentableValues" 2 2.0,
-  test "negative whole" "convertsExactlyRepresentableValues" (-2) (-2.0)]
+  test "zero (decimal to float32)" "convertsExactlyRepresentableValues" 0 0.0,
+  test "positive whole (decimal to float32)" "convertsExactlyRepresentableValues" 2 2.0,
+  test "negative whole (decimal to float32)" "convertsExactlyRepresentableValues" (-2) (-2.0)]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.decimalToFloat32 [decimal x] (float32 result)
 
 literalsDecimalToFloat64 :: TypedTerm TestGroup
 literalsDecimalToFloat64 = subgroup "convertsExactlyRepresentableValues" [
-  test "zero" "convertsExactlyRepresentableValues" 0 0.0,
-  test "positive whole" "convertsExactlyRepresentableValues" 2 2.0,
-  test "negative whole" "convertsExactlyRepresentableValues" (-2) (-2.0)]
+  test "zero (decimal to float64)" "convertsExactlyRepresentableValues" 0 0.0,
+  test "positive whole (decimal to float64)" "convertsExactlyRepresentableValues" 2 2.0,
+  test "negative whole (decimal to float64)" "convertsExactlyRepresentableValues" (-2) (-2.0)]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.decimalToFloat64 [decimal x] (float64 result)
 
 literalsFloat32ToDecimal :: TypedTerm TestGroup
 literalsFloat32ToDecimal = subgroup "convertsExactlyRepresentableValues" [
-  test "zero" "convertsExactlyRepresentableValues" 0.0 0,
-  test "positive whole" "convertsExactlyRepresentableValues" 2.0 2,
-  test "negative whole" "convertsExactlyRepresentableValues" (-2.0) (-2)]
+  test "zero (float32 to decimal)" "convertsExactlyRepresentableValues" 0.0 0,
+  test "positive whole (float32 to decimal)" "convertsExactlyRepresentableValues" 2.0 2,
+  test "negative whole (float32 to decimal)" "convertsExactlyRepresentableValues" (-2.0) (-2)]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.float32ToDecimal [float32 x] (decimal result)
 
 literalsFloat64ToDecimal :: TypedTerm TestGroup
 literalsFloat64ToDecimal = subgroup "convertsExactlyRepresentableValues" [
-  test "zero" "convertsExactlyRepresentableValues" 0.0 0,
-  test "positive whole" "convertsExactlyRepresentableValues" 2.0 2,
-  test "negative whole" "convertsExactlyRepresentableValues" (-2.0) (-2)]
+  test "zero (float64 to decimal)" "convertsExactlyRepresentableValues" 0.0 0,
+  test "positive whole (float64 to decimal)" "convertsExactlyRepresentableValues" 2.0 2,
+  test "negative whole (float64 to decimal)" "convertsExactlyRepresentableValues" (-2.0) (-2)]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.float64ToDecimal [float64 x] (decimal result)
 
@@ -272,9 +272,9 @@ literalsParseDecimal = supergroup "parseDecimal" [
 
 literalsPrintDecimal :: TypedTerm TestGroup
 literalsPrintDecimal = subgroup "rendersCanonicalDecimal" [
-  test "zero" "rendersCanonicalDecimal" 0 "0",
-  test "positive whole" "rendersCanonicalDecimal" 42 "42",
-  test "negative whole" "rendersCanonicalDecimal" (-42) "-42",
+  test "zero (decimal)" "rendersCanonicalDecimal" 0 "0",
+  test "positive whole (decimal)" "rendersCanonicalDecimal" 42 "42",
+  test "negative whole (decimal)" "rendersCanonicalDecimal" (-42) "-42",
   test "positive fraction" "rendersCanonicalDecimal" 3.14 "3.14",
   test "negative fraction" "rendersCanonicalDecimal" (-2.5) "-2.5"]
   where
@@ -284,9 +284,9 @@ literalsPrintDecimal = subgroup "rendersCanonicalDecimal" [
 
 literalsPrintBigint :: TypedTerm TestGroup
 literalsPrintBigint = subgroup "rendersCanonicalDecimal" [
-  test "positive" "rendersCanonicalDecimal" 42 "42",
-  test "negative" "rendersCanonicalDecimal" (-42) "-42",
-  test "zero" "rendersCanonicalDecimal" 0 "0"]
+  test "positive (bigint)" "rendersCanonicalDecimal" 42 "42",
+  test "negative (bigint)" "rendersCanonicalDecimal" (-42) "-42",
+  test "zero (bigint)" "rendersCanonicalDecimal" 0 "0"]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.printBigint [bigint x] (string result)
 
@@ -299,53 +299,53 @@ literalsPrintBoolean = subgroup "rendersLowercaseLiterals" [
 
 literalsPrintFloat32 :: TypedTerm TestGroup
 literalsPrintFloat32 = subgroup "rendersRoundTrippableRepresentation" [
-  test "positive" "rendersRoundTrippableRepresentation" 3.14 "3.14",
-  test "negative" "rendersRoundTrippableRepresentation" (-2.5) "-2.5",
-  test "zero" "rendersRoundTrippableRepresentation" 0.0 "0.0",
-  test "small positive" "rendersRoundTrippableRepresentation" 0.05 "5.0e-2",
-  test "small positive 2" "rendersRoundTrippableRepresentation" 0.03 "3.0e-2",
-  test "very small" "rendersRoundTrippableRepresentation" 0.001 "1.0e-3",
-  test "normal decimal" "rendersRoundTrippableRepresentation" 0.1 "0.1"]
+  test "positive (float32)" "rendersRoundTrippableRepresentation" 3.14 "3.14",
+  test "negative (float32)" "rendersRoundTrippableRepresentation" (-2.5) "-2.5",
+  test "zero (float32)" "rendersRoundTrippableRepresentation" 0.0 "0.0",
+  test "small positive (float32)" "rendersRoundTrippableRepresentation" 0.05 "5.0e-2",
+  test "small positive 2 (float32)" "rendersRoundTrippableRepresentation" 0.03 "3.0e-2",
+  test "very small (float32)" "rendersRoundTrippableRepresentation" 0.001 "1.0e-3",
+  test "normal decimal (float32)" "rendersRoundTrippableRepresentation" 0.1 "0.1"]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.printFloat32 [float32 x] (string result)
 
 literalsPrintFloat64 :: TypedTerm TestGroup
 literalsPrintFloat64 = subgroup "rendersRoundTrippableRepresentation" [
-  test "positive" "rendersRoundTrippableRepresentation" 3.14159 "3.14159",
-  test "zero" "rendersRoundTrippableRepresentation" 0.0 "0.0",
-  test "small positive" "rendersRoundTrippableRepresentation" 0.05 "5.0e-2",
-  test "small positive 2" "rendersRoundTrippableRepresentation" 0.03 "3.0e-2",
-  test "very small" "rendersRoundTrippableRepresentation" 0.001 "1.0e-3",
-  test "normal decimal" "rendersRoundTrippableRepresentation" 0.1 "0.1"]
+  test "positive (float64)" "rendersRoundTrippableRepresentation" 3.14159 "3.14159",
+  test "zero (float64)" "rendersRoundTrippableRepresentation" 0.0 "0.0",
+  test "small positive (float64)" "rendersRoundTrippableRepresentation" 0.05 "5.0e-2",
+  test "small positive 2 (float64)" "rendersRoundTrippableRepresentation" 0.03 "3.0e-2",
+  test "very small (float64)" "rendersRoundTrippableRepresentation" 0.001 "1.0e-3",
+  test "normal decimal (float64)" "rendersRoundTrippableRepresentation" 0.1 "0.1"]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.printFloat64 [float64 x] (string result)
 
 literalsPrintInt16 :: TypedTerm TestGroup
 literalsPrintInt16 = subgroup "rendersCanonicalDecimal" [
-  test "positive" "rendersCanonicalDecimal" 1000 "1000",
-  test "negative" "rendersCanonicalDecimal" (-1000) "-1000"]
+  test "positive (int16)" "rendersCanonicalDecimal" 1000 "1000",
+  test "negative (int16)" "rendersCanonicalDecimal" (-1000) "-1000"]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.printInt16 [int16 x] (string result)
 
 literalsPrintInt32 :: TypedTerm TestGroup
 literalsPrintInt32 = subgroup "rendersCanonicalDecimal" [
-  test "positive" "rendersCanonicalDecimal" 42 "42",
-  test "negative" "rendersCanonicalDecimal" (-42) "-42",
-  test "zero" "rendersCanonicalDecimal" 0 "0"]
+  test "positive (int32)" "rendersCanonicalDecimal" 42 "42",
+  test "negative (int32)" "rendersCanonicalDecimal" (-42) "-42",
+  test "zero (int32)" "rendersCanonicalDecimal" 0 "0"]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.printInt32 [int32 x] (string result)
 
 literalsPrintInt64 :: TypedTerm TestGroup
 literalsPrintInt64 = subgroup "rendersCanonicalDecimal" [
-  test "positive" "rendersCanonicalDecimal" 1000000 "1000000",
-  test "negative" "rendersCanonicalDecimal" (-1000000) "-1000000"]
+  test "positive (int64)" "rendersCanonicalDecimal" 1000000 "1000000",
+  test "negative (int64)" "rendersCanonicalDecimal" (-1000000) "-1000000"]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.printInt64 [int64 x] (string result)
 
 literalsPrintInt8 :: TypedTerm TestGroup
 literalsPrintInt8 = subgroup "rendersCanonicalDecimal" [
-  test "positive" "rendersCanonicalDecimal" 42 "42",
-  test "negative" "rendersCanonicalDecimal" (-42) "-42"]
+  test "positive (int8)" "rendersCanonicalDecimal" 42 "42",
+  test "negative (int8)" "rendersCanonicalDecimal" (-42) "-42"]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.printInt8 [int8 x] (string result)
 
@@ -375,29 +375,29 @@ literalsPrintString = supergroup "printString" [
 
 literalsPrintUint16 :: TypedTerm TestGroup
 literalsPrintUint16 = subgroup "rendersCanonicalDecimal" [
-  test "zero" "rendersCanonicalDecimal" 0 "0",
-  test "typical value" "rendersCanonicalDecimal" 1000 "1000"]
+  test "zero (uint16)" "rendersCanonicalDecimal" 0 "0",
+  test "typical value (uint16)" "rendersCanonicalDecimal" 1000 "1000"]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.printUint16 [uint16 x] (string result)
 
 literalsPrintUint32 :: TypedTerm TestGroup
 literalsPrintUint32 = subgroup "rendersCanonicalDecimal" [
-  test "zero" "rendersCanonicalDecimal" 0 "0",
-  test "typical value" "rendersCanonicalDecimal" 100000 "100000"]
+  test "zero (uint32)" "rendersCanonicalDecimal" 0 "0",
+  test "typical value (uint32)" "rendersCanonicalDecimal" 100000 "100000"]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.printUint32 [uint32 x] (string result)
 
 literalsPrintUint64 :: TypedTerm TestGroup
 literalsPrintUint64 = subgroup "rendersCanonicalDecimal" [
-  test "zero" "rendersCanonicalDecimal" 0 "0",
-  test "typical value" "rendersCanonicalDecimal" 1000000 "1000000"]
+  test "zero (uint64)" "rendersCanonicalDecimal" 0 "0",
+  test "typical value (uint64)" "rendersCanonicalDecimal" 1000000 "1000000"]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.printUint64 [uint64 x] (string result)
 
 literalsPrintUint8 :: TypedTerm TestGroup
 literalsPrintUint8 = subgroup "rendersCanonicalDecimal" [
-  test "zero" "rendersCanonicalDecimal" 0 "0",
-  test "max value" "rendersCanonicalDecimal" 255 "255"]
+  test "zero (uint8)" "rendersCanonicalDecimal" 0 "0",
+  test "max value (uint8)" "rendersCanonicalDecimal" 255 "255"]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.printUint8 [uint8 x] (string result)
 
