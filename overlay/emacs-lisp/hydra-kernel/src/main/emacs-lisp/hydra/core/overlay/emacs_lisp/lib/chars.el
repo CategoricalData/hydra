@@ -5,6 +5,16 @@
 ;; Hydra represents characters as int32 codepoints.
 ;; These primitives convert to/from Emacs characters internally.
 
+;; is_alpha :: Int32 -> Bool
+;; ASCII-only, matching the is_alpha_num idiom below (this file doesn't use Unicode-aware
+;; character predicates elsewhere).
+(defvar hydra_overlay_emacs_lisp_lib_chars_is_alpha
+  (lambda (c)
+    "Check whether a character is alphabetic."
+    (and (or (and (>= c ?a) (<= c ?z))
+             (and (>= c ?A) (<= c ?Z)))
+         t)))
+
 ;; is_alpha_num :: Int32 -> Bool
 (defvar hydra_overlay_emacs_lisp_lib_chars_is_alpha_num
   (lambda (c)
@@ -14,6 +24,13 @@
                (and (>= ch ?A) (<= ch ?Z))
                (and (>= ch ?0) (<= ch ?9)))
            t))))
+
+;; is_digit :: Int32 -> Bool
+;; ASCII-only, matching Haskell's Data.Char.isDigit.
+(defvar hydra_overlay_emacs_lisp_lib_chars_is_digit
+  (lambda (c)
+    "Check whether a character is an ASCII decimal digit."
+    (and (>= c ?0) (<= c ?9))))
 
 ;; is_lower :: Int32 -> Bool
 (defvar hydra_overlay_emacs_lisp_lib_chars_is_lower

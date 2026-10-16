@@ -1,7 +1,9 @@
 (define-library (hydra overlay scheme lib chars)
   (import (scheme base)
           (scheme char))
-  (export hydra_overlay_scheme_lib_chars_is_alpha_num
+  (export hydra_overlay_scheme_lib_chars_is_alpha
+          hydra_overlay_scheme_lib_chars_is_alpha_num
+          hydra_overlay_scheme_lib_chars_is_digit
           hydra_overlay_scheme_lib_chars_is_lower
           hydra_overlay_scheme_lib_chars_is_space
           hydra_overlay_scheme_lib_chars_is_upper
@@ -14,12 +16,25 @@
     (define (int->char c) (if (char? c) c (integer->char c)))
     (define (char->int c) (if (char? c) (char->integer c) c))
 
+    ;; Check whether a character is alphabetic.
+    (define hydra_overlay_scheme_lib_chars_is_alpha
+      (lambda (c)
+        (char-alphabetic? (int->char c))))
+
     ;; Check whether a character is alphanumeric.
     (define hydra_overlay_scheme_lib_chars_is_alpha_num
       (lambda (c)
         (let ((ch (int->char c)))
           (or (char-alphabetic? ch)
               (char-numeric? ch)))))
+
+    ;; Check whether a character is an ASCII decimal digit. ASCII-only, matching Haskell's
+    ;; Data.Char.isDigit -- char-numeric? is Unicode-aware and would wrongly accept non-ASCII
+    ;; digits (e.g. Arabic-Indic digits).
+    (define hydra_overlay_scheme_lib_chars_is_digit
+      (lambda (c)
+        (let ((ch (int->char c)))
+          (and (char<=? #\0 ch) (char<=? ch #\9)))))
 
     ;; Check whether a character is lowercase.
     (define hydra_overlay_scheme_lib_chars_is_lower

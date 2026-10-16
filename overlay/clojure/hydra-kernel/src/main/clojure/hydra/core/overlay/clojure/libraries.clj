@@ -48,7 +48,9 @@
 
 (defn register-chars []
   (let []
-    {(prim-name 'hydra.core.lib.chars/hydra_core_lib_chars_is_alpha_num) (p/prim1 (prim-name 'hydra.core.lib.chars/hydra_core_lib_chars_is_alpha_num) chars/hydra_overlay_clojure_lib_chars_is_alpha_num [] (p/tc-int32) (p/tc-boolean))
+    {(prim-name 'hydra.core.lib.chars/hydra_core_lib_chars_is_alpha)     (p/prim1 (prim-name 'hydra.core.lib.chars/hydra_core_lib_chars_is_alpha)     chars/hydra_overlay_clojure_lib_chars_is_alpha     [] (p/tc-int32) (p/tc-boolean))
+     (prim-name 'hydra.core.lib.chars/hydra_core_lib_chars_is_alpha_num) (p/prim1 (prim-name 'hydra.core.lib.chars/hydra_core_lib_chars_is_alpha_num) chars/hydra_overlay_clojure_lib_chars_is_alpha_num [] (p/tc-int32) (p/tc-boolean))
+     (prim-name 'hydra.core.lib.chars/hydra_core_lib_chars_is_digit)     (p/prim1 (prim-name 'hydra.core.lib.chars/hydra_core_lib_chars_is_digit)     chars/hydra_overlay_clojure_lib_chars_is_digit     [] (p/tc-int32) (p/tc-boolean))
      (prim-name 'hydra.core.lib.chars/hydra_core_lib_chars_is_lower)    (p/prim1 (prim-name 'hydra.core.lib.chars/hydra_core_lib_chars_is_lower)    chars/hydra_overlay_clojure_lib_chars_is_lower    [] (p/tc-int32) (p/tc-boolean))
      (prim-name 'hydra.core.lib.chars/hydra_core_lib_chars_is_space)    (p/prim1 (prim-name 'hydra.core.lib.chars/hydra_core_lib_chars_is_space)    chars/hydra_overlay_clojure_lib_chars_is_space    [] (p/tc-int32) (p/tc-boolean))
      (prim-name 'hydra.core.lib.chars/hydra_core_lib_chars_is_upper)    (p/prim1 (prim-name 'hydra.core.lib.chars/hydra_core_lib_chars_is_upper)    chars/hydra_overlay_clojure_lib_chars_is_upper    [] (p/tc-int32) (p/tc-boolean))

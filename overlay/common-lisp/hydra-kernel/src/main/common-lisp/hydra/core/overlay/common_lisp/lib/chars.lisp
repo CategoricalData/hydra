@@ -3,6 +3,13 @@
 ;; Hydra represents characters as int32 codepoints.
 ;; These primitives convert to/from CL characters internally.
 
+;; is_alpha :: Int32 -> Bool
+;; Check whether a character is alphabetic.
+(defvar hydra_overlay_common_lisp_lib_chars_is_alpha
+  (lambda (c)
+    (let ((ch (code-char c)))
+      (and ch (alpha-char-p ch) t))))
+
 ;; is_alpha_num :: Int32 -> Bool
 ;; Check whether a character is alphanumeric.
 (defvar hydra_overlay_common_lisp_lib_chars_is_alpha_num
@@ -10,6 +17,16 @@
     (let ((ch (code-char c)))
       (and ch (or (alpha-char-p ch) (digit-char-p ch))
            t))))
+
+;; is_digit :: Int32 -> Bool
+;; Check whether a character is an ASCII decimal digit. ASCII-only, matching Haskell's
+;; Data.Char.isDigit -- (digit-char-p ch), even with an explicit radix of 10, is Unicode-aware
+;; in SBCL (e.g. U+0660 ARABIC-INDIC DIGIT ZERO satisfies (digit-char-p ch 10)), so use an
+;; explicit character-range comparison instead.
+(defvar hydra_overlay_common_lisp_lib_chars_is_digit
+  (lambda (c)
+    (let ((ch (code-char c)))
+      (and ch (char<= #\0 ch) (char<= ch #\9) t))))
 
 ;; is_lower :: Int32 -> Bool
 ;; Check whether a character is lowercase.

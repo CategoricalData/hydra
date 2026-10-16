@@ -80,7 +80,9 @@
     (define (register-chars)
       (let ()
         (list
+          (cons (prim-name def:hydra_core_lib_chars_is_alpha)     (prim1 (prim-name def:hydra_core_lib_chars_is_alpha)     hydra_overlay_scheme_lib_chars_is_alpha     #f (tc-int32) (tc-boolean)))
           (cons (prim-name def:hydra_core_lib_chars_is_alpha_num) (prim1 (prim-name def:hydra_core_lib_chars_is_alpha_num) hydra_overlay_scheme_lib_chars_is_alpha_num #f (tc-int32) (tc-boolean)))
+          (cons (prim-name def:hydra_core_lib_chars_is_digit)     (prim1 (prim-name def:hydra_core_lib_chars_is_digit)     hydra_overlay_scheme_lib_chars_is_digit     #f (tc-int32) (tc-boolean)))
           (cons (prim-name def:hydra_core_lib_chars_is_lower)    (prim1 (prim-name def:hydra_core_lib_chars_is_lower)    hydra_overlay_scheme_lib_chars_is_lower    #f (tc-int32) (tc-boolean)))
           (cons (prim-name def:hydra_core_lib_chars_is_space)    (prim1 (prim-name def:hydra_core_lib_chars_is_space)    hydra_overlay_scheme_lib_chars_is_space    #f (tc-int32) (tc-boolean)))
           (cons (prim-name def:hydra_core_lib_chars_is_upper)    (prim1 (prim-name def:hydra_core_lib_chars_is_upper)    hydra_overlay_scheme_lib_chars_is_upper    #f (tc-int32) (tc-boolean)))

@@ -43,7 +43,9 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
 (defun register-chars ()
   (let ()
     (list
+      (cons (prim-name hydra_core_lib_chars_is_alpha)     (prim1 (prim-name hydra_core_lib_chars_is_alpha)     hydra_overlay_emacs_lisp_lib_chars_is_alpha     nil (tc-int32) (tc-boolean)))
       (cons (prim-name hydra_core_lib_chars_is_alpha_num) (prim1 (prim-name hydra_core_lib_chars_is_alpha_num) hydra_overlay_emacs_lisp_lib_chars_is_alpha_num nil (tc-int32) (tc-boolean)))
+      (cons (prim-name hydra_core_lib_chars_is_digit)     (prim1 (prim-name hydra_core_lib_chars_is_digit)     hydra_overlay_emacs_lisp_lib_chars_is_digit     nil (tc-int32) (tc-boolean)))
       (cons (prim-name hydra_core_lib_chars_is_lower)    (prim1 (prim-name hydra_core_lib_chars_is_lower)    hydra_overlay_emacs_lisp_lib_chars_is_lower    nil (tc-int32) (tc-boolean)))
       (cons (prim-name hydra_core_lib_chars_is_space)    (prim1 (prim-name hydra_core_lib_chars_is_space)    hydra_overlay_emacs_lisp_lib_chars_is_space    nil (tc-int32) (tc-boolean)))
       (cons (prim-name hydra_core_lib_chars_is_upper)    (prim1 (prim-name hydra_core_lib_chars_is_upper)    hydra_overlay_emacs_lisp_lib_chars_is_upper    nil (tc-int32) (tc-boolean)))

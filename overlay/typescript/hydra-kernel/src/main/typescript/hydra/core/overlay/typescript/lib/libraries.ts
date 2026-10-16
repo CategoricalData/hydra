@@ -398,7 +398,9 @@ const dDecimal = (_g: Graph, t: Term): Either<HydraError, libLiterals.Decimal> =
 // === lib.chars ===
 
 const charsPrimitives = (): readonly Primitive[] => [
+  u1("hydra.core.lib.chars.isAlpha", tyInt32, tyBool, dInt32, libChars.isAlpha, tBool),
   u1("hydra.core.lib.chars.isAlphaNum", tyInt32, tyBool, dInt32, libChars.isAlphaNum, tBool),
+  u1("hydra.core.lib.chars.isDigit", tyInt32, tyBool, dInt32, libChars.isDigit, tBool),
   u1("hydra.core.lib.chars.isLower", tyInt32, tyBool, dInt32, libChars.isLower, tBool),
   u1("hydra.core.lib.chars.isSpace", tyInt32, tyBool, dInt32, libChars.isSpace, tBool),
   u1("hydra.core.lib.chars.isUpper", tyInt32, tyBool, dInt32, libChars.isUpper, tBool),

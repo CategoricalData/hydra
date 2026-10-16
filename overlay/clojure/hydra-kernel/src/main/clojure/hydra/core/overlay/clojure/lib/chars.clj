@@ -1,9 +1,21 @@
 (ns hydra.core.overlay.clojure.lib.chars)
 
+;; is_alpha :: Char -> Bool
+(def hydra_overlay_clojure_lib_chars_is_alpha
+  "Check whether a character is alphabetic."
+  (fn [c] (Character/isLetter c)))
+
 ;; is_alpha_num :: Char -> Bool
 (def hydra_overlay_clojure_lib_chars_is_alpha_num
   "Check whether a character is alphanumeric."
   (fn [c] (or (Character/isLetterOrDigit c))))
+
+;; is_digit :: Char -> Bool
+;; ASCII-only, matching Haskell's Data.Char.isDigit -- Character/isDigit is Unicode-aware
+;; and would wrongly accept non-ASCII digits (e.g. Arabic-Indic digits).
+(def hydra_overlay_clojure_lib_chars_is_digit
+  "Check whether a character is an ASCII decimal digit."
+  (fn [c] (and (>= c (int \0)) (<= c (int \9)))))
 
 ;; is_lower :: Char -> Bool
 (def hydra_overlay_clojure_lib_chars_is_lower

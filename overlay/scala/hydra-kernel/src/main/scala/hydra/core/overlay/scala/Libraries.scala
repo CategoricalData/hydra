@@ -491,8 +491,12 @@ object Libraries:
 
   private def charsPrimitives(): Map[String, Primitive] =
     Map(
+      hydra.core.lib.chars.isAlpha.name -> mkPrimImpl(hydra.core.lib.chars.isAlpha.name, tMono(tFun(tInt32, tBool)),
+        impl1(a => mkBool(chars.isAlpha(exInt32(a))))),
       hydra.core.lib.chars.isAlphaNum.name -> mkPrimImpl(hydra.core.lib.chars.isAlphaNum.name, tMono(tFun(tInt32, tBool)),
         impl1(a => mkBool(chars.isAlphaNum(exInt32(a))))),
+      hydra.core.lib.chars.isDigit.name -> mkPrimImpl(hydra.core.lib.chars.isDigit.name, tMono(tFun(tInt32, tBool)),
+        impl1(a => mkBool(chars.isDigit(exInt32(a))))),
       hydra.core.lib.chars.isLower.name -> mkPrimImpl(hydra.core.lib.chars.isLower.name, tMono(tFun(tInt32, tBool)),
         impl1(a => mkBool(chars.isLower(exInt32(a))))),
       hydra.core.lib.chars.isSpace.name -> mkPrimImpl(hydra.core.lib.chars.isSpace.name, tMono(tFun(tInt32, tBool)),
