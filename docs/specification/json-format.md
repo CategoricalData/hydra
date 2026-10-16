@@ -138,6 +138,89 @@ fields, which maps to a JSON object containing one attribute). The variant
 key *is* the discriminator; there is no separate `"tag"` / `"value"`
 indirection to maintain.
 
+## Variables
+
+The type-directed (schema-aware) encoding described in the rest of this document covers
+*closed* terms — terms with no free variables. A `Term.variable` (a reference to another
+named element, or a bound variable under a binder) has no natural encoding in a
+type-specific position: its JSON shape would have to match the target type, but a variable
+carries no value of that type to encode.
+
+**[HYDRA-JSON-VARIABLE-RESERVED-KEY]** A `Term.variable` is written at *any* type-directed
+position as a reserved single-key JSON object:
+
+```json
+{"@var": "<name>"}
+```
+
+The key is the literal string `@var`; the value is the variable's `Name`, written as a plain
+JSON string (qualified names, e.g. `ns.local`, need no special handling — `Name` already
+serializes as a plain string in every other position). This form is recognized before any
+type-directed dispatch, so it is legal wherever a term of *any* type may appear: record
+fields, list/set/map elements, optional payloads, union payloads, and wrapped-type bodies.
+It is also legal in the untyped (structural) term encoding used when no type information is
+available.
+
+**Optional and wrapped-type positions always decode as present/wrapped first.** Decoding at
+an `optional<T>` type never reads `{"@var": ...}` as "the whole optional position is a
+variable" — it reads it the same way it reads any other JSON value in that position: as a
+present value (`Just`) whose payload, decoded against `T`, happens to be a variable. The
+result is `Term.optional(Just(Term.variable "x"))`, not a bare `Term.variable "x"`. The same
+holds for a wrapped type: decoding produces `Term.wrap(_, Term.variable "x")`, not a bare
+variable. This falls out of the ordinary optional/wrap decoding rule — `Just`'s wrapper
+carries no JSON-level marker of its own (see [Optional fields](#optional-fields)), so the
+decoder always reconstructs it structurally from the type, regardless of what the inner
+value's own shape turns out to be, variable or otherwise.
+
+Example — given a record type `Point = record { latitude: float64, longitude: float64 }`
+and a term whose `longitude` field is the variable `lon42`:
+
+```json
+{"latitude": 47.6, "longitude": {"@var": "lon42"}}
+```
+
+instead of a plain `{"latitude": 47.6, "longitude": 42.0}` for a closed value.
+
+**Why a reserved object key, not a reserved string prefix.** An earlier design considered a
+reserved *string* prefix (e.g. a hypothetical `"@@lon42"`) so that a variable could be
+written using the plain string form already available at every position. The object-key
+form was chosen instead because it requires no escaping convention: a legitimate `string`
+value never collides with `{"@var": ...}`'s *shape* (a single-key object is never produced
+by `Type.literal(string)` encoding, which always emits a bare JSON string), whereas a
+string-prefix marker would be indistinguishable from a real string value starting with the
+same prefix, and would need an escaping rule — with no existing precedent in this encoding
+to draw from — to disambiguate the two.
+
+**A field or variant literally named `@var` is a theoretical, not practical, collision.** A
+bare `Name` (see [the textual syntax specification](syntax.md#24-names)) is restricted to
+alphanumeric dot-segments, and `@` falls outside that alphabet — so ordinary schema
+authoring can never produce a record field or union variant named `@var`, and the record/
+union encodings always use the field's own name as the object key, never the fixed literal
+`@var`. `Name` also admits a backtick-escaped form at the data-model level that can represent
+any string, so a schema could in principle declare a field named `@var` via that path; such a
+field's encoding would be misread by the decoder as a variable marker. This is an accepted,
+documented limitation, not a defect to be fixed — no legitimate schema does this in practice.
+
+A second, structurally distinct case of the same kind: the [compact map encoding](#maps)'s
+keys are arbitrary string *data*, not field names, so a map with a key whose value happens to
+be the literal string `@var` is also read back as a variable rather than a one-entry map —
+reachable by any string-typed map key, with no backtick-escaping required. This is likewise
+accepted as a documented edge case, not a defect.
+
+**Maps: a variable key forces the whole map out of compact form.** The [compact map
+encoding](#maps) requires every key to encode as a plain JSON string under the key type; a
+variable key cannot satisfy this (it encodes as the reserved object, not a string), so if
+*any* key in a map is a variable, the encoder uses the entry-array form
+(`[{"key": ..., "value": ...}]`) for the **entire** map, including any other,
+otherwise-string-resolving keys alongside it — not just the variable-keyed entry. This keeps
+the compact form's invariant simple: when present, it is a native JSON object whose keys are
+always plain strings, never the reserved marker.
+
+**Not a format-version bump.** Per [Format versioning](#format-versioning)'s bump rule, this
+is additive: a decoder written before this feature existed would see an unrecognized shape
+at a term position it expects (not a value it could silently misinterpret as something else)
+and fail loudly, rather than silently misparsing valid data.
+
 ## Records
 
 A *record type* (`Type.record`) encodes as a JSON **array** of `{"name": ..., "type": ...}`

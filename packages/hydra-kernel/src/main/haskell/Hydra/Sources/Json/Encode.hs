@@ -192,6 +192,18 @@ toJson = define "toJson" $
   "types" ~> "compactMaps" ~> "tname" ~> "typ" ~> "term" ~>
   "stripped" <~ (Strip.deannotateType @@ var "typ") $
   "strippedTerm" <~ (Strip.deannotateTerm @@ var "term") $
+  -- A Term.variable is legal at any type-directed position (#798): encode it as the reserved
+  -- single-key object {"@var": "name"} instead of dispatching on the target type at all. This
+  -- must be checked before the type-dispatch match below, since a variable is admissible
+  -- regardless of what type is expected at this position.
+  "isVariableTerm" <~ (match _Term (var "strippedTerm") (Just false) [
+    _Term_variable>>: constant true]) $
+  Logic.ifElse (var "isVariableTerm")
+    (match _Term (var "strippedTerm")
+      (Just $ left $ string "expected variable term")
+      [_Term_variable>>: "n" ~>
+        right $ Json.valueObject $ list [pair (string "@var") (Json.valueString $ Core.unName $ var "n")]])
+    (
   -- Beta-reduce a type application by resolving the function side down to a Forall
   -- (following Variable lookups and nested Applications as needed), then substituting
   -- the argument for the bound parameter in the Forall's body.
@@ -355,10 +367,18 @@ toJson = define "toJson" $
     _Type_map>>: "mt" ~>
       "keyType" <~ (Core.mapTypeKeys $ var "mt") $
       "valType" <~ (Core.mapTypeValues $ var "mt") $
-      "compact" <~ (Logic.and (var "compactMaps") (Resolution.mapKeyResolvesToString @@ var "types" @@ var "keyType")) $
+      "typeAllowsCompact" <~ (Logic.and (var "compactMaps") (Resolution.mapKeyResolvesToString @@ var "types" @@ var "keyType")) $
       match _Term (var "strippedTerm")
         (Just $ left $ string "expected map term") [
         _Term_map>>: "m" ~>
+          -- #798: a variable key can't be written in the compact string-keyed object form, so
+          -- any variable key forces the whole map out of compact form into the entry-array form
+          -- (not just that one entry), even for otherwise string-resolving keys alongside it.
+          "hasVariableKey" <~ (Optionals.match (Lists.find
+              ("k" ~> match _Term (Strip.deannotateTerm @@ var "k") (Just false) [_Term_variable>>: constant true])
+              (Maps.keys (var "m" :: TypedTerm (M.Map Term Term))))
+            false ("_" ~> true)) $
+          "compact" <~ (Logic.and (var "typeAllowsCompact") (Logic.not (var "hasVariableKey"))) $
           Logic.ifElse (var "compact")
             ("encodeCompactEntry" <~ ("kv" ~>
                 "k" <~ (Pairs.first $ var "kv") $
@@ -437,7 +457,7 @@ toJson = define "toJson" $
     -- Type variables (look up in type table and recurse; fall back to untyped encoding)
     _Type_variable>>: "name" ~>
       "lookedUp" <~ (Maps.lookup (var "name") (var "types" :: TypedTerm (M.Map Name Type))) $
-      Optionals.match (var "lookedUp") (toJsonUntyped @@ var "term") ("resolvedType" ~> toJson @@ var "types" @@ var "compactMaps" @@ var "name" @@ var "resolvedType" @@ var "term")]
+      Optionals.match (var "lookedUp") (toJsonUntyped @@ var "term") ("resolvedType" ~> toJson @@ var "types" @@ var "compactMaps" @@ var "name" @@ var "resolvedType" @@ var "term")])
 
 -- | Encode a Term to a JSON Value without type information.
 -- This is a structural fallback used when type information is unavailable (e.g. unresolved
@@ -458,6 +478,10 @@ toJsonUntyped = define "toJsonUntyped" $
     (Just $ left $ Strings.concat $ list [
       string "unsupported term variant for JSON encoding: ",
       PrintCore.term @@ var "term"]) [
+    -- Variables (#798): reserved single-key object, same as the typed path.
+    _Term_variable>>: "n" ~>
+      right $ Json.valueObject $ list [pair (string "@var") (Json.valueString $ Core.unName $ var "n")],
+
     -- Literals
     _Term_literal>>: "lit" ~> encodeLiteral @@ var "lit",
 

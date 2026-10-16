@@ -290,6 +290,38 @@ fromJson = define "fromJson" $
     <> " byte-stable published-host decoder must be able to read that data unmodified.") $
   "types" ~> "compactMaps" ~> "tname" ~> "typ" ~> "value" ~>
   "stripped" <~ (Strip.deannotateType @@ var "typ") $
+  -- A reserved single-key object {"@var": "name"} decodes to Term.variable at any
+  -- type-directed position (#798), independent of the expected type. Checked before the
+  -- type-dispatch match below, mirroring toJson's symmetric check. asVariablePayload holds
+  -- the raw JSON value under the "@var" key when the shape matches, so that a non-string
+  -- payload (malformed marker) is reported as a decode error rather than silently falling
+  -- through to the ordinary type-dispatch logic.
+  --
+  -- Exception: optional and wrap targets always defer to the ordinary dispatch below, even
+  -- when value has the {"@var": ...} shape. Those two branches reconstruct their wrapper
+  -- (Optional/Just, or Term.wrap) around whatever their own recursive fromJson call decodes;
+  -- a variable payload at an optional/wrap position must still go through that recursive
+  -- call (which will then see the {"@var": ...} shape against the INNER type, and correctly
+  -- decode to a bare Term.variable one level down) so the outer wrapper is restored. Checking
+  -- the marker here, before that dispatch, would short-circuit past the wrapper reconstruction
+  -- and decode e.g. Term.optional(Just(Term.variable "x")) back as a bare Term.variable "x",
+  -- losing the Optional layer -- a round-trip regression that doesn't occur for ordinary
+  -- (non-variable) values, since the ordinary dispatch always runs for those.
+  "typeDefersVariableCheck" <~ (match _Type (var "stripped") (Just false) [
+    _Type_optional>>: constant true,
+    _Type_wrap>>: constant true]) $
+  "asVariablePayload" <~ (Logic.ifElse (var "typeDefersVariableCheck")
+    nothing
+    (match _Value (var "value") (Just nothing) [
+      _Value_object>>: "pairs" ~>
+        Logic.ifElse (Equality.equal (Lists.length $ var "pairs") (int32 1))
+          ("onlyPair" <~ (Optionals.withDefault (pair (string "") Json.valueNull) (Lists.at (int32 0) (var "pairs"))) $
+            Logic.ifElse (Equality.equal (Pairs.first $ var "onlyPair") (string "@var"))
+              (just $ Pairs.second $ var "onlyPair")
+              nothing)
+          nothing])) $
+  Optionals.match (var "asVariablePayload")
+    (
   -- Beta-reduce a type application by resolving the function side down to a Forall
   -- (following Variable lookups and nested Applications as needed), then substituting
   -- the argument for the bound parameter in the Forall's body.
@@ -566,7 +598,10 @@ fromJson = define "fromJson" $
       "lookedUp" <~ (Maps.lookup (var "name" :: TypedTerm Name) (var "types")) $
       Optionals.match (var "lookedUp") (left $ Strings.concat $ list [
           string "unknown type variable: ",
-          Core.unName $ var "name"]) ("resolvedType" ~> fromJson @@ var "types" @@ var "compactMaps" @@ var "name" @@ var "resolvedType" @@ var "value")]
+          Core.unName $ var "name"]) ("resolvedType" ~> fromJson @@ var "types" @@ var "compactMaps" @@ var "name" @@ var "resolvedType" @@ var "value")])
+    ("payload" ~> match _Value (var "payload")
+      (Just $ left $ string "expected a JSON string as the \"@var\" variable name")
+      [_Value_string>>: "s" ~> right $ Core.termVariable $ Core.name $ var "s"])
 
 -- | Decode a JSON value to a literal term given a literal type
 -- | Parse a string as an IEEE sentinel float that the JSON number grammar cannot express:
