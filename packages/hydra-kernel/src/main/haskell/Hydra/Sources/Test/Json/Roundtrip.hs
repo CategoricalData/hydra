@@ -71,6 +71,7 @@ allTests = define "allTests" $
       eitherRoundtripGroup,
       unionRoundtripGroup,
       mapRoundtripGroup,
+      variableRoundtripGroup,
       wireShapeGroup]
 
 -- Helper for creating JSON round-trip test cases (universal)
@@ -558,6 +559,120 @@ mapRoundtripGroup = subgroup "map types" [
       (T.map (T.optional T.string) T.int32)
       (Terms.map (Maps.fromList $ Phantoms.list [
         Phantoms.pair (optional (just $ string "k1")) (int32 1)]))]
+
+----------------------------------------
+-- Variables (#798): a Term.variable at any type-directed position encodes as the reserved
+-- single-key object {"@var": "name"}, independent of the expected type.
+----------------------------------------
+
+variableRoundtripGroup :: TypedTerm TestGroup
+variableRoundtripGroup = subgroup "variables" [
+    -- A variable at a literal-typed (here string) position -- the position most at risk of
+    -- ambiguity with a real string value under a string-prefix design; the object-key design
+    -- has no such ambiguity, which this test and the next one jointly demonstrate.
+    roundtripTest "variable at a string-typed position"
+      T.string
+      (Terms.var "lon42"),
+
+    wireShapeTest "variable at a string-typed position wire shape"
+      T.string
+      (Terms.var "lon42")
+      "{\"@var\": \"lon42\"}",
+
+    -- A real string value that happens to look like the reserved marker's payload is encoded
+    -- and decoded as an ordinary string, not misread as a variable -- there is no escaping
+    -- rule to apply because the two forms are never shape-ambiguous (a string literal always
+    -- encodes as a bare JSON string, never as a single-key object).
+    roundtripTest "string value adjacent in shape to the variable marker is unaffected"
+      T.string
+      (string "@var"),
+
+    wireShapeTest "string value adjacent in shape to the variable marker wire shape"
+      T.string
+      (string "@var")
+      "\"@var\"",
+
+    -- Qualified name
+    roundtripTest "variable with a qualified name"
+      T.string
+      (Terms.var "example.ns.lon42"),
+
+    wireShapeTest "variable with a qualified name wire shape"
+      T.string
+      (Terms.var "example.ns.lon42")
+      "{\"@var\": \"example.ns.lon42\"}",
+
+    -- Record field. Note: like every other roundtripTest case involving a record, the input
+    -- term's tag is "test" (the harness's fixed root type name), not the type's own name
+    -- "Point" -- the decoder always re-stamps with the ambient tname (see
+    -- parametricTypeRoundtripGroup's comment above for the same harness quirk).
+    roundtripTest "variable in a record field"
+      (T.record (name "Point") ["latitude">: T.float64, "longitude">: T.float64])
+      (record (name "test") ["latitude">: float64 47.6, "longitude">: Terms.var "lon42"]),
+
+    -- List element
+    roundtripTest "variable as a list element"
+      (T.list T.string)
+      (list [string "a", Terms.var "b", string "c"]),
+
+    -- Set element
+    roundtripTest "variable as a set element"
+      (T.set T.string)
+      (set [Terms.var "x"]),
+
+    -- Optional payload
+    roundtripTest "variable as an optional payload"
+      (T.optional T.string)
+      (optional (just $ Terms.var "opt1")),
+
+    -- Union payload
+    roundtripTest "variable as a union payload"
+      unionType
+      (inject (name "test") "string" (Terms.var "u1")),
+
+    -- Wrapped-type body
+    roundtripTest "variable as a wrapped-type body"
+      wrappedStringType
+      (wrap (name "test") (Terms.var "w1")),
+
+    -- Map value
+    roundtripTest "variable as a map value"
+      (T.map T.string T.string)
+      (Terms.map (Maps.fromList $ Phantoms.list [
+        Phantoms.pair (string "a") (Terms.var "v1")])),
+
+    -- Map key: forces the whole map out of compact form, even for an otherwise
+    -- string-resolving key type, per the #798 whole-map-fallback rule. Entry order follows
+    -- the Term Ord instance's constructor order (Term.variable sorts after Term.literal), not
+    -- insertion order -- confirmed empirically, matching how every other map test in this
+    -- file observes Map's key-order iteration rather than assuming insertion order.
+    wireShapeTest "variable as a map key forces entry-array form for the whole map"
+      (T.map T.string T.int32)
+      (Terms.map (Maps.fromList $ Phantoms.list [
+        Phantoms.pair (Terms.var "k1") (int32 1),
+        Phantoms.pair (string "k2") (int32 2)]))
+      "[{\"key\": \"k2\", \"value\": 2}, {\"key\": {\"@var\": \"k1\"}, \"value\": 1}]",
+
+    roundtripTest "variable as a map key round-trips"
+      (T.map T.string T.int32)
+      (Terms.map (Maps.fromList $ Phantoms.list [
+        Phantoms.pair (Terms.var "k1") (int32 1),
+        Phantoms.pair (string "k2") (int32 2)])),
+
+    -- Untyped fallback path (toJsonUntyped): an unresolved type variable makes toJson fall
+    -- back to untyped encoding (toJsonUntyped), which must also accept a Term.variable. This
+    -- is encode-only: fromJson has no untyped decode counterpart (an unresolved type variable
+    -- is always a decode error, independent of #798), so this is a wireShapeTest, not a
+    -- roundtripTest.
+    wireShapeTest "variable encoded via the untyped fallback path"
+      (T.variable "Unresolved")
+      (Terms.var "lon42")
+      "{\"@var\": \"lon42\"}",
+
+    -- Malformed marker: {"@var": <non-string>} is rejected, not silently misdecoded.
+    decodeFailureTest "malformed variable marker with a non-string payload is rejected"
+      T.string
+      (Typed.TypedTerm (EncodeJsonModel.value (Model.ValueObject [("@var", Model.ValueNumber 1)])))]
 
 ----------------------------------------
 -- Wire shape (encoder output)
