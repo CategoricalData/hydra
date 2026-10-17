@@ -395,11 +395,15 @@ object Libraries:
 
   // Primitives which have no native Scala implementation, but do declare a portable
   // defaultImplementation term. Spike (#609 Stage 3) wired lists.takeWhile, mirroring the
-  // Java/Python validation case; #749 added equality.notEqual and functions.{const,flip}. 8
-  // Group-A names remain: eithers.{apply,compose,pure}, functions.compose,
-  // optionals.{foldList,mapList,mapSet}, sets.filter.
+  // Java/Python validation case; #749 added equality.notEqual and functions.{const,flip}.
+  // functions.compose and lists.{compose,foldList,mapList,mapOptional,mapSet} closed out the
+  // remaining Group-A names (the kernel now declares default terms for the lists.* versions
+  // too, converted from plain `define` to `defineWithDefault`). Remaining non-Group-A gaps:
+  // eithers.{apply,compose,pure}, optionals.{foldList,mapList,mapSet}, sets.filter.
   private def defaultFallbackPrimitives(alreadyNative: Set[String]): Map[String, Primitive] =
     val x = tVar("x")
+    val y = tVar("y")
+    val z = tVar("z")
     val xEq = Seq(("x", Seq("equality")))
     val t1 = tVar("t1")
     val t2 = tVar("t2")
@@ -409,6 +413,12 @@ object Libraries:
       hydra.core.lib.equality.notEqual.name -> tSchemeConstrained(xEq, tFun(x, tFun(x, tBool))),
       hydra.core.lib.functions.const.name -> tScheme(Seq("t1", "t2"), tFun(t1, tFun(t2, t1))),
       hydra.core.lib.functions.flip.name -> tScheme(Seq("t1", "t2", "t3"), tFun(tFun(t1, tFun(t2, t3)), tFun(t2, tFun(t1, t3)))),
+      hydra.core.lib.functions.compose.name -> tScheme(Seq("t1", "t2", "t3"), tFun(tFun(t2, t3), tFun(tFun(t1, t2), tFun(t1, t3)))),
+      hydra.core.lib.lists.compose.name -> tScheme(Seq("x", "y", "z"), tFun(tFun(x, tList(y)), tFun(tFun(y, tList(z)), tFun(x, tList(z))))),
+      hydra.core.lib.lists.foldList.name -> tScheme(Seq("x", "y"), tFun(tFun(x, tFun(y, tList(x))), tFun(x, tFun(tList(y), tList(x))))),
+      hydra.core.lib.lists.mapList.name -> tScheme(Seq("x", "y"), tFun(tFun(x, tList(y)), tFun(tList(x), tList(tList(y))))),
+      hydra.core.lib.lists.mapOptional.name -> tScheme(Seq("x", "y"), tFun(tFun(x, tList(y)), tFun(tOpt(x), tList(tOpt(y))))),
+      hydra.core.lib.lists.mapSet.name -> tSchemeConstrained(Seq(("x", Seq("ordering")), ("y", Seq("ordering"))), tFun(tFun(x, tList(y)), tFun(tSet(x), tList(tSet(y))))),
     )
     candidates
       .filterNot((name, _) => alreadyNative.contains(name))

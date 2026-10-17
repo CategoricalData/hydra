@@ -191,7 +191,23 @@
             {"name": "x", "description": "the input value", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "z"}}}},
         "isPure": true,
-        "isTotal": true}},
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "f",
+            "body": {
+              "lambda": {
+                "parameter": "g",
+                "body": {
+                  "lambda": {
+                    "parameter": "x",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"variable": "hydra.core.lib.lists.bind"},
+                            "argument": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}},
+                        "argument": {"variable": "g"}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.core.lib.lists.concat",
@@ -523,7 +539,41 @@
             {"name": "xs", "description": "the list to fold", "type": {"list": {"variable": "y"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
-        "isTotal": true}},
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "f",
+            "body": {
+              "lambda": {
+                "parameter": "acc0",
+                "body": {
+                  "lambda": {
+                    "parameter": "xs",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"variable": "hydra.core.lib.lists.foldl"},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "macc",
+                                    "body": {
+                                      "lambda": {
+                                        "parameter": "el",
+                                        "body": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.core.lib.lists.bind"}, "argument": {"variable": "macc"}}},
+                                            "argument": {
+                                              "lambda": {
+                                                "parameter": "acc",
+                                                "body": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "f"}, "argument": {"variable": "acc"}}},
+                                                    "argument": {"variable": "el"}}}}}}}}}}}}},
+                            "argument": {"list": [{"variable": "acc0"}]}}},
+                        "argument": {"variable": "xs"}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.core.lib.lists.foldl",
@@ -894,7 +944,49 @@
             {"name": "xs", "description": "the list to traverse", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"list": {"variable": "y"}}}}},
         "isPure": true,
-        "isTotal": true}},
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "f",
+            "body": {
+              "lambda": {
+                "parameter": "xs",
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"variable": "hydra.core.lib.lists.foldr"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "x",
+                                "body": {
+                                  "lambda": {
+                                    "parameter": "acc",
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"variable": "hydra.core.lib.lists.bind"},
+                                            "argument": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "y",
+                                            "body": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.core.lib.lists.bind"}, "argument": {"variable": "acc"}}},
+                                                "argument": {
+                                                  "lambda": {
+                                                    "parameter": "ys",
+                                                    "body": {
+                                                      "list": [
+                                                        {
+                                                          "application": {
+                                                            "function": {"application": {"function": {"variable": "hydra.core.lib.lists.cons"}, "argument": {"variable": "y"}}},
+                                                            "argument": {"variable": "ys"}}}]}}}}}}}}}}}}}}},
+                        "argument": {"list": [{"list": []}]}}},
+                    "argument": {"variable": "xs"}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.core.lib.lists.mapOptional",
@@ -917,7 +1009,29 @@
             {"name": "m", "description": "the optional value to traverse", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"optional": {"variable": "y"}}}}},
         "isPure": true,
-        "isTotal": true}},
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "f",
+            "body": {
+              "lambda": {
+                "parameter": "m",
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.core.lib.optionals.match"}, "argument": {"variable": "m"}}},
+                        "argument": {"list": [{"optional": null}]}}},
+                    "argument": {
+                      "lambda": {
+                        "parameter": "x",
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"variable": "hydra.core.lib.lists.bind"},
+                                "argument": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}},
+                            "argument": {"lambda": {"parameter": "y", "body": {"list": [{"optional": {"variable": "y"}}]}}}}}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.core.lib.lists.mapSet",
@@ -941,7 +1055,58 @@
             {"name": "s", "description": "the set to traverse", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"set": {"variable": "y"}}}}},
         "isPure": true,
-        "isTotal": true}},
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "f",
+            "body": {
+              "lambda": {
+                "parameter": "s",
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"variable": "hydra.core.lib.lists.map"},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "ys",
+                            "body": {"application": {"function": {"variable": "hydra.core.lib.sets.fromList"}, "argument": {"variable": "ys"}}}}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"variable": "hydra.core.lib.lists.foldr"},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "x",
+                                    "body": {
+                                      "lambda": {
+                                        "parameter": "acc",
+                                        "body": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"variable": "hydra.core.lib.lists.bind"},
+                                                "argument": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}},
+                                            "argument": {
+                                              "lambda": {
+                                                "parameter": "y",
+                                                "body": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.core.lib.lists.bind"}, "argument": {"variable": "acc"}}},
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "parameter": "ys",
+                                                        "body": {
+                                                          "list": [
+                                                            {
+                                                              "application": {
+                                                                "function": {"application": {"function": {"variable": "hydra.core.lib.lists.cons"}, "argument": {"variable": "y"}}},
+                                                                "argument": {"variable": "ys"}}}]}}}}}}}}}}}}}}},
+                            "argument": {"list": [{"list": []}]}}},
+                        "argument": {"application": {"function": {"variable": "hydra.core.lib.sets.toList"}, "argument": {"variable": "s"}}}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.core.lib.lists.member",

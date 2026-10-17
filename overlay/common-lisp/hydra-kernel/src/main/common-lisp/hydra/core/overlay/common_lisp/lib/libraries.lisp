@@ -907,17 +907,24 @@
 ;; ============================================================================
 ;; Default-implementation fallbacks (#609 Stage 4): primitives with no native Common Lisp
 ;; implementation, but which declare a portable defaultImplementation term. lists.takeWhile,
-;; equality.notEqual, and functions.const/flip are wired here (#749). See the caller's
-;; verification notes for slot-validation status of this build.
+;; equality.notEqual, and functions.const/flip are wired here (#749). functions.compose and
+;; lists.{compose,foldList,mapList,mapOptional,mapSet} closed out the remaining Group-A names
+;; (the kernel now declares default terms for the lists.* versions too, converted from plain
+;; `define` to `defineWithDefault`). Remaining non-Group-A gaps: eithers.{apply,compose,pure},
+;; optionals.{foldList,mapList,mapSet}, sets.filter. See the caller's verification notes for
+;; slot-validation status of this build.
 ;; ============================================================================
 
 (defun register-default-fallbacks (already-native)
   (let ((a (tc-variable "a"))
         (x (tc-variable "x"))
+        (y (tc-variable "y"))
+        (z (tc-variable "z"))
         (t1 (tc-variable "t1"))
         (t2 (tc-variable "t2"))
         (t3 (tc-variable "t3"))
-        (eq-x '(("x" . ("equality")))))
+        (eq-x '(("x" . ("equality"))))
+        (ord-xy '(("x" . ("ordering")) ("y" . ("ordering")))))
     (remove nil
       (list
         (unless (member (prim-name hydra_core_lib_lists_take_while) already-native :test #'equal)
@@ -935,7 +942,31 @@
         (unless (member (prim-name hydra_core_lib_functions_flip) already-native :test #'equal)
           (cons (prim-name hydra_core_lib_functions_flip)
                 (default-fallback-primitive (prim-name hydra_core_lib_functions_flip)
-                  (list "t1" "t2" "t3") (list (fun t1 (fun t2 t3)) t2 t1) t3)))))))
+                  (list "t1" "t2" "t3") (list (fun t1 (fun t2 t3)) t2 t1) t3)))
+        (unless (member (prim-name hydra_core_lib_functions_compose) already-native :test #'equal)
+          (cons (prim-name hydra_core_lib_functions_compose)
+                (default-fallback-primitive (prim-name hydra_core_lib_functions_compose)
+                  (list "t1" "t2" "t3") (list (fun t2 t3) (fun t1 t2) t1) t3)))
+        (unless (member (prim-name hydra_core_lib_lists_compose) already-native :test #'equal)
+          (cons (prim-name hydra_core_lib_lists_compose)
+                (default-fallback-primitive (prim-name hydra_core_lib_lists_compose)
+                  (list "x" "y" "z") (list (fun x (tc-list y)) (fun y (tc-list z)) x) (tc-list z))))
+        (unless (member (prim-name hydra_core_lib_lists_fold_list) already-native :test #'equal)
+          (cons (prim-name hydra_core_lib_lists_fold_list)
+                (default-fallback-primitive (prim-name hydra_core_lib_lists_fold_list)
+                  (list "x" "y") (list (fun x (fun y (tc-list x))) x (tc-list y)) (tc-list x))))
+        (unless (member (prim-name hydra_core_lib_lists_map_list) already-native :test #'equal)
+          (cons (prim-name hydra_core_lib_lists_map_list)
+                (default-fallback-primitive (prim-name hydra_core_lib_lists_map_list)
+                  (list "x" "y") (list (fun x (tc-list y)) (tc-list x)) (tc-list (tc-list y)))))
+        (unless (member (prim-name hydra_core_lib_lists_map_optional) already-native :test #'equal)
+          (cons (prim-name hydra_core_lib_lists_map_optional)
+                (default-fallback-primitive (prim-name hydra_core_lib_lists_map_optional)
+                  (list "x" "y") (list (fun x (tc-list y)) (tc-optional x)) (tc-list (tc-optional y)))))
+        (unless (member (prim-name hydra_core_lib_lists_map_set) already-native :test #'equal)
+          (cons (prim-name hydra_core_lib_lists_map_set)
+                (default-fallback-primitive (prim-name hydra_core_lib_lists_map_set)
+                  (list "x" "y") (list (fun x (tc-list y)) (tc-set x)) (tc-list (tc-set y)) ord-xy)))))))
 
 ;; ============================================================================
 ;; Standard library: all primitives combined

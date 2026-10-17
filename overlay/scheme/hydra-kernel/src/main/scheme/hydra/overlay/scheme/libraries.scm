@@ -850,14 +850,22 @@
     ;; implementation, but which declare a portable defaultImplementation term. Originally a
     ;; spike with only lists.takeWhile wired, mirroring the Java/Python/Scala/TS/Clojure/
     ;; Common-Lisp/Emacs-Lisp validation case. Under #749, equality.notEqual and
-    ;; functions.{const,flip} were added as well.
+    ;; functions.{const,flip} were added as well. functions.compose and
+    ;; lists.{compose,foldList,mapList,mapOptional,mapSet} closed out the remaining Group-A
+    ;; names (the kernel now declares default terms for the lists.* versions too, converted
+    ;; from plain `define` to `defineWithDefault`). Remaining non-Group-A gaps:
+    ;; eithers.{apply,compose,pure}, optionals.{foldList,mapList,mapSet}, sets.filter.
     ;; ============================================================================
 
     (define (register-default-fallbacks already-native)
       (let* (
              (a (tc-variable "a"))
              (x (tc-variable "x"))
+             (y (tc-variable "y"))
+             (z (tc-variable "z"))
              (eq-x (list (list "x" (make-hydra_core_model_type_variable_constraints (constraints "equality")))))
+             (ord-xy (list (list "x" (make-hydra_core_model_type_variable_constraints (constraints "ordering")))
+                           (list "y" (make-hydra_core_model_type_variable_constraints (constraints "ordering")))))
              (t1 (tc-variable "t1"))
              (t2 (tc-variable "t2"))
              (t3 (tc-variable "t3"))
@@ -874,7 +882,25 @@
                                     #f (list t1 t2) t1)))
                  (cons (prim-name def:hydra_core_lib_functions_flip)
                        (lambda () (default-fallback-primitive (prim-name def:hydra_core_lib_functions_flip)
-                                    #f (list (fun t1 (fun t2 t3)) t2 t1) t3))))))
+                                    #f (list (fun t1 (fun t2 t3)) t2 t1) t3)))
+                 (cons (prim-name def:hydra_core_lib_functions_compose)
+                       (lambda () (default-fallback-primitive (prim-name def:hydra_core_lib_functions_compose)
+                                    #f (list (fun t2 t3) (fun t1 t2) t1) t3)))
+                 (cons (prim-name def:hydra_core_lib_lists_compose)
+                       (lambda () (default-fallback-primitive (prim-name def:hydra_core_lib_lists_compose)
+                                    #f (list (fun x (tc-list y)) (fun y (tc-list z)) x) (tc-list z))))
+                 (cons (prim-name def:hydra_core_lib_lists_fold_list)
+                       (lambda () (default-fallback-primitive (prim-name def:hydra_core_lib_lists_fold_list)
+                                    #f (list (fun x (fun y (tc-list x))) x (tc-list y)) (tc-list x))))
+                 (cons (prim-name def:hydra_core_lib_lists_map_list)
+                       (lambda () (default-fallback-primitive (prim-name def:hydra_core_lib_lists_map_list)
+                                    #f (list (fun x (tc-list y)) (tc-list x)) (tc-list (tc-list y)))))
+                 (cons (prim-name def:hydra_core_lib_lists_map_optional)
+                       (lambda () (default-fallback-primitive (prim-name def:hydra_core_lib_lists_map_optional)
+                                    #f (list (fun x (tc-list y)) (tc-optional x)) (tc-list (tc-optional y)))))
+                 (cons (prim-name def:hydra_core_lib_lists_map_set)
+                       (lambda () (default-fallback-primitive (prim-name def:hydra_core_lib_lists_map_set)
+                                    #f (list (fun x (tc-list y)) (tc-set x)) (tc-list (tc-set y)) ord-xy))))))
         (let loop ((cs candidates) (acc '()))
           (if (null? cs)
               (reverse acc)

@@ -9,12 +9,14 @@ import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
 import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
 import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms hiding (apply, compose, map)
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), concat, drop, dropWhile, elem, filter, foldl, foldr,
                                head, init, last, length, map, replicate, reverse,
                                span, tail, take, takeWhile, zip, zipWith)
+import qualified Data.Set                    as S
 
 
 ns :: ModuleName
@@ -106,12 +108,14 @@ bind = availableSince "0.15" $ withProvisions [
       (var "xs"))
 
 compose :: PrimitiveDefinition
-compose = availableSince "0.17.6" $ define "compose" "Compose two functions that return lists (Kleisli composition in the list monad)."
+compose = availableSince "0.17.6" $ defineWithDefault "compose" "Compose two functions that return lists (Kleisli composition in the list monad)."
   (sigWithParams [("f", "the first list-returning function"), ("g", "the second list-returning function"), ("x", "the input value")] $ TypeScheme [Name "x", Name "y", Name "z"]
     ((tx Types.~> l ty) Types.~> (ty Types.~> l tz) Types.~> tx Types.~> l tz) mempty)
   ["compose(f, g, x) is bind(f(x), g); this defining equation is the specification. The results of\
   \ applying g to each element of f(x) are concatenated in order.",
    "Total. Corresponds to Kleisli composition (>=>) in the list monad."]
+  ("f" ~> "g" ~> "x" ~>
+    Lists.bind (var "f" @@ var "x") (var "g"))
 
 concat :: PrimitiveDefinition
 concat = availableSince "0.15" $ withProvisions [
@@ -234,7 +238,7 @@ find = availableSince "0.15" $ withProvisions [
       (var "xs"))
 
 foldList :: PrimitiveDefinition
-foldList = availableSince "0.17.6" $ define "foldList" "Left-fold a list in the list monad (a nondeterministic fold)."
+foldList = availableSince "0.17.6" $ defineWithDefault "foldList" "Left-fold a list in the list monad (a nondeterministic fold)."
   (sigWithParams [("f", "the branching step function"), ("acc0", "the initial accumulator"), ("xs", "the list to fold")] $ TypeScheme [Name "x", Name "y"]
     ((tx Types.~> ty Types.~> l tx) Types.~> tx Types.~> l ty Types.~> l tx) mempty)
   ["foldList(f, acc0, xs) folds xs from the left, branching the accumulator over every result of the\
@@ -245,6 +249,12 @@ foldList = availableSince "0.17.6" $ define "foldList" "Left-fold a list in the 
    "Total on finite inputs. The list-monad instance of the monadic left fold.",
    "For example, if f(acc, x) returns the two-element list containing acc and the sum of acc and x,\
   \ then foldList(f, 0, xs) computes the sums of all subsets of xs."]
+  ("f" ~> "acc0" ~> "xs" ~>
+    Lists.foldl
+      ("macc" ~> "el" ~>
+        Lists.bind (var "macc") ("acc" ~> var "f" @@ var "acc" @@ var "el"))
+      (list [var "acc0"])
+      (var "xs"))
 
 foldl :: PrimitiveDefinition
 foldl = availableSince "0.15" $ withProvisions [
@@ -410,7 +420,7 @@ mapGivens = defineWithDefault "mapGivens" "Map a partial function over a list, k
   ("f" ~> "xs" ~> Optionals.givens (Lists.map (var "f") (var "xs")))
 
 mapList :: PrimitiveDefinition
-mapList = availableSince "0.17.6" $ define "mapList" "Traverse a list in the list monad."
+mapList = availableSince "0.17.6" $ defineWithDefault "mapList" "Traverse a list in the list monad."
   (sigWithParams [("f", "the list-returning function to apply to each element"), ("xs", "the list to traverse")] $ TypeScheme [Name "x", Name "y"]
     ((tx Types.~> l ty) Types.~> l tx Types.~> l (l ty)) mempty)
   ["mapList(f, xs) returns all combinations obtainable by choosing one element from f(x) for each x in\
@@ -420,18 +430,29 @@ mapList = availableSince "0.17.6" $ define "mapList" "Traverse a list in the lis
   \ varying slowest. The number of results is the product of the lengths of the lists f(x); if f(x) is\
   \ empty for any element, the result is the empty list; mapList(f, []) is singleton([]).",
    "Total on finite inputs. The list-monad instance of the traversal family."]
+  ("f" ~> "xs" ~>
+    Lists.foldr
+      ("x" ~> "acc" ~>
+        Lists.bind (var "f" @@ var "x") $
+          "y" ~> Lists.bind (var "acc") ("ys" ~> list [Lists.cons (var "y") (var "ys")]))
+      (list [list ([] :: [TypedTerm b])])
+      (var "xs"))
 
 mapOptional :: PrimitiveDefinition
-mapOptional = availableSince "0.17.6" $ define "mapOptional" "Traverse an optional value in the list monad."
+mapOptional = availableSince "0.17.6" $ defineWithDefault "mapOptional" "Traverse an optional value in the list monad."
   (sigWithParams [("f", "the list-returning function to apply"), ("m", "the optional value to traverse")] $ TypeScheme [Name "x", Name "y"]
     ((tx Types.~> l ty) Types.~> Types.optional tx Types.~> l (Types.optional ty)) mempty)
   ["mapOptional(f, m) returns the single-element list containing none when m is none; for given(x) it\
   \ returns given(y) for each element y of f(x), in order.",
    "Total on finite inputs. The list-monad instance of the traversal family, applied to the optional\
   \ container."]
+  ("f" ~> "m" ~>
+    Optionals.match (var "m")
+      (list [nothing :: TypedTerm (Maybe a)])
+      ("x" ~> Lists.bind (var "f" @@ var "x") ("y" ~> list [just (var "y")])))
 
 mapSet :: PrimitiveDefinition
-mapSet = availableSince "0.17.6" $ define "mapSet" "Traverse a set in the list monad."
+mapSet = availableSince "0.17.6" $ defineWithDefault "mapSet" "Traverse a set in the list monad."
   (sigWithParams [("f", "the list-returning function to apply to each element"), ("s", "the set to traverse")] $ Types.polyConstrained [("x", [Name "ordering"]), ("y", [Name "ordering"])]
     ((tx Types.~> l ty) Types.~> Types.set tx Types.~> l (Types.set ty)))
   ["mapSet(f, s) returns all sets obtainable by choosing one element from f(x) for each element x of s.\
@@ -441,6 +462,15 @@ mapSet = availableSince "0.17.6" $ define "mapSet" "Traverse a set in the list m
   \ any element, the result is the empty list; for the empty set the result is the single-element list\
   \ containing the empty set.",
    "Requires 'ordering' constraints on both element types (the set type contract)."]
+  ((("f" ~> "s" ~>
+      Lists.map
+        ("ys" ~> (Sets.fromList (var "ys") :: TypedTerm (S.Set Int)))
+        (Lists.foldr
+          ("x" ~> "acc" ~>
+            Lists.bind (var "f" @@ var "x") $
+              "y" ~> Lists.bind (var "acc") ("ys" ~> list [Lists.cons (var "y") (var "ys")]))
+          (list [list ([] :: [TypedTerm Int])])
+          (Sets.toList (var "s" :: TypedTerm (S.Set Int))))) :: TypedTerm ((Int -> [Int]) -> S.Set Int -> [S.Set Int])))
 
 member :: PrimitiveDefinition
 member = availableSince "0.17.6" $ withComments [

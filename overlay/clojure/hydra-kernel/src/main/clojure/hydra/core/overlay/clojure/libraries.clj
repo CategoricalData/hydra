@@ -881,15 +881,20 @@
 ;; Default-implementation fallbacks (#609 Stage 3): primitives with no native Clojure
 ;; implementation, but which declare a portable defaultImplementation term. Spike: only
 ;; lists.takeWhile is wired here, mirroring the Java/Python/Scala validation case. Under
-;; #749, equality.notEqual and functions.{const,flip} were added as well. 8 Group-A names
-;; remain: eithers.{apply,compose,pure}, functions.compose, optionals.{foldList,mapList,mapSet},
-;; sets.filter.
+;; #749, equality.notEqual and functions.{const,flip} were added as well. functions.compose and
+;; lists.{compose,foldList,mapList,mapOptional,mapSet} closed out the remaining Group-A names
+;; (the kernel now declares default terms for the lists.* versions too, converted from plain
+;; `define` to `defineWithDefault`). Remaining non-Group-A gaps: eithers.{apply,compose,pure},
+;; optionals.{foldList,mapList,mapSet}, sets.filter.
 ;; ============================================================
 
 (defn register-default-fallbacks [already-native]
   (let [a (p/tc-variable "a")
         x (p/tc-variable "x")
+        y (p/tc-variable "y")
+        z (p/tc-variable "z")
         eq-x {"x" ["equality"]}
+        ord-xy {"x" ["ordering"] "y" ["ordering"]}
         t1 (p/tc-variable "t1")
         t2 (p/tc-variable "t2")
         t3 (p/tc-variable "t3")
@@ -908,7 +913,31 @@
                     (prim-name 'hydra.core.lib.functions/hydra_core_lib_functions_flip)
                     (fn [] (p/default-fallback-primitive
                             (prim-name 'hydra.core.lib.functions/hydra_core_lib_functions_flip)
-                            [] [(fun t1 (fun t2 t3)) t2 t1] t3))}]
+                            [] [(fun t1 (fun t2 t3)) t2 t1] t3))
+                    (prim-name 'hydra.core.lib.functions/hydra_core_lib_functions_compose)
+                    (fn [] (p/default-fallback-primitive
+                            (prim-name 'hydra.core.lib.functions/hydra_core_lib_functions_compose)
+                            [] [(fun t2 t3) (fun t1 t2) t1] t3))
+                    (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_compose)
+                    (fn [] (p/default-fallback-primitive
+                            (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_compose)
+                            [] [(fun x (p/tc-list y)) (fun y (p/tc-list z)) x] (p/tc-list z)))
+                    (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_fold_list)
+                    (fn [] (p/default-fallback-primitive
+                            (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_fold_list)
+                            [] [(fun x (fun y (p/tc-list x))) x (p/tc-list y)] (p/tc-list x)))
+                    (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_map_list)
+                    (fn [] (p/default-fallback-primitive
+                            (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_map_list)
+                            [] [(fun x (p/tc-list y)) (p/tc-list x)] (p/tc-list (p/tc-list y))))
+                    (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_map_optional)
+                    (fn [] (p/default-fallback-primitive
+                            (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_map_optional)
+                            [] [(fun x (p/tc-list y)) (p/tc-optional x)] (p/tc-list (p/tc-optional y))))
+                    (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_map_set)
+                    (fn [] (p/default-fallback-primitive
+                            (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_map_set)
+                            [] [(fun x (p/tc-list y)) (p/tc-set x)] (p/tc-list (p/tc-set y)) ord-xy))}]
     (into {} (map (fn [[pname build-fn]] [pname (build-fn)])
                   (remove (fn [[pname _]] (contains? already-native pname)) candidates)))))
 

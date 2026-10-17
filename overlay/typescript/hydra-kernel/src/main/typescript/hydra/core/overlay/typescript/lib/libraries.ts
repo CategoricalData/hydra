@@ -302,14 +302,23 @@ const defaultFallback = (qname: string, ts: TypeScheme): Primitive => {
 
 // Primitives which have no native TypeScript implementation, but do declare a portable
 // defaultImplementation term. Spike (#609 Stage 3) validated lists.takeWhile; equality.notEqual
-// and functions.{const,flip} were added under #749. The remaining Group-A names (sets.filter
-// among them) are wired the same way as needed.
+// and functions.{const,flip} were added under #749. functions.compose and
+// lists.{compose,foldList,mapList,mapOptional,mapSet} closed out the remaining Group-A names
+// (the kernel now declares default terms for the lists.* versions too, converted from plain
+// `define` to `defineWithDefault`). Remaining non-Group-A gaps: eithers.{apply,compose,pure},
+// optionals.{foldList,mapList,mapSet}, sets.filter.
 const defaultFallbackPrimitives = (alreadyNative: ReadonlySet<string>): readonly Primitive[] => {
   const candidates: ReadonlyArray<readonly [string, TypeScheme]> = [
     ["hydra.core.lib.lists.takeWhile", scheme(tyFnCurried(tyFn(tyVar("x"), tyBool), tyList(tyVar("x")), tyList(tyVar("x"))), ["x"])],
     ["hydra.core.lib.equality.notEqual", schemeC(tyFnCurried(tyVar("x"), tyVar("x"), tyBool), ["x"], [["x", ["equality"]]])],
     ["hydra.core.lib.functions.const", scheme(tyFnCurried(tyVar("t1"), tyVar("t2"), tyVar("t1")), ["t1", "t2"])],
     ["hydra.core.lib.functions.flip", scheme(tyFnCurried(tyFnCurried(tyVar("t1"), tyVar("t2"), tyVar("t3")), tyVar("t2"), tyVar("t1"), tyVar("t3")), ["t1", "t2", "t3"])],
+    ["hydra.core.lib.functions.compose", scheme(tyFnCurried(tyFn(tyVar("t2"), tyVar("t3")), tyFn(tyVar("t1"), tyVar("t2")), tyVar("t1"), tyVar("t3")), ["t1", "t2", "t3"])],
+    ["hydra.core.lib.lists.compose", scheme(tyFnCurried(tyFn(tyVar("x"), tyList(tyVar("y"))), tyFn(tyVar("y"), tyList(tyVar("z"))), tyVar("x"), tyList(tyVar("z"))), ["x", "y", "z"])],
+    ["hydra.core.lib.lists.foldList", scheme(tyFnCurried(tyFnCurried(tyVar("x"), tyVar("y"), tyList(tyVar("x"))), tyVar("x"), tyList(tyVar("y")), tyList(tyVar("x"))), ["x", "y"])],
+    ["hydra.core.lib.lists.mapList", scheme(tyFnCurried(tyFn(tyVar("x"), tyList(tyVar("y"))), tyList(tyVar("x")), tyList(tyList(tyVar("y")))), ["x", "y"])],
+    ["hydra.core.lib.lists.mapOptional", scheme(tyFnCurried(tyFn(tyVar("x"), tyList(tyVar("y"))), tyOptional(tyVar("x")), tyList(tyOptional(tyVar("y")))), ["x", "y"])],
+    ["hydra.core.lib.lists.mapSet", schemeC(tyFnCurried(tyFn(tyVar("x"), tyList(tyVar("y"))), tySet(tyVar("x")), tyList(tySet(tyVar("y")))), ["x", "y"], [["x", ["ordering"]], ["y", ["ordering"]]])],
   ];
   return candidates
     .filter(([qname]) => !alreadyNative.has(qname) && defaultImplementationsByName.has(qname))
