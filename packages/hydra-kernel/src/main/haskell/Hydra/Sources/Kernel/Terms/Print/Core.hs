@@ -255,18 +255,25 @@ integerType = define "integerType" $
     _IntegerType_uint32>>: constant $ string "uint32",
     _IntegerType_uint64>>: constant $ string "uint64"]
 
--- | The reserved words of docs/specification/syntax.md #2.7, verbatim. A bare name matching one
--- of these must be backtick-escaped.
+-- | The reserved words of docs/specification/syntax.md #2.7, verbatim, plus the module-grammar
+-- keywords of #710's (not yet written) #6 ('module', 'import', 'as', 'from', 'type', 'term',
+-- 'primitive', 'impure', 'partial') -- reserved for the same reason: a bare name matching one of
+-- these is ambiguous with the keyword at any definition boundary (e.g. a plain, non-generic
+-- primitive's result type followed by a blank line and the next 'primitive' keyword parses, with
+-- no reservation, as a 3-way type application swallowing 'primitive' and the next identifier as
+-- adjacency arguments -- confirmed via #711's round-trip harness). A bare name matching one of
+-- these must be backtick-escaped.
 reservedWords :: TypedTerm (S.Set String)
 reservedWords = Sets.fromList $ list [
-  string "_", string "bigint", string "binary", string "boolean", string "case", string "decimal",
-  string "effect", string "either", string "false", string "float32", string "float64",
-  string "forall", string "given", string "in", string "inject", string "int8", string "int16",
-  string "int32", string "int64", string "left", string "let", string "list", string "map",
-  string "none", string "optional", string "project", string "record", string "right", string "set",
-  string "string", string "true", string "uint8", string "uint16", string "uint32", string "uint64",
-  string "union", string "unit", string "unwrap", string "void", string "wrap", string "NaN",
-  string "Infinity"]
+  string "_", string "as", string "bigint", string "binary", string "boolean", string "case",
+  string "decimal", string "effect", string "either", string "false", string "float32",
+  string "float64", string "forall", string "from", string "given", string "impure", string "in",
+  string "import", string "inject", string "int8", string "int16", string "int32", string "int64",
+  string "left", string "let", string "list", string "map", string "module", string "none",
+  string "optional", string "partial", string "primitive", string "project", string "record",
+  string "right", string "set", string "string", string "term", string "true", string "type",
+  string "uint8", string "uint16", string "uint32", string "uint64", string "union", string "unit",
+  string "unwrap", string "void", string "wrap", string "NaN", string "Infinity"]
 
 -- | True iff a name is bare: a nonempty, dot-separated sequence of bare segments (#2.4).
 isBareName :: TypedTermDefinition (String -> Bool)

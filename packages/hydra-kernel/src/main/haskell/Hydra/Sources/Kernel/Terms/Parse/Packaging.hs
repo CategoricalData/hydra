@@ -110,14 +110,23 @@ module_ = Module {
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
--- | Skip zero or more whitespace characters. Placeholder: a real implementation needs to also
--- skip '#'-prefixed line comments (syntax.md 2.2) -- NOT attempted here, since comment-skipping
--- interacts with doc-comment ('##') recognition, which is itself blocked on the open
--- EntityMetadata design questions.
+-- | Skip zero or more whitespace characters, including '#' line comments (syntax.md 2.2).
+-- Mirrors Parse/Core.hs's own 'whitespace' (duplicated rather than shared: that module depends
+-- on Hydra.Sources.Kernel.Terms.All, so importing it here would create a module-graph cycle).
+-- A '##' doc-comment block is just two consecutive '#' line comments under this rule -- it is
+-- skipped like any other comment, not parsed into 'EntityMetadata' (that reconstruction is a
+-- separate, open design question; metadata stays 'Nothing' on parse, matching the printer's
+-- intentional skip of this case).
 whitespace :: TypedTermDefinition (Parser ())
 whitespace = define "whitespace" $
-  doc "Skip zero or more whitespace characters (TODO: also skip '#' line comments)" $
-  P.map @@ ("_" ~> unit) @@ (P.many @@ (P.satisfy @@ ("c" ~> Chars.isSpace (var "c"))))
+  doc "Skip zero or more whitespace characters and '#' line comments" $
+  P.map @@ ("_" ~> unit) @@ (P.many @@ (P.alt @@ wsChar @@ lineComment))
+  where
+    wsChar = P.map @@ (constant unit) @@ (P.satisfy @@ ("c" ~> Chars.isSpace (var "c")))
+    lineComment =
+      P.bind @@ (P.char @@ int32 35) @@ (constant $    -- '#'
+        P.map @@ (constant unit) @@
+          (P.many @@ (P.satisfy @@ ("c" ~> Logic.not (Equality.equal (var "c") (int32 10))))))  -- not '\n'
 
 -- | Parse a token followed by trailing whitespace. Whitespace is consumed AFTER a token, never
 -- before one -- this is the convention the existing hydra.core.json.parser ('token' there, see
@@ -335,7 +344,7 @@ typeDefinitionParser = define "typeDefinitionParser" $
       P.bind @@ (keyword @@ string "=") @@ (constant $
         P.map @@ ("ts" ~> Packaging.definitionType
             (Packaging.typeDefinition (qualifyLocalName @@ var "modName" @@ var "local") nothing (var "ts"))) @@
-          (asTerm ParseCore.typeScheme))))
+          (token @@ (asTerm ParseCore.typeScheme)))))
 
 -- | Parse a term definition: 'term name [: typeScheme] = term'. The optional ': typeScheme'
 -- ascription becomes the TermDefinition's signature (converted via
@@ -351,11 +360,11 @@ termDefinitionParser = define "termDefinitionParser" $
         P.bind @@ (keyword @@ string "=") @@ (constant $
           P.map @@ ("t" ~> Packaging.definitionTerm
               (Packaging.termDefinition (qualifyLocalName @@ var "modName" @@ var "local") nothing (var "msig") (var "t"))) @@
-            (asTerm ParseCore.term)))))
+            (token @@ (asTerm ParseCore.term))))))
   where
     ascribedScheme =
       P.bind @@ (keyword @@ string ":") @@ (constant $
-        P.map @@ ("ts" ~> Scoping.typeSchemeToTermSignature @@ var "ts") @@ (asTerm ParseCore.typeScheme))
+        P.map @@ ("ts" ~> Scoping.typeSchemeToTermSignature @@ var "ts") @@ (token @@ (asTerm ParseCore.typeScheme)))
 
 -- | Parse a primitive definition: '[impure] [partial] primitive name : typeScheme [= term]'.
 -- No doc-comment parsing -- metadata is always Nothing.
@@ -369,13 +378,13 @@ primitiveDefinitionParser = define "primitiveDefinitionParser" $
     P.bind @@ (keyword @@ string "primitive") @@ (constant $
       P.bind @@ identifier @@ ("local" ~>
         P.bind @@ (keyword @@ string ":") @@ (constant $
-          P.bind @@ (asTerm ParseCore.typeScheme) @@ ("ts" ~>
+          P.bind @@ (token @@ (asTerm ParseCore.typeScheme)) @@ ("ts" ~>
             P.map @@ ("mimpl" ~> Packaging.definitionPrimitive
                 (Packaging.primitiveDefinition (qualifyLocalName @@ var "modName" @@ var "local") nothing
                   (Scoping.typeSchemeToTermSignature @@ var "ts") (var "isPure") (var "isTotal") (var "mimpl"))) @@
               (P.optional @@ defaultImpl))))))
   where
-    defaultImpl = P.bind @@ (keyword @@ string "=") @@ (constant $ asTerm ParseCore.term)
+    defaultImpl = P.bind @@ (keyword @@ string "=") @@ (constant $ token @@ (asTerm ParseCore.term))
 
 -- | Parse a definition: a type, term, or primitive definition, dispatching on the leading
 -- keyword (the primitive-modifier keywords 'impure'/'partial' also mark a primitive definition,

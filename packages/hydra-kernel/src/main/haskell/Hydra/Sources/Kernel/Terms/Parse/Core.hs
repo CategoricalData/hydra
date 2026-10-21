@@ -975,7 +975,10 @@ typeScheme = define "typeScheme" $
   P.bind @@ (lexeme @@ (P.char @@ int32 8704)) @@ (constant $    -- '∀'
     P.bind @@ (P.sepBy @@ (asTerm binderName) @@ (lexeme @@ (P.char @@ int32 44))) @@ ("vars" ~>    -- ','
       P.bind @@ (lexeme @@ (P.char @@ int32 46)) @@ (constant $    -- '.'
-        P.bind @@ (P.optional @@ constraintsBlock) @@ ("mcs" ~>
+        -- constraintsBlock and a parenthesized function-type body share a leading '(': wrap in
+        -- 'try' so a failed constraints-block attempt (e.g. '(a → c) → ...', not a constraint
+        -- list) rewinds cleanly instead of hard-failing the whole typeScheme (#711).
+        P.bind @@ (P.optional @@ (P.try @@ constraintsBlock)) @@ ("mcs" ~>
           P.map @@ ("body" ~> Core.typeScheme (var "vars") (var "body")
               (Maps.fromList (Lists.map (asTerm toConstraintsEntry) (Optionals.withDefault (list ([] :: [TypedTerm (Name, Name)])) (var "mcs"))))) @@
             (P.lazy @@ (constant $ asTerm type_))))))
