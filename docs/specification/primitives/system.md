@@ -1,182 +1,119 @@
-<!-- NOTE: this page will be automatically generated from the primitive definitions in
-     packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/System.hs (generator not yet
-     built). Hand-authored draft under #417; the specifications here are the normative TARGET
-     and may deliberately diverge from the currently-frozen definitions.
-     Conventions (notation, laziness, badges, floating point) are defined in index.md. -->
+<!-- Note: this is an automatically generated file. Do not edit. -->
 
-# hydra.lib.system
+# hydra.core.lib.system
+
+<!-- Note: this is an automatically generated file. Do not edit. -->
 
 Process and environment access.
-Every primitive in this module is effectful: it describes a computation against the ambient
-state of the running process — its environment, its working directory, the system clock, child
-processes — and executing that computation is separate from describing it.
-The types used here — [Command](../types/system.md#command),
-<!-- [PENDING types page] -->
-[ProcessResult](../types/system.md#processresult), [StatusCode](../types/system.md#statuscode),
-[EnvironmentVariable](../types/system.md#environmentvariable),
-[SystemError](../types/system.md#systemerror), [Timespec](../types/time.md#timespec),
-[FilePath](../types/files.md#filepath) — are documented in the types pages.
 
-#### execute — **Draft**
+Every primitive in this module is effectful: it describes a computation against the ambient state of the running process -- its environment, its working directory, the system clock, child processes -- and executing that computation is separate from describing it.
 
-`Command → effect<either<SystemError, ProcessResult>>`
-
-Usage: `execute command`
+## hydra.core.lib.system.execute
 
 Run a program to completion and capture its result.
-Describes an effectful computation which runs the program described by `command` to completion
-and returns its result as a [ProcessResult](../types/system.md#processresult).
-The child process is spawned, Hydra waits for it to terminate (as with POSIX `waitpid`), and
-its standard output and standard error are captured as raw bytes.
-Output is byte-oriented, with no character decoding or newline translation; decode it to text
-with `hydra.lib.text.decodeUtf8`.
-A child that launches and then exits with a non-zero status is not an error: it is returned as
-`right result` carrying that [StatusCode](../types/system.md#statuscode), following the POSIX
-exit-status convention (0 denotes success, non-zero denotes failure).
-Only a failure to launch — for example a missing program, insufficient permissions, or a bad
-working directory — is returned as `left` of a
-[SystemError](../types/system.md#systemerror).
-No intermediate shell is invoked: the command's program is executed directly, so shell syntax
-in arguments is not interpreted.
 
-Effectful: process control — spawns and waits for a child process.
+`∀.hydra.core.system.Command → effect<either<hydra.core.error.system.SystemError, hydra.core.system.ProcessResult>>`
 
-Since: 0.17
+*Since: 0.17.*
 
-#### exit — **Draft**
+execute(command) describes an effectful computation which runs the program described by command to completion and returns its result. This is the POSIX "execute a command" operation at the posix_spawn / system() altitude (https://pubs.opengroup.org/onlinepubs/9799919799/functions/posix_spawn.html, https://pubs.opengroup.org/onlinepubs/9799919799/functions/system.html): the child is spawned, Hydra waits for it (POSIX waitpid), and standard output and standard error are captured as raw bytes. Output is byte-oriented, with no character decoding or newline translation; decode it to text via hydra.core.lib.text.decodeUtf8. A child that runs and exits with a non-zero status (POSIX WEXITSTATUS) is returned as right(result) with that StatusCode, following the XCU section 2.8.2 exit-status convention. Only a failure to launch -- for example POSIX ENOENT, EACCES, or a bad working directory -- is returned as left(error). Unlike the shell system(), no intermediate shell is invoked; command.program is executed directly (as the execvp family does), so shell syntax in arguments is not interpreted.
 
-`StatusCode → effect<unit>`
+**[HYDRA-CORE-LIB-SYSTEM-EXECUTE-CAPTURES-STDOUT-BYTE-EXACTLY] (requirement) **execute captures the child program's standard output as raw bytes, byte-exactly, with no newline translation, including the full argument vector being passed through to the child in order.
 
-Usage: `exit code`
+**[HYDRA-CORE-LIB-SYSTEM-EXECUTE-CAPTURES-STDERR-SEPARATELY] (requirement) **execute captures the child program's standard error separately from standard output, so diagnostics written to stderr do not leak into the captured stdout.
+
+**[HYDRA-CORE-LIB-SYSTEM-EXECUTE-REPORTS-EXIT-STATUS-AS-RIGHT] (requirement) **execute reports a child's exit status as right(result), for both a zero (successful) and a non-zero exit status -- a non-zero exit is a normal, successful launch outcome, not a SystemError.
+
+**[HYDRA-CORE-LIB-SYSTEM-EXECUTE-HONORS-WORKING-DIRECTORY-AND-ENVIRONMENT-FIELDS] (requirement) **execute honors the command's workingDirectory field (running the child with that directory as its current directory) and its environment field (replacing the child's environment with exactly the given bindings, not merely augmenting it).
+
+**[HYDRA-CORE-LIB-SYSTEM-EXECUTE-LEFT-COMMAND-NOT-FOUND-ON-MISSING-PROGRAM] (requirement) **execute returns left(commandNotFound) when the program does not exist, distinguishing a launch failure from a program that ran and exited non-zero.
+
+## hydra.core.lib.system.exit
 
 Terminate the current process with a status code.
-Describes an effectful computation which terminates the current process immediately with the
-status `code`, as with the POSIX `exit` function.
-The status is reported to the parent process; by the POSIX convention, 0 denotes success and
-non-zero denotes failure.
-This computation never returns normally: subsequent effects in a sequence are not performed.
 
-Effectful: process control — terminates the current process.
+`∀.hydra.core.system.StatusCode → effect<unit>`
 
-Since: 0.17
+*Since: 0.17.*
 
-#### getEnvironment — **Draft**
+exit(code) describes an effectful computation which terminates the current process immediately with the given status, exactly as the POSIX exit() function (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/exit.html). The status is reported to the parent through wait(); by the XCU section 2.8.2 convention, 0 denotes success and non-zero denotes failure. This computation does not return, so subsequent effects in a sequence are not performed.
 
-`effect<map<EnvironmentVariable, string>>`
-
-Usage: `getEnvironment`
+## hydra.core.lib.system.getEnvironment
 
 Get the full set of environment variables.
-Describes an effectful computation which returns the entire environment of the current process
-(the POSIX environment list, `environ`) as a map from variable name to value.
-POSIX represents each entry as a single `name=value` string; this primitive splits each entry
-at the first `=` into an [EnvironmentVariable](../types/system.md#environmentvariable) key and
-a string value.
-This computation does not fail; an empty environment yields an empty map.
 
-Effectful: reads the process environment.
+`∀.effect<map<hydra.core.system.EnvironmentVariable, string>>`
 
-Since: 0.17
+*Since: 0.17.*
 
-#### getEnvironmentVariable — **Draft**
+getEnvironment describes an effectful computation which returns the entire environment of the current process -- the POSIX environment list environ (XBD section 8, Environment Variables, https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html) -- as a map from variable name to value. POSIX represents each entry as a "name=value" string; this primitive splits each at the first '=' into an EnvironmentVariable key and a string value. This computation does not fail; an empty environment yields an empty map.
 
-`EnvironmentVariable → effect<optional<string>>`
+**[HYDRA-CORE-LIB-SYSTEM-GET-ENVIRONMENT-RETURNS-EXACT-ENVIRONMENT-CONTENTS] (requirement) **getEnvironment returns a map containing exactly the current process's environment, with no entries for variables that are not actually set (observed by the absence of a guaranteed-unset variable name).
 
-Usage: `getEnvironmentVariable name`
+## hydra.core.lib.system.getEnvironmentVariable
 
 Look up a single environment variable by name.
-Describes an effectful computation which returns the value of the environment variable `name`,
-or `none` if it is not set (the POSIX `getenv` function).
-A variable that is present but set to the empty string is returned as `given ""`, distinct from
-`none`.
-This computation does not fail.
 
-Effectful: reads the process environment.
+`∀.hydra.core.system.EnvironmentVariable → effect<optional<string>>`
 
-Since: 0.17
+*Since: 0.17.*
 
-#### getTime — **Draft**
+getEnvironmentVariable(name) describes an effectful computation which returns the value of the environment variable name, or none if it is not present -- the POSIX getenv() function (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/getenv.html). A variable that is present but set to the empty string is returned as given(""), distinct from the none that POSIX getenv signals with a null pointer. This computation does not fail.
 
-`effect<Timespec>`
+**[HYDRA-CORE-LIB-SYSTEM-GET-ENVIRONMENT-VARIABLE-NONE-FOR-ABSENT-VARIABLE] (requirement) **getEnvironmentVariable returns none when the named environment variable is not set.
 
-Usage: `getTime`
+## hydra.core.lib.system.getTime
 
 Get the current wall-clock time.
-Describes an effectful computation which returns the current wall-clock time as a
-[Timespec](../types/time.md#timespec) — seconds and nanoseconds since the Unix Epoch — as with
-the POSIX `clock_gettime` function on the real-time clock.
-The actual resolution is implementation- and platform-defined and may be coarser than
-nanoseconds.
-The clock is not monotonic: it can jump or move backwards when the host's wall clock is
-adjusted.
-This computation does not fail.
 
-Effectful: reads the system clock.
+`∀.effect<hydra.core.time.Timespec>`
 
-Since: 0.17
+*Since: 0.17.*
 
-#### getWorkingDirectory — **Draft**
+getTime describes an effectful computation which returns the current wall-clock time as a Timespec (seconds and nanoseconds since the Unix Epoch) -- the POSIX clock_gettime() function with the CLOCK_REALTIME clock (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/clock_gettime.html). The actual resolution is implementation- and platform-defined and may be coarser than nanoseconds. As with CLOCK_REALTIME, the clock is not monotonic: it can jump or move backwards when the host's wall clock is adjusted. This computation does not fail.
 
-`effect<either<SystemError, FilePath>>`
+**[HYDRA-CORE-LIB-SYSTEM-GET-TIME-RETURNS-POSITIVE-EPOCH-SECONDS] (requirement) **getTime returns a Timespec whose seconds field is a positive number of seconds since the Unix epoch.
 
-Usage: `getWorkingDirectory`
+**[HYDRA-CORE-LIB-SYSTEM-GET-TIME-RETURNS-NANOSECONDS-IN-VALID-RANGE] (requirement) **getTime returns a Timespec whose nanoseconds field is within the documented range [0, 1000000000).
+
+## hydra.core.lib.system.getWorkingDirectory
 
 Get the current working directory.
-Describes an effectful computation which returns the absolute pathname of the current working
-directory (the POSIX `getcwd` function) as a [FilePath](../types/files.md#filepath).
-A recoverable failure — for example insufficient permissions, or the working directory having
-been removed — is returned as `left` of a [SystemError](../types/system.md#systemerror);
-success is returned as `right path`.
 
-Effectful: reads process state (the working directory).
+`∀.effect<either<hydra.core.error.system.SystemError, hydra.core.file.FilePath>>`
 
-Since: 0.17
+*Since: 0.17.*
 
-#### readStdin — **Draft**
+getWorkingDirectory describes an effectful computation which returns the absolute pathname of the current working directory -- the POSIX getcwd() function (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/getcwd.html) -- as a FilePath. A recoverable failure (for example POSIX EACCES, or the working directory having been removed) is returned as left(error); success is returned as right(path).
 
-`effect<either<SystemError, binary>>`
+**[HYDRA-CORE-LIB-SYSTEM-GET-WORKING-DIRECTORY-RETURNS-NON-EMPTY-PATH] (requirement) **getWorkingDirectory returns a non-empty absolute path for the current working directory.
 
-Usage: `readStdin`
+## hydra.core.lib.system.readStdin
 
 Read the complete contents of standard input as raw bytes.
-Describes an effectful computation which reads the process's standard input stream to
-end-of-input and returns its contents as raw bytes, with no character decoding or newline
-translation; decode it to text with `hydra.lib.text.decodeUtf8`.
-A recoverable failure is returned as `left` of a
-[SystemError](../types/system.md#systemerror); success is returned as `right contents`.
 
-Effectful: reads from standard input.
+`∀.effect<either<hydra.core.error.system.SystemError, binary>>`
 
-Since: 0.17.6
+*Since: 0.17.6.*
 
-#### writeStderr — **Draft**
+readStdin describes an effectful computation which reads standard input (POSIX file descriptor 0) until end-of-file and returns the complete contents as raw bytes, with no character decoding or newline translation -- the POSIX read() function (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/read.html) applied repeatedly to fd 0 until it signals end-of-file. To interpret the result as text, decode it (e.g. via hydra.core.lib.text.decodeUtf8). A recoverable I/O failure is returned as left(error); success is returned as right(contents), including the empty byte string if stdin is closed or empty.
 
-`binary → effect<either<SystemError, unit>>`
-
-Usage: `writeStderr contents`
+## hydra.core.lib.system.writeStderr
 
 Write raw bytes to standard error.
-Describes an effectful computation which writes `contents` to the process's standard error
-stream verbatim, with no character encoding or newline translation.
-A recoverable failure is returned as `left` of a
-[SystemError](../types/system.md#systemerror); success is returned as `right unit`.
 
-Effectful: writes to standard error.
+`∀.binary → effect<either<hydra.core.error.system.SystemError, unit>>`
 
-Since: 0.17.6
+*Since: 0.17.6.*
 
-#### writeStdout — **Draft**
+writeStderr(bytes) describes an effectful computation which writes bytes to standard error (POSIX file descriptor 2), with no character encoding or newline translation -- the POSIX write() function (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/write.html) applied repeatedly to fd 2 until all bytes are written. To write text, encode it first (e.g. via hydra.core.lib.text.encodeUtf8). A recoverable I/O failure (for example a closed pipe, POSIX EPIPE) is returned as left(error); success is returned as right(unit).
 
-`binary → effect<either<SystemError, unit>>`
-
-Usage: `writeStdout contents`
+## hydra.core.lib.system.writeStdout
 
 Write raw bytes to standard output.
-Describes an effectful computation which writes `contents` to the process's standard output
-stream verbatim, with no character encoding or newline translation.
-A recoverable failure is returned as `left` of a
-[SystemError](../types/system.md#systemerror); success is returned as `right unit`.
 
-Effectful: writes to standard output.
+`∀.binary → effect<either<hydra.core.error.system.SystemError, unit>>`
 
-Since: 0.17.6
+*Since: 0.17.6.*
+
+writeStdout(bytes) describes an effectful computation which writes bytes to standard output (POSIX file descriptor 1), with no character encoding or newline translation -- the POSIX write() function (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/write.html) applied repeatedly to fd 1 until all bytes are written. To write text, encode it first (e.g. via hydra.core.lib.text.encodeUtf8). A recoverable I/O failure (for example a closed pipe, POSIX EPIPE) is returned as left(error); success is returned as right(unit).

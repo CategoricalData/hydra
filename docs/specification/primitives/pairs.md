@@ -1,57 +1,65 @@
-<!-- NOTE: this page will be automatically generated from the primitive definitions in
-     packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Pairs.hs (generator not yet
-     built). Hand-authored draft under #417; the specifications here are the normative TARGET
-     and may deliberately diverge from the currently-frozen definitions.
-     Conventions (notation, laziness, badges, floating point) are defined in index.md. -->
+<!-- Note: this is an automatically generated file. Do not edit. -->
 
-# hydra.lib.pairs
+# hydra.core.lib.pairs
 
-Pairs: the two-component product type.
-This module provides the two projections, the bifunctor map, and the constructor.
+<!-- Note: this is an automatically generated file. Do not edit. -->
 
-#### bimap — **Draft**
+Pairs: the two-component product type. This module provides the two projections, the bifunctor map, and the constructor.
 
-`∀t1,t2,t3,t4. (t1 → t3) → (t2 → t4) → pair<t1, t2> → pair<t3, t4>`
+## hydra.core.lib.pairs.bimap
 
-Usage: `bimap f g p`
+Map over both elements of a pair.
 
-Map functions over both components of a pair.
-`bimap f g p` is the pair whose first component is `f (first p)` and whose second component is
-`g (second p)`; this defining equation is the specification, and the default implementation.
-This is the bifunctor map for pairs.
+`∀a,b,c,d.(a → c) → (b → d) → (a, b) → (c, d)`
 
-Since: 0.15
+*Since: 0.15.*
 
-#### first — **Draft**
+bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.
 
-`∀t1,t2. pair<t1, t2> → t1`
+Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d).
 
-Usage: `first p`
+**[HYDRA-CORE-LIB-PAIRS-BIMAP-MAPS-BOTH-ELEMENTS-INDEPENDENTLY] (requirement) **bimap applies the first function to the pair's first element and the second function to the pair's second element, producing a new pair of the two results, for any element and function types.
+
+## hydra.core.lib.pairs.first
 
 Get the first element of a pair.
-Returns the first component of `p`.
 
-Since: 0.15
+`∀a,b.(a, b) → a`
 
-#### pair — **Draft**
+*Since: 0.15.*
 
-`∀t1,t2. t1 → t2 → pair<t1, t2>`
+first(p) returns the first component of the pair p.
 
-Usage: `pair x y`
+Total. Corresponds to Haskell's fst :: (a, b) -> a.
+
+**[HYDRA-CORE-LIB-PAIRS-FIRST-RETURNS-FIRST-COMPONENT] (requirement) **first returns the first component of the pair unchanged, for any element type and value.
+
+## hydra.core.lib.pairs.pair
 
 Construct a pair from two values.
-Returns the pair `(x, y)`.
-The type-free pair constructor, useful point-free (e.g. `zipWith pair xs ys`).
 
-Since: 0.17.6
+`∀a,b.a → b → (a, b)`
 
-#### second — **Draft**
+*Since: 0.17.6.*
 
-`∀t1,t2. pair<t1, t2> → t2`
+pair(x, y) returns the pair (x, y).
 
-Usage: `second p`
+The type-free pair constructor, useful point-free (e.g. zipWith(pair, xs, ys)).
+
+Total. Corresponds to Haskell's (,) :: a -> b -> (a, b).
+
+**[HYDRA-CORE-LIB-PAIRS-PAIR-CONSTRUCTS-FROM-TWO-VALUES] (requirement) **pair x y constructs the pair (x, y), preserving both components exactly as given, for any value.
+
+## hydra.core.lib.pairs.second
 
 Get the second element of a pair.
-Returns the second component of `p`.
 
-Since: 0.15
+`∀a,b.(a, b) → b`
+
+*Since: 0.15.*
+
+second(p) returns the second component of the pair p.
+
+Total. Corresponds to Haskell's snd :: (a, b) -> b.
+
+**[HYDRA-CORE-LIB-PAIRS-SECOND-RETURNS-SECOND-COMPONENT] (requirement) **second returns the second component of the pair unchanged, for any element type and value.

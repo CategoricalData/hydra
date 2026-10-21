@@ -1,66 +1,67 @@
-<!-- NOTE: this page will be automatically generated from the primitive definitions in
-     packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Logic.hs (generator not yet
-     built). Hand-authored draft under #417; the specifications here are the normative TARGET
-     and may deliberately diverge from the currently-frozen definitions.
-     Conventions (notation, laziness, badges, floating point) are defined in index.md. -->
+<!-- Note: this is an automatically generated file. Do not edit. -->
 
-# hydra.lib.logic
+# hydra.core.lib.logic
 
-Boolean operations and branching.
-`and` and `or` are short-circuiting: their second argument is evaluated only when the first
-does not already determine the result.
+<!-- Note: this is an automatically generated file. Do not edit. -->
 
-#### and — **Draft**
+## hydra.core.lib.logic.and
 
-`boolean → boolean → boolean`
+Compute the logical AND of two boolean values.
 
-Usage: `and p q`
+`∀.boolean → boolean → boolean`
 
-Compute the logical conjunction of two boolean values.
-Returns `true` if both `p` and `q` are `true`, and `false` otherwise.
-`and p q` is `ifElse p q false`; this defining equation is the specification, and the default
-implementation.
+*Since: 0.15.*
 
-Lazy: `q` — evaluated only if `p` is `true`.
+and(p, q) returns true iff both p and q are true.
 
-Since: 0.15
+Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.
 
-#### ifElse — **Draft**
+Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation).
 
-`∀t. boolean → t → t → t`
+**[HYDRA-CORE-LIB-LOGIC-AND-TRUE-ONLY-WHEN-BOTH-TRUE] (requirement) **and(p, q) returns true exactly when both p and q are true; any false operand makes the result false.
 
-Usage: `ifElse condition ifTrue ifFalse`
+## hydra.core.lib.logic.ifElse
 
 Compute a conditional expression.
-Returns `ifTrue` if `condition` is `true`, and `ifFalse` if `condition` is `false`.
-This is the standard way to express branching in Hydra.
 
-Lazy: `ifTrue`, `ifFalse` — only the selected branch is evaluated; `condition` is strict.
+`∀x.boolean → x → x → x`
 
-Since: 0.15
+*Since: 0.15.*
 
-#### not — **Draft**
+ifElse(p, t, f) returns t if p is true, or f if p is false.
 
-`boolean → boolean`
+The unselected branch is not necessarily evaluated; ifElse is the standard way to express short-circuiting boolean logic and branching in Hydra.
 
-Usage: `not p`
+Total. Corresponds to Haskell's if/then/else.
 
-Compute the logical negation of a boolean value.
-Returns `false` if `p` is `true`, and `true` if `p` is `false`.
+**[HYDRA-CORE-LIB-LOGIC-IF-ELSE-SELECTS-BRANCH-BY-CONDITION] (requirement) **ifElse(p, t, f) returns t when p is true and f when p is false, for any value type of t/f including booleans, integers, and strings -- the then/else branches may be of any (matching) type.
 
-Since: 0.15
+## hydra.core.lib.logic.not
 
-#### or — **Draft**
+Compute the logical NOT of a boolean value.
 
-`boolean → boolean → boolean`
+`∀.boolean → boolean`
 
-Usage: `or p q`
+*Since: 0.15.*
 
-Compute the logical disjunction of two boolean values.
-Returns `true` if at least one of `p` and `q` is `true`, and `false` otherwise.
-`or p q` is `ifElse p true q`; this defining equation is the specification, and the default
-implementation.
+not(p) returns false if p is true, or true if p is false.
 
-Lazy: `q` — evaluated only if `p` is `false`.
+Total. Corresponds to Haskell's not :: Bool -> Bool.
 
-Since: 0.15
+**[HYDRA-CORE-LIB-LOGIC-NOT-NEGATES-BOOLEAN] (requirement) **not(p) returns false when p is true and true when p is false.
+
+## hydra.core.lib.logic.or
+
+Compute the logical OR of two boolean values.
+
+`∀.boolean → boolean → boolean`
+
+*Since: 0.15.*
+
+or(p, q) returns true iff at least one of p and q is true.
+
+Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.
+
+Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation).
+
+**[HYDRA-CORE-LIB-LOGIC-OR-TRUE-WHEN-EITHER-TRUE] (requirement) **or(p, q) returns true when at least one of p and q is true; it returns false only when both are false.

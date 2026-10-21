@@ -1,234 +1,235 @@
-<!-- NOTE: this page will be automatically generated from the primitive definitions in
-     packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Optionals.hs (generator not
-     yet built). Hand-authored draft under #417; the specifications here are the normative TARGET
-     and may deliberately diverge from the currently-frozen definitions.
-     Conventions (notation, laziness, badges, floating point) are defined in index.md. -->
+<!-- Note: this is an automatically generated file. Do not edit. -->
 
-# hydra.lib.optionals
+# hydra.core.lib.optionals
 
-The optional type is Hydra's presence/absence type: a value of `optional<t>` is either `given x`,
-carrying a value `x` of type `t`, or `none`, carrying nothing.
-The optional type is a monad, and this module provides the full monad row — `given` (the unit),
-`map`, `apply`, `bind`, and `compose` — together with elimination (`cases`), predicates, and
-traversal.
-The fundamental eliminator is `cases`; every other primitive in this module can be derived
-from it.
+<!-- Note: this is an automatically generated file. Do not edit. -->
 
-#### apply — **Draft**
+The optional type is Hydra's presence/absence type: a value of optional<t> is either given(x), carrying a value x of type t, or none, carrying nothing.
 
-`∀t1,t2. optional<t1 → t2> → optional<t1> → optional<t2>`
+The optional type is a monad, and this module provides the full monad row -- given (the unit), map, apply, bind, and compose -- together with elimination (match), predicates, and traversal.
 
-Usage: `apply mf mx`
+## hydra.core.lib.optionals.apply
 
 Applicative apply for optionals: combine an optional function and an optional argument.
-Returns `given (f x)` when `mf` is `given f` and `mx` is `given x`, and `none` if either
-argument is `none`.
-Threads a function-in-context with a value-in-context.
-`apply mf mx` is `bind mf (λf → map f mx)`; this defining equation is the specification, and
-the default implementation.
 
-Since: 0.15
+`∀x,y.optional<x → y> → optional<x> → optional<y>`
 
-#### bind — **Draft**
+*Since: 0.15.*
 
-`∀t1,t2. optional<t1> → (t1 → optional<t2>) → optional<t2>`
+apply(mf, mx) returns given(f x) when mf is given(f) and mx is given(x), and none if either is none.
 
-Usage: `bind m f`
+The applicative apply for optionals; threads a function-in-context with a value-in-context.
+
+Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b.
+
+**[HYDRA-CORE-LIB-OPTIONALS-APPLY-APPLIES-FUNCTION-WHEN-BOTH-GIVEN] (requirement) **apply returns given of the function applied to the value when both the function and the argument are given, and none when either side is none.
+
+## hydra.core.lib.optionals.bind
 
 Monadic bind for optionals.
-Returns `f x` when `m` is `given x`, and `none` when `m` is `none`.
-Used to chain computations that may be absent.
-`bind m f` is `cases m none f`; this defining equation is the specification, and the default
-implementation.
 
-Since: 0.15
+`∀x,y.optional<x> → (x → optional<y>) → optional<y>`
 
-#### cases — **Draft**
+*Since: 0.15.*
 
-`∀t1,t2. optional<t1> → t2 → (t1 → t2) → t2`
+bind(m, f) returns f(x) when m is given(x), and none when m is none.
 
-Usage: `cases m default f`
+The monadic bind for optionals; used to chain computations that may be absent.
 
-Case analysis on an optional value.
-Returns `f x` when `m` is `given x`, and `default` when `m` is `none`.
-This is the fundamental eliminator for the optional type; every other primitive in this module
-can be derived from it.
-The optional value is the first argument, matching the convention for case-statement-like
-elimination.
+Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b.
 
-Lazy: `default` — evaluated only when `m` is `none`.
+**[HYDRA-CORE-LIB-OPTIONALS-BIND-CHAINS-ON-GIVEN-PROPAGATES-NONE] (requirement) **bind applies the continuation to the contained value when the optional is given, returning the continuation's own result; when the optional is none, bind returns none without invoking the continuation.
 
-Since: 0.15
-
-#### compose — **Draft**
-
-`∀t1,t2,t3. (t1 → optional<t2>) → (t2 → optional<t3>) → t1 → optional<t3>`
-
-Usage: `compose f g x`
+## hydra.core.lib.optionals.compose
 
 Kleisli composition for optionals.
-`compose f g x` is `bind (f x) g`; this defining equation is the specification, and the default
-implementation.
-If either `f x` or the second stage produces `none`, the result is `none`.
 
-Since: 0.15
+`∀x,y,z.(x → optional<y>) → (y → optional<z>) → x → optional<z>`
 
-#### foldList — **Draft**
+*Since: 0.15.*
 
-`∀t1,t2. (t1 → t2 → optional<t1>) → t1 → list<t2> → optional<t1>`
+compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g).
 
-Usage: `foldList f acc xs`
+If either f or the second stage produces none, the result is none.
 
-Left-fold over a list with an optional-returning function, short-circuiting on `none`.
-Threads the accumulator through the optional monad: folds `f` over `xs` from the left,
-iterating while each application yields `given`, and returns `none` as soon as any step
-yields `none`.
-If every element is processed, the result is `given` of the final accumulator.
-`foldList f acc xs` is `hydra.lib.lists.foldl (λm y → bind m (λx → f x y)) (given acc) xs`;
-this defining equation is the specification, and the default implementation.
+Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c.
 
-Since: 0.17.6
+**[HYDRA-CORE-LIB-OPTIONALS-COMPOSE-KLEISLI-COMPOSES-SHORT-CIRCUITING-ON-NONE] (requirement) **compose(f, g, x) applies f to x, then g to the result of f, short-circuiting to none as soon as either stage yields none.
 
-#### given — **Draft**
+## hydra.core.lib.optionals.foldList
 
-`∀t. t → optional<t>`
+Left-fold over a list with an optional-returning function, short-circuiting on none.
 
-Usage: `given x`
+`∀x,y.(x → y → optional<x>) → x → list<y> → optional<x>`
 
-Wrap a value in `given`.
-Returns the optional value containing `x`. The constructor for the present case of an
-optional value.
+*Since: 0.17.6.*
 
-Since: 0.17.6
+foldList(f, acc, xs) folds f over xs from the left, iterating while each application yields given, and returns none as soon as any step yields none. If every element is processed, the result is given of the final accumulator.
 
-#### givens — **Draft**
+foldList(f, acc, xs) is lists.foldl(\m y -> bind(m, \x -> f(x, y)), given(acc), xs); this defining equation is the specification, and the default implementation.
 
-`∀t. list<optional<t>> → list<t>`
+Total. Corresponds to a short-circuiting foldM specialised to Maybe.
 
-Usage: `givens xs`
+## hydra.core.lib.optionals.given
 
-Collect the present values from a list of optionals.
-Returns the list of contained values from the `given` elements of `xs`, in their original
-order; `none` elements are discarded.
-Parallel to `hydra.lib.eithers.lefts` and `hydra.lib.eithers.rights`.
+Wrap a value in given.
 
-Since: 0.17.6 (renamed from `hydra.lib.optionals.cat`)
+`∀x.x → optional<x>`
 
-#### isGiven — **Draft**
+*Since: 0.17.6.*
 
-`∀t. optional<t> → boolean`
+given(x) is the optional value containing x.
 
-Usage: `isGiven m`
+The constructor for the present case of an optional value.
 
-Test whether an optional value is present.
-Returns `true` if `m` is a `given` variant, and `false` if `m` is `none`.
+Total. Corresponds to Haskell's Just :: a -> Maybe a.
 
-Since: 0.15
+**[HYDRA-CORE-LIB-OPTIONALS-GIVEN-WRAPS-VALUE-AS-PRESENT] (requirement) **given wraps a value as the present variant of an optional, for any value type including integers and strings.
 
-#### isNone — **Draft**
+## hydra.core.lib.optionals.givens
 
-`∀t. optional<t> → boolean`
+Concatenate optionals, keeping only the present values.
 
-Usage: `isNone m`
+`∀x.list<optional<x>> → list<x>`
 
-Test whether an optional value is absent.
-Returns `true` if `m` is the `none` variant, and `false` if `m` is a `given`.
+*Since: 0.17.6.*
 
-Since: 0.15
+givens(xs) returns the list of contained values from given elements of xs, in original order; none elements are discarded.
 
-#### map — **Draft**
+Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a].
 
-`∀t1,t2. (t1 → t2) → optional<t1> → optional<t2>`
+Renamed from hydra.lib.optionals.cat.
 
-Usage: `map f m`
+**[HYDRA-CORE-LIB-OPTIONALS-GIVENS-KEEPS-PRESENT-VALUES-PRESERVING-ORDER] (requirement) **givens returns the list of contained values from every given element of the input list, in original order, discarding none elements; an all-none or empty input list yields the empty list.
 
-Map a function over an optional value.
-Returns `given (f x)` when `m` is `given x`, and `none` when `m` is `none`.
-This is the functor map for optionals.
+## hydra.core.lib.optionals.isGiven
 
-Since: 0.15
+Test whether an optional is present (given).
 
-#### mapList — **Draft**
+`∀x.optional<x> → boolean`
 
-`∀t1,t2. (t1 → optional<t2>) → list<t1> → optional<list<t2>>`
+*Since: 0.15.*
 
-Usage: `mapList f xs`
+isGiven(m) returns true iff m is a given variant.
+
+Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool.
+
+**[HYDRA-CORE-LIB-OPTIONALS-IS-GIVEN-TESTS-PRESENT-VARIANT] (requirement) **isGiven returns true exactly when the optional is the given variant, and false for none.
+
+## hydra.core.lib.optionals.isNone
+
+Test whether an optional is absent (none).
+
+`∀x.optional<x> → boolean`
+
+*Since: 0.15.*
+
+isNone(m) returns true iff m is the none variant.
+
+Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool.
+
+**[HYDRA-CORE-LIB-OPTIONALS-IS-NONE-TESTS-ABSENT-VARIANT] (requirement) **isNone returns true exactly when the optional is the none variant, and false for given.
+
+## hydra.core.lib.optionals.map
+
+Map a function over an optional.
+
+`∀x,y.(x → y) → optional<x> → optional<y>`
+
+*Since: 0.15.*
+
+map(f, m) returns given(f x) when m is given(x), and none when m is none.
+
+The functor instance for optionals.
+
+Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b.
+
+**[HYDRA-CORE-LIB-OPTIONALS-MAP-MAPS-GIVEN-LEAVES-NONE-UNCHANGED] (requirement) **map applies the given function to the contained value when the optional is given, and leaves none completely unchanged.
+
+## hydra.core.lib.optionals.mapList
 
 Traverse a list in the optional monad.
-Applies `f` to each element of `xs`.
-If every application yields `given`, the result is `given` of the list of contained values,
-in their original order.
-The result is `none` as soon as any application yields `none`.
 
-Since: 0.17.6
+`∀x,y.(x → optional<y>) → list<x> → optional<list<y>>`
 
-#### mapSet — **Draft**
+*Since: 0.17.6.*
 
-`∀t1,t2. (ordering t1, ordering t2) ⇒ (t1 → optional<t2>) → set<t1> → optional<set<t2>>`
+mapList(f, xs) applies f to each element of xs. If every application yields given, the result is given of the list of contained values, in their original order. The result is none as soon as any application yields none.
 
-Usage: `mapSet f s`
+Total. Corresponds to Haskell's traverse :: (a -> Maybe b) -> [a] -> Maybe [b].
+
+## hydra.core.lib.optionals.mapOptional
+
+Map a partial function over a list, keeping only the present results.
+
+`∀x,y.(x → optional<y>) → list<x> → list<y>`
+
+*Deprecated since: 0.18.*
+
+mapOptional(f, xs) applies f to each element of xs and returns the list of contained values from given results in original order; none results are discarded.
+
+Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b].
+
+Deprecated since 0.18. Use: hydra.core.lib.lists.mapGivens.
+
+**[HYDRA-CORE-LIB-OPTIONALS-MAP-OPTIONAL-FILTERS-AND-TRANSFORMS-KEEPING-GIVEN] (requirement) **mapOptional applies the given partial (optional-returning) function to each element of the input list and returns the list of contained values from every given result, in original order, discarding elements for which the function returned none; an input that yields no given results, or an empty input list, produces the empty list.
+
+## hydra.core.lib.optionals.mapSet
 
 Traverse a set in the optional monad.
-Applies `f` to each element of `s`.
-If every application yields `given`, the result is `given` of the set of contained values,
-deduplicated by the result type's ordering.
-The result is `none` as soon as any application yields `none`.
 
-Since: 0.17.6
+`∀x,y.(ordering x, ordering y) ⇒ (x → optional<y>) → set<x> → optional<set<y>>`
 
-#### toList — **Draft**
+*Since: 0.17.6.*
 
-`∀t. optional<t> → list<t>`
+mapSet(f, s) applies f to each element of s. If every application yields given, the result is given of the set of contained values, deduplicated by the result type's ordering. The result is none as soon as any application yields none.
 
-Usage: `toList m`
+Requires 'ordering' constraints on both element types (the set type contract).
 
-Convert an optional value to a list.
-Returns the singleton list containing `x` when `m` is `given x`, and the empty list when `m`
-is `none`.
+Total. Corresponds to a traverse-style operation specialised to Set in the Maybe monad.
 
-Since: 0.15
+## hydra.core.lib.optionals.match
 
-#### withDefault — **Draft**
+The fundamental eliminator for the optional type, scrutinee-first.
 
-`∀t. t → optional<t> → t`
+`∀x,y.optional<x> → y → (x → y) → y`
 
-Usage: `withDefault default m`
+*Since: 0.15.*
+
+match(m, def, f) returns f(x) when m is given(x), and def when m is none.
+
+The fundamental eliminator for the optional type; every other primitive in this namespace can be derived from it. The optional value is the first argument, matching the convention for case-statement-like elimination.
+
+Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m).
+
+**[HYDRA-CORE-LIB-OPTIONALS-MATCH-ELIMINATES-BY-VARIANT] (requirement) **match returns the result of applying the given function to the contained value when the optional is given, and returns the default value unevaluated-until-needed when the optional is none.
+
+## hydra.core.lib.optionals.toList
+
+Convert an optional to a list: given x maps to [x], none to [].
+
+`∀x.optional<x> → list<x>`
+
+*Since: 0.15.*
+
+toList(m) returns [x] when m is given(x), and the empty list when m is none.
+
+Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a].
+
+**[HYDRA-CORE-LIB-OPTIONALS-TO-LIST-CONVERTS-GIVEN-TO-SINGLETON-NONE-TO-EMPTY] (requirement) **toList converts a given value to a one-element list containing it, and none to the empty list.
+
+## hydra.core.lib.optionals.withDefault
 
 Return the value contained in an optional, falling back to a default if absent.
-Returns `x` when `m` is `given x`, and `default` when `m` is `none`.
-`withDefault default m` is `cases m default (λx → x)`; this defining equation is the
-specification, and the default implementation.
-The default comes first — a documented exception to the standard parameter order.
 
-Lazy: `default` — evaluated only when the optional is `none`.
+`∀x.x → optional<x> → x`
 
-Since: 0.17.6 (renamed from `hydra.lib.optionals.fromOptional`)
+*Since: 0.17.6.*
 
-#### cat — **Deprecated**
+withDefault(def, m) returns x when m is given(x), and def when m is none.
 
-`∀t. list<optional<t>> → list<t>`
+Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a.
 
-Deprecated since: 0.18. Use: `givens`.
+Renamed from hydra.lib.optionals.fromOptional.
 
-#### fromOptional — **Deprecated**
-
-`∀t. t → optional<t> → t`
-
-Deprecated since: 0.18. Use: `withDefault`.
-
-#### match — **Deprecated**
-
-`∀t1,t2. optional<t1> → t2 → (t1 → t2) → t2`
-
-Deprecated since: 0.18. Use: `cases`.
-A straight rename of the optional eliminator; the argument order is unchanged.
-
-#### mapOptional — **Deprecated**
-
-`∀t1,t2. (t1 → optional<t2>) → list<t1> → list<t2>`
-
-Deprecated since: 0.18. Use: `hydra.lib.lists.mapGivens`.
-
-<!-- [PENDING]: the name mapOptional is reserved; once this deprecated alias is removed, the
-     traversal-family cell optionals.mapOptional ((t1 → optional<t2>) → optional<t1> →
-     optional<optional<t2>>) may be added. -->
+**[HYDRA-CORE-LIB-OPTIONALS-WITH-DEFAULT-RETURNS-CONTAINED-VALUE-OR-DEFAULT] (requirement) **withDefault returns the contained value when the optional is given, and the supplied default when the optional is none.

@@ -1,75 +1,87 @@
-<!-- NOTE: this page will be automatically generated from the primitive definitions in
-     packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Functions.hs (a module new
-     under #417; neither the module nor the generator exists yet). Hand-authored draft under
-     #417; the specifications here are the normative TARGET.
-     Conventions (notation, laziness, badges, floating point) are defined in index.md. -->
+<!-- Note: this is an automatically generated file. Do not edit. -->
 
-# hydra.lib.functions
+# hydra.core.lib.functions
 
-Function combinators: the `identity`/`compose`/`const`/`flip` basis.
-These primitives manipulate functions themselves, independently of any particular data type.
+<!-- Note: this is an automatically generated file. Do not edit. -->
 
-#### absurd — **Draft**
+Function combinators: the identity/compose/const/flip basis. These primitives manipulate functions themselves, independently of any particular data type.
 
-`∀t1. void → t1`
+## hydra.core.lib.functions.absurd
 
-Usage: `absurd v`
+Eliminate a value of the uninhabited void type, producing any type.
 
-Eliminate a value of the uninhabited `void` type, producing any type. `absurd v` is the
-unique function from `void` to any type `t1`; since `void` has no inhabitants, this
-function can never actually be applied in a well-typed program.
-Its purpose is to discharge an impossible branch in otherwise-total code, such as the
-`left` case of an `either<void, a>` that can never occur.
-The eliminator dual to the (nonexistent) introducer for `void`.
+`∀t1.void → t1`
 
-Since: 0.17.6
+*Since: 0.17.6.*
 
-#### compose — **Draft**
+absurd(v) is the unique function from void to any type t1; since void has no inhabitants, this function can never actually be applied in a well-typed program.
 
-`∀t1,t2,t3. (t2 → t3) → (t1 → t2) → t1 → t3`
+Its purpose is to discharge an impossible branch in otherwise-total code, such as the left case of an either<void, a> that can never occur.
 
-Usage: `compose g f x`
+The eliminator dual to the (nonexistent) introducer for void.
 
-Compose two functions: `compose g f x` is `g (f x)`; this defining equation is the
-specification.
-The outer function comes first: `f` is applied to `x`, and `g` is applied to the result.
-This is ordinary function composition, distinct from the Kleisli `compose` primitives of the
-monad modules.
+Total, vacuously: there is no well-typed argument on which absurd could be called. Corresponds to Haskell's Data.Void.absurd :: Void -> a.
 
-Since: 0.17.6
+## hydra.core.lib.functions.compose
 
-#### const — **Draft**
+Compose two functions.
 
-`∀t1,t2. t1 → t2 → t1`
+`∀t1,t2,t3.(t2 → t3) → (t1 → t2) → t1 → t3`
 
-Usage: `const x y`
+*Since: 0.17.6.*
 
-Return the first argument, ignoring the second: `const x y` is `x`; this defining equation is
-the specification.
-Partially applied, `const x` is the constant function which returns `x` on every input.
+compose(g, f, x) = g(f(x)); this defining equation is the specification.
 
-Since: 0.17.6
+The outer function comes first: f is applied to x, and g is applied to the result.
 
-#### flip — **Draft**
+This is ordinary function composition, distinct from the Kleisli compose primitives of the monad modules.
 
-`∀t1,t2,t3. (t1 → t2 → t3) → t2 → t1 → t3`
+Total. Corresponds to Haskell's (.) :: (b -> c) -> (a -> b) -> a -> c.
 
-Usage: `flip f x y`
+## hydra.core.lib.functions.const
 
-Swap the argument order of a binary function: `flip f x y` is `f y x`; this defining equation
-is the specification.
+Return the first argument, ignoring the second.
 
-Since: 0.17.6
+`∀t1,t2.t1 → t2 → t1`
 
-#### identity — **Draft**
+*Since: 0.17.6.*
 
-`∀t. t → t`
+const(x, y) = x; this defining equation is the specification.
 
-Usage: `identity x`
+Partially applied, const(x) is the constant function which returns x on every input.
 
-Return the argument unchanged: `identity x` is `x`; this defining equation is the
-specification.
-`identity` is the unit of `compose`: `compose identity f` and `compose f identity` are both
-`f`.
+Total. Corresponds to Haskell's const :: a -> b -> a.
 
-Since: 0.17.6 (moved from `hydra.lib.equality.identity`)
+**[HYDRA-CORE-LIB-FUNCTIONS-CONST-RETURNS-FIRST-ARGUMENT-IGNORING-SECOND] (requirement) **const returns its first argument unchanged and ignores its second argument entirely, regardless of the second argument's type or value.
+
+## hydra.core.lib.functions.flip
+
+Swap the argument order of a binary function.
+
+`∀t1,t2,t3.(t1 → t2 → t3) → t2 → t1 → t3`
+
+*Since: 0.17.6.*
+
+flip(f, x, y) = f(y, x); this defining equation is the specification.
+
+Total. Corresponds to Haskell's flip :: (a -> b -> c) -> b -> a -> c.
+
+**[HYDRA-CORE-LIB-FUNCTIONS-FLIP-SWAPS-ARGUMENT-ORDER] (requirement) **flip(f, x, y) applies f with its two arguments in reversed order, i.e. flip(f, x, y) = f(y, x).
+
+## hydra.core.lib.functions.identity
+
+Return the argument unchanged.
+
+`∀t1.t1 → t1`
+
+*Since: 0.17.6.*
+
+identity(x) = x; this defining equation is the specification. The polymorphic identity function.
+
+identity is the unit of compose: compose(identity, f) and compose(f, identity) are both f.
+
+Total. Corresponds to Haskell's id :: a -> a.
+
+Moved from hydra.lib.equality.identity.
+
+**[HYDRA-CORE-LIB-FUNCTIONS-IDENTITY-RETURNS-ARGUMENT-UNCHANGED] (requirement) **identity returns its argument completely unchanged, for any value.

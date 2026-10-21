@@ -1,278 +1,269 @@
-<!-- NOTE: this page will be automatically generated from the primitive definitions in
-     packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Eithers.hs (generator not
-     yet built). Hand-authored draft under #417; the specifications here are the normative TARGET
-     and may deliberately diverge from the currently-frozen definitions.
-     Conventions (notation, laziness, badges, floating point) are defined in index.md. -->
+<!-- Note: this is an automatically generated file. Do not edit. -->
 
-# hydra.lib.eithers
+# hydra.core.lib.eithers
 
-The either type is Hydra's error/alternative type: a value of `either<t1, t2>` is either
-`left x`, conventionally carrying an error or alternative of type `t1`, or `right y`, carrying
-a success value of type `t2`.
-The either type is a right-biased monad: `right` (the unit), `map`, `apply`, and `bind` operate
-on the `right` side, and the `left` type is held fixed through a computation, so a chain of
-steps shares a common error type.
-This module provides the full monad row — `right`, `map`, `apply`, `bind`, and `compose` —
-together with the dual constructor `left`, elimination (`cases`), predicates, and traversal.
-The fundamental eliminator is `cases`; every other primitive in this module can be derived
-from it.
+<!-- Note: this is an automatically generated file. Do not edit. -->
 
-#### apply — **Draft**
+The either type is Hydra's error/alternative type: a value of either<t1, t2> is either left(x), conventionally carrying an error or alternative of type t1, or right(y), carrying a success value of type t2.
 
-`∀t1,t2,t3. either<t1, t2 → t3> → either<t1, t2> → either<t1, t3>`
+The either type is a right-biased monad: right (the unit), map, apply, and bind operate on the right side, and the left type is held fixed through a computation, so a chain of steps shares a common error type.
 
-Usage: `apply ef ex`
+This module provides the full monad row -- right, map, apply, bind, and compose -- together with the dual constructor left, elimination (cases), predicates, and traversal.
+
+The fundamental eliminator is cases; every other primitive in this module can be derived from it.
+
+## hydra.core.lib.eithers.apply
 
 Applicative apply for either: combine a function under either and an argument under either.
-Returns `right (f x)` when `ef` is `right f` and `ex` is `right x`.
-If either argument is a `left`, the result is that `left`; when both arguments are `left`,
-the first (function-side) `left` is returned — first error wins, and `ex` is not consulted
-once `ef` is known to be a `left`.
-`apply ef ex` is `bind ef (λf → map f ex)`; this defining equation is the specification, and
-the default implementation.
 
-Since: 0.17.6
+`∀x,y,z.either<x, y → z> → either<x, y> → either<x, z>`
 
-#### bimap — **Draft**
+*Since: 0.17.6.*
 
-`∀t1,t2,t3,t4. (t1 → t3) → (t2 → t4) → either<t1, t2> → either<t3, t4>`
+apply(ef, ex) returns right(f(x)) when ef is right(f) and ex is right(x).
 
-Usage: `bimap f g e`
+If either argument is a left, the result is that left; when both arguments are left, the first (function-side) left is returned — first error wins, and ex is not consulted once ef is known to be a left.
+
+apply(ef, ex) is bind(ef, \f -> map(f, ex)); this defining equation is the specification, and the default implementation.
+
+Total. Corresponds to Haskell's (<*>) :: Either a (b -> c) -> Either a b -> Either a c.
+
+## hydra.core.lib.eithers.bimap
 
 Map over both sides of an either value.
-Returns `left (f x)` when `e` is `left x`, and `right (g y)` when `e` is `right y`; the result
-retains the same `left`/`right` variant as the argument.
 
-Since: 0.15
+`∀x,y,z,w.(x → z) → (y → w) → either<x, y> → either<z, w>`
 
-#### bind — **Draft**
+*Since: 0.15.*
 
-`∀t1,t2,t3. either<t1, t2> → (t2 → either<t1, t3>) → either<t1, t3>`
+bimap(f, g, e) applies f to the contained value if e is a Left, or g if e is a Right; the result retains the same Left/Right variant.
 
-Usage: `bind e f`
+Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d.
 
-Monadic bind for either, with a fixed `left` type.
-Returns `f y` when `e` is `right y`; when `e` is `left x`, the result is `left x`, with the
-`left` type preserved.
+**[HYDRA-CORE-LIB-EITHERS-BIMAP-MAPS-BOTH-SIDES-INDEPENDENTLY] (requirement) **bimap applies the first function if the either is a left and the second function if it is a right, preserving the left/right variant of the result.
+
+## hydra.core.lib.eithers.bind
+
+Bind (flatMap) for either: if Right, apply the function; if Left, return unchanged.
+
+`∀x,y,z.either<x, y> → (y → either<x, z>) → either<x, z>`
+
+*Since: 0.15.*
+
+bind(e, f) is the monadic bind for either with a fixed Left type: if e is Right v, the result is f(v); if e is Left x, the result is Left x with the Left type preserved.
+
 Used to chain computations that may fail with a common error type.
 
-Since: 0.15
+Total. Corresponds to Haskell's (>>=) :: Either a b -> (b -> Either a c) -> Either a c.
 
-#### cases — **Draft**
+**[HYDRA-CORE-LIB-EITHERS-BIND-CHAINS-ON-RIGHT-SHORT-CIRCUITS-ON-LEFT] (requirement) **bind applies the continuation function when the either is a right, propagating the continuation's own result (which may itself be a left or right); when the either is a left, bind returns that left unchanged without invoking the continuation.
 
-`∀t1,t2,t3. either<t1, t2> → (t1 → t3) → (t2 → t3) → t3`
-
-Usage: `cases e f g`
-
-Case analysis on an either value.
-Applies the first function to a `left` value and the second to a `right` value: returns `f x`
-when `e` is `left x`, and `g y` when `e` is `right y`.
-This is the fundamental eliminator for the either type; every other primitive in this module
-can be derived from it.
-The either value is the first argument, matching `hydra.lib.optionals.cases` and the convention
-for case-statement-like elimination.
-
-Since: 0.18 (renamed from `either`, with the scrutinee moved first)
-
-#### compose — **Draft**
-
-`∀t1,t2,t3,t4. (t1 → either<t4, t2>) → (t2 → either<t4, t3>) → t1 → either<t4, t3>`
-
-Usage: `compose f g x`
+## hydra.core.lib.eithers.compose
 
 Kleisli composition for either.
-`compose f g x` is `bind (f x) g`; this defining equation is the specification, and the default
-implementation.
-If either `f x` or the second stage produces a `left`, the result is that `left`.
 
-Since: 0.17.6
+`∀x,y,z,w.(x → either<w, y>) → (y → either<w, z>) → x → either<w, z>`
 
-#### foldList — **Draft**
+*Since: 0.17.6.*
 
-`∀t1,t2,t3. (t1 → t2 → either<t3, t1>) → t1 → list<t2> → either<t3, t1>`
+compose(f, g, x) is bind(f(x), g); this defining equation is the specification, and the default implementation.
 
-Usage: `foldList f acc xs`
+If either f(x) or the second stage produces a left, the result is that left.
 
-Left-fold over a list with an either-returning function, short-circuiting on `left`.
-Folds `f` over `xs` from the left, threading an accumulator of type `t1`, where each
-application may fail with a `left`: iterates while `f` returns `right`, propagates the first
-`left` without processing further elements, and returns `right` of the final accumulator if
-every element was processed.
-Equivalent to chaining `bind` over the list.
-`foldList f acc xs` is `hydra.lib.lists.foldl (λe y → bind e (λx → f x y)) (right acc) xs`;
-this defining equation is the specification, and the default implementation.
+Total. Corresponds to Kleisli composition (>=>) specialised to Either with a fixed Left type.
 
-Since: 0.17.6 (renamed from `hydra.lib.eithers.foldl`)
+## hydra.core.lib.eithers.either
 
-#### isLeft — **Draft**
+Eliminate an either value by applying one of two functions.
 
-`∀t1,t2. either<t1, t2> → boolean`
+`∀x,y,z.(x → z) → (y → z) → either<x, y> → z`
 
-Usage: `isLeft e`
+*Deprecated since: 0.18.*
 
-Test whether an either value is a `left`.
-Returns `true` if `e` is a `left` variant, and `false` if it is a `right`.
+either(f, g, e) returns f(x) if e is Left x and g(y) if e is Right y.
 
-Since: 0.15
+The fundamental eliminator for the either type; every other primitive in this namespace can be derived from it.
 
-#### isRight — **Draft**
+Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c.
 
-`∀t1,t2. either<t1, t2> → boolean`
+Deprecated since 0.18. Use: cases.
 
-Usage: `isRight e`
+Note that the argument order also changed in the replacement: cases takes the scrutinee first.
 
-Test whether an either value is a `right`.
-Returns `true` if `e` is a `right` variant, and `false` if it is a `left`.
+**[HYDRA-CORE-LIB-EITHERS-EITHER-ELIMINATES-BY-VARIANT] (requirement) **either applies the first function if given a left value and the second function if given a right value, returning that function's result directly.
 
-Since: 0.15
+## hydra.core.lib.eithers.foldList
 
-#### left — **Draft**
+Left-fold over a list with an Either-returning function, short-circuiting on Left.
 
-`∀t1,t2. t1 → either<t1, t2>`
+`∀x,y,z.(x → y → either<z, x>) → x → list<y> → either<z, x>`
 
-Usage: `left x`
+*Since: 0.17.6.*
 
-Construct a `left` (error/exceptional) either value.
-`left x` is `Left x`. The dual constructor to `right`, injecting into the Left
-(error/exceptional) side of an either.
+foldList(f, acc0, xs) folds f over xs from the left, threading an accumulator of type a, where each application may fail with Left e: it iterates while f returns Right, propagates Left on the first failure, and returns Right (final accumulator) if all elements were processed.
 
-Since: 0.17.6
+Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either.
 
-#### lefts — **Draft**
+Renamed from hydra.lib.eithers.foldl, to distinguish the monadic fold from the plain list fold hydra.lib.lists.foldl.
 
-`∀t1,t2. list<either<t1, t2>> → list<t1>`
+**[HYDRA-CORE-LIB-EITHERS-FOLD-LIST-FOLDS-LEFT-SHORT-CIRCUITING-ON-LEFT] (requirement) **foldList folds the given function over the list from the left, threading an accumulator through successive right results; the first left result returned by the step function short-circuits the whole fold to that left, and folding the empty list returns right of the initial accumulator unchanged.
 
-Usage: `lefts xs`
+## hydra.core.lib.eithers.isLeft
 
-Extract all `left` values from a list of either values.
-Returns the list containing every `left` value in `xs`, in their original order, with `right`
-values discarded.
+Check whether an either is a Left value.
 
-Since: 0.15
+`∀x,y.either<x, y> → boolean`
 
-#### map — **Draft**
+*Since: 0.15.*
 
-`∀t1,t2,t3. (t1 → t2) → either<t3, t1> → either<t3, t2>`
+True if the argument is a Left variant, false if a Right.
 
-Usage: `map f e`
+Total. Corresponds to Haskell's Data.Either.isLeft :: Either a b -> Bool.
 
-Map a function over the `right` side of an either value.
-Returns `right (f y)` when `e` is `right y`, and `left x` unchanged when `e` is `left x`.
-This is the functor map for either; it treats the `right` variant as the focus and leaves the
-`left` variant alone.
+**[HYDRA-CORE-LIB-EITHERS-IS-LEFT-TESTS-LEFT-VARIANT] (requirement) **isLeft returns true exactly when the either is a left value, and false for a right value.
 
-Since: 0.15
+## hydra.core.lib.eithers.isRight
 
-#### mapList — **Draft**
+Check whether an either is a Right value.
 
-`∀t1,t2,t3. (t1 → either<t3, t2>) → list<t1> → either<t3, list<t2>>`
+`∀x,y.either<x, y> → boolean`
 
-Usage: `mapList f xs`
+*Since: 0.15.*
 
-Traverse a list in the either monad.
-Applies `f` to each element of `xs`.
-If every application returns `right`, the result is `right` of the list of contained values,
-in their original order.
-The first application that returns a `left` short-circuits the whole result to that `left`.
+True if the argument is a Right variant, false if a Left.
 
-Since: 0.15
+Total. Corresponds to Haskell's Data.Either.isRight :: Either a b -> Bool.
 
-#### mapOptional — **Draft**
+**[HYDRA-CORE-LIB-EITHERS-IS-RIGHT-TESTS-RIGHT-VARIANT] (requirement) **isRight returns true exactly when the either is a right value, and false for a left value.
 
-`∀t1,t2,t3. (t1 → either<t3, t2>) → optional<t1> → either<t3, optional<t2>>`
+## hydra.core.lib.eithers.left
 
-Usage: `mapOptional f m`
+Construct a left (error/exceptional) either value.
 
-Traverse an optional in the either monad.
-Returns `right none` when `m` is `none`; otherwise applies `f` to the contained value, and
-returns the result with the contained value (if any) wrapped in `given`: `right (given y)` when
-`f x` is `right y`, or the `left` unchanged when `f x` is a `left`.
+`∀x,y.x → either<x, y>`
 
-Since: 0.15
+*Since: 0.17.6.*
 
-#### mapSet — **Draft**
+left(x) is Left x. The dual constructor to right, injecting into the Left (error/exceptional) side of an either.
 
-`∀t1,t2,t3. (ordering t1, ordering t2) ⇒ (t1 → either<t3, t2>) → set<t1> → either<t3, set<t2>>`
+Total. Corresponds to Haskell's Left :: a -> Either a b.
 
-Usage: `mapSet f s`
+**[HYDRA-CORE-LIB-EITHERS-LEFT-CONSTRUCTS-LEFT-VARIANT] (requirement) **left wraps a value as the left (error/exceptional) variant of an either.
 
-Traverse a set in the either monad.
-Applies `f` to each element of `s`, in unspecified order.
-If every application returns `right`, the result is `right` of the set of contained values,
-deduplicated by the result type's ordering.
-The first application returning a `left` short-circuits the whole result to that `left`;
-because the traversal order is unspecified, which `left` is returned when several elements map
-to a `left` is also unspecified.
+## hydra.core.lib.eithers.lefts
 
-Since: 0.15
+Extract all Left values from a list of either values.
 
-#### partition — **Draft**
+`∀x,y.list<either<x, y>> → list<x>`
 
-`∀t1,t2. list<either<t1, t2>> → pair<list<t1>, list<t2>>`
+*Since: 0.15.*
 
-Usage: `partition xs`
+lefts(xs) returns a list containing every Left value in xs, in original order, with Right values discarded.
+
+Total. Corresponds to Haskell's Data.Either.lefts :: [Either a b] -> [a].
+
+**[HYDRA-CORE-LIB-EITHERS-LEFTS-EXTRACTS-LEFT-VALUES-PRESERVING-ORDER] (requirement) **lefts returns the list of every left value in the input list, in original order, discarding right values; given a list of only right values, or an empty list, the result is the empty list.
+
+## hydra.core.lib.eithers.map
+
+Map a function over the Right side of an either (standard functor map).
+
+`∀x,y,z.(x → y) → either<z, x> → either<z, y>`
+
+*Since: 0.15.*
+
+map(f, e) returns Right (f y) if e is Right y, or Left x unchanged if e is Left x.
+
+The functor instance for either; treats the Right variant as the focus and leaves the Left variant alone.
+
+Total. Corresponds to Haskell's fmap :: (a -> b) -> Either e a -> Either e b.
+
+**[HYDRA-CORE-LIB-EITHERS-MAP-MAPS-RIGHT-PRESERVES-LEFT] (requirement) **map applies the given function to the contained value when the either is a right, and leaves a left value completely unchanged.
+
+## hydra.core.lib.eithers.mapList
+
+Map a function returning either over a list, collecting results or short-circuiting on Left.
+
+`∀x,y,z.(x → either<z, y>) → list<x> → either<z, list<y>>`
+
+*Since: 0.15.*
+
+mapList(f, xs) applies f to each element of xs. If every application returns Right, the result is Right of the list of contained values, in original order. The first application that returns Left short-circuits the whole result to that Left.
+
+Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> [a] -> Either e [b].
+
+**[HYDRA-CORE-LIB-EITHERS-MAP-LIST-TRAVERSES-COLLECTING-OR-SHORT-CIRCUITING] (requirement) **mapList applies the given either-returning function to each element of the list; if every application returns a right, the result is a right of the list of contained values in original order, and the first application returning a left short-circuits the whole result to that left; folding the empty list returns a right of the empty list.
+
+## hydra.core.lib.eithers.mapOptional
+
+Map a function returning either over an optional, or return Right none if none.
+
+`∀x,y,z.(x → either<z, y>) → optional<x> → either<z, optional<y>>`
+
+*Since: 0.15.*
+
+mapOptional(f, m) returns Right none if m is none; otherwise applies f to the contained value and returns the result with Right wrapped around given.
+
+Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b).
+
+**[HYDRA-CORE-LIB-EITHERS-MAP-OPTIONAL-TRAVERSES-OPTIONAL-COLLECTING-OR-SHORT-CIRCUITING] (requirement) **mapOptional returns a right of none when the input optional is none; when the input is given a value, it applies the given function to that value and lifts a right result back into right of given, or propagates a left result unchanged.
+
+## hydra.core.lib.eithers.mapSet
+
+Map a function returning either over a set, collecting results or short-circuiting on Left.
+
+`∀x,y,z.(ordering x, ordering y) ⇒ (x → either<z, y>) → set<x> → either<z, set<y>>`
+
+*Since: 0.15.*
+
+mapSet(f, s) applies f to each element of s in unspecified order. If every application returns Right, the result is Right of the set of contained values (deduplicated by the result type's ordering); the first application returning Left short-circuits the whole result to that Left.
+
+Requires an 'ordering' constraint on the input and output element types.
+
+Total. Corresponds to Haskell's traverse-style operation specialised to Set.
+
+**[HYDRA-CORE-LIB-EITHERS-MAP-SET-TRAVERSES-SET-COLLECTING-OR-SHORT-CIRCUITING] (requirement) **mapSet applies the given either-returning function to each element of the set; if every application returns a right, the result is a right of the set of contained values (deduplicated by the result type's ordering), and the first application returning a left short-circuits the whole result to that left; mapping the empty set returns a right of the empty set.
+
+## hydra.core.lib.eithers.partition
 
 Partition a list of either values into lefts and rights.
-Returns a pair whose first component contains every `left` value from `xs`, in their original
-order, and whose second component contains every `right` value from `xs`, in their original
-order.
 
-Since: 0.17.6 (renamed from `hydra.lib.eithers.partitionEithers`)
+`∀x,y.list<either<x, y>> → (list<x>, list<y>)`
 
-#### right — **Draft**
+*Since: 0.17.6.*
 
-`∀t1,t2. t2 → either<t1, t2>`
+partition(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs in original order and rights contains every Right value from xs in original order.
 
-Usage: `right x`
+Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b]).
 
-Construct a `right` (success/normal) either value.
-`right x` is `Right x`. The dual constructor to `left`, injecting into the Right
-(success/normal) side of an either.
+Renamed from hydra.lib.eithers.partitionEithers.
 
-Since: 0.17.6
+**[HYDRA-CORE-LIB-EITHERS-PARTITION-SPLITS-INTO-LEFTS-AND-RIGHTS] (requirement) **partition returns a pair of (every left value in the input, every right value in the input), each preserving original relative order; an all-left, all-right, or empty input list degrades to the corresponding (full, empty) / (empty, full) / (empty, empty) pairing.
 
-#### rights — **Draft**
+## hydra.core.lib.eithers.right
 
-`∀t1,t2. list<either<t1, t2>> → list<t2>`
+Construct a right (success/normal) either value.
 
-Usage: `rights xs`
+`∀x,y.y → either<x, y>`
 
-Extract all `right` values from a list of either values.
-Returns the list containing every `right` value in `xs`, in their original order, with `left`
-values discarded.
+*Since: 0.17.6.*
 
-Since: 0.15
+right(x) is Right x. The dual constructor to left, injecting into the Right (success/normal) side of an either.
 
-#### either — **Deprecated**
+Total. Corresponds to Haskell's Right :: b -> Either a b.
 
-`∀t1,t2,t3. (t1 → t3) → (t2 → t3) → either<t1, t2> → t3`
+**[HYDRA-CORE-LIB-EITHERS-RIGHT-CONSTRUCTS-RIGHT-VARIANT] (requirement) **right wraps a value as the right (success/normal) variant of an either.
 
-Deprecated since: 0.18. Use: `cases`.
-Note that the argument order also changed: `cases` takes the scrutinee first.
+## hydra.core.lib.eithers.rights
 
-#### fromLeft — **Deprecated**
+Extract all Right values from a list of either values.
 
-`∀t1,t2. t1 → either<t1, t2> → t1`
+`∀x,y.list<either<x, y>> → list<y>`
 
-Deprecated since: 0.18. Use: `cases`.
-This was a default-extractor; `cases` expresses it directly.
+*Since: 0.15.*
 
-#### fromRight — **Deprecated**
+rights(xs) returns a list containing every Right value in xs, in original order, with Left values discarded.
 
-`∀t1,t2. t2 → either<t1, t2> → t2`
+Total. Corresponds to Haskell's Data.Either.rights :: [Either a b] -> [b].
 
-Deprecated since: 0.18. Use: `cases`.
-This was a default-extractor; `cases` expresses it directly.
-
-#### foldl — **Deprecated**
-
-`∀t1,t2,t3. (t1 → t2 → either<t3, t1>) → t1 → list<t2> → either<t3, t1>`
-
-Deprecated since: 0.18. Use: `foldList`.
-Renamed to distinguish the monadic fold from the plain list fold `hydra.lib.lists.foldl`.
-
-#### partitionEithers — **Deprecated**
-
-`∀t1,t2. list<either<t1, t2>> → pair<list<t1>, list<t2>>`
-
-Deprecated since: 0.18. Use: `partition`.
+**[HYDRA-CORE-LIB-EITHERS-RIGHTS-EXTRACTS-RIGHT-VALUES-PRESERVING-ORDER] (requirement) **rights returns the list of every right value in the input list, in original order, discarding left values; given a list of only left values, or an empty list, the result is the empty list.
