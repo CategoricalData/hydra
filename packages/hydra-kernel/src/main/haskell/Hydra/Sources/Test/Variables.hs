@@ -344,6 +344,36 @@ unshadowVariablesGroup = subgroup "unshadowVariables" [
         (letExpr "y" (int32 2)
           (lambda "x2" (var "x2")))),
 
+    -- === Let shadows let (#799: sibling lets both binding the same name in nested scopes,
+    -- e.g. an outer module-level 'comments' and an inner per-definition 'comments') ===
+
+    unshadowCase "inner let shadows outer let - body references both"
+      (letExpr "x" (int32 1)
+        (list [var "x", letExpr "x" (int32 2) (var "x")]))
+      (letExpr "x" (int32 1)
+        (list [var "x", letExpr "x2" (int32 2) (var "x2")])),
+
+    unshadowCase "inner let shadows outer let, nested inside sibling lambdas (module-doc generation shape)"
+      (letExpr "x" (int32 1)
+        (lambda "mod"
+          (list [
+            var "x",
+            lambda "d" (letExpr "x" (var "d") (var "x"))])))
+      (letExpr "x" (int32 1)
+        (lambda "mod"
+          (list [
+            var "x",
+            lambda "d" (letExpr "x2" (var "d") (var "x2"))]))),
+
+    -- A Let's own bindings are "(possibly recursive)" per their type's own doc comment, so a
+    -- binding's value term is in scope of that same Let's bindings (including itself) -- a
+    -- self-referential inner 'x' resolves to the renamed x2, not to the shadowed outer 'x'.
+    unshadowCase "self-recursive inner let-bound name resolves to its own renamed binding"
+      (letExpr "x" (int32 1)
+        (letExpr "x" (var "x") (var "x")))
+      (letExpr "x" (int32 1)
+        (letExpr "x2" (var "x2") (var "x2"))),
+
     -- === Shadowing inside application ===
 
     unshadowCase "shadowed lambda in function position of application"

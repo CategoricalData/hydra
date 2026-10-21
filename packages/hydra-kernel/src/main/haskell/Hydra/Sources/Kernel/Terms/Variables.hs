@@ -11,6 +11,7 @@ import Hydra.Kernel hiding (
   freeVariablesInTypeSimple,
   freeVariablesInTypeScheme,
   freeVariablesInTypeSchemeSimple,
+  freshNameAvoiding,
   isFreeVariableInTerm,
   normalizeTypeVariablesInTerm,
   replaceFreeTermVariable,
@@ -92,6 +93,7 @@ module_ = Module {
      toDefinition freeVariablesInTypeScheme,
      toDefinition freeVariablesInTypeSchemeSimple,
      toDefinition freeVariablesInTypeSimple,
+     toDefinition freshNameAvoiding,
      toDefinition isFreeVariableInTerm,
      toDefinition normalizeTypeVariablesInTerm,
      toDefinition replaceFreeTermVariable,
@@ -100,6 +102,18 @@ module_ = Module {
      toDefinition substituteVariable,
      toDefinition substituteVariables,
      toDefinition unshadowVariables]
+
+freshNameAvoiding :: TypedTermDefinition (Name -> S.Set Name -> Name)
+freshNameAvoiding = define "freshNameAvoiding" $
+  doc ("Find a fresh name based on the given base name, not in the given avoid-set,"
+    <> " trying base2, base3, etc.") $
+  "base" ~> "avoid" ~>
+  "go" <~ ("i" ~>
+    "candidate" <~ Core.name (Strings.concat2 (Core.unName $ var "base") (Literals.printInt32 $ var "i")) $
+    Logic.ifElse (Sets.member (var "candidate") (var "avoid" :: TypedTerm (S.Set Name)))
+      (var "go" @@ Math.add (var "i") (int32 1))
+      (var "candidate")) $
+  var "go" @@ int32 2
 
 freeTypeVariablesInTerm :: TypedTermDefinition (Term -> S.Set Name)
 freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
@@ -407,12 +421,6 @@ unshadowVariables = define "unshadowVariables" $
   doc ("Rename all shadowed variables (both lambda parameters and let-bound variables"
     <> " that shadow lambda parameters) in a term.") $
   "term0" ~>
-  -- Find a fresh name not in the key set of the map, trying base2, base3, etc.
-  "freshName" <~ ("base" ~> "i" ~> "m" ~>
-    "candidate" <~ Core.name (Strings.concat2 (Core.unName $ var "base") (Literals.printInt32 $ var "i")) $
-    Logic.ifElse (Maps.member (var "candidate") (var "m" :: TypedTerm (M.Map Name Name)))
-      (var "freshName" @@ var "base" @@ Math.add (var "i") (int32 1) @@ var "m")
-      (var "candidate")) $
   "f" <~ ("recurse" ~> "m" ~> "term" ~>
     match _Term (var "term") (Just $ var "recurse" @@ var "m" @@ var "term") [
     _Term_lambda>>: "l" ~>
@@ -421,7 +429,7 @@ unshadowVariables = define "unshadowVariables" $
       "body" <~ Core.lambdaBody (var "l") $
       Logic.ifElse (Maps.member (var "v") (var "m" :: TypedTerm (M.Map Name Name)))
         -- Shadowed: find a fresh name, add v -> fresh to map, recurse into body
-        ("v2" <~ var "freshName" @@ var "v" @@ int32 2 @@ var "m" $
+        ("v2" <~ freshNameAvoiding @@ var "v" @@ Sets.fromList (Maps.keys (var "m" :: TypedTerm (M.Map Name Name))) $
           "m2" <~ Maps.insert (var "v") (var "v2") (Maps.insert (var "v2") (var "v2") (var "m" :: TypedTerm (M.Map Name Name))) $
           Core.termLambda $ Core.lambda (var "v2") (var "domain")
             (var "f" @@ var "recurse" @@ var "m2" @@ var "body"))
@@ -429,14 +437,37 @@ unshadowVariables = define "unshadowVariables" $
         (Core.termLambda $ Core.lambda (var "v") (var "domain")
           (var "f" @@ var "recurse" @@ Maps.insert (var "v") (var "v") (var "m" :: TypedTerm (M.Map Name Name)) @@ var "body")),
     _Term_let>>: "lt" ~>
-      -- Register all let-bound names as in-scope (identity mapping) so inner lambdas know about them
-      "m2" <~ Lists.foldl ("acc" ~> "b" ~>
+      -- Resolve each let-bound name against the enclosing scope: if it's already bound (by an
+      -- outer lambda or let), rename it to a fresh name (like the lambda case); otherwise register
+      -- it as in-scope via an identity mapping. Collect the resolved names alongside the extended
+      -- map so the bindings themselves (declarations, not just use sites) can be renamed below --
+      -- #799: the previous version only extended the map and deferred to generic recursion, which
+      -- never rewrites a Binding's own name, so a shadowing let-bound declaration was left
+      -- unrenamed while its use sites (and any inner shadowing descendant) resolved through the map
+      -- as if it had been renamed, silently decoupling declarations from their use sites.
+      "resolveBinding" <~ ("acc" ~> "b" ~>
         "bname" <~ Core.bindingName (var "b") $
-        Logic.ifElse (Maps.member (var "bname") (var "acc" :: TypedTerm (M.Map Name Name)))
-          (var "acc")
-          (Maps.insert (var "bname") (var "bname") (var "acc" :: TypedTerm (M.Map Name Name))))
-        (var "m") (Core.letBindings $ var "lt") $
-      var "recurse" @@ var "m2" @@ var "term",
+        "resolved" <~ Pairs.first (var "acc") $
+        "mapSoFar" <~ Pairs.second (var "acc") $
+        Logic.ifElse (Maps.member (var "bname") (var "mapSoFar" :: TypedTerm (M.Map Name Name)))
+          ("v2" <~ freshNameAvoiding @@ var "bname" @@ Sets.fromList (Maps.keys (var "mapSoFar" :: TypedTerm (M.Map Name Name))) $
+            "extended" <~ Maps.insert (var "bname") (var "v2") (Maps.insert (var "v2") (var "v2") (var "mapSoFar" :: TypedTerm (M.Map Name Name))) $
+            pair (Lists.cons (var "v2") (var "resolved")) (var "extended"))
+          ("extended" <~ Maps.insert (var "bname") (var "bname") (var "mapSoFar" :: TypedTerm (M.Map Name Name)) $
+            pair (Lists.cons (var "bname") (var "resolved")) (var "extended"))) $
+      "resolvedState" <~ Lists.foldl (var "resolveBinding") (pair (list ([] :: [TypedTerm Name])) (var "m")) (Core.letBindings $ var "lt") $
+      "resolvedNames" <~ Lists.reverse (Pairs.first (var "resolvedState")) $
+      "m2" <~ Pairs.second (var "resolvedState") $
+      "renameBinding" <~ ("p" ~>
+        "b" <~ Pairs.first (var "p") $
+        "newName" <~ Pairs.second (var "p") $
+        Core.binding (var "newName")
+          (var "f" @@ var "recurse" @@ var "m2" @@ (Core.bindingTerm $ var "b"))
+          (Core.bindingTypeScheme $ var "b")) $
+      "newBindings" <~ Lists.map (var "renameBinding") (Lists.zip (Core.letBindings $ var "lt") (var "resolvedNames")) $
+      Core.termLet $ Core.let_
+        (var "newBindings")
+        (var "f" @@ var "recurse" @@ var "m2" @@ (Core.letBody $ var "lt")),
     _Term_variable>>: "v" ~> Core.termVariable $ optCases (Maps.lookup (var "v") (var "m" :: TypedTerm (M.Map Name Name)))
       (var "v")
       ("renamed" ~> var "renamed")]) $

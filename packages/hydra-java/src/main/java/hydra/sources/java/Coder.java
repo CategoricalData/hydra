@@ -1041,18 +1041,23 @@ public class Coder {
                         var("unq"))));
 
     public static final Def bindingsToStatements = def("bindingsToStatements")
-        .lam("env").lam("bindings").lam("cx").lam("g0")
+        .lam("env").lam("bindings").lam("body0").lam("cx").lam("g0")
         .to(() ->
                 let(
                     binds(    field("aliases",
                         proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
     field("g",
                         proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env")),
-    field("flatBindings",
+    field("dedupResult",
                         apply(
-                            ref(Coder.dedupBindings),
+                            ref(Coder.dedupBindingsWithBody),
                             proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases"),
-                            apply(ref(Coder.flattenBindings), var("bindings")))),
+                            apply(ref(Coder.flattenBindings), var("bindings")),
+                            var("body0"))),
+    field("flatBindings",
+                        Pairs.first(var("dedupResult"))),
+    field("body",
+                        Pairs.second(var("dedupResult"))),
     field("gExtended",
                         hydra.core.dsl.Scoping.extendGraphForLet(
                             lambda(
@@ -1186,7 +1191,7 @@ public class Coder {
                             field(JavaEnvironment.GRAPH, var("gExtended"))))),
                     Logic.ifElse(
                         Lists.isEmpty(var("bindings")),
-                        right(pair(list(), var("envExtended"))),
+                        right(pair(pair(list(), var("envExtended")), var("body"))),
                         Eithers.bind(
                             Eithers.mapList(
                                 lambda("names",
@@ -1226,7 +1231,7 @@ public class Coder {
                                                             var("decls")))))))),
                                 var("sorted")),
                             lambda("groups",
-                                right(pair(Lists.concat(var("groups")), var("envExtended"))))))));
+                                right(pair(pair(Lists.concat(var("groups")), var("envExtended")), var("body"))))))));
 
     public static final Def boundTypeVariables = def("boundTypeVariables")
         .lam("typ")
@@ -3920,11 +3925,18 @@ public class Coder {
                                                         nothing())))))),
                                 nothing())))));
 
-    public static final Def dedupBindings = def("dedupBindings")
-        .lam("inScope").lam("bs")
+    // #799: dedupBindings renames a colliding binding's declaration and substitutes the rename into
+    // every subsequent sibling binding's term, but a Let's own body is not one of those siblings --
+    // bindingsToStatements historically left the body untouched, so a declaration renamed to avoid a
+    // Java-level collision (introduced by bindingsToStatements' own topological reordering exposing
+    // bindings to scopes they weren't lexically nested in at the Hydra term level) silently diverged
+    // from its use sites in the body. dedupBindingsWithBody threads the same substitution into the
+    // body term, returning (renamed bindings, renamed body) instead of just the bindings.
+    public static final Def dedupBindingsWithBody = def("dedupBindingsWithBody")
+        .lam("inScope").lam("bs").lam("body")
         .to(() ->
                 Optionals.withDefault(
-                    list(),
+                    pair(list(), var("body")),
                     Optionals.map(
                         lambda("p",
                             let(
@@ -3960,26 +3972,40 @@ public class Coder {
                                                             Binding.TYPE_SCHEME,
                                                             proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b2")))),
                                                 var("rest"))),
-                                        Lists.cons(
-                                            record(Binding.TYPE_,
-                                                field(Binding.NAME, var("newName")),
-                                                field(
-                                                    Binding.TERM,
-                                                    proj(Binding.TYPE_, Binding.TERM, "b")),
-                                                field(
-                                                    Binding.TYPE_SCHEME,
-                                                    proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"))),
+                                        field("body2",
+                                            hydra.core.dsl.Variables.substituteVariables(
+                                                var("subst"),
+                                                var("body"))),
+                                        field("recResult",
                                             apply(
-                                                ref(Coder.dedupBindings),
+                                                ref(Coder.dedupBindingsWithBody),
                                                 Sets.insert(var("newName"), var("inScope")),
-                                                var("rest2")))),
-                                    Lists.cons(
-                                        var("b"),
+                                                var("rest2"),
+                                                var("body2"))),
+                                        pair(
+                                            Lists.cons(
+                                                record(Binding.TYPE_,
+                                                    field(Binding.NAME, var("newName")),
+                                                    field(
+                                                        Binding.TERM,
+                                                        proj(Binding.TYPE_, Binding.TERM, "b")),
+                                                    field(
+                                                        Binding.TYPE_SCHEME,
+                                                        proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"))),
+                                                Pairs.first(var("recResult"))),
+                                            Pairs.second(var("recResult")))),
+                                    let(
+                                        "recResult",
                                         apply(
-                                            ref(Coder.dedupBindings),
+                                            ref(Coder.dedupBindingsWithBody),
                                             Sets.insert(var("name"), var("inScope")),
-                                            var("rest")))))),
+                                            var("rest"),
+                                            var("body")),
+                                        pair(
+                                            Lists.cons(var("b"), Pairs.first(var("recResult"))),
+                                            Pairs.second(var("recResult"))))))),
                         Lists.uncons(var("bs")))));
+
 
     public static final Def detectAccumulatorUnification = def("detectAccumulatorUnification")
         .lam("doms").lam("cod").lam("tparams")
@@ -5145,19 +5171,22 @@ public class Coder {
                                                     ref(Coder.bindingsToStatements),
                                                     var("env3"),
                                                     var("bindings"),
+                                                    var("innerBody"),
                                                     var("cx"),
                                                     var("g")),
                                                 lambda("bindResult",
                                                     let(
                                                         field("bindingStmts",
-                                                            Pairs.first(var("bindResult"))),
+                                                            Pairs.first(Pairs.first(var("bindResult")))),
                                                         field("env4",
+                                                            Pairs.second(Pairs.first(var("bindResult")))),
+                                                        field("innerBody2",
                                                             Pairs.second(var("bindResult"))),
                                                         Eithers.bind(
                                                             apply(
                                                                 ref(Coder.encodeTerm),
                                                                 var("env4"),
-                                                                var("innerBody"),
+                                                                var("innerBody2"),
                                                                 var("cx"),
                                                                 var("g")),
                                                             lambda("jbody",
@@ -6465,25 +6494,29 @@ public class Coder {
                                                                 ref(Coder.bindingsToStatements),
                                                                 var("env2WithTypeParams"),
                                                                 var("bindings"),
+                                                                var("body"),
                                                                 var("cx"),
                                                                 var("g")),
                                                             lambda("bindResult",
                                                                 let(
                                                                     field("bindingStmts",
                                                                         Pairs.first(
-                                                                            var("bindResult"))),
+                                                                            Pairs.first(var("bindResult")))),
                                                                     field("env3",
+                                                                        Pairs.second(
+                                                                            Pairs.first(var("bindResult")))),
+                                                                    field("body2",
                                                                         Pairs.second(
                                                                             var("bindResult"))),
                                                                     Eithers.bind(
                                                                         Logic.ifElse(
                                                                             Maps.isEmpty(
                                                                                 var("overgenSubst")),
-                                                                            right(var("body")),
+                                                                            right(var("body2")),
                                                                             apply(
                                                                                 ref(Coder.applyOvergenSubstToTermAnnotations),
                                                                                 var("overgenSubst"),
-                                                                                var("body"),
+                                                                                var("body2"),
                                                                                 var("cx"),
                                                                                 var("g"))),
                                                                         lambda("body'",
@@ -6970,13 +7003,16 @@ public class Coder {
                                                 ref(Coder.bindingsToStatements),
                                                 var("env"),
                                                 var("bindings"),
+                                                var("body"),
                                                 var("cx"),
                                                 var("g")),
                                             lambda("bindResult",
                                                 let(
                                                     field("bindingStmts",
-                                                        Pairs.first(var("bindResult"))),
+                                                        Pairs.first(Pairs.first(var("bindResult")))),
                                                     field("env2",
+                                                        Pairs.second(Pairs.first(var("bindResult")))),
+                                                    field("body2",
                                                         Pairs.second(var("bindResult"))),
                                                     Eithers.bind(
                                                         apply(
@@ -6984,7 +7020,7 @@ public class Coder {
                                                             var("env2"),
                                                             var("anns"),
                                                             list(),
-                                                            var("body"),
+                                                            var("body2"),
                                                             var("cx"),
                                                             var("g")),
                                                         lambda("jbody",
@@ -8525,6 +8561,7 @@ public class Coder {
                                                                                                                                                 ref(Coder.bindingsToStatements),
                                                                                                                                                 var("env4"),
                                                                                                                                                 var("bindings"),
+                                                                                                                                                var("innerBody"),
                                                                                                                                                 var("cx"),
                                                                                                                                                 var("g")),
                                                                                                                                             lambda(
@@ -8532,17 +8569,21 @@ public class Coder {
                                                                                                                                                 let(
                                                                                                                                                     field(
                                                                                                                                                         "bindingStmts",
-                                                                                                                                                        Pairs.first(
-                                                                                                                                                            var("bindResult"))),
+                                                                                                                                                        Pairs.first(Pairs.first(
+                                                                                                                                                            var("bindResult")))),
                                                                                                                                                     field(
                                                                                                                                                         "env5",
+                                                                                                                                                        Pairs.second(Pairs.first(
+                                                                                                                                                            var("bindResult")))),
+                                                                                                                                                    field(
+                                                                                                                                                        "innerBody2",
                                                                                                                                                         Pairs.second(
                                                                                                                                                             var("bindResult"))),
                                                                                                                                                     Eithers.bind(
                                                                                                                                                         apply(
                                                                                                                                                             ref(Coder.encodeTerm),
                                                                                                                                                             var("env5"),
-                                                                                                                                                            var("innerBody"),
+                                                                                                                                                            var("innerBody2"),
                                                                                                                                                             var("cx"),
                                                                                                                                                             var("g")),
                                                                                                                                                         lambda(
@@ -8688,13 +8729,16 @@ public class Coder {
                                                 ref(Coder.bindingsToStatements),
                                                 var("env"),
                                                 var("letBindings"),
+                                                var("letBody"),
                                                 var("cx"),
                                                 var("g")),
                                             lambda("bindResult",
                                                 let(
                                                     field("letStmts",
-                                                        Pairs.first(var("bindResult"))),
+                                                        Pairs.first(Pairs.first(var("bindResult")))),
                                                     field("envAfterLet",
+                                                        Pairs.second(Pairs.first(var("bindResult")))),
+                                                    field("letBody2",
                                                         Pairs.second(var("bindResult"))),
                                                     Eithers.bind(
                                                         apply(
@@ -8705,7 +8749,7 @@ public class Coder {
                                                             var("tparams"),
                                                             var("tcoVarRenames"),
                                                             var("tcoDepth"),
-                                                            var("letBody"),
+                                                            var("letBody2"),
                                                             var("cx"),
                                                             var("g")),
                                                         lambda("tcoBodyStmts",
@@ -11132,19 +11176,22 @@ public class Coder {
                                         ref(Coder.bindingsToStatements),
                                         var("env2"),
                                         var("bindings"),
+                                        var("innerBody"),
                                         var("cx"),
                                         var("g")),
                                     lambda("bindResult",
                                         let(
                                             field("bindingStmts",
-                                                Pairs.first(var("bindResult"))),
+                                                Pairs.first(Pairs.first(var("bindResult")))),
                                             field("env3",
+                                                Pairs.second(Pairs.first(var("bindResult")))),
+                                            field("innerBody2",
                                                 Pairs.second(var("bindResult"))),
                                             Eithers.bind(
                                                 apply(
                                                     ref(Coder.encodeTerm),
                                                     var("env3"),
-                                                    var("innerBody"),
+                                                    var("innerBody2"),
                                                     var("cx"),
                                                     var("g")),
                                                 lambda("jret",
@@ -13833,21 +13880,25 @@ public class Coder {
                                                                 ref(Coder.bindingsToStatements),
                                                                 var("env4"),
                                                                 var("bindings"),
+                                                                var("innerBody"),
                                                                 var("cx"),
                                                                 var("g")),
                                                             lambda("bindResult",
                                                                 let(
                                                                     field("bindingStmts",
-                                                                        Pairs.first(
-                                                                            var("bindResult"))),
+                                                                        Pairs.first(Pairs.first(
+                                                                            var("bindResult")))),
                                                                     field("env5",
+                                                                        Pairs.second(Pairs.first(
+                                                                            var("bindResult")))),
+                                                                    field("innerBody2",
                                                                         Pairs.second(
                                                                             var("bindResult"))),
                                                                     Eithers.bind(
                                                                         apply(
                                                                             ref(Coder.encodeTerm),
                                                                             var("env5"),
-                                                                            var("innerBody"),
+                                                                            var("innerBody2"),
                                                                             var("cx"),
                                                                             var("g")),
                                                                         lambda("jret",
@@ -14080,7 +14131,7 @@ public class Coder {
             declarationForRecordType_prime,
             declarationForUnionType,
             decodeTypeFromTerm,
-            dedupBindings,
+            dedupBindingsWithBody,
             detectAccumulatorUnification,
             directRefSubstitution,
             directRefSubstitution_processGroup,

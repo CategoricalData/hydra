@@ -213,8 +213,41 @@ analyzeFunctionTermWithGather = define "analyzeFunctionTermWithGather" $
            @@ var "body")
         (analyzeFunctionTermWithFinish @@ var "cx" @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t"),
     _Term_let>>: "lt" ~>
-      "newBindings" <~ Core.letBindings (var "lt") $
-      "body" <~ Core.letBody (var "lt") $
+      -- #799: a Let's own bindings may collide (by name) with bindings/args already
+      -- accumulated from an enclosing lambda/let peeled off earlier in this same walk --
+      -- not because the source term actually shadows (unshadowVariables already rules
+      -- that out at the whole-term level), but because this function flattens originally
+      -- separate, sibling-in-time Lets into one shared list that bindingsToStatements later
+      -- renders into a single flat Java scope. Resolve each new binding name against the
+      -- names already in scope (accumulated bindings + args), renaming on collision and
+      -- substituting the rename into the remaining new bindings AND the body -- the same
+      -- declaration-vs-use-site consistency that unshadowVariables and dedupBindingsWithBody
+      -- already enforce at their own levels. Without this, a renamed declaration here
+      -- reaches bindingsToStatements already decoupled from its own use sites in body,
+      -- which only sees the raw (unrenamed) Let body via Core.letBody.
+      "inScope0" <~ Sets.union (Sets.fromList (var "args")) (Sets.fromList (Lists.map (reify Core.bindingName) (var "bindings"))) $
+      "resolveBinding" <~ ("acc" ~> "b" ~>
+        "bname" <~ Core.bindingName (var "b") $
+        "resolvedSoFar" <~ Pairs.first (var "acc") $
+        "scopeSoFar" <~ Pairs.second (var "acc") $
+        Logic.ifElse (Sets.member (var "bname") (var "scopeSoFar" :: TypedTerm (S.Set Name)))
+          ("bname2" <~ Variables.freshNameAvoiding @@ var "bname" @@ var "scopeSoFar" $
+            pair
+              (Lists.cons (pair (var "bname") (var "bname2")) (var "resolvedSoFar"))
+              (Sets.insert (var "bname2") (var "scopeSoFar")))
+          (pair
+            (var "resolvedSoFar")
+            (Sets.insert (var "bname") (var "scopeSoFar" :: TypedTerm (S.Set Name))))) $
+      "resolveState" <~ Lists.foldl (var "resolveBinding") (pair (list ([] :: [TypedTerm (Name, Name)])) (var "inScope0")) (Core.letBindings $ var "lt") $
+      "renames" <~ Maps.fromList (Pairs.first (var "resolveState")) $
+      "renameBindingName" <~ ("b" ~> Core.binding
+        (Optionals.withDefault (Core.bindingName $ var "b") (Maps.lookup (Core.bindingName $ var "b") (var "renames" :: TypedTerm (M.Map Name Name))))
+        (Variables.substituteVariables @@ var "renames" @@ (Core.bindingTerm $ var "b"))
+        (Core.bindingTypeScheme $ var "b")) $
+      "newBindings" <~ Lists.map (var "renameBindingName") (Core.letBindings $ var "lt") $
+      "body" <~ Logic.ifElse (Maps.isEmpty (var "renames" :: TypedTerm (M.Map Name Name)))
+        (Core.letBody $ var "lt")
+        (Variables.substituteVariables @@ var "renames" @@ (Core.letBody $ var "lt")) $
       "newEnv" <~ (var "setTC" @@ (Scoping.extendGraphForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
       analyzeFunctionTermWithGather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ boolean False @@ var "newEnv"
