@@ -76,6 +76,7 @@ import qualified Hydra.Sources.Test.Sorting as Sorting
 import qualified Hydra.Sources.Test.Strip as Strip
 import qualified Hydra.Sources.Test.Subterms as Subterms
 import qualified Hydra.Sources.Test.Substitution as Substitution
+import qualified Hydra.Sources.Test.Syntax as Syntax
 import qualified Hydra.Sources.Test.Unification as Unification
 import qualified Hydra.Sources.Test.Validate.All as ValidateAll
 import qualified Hydra.Sources.Test.Validate.Core as ValidateCore
@@ -151,6 +152,7 @@ otherPairs = [
   (Strip.ns, Strip.allTests),
   (Subterms.ns, Subterms.allTests),
   (Substitution.ns, Substitution.allTests),
+  (Syntax.ns, Syntax.allTests),
   (Unification.ns, Unification.allTests),
   (ValidateAll.ns, ValidateAll.allTests),
   (Variables.ns, Variables.allTests)]
@@ -175,7 +177,7 @@ testSuiteModules =
    JsonParser.module_, JsonRoundtrip.module_, JsonWriter.module_, JsonYaml.module_,
    Names.module_,
    Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
-   Strip.module_, Subterms.module_, Variables.module_, Ordering.module_,
+   Strip.module_, Subterms.module_, Syntax.module_, Variables.module_, Ordering.module_,
    -- Checking tests (including sub-modules)
    CheckingAll.module_,
    CheckingAdvanced.module_, CheckingAlgebraicTypes.module_, CheckingCollections.module_,

@@ -57,7 +57,6 @@ import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Parse.Core as ParseCore
 import qualified Hydra.Sources.Kernel.Terms.Parsers as P
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 
 
 -- NOTE: mirrors Print/Packaging.hs (see that file's own header note). Uses the parser-combinator
@@ -82,7 +81,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, ParseCore.ns, P.ns, Rewriting.ns, Scoping.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, ParseCore.ns, P.ns, Rewriting.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Parsers for hydra.core.packaging types")}
   where
    definitions = [
@@ -90,6 +89,7 @@ module_ = Module {
      toDefinition expandAliasedName,
      toDefinition expandAliasesInDefinition,
      toDefinition expandAliasesInTerm,
+     toDefinition expandAliasesInTermSignature,
      toDefinition expandAliasesInType,
      toDefinition identifier,
      toDefinition importDecl,
@@ -298,6 +298,23 @@ expandAliasesInType = define "expandAliasesInType" $
       _Type_variable>>: "n" ~> Core.typeVariable (expandAliasedName @@ (var "aliases" :: TypedTerm (M.Map String ModuleName)) @@ var "n")]) $
   Rewriting.rewriteType @@ var "rewrite" @@ var "typ0"
 
+-- | Expand every aliased name reference inside a term signature's parameter and result types,
+-- per the given alias table. Operates directly on TermSignature (not via a TypeScheme bridge),
+-- preserving parameter names, descriptions, and isLazy flags (#800) exactly.
+expandAliasesInTermSignature :: TypedTermDefinition (M.Map String ModuleName -> TermSignature -> TermSignature)
+expandAliasesInTermSignature = define "expandAliasesInTermSignature" $
+  doc "Expand every aliased name reference inside a term signature's parameter and result types" $
+  "aliases" ~> "sig" ~>
+  "expand" <~ (expandAliasesInType @@ (var "aliases" :: TypedTerm (M.Map String ModuleName))) $
+  Typing.termSignature
+    (Typing.termSignatureTypeParameters $ var "sig")
+    (Lists.map
+      ("p" ~> Typing.parameter (Typing.parameterName $ var "p") (Typing.parameterDescription $ var "p")
+        (var "expand" @@ (Typing.parameterType $ var "p")) (Typing.parameterIsLazy $ var "p"))
+      (Typing.termSignatureParameters $ var "sig"))
+    ("r" <~ Typing.termSignatureResult (var "sig") $
+      Typing.result (Typing.resultDescription $ var "r") (var "expand" @@ (Typing.resultType $ var "r")))
+
 -- | Expand every aliased name reference inside a definition's body/signature, per the given
 -- alias table. Dispatches by definition kind, rewriting only the parts that can carry name
 -- references (a type definition's body, a term definition's body and signature, a primitive
@@ -315,12 +332,12 @@ expandAliasesInDefinition = define "expandAliasesInDefinition" $
       (var "expandScheme" @@ (Packaging.typeDefinitionBody $ var "td"))),
     _Definition_term>>: "td" ~> Packaging.definitionTerm (Packaging.termDefinition
       (Packaging.termDefinitionName $ var "td") (Packaging.termDefinitionMetadata $ var "td")
-      (Optionals.map ("sig" ~> Scoping.typeSchemeToTermSignature @@ (var "expandScheme" @@ (Scoping.termSignatureToTypeScheme @@ var "sig")))
+      (Optionals.map (expandAliasesInTermSignature @@ (var "aliases" :: TypedTerm (M.Map String ModuleName)))
         (Packaging.termDefinitionSignature $ var "td"))
       (expandAliasesInTerm @@ (var "aliases" :: TypedTerm (M.Map String ModuleName)) @@ (Packaging.termDefinitionBody $ var "td"))),
     _Definition_primitive>>: "pd" ~> Packaging.definitionPrimitive (Packaging.primitiveDefinition
       (Packaging.primitiveDefinitionName $ var "pd") (Packaging.primitiveDefinitionMetadata $ var "pd")
-      (Scoping.typeSchemeToTermSignature @@ (var "expandScheme" @@ (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ var "pd"))))
+      (expandAliasesInTermSignature @@ (var "aliases" :: TypedTerm (M.Map String ModuleName)) @@ (Packaging.primitiveDefinitionSignature $ var "pd"))
       (Packaging.primitiveDefinitionIsPure $ var "pd") (Packaging.primitiveDefinitionIsTotal $ var "pd")
       (Optionals.map (expandAliasesInTerm @@ (var "aliases" :: TypedTerm (M.Map String ModuleName))) (Packaging.primitiveDefinitionDefaultImplementation $ var "pd")))]
 
@@ -337,31 +354,30 @@ typeDefinitionParser = define "typeDefinitionParser" $
             (Packaging.typeDefinition (qualifyLocalName @@ var "modName" @@ var "local") nothing (var "ts"))) @@
           (asTerm ParseCore.typeScheme))))
 
--- | Parse a term definition: 'term name [: typeScheme] = term'. The optional ': typeScheme'
--- ascription becomes the TermDefinition's signature (converted via
--- 'Scoping.typeSchemeToTermSignature', the inverse of the printer's own
--- 'termSignatureToTypeScheme' call). No doc-comment parsing -- metadata is always Nothing.
+-- | Parse a term definition: 'term name [: termSignature] = term'. The optional ': termSignature'
+-- ascription becomes the TermDefinition's signature, parsed directly as a TermSignature (not via
+-- a TypeScheme bridge) so that a parameter's 'lazy' keyword (#800) round-trips. No doc-comment
+-- parsing -- metadata is always Nothing.
 termDefinitionParser :: TypedTermDefinition (ModuleName -> Parser Definition)
 termDefinitionParser = define "termDefinitionParser" $
-  doc "Parse a term definition: 'term name [: typeScheme] = term'" $
+  doc "Parse a term definition: 'term name [: termSignature] = term'" $
   "modName" ~>
   P.bind @@ (keyword @@ string "term") @@ (constant $
     P.bind @@ identifier @@ ("local" ~>
-      P.bind @@ (P.optional @@ ascribedScheme) @@ ("msig" ~>
+      P.bind @@ (P.optional @@ ascribedSignature) @@ ("msig" ~>
         P.bind @@ (keyword @@ string "=") @@ (constant $
           P.map @@ ("t" ~> Packaging.definitionTerm
               (Packaging.termDefinition (qualifyLocalName @@ var "modName" @@ var "local") nothing (var "msig") (var "t"))) @@
             (asTerm ParseCore.term)))))
   where
-    ascribedScheme =
-      P.bind @@ (keyword @@ string ":") @@ (constant $
-        P.map @@ ("ts" ~> Scoping.typeSchemeToTermSignature @@ var "ts") @@ (asTerm ParseCore.typeScheme))
+    ascribedSignature =
+      P.bind @@ (keyword @@ string ":") @@ (constant $ asTerm ParseCore.termSignature)
 
--- | Parse a primitive definition: '[impure] [partial] primitive name : typeScheme [= term]'.
+-- | Parse a primitive definition: '[impure] [partial] primitive name : termSignature [= term]'.
 -- No doc-comment parsing -- metadata is always Nothing.
 primitiveDefinitionParser :: TypedTermDefinition (ModuleName -> Parser Definition)
 primitiveDefinitionParser = define "primitiveDefinitionParser" $
-  doc "Parse a primitive definition: '[impure] [partial] primitive name : typeScheme [= term]'" $
+  doc "Parse a primitive definition: '[impure] [partial] primitive name : termSignature [= term]'" $
   "modName" ~>
   P.bind @@ primitiveModifiers @@ ("mods" ~>
     "isPure" <~ Pairs.first (var "mods") $
@@ -369,10 +385,10 @@ primitiveDefinitionParser = define "primitiveDefinitionParser" $
     P.bind @@ (keyword @@ string "primitive") @@ (constant $
       P.bind @@ identifier @@ ("local" ~>
         P.bind @@ (keyword @@ string ":") @@ (constant $
-          P.bind @@ (asTerm ParseCore.typeScheme) @@ ("ts" ~>
+          P.bind @@ (asTerm ParseCore.termSignature) @@ ("sig" ~>
             P.map @@ ("mimpl" ~> Packaging.definitionPrimitive
                 (Packaging.primitiveDefinition (qualifyLocalName @@ var "modName" @@ var "local") nothing
-                  (Scoping.typeSchemeToTermSignature @@ var "ts") (var "isPure") (var "isTotal") (var "mimpl"))) @@
+                  (var "sig") (var "isPure") (var "isTotal") (var "mimpl"))) @@
               (P.optional @@ defaultImpl))))))
   where
     defaultImpl = P.bind @@ (keyword @@ string "=") @@ (constant $ asTerm ParseCore.term)

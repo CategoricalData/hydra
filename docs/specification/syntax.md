@@ -153,7 +153,7 @@ To use one as a name, write it backticked.
 
 ```
 _ bigint binary boolean case decimal effect either false float32 float64
-forall given in inject int8 int16 int32 int64 left let list map none optional
+forall given in inject int8 int16 int32 int64 lazy left let list map none optional
 project record right set string true uint8 uint16 uint32 uint64 union unit
 unwrap void wrap NaN Infinity
 ```
@@ -275,6 +275,20 @@ typeScheme    ::= '∀' [binderName (',' binderName)*] '.'
                                                -- '∀.t' is a monomorphic scheme
 schemeConstraints ::= '(' constraint (',' constraint)* ')'
 constraint    ::= className typeVariable       -- e.g. ordering a
+
+-- Term signatures (hydra.core.typing.TermSignature; distinct from typeScheme):
+-- the notation for a term or primitive definition's ': <signature>' ascription.
+-- 'lazy' marks an individual parameter's Parameter.isLazy; it is NOT part of the
+-- general 'type' production above and has no meaning outside this position
+-- (#800) -- a bare type (a let-binding's ascription, a type alias, etc.) never
+-- carries 'lazy'.
+termSignature ::= '∀' [binderName (',' binderName)*] '.'
+                  [schemeConstraints '⇒'] signatureArrow
+signatureArrow ::= [lazy] type '→' signatureArrow | type
+                                               -- right-associative; 'lazy' may
+                                               -- prefix any parameter position
+                                               -- (all but the last, which is
+                                               -- the signature's result type)
 ```
 
 Notes:
@@ -288,6 +302,9 @@ Notes:
 - Separators: bindings bind with `:=`; fields and map entries use `=`; type fields use `:`.
 - The kinded binder form `forall (f : * → *). τ` is reserved for the kind system (#226)
   and is not yet produced by any printer.
+- `termSignature`'s header (`∀` ... `⇒`) is identical to `typeScheme`'s; only the body differs,
+  since a `TermSignature`'s parameters (unlike a bare `type`'s function-arrow chain) can each
+  carry a laziness flag. Example: `primitive ifElse : ∀t. boolean → lazy t → lazy t → t`.
 
 ## 4. Canonical form
 
