@@ -1,0 +1,57 @@
+## Primitives in the hydra.core.lib.hashing module.
+##
+## Digests are computed with SHA-256 as defined in FIPS 180-4; results are deterministic and bit-identical across hosts.
+## Hashing is pure: both primitives are ordinary total functions of their input bytes, and hashing never fails.
+module hydra.core.lib.hashing
+
+import hydra.core.paths
+import hydra.core.ast
+import hydra.core.coders
+import hydra.core.model
+import hydra.core.diff
+import hydra.core.docs
+import hydra.core.error.checking
+import hydra.core.error.model
+import hydra.core.error.file
+import hydra.core.error.packaging
+import hydra.core.error.system
+import hydra.core.errors
+import hydra.core.file
+import hydra.core.graph
+import hydra.core.json.model
+import hydra.core.markdown
+import hydra.core.packaging
+import hydra.core.parsing
+import hydra.core.query
+import hydra.core.regex
+import hydra.core.relational
+import hydra.core.system
+import hydra.core.tabular
+import hydra.core.testing
+import hydra.core.time
+import hydra.core.topology
+import hydra.core.typed
+import hydra.core.typing
+import hydra.core.util
+import hydra.core.validation
+import hydra.core.variants
+
+## Compute the SHA-256 digest of a sequence of bytes.
+##
+## sha256(bytes) returns the 32-byte SHA-256 digest of bytes. Total: hashing is pure and never fails.
+## Pairs with hydra.core.lib.files.readFile, which returns raw bytes, to hash file contents.
+##
+## @availableSince 0.17
+## @requirement matchesKnownAnswerVectors sha256 returns the correct 32-byte SHA-256 digest for known-answer input vectors, including the empty byte sequence.
+primitive sha256 : ∀.binary → binary
+
+## Compute the SHA-256 digest of a sequence of bytes as a lowercase hex string.
+##
+## sha256Hex(bytes) returns the SHA-256 digest of bytes as a 64-character lowercase hexadecimal string. Equivalent to hex-encoding the output of sha256. Total: hashing is pure and never fails.
+## sha256Hex(bytes) is the lowercase hexadecimal rendering of the 32 bytes of sha256(bytes); this equivalence is the specification.
+## Pairs with hydra.core.lib.files.readFile, which returns raw bytes, to hash file contents.
+##
+## @availableSince 0.17
+## @requirement matchesKnownAnswerVectors sha256Hex returns the correct 64-character lowercase hexadecimal SHA-256 digest for known-answer input vectors, including the empty byte sequence and a multi-block input.
+## @requirement handlesPaddingBoundariesCorrectly sha256Hex returns the correct digest at every SHA-256 message-padding boundary length (55 bytes, the largest message whose padding still fits one 64-byte block; 56 bytes, which forces a second block; and 63 and 64 bytes, straddling the block size), guarding against a padding-logic regression that would only surface at these specific lengths.
+primitive sha256Hex : ∀.binary → string

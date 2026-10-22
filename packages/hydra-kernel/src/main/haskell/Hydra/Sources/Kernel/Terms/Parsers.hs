@@ -82,7 +82,8 @@ module_ = Module {
      toDefinition sepBy,
      toDefinition sepBy1,
      toDefinition some,
-     toDefinition string_]
+     toDefinition string_,
+     toDefinition try]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -307,3 +308,24 @@ string_ = define "string" $
         (Parsing.parseResultFailure (Parsing.parseError
           (string "expected: " ++ var "str")
           (var "input"))))
+
+-- | Make a parser's failure backtrackable regardless of how much input it consumed before
+-- failing. 'alt'/'optional' only fall back to an alternative when the failed branch consumed NO
+-- input (see 'alt's own doc comment) -- which is the right default (it keeps error messages
+-- precise and avoids silently swallowing real failures elsewhere), but it is wrong for a genuinely
+-- ambiguous prefix shared by two different productions, where some of the losing production must
+-- be read before the ambiguity resolves (e.g. a typeScheme's optional '(constraints) ⇒' block
+-- shares its leading '(' with a parenthesized function type -- see Parse/Core.hs's 'typeScheme').
+-- 'try p' wraps exactly those few, deliberate sites: on failure, it discards how far 'p' actually
+-- got and reports the original input as the (unconsumed) remainder, so a surrounding
+-- 'alt'/'optional' can backtrack to the other alternative as if 'p' had never been attempted.
+try :: TypedTermDefinition (Parser a -> Parser a)
+try = define "try" $
+  doc "Make a parser's failure backtrackable, rewinding to the original input on failure" $
+  "p" ~>
+  "parse" <~ ("input" ~> match _ParseResult (unwrap _Parser @@ (var "p") @@ (var "input")) Nothing [
+    _ParseResult_success>>: "s" ~>
+      Parsing.parseResultSuccess (var "s"),
+    _ParseResult_failure>>: "e" ~>
+      Parsing.parseResultFailure (Parsing.parseError (Parsing.parseErrorMessage $ var "e") (var "input"))]) $
+  Parsing.parser (var "parse")

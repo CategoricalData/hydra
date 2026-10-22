@@ -152,11 +152,19 @@ The following bare names are reserved in all positions.
 To use one as a name, write it backticked.
 
 ```
-_ bigint binary boolean case decimal effect either false float32 float64
-forall given in inject int8 int16 int32 int64 left let list map none optional
-project record right set string true uint8 uint16 uint32 uint64 union unit
-unwrap void wrap NaN Infinity
+_ as bigint binary boolean case decimal effect either false float32 float64
+forall from given impure in import inject int8 int16 int32 int64 left let
+list map module none optional partial primitive project record right set
+string term true type uint8 uint16 uint32 uint64 union unit unwrap void wrap
+NaN Infinity
 ```
+
+This includes the module-grammar keywords of §6 (`module`, `import`, `as`, `from`, `type`, `term`,
+`primitive`, `impure`, `partial`) alongside the term/type grammar's own keywords (§3) — reserving
+both sets globally, rather than only at each keyword's own syntactic position, keeps the grammar's
+adjacency-based type/term application (§3) unambiguous at every definition boundary: a definition's
+trailing type or term would otherwise be indistinguishable from an application that consumes the
+next definition's keyword as an argument.
 
 Validation SHOULD reject reserved names in positions that quoting cannot rescue,
 in particular `_` as a user field or variant name (it would collide with the case-default wildcard).

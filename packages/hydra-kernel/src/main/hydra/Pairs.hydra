@@ -1,0 +1,73 @@
+## Primitives in the hydra.core.lib.pairs module.
+##
+## Pairs: the two-component product type. This module provides the two projections, the bifunctor map, and the constructor.
+module hydra.core.lib.pairs
+
+import hydra.core.paths
+import hydra.core.ast
+import hydra.core.coders
+import hydra.core.model
+import hydra.core.diff
+import hydra.core.docs
+import hydra.core.error.checking
+import hydra.core.error.model
+import hydra.core.error.file
+import hydra.core.error.packaging
+import hydra.core.error.system
+import hydra.core.errors
+import hydra.core.file
+import hydra.core.graph
+import hydra.core.json.model
+import hydra.core.markdown
+import hydra.core.packaging
+import hydra.core.parsing
+import hydra.core.query
+import hydra.core.regex
+import hydra.core.relational
+import hydra.core.system
+import hydra.core.tabular
+import hydra.core.testing
+import hydra.core.time
+import hydra.core.topology
+import hydra.core.typed
+import hydra.core.typing
+import hydra.core.util
+import hydra.core.validation
+import hydra.core.variants
+
+## Map over both elements of a pair.
+##
+## bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.
+## Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d).
+##
+## @availableSince 0.15
+## @requirement mapsBothElementsIndependently bimap applies the first function to the pair's first element and the second function to the pair's second element, producing a new pair of the two results, for any element and function types.
+primitive bimap : ∀a,b,c,d.(a → c) → (b → d) → (a, b) → (c, d) = λf.λg.λp.(f (hydra.core.lib.pairs.first p), g (hydra.core.lib.pairs.second p))
+
+## Get the first element of a pair.
+##
+## first(p) returns the first component of the pair p.
+## Total. Corresponds to Haskell's fst :: (a, b) -> a.
+##
+## @availableSince 0.15
+## @requirement returnsFirstComponent first returns the first component of the pair unchanged, for any element type and value.
+primitive first : ∀a,b.(a, b) → a
+
+## Construct a pair from two values.
+##
+## pair(x, y) returns the pair (x, y).
+## The type-free pair constructor, useful point-free (e.g. zipWith(pair, xs, ys)).
+## Total. Corresponds to Haskell's (,) :: a -> b -> (a, b).
+##
+## @availableSince 0.17.6
+## @requirement constructsFromTwoValues pair x y constructs the pair (x, y), preserving both components exactly as given, for any value.
+primitive pair : ∀a,b.a → b → (a, b)
+
+## Get the second element of a pair.
+##
+## second(p) returns the second component of the pair p.
+## Total. Corresponds to Haskell's snd :: (a, b) -> b.
+##
+## @availableSince 0.15
+## @requirement returnsSecondComponent second returns the second component of the pair unchanged, for any element type and value.
+primitive second : ∀a,b.(a, b) → b
