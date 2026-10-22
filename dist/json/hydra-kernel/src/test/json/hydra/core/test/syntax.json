@@ -1,0 +1,1512 @@
+{
+  "name": "hydra.core.test.syntax",
+  "metadata": {"description": "Round-trip test cases for the textual syntax", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.test.testGraph"},
+    {"module": "hydra.core.print.model"},
+    {"module": "hydra.core.parse.core"},
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.core.test.syntax.allTests",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.testing.TestGroup"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "record": {
+                "typeName": "hydra.core.testing.TestGroup",
+                "fields": [
+                  {"name": "name", "term": {"literal": {"string": "textual syntax"}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                  {"name": "subgroups", "term": {"list": [{"variable": "hydra.core.test.syntax.lazyParameterRoundtripGroup"}]}},
+                  {
+                    "name": "cases",
+                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestCaseWithMetadata"}}}}]}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Test cases for the textual syntax (#497/#710)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.test.syntax.lazyParameterRoundtripGroup",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.testing.TestGroup"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "record": {
+                "typeName": "hydra.core.testing.TestGroup",
+                "fields": [
+                  {"name": "name", "term": {"literal": {"string": "lazy parameter syntax"}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                  {
+                    "name": "subgroups",
+                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestGroup"}}}},
+                  {
+                    "name": "cases",
+                    "term": {
+                      "list": [
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "ifElse: lazy then/else branches print with 'lazy' keyword"}}},
+                              {
+                                "name": "case",
+                                "term": {
+                                  "inject": {
+                                    "typeName": "hydra.core.testing.TestCase",
+                                    "field": {
+                                      "name": "universal",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.testing.UniversalTestCase",
+                                          "fields": [
+                                            {
+                                              "name": "actual",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {"variable": "hydra.core.print.model.termSignature"},
+                                                      "argument": {
+                                                        "record": {
+                                                          "typeName": "hydra.core.typing.TermSignature",
+                                                          "fields": [
+                                                            {
+                                                              "name": "typeParameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.TypeParameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}},
+                                                                        {
+                                                                          "name": "constraints",
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}}]}},
+                                                            {
+                                                              "name": "parameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "p"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {
+                                                                                "name": "literal",
+                                                                                "term": {"inject": {"typeName": "hydra.core.model.LiteralType", "field": {"name": "boolean", "term": "unit"}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "t"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": true}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "f"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": true}}}]}}]}},
+                                                            {
+                                                              "name": "result",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.typing.Result",
+                                                                  "fields": [
+                                                                    {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                    {
+                                                                      "name": "type",
+                                                                      "term": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.model.Type",
+                                                                          "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}}]}}}]}}}}}}},
+                                            {
+                                              "name": "expected",
+                                              "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "∀x.boolean → lazy x → lazy x → x"}}}}}]}}}}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                              {
+                                "name": "provisions",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "ifElse: lazy then/else branches round-trip"}}},
+                              {
+                                "name": "case",
+                                "term": {
+                                  "inject": {
+                                    "typeName": "hydra.core.testing.TestCase",
+                                    "field": {
+                                      "name": "universal",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.testing.UniversalTestCase",
+                                          "fields": [
+                                            {
+                                              "name": "actual",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "application": {
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.eithers.either"}, "type": {"literal": "string"}}},
+                                                                      "type": {"variable": "hydra.core.typing.TermSignature"}}},
+                                                                  "type": {"literal": "string"}}},
+                                                              "argument": {"lambda": {"parameter": "e", "domain": {"literal": "string"}, "body": {"variable": "e"}}}}},
+                                                          "argument": {
+                                                            "lambda": {
+                                                              "parameter": "sig2",
+                                                              "domain": {"variable": "hydra.core.typing.TermSignature"},
+                                                              "body": {"application": {"function": {"variable": "hydra.core.print.model.termSignature"}, "argument": {"variable": "sig2"}}}}}}},
+                                                      "argument": {
+                                                        "application": {
+                                                          "function": {"variable": "hydra.core.parse.core.parseTermSignature"},
+                                                          "argument": {
+                                                            "application": {
+                                                              "function": {"variable": "hydra.core.print.model.termSignature"},
+                                                              "argument": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.typing.TermSignature",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "typeParameters",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.TypeParameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}},
+                                                                                {
+                                                                                  "name": "constraints",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}}]}},
+                                                                    {
+                                                                      "name": "parameters",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.Parameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "p"}}}}},
+                                                                                {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                                {
+                                                                                  "name": "type",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "typeName": "hydra.core.model.Type",
+                                                                                      "field": {
+                                                                                        "name": "literal",
+                                                                                        "term": {"inject": {"typeName": "hydra.core.model.LiteralType", "field": {"name": "boolean", "term": "unit"}}}}}}},
+                                                                                {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.Parameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "t"}}}}},
+                                                                                {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                                {
+                                                                                  "name": "type",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "typeName": "hydra.core.model.Type",
+                                                                                      "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}},
+                                                                                {"name": "isLazy", "term": {"literal": {"boolean": true}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.Parameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "f"}}}}},
+                                                                                {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                                {
+                                                                                  "name": "type",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "typeName": "hydra.core.model.Type",
+                                                                                      "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}},
+                                                                                {"name": "isLazy", "term": {"literal": {"boolean": true}}}]}}]}},
+                                                                    {
+                                                                      "name": "result",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.typing.Result",
+                                                                          "fields": [
+                                                                            {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                            {
+                                                                              "name": "type",
+                                                                              "term": {
+                                                                                "inject": {
+                                                                                  "typeName": "hydra.core.model.Type",
+                                                                                  "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}}]}}}]}}}}}}}}}}},
+                                            {
+                                              "name": "expected",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {"variable": "hydra.core.print.model.termSignature"},
+                                                      "argument": {
+                                                        "record": {
+                                                          "typeName": "hydra.core.typing.TermSignature",
+                                                          "fields": [
+                                                            {
+                                                              "name": "typeParameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.TypeParameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}},
+                                                                        {
+                                                                          "name": "constraints",
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}}]}},
+                                                            {
+                                                              "name": "parameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "p"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {
+                                                                                "name": "literal",
+                                                                                "term": {"inject": {"typeName": "hydra.core.model.LiteralType", "field": {"name": "boolean", "term": "unit"}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "t"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": true}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "f"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": true}}}]}}]}},
+                                                            {
+                                                              "name": "result",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.typing.Result",
+                                                                  "fields": [
+                                                                    {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                    {
+                                                                      "name": "type",
+                                                                      "term": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.model.Type",
+                                                                          "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}}]}}}]}}}}}}}]}}}}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                              {
+                                "name": "provisions",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "findWithDefault: lazy default value prints with 'lazy' keyword"}}},
+                              {
+                                "name": "case",
+                                "term": {
+                                  "inject": {
+                                    "typeName": "hydra.core.testing.TestCase",
+                                    "field": {
+                                      "name": "universal",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.testing.UniversalTestCase",
+                                          "fields": [
+                                            {
+                                              "name": "actual",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {"variable": "hydra.core.print.model.termSignature"},
+                                                      "argument": {
+                                                        "record": {
+                                                          "typeName": "hydra.core.typing.TermSignature",
+                                                          "fields": [
+                                                            {
+                                                              "name": "typeParameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.TypeParameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "k"}}}}},
+                                                                        {
+                                                                          "name": "constraints",
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.TypeParameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "v"}}}}},
+                                                                        {
+                                                                          "name": "constraints",
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}}]}},
+                                                            {
+                                                              "name": "parameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "def"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "v"}}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": true}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "key"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "k"}}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "m"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {
+                                                                                "name": "application",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "typeName": "hydra.core.model.ApplicationType",
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "function",
+                                                                                        "term": {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.model.Type",
+                                                                                            "field": {
+                                                                                              "name": "application",
+                                                                                              "term": {
+                                                                                                "record": {
+                                                                                                  "typeName": "hydra.core.model.ApplicationType",
+                                                                                                  "fields": [
+                                                                                                    {
+                                                                                                      "name": "function",
+                                                                                                      "term": {
+                                                                                                        "inject": {
+                                                                                                          "typeName": "hydra.core.model.Type",
+                                                                                                          "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "Map"}}}}}}}},
+                                                                                                    {
+                                                                                                      "name": "argument",
+                                                                                                      "term": {
+                                                                                                        "inject": {
+                                                                                                          "typeName": "hydra.core.model.Type",
+                                                                                                          "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "k"}}}}}}}}]}}}}}},
+                                                                                      {
+                                                                                        "name": "argument",
+                                                                                        "term": {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.model.Type",
+                                                                                            "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "v"}}}}}}}}]}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}}]}},
+                                                            {
+                                                              "name": "result",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.typing.Result",
+                                                                  "fields": [
+                                                                    {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                    {
+                                                                      "name": "type",
+                                                                      "term": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.model.Type",
+                                                                          "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "v"}}}}}}}}]}}}]}}}}}}},
+                                            {
+                                              "name": "expected",
+                                              "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "∀k,v.lazy v → k → Map k v → v"}}}}}]}}}}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                              {
+                                "name": "provisions",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "findWithDefault: lazy default value round-trips"}}},
+                              {
+                                "name": "case",
+                                "term": {
+                                  "inject": {
+                                    "typeName": "hydra.core.testing.TestCase",
+                                    "field": {
+                                      "name": "universal",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.testing.UniversalTestCase",
+                                          "fields": [
+                                            {
+                                              "name": "actual",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "application": {
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.eithers.either"}, "type": {"literal": "string"}}},
+                                                                      "type": {"variable": "hydra.core.typing.TermSignature"}}},
+                                                                  "type": {"literal": "string"}}},
+                                                              "argument": {"lambda": {"parameter": "e", "domain": {"literal": "string"}, "body": {"variable": "e"}}}}},
+                                                          "argument": {
+                                                            "lambda": {
+                                                              "parameter": "sig2",
+                                                              "domain": {"variable": "hydra.core.typing.TermSignature"},
+                                                              "body": {"application": {"function": {"variable": "hydra.core.print.model.termSignature"}, "argument": {"variable": "sig2"}}}}}}},
+                                                      "argument": {
+                                                        "application": {
+                                                          "function": {"variable": "hydra.core.parse.core.parseTermSignature"},
+                                                          "argument": {
+                                                            "application": {
+                                                              "function": {"variable": "hydra.core.print.model.termSignature"},
+                                                              "argument": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.typing.TermSignature",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "typeParameters",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.TypeParameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "k"}}}}},
+                                                                                {
+                                                                                  "name": "constraints",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.TypeParameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "v"}}}}},
+                                                                                {
+                                                                                  "name": "constraints",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}}]}},
+                                                                    {
+                                                                      "name": "parameters",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.Parameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "def"}}}}},
+                                                                                {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                                {
+                                                                                  "name": "type",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "typeName": "hydra.core.model.Type",
+                                                                                      "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "v"}}}}}}}},
+                                                                                {"name": "isLazy", "term": {"literal": {"boolean": true}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.Parameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "key"}}}}},
+                                                                                {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                                {
+                                                                                  "name": "type",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "typeName": "hydra.core.model.Type",
+                                                                                      "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "k"}}}}}}}},
+                                                                                {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.Parameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "m"}}}}},
+                                                                                {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                                {
+                                                                                  "name": "type",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "typeName": "hydra.core.model.Type",
+                                                                                      "field": {
+                                                                                        "name": "application",
+                                                                                        "term": {
+                                                                                          "record": {
+                                                                                            "typeName": "hydra.core.model.ApplicationType",
+                                                                                            "fields": [
+                                                                                              {
+                                                                                                "name": "function",
+                                                                                                "term": {
+                                                                                                  "inject": {
+                                                                                                    "typeName": "hydra.core.model.Type",
+                                                                                                    "field": {
+                                                                                                      "name": "application",
+                                                                                                      "term": {
+                                                                                                        "record": {
+                                                                                                          "typeName": "hydra.core.model.ApplicationType",
+                                                                                                          "fields": [
+                                                                                                            {
+                                                                                                              "name": "function",
+                                                                                                              "term": {
+                                                                                                                "inject": {
+                                                                                                                  "typeName": "hydra.core.model.Type",
+                                                                                                                  "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "Map"}}}}}}}},
+                                                                                                            {
+                                                                                                              "name": "argument",
+                                                                                                              "term": {
+                                                                                                                "inject": {
+                                                                                                                  "typeName": "hydra.core.model.Type",
+                                                                                                                  "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "k"}}}}}}}}]}}}}}},
+                                                                                              {
+                                                                                                "name": "argument",
+                                                                                                "term": {
+                                                                                                  "inject": {
+                                                                                                    "typeName": "hydra.core.model.Type",
+                                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "v"}}}}}}}}]}}}}}},
+                                                                                {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}}]}},
+                                                                    {
+                                                                      "name": "result",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.typing.Result",
+                                                                          "fields": [
+                                                                            {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                            {
+                                                                              "name": "type",
+                                                                              "term": {
+                                                                                "inject": {
+                                                                                  "typeName": "hydra.core.model.Type",
+                                                                                  "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "v"}}}}}}}}]}}}]}}}}}}}}}}},
+                                            {
+                                              "name": "expected",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {"variable": "hydra.core.print.model.termSignature"},
+                                                      "argument": {
+                                                        "record": {
+                                                          "typeName": "hydra.core.typing.TermSignature",
+                                                          "fields": [
+                                                            {
+                                                              "name": "typeParameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.TypeParameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "k"}}}}},
+                                                                        {
+                                                                          "name": "constraints",
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.TypeParameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "v"}}}}},
+                                                                        {
+                                                                          "name": "constraints",
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}}]}},
+                                                            {
+                                                              "name": "parameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "def"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "v"}}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": true}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "key"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "k"}}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "m"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {
+                                                                                "name": "application",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "typeName": "hydra.core.model.ApplicationType",
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "function",
+                                                                                        "term": {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.model.Type",
+                                                                                            "field": {
+                                                                                              "name": "application",
+                                                                                              "term": {
+                                                                                                "record": {
+                                                                                                  "typeName": "hydra.core.model.ApplicationType",
+                                                                                                  "fields": [
+                                                                                                    {
+                                                                                                      "name": "function",
+                                                                                                      "term": {
+                                                                                                        "inject": {
+                                                                                                          "typeName": "hydra.core.model.Type",
+                                                                                                          "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "Map"}}}}}}}},
+                                                                                                    {
+                                                                                                      "name": "argument",
+                                                                                                      "term": {
+                                                                                                        "inject": {
+                                                                                                          "typeName": "hydra.core.model.Type",
+                                                                                                          "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "k"}}}}}}}}]}}}}}},
+                                                                                      {
+                                                                                        "name": "argument",
+                                                                                        "term": {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.model.Type",
+                                                                                            "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "v"}}}}}}}}]}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}}]}},
+                                                            {
+                                                              "name": "result",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.typing.Result",
+                                                                  "fields": [
+                                                                    {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                    {
+                                                                      "name": "type",
+                                                                      "term": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.model.Type",
+                                                                          "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "v"}}}}}}}}]}}}]}}}}}}}]}}}}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                              {
+                                "name": "provisions",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "optionals.match: lazy default value prints with 'lazy' keyword"}}},
+                              {
+                                "name": "case",
+                                "term": {
+                                  "inject": {
+                                    "typeName": "hydra.core.testing.TestCase",
+                                    "field": {
+                                      "name": "universal",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.testing.UniversalTestCase",
+                                          "fields": [
+                                            {
+                                              "name": "actual",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {"variable": "hydra.core.print.model.termSignature"},
+                                                      "argument": {
+                                                        "record": {
+                                                          "typeName": "hydra.core.typing.TermSignature",
+                                                          "fields": [
+                                                            {
+                                                              "name": "typeParameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.TypeParameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}},
+                                                                        {
+                                                                          "name": "constraints",
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.TypeParameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "y"}}}}},
+                                                                        {
+                                                                          "name": "constraints",
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}}]}},
+                                                            {
+                                                              "name": "parameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "m"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {
+                                                                                "name": "optional",
+                                                                                "term": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.model.Type",
+                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "def"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "y"}}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": true}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "f"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {
+                                                                                "name": "function",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "typeName": "hydra.core.model.FunctionType",
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "domain",
+                                                                                        "term": {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.model.Type",
+                                                                                            "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}},
+                                                                                      {
+                                                                                        "name": "codomain",
+                                                                                        "term": {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.model.Type",
+                                                                                            "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "y"}}}}}}}}]}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}}]}},
+                                                            {
+                                                              "name": "result",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.typing.Result",
+                                                                  "fields": [
+                                                                    {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                    {
+                                                                      "name": "type",
+                                                                      "term": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.model.Type",
+                                                                          "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "y"}}}}}}}}]}}}]}}}}}}},
+                                            {
+                                              "name": "expected",
+                                              "term": {
+                                                "lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "∀x,y.optional<x> → lazy y → (x → y) → y"}}}}}]}}}}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                              {
+                                "name": "provisions",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "optionals.match: lazy default value round-trips"}}},
+                              {
+                                "name": "case",
+                                "term": {
+                                  "inject": {
+                                    "typeName": "hydra.core.testing.TestCase",
+                                    "field": {
+                                      "name": "universal",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.testing.UniversalTestCase",
+                                          "fields": [
+                                            {
+                                              "name": "actual",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "application": {
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.eithers.either"}, "type": {"literal": "string"}}},
+                                                                      "type": {"variable": "hydra.core.typing.TermSignature"}}},
+                                                                  "type": {"literal": "string"}}},
+                                                              "argument": {"lambda": {"parameter": "e", "domain": {"literal": "string"}, "body": {"variable": "e"}}}}},
+                                                          "argument": {
+                                                            "lambda": {
+                                                              "parameter": "sig2",
+                                                              "domain": {"variable": "hydra.core.typing.TermSignature"},
+                                                              "body": {"application": {"function": {"variable": "hydra.core.print.model.termSignature"}, "argument": {"variable": "sig2"}}}}}}},
+                                                      "argument": {
+                                                        "application": {
+                                                          "function": {"variable": "hydra.core.parse.core.parseTermSignature"},
+                                                          "argument": {
+                                                            "application": {
+                                                              "function": {"variable": "hydra.core.print.model.termSignature"},
+                                                              "argument": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.typing.TermSignature",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "typeParameters",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.TypeParameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}},
+                                                                                {
+                                                                                  "name": "constraints",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.TypeParameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "y"}}}}},
+                                                                                {
+                                                                                  "name": "constraints",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}}]}},
+                                                                    {
+                                                                      "name": "parameters",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.Parameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "m"}}}}},
+                                                                                {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                                {
+                                                                                  "name": "type",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "typeName": "hydra.core.model.Type",
+                                                                                      "field": {
+                                                                                        "name": "optional",
+                                                                                        "term": {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.model.Type",
+                                                                                            "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}}}}},
+                                                                                {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.Parameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "def"}}}}},
+                                                                                {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                                {
+                                                                                  "name": "type",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "typeName": "hydra.core.model.Type",
+                                                                                      "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "y"}}}}}}}},
+                                                                                {"name": "isLazy", "term": {"literal": {"boolean": true}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.Parameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "f"}}}}},
+                                                                                {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                                {
+                                                                                  "name": "type",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "typeName": "hydra.core.model.Type",
+                                                                                      "field": {
+                                                                                        "name": "function",
+                                                                                        "term": {
+                                                                                          "record": {
+                                                                                            "typeName": "hydra.core.model.FunctionType",
+                                                                                            "fields": [
+                                                                                              {
+                                                                                                "name": "domain",
+                                                                                                "term": {
+                                                                                                  "inject": {
+                                                                                                    "typeName": "hydra.core.model.Type",
+                                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}},
+                                                                                              {
+                                                                                                "name": "codomain",
+                                                                                                "term": {
+                                                                                                  "inject": {
+                                                                                                    "typeName": "hydra.core.model.Type",
+                                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "y"}}}}}}}}]}}}}}},
+                                                                                {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}}]}},
+                                                                    {
+                                                                      "name": "result",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.typing.Result",
+                                                                          "fields": [
+                                                                            {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                            {
+                                                                              "name": "type",
+                                                                              "term": {
+                                                                                "inject": {
+                                                                                  "typeName": "hydra.core.model.Type",
+                                                                                  "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "y"}}}}}}}}]}}}]}}}}}}}}}}},
+                                            {
+                                              "name": "expected",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {"variable": "hydra.core.print.model.termSignature"},
+                                                      "argument": {
+                                                        "record": {
+                                                          "typeName": "hydra.core.typing.TermSignature",
+                                                          "fields": [
+                                                            {
+                                                              "name": "typeParameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.TypeParameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}},
+                                                                        {
+                                                                          "name": "constraints",
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.TypeParameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "y"}}}}},
+                                                                        {
+                                                                          "name": "constraints",
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}}]}},
+                                                            {
+                                                              "name": "parameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "m"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {
+                                                                                "name": "optional",
+                                                                                "term": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.model.Type",
+                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "def"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "y"}}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": true}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "f"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {
+                                                                                "name": "function",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "typeName": "hydra.core.model.FunctionType",
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "domain",
+                                                                                        "term": {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.model.Type",
+                                                                                            "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}},
+                                                                                      {
+                                                                                        "name": "codomain",
+                                                                                        "term": {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.model.Type",
+                                                                                            "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "y"}}}}}}}}]}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}}]}},
+                                                            {
+                                                              "name": "result",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.typing.Result",
+                                                                  "fields": [
+                                                                    {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                    {
+                                                                      "name": "type",
+                                                                      "term": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.model.Type",
+                                                                          "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "y"}}}}}}}}]}}}]}}}}}}}]}}}}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                              {
+                                "name": "provisions",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "no lazy parameters: no 'lazy' keyword appears"}}},
+                              {
+                                "name": "case",
+                                "term": {
+                                  "inject": {
+                                    "typeName": "hydra.core.testing.TestCase",
+                                    "field": {
+                                      "name": "universal",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.testing.UniversalTestCase",
+                                          "fields": [
+                                            {
+                                              "name": "actual",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {"variable": "hydra.core.print.model.termSignature"},
+                                                      "argument": {
+                                                        "record": {
+                                                          "typeName": "hydra.core.typing.TermSignature",
+                                                          "fields": [
+                                                            {
+                                                              "name": "typeParameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.TypeParameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}},
+                                                                        {
+                                                                          "name": "constraints",
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}}]}},
+                                                            {
+                                                              "name": "parameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "p"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {
+                                                                                "name": "literal",
+                                                                                "term": {"inject": {"typeName": "hydra.core.model.LiteralType", "field": {"name": "boolean", "term": "unit"}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "q"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}}]}},
+                                                            {
+                                                              "name": "result",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.typing.Result",
+                                                                  "fields": [
+                                                                    {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                    {
+                                                                      "name": "type",
+                                                                      "term": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.model.Type",
+                                                                          "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}}]}}}]}}}}}}},
+                                            {
+                                              "name": "expected",
+                                              "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "∀x.boolean → x → x"}}}}}]}}}}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                              {
+                                "name": "provisions",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "no lazy parameters: round-trips cleanly"}}},
+                              {
+                                "name": "case",
+                                "term": {
+                                  "inject": {
+                                    "typeName": "hydra.core.testing.TestCase",
+                                    "field": {
+                                      "name": "universal",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.testing.UniversalTestCase",
+                                          "fields": [
+                                            {
+                                              "name": "actual",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "application": {
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.eithers.either"}, "type": {"literal": "string"}}},
+                                                                      "type": {"variable": "hydra.core.typing.TermSignature"}}},
+                                                                  "type": {"literal": "string"}}},
+                                                              "argument": {"lambda": {"parameter": "e", "domain": {"literal": "string"}, "body": {"variable": "e"}}}}},
+                                                          "argument": {
+                                                            "lambda": {
+                                                              "parameter": "sig2",
+                                                              "domain": {"variable": "hydra.core.typing.TermSignature"},
+                                                              "body": {"application": {"function": {"variable": "hydra.core.print.model.termSignature"}, "argument": {"variable": "sig2"}}}}}}},
+                                                      "argument": {
+                                                        "application": {
+                                                          "function": {"variable": "hydra.core.parse.core.parseTermSignature"},
+                                                          "argument": {
+                                                            "application": {
+                                                              "function": {"variable": "hydra.core.print.model.termSignature"},
+                                                              "argument": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.typing.TermSignature",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "typeParameters",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.TypeParameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}},
+                                                                                {
+                                                                                  "name": "constraints",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}}]}},
+                                                                    {
+                                                                      "name": "parameters",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.Parameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "p"}}}}},
+                                                                                {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                                {
+                                                                                  "name": "type",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "typeName": "hydra.core.model.Type",
+                                                                                      "field": {
+                                                                                        "name": "literal",
+                                                                                        "term": {"inject": {"typeName": "hydra.core.model.LiteralType", "field": {"name": "boolean", "term": "unit"}}}}}}},
+                                                                                {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.typing.Parameter",
+                                                                              "fields": [
+                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "q"}}}}},
+                                                                                {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                                {
+                                                                                  "name": "type",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "typeName": "hydra.core.model.Type",
+                                                                                      "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}},
+                                                                                {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}}]}},
+                                                                    {
+                                                                      "name": "result",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.typing.Result",
+                                                                          "fields": [
+                                                                            {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                            {
+                                                                              "name": "type",
+                                                                              "term": {
+                                                                                "inject": {
+                                                                                  "typeName": "hydra.core.model.Type",
+                                                                                  "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}}]}}}]}}}}}}}}}}},
+                                            {
+                                              "name": "expected",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {"variable": "hydra.core.print.model.termSignature"},
+                                                      "argument": {
+                                                        "record": {
+                                                          "typeName": "hydra.core.typing.TermSignature",
+                                                          "fields": [
+                                                            {
+                                                              "name": "typeParameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.TypeParameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}},
+                                                                        {
+                                                                          "name": "constraints",
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.TypeClassConstraint"}}}}]}}]}},
+                                                            {
+                                                              "name": "parameters",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "p"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {
+                                                                                "name": "literal",
+                                                                                "term": {"inject": {"typeName": "hydra.core.model.LiteralType", "field": {"name": "boolean", "term": "unit"}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}},
+                                                                  {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.typing.Parameter",
+                                                                      "fields": [
+                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "q"}}}}},
+                                                                        {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                        {
+                                                                          "name": "type",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.model.Type",
+                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}},
+                                                                        {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}}]}},
+                                                            {
+                                                              "name": "result",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.typing.Result",
+                                                                  "fields": [
+                                                                    {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                                    {
+                                                                      "name": "type",
+                                                                      "term": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.model.Type",
+                                                                          "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "x"}}}}}}}}]}}}]}}}}}}}]}}}}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                              {
+                                "name": "provisions",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Round-trip and exact-print test cases for lazy parameter syntax (#800)"}}}]}}}}}]}
