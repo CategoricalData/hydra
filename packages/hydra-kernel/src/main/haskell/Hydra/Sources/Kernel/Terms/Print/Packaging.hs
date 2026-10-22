@@ -57,7 +57,6 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Sources.Kernel.Terms.Analysis as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
-import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 
 
 -- NOTE: this module is a work-in-progress skeleton for #710. All syntax-design questions were
@@ -77,7 +76,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Analysis.ns, PrintCore.ns, Names.ns, Scoping.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Analysis.ns, PrintCore.ns, Names.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "String representations of hydra.core.packaging types")}
   where
    definitions = [
@@ -352,7 +351,7 @@ termDefinition = define "termDefinition" $
   -- is needed around it below.
   "sigStr" <~ Optionals.match (Packaging.termDefinitionSignature $ var "td")
     (string " ")
-    ("sig" ~> Strings.concat $ list [string " : ", PrintCore.typeScheme @@ (Scoping.termSignatureToTypeScheme @@ var "sig"), string " "]) $
+    ("sig" ~> Strings.concat $ list [string " : ", PrintCore.termSignature @@ var "sig", string " "]) $
   "bodyStr" <~ (PrintCore.term @@ (Packaging.termDefinitionBody $ var "td")) $
   withDefinitionDoc @@ (Packaging.termDefinitionMetadata $ var "td") @@
     (Strings.concat $ list [string "term ", var "localName", var "sigStr", string "= ", var "bodyStr"])
@@ -379,7 +378,7 @@ primitiveDefinitionDoc = define "primitiveDefinition" $
   "partialStr" <~ Logic.ifElse (Packaging.primitiveDefinitionIsTotal $ var "pd")
     (string "")
     (string "partial ") $
-  "sigStr" <~ (PrintCore.typeScheme @@ (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ var "pd"))) $
+  "sigStr" <~ (PrintCore.termSignature @@ (Packaging.primitiveDefinitionSignature $ var "pd")) $
   "implStr" <~ Optionals.match (Packaging.primitiveDefinitionDefaultImplementation $ var "pd")
     (string "")
     ("impl" ~> Strings.concat $ list [string " = ", PrintCore.term @@ var "impl"]) $

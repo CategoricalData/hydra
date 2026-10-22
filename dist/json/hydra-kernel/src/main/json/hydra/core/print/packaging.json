@@ -5,7 +5,6 @@
     {"module": "hydra.core.analysis"},
     {"module": "hydra.core.print.model"},
     {"module": "hydra.core.names"},
-    {"module": "hydra.core.scoping"},
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
     {"module": "hydra.core.coders"},
@@ -2174,14 +2173,11 @@
                                     "name": "sigStr",
                                     "term": {
                                       "application": {
-                                        "function": {"variable": "hydra.core.print.model.typeScheme"},
+                                        "function": {"variable": "hydra.core.print.model.termSignature"},
                                         "argument": {
                                           "application": {
-                                            "function": {"variable": "hydra.core.scoping.termSignatureToTypeScheme"},
-                                            "argument": {
-                                              "application": {
-                                                "function": {"project": {"typeName": "hydra.core.packaging.PrimitiveDefinition", "fieldName": "signature"}},
-                                                "argument": {"variable": "pd"}}}}}}},
+                                            "function": {"project": {"typeName": "hydra.core.packaging.PrimitiveDefinition", "fieldName": "signature"}},
+                                            "argument": {"variable": "pd"}}}}},
                                     "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                 "body": {
                                   "let": {
@@ -2296,11 +2292,7 @@
                                         "argument": {
                                           "list": [
                                             {"literal": {"string": " : "}},
-                                            {
-                                              "application": {
-                                                "function": {"variable": "hydra.core.print.model.typeScheme"},
-                                                "argument": {
-                                                  "application": {"function": {"variable": "hydra.core.scoping.termSignatureToTypeScheme"}, "argument": {"variable": "sig"}}}}},
+                                            {"application": {"function": {"variable": "hydra.core.print.model.termSignature"}, "argument": {"variable": "sig"}}},
                                             {"literal": {"string": " "}}]}}}}}}},
                             "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                         "body": {

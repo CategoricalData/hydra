@@ -97,6 +97,7 @@ module_ = Module {
      toDefinition (set_ :: TypedTermDefinition ((Int -> String) -> S.Set Int -> String)),
      toDefinition term,
      toDefinition termAtPrec,
+     toDefinition termSignature,
      toDefinition toHex2,
      toDefinition type_,
      toDefinition typeAtPrec,
@@ -768,3 +769,46 @@ typeScheme = define "typeScheme" $
         Strings.join (string ", ") (var "tc"),
         string ") ⇒ "]),
     type_ @@ var "body"]
+
+-- | Show a term signature as a string: like typeScheme's '∀vars.[constraints⇒]' header, but the
+-- arrow chain is printed from the signature's own parameters/result rather than from a bare
+-- Type body, so that a parameter's 'lazy' keyword (Parameter.isLazy; #800) can be emitted. This
+-- is the printer counterpart used at term/primitive-definition sites (Print/Packaging.hs),
+-- deliberately bypassing the lossy TermSignature->TypeScheme bridge (Scoping.hs), which erases
+-- isLazy -- that bridge remains correct for contexts with no TermSignature at all (e.g. a
+-- let-binding's ':(typeScheme)' ascription).
+termSignature :: TypedTermDefinition (TermSignature -> String)
+termSignature = define "termSignature" $
+  doc "Show a term signature as a string, preserving each parameter's lazy marking" $
+  "sig" ~>
+  "typeParams" <~ Typing.termSignatureTypeParameters (var "sig") $
+  "params" <~ Typing.termSignatureParameters (var "sig") $
+  "result" <~ Typing.termSignatureResult (var "sig") $
+  "varNames" <~ Lists.map ("tp" ~> printBinderName @@ (Typing.typeParameterName $ var "tp")) (var "typeParams") $
+  "constraintClassName" <~ ("c" ~>
+    cases _TypeClassConstraint Nothing [
+      _TypeClassConstraint_simple>>: "n" ~> Core.unName (var "n")] @@ (var "c")) $
+  "toConstraintPairsForParam" <~ ("tp" ~> "v" <~ Typing.typeParameterName (var "tp") $
+    Lists.map ("c" ~> Strings.concat $ list [
+      var "constraintClassName" @@ var "c", string " ", Core.unName (var "v")]) $
+    Lists.sortBy (var "constraintClassName") (Typing.typeParameterConstraints $ var "tp")) $
+  "tc" <~ Lists.concat (Lists.map (var "toConstraintPairsForParam") (var "typeParams")) $
+  "paramStr" <~ ("p" ~>
+    "tyStr" <~ typeAtPrec @@ int32 precApp @@ (Typing.parameterType $ var "p") $
+    Logic.ifElse (Typing.parameterIsLazy $ var "p")
+      (Strings.concat2 (string "lazy ") (var "tyStr"))
+      (var "tyStr")) $
+  "paramStrs" <~ Lists.map (var "paramStr") (var "params") $
+  "resultStr" <~ typeAtPrec @@ int32 precApp @@ (Typing.resultType $ var "result") $
+  "bodyStr" <~ Strings.join (string " → ") (Lists.concat2 (var "paramStrs") (list [var "resultStr"])) $
+  Strings.concat $ list [
+    string "∀",
+    Strings.join (string ",") (var "varNames"),
+    string ".",
+    Logic.ifElse (Lists.isEmpty $ var "tc")
+      (string "")
+      (Strings.concat $ list [
+        string "(",
+        Strings.join (string ", ") (var "tc"),
+        string ") ⇒ "]),
+    var "bodyStr"]

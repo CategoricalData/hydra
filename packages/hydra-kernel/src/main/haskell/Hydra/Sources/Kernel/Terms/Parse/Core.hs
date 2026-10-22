@@ -113,6 +113,7 @@ module_ = Module {
      toDefinition numericLit,
      toDefinition optionalTerm,
      toDefinition parseTerm,
+     toDefinition parseTermSignature,
      toDefinition parseType,
      toDefinition parseTypeScheme,
      toDefinition postfixTerm,
@@ -125,6 +126,8 @@ module_ = Module {
      toDefinition termField,
      toDefinition termFields,
      toDefinition termKeyword,
+     toDefinition termSignature,
+     toDefinition termSignatureArrowChain,
      toDefinition topTerm,
      toDefinition topType,
      toDefinition type_,
@@ -993,6 +996,113 @@ typeScheme = define "typeScheme" $
     -- into one TypeVariableConstraints with a multi-element classes set.
     toConstraintsEntry = "p" ~> pair (Pairs.second (var "p"))
       (Core.typeVariableConstraints (Sets.fromList (list [Core.typeClassConstraintSimple (Pairs.first (var "p"))])))
+
+-- | Parse one element of a term-signature arrow chain: an optional 'lazy' keyword (#800) followed
+-- by an application-level type, yielding (isLazy, type).
+lazyTypeApplicationLevel :: TypedTerm (Parser (Bool, Type))
+lazyTypeApplicationLevel =
+  P.bind @@ (P.optional @@ (typeKeyword @@ string "lazy")) @@ ("mlazy" ~>
+    P.map @@ ("t" ~> pair (Optionals.isGiven $ var "mlazy") (var "t")) @@ (asTerm typeApplicationLevel))
+
+-- | Parse the arrow chain of a term signature (syntax.md #3 precedence 3, signature variant):
+-- one '[lazy] application-level type', then if '→' follows, recurse for the right side --
+-- right-associative, mirroring typeFunctionLevel, but gathering (isLazy, type) parameter pairs
+-- in REVERSE order alongside the final result type, instead of building a Type, since only a
+-- term signature's Parameters (not Type.function) can carry a laziness flag (#800). Mirrors the
+-- "peel" accumulator in Scoping.typeSchemeToTermSignature, but built directly during parsing
+-- (right-associative recursion naturally yields the result type first, then each domain
+-- prepended as recursion unwinds) rather than by peeling a pre-built Type afterward.
+-- NOTE: must be a registered 'define'd TypedTermDefinition, NOT a bare TypedTerm, because it
+-- self-references recursively below. AsTerm's instance for TypedTermDefinition converts the
+-- self-reference to a lightweight TermVariable; the instance for a bare TypedTerm is 'id', which
+-- would embed this term's entire (self-referencing) body inline at the recursive call site --
+-- an infinite Haskell-level term graph that overflows the stack the instant anything traverses it
+-- (discovered via #800's own stack-space-overflow failure in checkUndeclaredDependencies).
+termSignatureArrowChain :: TypedTermDefinition (Parser ([(Bool, Type)], Type))
+termSignatureArrowChain = define "termSignatureArrowChain" $
+  doc "Parse the arrow chain of a term signature, gathering (isLazy, type) parameter pairs alongside the final result type" $
+  P.bind @@ (asTerm lazyTypeApplicationLevel) @@ ("dom" ~>
+    P.alt
+      @@ (P.bind @@ (lexeme @@ (P.char @@ int32 8594)) @@ (constant $    -- '→'
+            P.map @@ ("rest" ~> pair
+                (Lists.cons (var "dom") (Pairs.first (var "rest" :: TypedTerm ([(Bool, Type)], Type))))
+                (Pairs.second (var "rest"))) @@
+              (P.lazy @@ (constant $ asTerm termSignatureArrowChain))))
+      @@ (P.pure @@ pair (list ([] :: [TypedTerm (Bool, Type)])) (Pairs.second (var "dom"))))
+
+-- | Parse a term signature: '∀' [binderName (',' binderName)*] '.' [schemeConstraints '⇒']
+-- arrow chain, where each parameter position (all but the last) may carry a 'lazy' keyword
+-- (#800), setting that Parameter's isLazy. Value-parameter names are synthesized as
+-- arg0, arg1, ..., mirroring Scoping.typeSchemeToTermSignature's convention -- this is the
+-- parser counterpart used at term/primitive-definition sites (Parse/Packaging.hs), deliberately
+-- bypassing the lossy TypeScheme->TermSignature bridge (Scoping.hs), which always defaults
+-- isLazy to false. The header (vars/constraints) parsing is identical to typeScheme's.
+termSignature :: TypedTermDefinition (Parser TermSignature)
+termSignature = define "termSignature" $
+  doc "Parse a term signature: '∀' [binderName (',' binderName)*] '.' [constraints '⇒'] arrow chain, with optional 'lazy' markers on parameter positions" $
+  P.bind @@ (lexeme @@ (P.char @@ int32 8704)) @@ (constant $    -- '∀'
+    P.bind @@ (P.sepBy @@ (asTerm binderName) @@ (lexeme @@ (P.char @@ int32 44))) @@ ("vars" ~>    -- ','
+      P.bind @@ (lexeme @@ (P.char @@ int32 46)) @@ (constant $    -- '.'
+        P.bind @@ (P.optional @@ constraintsBlock) @@ ("mcs" ~>
+          "typeParams" <~ Lists.map
+            ("v" ~> Typing.typeParameter (var "v")
+              (Optionals.withDefault (list ([] :: [TypedTerm TypeClassConstraint]))
+                (Maps.lookup (var "v" :: TypedTerm Name)
+                  (Maps.fromList (Lists.map (asTerm toTypeParamConstraintsEntry) (Optionals.withDefault (list ([] :: [TypedTerm (Name, Name)])) (var "mcs")))))))
+            (var "vars") $
+          P.map @@ ("chain" ~>
+              -- The chain accumulator is already in forward (left-to-right, domain-first) order:
+              -- each level of the right-associative recursion prepends its OWN (outer, earlier)
+              -- domain onto the inner recursive result as it returns, so the leftmost-parsed
+              -- domain ends up at the head of the list.
+              "fwdParams" <~ Pairs.first (var "chain" :: TypedTerm ([(Bool, Type)], Type)) $
+              "resultType" <~ Pairs.second (var "chain") $
+              -- Build Parameters with synthetic names arg0, arg1, ... via a (length-1)-indexed
+              -- fold, since there is no DSL `range` helper -- same idiom as
+              -- Scoping.typeSchemeToTermSignature.
+              "params" <~ Lists.reverse (Pairs.first $ Lists.foldl
+                ("acc" ~> "item" ~>
+                  "pairAcc" <~ Pairs.first (var "acc") $
+                  "i" <~ Pairs.second (var "acc") $
+                  pair
+                    (Lists.cons
+                      (Typing.parameter
+                        (Core.name $ Strings.concat (list [string "arg", Literals.printInt32 (var "i")]))
+                        Phantoms.nothing
+                        (Pairs.second (var "item" :: TypedTerm (Bool, Type)))
+                        (Pairs.first (var "item")))
+                      (var "pairAcc"))
+                    (Math.add (var "i") (int32 1)))
+                (pair (list ([] :: [TypedTerm Parameter])) (int32 0))
+                (var "fwdParams")) $
+              "result" <~ Typing.result Phantoms.nothing (var "resultType") $
+              Typing.termSignature (var "typeParams") (var "params") (var "result")) @@
+            (asTerm termSignatureArrowChain)))))
+  where
+    constraintsBlock =
+      P.bind @@ (termKeyword @@ string "(") @@ (constant $
+        P.bind @@ (P.sepBy1 @@ (asTerm constraint) @@ (termKeyword @@ string ",")) @@ ("cs" ~>
+          P.bind @@ (termKeyword @@ string ")") @@ (constant $
+            P.bind @@ (lexeme @@ (P.char @@ int32 8658)) @@ (constant $    -- '⇒'
+              P.pure @@ var "cs"))))
+    -- Map each type variable to its constraints, keyed by variable name. Mirrors typeScheme's own
+    -- toConstraintsEntry/Maps.fromList pattern exactly, including its pre-existing limitation:
+    -- multiple (class, var) pairs sharing a variable are not merged, since Maps.fromList keeps
+    -- only the last entry per key -- out of scope for #800, which concerns 'lazy' only.
+    toTypeParamConstraintsEntry = "p" ~> pair (Pairs.second (var "p"))
+      (list [Core.typeClassConstraintSimple (Pairs.first (var "p"))])
+
+-- | Run the term-signature parser on a full input string, requiring all input to be consumed.
+parseTermSignature :: TypedTermDefinition (String -> Either String TermSignature)
+parseTermSignature = define "parseTermSignature" $
+  doc "Parse a complete term signature from a string, requiring the parse to consume all input" $
+  "input" ~>
+  match _ParseResult (P.runParser @@ (P.bind @@ whitespace @@ (constant $ asTerm termSignature)) @@ var "input") Nothing [
+    _ParseResult_success>>: "s" ~>
+      Logic.ifElse (Lists.isEmpty (Parsing.parseSuccessRemainder $ var "s"))
+        (right (Parsing.parseSuccessValue (var "s")))
+        (left (string "trailing input after term signature")),
+    _ParseResult_failure>>: "e" ~> left (Parsing.parseErrorMessage (var "e"))]
 
 -- | Run the type-scheme parser on a full input string, requiring all input to be consumed.
 parseTypeScheme :: TypedTermDefinition (String -> Either String TypeScheme)

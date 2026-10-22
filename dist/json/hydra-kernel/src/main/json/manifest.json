@@ -380,6 +380,7 @@
     "hydra.core.test.strip",
     "hydra.core.test.substitution",
     "hydra.core.test.subterms",
+    "hydra.core.test.syntax",
     "hydra.core.test.testEnv",
     "hydra.core.test.testGraph",
     "hydra.core.test.testSuite",
