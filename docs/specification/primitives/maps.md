@@ -1,310 +1,423 @@
-<!-- NOTE: this page will be automatically generated from the primitive definitions in
-     packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Maps.hs (generator not yet
-     built). Hand-authored draft under #417; the specifications here are the normative TARGET
-     and may deliberately diverge from the currently-frozen definitions.
-     Conventions (notation, laziness, badges, floating point) are defined in index.md. -->
+<!-- Note: this is an automatically generated file. Do not edit. -->
 
-# hydra.lib.maps
+# hydra.core.lib.maps
+
+<!-- Note: this is an automatically generated file. Do not edit. -->
 
 Ordered maps: finite collections of key-value bindings, with at most one value per key.
-Hydra maps are ordered collections: iteration — `elems`, `keys`, `toList` — is in ascending key
-order, under the total order defined in [ordering-and-equality.md](../ordering-and-equality.md).
-Because key ordering is part of the map type's contract, every map-typed variable in this
-module's signatures carries the `ordering` constraint on its key type, including in primitives
-that perform no comparison themselves.
 
-#### alter — **Draft**
+Hydra maps are ordered collections: iteration -- elems, keys, toList -- is in ascending key order, under the total order defined in the ordering-and-equality specification.
 
-`∀k,v. (ordering k) ⇒ (optional<v> → optional<v>) → k → map<k, v> → map<k, v>`
+Because key ordering is part of the map type's contract, every map-typed variable in this module's signatures carries the ordering constraint on its key type, including in primitives that perform no comparison themselves.
 
-Usage: `alter f k m`
+## hydra.core.lib.maps.alter
 
-Transform the binding at a key using a function which sees the optional current value.
-Applies `f` to `given v` when `m` contains a binding of `k` to `v`, and to `none` when `k` is
-absent from `m`.
-If `f` returns `given v'`, the result contains the binding of `k` to `v'` (added or updated);
-if `f` returns `none`, the result contains no binding for `k` (removed if it was present).
-All other bindings of `m` are unchanged.
-A single primitive that subsumes `insert`, `delete`, and adjustment of an existing value.
+Alter a value at a key using a function which sees the optional current value.
 
-Since: 0.15
+`∀v,k.(ordering k) ⇒ (optional<v> → optional<v>) → k → map<k, v> → map<k, v>`
 
-#### bimap — **Draft**
+*Since: 0.15.*
 
-`∀k1,k2,v1,v2. (ordering k1, ordering k2) ⇒ (k1 → k2) → (v1 → v2) → map<k1, v1> → map<k2, v2>`
+alter(f, k, m) applies f to Just(v) when m contains key k with value v, or to Nothing when k is absent. If f returns Just(v'), the binding (k, v') is set in the result; if f returns Nothing, k is removed from the result.
 
-Usage: `bimap fk fv m`
+A single primitive that subsumes insert, delete, and adjust.
 
-Map functions over both the keys and the values of a map.
-Returns a map with a binding of `fk k` to `fv v` for each binding of `k` to `v` in `m`.
-If `fk` maps distinct keys to the same image, the colliding bindings collapse to one: the
-binding from the greatest colliding original key (the last in ascending original-key order)
-supplies the value.
-When `fk` is injective, the result has exactly as many bindings as `m`.
-Compare `mapKeys`, which transforms keys only, and `map`, which transforms values only.
+Requires an 'ordering' constraint on the key type.
 
-Since: 0.15
+Total. Corresponds to Haskell's Data.Map.alter :: Ord k => (Maybe v -> Maybe v) -> k -> Map k v -> Map k v.
 
-#### delete — **Draft**
+**[HYDRA-CORE-LIB-MAPS-ALTER-INSERTS-UPDATES-OR-DELETES] (requirement) **alter applies the given function to the optional current value at the key: if the function returns given(v'), that binding is set (inserting if absent, overwriting if present); if it returns none, the key is removed.
 
-`∀k,v. (ordering k) ⇒ k → map<k, v> → map<k, v>`
+## hydra.core.lib.maps.bimap
 
-Usage: `delete k m`
+Map functions over both the keys and values of a map.
+
+`∀k1,k2,v1,v2.(ordering k1, ordering k2) ⇒ (k1 → k2) → (v1 → v2) → map<k1, v1> → map<k2, v2>`
+
+*Since: 0.15.*
+
+bimap(fk, fv, m) returns a new map with key fk(k) and value fv(v) for each binding (k, v) in m.
+
+Key collisions after applying fk are resolved by keeping the last binding encountered (host may differ on collision policy if fk is not injective).
+
+Requires 'ordering' constraints on both the input and output key types.
+
+Total. Corresponds to a key-and-value lift of Haskell's Data.Map.fromList . map (\(k,v) -> (fk k, fv v)) . toList.
+
+**[HYDRA-CORE-LIB-MAPS-BIMAP-TRANSFORMS-KEYS-AND-VALUES] (requirement) **bimap returns a new map where each binding (k, v) becomes (fk(k), fv(v)), applying the key function and value function independently to every binding.
+
+**[HYDRA-CORE-LIB-MAPS-BIMAP-EMPTY-INPUT] (requirement) **bimap of the empty map is the empty map, regardless of the key and value functions.
+
+## hydra.core.lib.maps.delete
 
 Remove a key from a map.
-Returns `m` with the binding for `k` removed; if `k` is not present, `m` is returned unchanged.
 
-Since: 0.15
+`∀k,v.(ordering k) ⇒ k → map<k, v> → map<k, v>`
 
-#### difference — **Draft**
+*Since: 0.15.*
 
-`∀k,v. (ordering k) ⇒ map<k, v> → map<k, v> → map<k, v>`
+delete(k, m) returns m with the binding for k removed; if k is not present, m is returned unchanged.
 
-Usage: `difference m1 m2`
+Requires an 'ordering' constraint on the key type.
+
+Total. Corresponds to Haskell's Data.Map.delete :: Ord k => k -> Map k v -> Map k v.
+
+**[HYDRA-CORE-LIB-MAPS-DELETE-REMOVES-KEY-IF-PRESENT] (requirement) **delete removes the binding for the given key if present, leaving the rest of the map unchanged.
+
+**[HYDRA-CORE-LIB-MAPS-DELETE-NO-OP-WHEN-ABSENT-OR-EMPTY] (requirement) **delete leaves the map unchanged when the key is absent, including when the map is empty.
+
+## hydra.core.lib.maps.difference
 
 Compute the difference of two maps by key.
-Returns the map containing exactly the bindings of `m1` whose keys do not appear in `m2`.
-Only the key set of `m2` matters; its values are ignored.
-The key-set analogue is `hydra.lib.sets.difference`.
 
-Since: 0.17.6
+`∀k,v.(ordering k) ⇒ map<k, v> → map<k, v> → map<k, v>`
 
-#### elems — **Draft**
+*Since: 0.17.6.*
 
-`∀k,v. (ordering k) ⇒ map<k, v> → list<v>`
+difference(m1, m2) returns the map containing exactly the bindings of m1 whose keys do not appear in m2. Only the key set of m2 matters; its values are ignored.
 
-Usage: `elems m`
+The key-set analogue is hydra.core.lib.sets.difference.
 
-Return the values of a map.
-Returns the values of `m` as a list, in ascending order of their keys.
-Values are not deduplicated: the result has exactly one element per binding of `m`, so its
-length is `size m`.
+Requires an 'ordering' constraint on the key type.
 
-Since: 0.15
+Total. Corresponds to Haskell's Data.Map.difference :: Ord k => Map k v -> Map k v -> Map k v.
 
-#### empty — **Draft**
+**[HYDRA-CORE-LIB-MAPS-DIFFERENCE-REMOVES-BINDINGS-WITH-KEYS-IN-SECOND-MAP] (requirement) **difference returns the bindings of the first map whose keys do not occur in the second map.
 
-`∀k,v. (ordering k) ⇒ map<k, v>`
+**[HYDRA-CORE-LIB-MAPS-DIFFERENCE-IDENTITY-WHEN-SECOND-EMPTY] (requirement) **difference with an empty second map returns the first map unchanged.
 
-Usage: `empty`
+## hydra.core.lib.maps.elems
 
-The map with no bindings.
-`isEmpty empty` is `true`, and `size empty` is `0`.
+Return the values of a map (in key order).
 
-Since: 0.15
+`∀k,v.(ordering k) ⇒ map<k, v> → list<v>`
 
-#### filter — **Draft**
+*Since: 0.15.*
 
-`∀k,v. (ordering k) ⇒ (v → boolean) → map<k, v> → map<k, v>`
+elems(m) returns the values of m as a list, ordered by their keys' ascending order.
 
-Usage: `filter p m`
+Requires an 'ordering' constraint on the key type.
+
+Total. Corresponds to Haskell's Data.Map.elems :: Map k v -> [v].
+
+**[HYDRA-CORE-LIB-MAPS-ELEMS-RETURNS-VALUES-IN-KEY-ORDER] (requirement) **elems returns the map's values as a list ordered by ascending key, including when keys were inserted out of order.
+
+**[HYDRA-CORE-LIB-MAPS-ELEMS-EMPTY-INPUT] (requirement) **elems of the empty map is the empty list.
+
+## hydra.core.lib.maps.empty
+
+The empty map.
+
+`∀k,v.(ordering k) ⇒ map<k, v>`
+
+*Since: 0.15.*
+
+empty is the map with no bindings.
+
+Requires an 'ordering' constraint on the key type.
+
+Total. Corresponds to Haskell's Data.Map.empty :: Map k v.
+
+**[HYDRA-CORE-LIB-MAPS-EMPTY-HAS-NO-BINDINGS] (requirement) **empty is the map containing no bindings.
+
+## hydra.core.lib.maps.filter
 
 Filter a map by value.
-Returns the submap of `m` containing exactly the bindings of `k` to `v` for which `p v` is
-`true`.
-Use `filterWithKey` when the predicate also needs to see the key.
 
-Since: 0.15
+`∀v,k.(ordering k) ⇒ (v → boolean) → map<k, v> → map<k, v>`
 
-#### filterWithKey — **Draft**
+*Since: 0.15.*
 
-`∀k,v. (ordering k) ⇒ (k → v → boolean) → map<k, v> → map<k, v>`
+filter(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(v) is true.
 
-Usage: `filterWithKey p m`
+Requires an 'ordering' constraint on the key type.
+
+Total. Corresponds to Haskell's Data.Map.filter :: (v -> Bool) -> Map k v -> Map k v.
+
+**[HYDRA-CORE-LIB-MAPS-FILTER-KEEPS-MATCHING-VALUES] (requirement) **filter returns the submap containing exactly the bindings whose value satisfies the predicate, preserving all matching keys.
+
+**[HYDRA-CORE-LIB-MAPS-FILTER-BOUNDARY-CASES] (requirement) **filter degrades correctly at the boundaries: a predicate matching no value yields the empty map; filtering the empty map yields the empty map.
+
+## hydra.core.lib.maps.filterWithKey
 
 Filter a map by key and value.
-Returns the submap of `m` containing exactly the bindings of `k` to `v` for which `p k v` is
-`true`.
 
-Since: 0.15
+`∀k,v.(ordering k) ⇒ (k → v → boolean) → map<k, v> → map<k, v>`
 
-#### findWithDefault — **Draft**
+*Since: 0.15.*
 
-`∀k,v. (ordering k) ⇒ v → k → map<k, v> → v`
+filterWithKey(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(k, v) is true.
 
-Usage: `findWithDefault default k m`
+Requires an 'ordering' constraint on the key type.
 
-Look up a value by key, with a default if the key is absent.
-Returns the value bound to `k` in `m` if `k` is present, and `default` otherwise.
-`findWithDefault default k m` is `hydra.lib.optionals.withDefault default (lookup k m)`; this
-defining equation is the specification, and the default implementation.
-The default comes first, an exception to the parameter-order conventions, matching
-`hydra.lib.optionals.withDefault`.
+Total. Corresponds to Haskell's Data.Map.filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v.
 
-Lazy: `default` — evaluated only when `k` is absent from `m`.
+**[HYDRA-CORE-LIB-MAPS-FILTER-WITH-KEY-KEEPS-MATCHING-BINDINGS] (requirement) **filterWithKey returns the submap containing exactly the bindings for which the predicate, given both key and value, is true.
 
-Since: 0.15
+**[HYDRA-CORE-LIB-MAPS-FILTER-WITH-KEY-BOUNDARY-CASES] (requirement) **filterWithKey degrades correctly at the boundaries: a predicate matching no binding yields the empty map; filtering the empty map yields the empty map.
 
-#### fromList — **Draft**
+## hydra.core.lib.maps.findWithDefault
 
-`∀k,v. (ordering k) ⇒ list<pair<k, v>> → map<k, v>`
+Look up a value with a default if the key is absent.
 
-Usage: `fromList xs`
+`∀v,k.(ordering k) ⇒ v → k → map<k, v> → v`
+
+*Since: 0.15.*
+
+findWithDefault(def, k, m) returns the value bound to k in m if k is present, or def otherwise. Equivalent to maybe(def, identity, lookup(k, m)).
+
+Requires an 'ordering' constraint on the key type.
+
+Total. Corresponds to Haskell's Data.Map.findWithDefault :: Ord k => v -> k -> Map k v -> v.
+
+**[HYDRA-CORE-LIB-MAPS-FIND-WITH-DEFAULT-RETURNS-BOUND-VALUE-OR-DEFAULT] (requirement) **findWithDefault returns the value bound to the key when present, or the supplied default value when the key is absent.
+
+## hydra.core.lib.maps.fromList
 
 Build a map from a list of key-value pairs.
-Returns the map containing exactly the bindings in `xs`.
-If `xs` contains multiple entries for the same key, the binding from the last such entry in
-list order wins.
-`fromList` and `toList` are inverses up to this normalization: `fromList (toList m)` is `m`.
 
-Since: 0.15
+`∀k,v.(ordering k) ⇒ list<(k, v)> → map<k, v>`
 
-#### insert — **Draft**
+*Since: 0.15.*
 
-`∀k,v. (ordering k) ⇒ k → v → map<k, v> → map<k, v>`
+fromList(xs) returns the map containing exactly the bindings in xs. If xs contains multiple entries for the same key, the last one wins (matching Haskell's fromList behavior).
 
-Usage: `insert k v m`
+Requires an 'ordering' constraint on the key type.
+
+Total. Corresponds to Haskell's Data.Map.fromList :: Ord k => [(k, v)] -> Map k v.
+
+**[HYDRA-CORE-LIB-MAPS-FROM-LIST-BUILDS-MAP-FROM-PAIRS] (requirement) **fromList returns the map containing exactly the bindings in the input list of key-value pairs.
+
+**[HYDRA-CORE-LIB-MAPS-FROM-LIST-LAST-DUPLICATE-WINS] (requirement) **fromList resolves multiple entries for the same key by keeping the value from the last occurrence in the input list.
+
+**[HYDRA-CORE-LIB-MAPS-FROM-LIST-EMPTY-INPUT] (requirement) **fromList of the empty list of pairs is the empty map.
+
+## hydra.core.lib.maps.insert
 
 Insert a key-value pair into a map.
-Returns `m` with the binding of `k` to `v` added; if `k` is already present, its value is
-overwritten with `v`.
 
-Since: 0.15
+`∀k,v.(ordering k) ⇒ k → v → map<k, v> → map<k, v>`
 
-#### intersection — **Draft**
+*Since: 0.15.*
 
-`∀k,v. (ordering k) ⇒ map<k, v> → map<k, v> → map<k, v>`
+insert(k, v, m) returns m with the binding (k, v) added or updated. If k is already present, its value is overwritten.
 
-Usage: `intersection m1 m2`
+Requires an 'ordering' constraint on the key type.
+
+Total. Corresponds to Haskell's Data.Map.insert :: Ord k => k -> v -> Map k v -> Map k v.
+
+**[HYDRA-CORE-LIB-MAPS-INSERT-ADDS-OR-OVERWRITES-BINDING] (requirement) **insert adds the given key-value binding to the map, overwriting any existing value at that key, including when the map was empty.
+
+## hydra.core.lib.maps.intersection
 
 Compute the intersection of two maps by key.
-Returns the map containing exactly the bindings of `m1` whose keys also appear in `m2`.
-On each common key the value is taken from `m1`; only the key set of `m2` matters, and its
-values are ignored.
-The key-set analogue is `hydra.lib.sets.intersection`.
 
-Since: 0.17.6
+`∀k,v.(ordering k) ⇒ map<k, v> → map<k, v> → map<k, v>`
 
-#### isEmpty — **Draft**
+*Since: 0.17.6.*
 
-`∀k,v. (ordering k) ⇒ map<k, v> → boolean`
+intersection(m1, m2) returns the map containing exactly the bindings of m1 whose keys also appear in m2. On each common key the value is taken from m1; only the key set of m2 matters, and its values are ignored.
 
-Usage: `isEmpty m`
+The key-set analogue is hydra.core.lib.sets.intersection.
+
+Requires an 'ordering' constraint on the key type.
+
+Total. Corresponds to Haskell's Data.Map.intersection :: Ord k => Map k v -> Map k v -> Map k v.
+
+**[HYDRA-CORE-LIB-MAPS-INTERSECTION-KEEPS-BINDINGS-WITH-KEYS-IN-BOTH] (requirement) **intersection returns the bindings of the first map whose keys also occur in the second map, taking the value from the first map on each common key.
+
+**[HYDRA-CORE-LIB-MAPS-INTERSECTION-EMPTY-WHEN-NO-OVERLAP-OR-EITHER-EMPTY] (requirement) **intersection is the empty map when the two maps share no keys, or when either map is empty.
+
+## hydra.core.lib.maps.isEmpty
 
 Test whether a map is empty.
-Returns `true` exactly when `m` has no bindings.
 
-Since: 0.15
+`∀k,v.(ordering k) ⇒ map<k, v> → boolean`
 
-#### keys — **Draft**
+*Since: 0.15.*
 
-`∀k,v. (ordering k) ⇒ map<k, v> → list<k>`
+isEmpty(m) returns true iff m has no bindings.
 
-Usage: `keys m`
+Requires an 'ordering' constraint on the key type.
 
-Return the keys of a map.
-Returns the keys of `m` as a list, in ascending order.
-The result contains no duplicates, and its length is `size m`.
+Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool.
 
-Since: 0.15
+**[HYDRA-CORE-LIB-MAPS-IS-EMPTY-TESTS-ZERO-BINDINGS] (requirement) **isEmpty returns true exactly when the map has no bindings.
 
-#### lookup — **Draft**
+## hydra.core.lib.maps.keys
 
-`∀k,v. (ordering k) ⇒ k → map<k, v> → optional<v>`
+Return the keys of a map (in key order).
 
-Usage: `lookup k m`
+`∀k,v.(ordering k) ⇒ map<k, v> → list<k>`
 
-Look up a value in a map by key.
-Returns `given v` where `v` is the value bound to `k` in `m`, or `none` if `k` is not present.
-Use `member` for a bare presence test, and `findWithDefault` to supply a fallback value.
+*Since: 0.15.*
 
-Since: 0.15
+keys(m) returns the keys of m as a list, in ascending order.
 
-#### map — **Draft**
+Requires an 'ordering' constraint on the key type.
 
-`∀k,v1,v2. (ordering k) ⇒ (v1 → v2) → map<k, v1> → map<k, v2>`
+Total. Corresponds to Haskell's Data.Map.keys :: Map k v -> [k].
 
-Usage: `map f m`
+**[HYDRA-CORE-LIB-MAPS-KEYS-RETURNS-KEYS-IN-ORDER] (requirement) **keys returns the map's keys as a list in ascending order, including when keys were inserted out of order.
+
+**[HYDRA-CORE-LIB-MAPS-KEYS-EMPTY-INPUT] (requirement) **keys of the empty map is the empty list.
+
+## hydra.core.lib.maps.lookup
+
+Look up a value in a map by key, returning Nothing if absent.
+
+`∀k,v.(ordering k) ⇒ k → map<k, v> → optional<v>`
+
+*Since: 0.15.*
+
+lookup(k, m) returns Just(v) where v is the value bound to k in m, or Nothing if k is not present.
+
+Requires an 'ordering' constraint on the key type.
+
+Total. Corresponds to Haskell's Data.Map.lookup :: Ord k => k -> Map k v -> Maybe v.
+
+**[HYDRA-CORE-LIB-MAPS-LOOKUP-RETURNS-BOUND-VALUE] (requirement) **lookup returns the value bound to the given key, wrapped, when the key is present.
+
+**[HYDRA-CORE-LIB-MAPS-LOOKUP-NONE-WHEN-ABSENT-OR-EMPTY] (requirement) **lookup returns none when the key is absent, including when the map is empty.
+
+## hydra.core.lib.maps.map
 
 Map a function over the values of a map.
-Returns the map with the same keys as `m` and the value `f v` for each binding of `k` to `v`.
-Keys are untouched, so the result always has exactly as many bindings as `m`.
 
-Since: 0.15
+`∀v1,v2,k.(ordering k) ⇒ (v1 → v2) → map<k, v1> → map<k, v2>`
 
-#### mapKeys — **Draft**
+*Since: 0.15.*
 
-`∀k1,k2,v. (ordering k1, ordering k2) ⇒ (k1 → k2) → map<k1, v> → map<k2, v>`
+map(f, m) returns a map with the same keys as m and value f(v) for each binding (k, v).
 
-Usage: `mapKeys f m`
+Requires an 'ordering' constraint on the key type.
+
+Total. Corresponds to Haskell's Data.Map.map :: (v -> w) -> Map k v -> Map k w / fmap on Map.
+
+**[HYDRA-CORE-LIB-MAPS-MAP-APPLIES-FUNCTION-TO-VALUES] (requirement) **map applies the given function to every value in the map, leaving keys unchanged.
+
+**[HYDRA-CORE-LIB-MAPS-MAP-EMPTY-INPUT] (requirement) **map over the empty map is the empty map, regardless of the function.
+
+## hydra.core.lib.maps.mapKeys
 
 Map a function over the keys of a map.
-Returns a map in which each binding of `k` to `v` in `m` becomes a binding of `f k` to `v`.
-If `f` maps distinct keys to the same image, the colliding bindings collapse to one: the
-binding whose original key is greatest (in the ascending order of `k1`) wins.
-When `f` is injective, the result has exactly as many bindings as `m`.
 
-Since: 0.15
+`∀k1,k2,v.(ordering k1, ordering k2) ⇒ (k1 → k2) → map<k1, v> → map<k2, v>`
 
-#### member — **Draft**
+*Since: 0.15.*
 
-`∀k,v. (ordering k) ⇒ k → map<k, v> → boolean`
+mapKeys(f, m) returns a map where each binding (k, v) becomes (f(k), v). If f maps multiple keys to the same image, key collisions are resolved by keeping the binding with the greater original key (matching Haskell's mapKeys behavior).
 
-Usage: `member k m`
+Requires 'ordering' constraints on both the input and output key types.
+
+Total. Corresponds to Haskell's Data.Map.mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> Map k1 v -> Map k2 v.
+
+**[HYDRA-CORE-LIB-MAPS-MAP-KEYS-APPLIES-FUNCTION-TO-KEYS] (requirement) **mapKeys applies the given function to every key in the map, leaving the bound values unchanged.
+
+**[HYDRA-CORE-LIB-MAPS-MAP-KEYS-EMPTY-INPUT] (requirement) **mapKeys over the empty map is the empty map, regardless of the function.
+
+## hydra.core.lib.maps.member
 
 Test whether a key is present in a map.
-Returns `true` exactly when `k` is a key of `m`.
 
-Since: 0.15
+`∀k,v.(ordering k) ⇒ k → map<k, v> → boolean`
 
-#### singleton — **Draft**
+*Since: 0.15.*
 
-`∀k,v. (ordering k) ⇒ k → v → map<k, v>`
+member(k, m) returns true iff k is a key in m.
 
-Usage: `singleton k v`
+Requires an 'ordering' constraint on the key type.
 
-Construct a map with a single binding.
-Returns the map containing exactly the binding of `k` to `v`.
+Total. Corresponds to Haskell's Data.Map.member :: Ord k => k -> Map k v -> Bool.
 
-Since: 0.15
+**[HYDRA-CORE-LIB-MAPS-MEMBER-TESTS-KEY-PRESENCE] (requirement) **member returns true exactly when the given key is present in the map.
 
-#### size — **Draft**
+**[HYDRA-CORE-LIB-MAPS-MEMBER-FALSE-WHEN-ABSENT-OR-EMPTY] (requirement) **member returns false when the key is absent, including when the map is empty.
 
-`∀k,v. (ordering k) ⇒ map<k, v> → int32`
+## hydra.core.lib.maps.singleton
 
-Usage: `size m`
+Construct a map with a single key-value pair.
 
-Return the number of bindings in a map.
-Returns the number of key-value bindings in `m` as an `int32`.
+`∀k,v.(ordering k) ⇒ k → v → map<k, v>`
 
-Since: 0.15
+*Since: 0.15.*
 
-#### toList — **Draft**
+singleton(k, v) returns the map containing exactly the binding (k, v).
 
-`∀k,v. (ordering k) ⇒ map<k, v> → list<pair<k, v>>`
+Requires an 'ordering' constraint on the key type.
 
-Usage: `toList m`
+Total. Corresponds to Haskell's Data.Map.singleton :: k -> v -> Map k v.
 
-Convert a map to a list of key-value pairs.
-Returns the bindings of `m` as a list of pairs, in ascending key order.
-`fromList (toList m)` is `m`.
+**[HYDRA-CORE-LIB-MAPS-SINGLETON-WRAPS-ONE-BINDING] (requirement) **singleton returns the map containing exactly the one given key-value binding.
 
-Since: 0.15
+## hydra.core.lib.maps.size
 
-#### union — **Draft**
+Return the number of key-value pairs in a map.
 
-`∀k,v. (ordering k) ⇒ map<k, v> → map<k, v> → map<k, v>`
+`∀k,v.(ordering k) ⇒ map<k, v> → int32`
 
-Usage: `union m1 m2`
+*Since: 0.15.*
 
-Compute the left-biased union of two maps.
-Returns the map containing all bindings of `m1`, plus the bindings of `m2` whose keys do not
-appear in `m1`.
-On key collision the binding from `m1` (the first map) wins.
-`unions` generalizes this to a list of maps, with the same bias.
+size(m) returns the number of bindings in m as an int32.
 
-Since: 0.15
+Requires an 'ordering' constraint on the key type.
 
-#### unions — **Draft**
+Total. Corresponds to Haskell's Data.Map.size :: Map k v -> Int (with narrowing to int32).
 
-`∀k,v. (ordering k) ⇒ list<map<k, v>> → map<k, v>`
+**[HYDRA-CORE-LIB-MAPS-SIZE-COUNTS-BINDINGS] (requirement) **size returns the number of bindings in the map, including zero for the empty map.
 
-Usage: `unions ms`
+## hydra.core.lib.maps.toList
+
+Convert a map to a list of key-value pairs (in key order).
+
+`∀k,v.(ordering k) ⇒ map<k, v> → list<(k, v)>`
+
+*Since: 0.15.*
+
+toList(m) returns the bindings of m as a list of (key, value) pairs, in ascending key order.
+
+Requires an 'ordering' constraint on the key type.
+
+Total. Corresponds to Haskell's Data.Map.toList :: Map k v -> [(k, v)].
+
+**[HYDRA-CORE-LIB-MAPS-TO-LIST-RETURNS-PAIRS-IN-KEY-ORDER] (requirement) **toList returns the map's bindings as a list of key-value pairs ordered by ascending key, including when keys were inserted out of order.
+
+**[HYDRA-CORE-LIB-MAPS-TO-LIST-EMPTY-INPUT] (requirement) **toList of the empty map is the empty list.
+
+## hydra.core.lib.maps.union
+
+Compute the union of two maps; the first map's bindings take precedence on key collision.
+
+`∀k,v.(ordering k) ⇒ map<k, v> → map<k, v> → map<k, v>`
+
+*Since: 0.15.*
+
+union(m1, m2) returns the map containing all bindings from m1 plus the bindings of m2 whose keys are not in m1. On key collision, the binding from m1 is preferred.
+
+Requires an 'ordering' constraint on the key type.
+
+Total. Corresponds to Haskell's Data.Map.union :: Ord k => Map k v -> Map k v -> Map k v.
+
+**[HYDRA-CORE-LIB-MAPS-UNION-FIRST-MAP-TAKES-PRECEDENCE] (requirement) **union returns the map containing all bindings from the first map plus the bindings of the second map whose keys are not in the first; on key collision the first map's binding is kept.
+
+**[HYDRA-CORE-LIB-MAPS-UNION-IDENTITY-WITH-EMPTY] (requirement) **union with either map empty returns the other map unchanged.
+
+## hydra.core.lib.maps.unions
 
 Compute the left-biased union of a list of maps.
-Returns the map containing every binding of every map in `ms`; when a key occurs in more than
-one map, the binding from the earliest such map in the list wins.
-`unions ms` is equivalent to folding `union` over `ms` from the left, starting from `empty`.
-`unions []` is `empty`, and the bias matches `union` and `hydra.lib.sets.unions`.
 
-Since: 0.17.6
+`∀k,v.(ordering k) ⇒ list<map<k, v>> → map<k, v>`
+
+*Since: 0.17.6.*
+
+unions(ms) returns the map containing every binding of every map in ms; when a key occurs in more than one map, the binding from the earliest such map in the list wins.
+
+unions(ms) is equivalent to folding union over ms from the left, starting from empty; unions([]) is empty, and the bias matches union and hydra.core.lib.sets.unions.
+
+Requires an 'ordering' constraint on the key type.
+
+Total. Corresponds to Haskell's Data.Map.unions :: Ord k => [Map k v] -> Map k v.
+
+**[HYDRA-CORE-LIB-MAPS-UNIONS-EARLIEST-MAP-TAKES-PRECEDENCE] (requirement) **unions returns the bindings of every map in the list; when a key occurs in more than one map, the binding from the earliest such map in the list is kept.
+
+**[HYDRA-CORE-LIB-MAPS-UNIONS-EMPTY-LIST-OF-MAPS-YIELDS-EMPTY-MAP] (requirement) **unions of an empty list of maps is the empty map.
