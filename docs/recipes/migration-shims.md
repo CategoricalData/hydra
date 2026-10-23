@@ -172,6 +172,47 @@ these. If you have deliberately emptied `dist/json/` (a true cold bootstrap), se
 package JSON via a full local Haskell build **before** the Java/Python steps run — the same
 Haskell-first ordering as a Mode B shim.
 
+## Publish lag: a hand-written driver outrunning the published jar
+
+A different failure shape than Modes A/B: not the *kernel data model* outrunning a published host,
+but a **hand-written driver file** (something under `heads/`, not generated) calling a
+newly-generated API symbol — a factory function, an enum constant, a new coder entry point — that
+is real in HEAD's sources but doesn't exist yet in the *published* jar a driver links against. Two
+real incidents:
+
+- **#719** — a fixture-baking step's decimal rendering depended on a `printDecimal` fix that was in
+  HEAD's kernel but not yet in the published `hydra-kernel`/`hydra-java` jars it ran against.
+- **#727** — `GenerationTargets.java` called four new `hydra.lisp.Language.*Language()` factories
+  absent from the published `hydra-lisp` jar at the pinned `hostVersion`.
+
+Both were invisible to every local warm-tree check (which builds against a freshly-regenerated
+local `dist/`, not the published jar) and surfaced only in the cold-clone CI job, which has no local
+fallback to mask the break. See [#737](https://github.com/CategoricalData/hydra/issues/737).
+
+### Convention: reflective lookup with a published-safe fallback
+
+When a hand-written driver must call a generated-API symbol that may post-date the current
+`hostVersion`, resolve it reflectively and fall back to a symbol guaranteed present in every
+published version, rather than calling it directly. #727's fix (`GenerationTargets.java`) is the
+reference example: it looks up each dialect's `Language` factory by reflection, falling back to the
+dialect's long-stable base factory if the newer one isn't found. This doesn't prevent publish lag,
+but it degrades gracefully — the driver still produces correct output against an older published
+jar — instead of hard-failing the whole cold-clone job.
+
+This is a targeted mitigation for specific call sites, not a substitute for the CI guard below.
+
+### CI guard: compile the driver against the published jar, early
+
+`heads/java/target-driver/` compiles the cross-target drivers (`Bootstrap.java`,
+`GenerationTargets.java`, `TransformJsonToTarget.java`) against the published
+`hydra-{java,python,scala,typescript,lisp,haskell,build}` jars at `hostVersion` — exactly the
+compile that would catch a publish-lag break. The `target-driver-published-classpath` CI job
+(`.github/workflows/ci.yml`) runs this compile in isolation, unconditionally, on every push/PR —
+seconds, not the ~2.5h of `cold-clone-haskell` — and forces `-PhostVersion` so a local
+`hostOverrides["java"/"python"] = "local"` shim (Mode B, in progress) can't mask it the way it masks
+the same compile in `heads/java/bin/transform-json-to-target.sh`'s local-build fallback. A
+not-yet-published symbol now fails fast and early, not only (or last) in the cold-clone job.
+
 ## See also
 
 - [The build system](../build-system.md) — the cache model, `component_identity`, and the consume path.

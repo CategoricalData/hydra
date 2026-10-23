@@ -97,6 +97,52 @@ jobs:
             skip_it "no cold-seed-path changes"
           fi
 
+  # #737: fast, always-run publish-lag guard. heads/java/target-driver/ compiles
+  # the hand-written Bootstrap/GenerationTargets/TransformJsonToTarget drivers
+  # against the PUBLISHED hydra-{java,python,scala,typescript,lisp,haskell,build}
+  # jars — this is the exact compile that would have caught #719 and #727 early
+  # (a driver referencing a generated-API symbol not yet in the published jar).
+  # Today that compile is reached only two ways: (a) heads/java/bin/transform-
+  # json-to-target.sh, which SWALLOWS a failure here and silently falls back to
+  # a local build whenever one is available (masking the break locally), or (b)
+  # the ~2.5h cold-clone-haskell job below, where no local fallback exists on a
+  # genuinely fresh checkout — so the failure surfaces, but only there, buried
+  # at the bottom of the most expensive job in the pipeline, and only when the
+  # `changes` gate decides to run it at all.
+  #
+  # This job runs the same compile in isolation, in seconds, on every push/PR,
+  # with no gating and no fallback: -PhostVersion forces target-driver's
+  # classpath to the registry's hostVersion regardless of any local
+  # hostOverrides["java"/"python"] = "local" shim (a shim that, left in place,
+  # would otherwise mean this check is never exercised against the real
+  # published jars during an in-progress breaking-change cycle). A publish-lag
+  # break now fails here first, not only (or last) in cold-clone-haskell.
+  target-driver-published-classpath:
+    name: Target-driver compile vs published jars (publish-lag guard)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11.0.19'
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('heads/java/target-driver/build.gradle') }}
+          restore-keys: gradle-
+      - name: Resolve registry hostVersion (ignoring local hostOverrides)
+        id: host_version
+        run: |
+          set -euo pipefail
+          VERSION=$(python3 -c "import json; print(json.load(open('hydra.json'))['hostVersion'])")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+      - name: Compile target-driver against the published jars
+        working-directory: heads/java
+        run: ./gradlew --quiet -PhostVersion="${{ steps.host_version.outputs.version }}" -p target-driver classes
+
   haskell:
     name: Haskell tests (JSON build + consistency check)
     runs-on: ubuntu-latest
