@@ -191,7 +191,10 @@ For example, `hydra/core/` holds the generated kernel modules alongside the over
 `hydra/core/overlay/<lang>/` subtree (and, for Python, the hand-written `hydra/core/py.typed`).
 (For Java/Python, the script appends every copied path to a manifest consumed by
 `bootstrap-from-json --keep-paths-from`, which protects hand-copied files
-from the `--prune-stale` deletion pass.)
+from the `--prune-stale` deletion pass. This is one of two valid copy/prune orderings;
+see [overlays.md § How overlays survive regeneration](overlays.md#how-overlays-survive-regeneration-prune-protection)
+for the other (copy strictly after the prune, used by Go/Scala and Haskell's batch path) and
+why a host must use exactly one.)
 
 Because the `overlay/<lang>/hydra-kernel/` tree holds *only* runtime (nothing
 else), the Java/Python/Haskell copy scripts are dumb full-tree merges — no selective
@@ -204,15 +207,20 @@ would risk clobbering generated output.) Files that are NOT kernel runtime
 head's own `*.test`/Spec runners) stay in `heads/<lang>/src` and are compiled by the
 developer rollup, not copied.
 
-| Language | Canonical runtime home | Overlaid by | Approx. file count |
-|----------|------------------------|-------------|--------------------|
-| Haskell | `overlay/haskell/hydra-kernel/` (+ `overlay/haskell/hydra/` umbrella): `Hydra.Settings`, `Hydra.Kernel`, `Hydra.Core.Overlay.Haskell.{Lib.*,Dsl.*,Libraries,Bootstrap,AsTerm,AsType}` (#501 namespace) | `sync-haskell.sh` (head compiles from the dist copy, not the overlay; copies gitignored) | ~45 |
-| Java | `overlay/java/hydra-kernel/`: `hydra/core/overlay/java/`: `Adapters.java`, `Coders.java`, full `{util,lib,dsl,tools}/`, `json/{JsonEncoding,JsonDecoding}.java` | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~282 |
-| Python | `overlay/python/hydra-kernel/`: `hydra/core/overlay/python/{lib,dsl,sources,util}/` + `tools.py`, `hydra/core/py.typed` (main, no `hydra/__init__.py` — PEP 420); `hydra/core/overlay/python/test_env.py` (test bridge). All overlay Python modules use the `hydra.core.overlay.python.*` namespace (#501). | `copy-kernel-runtime.sh` (Step 0 of assemble; copies overlay main + test) | ~41+3 |
-| TypeScript | `overlay/typescript/hydra-kernel/`: `hydra/core/{bootstrap,primitives,runtime}.ts`, `hydra/core/overlay/typescript/lib/*.ts` (main); `hydra/core/test/{testEnv,jsonBindings}.ts` (test) | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~19 |
-| Go (head bud) | `overlay/go/hydra-kernel/`: `hydra/core/overlay/go/lib/<name>/` primitive impls plus `util/` and `libraries/` runtime helpers. Generated code is rooted at the dist-local Go module `hydra.dev`; the Go coder (`packages/hydra-go/.../Go/Coder.hs`) and the overlay's own imports use `hydra.dev/hydra/core/overlay/go/{util,lib/<name>}`, matching the overlay's on-disk `hydra/core/overlay/go/` location (#289 fixed the post-#729 stale-path regression) | `apply-assembly-plan.sh go hydra-kernel` (Step 3 of assemble, post-prune) | ~25 |
-| Lisp dialects (clojure, scheme, common-lisp, emacs-lisp) | `overlay/<dialect>/hydra-kernel/`: the loader/prims/lazy/prelude/json-reader runtime + the `hydra/core/overlay/<dialect>/` library registry and `lib/*` native impls (Scheme: `hydra/overlay/scheme/`; + Scheme's `scheme/`/`srfi/` externals) + the test bridge. Copied by common.sh's `lisp_copy_overlay` (Step 3, kernel-only). Each dialect's test runner loads the runtime from `dist/`. Common Lisp's `struct-compat.lisp` is generated into dist by gen-compat.sh (not overlay). | ~17 (clojure) – ~42 (scheme) |
-| Scala | `overlay/scala/hydra-kernel/`: `hydra/core/overlay/scala/{Libraries.scala,lib/*.scala,dsl/*.scala}` (#501 namespace, main); `hydra/core/{TestSuiteRunner,test/testEnv}.scala` (test). build.sbt lists the dist copy on `unmanagedSourceDirectories`. | `copy-kernel-runtime.sh` | ~25 |
+Each copy step uses one of two valid copy/prune orderings (Strategy A: copy before prune,
+protected by a keep-paths manifest; Strategy B: copy strictly after prune) — see
+[overlays.md § How overlays survive regeneration](overlays.md#how-overlays-survive-regeneration-prune-protection)
+for the full explanation. The table's "Strategy" column states which each host uses.
+
+| Language | Canonical runtime home | Overlaid by | Strategy | Approx. file count |
+|----------|------------------------|-------------|----------|--------------------|
+| Haskell | `overlay/haskell/hydra-kernel/` (+ `overlay/haskell/hydra/` umbrella): `Hydra.Settings`, `Hydra.Kernel`, `Hydra.Core.Overlay.Haskell.{Lib.*,Dsl.*,Libraries,Bootstrap,AsTerm,AsType}` (#501 namespace) | `sync-haskell.sh` (head compiles from the dist copy, not the overlay; copies gitignored) | A (per-package `assemble-distribution.sh`, derived manifest) and B (`sync-haskell.sh`'s all-packages batch path, no manifest + post-prune re-overlay) | ~45 |
+| Java | `overlay/java/hydra-kernel/`: `hydra/core/overlay/java/`: `Adapters.java`, `Coders.java`, full `{util,lib,dsl,tools}/`, `json/{JsonEncoding,JsonDecoding}.java` | `copy-kernel-runtime.sh` (Step 0 of assemble) | A | ~282 |
+| Python | `overlay/python/hydra-kernel/`: `hydra/core/overlay/python/{lib,dsl,sources,util}/` + `tools.py`, `hydra/core/py.typed` (main, no `hydra/__init__.py` — PEP 420); `hydra/core/overlay/python/test_env.py` (test bridge). All overlay Python modules use the `hydra.core.overlay.python.*` namespace (#501). | `copy-kernel-runtime.sh` (Step 0 of assemble; copies overlay main + test) | A | ~41+3 |
+| TypeScript | `overlay/typescript/hydra-kernel/`: `hydra/core/{bootstrap,primitives,runtime}.ts`, `hydra/core/overlay/typescript/lib/*.ts` (main); `hydra/core/test/{testEnv,jsonBindings}.ts` (test) | `copy-kernel-runtime.sh` (Step 0 of assemble) | A | ~19 |
+| Go (head bud) | `overlay/go/hydra-kernel/`: `hydra/core/overlay/go/lib/<name>/` primitive impls plus `util/` and `libraries/` runtime helpers. Generated code is rooted at the dist-local Go module `hydra.dev`; the Go coder (`packages/hydra-go/.../Go/Coder.hs`) and the overlay's own imports use `hydra.dev/hydra/core/overlay/go/{util,lib/<name>}`, matching the overlay's on-disk `hydra/core/overlay/go/` location (#289 fixed the post-#729 stale-path regression) | `apply-assembly-plan.sh go hydra-kernel` (Step 3 of assemble, post-prune) | B | ~25 |
+| Lisp dialects (clojure, scheme, common-lisp, emacs-lisp) | `overlay/<dialect>/hydra-kernel/`: the loader/prims/lazy/prelude/json-reader runtime + the `hydra/core/overlay/<dialect>/` library registry and `lib/*` native impls (Scheme: `hydra/overlay/scheme/`; + Scheme's `scheme/`/`srfi/` externals) + the test bridge. Copied by common.sh's `lisp_copy_overlay` (Step 3, kernel-only). Each dialect's test runner loads the runtime from `dist/`. Common Lisp's `struct-compat.lisp` is generated into dist by gen-compat.sh (not overlay). | A | ~17 (clojure) – ~42 (scheme) |
+| Scala | `overlay/scala/hydra-kernel/`: `hydra/core/overlay/scala/{Libraries.scala,lib/*.scala,dsl/*.scala}` (#501 namespace, main); `hydra/core/{TestSuiteRunner,test/testEnv}.scala` (test). build.sbt lists the dist copy on `unmanagedSourceDirectories`. | `copy-kernel-runtime.sh` | B | ~25 |
 
 The canonical edit point is the `overlay/<lang>/` tree (Haskell/Java/Python/TypeScript) or,
 for the not-yet-migrated heads, `heads/<lang>/src`. Editing the copy in `dist/` is wrong for

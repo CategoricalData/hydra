@@ -154,17 +154,60 @@ deps, plugins, and (for ANTLR) grammar-generation configuration.
 ## How overlays survive regeneration (prune protection)
 
 Because overlay files are *copied* (not generated), they are not in a package's recorded output
-digest. The copy step is `heads/<lang>/bin/copy-overlay.sh` for Java/Python (the #511
-generalization; `copy-kernel-runtime.sh` remains the kernel-only batch path),
-`copy-kernel-runtime.sh` for TypeScript/Scala/Go, `overlay-kernel-runtime.sh` for Haskell, and
-`lisp_copy_overlay` (in `heads/lisp/bin/common.sh`) for the Lisp dialects. To keep regeneration
-from deleting the copied files, the copy step records every overlay file in a
-**keep-paths manifest** (keyed by source-set directory), which is honored by both prune paths:
+digest. A prune pass (`bootstrap-from-json --prune-stale`, the full-regeneration prune; or
+`digest-check fresh`, the cache-hit reconcile) deletes anything under a package's output dir that
+it does not recognize as part of what the generator just wrote — which, left unguarded, includes
+every copied overlay file. There are exactly **two correct strategies** for preventing that, and
+every host must use one:
 
-- `bootstrap-from-json --prune-stale` (the full-regeneration prune), and
-- `digest-check fresh` (the cache-hit reconcile).
+### Strategy A: copy before prune, protect with a keep-paths manifest
 
-This is why a sync can regenerate a package's modules without clobbering its hand-written overlay.
+The copy step runs first and additionally records every file it copied into a **keep-paths
+manifest** (`<sourceSetDir>\t<relPath>` lines, keyed by source-set directory). Both prune paths —
+`--prune-stale` and `digest-check fresh` — accept `--keep-paths-from <manifest>` and skip deleting
+anything listed in it. The manifest is what makes the ordering safe despite the copy happening
+first.
+
+Used by: Haskell (per-package `assemble-distribution.sh`, which derives the manifest from the
+overlay tree directly), Java, Python (`copy-overlay.sh` / `copy-kernel-runtime.sh`), and the Lisp
+dialects (`lisp_copy_overlay` in `heads/lisp/bin/common.sh`, via the `--keep-paths-from` forwarded
+in `heads/lisp/bin/common.sh`'s prune invocations).
+
+### Strategy B: copy after prune
+
+The prune runs first, with no keep-paths manifest at all, against a dist tree that does not yet
+contain the overlay files — so there is nothing overlay-shaped for it to delete. The copy step
+then runs strictly afterward and is the last thing to touch the tree.
+
+Used by: Go and Scala (`apply-assembly-plan.sh <lang> hydra-kernel`, called as a numbered "Step 3"
+*after* the `--prune-stale` transform step in each language's `assemble-distribution.sh`), and
+Haskell's own all-packages batch path in `sync-haskell.sh` (`bootstrap-from-json --all-packages
+--prune-stale` with no `--keep-paths-from`, followed immediately by a second, idempotent
+`overlay-kernel-runtime.sh` invocation that repairs whatever the prune deleted).
+
+### Both are correct; do not mix them for one copy step
+
+Either strategy independently satisfies the same invariant — the overlay files are present in the
+final dist tree after the pipeline step completes — so neither is "more correct." What is a bug is
+a copy step that uses **neither**: copying before the prune without a keep-paths manifest, which is
+exactly the failure this issue (#645) describes (`overlay-kernel-runtime.sh` ran once, before
+`sync-haskell.sh`'s per-package assembles, with no manifest, and the Haskell-target assemble of
+`hydra-typescript` pruned a file it had just copied in). Fixed in `3f9162bde4` by giving the
+per-package Haskell path a derived keep-paths manifest (Strategy A); the batch path in
+`sync-haskell.sh` relies on the separate post-prune re-invocation described above (Strategy B) and
+always has.
+
+When adding a new copy step (a new host, or a new package's overlay), pick one strategy up front
+and follow its existing pattern verbatim — don't invent a third ordering. A copy step that applies
+Strategy A must pass its manifest into *every* prune call it precedes; a copy step that applies
+Strategy B must run *after every* prune call in its pipeline, with no prune call anywhere between
+the copy and the point where the dist tree is considered final for that run.
+
+A copy step's own success log line is not evidence of survival: reporting a count of files found
+in the *source* overlay tree only proves the files existed before the copy, not that they are
+still present afterward. Count the **destination** after the copy (and, for Strategy B, after any
+subsequent prune) — that is the only count that would actually go to zero if a future change
+reintroduced the "neither strategy" bug.
 
 ## Routing a new overlay-only / native module
 

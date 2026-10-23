@@ -14,6 +14,18 @@
 # Hydra.Core.Overlay.Haskell.Dsl.*) must be copied into dist/haskell/ BEFORE the executables
 # are built — otherwise GHC can't find them. bin/sync.sh's Phase 0 builds the execs first,
 # so it invokes this script first. sync-haskell.sh also calls it (idempotent cp -R).
+#
+# Overlay-vs-prune ordering (#645; see docs/overlays.md "How overlays survive
+# regeneration"): sync-haskell.sh's `bootstrap-from-json --all-packages --prune-stale`
+# step runs with NO --keep-paths-from, so it deletes every file under each package's
+# output dir that it did not itself just generate — including whatever this script
+# copied in beforehand. sync-haskell.sh deliberately re-invokes this script
+# immediately AFTER that prune to repair the damage (Strategy B: copy-after-prune).
+# This script must stay idempotent (plain `cp -R` merge, safe to re-run) for that to
+# work. Do not add a keep-paths manifest here as an alternative fix without removing
+# the post-prune re-invocation — the two strategies are redundant, not additive, and
+# per-package assemble-distribution.sh already applies Strategy A (keep-paths) for
+# the per-package digest-gated path.
 set -euo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -34,7 +46,11 @@ KERNEL_RUNTIME_SRC="$HYDRA_ROOT_DIR/overlay/haskell/hydra-kernel/src/main/haskel
 KERNEL_DST="$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/main/haskell"
 mkdir -p "$KERNEL_DST"
 cp -R "$KERNEL_RUNTIME_SRC"/. "$KERNEL_DST/"
-echo "    hydra-kernel: overlaid $(find "$KERNEL_RUNTIME_SRC" -name '*.hs' | wc -l | tr -d ' ') hand-written runtime module(s)"
+# Count files present at the DESTINATION after the copy, not the source tree being
+# copied from (#645): a source-side count reports "overlaid N" even if something
+# downstream (e.g. a prune pass with no keep-paths protection) deletes the files
+# right back out, masking exactly the failure this step exists to prevent.
+echo "    hydra-kernel: overlaid $(find "$KERNEL_DST" -name '*.hs' | wc -l | tr -d ' ') hand-written runtime module(s)"
 
 # hydra-kernel test bridge: hand-written test infra (Hydra.Core.Test.TestEnv) referenced
 # by the generated TestGraph. MERGE onto the generated src/test dist (shares the dir
@@ -44,7 +60,8 @@ KERNEL_TEST_DST="$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/test/haskell"
 if [ -d "$KERNEL_TEST_SRC" ]; then
   mkdir -p "$KERNEL_TEST_DST"
   cp -R "$KERNEL_TEST_SRC"/. "$KERNEL_TEST_DST/"
-  echo "    hydra-kernel: overlaid $(find "$KERNEL_TEST_SRC" -name '*.hs' | wc -l | tr -d ' ') hand-written test module(s)"
+  # Destination-side count; see the hydra-kernel runtime count above (#645).
+  echo "    hydra-kernel: overlaid $(find "$KERNEL_TEST_DST" -name '*.hs' | wc -l | tr -d ' ') hand-written test module(s)"
 fi
 
 # hydra umbrella: its own dedicated package dir (no generated content to merge).
@@ -71,5 +88,6 @@ for PKG_OVERLAY_SRC in "$HYDRA_ROOT_DIR"/overlay/haskell/*/src/main/haskell; do
   PKG_DST="$HYDRA_ROOT_DIR/dist/haskell/$PKG/src/main/haskell"
   mkdir -p "$PKG_DST"
   cp -R "$PKG_OVERLAY_SRC"/. "$PKG_DST/"
-  echo "    $PKG: overlaid $(find "$PKG_OVERLAY_SRC" -name '*.hs' | wc -l | tr -d ' ') hand-written module(s)"
+  # Destination-side count; see the hydra-kernel runtime count above (#645).
+  echo "    $PKG: overlaid $(find "$PKG_DST" -name '*.hs' | wc -l | tr -d ' ') hand-written module(s)"
 done
