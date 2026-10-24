@@ -165,18 +165,23 @@ reorderDefs = define "reorderDefs" $
       Lists.map ("td" ~> inject _Definition _Definition_type (var "td")) (var "nameRest")]) $
     "termDefsWrapped" <~ Lists.map ("td" ~> inject _Definition _Definition_term (var "td"))
       (Pairs.second (var "partitioned")) $
-    -- Topologically sort term definitions by free-variable dependencies, grouped into SCCs so that
-    -- mutually recursive definitions land together in one cluster while acyclic definitions
-    -- linearize in dependency order. The graph builder needs this: a definition cannot be installed
-    -- before any definition it references, and mutual recursion has no flat ordering that satisfies
-    -- the use-before-define rule.
+    -- Topologically sort term definitions by eager free-variable dependencies, grouped into SCCs
+    -- so that mutually recursive definitions land together in one cluster while acyclic
+    -- definitions linearize in dependency order. The graph builder needs this: a definition
+    -- cannot be installed before any definition it references, and mutual recursion has no flat
+    -- ordering that satisfies the use-before-define rule.
+    -- Dependency edges use eagerFreeVariablesInTerm, not the full free-variable set: a reference
+    -- that only occurs inside a nested lambda body (e.g. a DSL-level hydra.core.parsers.lazy
+    -- thunk used to break genuine mutual recursion) is deferred until call time and is not an
+    -- ordering hazard, so it must not be treated as a dependency. Counting it would create a
+    -- false cycle among definitions whose only mutual reference is through such a thunk. See #801.
     "sortedTermDefs" <~ (Lists.concat $ (Sorting.topologicalSortNodes :: TypedTermDefinition ((Definition -> Name) -> (Definition -> [Name]) -> [Definition] -> [[Definition]])) @@
       ("d" ~> match _Definition (var "d") Nothing [
         _Definition_term>>: "td" ~> (project _TermDefinition _TermDefinition_name @@ var "td" :: TypedTerm Name)])
       @@
       ("d" ~> match _Definition (var "d") (Just (list ([] :: [TypedTerm Name]))) [
         _Definition_term>>: "td" ~>
-          Sets.toList $ Variables.freeVariablesInTerm @@ (project _TermDefinition _TermDefinition_body @@ var "td")])
+          Sets.toList $ Variables.eagerFreeVariablesInTerm @@ (project _TermDefinition _TermDefinition_body @@ var "td")])
       @@ var "termDefsWrapped") $
     Lists.concat (list [var "typeDefs", var "sortedTermDefs"])
 

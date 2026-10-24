@@ -4,6 +4,7 @@ module Hydra.Sources.Kernel.Terms.Variables where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
+  eagerFreeVariablesInTerm,
   freeTypeVariablesInTerm,
   freeVariablesInTerm,
   freeVariablesInType,
@@ -86,6 +87,7 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Free variable analysis, term-level substitution, and unshadowing"))}
   where
    definitions = [
+     toDefinition eagerFreeVariablesInTerm,
      toDefinition freeTypeVariablesInTerm,
      toDefinition freeVariablesInTerm,
      toDefinition freeVariablesInType,
@@ -114,6 +116,24 @@ freshNameAvoiding = define "freshNameAvoiding" $
       (var "go" @@ Math.add (var "i") (int32 1))
       (var "candidate")) $
   var "go" @@ int32 2
+
+eagerFreeVariablesInTerm :: TypedTermDefinition (Term -> S.Set Name)
+eagerFreeVariablesInTerm = define "eagerFreeVariablesInTerm" $
+  doc ("Find the free variables of a term that are referenced eagerly, i.e. outside of any nested "
+    <> "lambda body; used to break false dependency cycles caused by DSL-level thunks such as hydra.core.parsers.lazy") $
+  "term" ~>
+  "dfltVars" <~ ("_" ~> Lists.foldl ("s" ~> "t" ~> Sets.union (var "s") (eagerFreeVariablesInTerm @@ var "t"))
+    (Sets.empty :: TypedTerm (S.Set Name))
+    (Rewriting.subterms @@ var "term")) $
+  match _Term (var "term")
+    (Just $ var "dfltVars" @@ unit) [
+    -- A lambda body is not evaluated at definition time: any reference
+    -- inside it is deferred, so it contributes no eager free variables.
+    _Term_lambda>>: "_l" ~> (Sets.empty :: TypedTerm (S.Set Name)),
+    _Term_let>>: "l" ~> Sets.difference
+      (var "dfltVars" @@ unit)
+      (Sets.fromList (Lists.map (reify Core.bindingName) (Core.letBindings $ var "l"))),
+    _Term_variable>>: "v" ~> Sets.singleton (var "v" :: TypedTerm Name)]
 
 freeTypeVariablesInTerm :: TypedTermDefinition (Term -> S.Set Name)
 freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $

@@ -683,7 +683,7 @@
                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.sets.toList"}, "type": {"variable": "hydra.core.model.Name"}}},
                                                                                     "argument": {
                                                                                       "application": {
-                                                                                        "function": {"variable": "hydra.core.variables.freeVariablesInTerm"},
+                                                                                        "function": {"variable": "hydra.core.variables.eagerFreeVariablesInTerm"},
                                                                                         "argument": {
                                                                                           "application": {
                                                                                             "function": {"project": {"typeName": "hydra.core.packaging.TermDefinition", "fieldName": "body"}},
