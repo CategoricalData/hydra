@@ -1,0 +1,86 @@
+## Primitives in the hydra.core.lib.functions module.
+##
+## Function combinators: the identity/compose/const/flip basis. These primitives manipulate functions themselves, independently of any particular data type.
+module hydra.core.lib.functions
+
+import hydra.core.paths
+import hydra.core.ast
+import hydra.core.coders
+import hydra.core.model
+import hydra.core.diff
+import hydra.core.docs
+import hydra.core.error.checking
+import hydra.core.error.model
+import hydra.core.error.file
+import hydra.core.error.packaging
+import hydra.core.error.system
+import hydra.core.errors
+import hydra.core.file
+import hydra.core.graph
+import hydra.core.json.model
+import hydra.core.markdown
+import hydra.core.packaging
+import hydra.core.parsing
+import hydra.core.query
+import hydra.core.regex
+import hydra.core.relational
+import hydra.core.system
+import hydra.core.tabular
+import hydra.core.testing
+import hydra.core.time
+import hydra.core.topology
+import hydra.core.typed
+import hydra.core.typing
+import hydra.core.util
+import hydra.core.validation
+import hydra.core.variants
+
+## Eliminate a value of the uninhabited void type, producing any type.
+##
+## absurd(v) is the unique function from void to any type t1; since void has no inhabitants, this function can never actually be applied in a well-typed program.
+## Its purpose is to discharge an impossible branch in otherwise-total code, such as the left case of an either<void, a> that can never occur.
+## The eliminator dual to the (nonexistent) introducer for void.
+## Total, vacuously: there is no well-typed argument on which absurd could be called. Corresponds to Haskell's Data.Void.absurd :: Void -> a.
+##
+## @availableSince 0.17.6
+primitive absurd : ∀t1.void → t1
+
+## Compose two functions.
+##
+## compose(g, f, x) = g(f(x)); this defining equation is the specification.
+## The outer function comes first: f is applied to x, and g is applied to the result.
+## This is ordinary function composition, distinct from the Kleisli compose primitives of the monad modules.
+## Total. Corresponds to Haskell's (.) :: (b -> c) -> (a -> b) -> a -> c.
+##
+## @availableSince 0.17.6
+primitive compose : ∀t1,t2,t3.(t2 → t3) → (t1 → t2) → t1 → t3 = λg.λf.λx.g (f x)
+
+## Return the first argument, ignoring the second.
+##
+## const(x, y) = x; this defining equation is the specification.
+## Partially applied, const(x) is the constant function which returns x on every input.
+## Total. Corresponds to Haskell's const :: a -> b -> a.
+##
+## @availableSince 0.17.6
+## @requirement returnsFirstArgumentIgnoringSecond const returns its first argument unchanged and ignores its second argument entirely, regardless of the second argument's type or value.
+primitive const : ∀t1,t2.t1 → t2 → t1 = λx.λy.x
+
+## Swap the argument order of a binary function.
+##
+## flip(f, x, y) = f(y, x); this defining equation is the specification.
+## Total. Corresponds to Haskell's flip :: (a -> b -> c) -> b -> a -> c.
+##
+## @availableSince 0.17.6
+## @requirement swapsArgumentOrder flip(f, x, y) applies f with its two arguments in reversed order, i.e. flip(f, x, y) = f(y, x).
+primitive flip : ∀t1,t2,t3.(t1 → t2 → t3) → t2 → t1 → t3 = λf.λx.λy.f y x
+
+## Return the argument unchanged.
+##
+## identity(x) = x; this defining equation is the specification. The polymorphic identity function.
+## identity is the unit of compose: compose(identity, f) and compose(f, identity) are both f.
+## Total. Corresponds to Haskell's id :: a -> a.
+## Moved from hydra.lib.equality.identity.
+##
+## @availableSince 0.17.6
+## @requirement returnsArgumentUnchanged identity returns its argument completely unchanged, for any value.
+primitive identity : ∀t1.t1 → t1 = λx.x

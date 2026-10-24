@@ -86,6 +86,7 @@ module_ = Module {
   where
    definitions = [
      toDefinition definitionParser,
+     toDefinition dottedIdentifier,
      toDefinition expandAliasedName,
      toDefinition expandAliasesInDefinition,
      toDefinition expandAliasesInTerm,
@@ -166,13 +167,24 @@ identifier = define "identifier" $
 -- clash with Module.moduleName (a field of hydra.core.packaging.Module, also in scope via the
 -- broad Hydra.Kernel import). The DSL term name registered below ("moduleName") is unaffected --
 -- only the Haskell-level identifier changed.
-moduleNameParser :: TypedTermDefinition (Parser ModuleName)
-moduleNameParser = define "moduleName" $
-  doc "Parse a dotted module name" $
-  P.map @@ ("segs" ~> wrap _ModuleName (Strings.join (string ".") (var "segs"))) @@
+-- | Parse a dotted name as a plain joined String -- shared segment-parsing core for
+-- 'moduleNameParser' (wraps in ModuleName) and an import alias (syntax.md #710 §6.4: a computed
+-- alias may itself be multi-segment when a shorter candidate collides, e.g. 'error.file' -- see
+-- Print/Packaging.hs's 'aliasFromSuffix'/'growAliasesStep'). NOT 'identifier': dots must bind
+-- tightly to their segments with no trailing-whitespace token in between (see moduleNameParser's
+-- original note, preserved below).
+dottedIdentifier :: TypedTermDefinition (Parser String)
+dottedIdentifier = define "dottedIdentifier" $
+  doc "Parse a dotted name (one or more alphanumeric segments joined by '.') as a String" $
+  P.map @@ ("segs" ~> Strings.join (string ".") (var "segs")) @@
     (P.sepBy1 @@ (P.map @@ ("xs" ~> Strings.fromList (var "xs")) @@ (P.some @@ (P.satisfy @@ ("c" ~> Chars.isAlphaNum (var "c")))))
                @@ (P.char @@ int32 46))  -- '.' -- NOT 'identifier' (see note above re: no
                                          -- trailing-whitespace tokens inside a dotted name)
+
+moduleNameParser :: TypedTermDefinition (Parser ModuleName)
+moduleNameParser = define "moduleName" $
+  doc "Parse a dotted module name" $
+  P.map @@ ("s" ~> wrap _ModuleName (var "s")) @@ dottedIdentifier
 
 -- | Parse the 'module <dotted-name>' header line.
 moduleHeader :: TypedTermDefinition (Parser ModuleName)
@@ -208,7 +220,7 @@ importDecl = define "importDecl" $
   P.bind @@ (keyword @@ string "import") @@ (constant $
     P.bind @@ (token @@ moduleNameParser) @@ ("modName" ~>
       P.bind @@ (P.optional @@ (
-        P.bind @@ (keyword @@ string "as") @@ (constant identifier))) @@ ("malias" ~>
+        P.bind @@ (keyword @@ string "as") @@ (constant $ token @@ dottedIdentifier))) @@ ("malias" ~>
         P.bind @@ (P.optional @@ modulePackage) @@ ("mpkg" ~>
           P.pure @@ pair (Packaging.moduleDependency (var "modName") (var "mpkg")) (var "malias")))))
 

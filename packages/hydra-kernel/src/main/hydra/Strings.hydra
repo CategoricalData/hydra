@@ -1,0 +1,157 @@
+## Primitives in the hydra.core.lib.strings module.
+##
+## Strings as sequences of Unicode code points: a Hydra string is a sequence of Unicode code points -- not UTF-16 code units and not grapheme clusters -- and length and index positions count code points.
+## The general split/join pair (splitOn and join) is the primary line-and-token machinery; the newline-specific lines and unlines were removed as primitives in its favor, their exact semantics preserved as the non-primitive term helpers hydra.formatting.lines and hydra.formatting.unlines.
+module hydra.core.lib.strings
+
+import hydra.core.paths
+import hydra.core.ast
+import hydra.core.coders
+import hydra.core.model
+import hydra.core.diff
+import hydra.core.docs
+import hydra.core.error.checking
+import hydra.core.error.model
+import hydra.core.error.file
+import hydra.core.error.packaging
+import hydra.core.error.system
+import hydra.core.errors
+import hydra.core.file
+import hydra.core.graph
+import hydra.core.json.model
+import hydra.core.markdown
+import hydra.core.packaging
+import hydra.core.parsing
+import hydra.core.query
+import hydra.core.regex
+import hydra.core.relational
+import hydra.core.system
+import hydra.core.tabular
+import hydra.core.testing
+import hydra.core.time
+import hydra.core.topology
+import hydra.core.typed
+import hydra.core.typing
+import hydra.core.util
+import hydra.core.validation
+import hydra.core.variants
+
+## Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds.
+##
+## charAt(i, s) returns Just(c) where c is the Unicode code point at position i in s, or Nothing if i is negative or i >= length(s).
+## Total.
+## Renamed from hydra.lib.strings.maybeCharAt.
+##
+## @availableSince 0.17.6
+## @requirement returnsCodePointAtIndex charAt returns the Unicode code point at the given zero-based index, wrapped, indexing by code point (not UTF-16 code unit), so an index after an astral (non-BMP) character is unaffected by that character's surrogate-pair width in UTF-16-based representations.
+## @requirement noneWhenOutOfRange charAt returns none when the index is negative, at or beyond the string's code-point length, or when the string is empty.
+primitive charAt : ∀.int32 → string → optional<int32>
+
+## Concatenate a list of strings into a single string.
+##
+## concat(xs) returns the string formed by concatenating every string in xs in order.
+## Total. Corresponds to Haskell's concat :: [String] -> String.
+## Renamed from hydra.lib.strings.cat.
+##
+## @availableSince 0.17.6
+## @requirement flattensPreservingOrderAndContent concat concatenates every string in the list in order, preserving all content exactly including control characters, null characters, and multi-code-point Unicode sequences (combining characters) without alteration.
+## @requirement emptyInputs concat of a list containing only empty strings, or of an empty list of strings, is the empty string; empty strings elsewhere in the list contribute nothing to the result.
+primitive concat : ∀.list<string> → string
+
+## Concatenate two strings.
+##
+## concat2(s, t) returns the concatenation of s and t.
+## Total. Corresponds to Haskell's (++) :: String -> String -> String.
+## Renamed from hydra.lib.strings.cat2.
+##
+## @availableSince 0.17.6
+## @requirement appendsPreservingContent concat2 appends its second string argument to its first, preserving all content exactly including Unicode, control, and null characters.
+## @requirement identityOnEmpty concat2 with either or both arguments empty returns the other argument unchanged (the empty string is the identity element).
+primitive concat2 : ∀.string → string → string
+
+## Convert a list of Unicode code points to a string.
+##
+## fromList(cs) returns the string whose characters are the Unicode code points in cs, in order.
+## Code points outside the valid Unicode range [0, 0x10FFFF] yield a host-defined result (typically substitution with U+FFFD or truncation of the bits).
+## Total. The inverse of toList.
+##
+## @availableSince 0.15
+## @requirement buildsStringFromCodePoints fromList constructs a string whose characters are exactly the given Unicode code points, in order, including multi-code-point sequences (combining characters), control characters, and null characters.
+## @requirement emptyInput fromList of an empty list of code points is the empty string.
+primitive fromList : ∀.list<int32> → string
+
+## Check whether a string is empty.
+##
+## isEmpty(s) returns true iff s is the empty string.
+## Total. Corresponds to Haskell's null :: String -> Bool.
+##
+## @availableSince 0.15
+## @requirement testsZeroLength isEmpty returns true exactly when the string has no code points; any non-empty content — including whitespace, control characters, or a null character — makes it false.
+primitive isEmpty : ∀.string → boolean
+
+## Join a list of strings with a separator between each element.
+##
+## join(sep, xs) returns the strings in xs concatenated with sep inserted between each pair of adjacent strings; for the empty list the result is the empty string, and for a singleton list the result is the single string.
+## Total. Corresponds to Haskell's Data.List.intercalate :: String -> [String] -> String.
+## Renamed from hydra.lib.strings.intercalate.
+##
+## @availableSince 0.17.6
+## @requirement insertsSeparatorBetweenStrings join concatenates a list of strings with a copy of the separator inserted between each pair of adjacent strings (not before the first or after the last), for separators of any content including empty, multi-character, and Unicode.
+## @requirement boundaryInputs join of an empty list of strings is the empty string, regardless of separator; join of a single-element list returns that element unchanged, regardless of separator.
+primitive join : ∀.string → list<string> → string
+
+## Return the length of a string.
+##
+## length(s) returns the number of Unicode code points in s as an int32.
+## Note: this is the code-point count, not the byte count or the grapheme-cluster count, so a four-byte UTF-8 character counts as one and an emoji built from multiple code points counts as the number of code points it uses.
+## Total on strings shorter than 2^31-1 code points.
+##
+## @availableSince 0.15
+## @requirement countsCodePoints length returns the number of Unicode code points in the string, not the byte count or grapheme-cluster count — so a multi-byte character counts as one code point and a combining-character sequence counts as multiple.
+primitive length : ∀.string → int32
+
+## Split a string on a delimiter string.
+##
+## splitOn(sep, s) returns the list of substrings of s obtained by splitting on every occurrence of the non-empty delimiter sep. Adjacent or boundary delimiters produce empty-string elements in the result.
+## Behavior when sep is empty is host-defined and should not be relied upon.
+## Total. Corresponds to Haskell's Data.List.Split.splitOn :: String -> String -> [String].
+##
+## @availableSince 0.15
+## @requirement splitsOnEveryOccurrence splitOn splits the string into the list of substrings between every occurrence of a non-empty delimiter, including when occurrences are consecutive, overlapping, at a boundary, or span the whole string — boundary and adjacent delimiters produce empty-string elements in the result.
+## @requirement noSplitWhenAbsent splitOn returns the single-element list containing the original string when the delimiter does not occur in it.
+## @requirement emptyStringOperands splitOn on an empty string (with a non-empty separator) returns the single-element list containing the empty string; splitOn with an empty separator splits between every code point, including around an astral (non-BMP) character without breaking its surrogate-pair encoding apart.
+primitive splitOn : ∀.string → string → list<string>
+
+## Convert a string to a list of Unicode code points.
+##
+## toList(s) returns the list of Unicode code points making up s, in order. Each code point is represented as an int32.
+## Total. The inverse of fromList.
+##
+## @availableSince 0.15
+## @requirement decomposesIntoCodePoints toList returns the list of Unicode code points making up the string, in order, as the exact inverse of fromList, including for multi-code-point sequences and control/null characters.
+## @requirement emptyInput toList of the empty string is the empty list.
+primitive toList : ∀.string → list<int32>
+
+## Convert a string to lowercase.
+##
+## toLower(s) returns s with each character replaced by its Unicode simple (one-to-one) lowercase mapping, or itself if it has no lowercase mapping.
+## This is a code-point-by-code-point operation, so it does not handle the string-changing match of full Unicode case folding (e.g. U+00DF "ß" does not lowercase to "ss"; it returns itself).
+## For text intended for human-readable display in locales with non-trivial case mappings, prefer a host-specific full case-folding API.
+## Total.
+##
+## @availableSince 0.15
+## @requirement appliesSimpleLowercaseMapping toLower replaces each character with its Unicode simple (one-to-one) lowercase mapping, leaving a character with no lowercase mapping unchanged — including letters, accented Unicode characters, non-letter characters (numbers, punctuation, control characters), and the empty string.
+## @requirement noFullCaseFoldingExpansion toLower does not perform full Unicode case folding: a character whose full lowercase mapping would expand to multiple code points (e.g. U+0130) is still mapped to its simple, single-code-point lowercase form, not the multi-code-point expansion.
+primitive toLower : ∀.string → string
+
+## Convert a string to uppercase.
+##
+## toUpper(s) returns s with each character replaced by its Unicode simple (one-to-one) uppercase mapping, or itself if it has no uppercase mapping.
+## This is a code-point-by-code-point operation, so it does not handle the string-changing match of full Unicode case folding (e.g. U+00DF "ß" does not uppercase to "SS"; it returns itself).
+## For text intended for human-readable display in locales with non-trivial case mappings, prefer a host-specific full case-folding API.
+## Total.
+##
+## @availableSince 0.15
+## @requirement appliesSimpleUppercaseMapping toUpper replaces each character with its Unicode simple (one-to-one) uppercase mapping, leaving a character with no uppercase mapping unchanged — including letters, accented Unicode characters, non-letter characters, and the empty string.
+## @requirement noFullCaseFoldingExpansion toUpper does not perform full Unicode case folding: a character whose full uppercase mapping would expand to multiple code points, or whose simple mapping targets a single precomposed code point rather than a decomposed sequence, is mapped only to its simple, single-code-point uppercase form.
+primitive toUpper : ∀.string → string

@@ -1,0 +1,111 @@
+## Primitives in the hydra.core.lib.effects module.
+##
+## A value of effect<t> describes a deferred, executable computation which, when executed by a host interpreter, produces a value of type t; describing a computation is separate from executing it, and Hydra uses the effect type to keep that boundary explicit.
+## There is no eliminator (cases) for effects: an effect value is opaque, consumable only by further composition within this module or by an executor outside the language.
+## Every primitive in this module is pure: constructing or composing an effect description is a referentially transparent operation on ordinary values, and nothing observable happens until an executor runs the description. Effect descriptions have no identity semantics -- two equal descriptions are interchangeable -- so the usual pure-term transformations are valid over effect-building code. (Purity is independent of implementation strategy: a host may implement these combinators natively rather than from a default implementation.)
+## A host interpreter of effect<t> must honor, in addition to the purity of the combinators above: purity of construction (building or composing a description performs no host interaction; only an executor performing the described computation may interact with the host); order (when a combinator specifies an order between the effects it composes, an executor performs them in exactly that order); exactly-once (each composed effect is performed exactly once per execution, never skipped, never repeated); and deferral (an effect specified to run after another must not be performed, nor its producing function evaluated for effect, until the prior effect has run to completion and its value is available). These obligations are observable -- the effects are real host interactions -- so they are normative, not advisory.
+## effect<t> is total: a leaf effect always completes and yields a value (for hydra.lib.files, an either<FileError, t>); the obligations above govern order, multiplicity, and deferral, not failure short-circuiting.
+module hydra.core.lib.effects
+
+import hydra.core.paths
+import hydra.core.ast
+import hydra.core.coders
+import hydra.core.model
+import hydra.core.diff
+import hydra.core.docs
+import hydra.core.error.checking
+import hydra.core.error.model
+import hydra.core.error.file
+import hydra.core.error.packaging
+import hydra.core.error.system
+import hydra.core.errors
+import hydra.core.file
+import hydra.core.graph
+import hydra.core.json.model
+import hydra.core.markdown
+import hydra.core.packaging
+import hydra.core.parsing
+import hydra.core.query
+import hydra.core.regex
+import hydra.core.relational
+import hydra.core.system
+import hydra.core.tabular
+import hydra.core.testing
+import hydra.core.time
+import hydra.core.topology
+import hydra.core.typed
+import hydra.core.typing
+import hydra.core.util
+import hydra.core.validation
+import hydra.core.variants
+
+## Applicative apply for effects.
+##
+## apply(ef, ex) describes an effectful computation which first interprets ef to produce a function, then interprets ex to produce an argument, and returns the result of applying the function to the argument.
+##
+## @availableSince 0.17
+## @requirement appliesEffectfulFunctionToEffectfulArgument apply interprets the function-producing effect and the argument-producing effect, then applies the resulting function to the resulting argument.
+impure primitive apply : ∀x,y.effect<x → y> → effect<x> → effect<y>
+
+## Sequence two effectful computations.
+##
+## bind(e, f) describes an effectful computation which first interprets e, then passes its result to f to obtain the next effect.
+## Host interpreters provide the operational meaning; Hydra uses the type effect<t> to keep the effect boundary explicit.
+##
+## @availableSince 0.17
+## @requirement threadsResultIntoNextEffect bind passes the result of the first effect to the given function to obtain the next effect, whose result is the overall result.
+## @requirement performsEffectsInOrderExactlyOnce bind performs the first effect to completion, exactly once, before performing the second effect, also exactly once -- observable via real host side effects (not merely by return value), ruling out a host that reorders, double-runs, skips, or eagerly runs either effect.
+impure primitive bind : ∀x,y.effect<x> → (x → effect<y>) → effect<y>
+
+## Kleisli composition for effects.
+##
+## compose(f, g, x) describes an effectful computation equivalent to bind(f(x), g).
+##
+## @availableSince 0.17
+## @requirement sequencesTwoKleisliArrows compose(f, g, x) runs f on x to obtain the first effect, then runs g on that effect's result to obtain the second effect, equivalent to bind(f(x), g).
+impure primitive compose : ∀x,y,z.(x → effect<y>) → (y → effect<z>) → x → effect<z>
+
+## Left-fold over a list with an effect-returning function.
+##
+## foldList(f, acc0, xs) describes an effectful left fold over xs, sequencing applications of f from left to right.
+## Renamed from hydra.lib.effects.foldl.
+##
+## @availableSince 0.17.6
+## @requirement sequencesEffectReturningStepOverList foldList sequences an effect-returning step function over the list's elements, threading the accumulator through, and the overall result is the final accumulator.
+## @requirement performsElementEffectsLeftToRightExactlyOnce foldList performs the element effects left-to-right in list order, each exactly once -- observable via real host side effects, ruling out a host that reorders, double-runs, or skips an element's effect.
+impure primitive foldList : ∀x,y.(x → y → effect<x>) → x → list<y> → effect<x>
+
+## Map a pure function over the result of an effect.
+##
+## map(f, e) describes an effectful computation which interprets e and applies f to its result.
+## Equivalent to bind(e, \x -> pure(f x)).
+##
+## @availableSince 0.17
+## @requirement appliesPureFunctionToEffectResult map interprets the given effect and applies the pure function to its result; equivalent to bind(e, \x -> pure(f x)).
+impure primitive map : ∀x,y.(x → y) → effect<x> → effect<y>
+
+## Map an effect-returning function over a list.
+##
+## mapList(f, xs) describes an effectful computation which applies f to each element of xs from left to right and collects the results.
+##
+## @availableSince 0.17
+## @requirement appliesEffectReturningFunctionAndCollectsResults mapList applies the effect-returning function to each element and collects the per-element results into a list of the same length, in order.
+## @requirement performsElementEffectsLeftToRightExactlyOnce mapList performs the element effects left-to-right in list order, each exactly once -- observable via real host side effects, ruling out a host that reorders, double-runs, or skips an element's effect.
+impure primitive mapList : ∀x,y.(x → effect<y>) → list<x> → effect<list<y>>
+
+## Map an effect-returning function over an optional.
+##
+## mapOptional(f, m) describes an effectful computation which returns none when m is none, or applies f to the contained value and wraps the result in given.
+##
+## @availableSince 0.17
+## @requirement appliesFunctionWhenPresentPassesThroughNoneWhenAbsent mapOptional over a present value applies the effect-returning function and wraps the result in given; mapOptional over none yields none, with the function not applied.
+## @requirement performsExactlyZeroOrOneEffect mapOptional over none performs zero effects; mapOptional over a present value performs exactly one effect -- observable via a real host side effect, distinguishing "the function was never invoked" from "the function was invoked and its effect ran".
+impure primitive mapOptional : ∀x,y.(x → effect<y>) → optional<x> → effect<optional<y>>
+
+## Lift a pure value into an effect.
+##
+## pure(x) describes an effectful computation which succeeds with x without requiring host interaction.
+##
+## @availableSince 0.17
+## @requirement liftsValueWithoutHostInteraction pure(x) succeeds with exactly x, without requiring any host interaction.
+impure primitive pure : ∀x.x → effect<x>

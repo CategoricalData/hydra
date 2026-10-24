@@ -1043,7 +1043,10 @@ termSignature = define "termSignature" $
   P.bind @@ (lexeme @@ (P.char @@ int32 8704)) @@ (constant $    -- '∀'
     P.bind @@ (P.sepBy @@ (asTerm binderName) @@ (lexeme @@ (P.char @@ int32 44))) @@ ("vars" ~>    -- ','
       P.bind @@ (lexeme @@ (P.char @@ int32 46)) @@ (constant $    -- '.'
-        P.bind @@ (P.optional @@ constraintsBlock) @@ ("mcs" ~>
+        -- 'try' needed here for the same reason as typeScheme's header (#711): a constraints
+        -- block and a parenthesized parameter type (e.g. bimap's '(a → c) → ...') share a
+        -- leading '(', so a failed constraints-block attempt must rewind, not hard-fail.
+        P.bind @@ (P.optional @@ (P.try @@ constraintsBlock)) @@ ("mcs" ~>
           "typeParams" <~ Lists.map
             ("v" ~> Typing.typeParameter (var "v")
               (Optionals.withDefault (list ([] :: [TypedTerm TypeClassConstraint]))
