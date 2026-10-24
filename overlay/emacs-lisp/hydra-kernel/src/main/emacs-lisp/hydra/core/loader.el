@@ -733,6 +733,7 @@ package's generated modules with the same ordering/exclusion rules."
                   "test/strip.el"
                   "test/subterms.el"
                   "test/substitution.el"
+                  "test/syntax.el"
                   "test/unification.el"
                   ;; #729: hydra.core.test.validate.core -> hydra.core.test.validate.model
                   ;; (the "core" submodule of validate was itself renamed to "model").

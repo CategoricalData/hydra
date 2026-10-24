@@ -408,6 +408,7 @@
 (load-test-file "strip.lisp")
 (load-test-file "subterms.lisp")
 (load-test-file "substitution.lisp")
+(load-test-file "syntax.lisp")
 (load-test-file "unification.lisp")
 
 ;; Validate tests
