@@ -88,7 +88,6 @@ module_ = Module {
       toDefinition collectInnerTypeImports,
       toDefinition collectTermImports,
       toDefinition decimalDigitsAndScale,
-      toDefinition eagerFreeVariablesInTerm,
       toDefinition encodeBindingAsStatement,
       toDefinition encodeLazyCall,
       toDefinition encodeLiteral,
@@ -2069,43 +2068,13 @@ sortBindingsTopologically = def "sortBindingsTopologically" $
       (lambda "n" $ Maps.lookup (var "n") (var "byName" :: TypedTerm (M.Map Name Binding)))
       (Lists.concat (var "sccs"))
 
--- | Find the free variables of a term that are referenced *eagerly*, i.e.
--- outside of any nested lambda body. A reference inside a lambda body is not
--- evaluated when the enclosing `const` initializer runs (the lambda is only
--- invoked later, at call time), so it is not a JS Temporal Dead Zone hazard
--- and should not force ordering. This differs from
--- 'Variables.freeVariablesInTerm', which reports every free variable
--- (including ones only reachable through a nested lambda) since that
--- function answers a different question (value-level free-variable capture,
--- not emission-order safety). Used to break false dependency cycles caused
--- by DSL-level thunks such as `hydra.core.parsers.lazy` (e.g. mutually recursive
--- parsers deliberately deferred with `lazy(() -> otherParser)`). See #604.
-eagerFreeVariablesInTerm :: TypedTermDefinition (Term -> S.Set Name)
-eagerFreeVariablesInTerm = def "eagerFreeVariablesInTerm" $
-  doc ("Find the free variables of a term that are referenced eagerly, i.e. outside of any nested " L.++
-    "lambda body; used to break false dependency cycles caused by DSL-level thunks such as hydra.core.parsers.lazy") $
-  lambda "term" $
-    "dfltVars" <~ (lambda "_" $ Lists.foldl
-      (lambda "s" $ lambda "t" $ Sets.union (var "s") (eagerFreeVariablesInTerm @@ var "t"))
-      (Sets.empty :: TypedTerm (S.Set Name))
-      (Rewriting.subterms @@ var "term")) $
-    match _Term (var "term")
-      (Just $ var "dfltVars" @@ unit) [
-      -- A lambda body is not evaluated at definition time: any reference
-      -- inside it is deferred, so it contributes no eager free variables.
-      _Term_lambda>>: lambda "_l" $ (Sets.empty :: TypedTerm (S.Set Name)),
-      _Term_let>>: lambda "l" $ Sets.difference
-        (var "dfltVars" @@ unit :: TypedTerm (S.Set Name))
-        (Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (Core.letBindings (var "l")))),
-      _Term_variable>>: lambda "v" $ Sets.singleton (var "v" :: TypedTerm Name)]
-
 -- | Reorder term definitions so each definition appears after the
 -- intra-module definitions it depends on. This avoids JS Temporal Dead
 -- Zone errors for `const` declarations that reference other constants
 -- defined later in alphabetical order (which is Hydra's source order).
 --
 -- Dependency edges are computed from *eager* free variables
--- ('eagerFreeVariablesInTerm'), not the full free-variable set: a reference
+-- ('Variables.eagerFreeVariablesInTerm'), not the full free-variable set: a reference
 -- that only occurs inside a nested lambda body (e.g. a DSL-level
 -- `hydra.core.parsers.lazy(() -> otherDef)` thunk used to break genuine mutual
 -- recursion) is deferred until call time and is not a TDZ hazard, so it must
@@ -2132,7 +2101,7 @@ sortTermDefsTopologically = def "sortTermDefsTopologically" $
       (lambda "td" $
         "tname" <~ Packaging.termDefinitionName (var "td") $
         "tterm" <~ Packaging.termDefinitionBody (var "td") $
-        "freeVars" <~ (eagerFreeVariablesInTerm @@ var "tterm") $
+        "freeVars" <~ (Variables.eagerFreeVariablesInTerm @@ var "tterm") $
         -- Keep only references that point to defs in this module.
         "deps" <~ (Lists.filter
           (lambda "n" $ Maps.member (var "n") (var "byName" :: TypedTerm (M.Map Name TermDefinition)))
