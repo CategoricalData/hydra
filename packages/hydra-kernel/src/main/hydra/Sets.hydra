@@ -1,0 +1,197 @@
+## Primitives in the hydra.core.lib.sets module.
+##
+## Ordered sets: finite collections of distinct elements.
+## Hydra sets are ordered collections: iteration (toList) is in ascending element order, under the type's total order.
+## Because element ordering is part of the set type's contract, every set-typed variable in this module's signatures carries the ordering constraint on its element type, including in primitives that perform no comparison themselves.
+module hydra.core.lib.sets
+
+import hydra.core.paths
+import hydra.core.ast
+import hydra.core.coders
+import hydra.core.model
+import hydra.core.diff
+import hydra.core.docs
+import hydra.core.error.checking
+import hydra.core.error.model
+import hydra.core.error.file
+import hydra.core.error.packaging
+import hydra.core.error.system
+import hydra.core.errors
+import hydra.core.file
+import hydra.core.graph
+import hydra.core.json.model
+import hydra.core.markdown
+import hydra.core.packaging
+import hydra.core.parsing
+import hydra.core.query
+import hydra.core.regex
+import hydra.core.relational
+import hydra.core.system
+import hydra.core.tabular
+import hydra.core.testing
+import hydra.core.time
+import hydra.core.topology
+import hydra.core.typed
+import hydra.core.typing
+import hydra.core.util
+import hydra.core.validation
+import hydra.core.variants
+
+## Remove an element from a set.
+##
+## delete(x, s) returns s with x removed; if x is not in s, s is returned unchanged.
+## Requires an 'ordering' constraint on the element type.
+## Total. Corresponds to Haskell's Data.Set.delete :: Ord a => a -> Set a -> Set a.
+##
+## @availableSince 0.15
+## @requirement removesElement delete removes the given element from the set if present, leaving every other element unchanged.
+## @requirement noOpWhenAbsentOrEmpty delete returns the set unchanged when the element is not present, including when the set is empty.
+primitive delete : ∀x.(ordering x) ⇒ x → set<x> → set<x>
+
+## Compute the difference of two sets: elements in the first that are not in the second.
+##
+## difference(s1, s2) returns the set of elements that are in s1 but not in s2.
+## Requires an 'ordering' constraint on the element type.
+## Total. Corresponds to Haskell's Data.Set.difference :: Ord a => Set a -> Set a -> Set a.
+##
+## @availableSince 0.15
+## @requirement removesElementsOfSecondSet difference returns the elements of the first set that do not occur in the second set.
+## @requirement identityWhenSecondEmpty difference with an empty second set returns the first set unchanged.
+primitive difference : ∀x.(ordering x) ⇒ set<x> → set<x> → set<x> = λs1.λs2.hydra.core.lib.lists.foldl (λacc.λel.hydra.core.lib.logic.ifElse (hydra.core.lib.sets.member el s2) acc (hydra.core.lib.sets.insert el acc)) hydra.core.lib.sets.empty (hydra.core.lib.sets.toList s1)
+
+## The empty set.
+##
+## empty is the set with no elements.
+## Requires an 'ordering' constraint on the element type.
+## Total. Corresponds to Haskell's Data.Set.empty :: Set a.
+##
+## @availableSince 0.15
+## @requirement hasNoElements empty is the set containing no elements, for any element type.
+primitive empty : ∀x.(ordering x) ⇒ set<x>
+
+## Filter a set by a predicate.
+##
+## filter(p, s) returns the subset of s containing exactly the elements x for which p(x) is true.
+## Requires an 'ordering' constraint on the element type.
+## Total. Corresponds to Haskell's Data.Set.filter :: (a -> Bool) -> Set a -> Set a.
+##
+## @availableSince 0.17.6
+primitive filter : ∀x.(ordering x) ⇒ (x → boolean) → set<x> → set<x> = λp.λs.hydra.core.lib.sets.fromList (hydra.core.lib.lists.filter p (hydra.core.lib.sets.toList s))
+
+## Construct a set from a list of elements (duplicates removed).
+##
+## fromList(xs) returns the set containing exactly the distinct elements of xs; duplicates are discarded.
+## Requires an 'ordering' constraint on the element type.
+## Total. Corresponds to Haskell's Data.Set.fromList :: Ord a => [a] -> Set a.
+##
+## @availableSince 0.15
+## @requirement collectsDistinctElements fromList returns the set of the distinct elements of the given list, discarding duplicates and order.
+## @requirement emptyListYieldsEmptySet fromList of the empty list is the empty set.
+primitive fromList : ∀x.(ordering x) ⇒ list<x> → set<x>
+
+## Add an element to a set.
+##
+## insert(x, s) returns s with x added; if x is already in s, s is returned unchanged.
+## Requires an 'ordering' constraint on the element type.
+## Total. Corresponds to Haskell's Data.Set.insert :: Ord a => a -> Set a -> Set a.
+##
+## @availableSince 0.15
+## @requirement addsElement insert adds the given element to the set, leaving every other element unchanged.
+## @requirement noOpWhenAlreadyPresent insert returns the set unchanged when the element is already present.
+primitive insert : ∀x.(ordering x) ⇒ x → set<x> → set<x>
+
+## Compute the intersection of two sets: elements present in both.
+##
+## intersection(s1, s2) returns the set of elements present in both s1 and s2.
+## Requires an 'ordering' constraint on the element type.
+## Total. Corresponds to Haskell's Data.Set.intersection :: Ord a => Set a -> Set a -> Set a.
+##
+## @availableSince 0.15
+## @requirement keepsElementsInBoth intersection returns exactly the elements present in both sets.
+## @requirement emptyWhenNoOverlapOrEitherEmpty intersection is the empty set when the two sets share no elements, or when either set is empty.
+primitive intersection : ∀x.(ordering x) ⇒ set<x> → set<x> → set<x> = λs1.λs2.hydra.core.lib.lists.foldl (λacc.λel.hydra.core.lib.logic.ifElse (hydra.core.lib.sets.member el s2) (hydra.core.lib.sets.insert el acc) acc) hydra.core.lib.sets.empty (hydra.core.lib.sets.toList s1)
+
+## Test whether a set is empty.
+##
+## isEmpty(s) returns true iff s has no elements.
+## Requires an 'ordering' constraint on the element type.
+## Total. Corresponds to Haskell's Data.Set.null :: Set a -> Bool.
+##
+## @availableSince 0.15
+## @requirement testsZeroSize isEmpty returns true exactly when the set has no elements.
+primitive isEmpty : ∀x.(ordering x) ⇒ set<x> → boolean
+
+## Map a function over a set.
+##
+## map(f, s) returns the set of f(x) for each x in s. Elements that f maps to the same image are deduplicated by the result type's ordering.
+## Requires 'ordering' constraints on both the input and output element types.
+## Total. Corresponds to Haskell's Data.Set.map :: (Ord a, Ord b) => (a -> b) -> Set a -> Set b.
+##
+## @availableSince 0.15
+## @requirement appliesFunctionToEachElement map returns the set of applying the given function to each element, deduplicating results that collide under the output type's ordering.
+## @requirement emptyInput map over the empty set is the empty set, regardless of the function.
+primitive map : ∀x,y.(ordering x, ordering y) ⇒ (x → y) → set<x> → set<y> = λf.λs.hydra.core.lib.sets.fromList (hydra.core.lib.lists.map f (hydra.core.lib.sets.toList s))
+
+## Test whether an element is in a set.
+##
+## member(x, s) returns true iff x is an element of s.
+## Requires an 'ordering' constraint on the element type.
+## Total. Corresponds to Haskell's Data.Set.member :: Ord a => a -> Set a -> Bool.
+##
+## @availableSince 0.15
+## @requirement testsSetMembership member returns true exactly when the given value is an element of the set.
+## @requirement falseWhenAbsentOrEmpty member returns false when the value is not an element of the set, including when the set is empty.
+primitive member : ∀x.(ordering x) ⇒ x → set<x> → boolean
+
+## Construct a set containing a single element.
+##
+## singleton(x) returns the set containing exactly the element x.
+## Requires an 'ordering' constraint on the element type.
+## Total. Corresponds to Haskell's Data.Set.singleton :: a -> Set a.
+##
+## @availableSince 0.15
+## @requirement wrapsOneElement singleton x returns the set containing exactly the element x.
+primitive singleton : ∀x.(ordering x) ⇒ x → set<x>
+
+## Return the number of elements in a set.
+##
+## size(s) returns the number of elements in s as an int32.
+## Requires an 'ordering' constraint on the element type.
+## Total. Corresponds to Haskell's Data.Set.size :: Set a -> Int (with narrowing to int32).
+##
+## @availableSince 0.15
+## @requirement countsElements size returns the number of elements in the set, including zero for the empty set.
+primitive size : ∀x.(ordering x) ⇒ set<x> → int32
+
+## Convert a set to a list (in ascending order).
+##
+## toList(s) returns the elements of s as a list, in ascending order under the element type's ordering.
+## Requires an 'ordering' constraint on the element type.
+## Total. Corresponds to Haskell's Data.Set.toAscList :: Set a -> [a].
+##
+## @availableSince 0.15
+## @requirement ordersAscending toList returns the elements of the set as a list in ascending order under the element type's ordering, regardless of insertion order.
+## @requirement emptySetYieldsEmptyList toList of the empty set is the empty list.
+primitive toList : ∀x.(ordering x) ⇒ set<x> → list<x>
+
+## Compute the union of two sets: elements in either.
+##
+## union(s1, s2) returns the set of elements that are in s1 or in s2 (or both).
+## Requires an 'ordering' constraint on the element type.
+## Total. Corresponds to Haskell's Data.Set.union :: Ord a => Set a -> Set a -> Set a.
+##
+## @availableSince 0.15
+## @requirement keepsElementsInEither union returns the elements that are in either set (or both), with no duplicates.
+## @requirement identityWhenEitherEmpty union with either set empty returns the other set unchanged.
+primitive union : ∀x.(ordering x) ⇒ set<x> → set<x> → set<x> = λs1.λs2.hydra.core.lib.lists.foldl (λacc.λel.hydra.core.lib.sets.insert el acc) s2 (hydra.core.lib.sets.toList s1)
+
+## Compute the union of a list of sets.
+##
+## unions(ss) returns the union of every set in ss. Equivalent to folding union over ss starting from empty.
+## Requires an 'ordering' constraint on the element type.
+## Total. Corresponds to Haskell's Data.Set.unions :: Ord a => [Set a] -> Set a.
+##
+## @availableSince 0.15
+## @requirement keepsElementsInAny unions returns the elements that occur in at least one of the given sets, equivalent to folding union over the list starting from empty.
+## @requirement emptyListOfSetsYieldsEmptySet unions of an empty list of sets is the empty set.
+primitive unions : ∀x.(ordering x) ⇒ list<set<x>> → set<x> = λss.hydra.core.lib.lists.foldl (λacc.λs.hydra.core.lib.sets.union acc s) hydra.core.lib.sets.empty ss
