@@ -330,29 +330,31 @@ withDefinitionDoc = define "withDefinitionDoc" $
         (Strings.concat $ list [var "docBlock", string "\n", var "declStr"]))
 
 -- | Show a type definition: 'type Name = <type>', with its doc-comment block (if any) prepended.
-typeDefinition :: TypedTermDefinition (TypeDefinition -> String)
+-- The import-alias map (#803) is threaded into the body printer so nominal references in the
+-- type are shortened via the module's own 'import ... as <alias>' lines.
+typeDefinition :: TypedTermDefinition (M.Map ModuleName String -> TypeDefinition -> String)
 typeDefinition = define "typeDefinition" $
-  doc "Show a type definition as a string" $
-  "td" ~>
+  doc "Show a type definition as a string, shortening nominal references via the given import-alias map (#803)" $
+  "aliases" ~> "td" ~>
   "localName" <~ (Names.localNameOf @@ (Packaging.typeDefinitionName $ var "td")) $
-  "typeStr" <~ (PrintCore.typeScheme @@ (Packaging.typeDefinitionBody $ var "td")) $
+  "typeStr" <~ (PrintCore.typeSchemeAliased @@ var "aliases" @@ (Packaging.typeDefinitionBody $ var "td")) $
   withDefinitionDoc @@ (Packaging.typeDefinitionMetadata $ var "td") @@
     (Strings.concat $ list [string "type ", var "localName", string " = ", var "typeStr"])
 
 -- | Show a term definition: 'term name [: <typeScheme>] = <term>', with its doc-comment block
 -- (if any) prepended. Signature is printed only when present -- conventionally omitted per #710
 -- design (left for inference).
-termDefinition :: TypedTermDefinition (TermDefinition -> String)
+termDefinition :: TypedTermDefinition (M.Map ModuleName String -> TermDefinition -> String)
 termDefinition = define "termDefinition" $
-  doc "Show a term definition as a string" $
-  "td" ~>
+  doc "Show a term definition as a string, shortening nominal references via the given import-alias map (#803)" $
+  "aliases" ~> "td" ~>
   "localName" <~ (Names.localNameOf @@ (Packaging.termDefinitionName $ var "td")) $
   -- sigStr carries its own leading/trailing spacing (or is empty) so no separate literal space
   -- is needed around it below.
   "sigStr" <~ Optionals.match (Packaging.termDefinitionSignature $ var "td")
     (string " ")
-    ("sig" ~> Strings.concat $ list [string " : ", PrintCore.termSignature @@ var "sig", string " "]) $
-  "bodyStr" <~ (PrintCore.term @@ (Packaging.termDefinitionBody $ var "td")) $
+    ("sig" ~> Strings.concat $ list [string " : ", PrintCore.termSignatureAliased @@ var "aliases" @@ var "sig", string " "]) $
+  "bodyStr" <~ (PrintCore.termAliased @@ var "aliases" @@ (Packaging.termDefinitionBody $ var "td")) $
   withDefinitionDoc @@ (Packaging.termDefinitionMetadata $ var "td") @@
     (Strings.concat $ list [string "term ", var "localName", var "sigStr", string "= ", var "bodyStr"])
 
@@ -367,10 +369,10 @@ termDefinition = define "termDefinition" $
 -- hydra.core.graph.Primitive record, also in scope via the broad Hydra.Kernel import). The DSL
 -- term name registered below ("primitiveDefinition") is unaffected -- only the Haskell-level
 -- identifier changed.
-primitiveDefinitionDoc :: TypedTermDefinition (PrimitiveDefinition -> String)
+primitiveDefinitionDoc :: TypedTermDefinition (M.Map ModuleName String -> PrimitiveDefinition -> String)
 primitiveDefinitionDoc = define "primitiveDefinition" $
-  doc "Show a primitive definition as a string" $
-  "pd" ~>
+  doc "Show a primitive definition as a string, shortening nominal references via the given import-alias map (#803)" $
+  "aliases" ~> "pd" ~>
   "localName" <~ (Names.localNameOf @@ (Packaging.primitiveDefinitionName $ var "pd")) $
   "impureStr" <~ Logic.ifElse (Packaging.primitiveDefinitionIsPure $ var "pd")
     (string "")
@@ -378,23 +380,24 @@ primitiveDefinitionDoc = define "primitiveDefinition" $
   "partialStr" <~ Logic.ifElse (Packaging.primitiveDefinitionIsTotal $ var "pd")
     (string "")
     (string "partial ") $
-  "sigStr" <~ (PrintCore.termSignature @@ (Packaging.primitiveDefinitionSignature $ var "pd")) $
+  "sigStr" <~ (PrintCore.termSignatureAliased @@ var "aliases" @@ (Packaging.primitiveDefinitionSignature $ var "pd")) $
   "implStr" <~ Optionals.match (Packaging.primitiveDefinitionDefaultImplementation $ var "pd")
     (string "")
-    ("impl" ~> Strings.concat $ list [string " = ", PrintCore.term @@ var "impl"]) $
+    ("impl" ~> Strings.concat $ list [string " = ", PrintCore.termAliased @@ var "aliases" @@ var "impl"]) $
   withDefinitionDoc @@ (Packaging.primitiveDefinitionMetadata $ var "pd") @@
     (Strings.concat $ list [
       var "impureStr", var "partialStr",
       string "primitive ", var "localName", string " : ", var "sigStr", var "implStr"])
 
--- | Show a definition (type, term, or primitive) by dispatching to the matching printer.
-definition :: TypedTermDefinition (Definition -> String)
+-- | Show a definition (type, term, or primitive) by dispatching to the matching printer, threading
+-- the import-alias map (#803) into the body/signature printers.
+definition :: TypedTermDefinition (M.Map ModuleName String -> Definition -> String)
 definition = define "definition" $
-  doc "Show a definition as a string" $
-  "def" ~> match _Definition (var "def") Nothing [
-    _Definition_primitive>>: primitiveDefinitionDoc,
-    _Definition_term>>: termDefinition,
-    _Definition_type>>: typeDefinition]
+  doc "Show a definition as a string, shortening nominal references via the given import-alias map (#803)" $
+  "aliases" ~> "def" ~> match _Definition (var "def") Nothing [
+    _Definition_primitive>>: "pd" ~> primitiveDefinitionDoc @@ var "aliases" @@ var "pd",
+    _Definition_term>>: "td" ~> termDefinition @@ var "aliases" @@ var "td",
+    _Definition_type>>: "tyd" ~> typeDefinition @@ var "aliases" @@ var "tyd"]
 
 -- | Show an entire module: header, imports, then definitions in the order given (#710: the
 -- grammar imposes no ordering requirement; this printer preserves 'Module.definitions' list
@@ -402,21 +405,16 @@ definition = define "definition" $
 --
 -- Import-line aliasing: computed per syntax.md §6.4's settled algorithm (see 'moduleAliases'),
 -- so every printed import line carries an 'as <alias>' clause chosen by the asymmetric
--- shortest-wins collision rule. SCOPED: aliasing is applied only to the import lines themselves;
--- definition BODIES (via 'definition' -> 'typeDefinition'/'termDefinition'/
--- 'primitiveDefinitionDoc' -> 'PrintCore.term'/'typeScheme') still print every name fully-dotted.
--- Threading the alias map into body printing too would require either (a) modifying
--- 'PrintCore.term'/'type_'/'typeScheme' to accept a name-printing environment (invasive --
--- 'PrintCore' is used unchanged by the JSON coder, lexicon generator, and every other fully-dotted
--- consumer; the 497 W4 printer is stable and shouldn't change shape for this), or (b) a
--- full from-scratch duplicate of 'PrintCore.termAtPrec'/'typeAtPrec' local to this module (a
--- ~500-line precedence-aware printer, high risk of drifting from PrintCore's own correctness).
--- Neither is justified by the round-trip contract (§1): fully-dotted body output is always valid,
--- never incorrect, just more verbose than necessary -- a readability optimization, not a
--- correctness requirement. So this is a conscious, documented scope boundary, not an oversight:
--- import lines get real aliases (the genuinely settled, implementable part of §6.4); body
--- printing stays fully-dotted until a future change either extends PrintCore itself or a
--- lighter-weight env-threading mechanism is designed for it.
+-- shortest-wins collision rule. The SAME 'moduleAliases' map is now threaded into definition
+-- BODIES too (#803): 'definition' -> 'typeDefinition'/'termDefinition'/'primitiveDefinitionDoc'
+-- -> 'PrintCore.{typeSchemeAliased,termAliased,termSignatureAliased}', so every nominal reference
+-- in a term/type body is shortened via that same alias map. This makes the printed 'import ... as
+-- <alias>' lines load-bearing (the body uses the alias) rather than advertising a shortening the
+-- body never took. The alias forms round-trip: 'Parse/Packaging.hs's 'expandAliasesInDefinition'
+-- re-expands each aliased first segment back to its full module name using the same import table.
+-- Callers with no module context (tests, the lexicon generator, the JSON coder, standalone spec
+-- examples) keep the fully-dotted output because they call 'PrintCore.{term,type_,typeScheme,
+-- termSignature}', whose empty-alias-map delegation reproduces the pre-#803 behaviour exactly.
 --
 -- Module-level doc-comment printing: per §6.2's grammar (module ::= moduleDoc? moduleHeader
 -- importDecl* definition*), the doc block precedes the header.
@@ -428,7 +426,7 @@ module' = define "moduleDefinition" $
     (Strings.concat (list [string "module ", moduleNameString @@ (Packaging.moduleName $ var "mod")]))) $
   "aliases" <~ (moduleAliases @@ var "mod") $
   "importStrs" <~ Lists.map (importDecl @@ (var "aliases" :: TypedTerm (M.Map ModuleName String))) (Packaging.moduleDependencies $ var "mod") $
-  "defStrs" <~ Lists.map (asTerm definition) (Packaging.moduleDefinitions $ var "mod") $
+  "defStrs" <~ Lists.map (definition @@ (var "aliases" :: TypedTerm (M.Map ModuleName String))) (Packaging.moduleDefinitions $ var "mod") $
   Strings.join (string "\n\n") (Lists.cons (var "headerStr")
     (Lists.cons (Strings.join (string "\n") (var "importStrs"))
       (var "defStrs")))
