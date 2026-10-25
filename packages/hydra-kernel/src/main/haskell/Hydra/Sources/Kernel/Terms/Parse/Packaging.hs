@@ -260,20 +260,38 @@ qualifyLocalName = define "qualifyLocalName" $
 -- syntax.md #6.4, 'moduleAliases') ALWAYS aliases every import it emits and never produces a bare
 -- unqualified import, so the parser's aliased-name resolution alone is sufficient to round-trip
 -- anything this printer itself produces.
+-- | Expand an aliased leading prefix of a name to its full module name, per the given alias table.
+-- Aliases may be multi-segment (syntax.md §6.4's asymmetric collision rule can assign e.g.
+-- 'error.file' to 'hydra.core.error.file' when it collides with 'hydra.core.file as file'), so the
+-- lookup tries the LONGEST matching leading prefix first: for a name with k segments, it tests the
+-- first (k-1), (k-2), ... , 1 segments joined by '.' as an alias key, stopping at the first hit.
+-- The matched prefix is replaced by its full module name and the remaining (local) segments are
+-- re-appended. At least one trailing segment is always kept (a name is never entirely alias), and
+-- a name with no matching prefix -- including a single-segment, unqualified name -- is returned
+-- unchanged. This is the exact inverse of 'Print/Core.hs's 'printNameAliased' (#803).
 expandAliasedName :: TypedTermDefinition (M.Map String ModuleName -> Name -> Name)
 expandAliasedName = define "expandAliasedName" $
-  doc "Expand a name's aliased first segment to its full module name, per the given alias table" $
+  doc "Expand a name's aliased leading prefix (longest match) to its full module name, per the given alias table" $
   "aliases" ~> "n" ~>
   "s" <~ Core.unName (var "n") $
   "segs" <~ Strings.splitOn (string ".") (var "s") $
-  Optionals.match (Lists.uncons (var "segs"))
-    (var "n")
-    ("uc" ~>
-      "first_" <~ Pairs.first (var "uc") $
-      "rest" <~ Pairs.second (var "uc") $
-      Optionals.match (Maps.lookup (var "first_") (var "aliases" :: TypedTerm (M.Map String ModuleName)))
-        (var "n")
-        ("modName" ~> Core.name (Strings.concat $ Lists.cons (Packaging.unModuleName (var "modName")) (Lists.map ("seg" ~> Strings.concat2 (string ".") (var "seg")) (var "rest")))))
+  "segCount" <~ Lists.length (var "segs") $
+  -- Try each proper leading prefix of length k = 1 .. segCount-1 as an alias key, expanding to the
+  -- full module name followed by the remaining (local) segments. 'tryLen' yields the expanded Name
+  -- when the k-segment prefix is an alias, Nothing otherwise. Longer prefixes come later in the
+  -- 1..segCount-1 order, so the LONGEST match is the last surviving candidate (Lists.last).
+  "tryLen" <~ ("k" ~>
+    "prefix" <~ Strings.join (string ".") (Lists.take (var "k") (var "segs")) $
+    Optionals.map
+      ("modName" ~> Core.name (Strings.join (string ".") (Lists.cons (Packaging.unModuleName (var "modName")) (Lists.drop (var "k") (var "segs")))))
+      (Maps.lookup (var "prefix") (var "aliases" :: TypedTerm (M.Map String ModuleName)))) $
+  -- Build [1 .. segCount-1] by discarding the last of [1 .. segCount] (one int per segment).
+  "prefixLens" <~ Lists.foldl
+    ("acc" ~> "_seg" ~> Lists.concat2 (var "acc") (list [Math.add (Lists.length $ var "acc") (int32 1)]))
+    (list ([] :: [TypedTerm Int]))
+    (Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.init $ var "segs")) $
+  "matches" <~ Optionals.mapOptional (var "tryLen") (var "prefixLens") $
+  Optionals.withDefault (var "n") (Lists.last $ var "matches")
 
 -- | Expand every aliased name reference inside a term, per the given alias table (see
 -- 'expandAliasedName'). Only 'variableTerm' (the one term-level name-reference position the base

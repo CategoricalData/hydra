@@ -18,8 +18,12 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Packaging     as Packaging
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Packaging as PrintPackaging
 import qualified Hydra.Sources.Kernel.Terms.Parse.Core as ParseCore
+import qualified Hydra.Sources.Kernel.Terms.Parse.Packaging as ParsePackaging
 
 import Hydra.Core.Testing
 
@@ -31,12 +35,13 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, PrintCore.ns, ParseCore.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, PrintCore.ns, PrintPackaging.ns, ParseCore.ns, ParsePackaging.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Round-trip test cases for the textual syntax"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,
-      Phantoms.toDefinition lazyParameterRoundtripGroup]
+      Phantoms.toDefinition lazyParameterRoundtripGroup,
+      Phantoms.toDefinition moduleAliasGroup]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -46,7 +51,7 @@ allTests = define "allTests" $
     doc "Test cases for the textual syntax (#497/#710)" $
     Testing.testGroup (string "textual syntax") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
-    subgroups = [lazyParameterRoundtripGroup]
+    subgroups = [lazyParameterRoundtripGroup, moduleAliasGroup]
 
 -- | Print a term signature, then parse the printed text back, and show the round-tripped
 -- signature. Compares against the original signature's own printed form, so the test both
@@ -142,3 +147,65 @@ lazyParameterRoundtripGroup = define "lazyParameterRoundtripGroup" $
       "\8704x.boolean \8594 x \8594 x",
 
     signatureRoundtripTest "no lazy parameters: round-trips cleanly" noLazyParamsSignature])
+
+-- #803: module-level import-alias printing. A module whose two dependencies share the trailing
+-- segment 'file' forces the asymmetric collision rule (syntax.md §6.4) to assign a MULTI-segment
+-- alias ('error.file') to one of them, exercising both the printer's alias threading
+-- (Print/Core.hs's printNameAliased, via Print/Packaging.hs's module') and the parser's
+-- longest-prefix alias expansion (Parse/Packaging.hs's expandAliasedName). Mirrors the confirmed
+-- Files.hydra case from the issue.
+
+-- | A monomorphic type scheme (no quantified variables, no constraints) wrapping the given type.
+monoScheme :: TypedTerm Type -> TypedTerm TypeScheme
+monoScheme ty = Core.typeScheme (Phantoms.list ([] :: [TypedTerm Name])) ty Maps.empty
+
+-- | The #803 example module: 'type Thing = (hydra.core.file.FilePath, hydra.core.error.file.FileError)'
+-- with both referenced modules declared as dependencies (error.file listed first so the printed
+-- import order is deterministic). Printing must shorten both references via the computed aliases.
+aliasExampleModule :: TypedTerm Module
+aliasExampleModule = Packaging.module_
+  (Packaging.moduleName2 $ Phantoms.string "hydra.example.app")
+  nothing
+  (Phantoms.list [
+    Packaging.moduleDependency (Packaging.moduleName2 $ Phantoms.string "hydra.core.error.file") nothing,
+    Packaging.moduleDependency (Packaging.moduleName2 $ Phantoms.string "hydra.core.file") nothing])
+  (Phantoms.list [
+    Packaging.definitionType (Packaging.typeDefinition
+      (Core.name $ Phantoms.string "hydra.example.app.Thing")
+      nothing
+      (monoScheme (T.pair (T.variable "hydra.core.file.FilePath") (T.variable "hydra.core.error.file.FileError"))))])
+
+-- | Exact-print test: the printed module uses the computed aliases on its import lines AND in the
+-- type-definition body ('file.FilePath'/'error.file.FileError'), proving the alias lines are
+-- load-bearing (#803).
+moduleAliasPrintTest :: TypedTerm TestCaseWithMetadata
+moduleAliasPrintTest = universalCase "module prints import aliases and uses them in definition bodies"
+  (PrintPackaging.module' @@ aliasExampleModule)
+  (Phantoms.string $ L.intercalate "\n" [
+    "module hydra.example.app",
+    "",
+    "import hydra.core.error.file as error.file",
+    "import hydra.core.file as file",
+    "",
+    "type Thing = \8704.(file.FilePath, error.file.FileError)"])
+
+-- | Round-trip test: printing then parsing then re-printing the module yields identical text. This
+-- is the load-bearing contract -- the printed aliases (including the multi-segment 'error.file')
+-- must re-expand to the original fully-qualified names so the second print matches the first.
+moduleAliasRoundtripTest :: TypedTerm TestCaseWithMetadata
+moduleAliasRoundtripTest = universalCase "module alias print round-trips (print -> parse -> print)"
+  actual expected
+  where
+    printed = PrintPackaging.module' @@ aliasExampleModule
+    actual = Eithers.either
+      (Phantoms.lambda "e" $ Phantoms.var "e")
+      (Phantoms.lambda "mod2" $ PrintPackaging.module' @@ Phantoms.var "mod2")
+      (ParsePackaging.parseModule @@ printed)
+    expected = printed
+
+moduleAliasGroup :: TypedTermDefinition TestGroup
+moduleAliasGroup = define "moduleAliasGroup" $
+  doc "Module-level import-alias printing and round-trip test cases (#803)" $
+  Testing.testGroup (string "import aliases") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    moduleAliasPrintTest,
+    moduleAliasRoundtripTest])

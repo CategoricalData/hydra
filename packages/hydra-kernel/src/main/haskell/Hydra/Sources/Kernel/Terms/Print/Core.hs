@@ -67,6 +67,7 @@ module_ = Module {
   where
    definitions = [
      toDefinition binding,
+     toDefinition bindingAliased,
      toDefinition caseStatement,
      toDefinition either_,
      toDefinition escapeBacktickChar,
@@ -84,6 +85,7 @@ module_ = Module {
      toDefinition isReservedWord,
      toDefinition lambda,
      toDefinition let_,
+     toDefinition letAliased,
      toDefinition list_,
      toDefinition literal,
      toDefinition literalType,
@@ -93,15 +95,20 @@ module_ = Module {
      toDefinition printBacktickedName,
      toDefinition printBinderName,
      toDefinition printName,
+     toDefinition printNameAliased,
      toDefinition projection,
      toDefinition (set_ :: TypedTermDefinition ((Int -> String) -> S.Set Int -> String)),
      toDefinition term,
+     toDefinition termAliased,
      toDefinition termAtPrec,
      toDefinition termSignature,
+     toDefinition termSignatureAliased,
      toDefinition toHex2,
      toDefinition type_,
+     toDefinition typeAliased,
      toDefinition typeAtPrec,
-     toDefinition typeScheme]
+     toDefinition typeScheme,
+     toDefinition typeSchemeAliased]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -133,24 +140,36 @@ parenthesizeIfNeeded ownPrec ctx s = Logic.ifElse (Ordering.lt (int32 ownPrec) c
   (Strings.concat $ list [string "(", s, string ")"])
   s
 
+-- | The empty import-alias map: resolving any name against it falls through to the full dotted
+-- form (see 'printNameAliased'). Every public, no-module-context entry point ('term', 'type_',
+-- 'typeScheme', 'termSignature', 'binding', 'let_') delegates to its '*Aliased' sibling with this,
+-- so their output is byte-for-byte what it was before #803.
+noAliases :: TypedTerm (M.Map ModuleName String)
+noAliases = Maps.empty
+
 binding :: TypedTermDefinition (Binding -> String)
 binding = define "binding" $
   doc "Show a binding as a string" $
-  "el" ~>
+  bindingAliased @@ noAliases
+
+bindingAliased :: TypedTermDefinition (M.Map ModuleName String -> Binding -> String)
+bindingAliased = define "bindingAliased" $
+  doc "Show a binding as a string, shortening nominal references via the given import-alias map (#803)" $
+  "aliases" ~> "el" ~>
   "name" <~ printName @@ (Core.bindingName $ var "el") $
   "t" <~ Core.bindingTerm (var "el") $
-  "typeStr" <~ Optionals.match (Core.bindingTypeScheme $ var "el") (string "") ("ts" ~> Strings.concat (list [string ":(", typeScheme @@ var "ts", string ")"])) $
+  "typeStr" <~ Optionals.match (Core.bindingTypeScheme $ var "el") (string "") ("ts" ~> Strings.concat (list [string ":(", typeSchemeAliased @@ var "aliases" @@ var "ts", string ")"])) $
   Strings.concat $ list [
     var "name",
     var "typeStr",
     string " := ",
-    term @@ var "t"]
+    termAliased @@ var "aliases" @@ var "t"]
 
-caseStatement :: TypedTermDefinition (CaseStatement -> String)
+caseStatement :: TypedTermDefinition (M.Map ModuleName String -> CaseStatement -> String)
 caseStatement = define "caseStatement" $
-  doc "Show a case statement as a string" $
-  "cs" ~>
-  "tname" <~ printName @@ (Core.caseStatementTypeName $ var "cs") $
+  doc "Show a case statement as a string, shortening nominal references via the given import-alias map (#803)" $
+  "aliases" ~> "cs" ~>
+  "tname" <~ printNameAliased @@ var "aliases" @@ (Core.caseStatementTypeName $ var "cs") $
   "mdef" <~ Core.caseStatementDefault (var "cs") $
   "csCases" <~ Core.caseStatementCases (var "cs") $
   "caseFields" <~ Lists.map
@@ -162,7 +181,7 @@ caseStatement = define "caseStatement" $
     string "case(",
     var "tname",
     string ")",
-    fields @@ var "allFields"]
+    fields @@ var "aliases" @@ var "allFields"]
 
 either_ :: TypedTermDefinition ((a -> String) -> (b -> String) -> Prelude.Either a b -> String)
 either_ = define "either" $
@@ -173,30 +192,30 @@ either_ = define "either" $
     ("b" ~> Strings.concat2 (string "right(") (Strings.concat2 (var "showB" @@ var "b") (string ")")))
     (var "e")
 
-field :: TypedTermDefinition (Field -> String)
+field :: TypedTermDefinition (M.Map ModuleName String -> Field -> String)
 field = define "field" $
-  doc "Show a field as a string" $
-  "field" ~>
+  doc "Show a field as a string, shortening nominal references in its term via the given alias map (#803)" $
+  "aliases" ~> "field" ~>
   "fname" <~ printName @@ (Core.fieldName $ var "field") $
   "fterm" <~ Core.fieldTerm (var "field") $
-  Strings.concat $ list [var "fname", string "=", term @@ var "fterm"]
+  Strings.concat $ list [var "fname", string "=", termAliased @@ var "aliases" @@ var "fterm"]
 
-fieldType :: TypedTermDefinition (FieldType -> String)
+fieldType :: TypedTermDefinition (M.Map ModuleName String -> FieldType -> String)
 fieldType = define "fieldType" $
-  doc "Show a field type as a string" $
-  "ft" ~>
+  doc "Show a field type as a string, shortening nominal references in its type via the given alias map (#803)" $
+  "aliases" ~> "ft" ~>
   "fname" <~ printName @@ (Core.fieldTypeName $ var "ft") $
   "ftyp" <~ Core.fieldTypeType (var "ft") $
   Strings.concat $ list [
     var "fname",
     string ":",
-    type_ @@ var "ftyp"]
+    typeAliased @@ var "aliases" @@ var "ftyp"]
 
-fields :: TypedTermDefinition ([Field] -> String)
+fields :: TypedTermDefinition (M.Map ModuleName String -> [Field] -> String)
 fields = define "fields" $
-  doc "Show a list of fields as a string" $
-  "flds" ~>
-  "fieldStrs" <~ Lists.map (asTerm field) (var "flds") $
+  doc "Show a list of fields as a string, shortening nominal references via the given alias map (#803)" $
+  "aliases" ~> "flds" ~>
+  "fieldStrs" <~ Lists.map (field @@ var "aliases") (var "flds") $
   Strings.concat $ list [
     string "{",
     Strings.join (string ", ") (var "fieldStrs"),
@@ -216,17 +235,17 @@ floatType = define "floatType" $
     _FloatType_float32>>: constant $ string "float32",
     _FloatType_float64>>: constant $ string "float64"]
 
-injection :: TypedTermDefinition (Injection -> String)
+injection :: TypedTermDefinition (M.Map ModuleName String -> Injection -> String)
 injection = define "injection" $
-  doc "Show an injection as a string" $
-  "inj" ~>
+  doc "Show an injection as a string, shortening the type name via the given import-alias map (#803)" $
+  "aliases" ~> "inj" ~>
   "tname" <~ Core.injectionTypeName (var "inj") $
   "f" <~ Core.injectionField (var "inj") $
   Strings.concat $ list [
     string "inject(",
-    printName @@ var "tname",
+    printNameAliased @@ var "aliases" @@ var "tname",
     string ")",
-    fields @@ (list [var "f"])]
+    fields @@ var "aliases" @@ (list [var "f"])]
 
 integerValue :: TypedTermDefinition (IntegerValue -> String)
 integerValue = define "integer" $
@@ -387,33 +406,68 @@ printName = define "printName" $
     (var "s")
     (printBacktickedName @@ var "s")
 
-lambda :: TypedTermDefinition (Lambda -> String)
+-- | Render a nominal name reference, shortening it via the current module's import aliases (#803,
+-- per syntax.md §6.4). The alias map is keyed by full 'ModuleName'; its values are the printed
+-- aliases ('moduleAliases'/'Print/Packaging.hs'). Resolution: split the name into its module part
+-- (all segments but the last, joined by '.') and local part (the last segment); if the module part
+-- is in the alias map, print '<alias>.<local>' (or just '<local>' when the alias is empty); on any
+-- miss -- a single-segment (unqualified, e.g. a lambda/let/forall-bound variable) name, or a module
+-- not in the map -- fall back to the full dotted name via 'printName'. An empty alias map therefore
+-- reproduces 'printName' exactly for every input, which is how every non-module-context caller
+-- (tests, the lexicon generator, the JSON coder, standalone spec examples) keeps full-name output.
+-- The chosen short form is routed back through 'printName' so the same backtick-escaping of the #2.4
+-- interference cases still applies to the shortened (still dotted) name.
+printNameAliased :: TypedTermDefinition (M.Map ModuleName String -> Name -> String)
+printNameAliased = define "printNameAliased" $
+  doc "Show a nominal name, shortened via the given import-alias map when its module is aliased (#803)." $
+  "aliases" ~> "n" ~>
+  "s" <~ Core.unName (var "n") $
+  "segs" <~ Strings.splitOn (string ".") (var "s") $
+  "segCount" <~ Lists.length (var "segs") $
+  Logic.ifElse (Ordering.lt (var "segCount") (int32 2))
+    (printName @@ var "n")
+    ("dropCount" <~ Math.sub (var "segCount") (int32 1) $
+     "localName" <~ Strings.join (string ".") (Lists.drop (var "dropCount") (var "segs")) $
+     "modStr" <~ Strings.join (string ".") (Lists.take (var "dropCount") (var "segs")) $
+     "modName" <~ Packaging.moduleName2 (var "modStr") $
+     Optionals.match (Maps.lookup (var "modName") (var "aliases" :: TypedTerm (M.Map ModuleName String)))
+       (printName @@ var "n")
+       ("alias" ~> Logic.ifElse (Strings.isEmpty $ var "alias")
+         (printName @@ (Core.name $ var "localName"))
+         (printName @@ (Core.name $ Strings.concat $ list [var "alias", string ".", var "localName"]))))
+
+lambda :: TypedTermDefinition (M.Map ModuleName String -> Lambda -> String)
 lambda = define "lambda" $
-  doc "Show a lambda as a string" $
-  "l" ~>
+  doc "Show a lambda as a string, shortening nominal references in its domain/body via the given alias map (#803)" $
+  "aliases" ~> "l" ~>
   "v" <~ printBinderName @@ (Core.lambdaParameter $ var "l") $
   "mt" <~ Core.lambdaDomain (var "l") $
   "body" <~ Core.lambdaBody (var "l") $
-  "typeStr" <~ Optionals.match (var "mt") (string "") ("t" ~> Strings.concat2 (string ":") (type_ @@ var "t")) $
+  "typeStr" <~ Optionals.match (var "mt") (string "") ("t" ~> Strings.concat2 (string ":") (typeAliased @@ var "aliases" @@ var "t")) $
   Strings.concat $ list [
     string "λ",
     var "v",
     var "typeStr",
     string ".",
-    term @@ var "body"]
+    termAliased @@ var "aliases" @@ var "body"]
 
 let_ :: TypedTermDefinition (Let -> String)
 let_ = define "let" $
   doc "Show a let expression as a string" $
-  "l" ~>
+  letAliased @@ noAliases
+
+letAliased :: TypedTermDefinition (M.Map ModuleName String -> Let -> String)
+letAliased = define "letAliased" $
+  doc "Show a let expression as a string, shortening nominal references via the given import-alias map (#803)" $
+  "aliases" ~> "l" ~>
   "bindings" <~ Core.letBindings (var "l") $
   "env" <~ Core.letBody (var "l") $
-  "bindingStrs" <~ Lists.map (asTerm binding) (var "bindings") $
+  "bindingStrs" <~ Lists.map (bindingAliased @@ var "aliases") (var "bindings") $
   Strings.concat $ list [
     string "let ",
     Strings.join (string ", ") (var "bindingStrs"),
     string " in ",
-    term @@ var "env"]
+    termAliased @@ var "aliases" @@ var "env"]
 
 list_ :: TypedTermDefinition ((a -> String) -> [a] -> String)
 list_ = define "list" $
@@ -481,12 +535,16 @@ pair_ = define "pair" $
     var "showB" @@ (Pairs.second $ var "p"),
     string ")"]
 
-projection :: TypedTermDefinition (Projection -> String)
+-- The projection's type name is a nominal reference and is shortened via the alias map; the field
+-- name is projected within that type and is an unqualified local identifier, so 'printNameAliased'
+-- leaves it unchanged (a single-segment name never matches a module alias). Aliasing both keeps
+-- this symmetric with the parser's 'expandAliasesInTerm' (#803).
+projection :: TypedTermDefinition (M.Map ModuleName String -> Projection -> String)
 projection = define "projection" $
-  doc "Show a projection as a string" $
-  "proj" ~>
-  "tname" <~ printName @@ (Core.projectionTypeName $ var "proj") $
-  "fname" <~ printName @@ (Core.projectionFieldName $ var "proj") $
+  doc "Show a projection as a string, shortening the type name via the given import-alias map (#803)" $
+  "aliases" ~> "proj" ~>
+  "tname" <~ printNameAliased @@ var "aliases" @@ (Core.projectionTypeName $ var "proj") $
+  "fname" <~ printNameAliased @@ var "aliases" @@ (Core.projectionFieldName $ var "proj") $
   Strings.concat $ list [
     string "project(",
     var "tname",
@@ -505,19 +563,27 @@ set_ = define "set" $
     string "}"]
 
 -- | Show a term as a string (the canonical, minimally-parenthesized rendering). Entry point at
--- the loosest (top-level) context.
+-- the loosest (top-level) context, with no import aliases (full dotted names everywhere).
 term :: TypedTermDefinition (Term -> String)
 term = define "term" $
   doc "Show a term as a string" $
-  "t" ~> termAtPrec @@ int32 precMin @@ var "t"
+  termAliased @@ noAliases
+
+-- | Like 'term', but shortening nominal references via the given import-alias map (#803). This is
+-- the module-context entry point used by 'Print/Packaging.hs' when printing a definition's body.
+termAliased :: TypedTermDefinition (M.Map ModuleName String -> Term -> String)
+termAliased = define "termAliased" $
+  doc "Show a term as a string, shortening nominal references via the given import-alias map (#803)" $
+  "aliases" ~> "t" ~> termAtPrec @@ var "aliases" @@ int32 precMin @@ var "t"
 
 -- | Show a term as a string in a given minimum-precedence context, wrapping in parentheses
 -- exactly when the term's own construct is looser than that context (see the precedence
--- constants above, and docs/specification/syntax.md #3-4).
-termAtPrec :: TypedTermDefinition (Int -> Term -> String)
+-- constants above, and docs/specification/syntax.md #3-4). The alias map (#803) is threaded
+-- through every recursive call so nominal references inside the term are shortened consistently.
+termAtPrec :: TypedTermDefinition (M.Map ModuleName String -> Int -> Term -> String)
 termAtPrec = define "termAtPrec" $
   doc "Show a term as a string at a given minimum context precedence, adding minimal parentheses" $
-  "ctx" ~> "t" ~>
+  "aliases" ~> "ctx" ~> "t" ~>
   "gatherTerms" <~ ("prev" ~> "app" ~>
     "lhs" <~ Core.applicationFunction (var "app") $
     "rhs" <~ Core.applicationArgument (var "app") $
@@ -526,32 +592,32 @@ termAtPrec = define "termAtPrec" $
       _Term_application>>: "app2" ~> var "gatherTerms" @@ (Lists.cons (var "rhs") (var "prev")) @@ var "app2"]) $
   match _Term (var "t") Nothing [
     _Term_annotated>>: "at" ~>
-      "bodyStr" <~ termAtPrec @@ int32 precPostfix @@ (Core.annotatedTermBody $ var "at") $
-      "annStr" <~ termAtPrec @@ int32 precPostfix @@ (Core.annotatedTermAnnotation $ var "at") $
+      "bodyStr" <~ termAtPrec @@ var "aliases" @@ int32 precPostfix @@ (Core.annotatedTermBody $ var "at") $
+      "annStr" <~ termAtPrec @@ var "aliases" @@ int32 precPostfix @@ (Core.annotatedTermAnnotation $ var "at") $
       parenthesizeIfNeeded precPostfix (var "ctx") $
         Strings.concat $ list [var "bodyStr", string "@", var "annStr"],
     _Term_application>>: "app" ~>
       "terms" <~ var "gatherTerms" @@ (list ([] :: [TypedTerm Term])) @@ var "app" $
-      "termStrs" <~ Lists.map ("e" ~> termAtPrec @@ int32 precPostfix @@ var "e") (var "terms") $
+      "termStrs" <~ Lists.map ("e" ~> termAtPrec @@ var "aliases" @@ int32 precPostfix @@ var "e") (var "terms") $
       parenthesizeIfNeeded precApp (var "ctx") $
         Strings.join (string " ") (var "termStrs"),
-    _Term_cases>>: caseStatement,
+    _Term_cases>>: "cs" ~> caseStatement @@ var "aliases" @@ var "cs",
     _Term_either>>: "e" ~> Eithers.either
       ("l" ~> Strings.concat $ list [
         string "left(",
-        term @@ var "l",
+        termAliased @@ var "aliases" @@ var "l",
         string ")"])
       ("r" ~> Strings.concat $ list [
         string "right(",
-        term @@ var "r",
+        termAliased @@ var "aliases" @@ var "r",
         string ")"])
       (var "e"),
     _Term_lambda>>: "l" ~>
-      parenthesizeIfNeeded precMin (var "ctx") $ lambda @@ var "l",
+      parenthesizeIfNeeded precMin (var "ctx") $ lambda @@ var "aliases" @@ var "l",
     _Term_let>>: "l" ~>
-      parenthesizeIfNeeded precMin (var "ctx") $ let_ @@ var "l",
+      parenthesizeIfNeeded precMin (var "ctx") $ letAliased @@ var "aliases" @@ var "l",
     _Term_list>>: "els" ~>
-      "termStrs" <~ Lists.map (asTerm term) (var "els") $
+      "termStrs" <~ Lists.map (termAliased @@ var "aliases") (var "els") $
       Strings.concat $ list [
         string "[",
         Strings.join (string ", ") (var "termStrs"),
@@ -559,9 +625,9 @@ termAtPrec = define "termAtPrec" $
     _Term_literal>>: "lit" ~> literal @@ var "lit",
     _Term_map>>: "m" ~>
       "entry" <~ ("p" ~> Strings.concat $ list [
-        term @@ (Pairs.first $ var "p"),
+        termAliased @@ var "aliases" @@ (Pairs.first $ var "p"),
         string "=",
-        term @@ (Pairs.second $ var "p")]) $
+        termAliased @@ var "aliases" @@ (Pairs.second $ var "p")]) $
       Strings.concat $ list [
         string "{",
         Strings.join (string ", ") $ Lists.map (var "entry") $
@@ -569,27 +635,27 @@ termAtPrec = define "termAtPrec" $
         string "}"],
     _Term_optional>>: "mt" ~> Optionals.match (var "mt") (string "none") ("t" ~> Strings.concat $ list [
         string "given(",
-        term @@ var "t",
+        termAliased @@ var "aliases" @@ var "t",
         string ")"]),
     _Term_pair>>: "p" ~> Strings.concat $ list [
       string "(",
-      term @@ (Pairs.first $ var "p"),
+      termAliased @@ var "aliases" @@ (Pairs.first $ var "p"),
       string ", ",
-      term @@ (Pairs.second $ var "p"),
+      termAliased @@ var "aliases" @@ (Pairs.second $ var "p"),
       string ")"],
-    _Term_project>>: projection,
+    _Term_project>>: "proj" ~> projection @@ var "aliases" @@ var "proj",
     _Term_record>>: "rec" ~>
-      "tname" <~ printName @@ (Core.recordTypeName $ var "rec") $
+      "tname" <~ printNameAliased @@ var "aliases" @@ (Core.recordTypeName $ var "rec") $
       "flds" <~ Core.recordFields (var "rec") $
       Strings.concat $ list [
         string "record(",
         var "tname",
         string ")",
-        fields @@ var "flds"],
+        fields @@ var "aliases" @@ var "flds"],
     _Term_set>>: "s" ~>
       Strings.concat $ list [
         string "{",
-        Strings.join (string ", ") (Lists.map (asTerm term) $ Lists.sort $ Sets.toList $ var "s"),
+        Strings.join (string ", ") (Lists.map (termAliased @@ var "aliases") $ Lists.sort $ Sets.toList $ var "s"),
         string "}"],
     _Term_typeLambda>>: "ta" ~>
       "param" <~ printBinderName @@ (Core.typeLambdaParameter $ var "ta") $
@@ -599,50 +665,58 @@ termAtPrec = define "termAtPrec" $
           string "Λ",
           var "param",
           string ".",
-          term @@ var "body"],
+          termAliased @@ var "aliases" @@ var "body"],
     _Term_typeApplication>>: "tt" ~>
       "t2" <~ Core.typeApplicationTermBody (var "tt") $
       "typ" <~ Core.typeApplicationTermType (var "tt") $
-      "bodyStr" <~ termAtPrec @@ int32 precPostfix @@ var "t2" $
+      "bodyStr" <~ termAtPrec @@ var "aliases" @@ int32 precPostfix @@ var "t2" $
       parenthesizeIfNeeded precPostfix (var "ctx") $
         Strings.concat $ list [
           var "bodyStr",
           string "⟨",
-          type_ @@ var "typ",
+          typeAliased @@ var "aliases" @@ var "typ",
           string "⟩"],
-    _Term_inject>>: injection,
+    _Term_inject>>: "inj" ~> injection @@ var "aliases" @@ var "inj",
     _Term_unit>>: constant $ string "unit",
     _Term_unwrap>>: "tname" ~> Strings.concat $ list [
       string "unwrap(",
-      printName @@ var "tname",
+      printNameAliased @@ var "aliases" @@ var "tname",
       string ")"],
-    _Term_variable>>: "name" ~> printName @@ var "name",
+    _Term_variable>>: "name" ~> printNameAliased @@ var "aliases" @@ var "name",
     _Term_wrap>>: "wt" ~>
-      "tname" <~ printName @@ (Core.wrappedTermTypeName $ var "wt") $
+      "tname" <~ printNameAliased @@ var "aliases" @@ (Core.wrappedTermTypeName $ var "wt") $
       "term1" <~ Core.wrappedTermBody (var "wt") $
       Strings.concat $ list [
         string "wrap(",
         var "tname",
         string "){",
-        term @@ var "term1",
+        termAliased @@ var "aliases" @@ var "term1",
         string "}"]]
 
 -- | Show a type as a string (the canonical, minimally-parenthesized rendering). Entry point at
--- the loosest (top-level) context.
+-- the loosest (top-level) context, with no import aliases (full dotted names everywhere).
 type_ :: TypedTermDefinition (Type -> String)
 type_ = define "type" $
   doc "Show a type as a string" $
-  "typ" ~> typeAtPrec @@ int32 precMin @@ var "typ"
+  typeAliased @@ noAliases
+
+-- | Like 'type_', but shortening nominal references via the given import-alias map (#803). This is
+-- the module-context entry point used by 'Print/Packaging.hs' when printing a type definition.
+typeAliased :: TypedTermDefinition (M.Map ModuleName String -> Type -> String)
+typeAliased = define "typeAliased" $
+  doc "Show a type as a string, shortening nominal references via the given import-alias map (#803)" $
+  "aliases" ~> "typ" ~> typeAtPrec @@ var "aliases" @@ int32 precMin @@ var "typ"
 
 -- | Show a type as a string in a given minimum-precedence context, wrapping in parentheses
 -- exactly when the type's own construct is looser than that context (see the precedence
--- constants above, and docs/specification/syntax.md #3-4).
-typeAtPrec :: TypedTermDefinition (Int -> Type -> String)
+-- constants above, and docs/specification/syntax.md #3-4). The alias map (#803) is threaded
+-- through every recursive call so nominal references inside the type are shortened consistently.
+typeAtPrec :: TypedTermDefinition (M.Map ModuleName String -> Int -> Type -> String)
 typeAtPrec = define "typeAtPrec" $
   doc "Show a type as a string at a given minimum context precedence, adding minimal parentheses" $
-  "ctx" ~> "typ" ~>
+  "aliases" ~> "ctx" ~> "typ" ~>
   "showRowType" <~ ("flds" ~>
-    "fieldStrs" <~ Lists.map (asTerm fieldType) (var "flds") $
+    "fieldStrs" <~ Lists.map (fieldType @@ var "aliases") (var "flds") $
     Strings.concat $ list [
       string "{",
       Strings.join (string ", ") (var "fieldStrs"),
@@ -662,27 +736,27 @@ typeAtPrec = define "typeAtPrec" $
           var "gatherFunctionTypes" @@ (Lists.cons (var "dom") (var "prev")) @@ var "cod"]) $
   match _Type (var "typ") Nothing [
     _Type_annotated>>: "at" ~>
-      "bodyStr" <~ typeAtPrec @@ int32 precPostfix @@ (Core.annotatedTypeBody $ var "at") $
-      "annStr" <~ termAtPrec @@ int32 precPostfix @@ (Core.annotatedTypeAnnotation $ var "at") $
+      "bodyStr" <~ typeAtPrec @@ var "aliases" @@ int32 precPostfix @@ (Core.annotatedTypeBody $ var "at") $
+      "annStr" <~ termAtPrec @@ var "aliases" @@ int32 precPostfix @@ (Core.annotatedTypeAnnotation $ var "at") $
       parenthesizeIfNeeded precPostfix (var "ctx") $
         Strings.concat $ list [var "bodyStr", string "@", var "annStr"],
     _Type_application>>: "app" ~>
       "types" <~ var "gatherTypes" @@ (list ([] :: [TypedTerm Type])) @@ var "app" $
-      "typeStrs" <~ Lists.map ("e" ~> typeAtPrec @@ int32 precPostfix @@ var "e") (var "types") $
+      "typeStrs" <~ Lists.map ("e" ~> typeAtPrec @@ var "aliases" @@ int32 precPostfix @@ var "e") (var "types") $
       parenthesizeIfNeeded precApp (var "ctx") $
         Strings.join (string " ") (var "typeStrs"),
     _Type_effect>>: "etyp" ~> Strings.concat $ list [
       string "effect<",
-      type_ @@ var "etyp",
+      typeAliased @@ var "aliases" @@ var "etyp",
       string ">"],
     _Type_either>>: "et" ~>
       "leftTyp" <~ Core.eitherTypeLeft (var "et") $
       "rightTyp" <~ Core.eitherTypeRight (var "et") $
       Strings.concat $ list [
         string "either<",
-        type_ @@ var "leftTyp",
+        typeAliased @@ var "aliases" @@ var "leftTyp",
         string ", ",
-        type_ @@ var "rightTyp",
+        typeAliased @@ var "aliases" @@ var "rightTyp",
         string ">"],
     _Type_forall>>: "ft" ~>
       "v" <~ printBinderName @@ (Core.forallTypeParameter $ var "ft") $
@@ -692,15 +766,15 @@ typeAtPrec = define "typeAtPrec" $
           string "forall ",
           var "v",
           string ". ",
-          type_ @@ var "body"],
+          typeAliased @@ var "aliases" @@ var "body"],
     _Type_function>>: "ft" ~>
       "types" <~ var "gatherFunctionTypes" @@ (list ([] :: [TypedTerm Type])) @@ var "typ" $
-      "typeStrs" <~ Lists.map ("e" ~> typeAtPrec @@ int32 precApp @@ var "e") (var "types") $
+      "typeStrs" <~ Lists.map ("e" ~> typeAtPrec @@ var "aliases" @@ int32 precApp @@ var "e") (var "types") $
       parenthesizeIfNeeded precArrow (var "ctx") $
         Strings.join (string " → ") (var "typeStrs"),
     _Type_list>>: "etyp" ~> Strings.concat $ list [
       string "list<",
-      type_ @@ var "etyp",
+      typeAliased @@ var "aliases" @@ var "etyp",
       string ">"],
     _Type_literal>>: "lt" ~> literalType @@ var "lt",
     _Type_map>>: "mt" ~>
@@ -708,39 +782,44 @@ typeAtPrec = define "typeAtPrec" $
       "valTyp" <~ Core.mapTypeValues (var "mt") $
       Strings.concat $ list [
         string "map<",
-        type_ @@ var "keyTyp",
+        typeAliased @@ var "aliases" @@ var "keyTyp",
         string ", ",
-        type_ @@ var "valTyp",
+        typeAliased @@ var "aliases" @@ var "valTyp",
         string ">"],
     _Type_optional>>: "etyp" ~> Strings.concat $ list [
       string "optional<",
-      type_ @@ var "etyp",
+      typeAliased @@ var "aliases" @@ var "etyp",
       string ">"],
     _Type_pair>>: "pt" ~>
       "firstTyp" <~ Core.pairTypeFirst (var "pt") $
       "secondTyp" <~ Core.pairTypeSecond (var "pt") $
       Strings.concat $ list [
         string "(",
-        type_ @@ var "firstTyp",
+        typeAliased @@ var "aliases" @@ var "firstTyp",
         string ", ",
-        type_ @@ var "secondTyp",
+        typeAliased @@ var "aliases" @@ var "secondTyp",
         string ")"],
     _Type_record>>: "rt" ~> Strings.concat2 (string "record") (var "showRowType" @@ var "rt"),
     _Type_set>>: "etyp" ~> Strings.concat $ list [
       string "set<",
-      type_ @@ var "etyp",
+      typeAliased @@ var "aliases" @@ var "etyp",
       string ">"],
     _Type_union>>: "rt" ~> Strings.concat2 (string "union") (var "showRowType" @@ var "rt"),
     _Type_unit>>: constant $ string "unit",
-    _Type_variable>>: "name" ~> printName @@ var "name",
+    _Type_variable>>: "name" ~> printNameAliased @@ var "aliases" @@ var "name",
     _Type_void>>: constant $ string "void",
     _Type_wrap>>: "wt" ~>
-      Strings.concat $ list [string "wrap(", type_ @@ var "wt", string ")"]]
+      Strings.concat $ list [string "wrap(", typeAliased @@ var "aliases" @@ var "wt", string ")"]]
 
 typeScheme :: TypedTermDefinition (TypeScheme -> String)
 typeScheme = define "typeScheme" $
   doc "Show a type scheme as a string" $
-  "ts" ~>
+  typeSchemeAliased @@ noAliases
+
+typeSchemeAliased :: TypedTermDefinition (M.Map ModuleName String -> TypeScheme -> String)
+typeSchemeAliased = define "typeSchemeAliased" $
+  doc "Show a type scheme as a string, shortening nominal references in its body via the given alias map (#803)" $
+  "aliases" ~> "ts" ~>
   "vars" <~ Core.typeSchemeVariables (var "ts") $
   "body" <~ Core.typeSchemeBody (var "ts") $
   "varNames" <~ Lists.map (asTerm printBinderName) (var "vars") $
@@ -768,7 +847,7 @@ typeScheme = define "typeScheme" $
         string "(",
         Strings.join (string ", ") (var "tc"),
         string ") ⇒ "]),
-    type_ @@ var "body"]
+    typeAliased @@ var "aliases" @@ var "body"]
 
 -- | Show a term signature as a string: like typeScheme's '∀vars.[constraints⇒]' header, but the
 -- arrow chain is printed from the signature's own parameters/result rather than from a bare
@@ -780,7 +859,12 @@ typeScheme = define "typeScheme" $
 termSignature :: TypedTermDefinition (TermSignature -> String)
 termSignature = define "termSignature" $
   doc "Show a term signature as a string, preserving each parameter's lazy marking" $
-  "sig" ~>
+  termSignatureAliased @@ noAliases
+
+termSignatureAliased :: TypedTermDefinition (M.Map ModuleName String -> TermSignature -> String)
+termSignatureAliased = define "termSignatureAliased" $
+  doc "Show a term signature as a string (preserving lazy markings), shortening nominal references via the given alias map (#803)" $
+  "aliases" ~> "sig" ~>
   "typeParams" <~ Typing.termSignatureTypeParameters (var "sig") $
   "params" <~ Typing.termSignatureParameters (var "sig") $
   "result" <~ Typing.termSignatureResult (var "sig") $
@@ -794,12 +878,12 @@ termSignature = define "termSignature" $
     Lists.sortBy (var "constraintClassName") (Typing.typeParameterConstraints $ var "tp")) $
   "tc" <~ Lists.concat (Lists.map (var "toConstraintPairsForParam") (var "typeParams")) $
   "paramStr" <~ ("p" ~>
-    "tyStr" <~ typeAtPrec @@ int32 precApp @@ (Typing.parameterType $ var "p") $
+    "tyStr" <~ typeAtPrec @@ var "aliases" @@ int32 precApp @@ (Typing.parameterType $ var "p") $
     Logic.ifElse (Typing.parameterIsLazy $ var "p")
       (Strings.concat2 (string "lazy ") (var "tyStr"))
       (var "tyStr")) $
   "paramStrs" <~ Lists.map (var "paramStr") (var "params") $
-  "resultStr" <~ typeAtPrec @@ int32 precApp @@ (Typing.resultType $ var "result") $
+  "resultStr" <~ typeAtPrec @@ var "aliases" @@ int32 precApp @@ (Typing.resultType $ var "result") $
   "bodyStr" <~ Strings.join (string " → ") (Lists.concat2 (var "paramStrs") (list [var "resultStr"])) $
   Strings.concat $ list [
     string "∀",
