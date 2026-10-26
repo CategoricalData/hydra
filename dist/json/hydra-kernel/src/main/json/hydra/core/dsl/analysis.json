@@ -1218,6 +1218,67 @@
                   "value": {"literal": {"string": "DSL reference to hydra.core.analysis.definitionDependencyModuleNames"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.core.dsl.analysis.definitionDependencyNamesByModule",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {"list": {"variable": "hydra.core.packaging.Definition"}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {
+                  "map": {
+                    "keys": {"variable": "hydra.core.packaging.ModuleName"},
+                    "values": {"map": {"keys": {"literal": "string"}, "values": {"literal": {"integer": "int32"}}}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "arg0",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {"list": {"variable": "hydra.core.packaging.Definition"}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.model.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {
+                                          "wrap": {
+                                            "typeName": "hydra.core.model.Name",
+                                            "body": {"literal": {"string": "hydra.core.analysis.definitionDependencyNamesByModule"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.core.analysis.definitionDependencyNamesByModule"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.core.dsl.analysis.dependencyModuleNames",
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
