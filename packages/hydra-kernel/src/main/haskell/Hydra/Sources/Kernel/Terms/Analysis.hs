@@ -10,6 +10,7 @@ import Hydra.Kernel hiding (
   analyzeFunctionTermWithFinish,
   analyzeFunctionTermWithGather,
   definitionDependencyModuleNames,
+  definitionDependencyNamesByModule,
   dependencyModuleNames,
   gatherApplications,
   gatherArgs,
@@ -103,6 +104,7 @@ module_ = Module {
       toDefinition analyzeFunctionTermWithFinish,
       toDefinition analyzeFunctionTermWithGather,
       toDefinition definitionDependencyModuleNames,
+      toDefinition definitionDependencyNamesByModule,
       toDefinition dependencyModuleNames,
       toDefinition gatherApplications,
       toDefinition gatherArgs,
@@ -295,6 +297,54 @@ definitionDependencyModuleNames = define "definitionDependencyModuleNames" $
       Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "primDef"))]) $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs") :: TypedTerm [S.Set Name]) $
   Sets.fromList (Optionals.givens (Lists.map (asTerm Names.moduleNameOf) (Sets.toList (var "allNames"))))
+
+-- | Like 'definitionDependencyModuleNames', but instead of collapsing to a flat set of module
+-- names it preserves, per dependency module, the COUNTED multiset of that module's local names
+-- referenced by the given definitions (local name -> reference count). Needed by the textual-syntax
+-- printer's import-aliasing gate (#804): the conflict graph's edges come from which local names two
+-- dependency modules share, and each module's MWIS vertex weight is its total reference count here.
+--
+-- "Reference count" is per-definition membership: 'Dependencies.termDependencyNames'/
+-- 'typeDependencyNames' return a 'Set Name' per definition (presence, not per-occurrence count), so
+-- a name referenced by k of the definitions contributes k. This is a deterministic proxy for true
+-- occurrence counts (which would require changing Dependencies.hs); it is sufficient for the MWIS
+-- objective, where weights only decide collision winners and tie-order.
+--
+-- A name with no module part (a bare/unqualified name, e.g. a locally-bound variable) is dropped --
+-- it belongs to no dependency module. The printed module's OWN namespace is NOT filtered out here;
+-- callers that need to exclude it (as 'moduleAliases' does for self-references) delete it from the
+-- result, exactly as they already delete it from 'definitionDependencyModuleNames''s output.
+definitionDependencyNamesByModule :: TypedTermDefinition ([Definition] -> M.Map ModuleName (M.Map String Int))
+definitionDependencyNamesByModule = define "definitionDependencyNamesByModule" $
+  doc "Get, per dependency module, the counted multiset of its local names referenced by the definitions" $
+  "defs" ~>
+  "defNames" <~ ("def" ~> match _Definition (var "def")
+    Nothing [
+    _Definition_type>>: "typeDef" ~>
+      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "typeDef")),
+    _Definition_term>>: "termDef" ~>
+      Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionBody (var "termDef"),
+    _Definition_primitive>>: "primDef" ~>
+      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "primDef"))]) $
+  -- One (ModuleName, localName) pair per (definition, referenced-name-with-a-module) hit; a name
+  -- referenced in several definitions appears once per definition, which is exactly the count we want.
+  "pairs" <~ Lists.concat (Lists.map
+    ("def" ~> Optionals.givens (Lists.map
+      ("nm" ~> Optionals.map
+        ("mn" ~> pair (var "mn") (Names.localNameOf @@ var "nm"))
+        (Names.moduleNameOf @@ var "nm"))
+      (Sets.toList (var "defNames" @@ var "def"))))
+    (var "defs")) $
+  -- Fold the pairs into a nested map ModuleName -> (localName -> count), incrementing on each hit.
+  Lists.foldl
+    ("acc" ~> "p" ~>
+      "mn" <~ Pairs.first (var "p") $
+      "local" <~ Pairs.second (var "p") $
+      "inner" <~ Optionals.withDefault (Maps.empty :: TypedTerm (M.Map String Int)) (Maps.lookup (var "mn") (var "acc" :: TypedTerm (M.Map ModuleName (M.Map String Int)))) $
+      "newCount" <~ Math.add (int32 1) (Optionals.withDefault (int32 0) (Maps.lookup (var "local") (var "inner" :: TypedTerm (M.Map String Int)))) $
+      Maps.insert (var "mn") (Maps.insert (var "local") (var "newCount") (var "inner" :: TypedTerm (M.Map String Int))) (var "acc" :: TypedTerm (M.Map ModuleName (M.Map String Int))))
+    (Maps.empty :: TypedTerm (M.Map ModuleName (M.Map String Int)))
+    (var "pairs")
 
 dependencyModuleNames :: TypedTermDefinition (InferenceContext -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either Error (S.Set ModuleName))
 dependencyModuleNames = define "dependencyModuleNames" $
