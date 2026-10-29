@@ -574,6 +574,32 @@
                     "literal": {"string": "Show a field as a string, shortening nominal references in its term via the given alias map (#803)"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.core.print.model.fieldTermIsUnit",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.model.Term"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "t",
+                "domain": {"variable": "hydra.core.model.Term"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.model.Term",
+                        "default": {"literal": {"boolean": false}},
+                        "cases": [{"name": "unit", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"boolean": true}}}}}]}},
+                    "argument": {"variable": "t"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "True iff a term is the unit term (for bareword unit-field sugar, #809)"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.core.print.model.fieldType",
         "signature": {
           "typeParameters": [],
@@ -858,16 +884,14 @@
                                 "function": {"variable": "hydra.core.lib.strings.concat"},
                                 "argument": {
                                   "list": [
-                                    {"literal": {"string": "inject("}},
                                     {
                                       "application": {
                                         "function": {
                                           "application": {"function": {"variable": "hydra.core.print.model.printNameAliased"}, "argument": {"variable": "aliases"}}},
                                         "argument": {"variable": "tname"}}},
-                                    {"literal": {"string": ")"}},
                                     {
                                       "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.core.print.model.fields"}, "argument": {"variable": "aliases"}}},
+                                        "function": {"application": {"function": {"variable": "hydra.core.print.model.sugarFields"}, "argument": {"variable": "aliases"}}},
                                         "argument": {"list": [{"variable": "f"}]}}}]}}}}}}}}}}},
             "annotation": {
               "map": [
@@ -1247,6 +1271,35 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {"string": "True iff the given string is a reserved word which must be backtick-escaped when used as a name."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.model.isVariableTerm",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.model.Term"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "t",
+                "domain": {"variable": "hydra.core.model.Term"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.model.Term",
+                        "default": {"literal": {"boolean": false}},
+                        "cases": [
+                          {
+                            "name": "variable",
+                            "handler": {"lambda": {"parameter": "_", "domain": {"variable": "hydra.core.model.Name"}, "body": {"literal": {"boolean": true}}}}}]}},
+                    "argument": {"variable": "t"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "True iff a term is a bare variable reference (for wrap-sugar disambiguation, #809)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.print.model.lambda",
@@ -2223,13 +2276,7 @@
                             "body": {
                               "application": {
                                 "function": {"variable": "hydra.core.lib.strings.concat"},
-                                "argument": {
-                                  "list": [
-                                    {"literal": {"string": "project("}},
-                                    {"variable": "tname"},
-                                    {"literal": {"string": "){"}},
-                                    {"variable": "fname"},
-                                    {"literal": {"string": "}"}}]}}}}}}}}}}},
+                                "argument": {"list": [{"variable": "tname"}, {"literal": {"string": "["}}, {"variable": "fname"}, {"literal": {"string": "]"}}]}}}}}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -2298,6 +2345,131 @@
                     {
                       "key": {"variable": "description"},
                       "value": {"literal": {"string": "Show a set using a given function to show each element, in canonical (ascending) order"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.model.sugarField",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"map": {"keys": {"variable": "hydra.core.packaging.ModuleName"}, "values": {"literal": "string"}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.core.model.Field"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "aliases",
+                "domain": {"map": {"keys": {"variable": "hydra.core.packaging.ModuleName"}, "values": {"literal": "string"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "field",
+                    "domain": {"variable": "hydra.core.model.Field"},
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "fname",
+                            "term": {
+                              "application": {
+                                "function": {"variable": "hydra.core.print.model.printName"},
+                                "argument": {
+                                  "application": {
+                                    "function": {"project": {"typeName": "hydra.core.model.Field", "fieldName": "name"}},
+                                    "argument": {"variable": "field"}}}}},
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "fterm",
+                                "term": {
+                                  "application": {
+                                    "function": {"project": {"typeName": "hydra.core.model.Field", "fieldName": "term"}},
+                                    "argument": {"variable": "field"}}},
+                                "typeScheme": {"variables": [], "body": {"variable": "hydra.core.model.Term"}, "constraints": []}}],
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"literal": "string"}}},
+                                        "argument": {"application": {"function": {"variable": "hydra.core.print.model.fieldTermIsUnit"}, "argument": {"variable": "fterm"}}}}},
+                                    "argument": {"variable": "fname"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.lib.strings.concat"},
+                                    "argument": {
+                                      "list": [
+                                        {"variable": "fname"},
+                                        {"literal": {"string": " = "}},
+                                        {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.core.print.model.termAliased"}, "argument": {"variable": "aliases"}}},
+                                            "argument": {"variable": "fterm"}}}]}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Show a single field in sugar form: bareword 'name' for a unit value, else 'name = term' (#809)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.model.sugarFields",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"map": {"keys": {"variable": "hydra.core.packaging.ModuleName"}, "values": {"literal": "string"}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "hydra.core.model.Field"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "aliases",
+                "domain": {"map": {"keys": {"variable": "hydra.core.packaging.ModuleName"}, "values": {"literal": "string"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "flds",
+                    "domain": {"list": {"variable": "hydra.core.model.Field"}},
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "fieldStrs",
+                            "term": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.model.Field"}}},
+                                        "type": {"literal": "string"}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.core.print.model.sugarField"}, "argument": {"variable": "aliases"}}}}},
+                                "argument": {"variable": "flds"}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
+                        "body": {
+                          "application": {
+                            "function": {"variable": "hydra.core.lib.strings.concat"},
+                            "argument": {
+                              "list": [
+                                {"literal": {"string": "{"}},
+                                {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": ", "}}}},
+                                    "argument": {"variable": "fieldStrs"}}},
+                                {"literal": {"string": "}"}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show fields as nominal-construction sugar, abbreviating unit-valued fields bareword (#809)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.print.model.term",
@@ -2982,12 +3154,10 @@
                                                         "function": {"variable": "hydra.core.lib.strings.concat"},
                                                         "argument": {
                                                           "list": [
-                                                            {"literal": {"string": "record("}},
                                                             {"variable": "tname"},
-                                                            {"literal": {"string": ")"}},
                                                             {
                                                               "application": {
-                                                                "function": {"application": {"function": {"variable": "hydra.core.print.model.fields"}, "argument": {"variable": "aliases"}}},
+                                                                "function": {"application": {"function": {"variable": "hydra.core.print.model.sugarFields"}, "argument": {"variable": "aliases"}}},
                                                                 "argument": {"variable": "flds"}}}]}}}}}}}}}},
                                       {
                                         "name": "set",
@@ -3201,13 +3371,12 @@
                                                 "function": {"variable": "hydra.core.lib.strings.concat"},
                                                 "argument": {
                                                   "list": [
-                                                    {"literal": {"string": "unwrap("}},
                                                     {
                                                       "application": {
                                                         "function": {
                                                           "application": {"function": {"variable": "hydra.core.print.model.printNameAliased"}, "argument": {"variable": "aliases"}}},
                                                         "argument": {"variable": "tname"}}},
-                                                    {"literal": {"string": ")"}}]}}}}}},
+                                                    {"literal": {"string": "[]"}}]}}}}}},
                                       {
                                         "name": "variable",
                                         "handler": {
@@ -3251,17 +3420,37 @@
                                                         "typeScheme": {"variables": [], "body": {"variable": "hydra.core.model.Term"}, "constraints": []}}],
                                                     "body": {
                                                       "application": {
-                                                        "function": {"variable": "hydra.core.lib.strings.concat"},
-                                                        "argument": {
-                                                          "list": [
-                                                            {"literal": {"string": "wrap("}},
-                                                            {"variable": "tname"},
-                                                            {"literal": {"string": "){"}},
-                                                            {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
                                                               "application": {
-                                                                "function": {"application": {"function": {"variable": "hydra.core.print.model.termAliased"}, "argument": {"variable": "aliases"}}},
-                                                                "argument": {"variable": "term1"}}},
-                                                            {"literal": {"string": "}"}}]}}}}}}}}}}]}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"literal": "string"}}},
+                                                                "argument": {"application": {"function": {"variable": "hydra.core.print.model.isVariableTerm"}, "argument": {"variable": "term1"}}}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {"variable": "hydra.core.lib.strings.concat"},
+                                                                "argument": {
+                                                                  "list": [
+                                                                    {"literal": {"string": "wrap("}},
+                                                                    {"variable": "tname"},
+                                                                    {"literal": {"string": "){"}},
+                                                                    {
+                                                                      "application": {
+                                                                        "function": {"application": {"function": {"variable": "hydra.core.print.model.termAliased"}, "argument": {"variable": "aliases"}}},
+                                                                        "argument": {"variable": "term1"}}},
+                                                                    {"literal": {"string": "}"}}]}}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"variable": "hydra.core.lib.strings.concat"},
+                                                            "argument": {
+                                                              "list": [
+                                                                {"variable": "tname"},
+                                                                {"literal": {"string": "{"}},
+                                                                {
+                                                                  "application": {
+                                                                    "function": {"application": {"function": {"variable": "hydra.core.print.model.termAliased"}, "argument": {"variable": "aliases"}}},
+                                                                    "argument": {"variable": "term1"}}},
+                                                                {"literal": {"string": "}"}}]}}}}}}}}}}}}]}},
                                 "argument": {"variable": "t"}}}}}}}}}}},
             "annotation": {
               "map": [
