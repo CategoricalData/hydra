@@ -41,7 +41,8 @@ module_ = Module {
     definitions = [
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition lazyParameterRoundtripGroup,
-      Phantoms.toDefinition moduleAliasGroup]
+      Phantoms.toDefinition moduleAliasGroup,
+      Phantoms.toDefinition nominalSugarGroup]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -51,7 +52,7 @@ allTests = define "allTests" $
     doc "Test cases for the textual syntax (#497/#710)" $
     Testing.testGroup (string "textual syntax") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
-    subgroups = [lazyParameterRoundtripGroup, moduleAliasGroup]
+    subgroups = [lazyParameterRoundtripGroup, moduleAliasGroup, nominalSugarGroup]
 
 -- | Print a term signature, then parse the printed text back, and show the round-tripped
 -- signature. Compares against the original signature's own printed form, so the test both
@@ -292,3 +293,114 @@ moduleAliasGroup = define "moduleAliasGroup" $
     moduleCollisionPrintTest,
     moduleAliasPathTest,
     moduleAliasRoundtripTest])
+
+----------------------------------------------------------------------------------------------
+-- #809: nominal construction/elimination sugar (Wave 1 -- record/injection/wrap + project/unwrap).
+-- These are graph-free string round-trips (print -> parse -> print). Note: an injection prints as
+-- the SAME one-field record-style construct string 'Name{field}', so its string round-trip passes
+-- without the packaging-pass injection correction (which operates at the AST level against a schema
+-- graph, exercised separately once Parse/Packaging.hs's correction lands).
+
+-- | Print a term, parse the printed text back, and re-print -- compares to the original printed
+-- form (self-comparing string round-trip, mirroring 'signatureRoundtripTest').
+termRoundtripTest :: String -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+termRoundtripTest testName t = universalCase testName actual expected
+  where
+    printed = PrintCore.term @@ t
+    actual = Eithers.either
+      (Phantoms.lambda "e" $ Phantoms.var "e")
+      (Phantoms.lambda "t2" $ PrintCore.term @@ Phantoms.var "t2")
+      (ParseCore.parseTerm @@ printed)
+    expected = printed
+
+-- | Print a term and compare against an exact expected string -- pins the canonical sugar form.
+termPrintTest :: String -> TypedTerm Term -> String -> TypedTerm TestCaseWithMetadata
+termPrintTest testName t expectedStr = universalCase testName
+  (PrintCore.term @@ t)
+  (Phantoms.string expectedStr)
+
+-- Term builders (shallow DSL) for the sugar fixtures.
+nm :: String -> TypedTerm Name
+nm s = Core.name $ Phantoms.string s
+
+strT :: String -> TypedTerm Term
+strT s = Core.termLiteral (Core.literalString $ Phantoms.string s)
+
+i32T :: Int -> TypedTerm Term
+i32T n = Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (Phantoms.int32 n)))
+
+fld :: String -> TypedTerm Term -> TypedTerm Field
+fld n t = Core.field (nm n) t
+
+unitFld :: String -> TypedTerm Field
+unitFld n = Core.field (nm n) Core.termUnit
+
+-- record Person{firstName = "Alice", age = 30:int32}
+recordPersonTerm :: TypedTerm Term
+recordPersonTerm = Core.termRecord (Core.record (nm "example.Person")
+  (Phantoms.list [fld "firstName" (strT "Alice"), fld "age" (i32T 30)]))
+
+-- record Person{contactInfo, firstName = "Arthur"} -- bareword unit field
+recordBarewordTerm :: TypedTerm Term
+recordBarewordTerm = Core.termRecord (Core.record (nm "example.Person")
+  (Phantoms.list [unitFld "contactInfo", fld "firstName" (strT "Arthur")]))
+
+-- injection Color{red} -- unit-valued variant (prints identically to a one-bare-field record)
+injectUnitTerm :: TypedTerm Term
+injectUnitTerm = Core.termInject (Core.injection (nm "example.Color") (unitFld "red"))
+
+-- injection Length{meters = 1.0:float64-ish} -- data-carrying variant (use int for simplicity)
+injectDataTerm :: TypedTerm Term
+injectDataTerm = Core.termInject (Core.injection (nm "example.Length") (fld "meters" (i32T 1)))
+
+-- wrap Meters{100:int32} -- literal body, sugars safely
+wrapLiteralTerm :: TypedTerm Term
+wrapLiteralTerm = Core.termWrap (Core.wrappedTerm (nm "example.Meters") (i32T 100))
+
+-- wrap Meters{x} -- variable body, must keep keyword form 'wrap(...)'
+wrapVariableTerm :: TypedTerm Term
+wrapVariableTerm = Core.termWrap (Core.wrappedTerm (nm "example.Meters") (Core.termVariable (nm "x")))
+
+-- project Person[firstName]
+projectTermVal :: TypedTerm Term
+projectTermVal = Core.termProject (Core.projection (nm "example.Person") (nm "firstName"))
+
+-- unwrap Meters[]
+unwrapTermVal :: TypedTerm Term
+unwrapTermVal = Core.termUnwrap (nm "example.Meters")
+
+nominalSugarGroup :: TypedTermDefinition TestGroup
+nominalSugarGroup = define "nominalSugarGroup" $
+  doc "Nominal construction/elimination sugar: print + round-trip (#809)" $
+  Testing.testGroup (string "nominal sugar") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    termPrintTest "record sugar: multi-field"
+      recordPersonTerm "example.Person{firstName = \"Alice\", age = 30:int32}",
+    termRoundtripTest "record sugar: multi-field round-trips" recordPersonTerm,
+
+    termPrintTest "record sugar: bareword unit field"
+      recordBarewordTerm "example.Person{contactInfo, firstName = \"Arthur\"}",
+    termRoundtripTest "record sugar: bareword unit field round-trips" recordBarewordTerm,
+
+    termPrintTest "injection sugar: unit variant prints as bareword record-style construct"
+      injectUnitTerm "example.Color{red}",
+    termRoundtripTest "injection sugar: unit variant string round-trips" injectUnitTerm,
+
+    termPrintTest "injection sugar: data variant"
+      injectDataTerm "example.Length{meters = 1:int32}",
+    termRoundtripTest "injection sugar: data variant string round-trips" injectDataTerm,
+
+    termPrintTest "wrap sugar: literal body"
+      wrapLiteralTerm "example.Meters{100:int32}",
+    termRoundtripTest "wrap sugar: literal body round-trips" wrapLiteralTerm,
+
+    termPrintTest "wrap: variable body keeps keyword form (ambiguous as record field otherwise)"
+      wrapVariableTerm "wrap(example.Meters){x}",
+    termRoundtripTest "wrap: variable body keyword form round-trips" wrapVariableTerm,
+
+    termPrintTest "project sugar: Name[field]"
+      projectTermVal "example.Person[firstName]",
+    termRoundtripTest "project sugar round-trips" projectTermVal,
+
+    termPrintTest "unwrap sugar: Name[]"
+      unwrapTermVal "example.Meters[]",
+    termRoundtripTest "unwrap sugar round-trips" unwrapTermVal])
