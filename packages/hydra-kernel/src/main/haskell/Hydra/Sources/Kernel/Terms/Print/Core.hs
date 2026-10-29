@@ -178,7 +178,7 @@ caseStatement = define "caseStatement" $
   "defaultField" <~ Optionals.match (var "mdef") (list ([] :: [TypedTerm Field])) ("d" ~> list [Core.field (Core.name $ string "_") (var "d")]) $
   "allFields" <~ Lists.concat (list [var "caseFields", var "defaultField"]) $
   Strings.concat $ list [
-    string "case(",
+    string "cases(",
     var "tname",
     string ")",
     fields @@ var "aliases" @@ var "allFields"]
@@ -285,7 +285,7 @@ integerType = define "integerType" $
 -- these must be backtick-escaped.
 reservedWords :: TypedTerm (S.Set String)
 reservedWords = Sets.fromList $ list [
-  string "_", string "as", string "bigint", string "binary", string "boolean", string "case",
+  string "_", string "as", string "bigint", string "binary", string "boolean", string "cases",
   string "decimal", string "effect", string "either", string "false", string "float32",
   string "float64", string "forall", string "from", string "given", string "impure", string "in",
   string "import", string "inject", string "int8", string "int16", string "int32", string "int64",

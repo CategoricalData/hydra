@@ -534,8 +534,8 @@ parenName kw =
 -- LAST as the wildcard field '_'").
 caseTerm :: TypedTermDefinition (Parser Term)
 caseTerm = define "caseTerm" $
-  doc "Parse a case term: 'case' '(' name ')' termFields, splitting off a trailing '_' default field" $
-  P.bind @@ (parenName (string "case")) @@ ("tname" ~>
+  doc "Parse a case term: 'cases' '(' name ')' termFields, splitting off a trailing '_' default field" $
+  P.bind @@ (parenName (string "cases")) @@ ("tname" ~>
     P.map @@ ("flds" ~>
       "isDefault" <~ ("f" ~> Equality.equal (Core.unName (Core.fieldName (var "f"))) (string "_")) $
       "defFields" <~ Lists.filter (var "isDefault") (var "flds") $

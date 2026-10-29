@@ -152,7 +152,7 @@ The following bare names are reserved in all positions.
 To use one as a name, write it backticked.
 
 ```
-_ as bigint binary boolean case decimal effect either false float32 float64
+_ as bigint binary boolean cases decimal effect either false float32 float64
 forall from given impure in import inject int8 int16 int32 int64 lazy left let
 list map module none optional partial primitive project record right set
 string term true type uint8 uint16 uint32 uint64 union unit unwrap void wrap
@@ -197,9 +197,9 @@ annot         ::= '@' term        -- postfix; payload parsed at tightest level,
                                   -- Chains left: x @m1 @m2 =
                                   -- annotated(annotated(x, m1), m2)
 applicationTerm ::= term term     -- adjacency; left-associative: add 1 2
-caseTerm      ::= 'case' '(' name ')' termFields   -- default handler, if present,
-                                                   -- appears LAST as the wildcard
-                                                   -- field '_'
+caseTerm      ::= 'cases' '(' name ')' termFields   -- default handler, if present,
+                                                    -- appears LAST as the wildcard
+                                                    -- field '_'
 eitherTerm    ::= 'left' '(' term ')' | 'right' '(' term ')'
 injectTerm    ::= 'inject' '(' name ')' termFields   -- exactly one field
 lambdaTerm    ::= 'λ' binderName [':' type] '.' term   -- domain type optional
