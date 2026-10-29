@@ -72,6 +72,7 @@ module_ = Module {
      toDefinition either_,
      toDefinition escapeBacktickChar,
      toDefinition field,
+     toDefinition fieldTermIsUnit,
      toDefinition fieldType,
      toDefinition fields,
      toDefinition floatValue,
@@ -83,6 +84,7 @@ module_ = Module {
      toDefinition isBareName,
      toDefinition isBareSegment,
      toDefinition isReservedWord,
+     toDefinition isVariableTerm,
      toDefinition lambda,
      toDefinition let_,
      toDefinition letAliased,
@@ -98,6 +100,8 @@ module_ = Module {
      toDefinition printNameAliased,
      toDefinition projection,
      toDefinition (set_ :: TypedTermDefinition ((Int -> String) -> S.Set Int -> String)),
+     toDefinition sugarField,
+     toDefinition sugarFields,
      toDefinition term,
      toDefinition termAliased,
      toDefinition termAtPrec,
@@ -221,6 +225,51 @@ fields = define "fields" $
     Strings.join (string ", ") (var "fieldStrs"),
     string "}"]
 
+-- | True iff a term is the unit term (Term.unit) -- used by 'sugarFields' to decide whether a field
+-- may be abbreviated bareword ('name' instead of 'name = unit'), #809. Named 'fieldTermIsUnit' (not
+-- 'isUnitTerm') to avoid colliding with the pre-existing kernel predicate hydra.core.predicates.
+-- isUnitTerm, which is re-exported via Hydra.Kernel; a local define of the same name is ambiguous.
+fieldTermIsUnit :: TypedTermDefinition (Term -> Bool)
+fieldTermIsUnit = define "fieldTermIsUnit" $
+  doc "True iff a term is the unit term (for bareword unit-field sugar, #809)" $
+  "t" ~> match _Term (var "t") (Just false) [
+    _Term_unit>>: constant true]
+
+-- | True iff a term is a bare variable reference (Term.variable) -- used by the wrap-sugar printer
+-- to fall back to the keyword form when the wrapped body would otherwise reparse as a one-bare-field
+-- record (#809).
+isVariableTerm :: TypedTermDefinition (Term -> Bool)
+isVariableTerm = define "isVariableTerm" $
+  doc "True iff a term is a bare variable reference (for wrap-sugar disambiguation, #809)" $
+  "t" ~> match _Term (var "t") (Just false) [
+    _Term_variable>>: constant true]
+
+-- | Show a list of fields in nominal-construction-sugar form (#809): '{name = term, ...}', but a
+-- unit-valued field abbreviates to a bareword 'name' (the unit-field shorthand). Shared by the
+-- record and injection sugar printers. The brace style (no keyword wrapper) is what distinguishes
+-- sugar from the legacy 'fields' helper, which this otherwise mirrors.
+sugarFields :: TypedTermDefinition (M.Map ModuleName String -> [Field] -> String)
+sugarFields = define "sugarFields" $
+  doc "Show fields as nominal-construction sugar, abbreviating unit-valued fields bareword (#809)" $
+  "aliases" ~> "flds" ~>
+  "fieldStrs" <~ Lists.map (sugarField @@ var "aliases") (var "flds") $
+  Strings.concat $ list [
+    string "{",
+    Strings.join (string ", ") (var "fieldStrs"),
+    string "}"]
+
+-- | Show a single field in sugar form: 'name' if its term is unit (bareword shorthand), else
+-- 'name = term' (#809).
+sugarField :: TypedTermDefinition (M.Map ModuleName String -> Field -> String)
+sugarField = define "sugarField" $
+  doc "Show a single field in sugar form: bareword 'name' for a unit value, else 'name = term' (#809)" $
+  "aliases" ~> "field" ~>
+  "fname" <~ printName @@ (Core.fieldName $ var "field") $
+  "fterm" <~ Core.fieldTerm (var "field") $
+  Logic.ifElse (fieldTermIsUnit @@ var "fterm")
+    (var "fname")
+    (Strings.concat $ list [var "fname", string " = ", termAliased @@ var "aliases" @@ var "fterm"])
+
 floatValue :: TypedTermDefinition (FloatValue -> String)
 floatValue = define "float" $
   doc "Show a float value as a string" $
@@ -241,11 +290,12 @@ injection = define "injection" $
   "aliases" ~> "inj" ~>
   "tname" <~ Core.injectionTypeName (var "inj") $
   "f" <~ Core.injectionField (var "inj") $
+  -- #809: injection construction sugar 'Name{field}' -- the SAME one-field record-style construct as
+  -- a record; the reader corrects it back to an injection against the schema graph (one field over a
+  -- union type). Unit-valued variants abbreviate bareword ('Color{red}') via 'sugarFields'.
   Strings.concat $ list [
-    string "inject(",
     printNameAliased @@ var "aliases" @@ var "tname",
-    string ")",
-    fields @@ var "aliases" @@ (list [var "f"])]
+    sugarFields @@ var "aliases" @@ (list [var "f"])]
 
 integerValue :: TypedTermDefinition (IntegerValue -> String)
 integerValue = define "integer" $
@@ -545,12 +595,12 @@ projection = define "projection" $
   "aliases" ~> "proj" ~>
   "tname" <~ printNameAliased @@ var "aliases" @@ (Core.projectionTypeName $ var "proj") $
   "fname" <~ printNameAliased @@ var "aliases" @@ (Core.projectionFieldName $ var "proj") $
+  -- #809: projection elimination sugar 'Name[field]'. Reparses directly to Term.project.
   Strings.concat $ list [
-    string "project(",
     var "tname",
-    string "){",
+    string "[",
     var "fname",
-    string "}"]
+    string "]"]
 
 set_ :: forall a. Ord a => TypedTermDefinition ((a -> String) -> S.Set a -> String)
 set_ = define "set" $
@@ -645,13 +695,15 @@ termAtPrec = define "termAtPrec" $
       string ")"],
     _Term_project>>: "proj" ~> projection @@ var "aliases" @@ var "proj",
     _Term_record>>: "rec" ~>
+      -- #809: nominal construction sugar. A record always prints as 'Name{...}' (the record-style
+      -- construct), with unit-valued fields abbreviated bareword via 'sugarFields'. It reparses as a
+      -- record (and, for a one-field record over a union type, is corrected to an injection by the
+      -- packaging pass -- but a genuine record is never over a union, so it round-trips as a record).
       "tname" <~ printNameAliased @@ var "aliases" @@ (Core.recordTypeName $ var "rec") $
       "flds" <~ Core.recordFields (var "rec") $
       Strings.concat $ list [
-        string "record(",
         var "tname",
-        string ")",
-        fields @@ var "aliases" @@ var "flds"],
+        sugarFields @@ var "aliases" @@ var "flds"],
     _Term_set>>: "s" ~>
       Strings.concat $ list [
         string "{",
@@ -678,20 +730,32 @@ termAtPrec = define "termAtPrec" $
           string "⟩"],
     _Term_inject>>: "inj" ~> injection @@ var "aliases" @@ var "inj",
     _Term_unit>>: constant $ string "unit",
+    -- #809: unwrap elimination sugar 'Name[]' (empty brackets = eliminate the wrapper's anonymous
+    -- field). Reparses directly to Term.unwrap -- no graph correction needed.
     _Term_unwrap>>: "tname" ~> Strings.concat $ list [
-      string "unwrap(",
       printNameAliased @@ var "aliases" @@ var "tname",
-      string ")"],
+      string "[]"],
     _Term_variable>>: "name" ~> printNameAliased @@ var "aliases" @@ var "name",
     _Term_wrap>>: "wt" ~>
+      -- #809: wrapper construction sugar 'Name{term}'. Safe ONLY when the wrapped body does NOT
+      -- reparse as a record field -- i.e. not a bare variable (which would print as a lone name and
+      -- reparse as a one-bare-field record). A variable body therefore keeps the keyword form
+      -- 'wrap(Name){x}', which round-trips unambiguously. All other bodies (literals, lists,
+      -- applications, nested constructs, ...) are not field-shaped, so they sugar safely.
       "tname" <~ printNameAliased @@ var "aliases" @@ (Core.wrappedTermTypeName $ var "wt") $
       "term1" <~ Core.wrappedTermBody (var "wt") $
-      Strings.concat $ list [
-        string "wrap(",
-        var "tname",
-        string "){",
-        termAliased @@ var "aliases" @@ var "term1",
-        string "}"]]
+      Logic.ifElse (isVariableTerm @@ var "term1")
+        (Strings.concat $ list [
+          string "wrap(",
+          var "tname",
+          string "){",
+          termAliased @@ var "aliases" @@ var "term1",
+          string "}"])
+        (Strings.concat $ list [
+          var "tname",
+          string "{",
+          termAliased @@ var "aliases" @@ var "term1",
+          string "}"])]
 
 -- | Show a type as a string (the canonical, minimally-parenthesized rendering). Entry point at
 -- the loosest (top-level) context, with no import aliases (full dotted names everywhere).

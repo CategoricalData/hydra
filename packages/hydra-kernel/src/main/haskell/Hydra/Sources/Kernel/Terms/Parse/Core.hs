@@ -91,7 +91,9 @@ module_ = Module {
      toDefinition bareNameSegmentChar,
      toDefinition binderName,
      toDefinition binding,
+     toDefinition braceConstruct,
      toDefinition braceContent,
+     toDefinition bracketEliminate,
      toDefinition caseTerm,
      toDefinition constraint,
      toDefinition decimalDigits,
@@ -119,9 +121,11 @@ module_ = Module {
      toDefinition postfixTerm,
      toDefinition postfixType,
      toDefinition projectTerm,
+     toDefinition rawName,
      toDefinition recordTerm,
      toDefinition signedDigits,
      toDefinition stringLit,
+     toDefinition sugarField,
      toDefinition term,
      toDefinition termField,
      toDefinition termFields,
@@ -299,6 +303,39 @@ name = define "name" $
           (P.pure @@ var "s")))
     segment = P.map @@ ("cs" ~> Strings.fromList (var "cs")) @@
       (P.some @@ (P.satisfy @@ (asTerm bareNameSegmentChar)))
+
+-- | Parse a name WITHOUT consuming trailing whitespace (unlike 'name', which is a 'lexeme' and so
+-- eats the gap after the name). The nominal-sugar atoms ('braceConstruct'/'bracketEliminate', #809)
+-- rely on this: the sugar is a type name IMMEDIATELY abutting '{' or '[', so the opening delimiter
+-- must be visible with no intervening whitespace consumed. A raw name followed by a non-abutting
+-- delimiter ('Name {...}' with a gap) therefore does NOT match a sugar atom and falls through to
+-- ordinary application ('Name' applied to a list/set/map), which is the intended reading. Backtick
+-- names are included (a backtick-escaped type name may prefix sugar, e.g. '`in`{x = unit}'); the
+-- backtick form self-delimits, so no lexeme is needed around it either.
+rawName :: TypedTermDefinition (Parser Name)
+rawName = define "rawName" $
+  doc "Parse a name without consuming trailing whitespace, for nominal-sugar delimiter adjacency (#809)" $
+  P.map @@ ("s" ~> Core.name (var "s")) @@ (P.alt @@ bareDottedNameRaw @@ (asTerm backtickedNameRaw))
+  where
+    bareDottedNameRaw =
+      P.bind @@ (P.sepBy1 @@ segment @@ (P.char @@ int32 46)) @@ ("segs" ~>    -- '.'
+        "s" <~ Strings.join (string ".") (var "segs") $
+        Logic.ifElse (PrintCore.isReservedWord @@ var "s")
+          (P.fail @@ (Strings.concat2 (string "reserved word used bare: ") (var "s")))
+          (P.pure @@ var "s"))
+    segment = P.map @@ ("cs" ~> Strings.fromList (var "cs")) @@
+      (P.some @@ (P.satisfy @@ (asTerm bareNameSegmentChar)))
+    -- A backtick literal without the trailing 'lexeme' (cf. 'backtickedName').
+    backtickedNameRaw =
+      P.bind @@ (P.char @@ int32 96) @@ (constant $    -- '`'
+        P.bind @@ (P.many @@ backtickChar) @@ ("cs" ~>
+          P.bind @@ (P.char @@ int32 96) @@ (constant $
+            P.pure @@ (Strings.fromList $ var "cs"))))
+    backtickChar = P.alt
+      @@ asTerm escapedChar
+      @@ (P.satisfy @@ ("c" ~> Logic.and
+            (Logic.not (Equality.equal (var "c") (int32 96)))
+            (Logic.not (Equality.equal (var "c") (int32 92)))))
 
 -- | Parse a name in a binder head (syntax.md #2.4 case 3): here a dot is structural (it
 -- terminates the binder head), so a bare binder name must be a single dot-free segment --
@@ -661,6 +698,72 @@ wrapTerm = define "wrapTerm" $
         P.bind @@ (termKeyword @@ string "}") @@ (constant $
           P.pure @@ Core.termWrap (Core.wrappedTerm (var "tname") (var "t"))))))
 
+-- | Parse one entry of a nominal-construction-sugar field list (#809): either 'name = term', or a
+-- bare 'name' abbreviating 'name = unit' (the bareword unit-field shorthand). Shared by the record
+-- and injection sugar (both read as a field list; the record/injection distinction is resolved
+-- later, against the schema graph, in the packaging pass).
+sugarField :: TypedTermDefinition (Parser Field)
+sugarField = define "sugarField" $
+  doc "Parse a sugar field: 'name = term', or a bare 'name' abbreviating 'name = unit' (#809)" $
+  P.bind @@ (asTerm name) @@ ("fname" ~>
+    P.alt
+      @@ (P.bind @@ (termKeyword @@ string "=") @@ (constant $
+            P.map @@ ("t" ~> Core.field (var "fname") (var "t")) @@ (P.lazy @@ (constant $ asTerm term))))
+      @@ (P.pure @@ Core.field (var "fname") Core.termUnit))
+
+-- | Parse the nominal CONSTRUCTION sugar (#809): a type name IMMEDIATELY followed by '{' ... '}'
+-- (no intervening whitespace -- see 'rawName'), dropping the 'record('/'inject('/'wrap(' keyword
+-- wrapper. The braces' content shape decides the term kind SYNTACTICALLY:
+--   * a field list (each entry 'name = term' or a bare 'name' ⇒ 'name = unit') ⇒ a RECORD. An
+--     injection ('Color{red}') is syntactically indistinguishable from a one-field record here, so
+--     it is parsed as a record now and CORRECTED to an injection later (packaging pass), iff the
+--     type name resolves to a union and the record has exactly one field (the "record-style
+--     construct" rule, #809). The parser itself stays graph-free.
+--   * a single term that is NOT field-shaped (a literal, a parenthesized term, a nested construct,
+--     a list, ...) ⇒ a WRAP, that term being the wrapped body ('Meters{100:int32}').
+-- The field-list alternative is tried first under 'P.try' so that a non-field single term (which
+-- may begin by parsing a 'name', then find no '=' and no ',', i.e. a lone bare name -- which IS a
+-- valid one-bare-field record) rewinds cleanly to the wrap alternative only when it is genuinely
+-- not field-shaped. A lone bare name '{x}' is a one-bare-field record (⇒ possibly injection), NOT a
+-- wrap of variable 'x'; wrapping a variable requires the keyword form 'wrap(T){x}'.
+braceConstruct :: TypedTermDefinition (Parser Term)
+braceConstruct = define "braceConstruct" $
+  doc "Parse nominal construction sugar: 'Name{...}' (record/injection fields, or a single wrapped term) (#809)" $
+  P.bind @@ (asTerm rawName) @@ ("tname" ~>
+    P.bind @@ (P.char @@ int32 123) @@ (constant $    -- '{', raw (must abut the name)
+      P.bind @@ whitespace @@ (constant $    -- resume lexeme-style content parsing
+        P.choice @@ list [
+          -- field list ⇒ record (⇒ possibly injection, corrected later)
+          P.try @@ (P.bind @@ (P.sepBy @@ (asTerm sugarField) @@ (termKeyword @@ string ",")) @@ ("flds" ~>
+            P.bind @@ (termKeyword @@ string "}") @@ (constant $
+              P.pure @@ Core.termRecord (Core.record (var "tname") (var "flds"))))),
+          -- single non-field term ⇒ wrap
+          P.bind @@ (P.lazy @@ (constant $ asTerm term)) @@ ("t" ~>
+            P.bind @@ (termKeyword @@ string "}") @@ (constant $
+              P.pure @@ Core.termWrap (Core.wrappedTerm (var "tname") (var "t"))))])))
+
+-- | Parse the nominal ELIMINATION sugar (#809): a type name IMMEDIATELY followed by '[' ... ']'
+-- (no intervening whitespace -- see 'rawName'). Unlike construction, elimination needs NO schema:
+--   * '[' name ']' ⇒ a PROJECTION ('Person[firstName]'), of that field within the named type.
+--   * '[' ']'      ⇒ an UNWRAP ('Meters[]'), the wrapper eliminator for the named type.
+-- '[' cannot occur inside a bare name, so there is no collision with qualified variable names (the
+-- hazard that ruled out a dot-based projection notation); both forms map to their AST node
+-- directly, with no later correction pass.
+bracketEliminate :: TypedTermDefinition (Parser Term)
+bracketEliminate = define "bracketEliminate" $
+  doc "Parse nominal elimination sugar: 'Name[field]' (projection) or 'Name[]' (unwrap) (#809)" $
+  P.bind @@ (asTerm rawName) @@ ("tname" ~>
+    P.bind @@ (P.char @@ int32 91) @@ (constant $    -- '[', raw (must abut the name)
+      P.bind @@ whitespace @@ (constant $
+        P.choice @@ list [
+          -- '[]' ⇒ unwrap
+          P.bind @@ (termKeyword @@ string "]") @@ (constant $
+            P.pure @@ Core.termUnwrap (var "tname")),
+          -- '[' name ']' ⇒ projection
+          P.bind @@ (asTerm name) @@ ("fname" ~>
+            P.bind @@ (termKeyword @@ string "]") @@ (constant $
+              P.pure @@ Core.termProject (Core.projection (var "tname") (var "fname"))))])))
+
 -- | Parse a braced '{' ... '}' construct that is either a set or a map (syntax.md #3: "nonempty
 -- braces are a map exactly when entries contain a top-level '='"), with one token of lookahead
 -- inside the braces to decide which. '{}' is the empty set; '{=}' is the empty map.
@@ -718,6 +821,14 @@ atomicTerm = define "atomicTerm" $
     asTerm unwrapTerm,
     asTerm wrapTerm,
     parenOrPair,
+    -- #809 nominal sugar: 'Name{...}' construction / 'Name[...]' elimination. Each begins by
+    -- parsing a raw (no-trailing-whitespace) name, then REQUIRES the delimiter to abut; wrapped in
+    -- 'P.try' so a bare name NOT followed by '{'/'[' rewinds cleanly to the variable fallback below
+    -- (and so a name abutting '{' with non-field content can rewind to the wrap alternative). Placed
+    -- after the keyword constructs (those start with reserved words a raw name rejects) and before
+    -- the bare-variable fallback (which a lone name without a delimiter must reach).
+    P.try @@ (asTerm braceConstruct),
+    P.try @@ (asTerm bracketEliminate),
     P.map @@ ("n" ~> Core.termVariable (var "n")) @@ (asTerm name)]
   where
     typeLambdaTermParser =

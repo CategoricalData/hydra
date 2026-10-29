@@ -57,6 +57,7 @@ import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Parse.Core as ParseCore
 import qualified Hydra.Sources.Kernel.Terms.Parsers as P
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 
 
 -- NOTE: mirrors Print/Packaging.hs (see that file's own header note). Uses the parser-combinator
@@ -69,10 +70,18 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 -- (EntityMetadata) is not attempted here -- every parsed definition and module gets
 -- metadata = Nothing, matching the printer's own skip of doc-comment output for this reason.
 --
--- NO type-environment pre-pass is needed: the landed syntax.md grammar has no TypeName{...}
--- nominal-instance sugar (an earlier design-doc draft's concern, not part of the ratified
--- grammar) -- every type/term reference is a plain 'name', resolved identically to
--- 'variableTerm'/'variableType', with no forward-reference machinery required.
+-- #809 adds nominal construction/elimination sugar. Construction ('Name{...}') is parsed by
+-- ParseCore GRAPH-FREE: a field-list body always becomes a Term.record (the "record-style
+-- construct"), since a union injection is syntactically indistinguishable from a one-field record
+-- without the schema. A type-environment post-pass here ('correctInjectionsInDefinition') then
+-- CORRECTS a one-field Term.record whose type name resolves to a UNION into a Term.inject. The env
+-- is built from THIS module's own type definitions ('typeEnvFromDefinitions'), which covers the
+-- mixed-module forward-reference case (a term using 'Color{red}' where 'Color' is defined later in
+-- the same module). Imported-type resolution would extend the env with the ambient schema; the
+-- correction takes a plain 'Map Name Type' so that extension is additive. Multi-field-record-over-
+-- union is left exactly as parsed, for the type checker to reject (the correction is not a
+-- validator). Elimination sugar ('Name[field]'/'Name[]') needs no correction -- it parses directly
+-- to Term.project/Term.unwrap.
 
 ns :: ModuleName
 ns = ModuleName "hydra.core.parse.packaging"
@@ -81,10 +90,12 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, ParseCore.ns, P.ns, Rewriting.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, ParseCore.ns, P.ns, Rewriting.ns, Strip.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Parsers for hydra.core.packaging types")}
   where
    definitions = [
+     toDefinition correctInjectionsInDefinition,
+     toDefinition correctInjectionsInTerm,
      toDefinition definitionParser,
      toDefinition dottedIdentifier,
      toDefinition expandAliasedName,
@@ -94,6 +105,7 @@ module_ = Module {
      toDefinition expandAliasesInType,
      toDefinition identifier,
      toDefinition importDecl,
+     toDefinition isUnionType,
      toDefinition keyword,
      toDefinition moduleHeader,
      toDefinition moduleNameParser,
@@ -106,6 +118,7 @@ module_ = Module {
      toDefinition termDefinitionParser,
      toDefinition token,
      toDefinition typeDefinitionParser,
+     toDefinition typeEnvFromDefinitions,
      toDefinition whitespace]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
@@ -380,6 +393,81 @@ expandAliasesInDefinition = define "expandAliasesInDefinition" $
       (Packaging.primitiveDefinitionIsPure $ var "pd") (Packaging.primitiveDefinitionIsTotal $ var "pd")
       (Optionals.map (expandAliasesInTerm @@ (var "aliases" :: TypedTerm (M.Map String ModuleName))) (Packaging.primitiveDefinitionDefaultImplementation $ var "pd")))]
 
+-- | True iff a type, once stripped of its 'forall' quantifiers and annotations, is a union type
+-- (#809). Used to decide whether a one-field record-style construct over this type name is actually
+-- an injection.
+isUnionType :: TypedTermDefinition (Type -> Bool)
+isUnionType = define "isUnionType" $
+  doc "True iff a type (after stripping foralls/annotations) is a union type (#809)" $
+  "typ" ~> match _Type (Strip.deannotateTypeParameters @@ var "typ") (Just false) [
+    _Type_union>>: constant true]
+
+-- | Build a type environment from a module's own type definitions: a map from each defined type's
+-- (fully-qualified) name to its scheme body (#809). The only consumer is 'correctInjectionsInTerm',
+-- which needs just enough schema to tell a union type from a record type. Imported types are not
+-- included here (a future extension would merge the ambient schema); this suffices for same-module
+-- references, including forward references within the module.
+typeEnvFromDefinitions :: TypedTermDefinition ([Definition] -> M.Map Name Type)
+typeEnvFromDefinitions = define "typeEnvFromDefinitions" $
+  doc "Map each of a module's own type definitions to its (deannotated) scheme body (#809)" $
+  "defs" ~>
+  Maps.fromList (Optionals.givens (Lists.map
+    ("def" ~> match _Definition (var "def") (Just nothing) [
+      _Definition_type>>: "td" ~> just (pair
+        (Packaging.typeDefinitionName $ var "td")
+        (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
+    (var "defs")))
+
+-- | Correct the nominal-construction sugar's record/injection ambiguity (#809): rewrite a
+-- one-field Term.record whose type name resolves (in the given env) to a UNION type into a
+-- Term.inject with that single field. Records over record types, records with 0 or 2+ fields, and
+-- records over types absent from the env are left unchanged (a multi-field record over a union is
+-- malformed and left for the type checker). Recurses through the whole term via Rewriting.rewriteTerm.
+correctInjectionsInTerm :: TypedTermDefinition (M.Map Name Type -> Term -> Term)
+correctInjectionsInTerm = define "correctInjectionsInTerm" $
+  doc "Rewrite a one-field record over a union type into an injection, per the type env (#809)" $
+  "env" ~> "t0" ~>
+  "rewrite" <~ ("recurse" ~> "term" ~>
+    match _Term (var "term")
+      (Just $ var "recurse" @@ var "term") [
+      _Term_record>>: "r" ~>
+        "tname" <~ Core.recordTypeName (var "r") $
+        "flds" <~ Core.recordFields (var "r") $
+        Optionals.match (Maps.lookup (var "tname") (var "env" :: TypedTerm (M.Map Name Type)))
+          -- type name not in env: leave as a record
+          (var "recurse" @@ var "term")
+          ("ty" ~>
+            -- union type with exactly one field: correct to an injection (matching 'Lists.head' to
+            -- extract that single field -- 'head' is optional-returning, so this also guards the
+            -- length-1 invariant). Any other shape (record type, 0 or 2+ fields) stays a record.
+            Logic.ifElse
+              (Logic.and (isUnionType @@ var "ty")
+                (Equality.equal (Lists.length $ var "flds") (int32 1)))
+              (Optionals.match (Lists.head $ var "flds")
+                (var "recurse" @@ var "term")
+                ("f" ~> var "recurse" @@ (Core.termInject (Core.injection (var "tname") (var "f")))))
+              (var "recurse" @@ var "term"))]) $
+  Rewriting.rewriteTerm @@ var "rewrite" @@ var "t0"
+
+-- | Apply 'correctInjectionsInTerm' to a definition's term-bearing bodies (term body + primitive
+-- default implementation), per the given type env (#809). Type definitions carry no term body.
+correctInjectionsInDefinition :: TypedTermDefinition (M.Map Name Type -> Definition -> Definition)
+correctInjectionsInDefinition = define "correctInjectionsInDefinition" $
+  doc "Apply the record->injection correction to a definition's term bodies, per the type env (#809)" $
+  "env" ~> "def" ~>
+  "correct" <~ (correctInjectionsInTerm @@ (var "env" :: TypedTerm (M.Map Name Type))) $
+  match _Definition (var "def") Nothing [
+    _Definition_type>>: constant $ var "def",
+    _Definition_term>>: "td" ~> Packaging.definitionTerm (Packaging.termDefinition
+      (Packaging.termDefinitionName $ var "td") (Packaging.termDefinitionMetadata $ var "td")
+      (Packaging.termDefinitionSignature $ var "td")
+      (var "correct" @@ (Packaging.termDefinitionBody $ var "td"))),
+    _Definition_primitive>>: "pd" ~> Packaging.definitionPrimitive (Packaging.primitiveDefinition
+      (Packaging.primitiveDefinitionName $ var "pd") (Packaging.primitiveDefinitionMetadata $ var "pd")
+      (Packaging.primitiveDefinitionSignature $ var "pd")
+      (Packaging.primitiveDefinitionIsPure $ var "pd") (Packaging.primitiveDefinitionIsTotal $ var "pd")
+      (Optionals.map (var "correct") (Packaging.primitiveDefinitionDefaultImplementation $ var "pd")))]
+
 -- | Parse a type definition: 'type name = typeScheme'. No doc-comment ('##') parsing (open
 -- design question, not attempted here) -- metadata is always Nothing.
 typeDefinitionParser :: TypedTermDefinition (ModuleName -> Parser Definition)
@@ -464,9 +552,16 @@ moduleParser = define "moduleParser" $
       "aliases" <~ (Maps.fromList (Optionals.givens (Lists.map
           ("p" ~> Optionals.map ("alias" ~> pair (var "alias") (Packaging.moduleDependencyModule (Pairs.first $ var "p"))) (Pairs.second $ var "p"))
           (var "imports"))) :: TypedTerm (M.Map String ModuleName)) $
-      P.map @@ ("defs" ~> Packaging.module_ (var "modName") nothing
-          (Lists.map ("p" ~> Pairs.first (var "p")) (var "imports"))
-          (Lists.map (expandAliasesInDefinition @@ (var "aliases" :: TypedTerm (M.Map String ModuleName))) (var "defs"))) @@
+      P.map @@ ("defs" ~>
+          -- 1. expand import aliases to fully-qualified names (#803/#804)
+          "expanded" <~ Lists.map (expandAliasesInDefinition @@ (var "aliases" :: TypedTerm (M.Map String ModuleName))) (var "defs") $
+          -- 2. build the type env from the (now fully-qualified) type definitions, then correct the
+          --    record/injection sugar ambiguity against it (#809). Done AFTER alias expansion so the
+          --    env keys and the record type names being looked up are both fully qualified.
+          "env" <~ (typeEnvFromDefinitions @@ var "expanded") $
+          Packaging.module_ (var "modName") nothing
+            (Lists.map ("p" ~> Pairs.first (var "p")) (var "imports"))
+            (Lists.map (correctInjectionsInDefinition @@ (var "env" :: TypedTerm (M.Map Name Type))) (var "expanded"))) @@
         (P.many @@ (definitionParser @@ var "modName"))))
 
 -- | Parse a complete module from a string, requiring the parse to consume all input (after

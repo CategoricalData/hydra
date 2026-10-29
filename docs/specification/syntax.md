@@ -202,6 +202,9 @@ caseTerm      ::= 'cases' '(' name ')' termFields   -- default handler, if prese
                                                     -- field '_'
 eitherTerm    ::= 'left' '(' term ')' | 'right' '(' term ')'
 injectTerm    ::= 'inject' '(' name ')' termFields   -- exactly one field
+                | name sugarFields                   -- SUGAR (#809): one field;
+                                                     -- disambiguated from a record
+                                                     -- by the schema (union type)
 lambdaTerm    ::= 'λ' binderName [':' type] '.' term   -- domain type optional
 letTerm       ::= 'let' binding (',' binding)* 'in' term
 listTerm      ::= '[' [term (',' term)*] ']'
@@ -212,15 +215,22 @@ mapEntry      ::= term '=' term
 optionalTerm  ::= 'given' '(' term ')' | 'none'
 pairTerm      ::= '(' term ',' term ')'
 projectTerm   ::= 'project' '(' name ')' '{' name '}'
+                | name '[' name ']'            -- SUGAR (#809): Person[firstName]
 recordTerm    ::= 'record' '(' name ')' termFields
+                | name sugarFields             -- SUGAR (#809): Person{a = 1, b}
 setTerm       ::= '{' [term (',' term)*] '}'   -- '{}' is the empty set; nonempty
                                                -- braces: '=' in entries means map
 typeApplicationTerm ::= term '⟨' type '⟩'      -- postfix
 typeLambdaTerm ::= 'Λ' binderName '.' term
 unitTerm      ::= 'unit'
 unwrapTerm    ::= 'unwrap' '(' name ')'
+                | name '[' ']'                 -- SUGAR (#809): Meters[]
 variableTerm  ::= name                         -- also primitive references
 wrapTerm      ::= 'wrap' '(' name ')' '{' term '}'
+                | name '{' term '}'            -- SUGAR (#809): Meters{100:int32};
+                                               -- the term must NOT be field-shaped
+                                               -- (a lone name is a one-field record,
+                                               -- not a wrapped variable)
 
 name          ::= bareName | '`' nameChars '`' -- backtick form per §2.4
 binderName    ::= segment | '`' nameChars '`'  -- bare names in binder heads are
@@ -229,6 +239,9 @@ binderName    ::= segment | '`' nameChars '`'  -- bare names in binder heads are
 binding       ::= name [':' '(' typeScheme ')'] ':=' term
 termFields    ::= '{' [termField (',' termField)*] '}'
 termField     ::= name '=' term
+sugarFields   ::= '{' [sugarField (',' sugarField)*] '}'   -- #809; no whitespace
+                                                           -- between name and '{'
+sugarField    ::= name '=' term | name        -- a bare 'name' ⇒ 'name = unit'
 
 -- Literals (lexical forms in §2.6)
 literal       ::= booleanLit | integerLit | floatLit | stringLit | binaryLit
@@ -313,6 +326,27 @@ Notes:
 - `termSignature`'s header (`∀` ... `⇒`) is identical to `typeScheme`'s; only the body differs,
   since a `TermSignature`'s parameters (unlike a bare `type`'s function-arrow chain) can each
   carry a laziness flag. Example: `primitive ifElse : ∀t. boolean → lazy t → lazy t → t`.
+- **Nominal sugar (#809).** A type name written immediately before `{...}` or `[...]` (no
+  intervening whitespace) is abbreviated nominal construction/elimination, dropping the
+  `record(…)`/`inject(…)`/`wrap(…)`/`project(…)`/`unwrap(…)` keyword wrapper. The keyword forms
+  remain valid — this is additive sugar.
+  - `Name sugarFields` (e.g. `Person{firstName = "Alice", age = 30:int32}`) is **record**
+    construction; a bare field `contactInfo` abbreviates `contactInfo = unit`.
+  - The same `Name sugarFields` with a single field over a **union** type is **injection**
+    (`Color{red}`, `Length{meters = 1.0:float64}`). It is syntactically identical to a one-field
+    record; the two are told apart by the **schema**: the reader parses the form as a record and,
+    against the type environment (the module's own type definitions, plus imported schema), rewrites
+    a one-field record over a union type into an injection. Without a schema (e.g. parsing a bare
+    term with no module context), the form stays a record. A multi-field construct over a union type
+    is malformed and left for type checking.
+  - `Name '{' term '}'` with a non-field-shaped term is **wrap** (`Meters{100:int32}`). A lone name
+    inside the braces is a one-field record, not a wrapped variable, so wrapping a *variable* keeps
+    the keyword form `wrap(Name){x}`.
+  - `Name '[' name ']'` is **projection** (`Person[firstName]`); `Name '[' ']'` is **unwrap**
+    (`Meters[]`). Both are unambiguous from syntax alone (no schema needed): `[` cannot occur inside
+    a name, so there is no collision with qualified variable names.
+  - The whitespace rule is load-bearing: `Name{…}` / `Name[…]` (abutting) are sugar; `Name {…}` /
+    `Name […]` (with a space) are ordinary application of `Name` to a set/map/list.
 
 ## 4. Canonical form
 
@@ -329,6 +363,15 @@ and confirmed by the cross-host formatting tests.
   or inside brackets.
 - The canonical printer backtick-escapes a name if and only if
   one of the three interference cases of §2.4 holds.
+- **[HYDRA-SYN-CANONICAL-NOMINAL-SUGAR]** The canonical printer emits the nominal sugar (#809), not
+  the keyword wrapper, for record (`Name{…}`), injection (`Name{…}`), projection (`Name[field]`),
+  and unwrap (`Name[]`). Record/injection fields print `name = term`, with a unit-valued field
+  abbreviated bareword `name`. Wrap prints `Name{term}` except when the wrapped body is a bare
+  variable, which would reparse as a one-field record; that single case prints the keyword form
+  `wrap(Name){x}`. Because injection is distinguished from a one-field record only by the schema,
+  round-tripping an injection through `print → parse` reproduces the injection only when the reader
+  has the same type environment; parsed without a schema, the printed `Name{field}` reads back as a
+  one-field record (the canonical string is identical either way).
 - **[HYDRA-SYN-CANONICAL-COLLECTION-ORDER]** Sets and maps print their elements and entries in
   canonical order: ascending by the canonical total order on terms — the `ordering` class's order,
   specified in [ordering-and-equality.md](ordering-and-equality.md)
