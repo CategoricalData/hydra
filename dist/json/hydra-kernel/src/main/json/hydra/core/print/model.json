@@ -288,7 +288,7 @@
                                                 "function": {"variable": "hydra.core.lib.strings.concat"},
                                                 "argument": {
                                                   "list": [
-                                                    {"literal": {"string": "case("}},
+                                                    {"literal": {"string": "cases("}},
                                                     {"variable": "tname"},
                                                     {"literal": {"string": ")"}},
                                                     {
@@ -1195,7 +1195,7 @@
                             {"literal": {"string": "bigint"}},
                             {"literal": {"string": "binary"}},
                             {"literal": {"string": "boolean"}},
-                            {"literal": {"string": "case"}},
+                            {"literal": {"string": "cases"}},
                             {"literal": {"string": "decimal"}},
                             {"literal": {"string": "effect"}},
                             {"literal": {"string": "either"}},

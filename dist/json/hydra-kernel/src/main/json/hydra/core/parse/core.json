@@ -1092,7 +1092,7 @@
                                 "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": "string"}}},
                                 "type": {"variable": "hydra.core.model.Name"}}},
                             "argument": {
-                              "application": {"function": {"variable": "hydra.core.parse.core.termKeyword"}, "argument": {"literal": {"string": "case"}}}}}},
+                              "application": {"function": {"variable": "hydra.core.parse.core.termKeyword"}, "argument": {"literal": {"string": "cases"}}}}}},
                         "argument": {
                           "lambda": {
                             "parameter": "_",
@@ -1295,7 +1295,8 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Parse a case term: 'case' '(' name ')' termFields, splitting off a trailing '_' default field"}}}]}}}}},
+                  "value": {
+                    "literal": {"string": "Parse a case term: 'cases' '(' name ')' termFields, splitting off a trailing '_' default field"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.parse.core.constraint",
