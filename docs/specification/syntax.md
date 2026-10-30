@@ -175,8 +175,16 @@ Precedence, tightest to loosest:
 
 1. postfix: `@` annotation, `⟨T⟩` type application
 2. application: adjacency, left-associative
-3. `→`: right-associative
-4. binder bodies (`λ`, `Λ`, `let`, `forall`, `∀`): extend maximally to the right
+3. infix operator sugar (RESERVED, #811): `!`/`¬` prefix, then (tightest to loosest)
+   `*` `/`, `+` `-`, `++` (concat, exact token TBD), comparison (`<` `<=` `==` `>=` `>`),
+   `&&`, `||`, `|>` — all looser than application and tighter than `→`, so
+   `f x + g y` parses as `(f x) + (g y)`, and `a + b → c` parses as `(a + b) → c`.
+   The relative order among these operator tiers follows conventional precedence
+   (arithmetic tighter than comparison, comparison tighter than boolean, pipeline
+   loosest) and is not otherwise stated in #811; it is not yet exercised by any
+   printer or parser.
+4. `→`: right-associative
+5. binder bodies (`λ`, `Λ`, `let`, `forall`, `∀`): extend maximally to the right
 
 `(` … `)` overrides precedence anywhere.
 A parenthesized single term or type is grouping; with a comma it is a pair.
@@ -189,6 +197,7 @@ term          ::= annotatedTerm | applicationTerm | caseTerm | eitherTerm
                 | setTerm | typeApplicationTerm | typeLambdaTerm | unitTerm
                 | unwrapTerm | variableTerm | wrapTerm
                 | '(' term ')'
+                | operatorTerm | doTerm   -- SUGAR, RESERVED (#811), not yet implemented
 
 annotatedTerm ::= term annot
 annot         ::= '@' term        -- postfix; payload parsed at tightest level,
@@ -206,6 +215,8 @@ injectTerm    ::= 'inject' '(' name ')' termFields   -- exactly one field
                                                      -- disambiguated from a record
                                                      -- by the schema (union type)
 lambdaTerm    ::= 'λ' binderName [':' type] '.' term   -- domain type optional
+                | 'λ' pattern '.' term          -- SUGAR, RESERVED (#811): destructuring
+                                                -- lambda; λ(x,y).body = λp.let (x,y):=p in body
 letTerm       ::= 'let' binding (',' binding)* 'in' term
 listTerm      ::= '[' [term (',' term)*] ']'
 literalTerm   ::= literal
@@ -237,11 +248,48 @@ binderName    ::= segment | '`' nameChars '`'  -- bare names in binder heads are
                                                -- single dot-free segments (§2.4)
 
 binding       ::= name [':' '(' typeScheme ')'] ':=' term
+                | pattern ':=' term             -- SUGAR, RESERVED (#811): destructuring
+                                                -- let; no type ascription on a pattern
 termFields    ::= '{' [termField (',' termField)*] '}'
 termField     ::= name '=' term
 sugarFields   ::= '{' [sugarField (',' sugarField)*] '}'   -- #809; no whitespace
                                                            -- between name and '{'
 sugarField    ::= name '=' term | name        -- a bare 'name' ⇒ 'name = unit'
+
+-- Destructuring patterns (SUGAR, RESERVED (#811), not yet implemented): a pattern
+-- stands for a single fresh parameter immediately taken apart by a 'let', e.g.
+-- 'λ(x,y).body' desugars to 'λp.let (x,y):=p in body'; there is no new AST node,
+-- so the printer does not reconstruct a pattern from the desugared let/lambda.
+pattern       ::= '(' name ',' name ')'         -- pair destructuring
+                | '{' name (',' name)* '}'      -- record destructuring (field names
+                                               -- double as the bound variable names)
+
+-- Infix operator sugar (SUGAR, RESERVED (#811), not yet implemented): parse-only;
+-- the parser desugars each operator immediately to the primitive-application form
+-- shown, and the printer continues to emit only that prefix form (§1 round-trip
+-- carve-out: see the Notes below). Precedence is given in this section's table above.
+operatorTerm  ::= term arithOp term             -- 'x + y' ⇒ 'math.add x y', etc.
+                | term compareOp term           -- 'x < y' ⇒ 'ordering.lt x y', etc.
+                | term '&&' term                -- ⇒ 'logic.and x y'
+                | term '||' term                -- ⇒ 'logic.or x y'
+                | '!' term                      -- prefix; ⇒ 'logic.not x'
+                                                -- ('¬' also admissible, per §2.3's
+                                                -- Unicode-only convention; token TBD
+                | term '++' term                -- concat; exact token TBD, see #811
+                | term '|>' term (' |>' term)*  -- pipeline; 'x |> f |> g' ⇒ 'g (f x)'
+arithOp       ::= '+' | '-' | '*' | '/'         -- '-' as binary minus: exact
+                                               -- primitive TBD, see #811
+compareOp     ::= '<' | '<=' | '==' | '>=' | '>'
+
+-- Monadic 'do' block (SUGAR, RESERVED (#811), not yet implemented): parse-only,
+-- desugaring immediately (driven by the monad tag, not by inference) to nested
+-- calls on the tagged monad's 'bind' primitive. 'map' is excluded (no lawful
+-- uniform 'bind' over a two-parameter map). An untagged 'do', resolved by a
+-- Monad typeclass at inference time, is a separate, not-yet-tracked follow-up.
+doTerm        ::= 'do' doTag '{' doClause (',' doClause)* '}'
+doTag         ::= 'either' | 'list' | 'optional' | 'effect'
+doClause      ::= name ':=' term                -- a bind; desugars to <tag>.bind
+                | term                          -- the final result (last clause only)
 
 -- Literals (lexical forms in §2.6)
 literal       ::= booleanLit | integerLit | floatLit | stringLit | binaryLit
@@ -347,6 +395,18 @@ Notes:
     a name, so there is no collision with qualified variable names.
   - The whitespace rule is load-bearing: `Name{…}` / `Name[…]` (abutting) are sugar; `Name {…}` /
     `Name […]` (with a space) are ordinary application of `Name` to a set/map/list.
+- **Operator, destructuring, and `do`-block sugar (RESERVED, #811).** `operatorTerm`, `pattern`
+  (destructuring in `lambdaTerm`/`binding`), and `doTerm` are reserved for #811 and are not yet
+  produced or accepted by any printer or parser. Several spellings are explicitly unsettled in
+  #811 itself rather than decided here: binary `-`'s underlying primitive, the concat operator's
+  token (candidate `++`), and whether `!` or `¬` is the boolean-negation spelling. `case`
+  extended to match nested shapes (not just the top-level variant tag) is noted in #811 as
+  in-scope but not yet designed, and is intentionally omitted from this grammar.
+  This sugar is **parse-only when it lands**: #811 states the parser will desugar it immediately
+  to the existing primitive-application/`let`/`λ`/`cases` forms shown above, with no new `Term`
+  AST node, and the printer will not re-emit the sugared spelling. This is a scoped carve-out of
+  §1's round-trip contract, parallel to the existing `ModuleDependency` alias carve-out (§6.4):
+  the grammar describes what the parser will accept, not a new printed canonical form.
 
 ## 4. Canonical form
 
@@ -387,6 +447,104 @@ The kernel also serializes adjacent type families
 (`hydra.core.print.{graph,typing,errors,variants,docs,paths}`).
 Those notations are out of scope here and may be specified as their sections of the
 specification land.
+
+## 6. Module-level grammar
+
+A module is a namespace, a list of dependencies on other modules, and a list of definitions
+(§6.1), each optionally preceded by a `##` doc-comment block (§6.2). Dependencies may be
+imported bare or under a local alias (§6.3), chosen by a module-wide collision-avoidance rule
+(§6.4) that this specification does not need to restate in full (it governs *which* imports are
+aliased, not the syntax of an import line). Produced and consumed by the
+`hydra.core.print.packaging` and `hydra.core.parse.packaging` kernel functions.
+
+### 6.1 Grammar
+
+```
+module        ::= moduleDoc? moduleHeader importDecl* definition*
+
+moduleHeader  ::= 'module' moduleName
+moduleName    ::= name                          -- dotted; read greedily per §2.4
+
+importDecl    ::= 'import' moduleName [importAlias] [importPackage]
+importAlias   ::= 'as' name                      -- bare or dotted; see §6.3
+importPackage ::= 'from' name                     -- disambiguates when the same module
+                                                  -- name is published by more than one
+                                                  -- package
+
+definition    ::= typeDef | termDef | primitiveDef
+typeDef       ::= defDoc? 'type' localName '=' typeScheme
+termDef       ::= defDoc? 'term' localName [':' termSignature] '=' term
+primitiveDef  ::= defDoc? ['impure'] ['partial'] 'primitive' localName ':' termSignature
+                  ['=' term]                      -- optional default implementation
+
+localName     ::= segment | '`' nameChars '`'     -- unqualified; qualified under
+                                                  -- moduleName on definition, per §6.1's
+                                                  -- own module namespace
+```
+
+### 6.2 Doc comments
+
+```
+moduleDoc     ::= docSection ('\n##\n' docSection)*
+defDoc        ::= docSection ('\n##\n' docSection)*
+docSection    ::= docLine ('\n' docLine)*
+docLine       ::= '## ' docText | '##'            -- '##' alone is a blank separator line
+```
+
+A `##` line (distinct from the whitespace-class `#` line comment of §2.2) immediately above a
+module header or a `type`/`term`/`primitive` definition is a doc comment: unlike an ordinary
+comment, it is structured `EntityMetadata`, not discarded commentary (see the Notes below for
+the current printer/parser asymmetry). Printed sections, separated by a blank `##` line, appear
+in a fixed order: the description, then each free-form comment, then a single block of `@key`
+lines (`@seeAlso`, `@availableSince`, `@deprecatedSince`, `@requirement`, `@recommendation`), in
+that order. A `@seeAlso` line's payload is one of `type <Name>`, `term <name>`,
+`primitive <name>`, `module <moduleName>`, `package <packageName>`, `term-expr <text>`, or
+`type-expr <text>`, naming the kind of thing referenced. Order among the `@key` lines themselves
+is not semantically significant, but the printer's fixed order keeps output deterministic.
+
+Record and union fields (§3) carry only a plain description line (one `## ...` line, directly
+above the field) — the richer `@key` forms above are module- and definition-level only.
+
+### 6.3 Import aliasing
+
+An import is written bare (`import <module>`) unless a local-name collision requires an alias
+(`import <module> as <alias>`); the choice is the printer's to make, not the author's, each time
+a module is printed (§6.4). An alias may itself be multi-segment (e.g. `as error.file`), when a
+shorter candidate alias collides. The `from <package>` clause disambiguates a module name that
+more than one package publishes; it is independent of aliasing and may appear on either a bare
+or an aliased import.
+
+### 6.4 Alias selection (informative)
+
+The alias (or bareness) of each import is chosen by the printer, not carried in the AST: a
+module dependency has no alias field of its own. Printing a module computes, for every imported
+module, whether it can stay bare — leaving it unqualified introduces no local-name collision,
+either against another import or against the printed module's own declared names — and resolves
+the remaining collisions with the shortest-unique-dotted-suffix available, preferring to leave
+the more heavily referenced side of a collision bare. This specification states the *syntax* two
+import lines may take (§6.3); the collision-resolution algorithm itself is an implementation
+detail of the printer, not part of the grammar.
+
+### Notes
+
+- Reserved words: `module`, `import`, `as`, `from`, `type`, `term`, `primitive`, `impure`,
+  `partial` are reserved globally (§2.7), not only at their own syntactic position, so that a
+  definition's trailing type or term cannot swallow the next definition's keyword as an argument.
+- `impure`/`partial` default to absent, meaning pure and total respectively; both prefix keywords
+  are printed only when `false`, and `impure` precedes `partial` when both are present.
+- A `term`/`primitive` definition's `: termSignature` ascription is the term-signature notation
+  of §3 (`∀` header, `lazy` parameters), not a plain `type`; a `type` definition's own `=`
+  right-hand side is always a `typeScheme`, never a `termSignature`.
+- **Bare-import round-trip gap (#805).** The printer may leave two colliding imports split bare
+  vs. aliased (the one with fewer references gets the alias; see §6.4). A single-file parser,
+  with no access to a bare-imported module's own definitions, cannot always re-qualify a bare
+  name back to the bare-imported module in that collision case — `print → parse → print` is
+  textually stable when no collision exists, but not guaranteed stable across a reparse in the
+  collision case. This is a tracked, open gap, not a design decision to leave unfixed.
+- The parser does not yet reconstruct `EntityMetadata` from `##` comments (§6.2): a parsed
+  module's and every parsed definition's metadata is always `Nothing`, matching the printer's
+  intentional omission of doc-comment output when metadata is absent. Doc-comment printing
+  (§6.2) is implemented; doc-comment parsing is not yet.
 
 ## Appendix: migration deltas (temporary)
 
