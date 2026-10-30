@@ -5,7 +5,7 @@ The phantom types provide static type checking in Python prior to Hydra's runtim
 """
 
 import inspect
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from typing import TypeVar
 
 import hydra.core.constants
@@ -16,7 +16,7 @@ from hydra.core.util import CaseConvention, QualifiedName
 from hydra.core.model import Binding, Field, Name, Term, Type
 from hydra.core.packaging import Module, ModuleName
 from hydra.core.typed import TypedBinding, TypedTerm
-from hydra.core.overlay.python.dsl.python import FrozenDict, Optional, Given, None_
+from hydra.core.overlay.python.dsl.python import Either, FrozenDict, Optional, Given, None_
 
 
 def _tbinding_matmul(self, other):
@@ -353,24 +353,24 @@ def lambdas(params: Sequence[str], body: TypedTerm[X]) -> TypedTerm[A]:
     return TypedTerm[A](terms.lambdas(params, un_tterm(body)))
 
 
-def left(term: TypedTerm[A]) -> TypedTerm[A]:
+def left(term: TypedTerm[A]) -> TypedTerm[Either[A, B]]:
     """Create a 'Left' either value."""
-    return TypedTerm[A](terms.left(un_tterm(term)))
+    return TypedTerm[Either[A, B]](terms.left(un_tterm(term)))
 
 
-def left_() -> TypedTerm[A]:
+def left_() -> TypedTerm[Callable[[A], Either[A, B]]]:
     """Function that wraps a value in 'Left'."""
-    return TypedTerm[A](terms.lambda_("left_", terms.left(terms.var("left_"))))
+    return TypedTerm[Callable[[A], Either[A, B]]](terms.lambda_("left_", terms.left(terms.var("left_"))))
 
 
-def right(term: TypedTerm[A]) -> TypedTerm[A]:
+def right(term: TypedTerm[A]) -> TypedTerm[Either[A, B]]:
     """Create a 'Right' either value."""
-    return TypedTerm[A](terms.right(un_tterm(term)))
+    return TypedTerm[Either[A, B]](terms.right(un_tterm(term)))
 
 
-def right_() -> TypedTerm[A]:
+def right_() -> TypedTerm[Callable[[A], Either[A, B]]]:
     """Function that wraps a value in 'Right'."""
-    return TypedTerm[A](terms.lambda_("right_", terms.right(terms.var("right_"))))
+    return TypedTerm[Callable[[A], Either[A, B]]](terms.lambda_("right_", terms.right(terms.var("right_"))))
 
 
 def let1(name: str, value: TypedTerm[A], env: TypedTerm[B]) -> TypedTerm[B]:
