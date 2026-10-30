@@ -55,6 +55,13 @@ symlink_hydra_tree() {
                 ln -sf "$sfile" "$dest"
             fi
         done < <(find "$src_hydra" -name "*.ts" -not -path "*/node_modules/*")
+    else
+        # #772: this used to no-op with zero output when either tree was missing, which
+        # silently dropped the cross-package symlinks (e.g. after a path regression like
+        # #729) and surfaced only as a confusing "cannot find module" error far downstream
+        # in tsc. Name the missing path so the real cause is visible at the source.
+        [ -d "$src_hydra" ] || echo "  WARNING: symlink source not found: $src_hydra" >&2
+        [ -d "$dest_hydra" ] || echo "  WARNING: symlink destination not found: $dest_hydra" >&2
     fi
 }
 
