@@ -1,0 +1,24 @@
+{
+  "description": "Baseline + absolute budget for the #700 CI inference-cost guard. Measured by heads/haskell/src/exec/inference-cost-guard (stack exec inference-cost-guard), which runs the flat, cache-bypassing CodeGeneration.inferModules over the kernel module set (kernelModules + synthesized encode/decode modules, 185 total) -- the worst-case 'one let over the whole universe' path that update-json-kernel takes on a cache miss, and that update-json-main's per-package incremental path (#381) normally avoids.",
+  "budget": {
+    "max_elapsed_seconds": 400,
+    "max_mem_in_use_bytes": 6442450944
+  },
+  "budget_rationale": "max_elapsed_seconds=400 is real: derived from a first measured run (2026-10-11, see baseline/history below) at elapsed_seconds=193.13, with ~2x headroom for machine-load variance (measured on a busy, contended fleet machine, not an isolated one). max_mem_in_use_bytes is UNCHANGED at 6442450944 (6GB, mirroring the existing -M6G RTS cap in bin/lib/common.sh) DESPITE the real measured peak (7.32GB) exceeding it -- see IMPORTANT note below. This is a flagged, not-yet-resolved discrepancy, not a silently-accepted headroom choice.",
+  "IMPORTANT_memory_discrepancy": "The real measured max_mem_in_use_bytes (7316963328, ~6.82GiB/7.32GB decimal) EXCEEDS both this budget (6GB) AND the GitHub Actions runner's ~7GB total memory ceiling cited in bin/lib/common.sh's RTS_FLAGS comment. Naive headroom multiplication (the usual 1.5-2x approach) would set an unachievable budget above what CI runners can even provide. This measurement was taken on a busy, concurrently-loaded fleet machine (not isolated), so some inflation from contention is possible, but even the clean number may be close to or over the CI ceiling. NOT raising the memory budget to match the measurement -- left at the existing, CI-achievable 6GB pending a human/coordinator decision on: (a) re-measure in isolation to rule out contention inflation, (b) if still high, this is a #700-relevant finding that the margin-to-ceiling may already be negative, which is a bigger finding than a routine threshold-setting exercise. See the branch plan's Findings section.",
+  "baseline": {
+    "elapsed_seconds": 193.131808,
+    "max_mem_in_use_bytes": 7316963328,
+    "module_count": 185,
+    "recorded_at": "2026-10-11T16:37:00Z",
+    "machine_note": "measured on a busy, concurrently-loaded fleet machine (other sessions' builds running simultaneously), not an isolated/idle one -- numbers may be inflated by contention"
+  },
+  "history": [
+    {
+      "elapsed_seconds": 193.131808,
+      "max_mem_in_use_bytes": 7316963328,
+      "module_count": 185,
+      "recorded_at": "2026-10-11T16:37:00Z"
+    }
+  ]
+}

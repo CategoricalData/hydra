@@ -398,6 +398,16 @@ jobs:
       - name: Restore overlay kernel runtime
         run: heads/haskell/bin/overlay-kernel-runtime.sh
       - name: Run regression harnesses
+        # #700/#795: HYDRA_INFERENCE_COST_ORACLE deliberately left OFF here.
+        # Turning it on would make this job fail on every run: the only real
+        # measurement on record (~7.32GB peak) already exceeds the committed
+        # budget.max_mem_in_use_bytes (6GB) in
+        # docs/history/data/bench-records/inference-cost-guard-baseline.json.
+        # That gap is a flagged, open finding (possibly #700-relevant: the
+        # margin to the ~7GB GitHub Actions runner ceiling may already be
+        # thin or negative) pending a clean, isolated re-measurement -- not
+        # something to silently paper over by picking a workable budget.
+        # Re-enable once that's resolved (tracked as a fast-follow issue).
         run: bin/test-regressions.sh
 
   # #376/#703: durable cold-clone gate. dist/haskell/ is untracked (gitignored) —

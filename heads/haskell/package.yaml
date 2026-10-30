@@ -228,6 +228,27 @@ executables:
     dependencies:
       - hydra
 
+  inference-cost-guard:
+    main: Main.hs
+    source-dirs:
+      - src/exec/inference-cost-guard
+    # -rtsopts enables runtime RTS flags at all (matches every other exec in
+    # this file). Unlike those execs, this one needs +RTS -T passed at
+    # INVOCATION time (not baked in via -with-rtsopts, which choked on the
+    # multi-flag string -- GHC split "-M8G -T" on the space and rejected the
+    # bare -T as an unrecognised compiler flag). Callers must pass
+    # +RTS -M8G -T -RTS explicitly, same as bin/lib/common.sh's RTS_FLAGS
+    # convention: -M8G mirrors the existing -M6G cap other generation execs
+    # use, a bit higher since a live run (2026-10-11) showed RSS climbing
+    # past 8.7GB and exhausting a busy fleet machine's swap before being
+    # killed -- uncapped risks a system-wide OOM, not just this process
+    # failing. -T is required for GHC.Stats.getRTSStats to report real
+    # numbers. See bin/test-inference-cost-guard.sh for the invocation.
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+      - time
+
 tests:
   hydra-test:
     main: Spec.hs
