@@ -247,6 +247,26 @@ else
   echo "with-stack-slot: hydra-agents disk-check lib not found at $DISK_CHECK_LIB; skipping the guard (not fatal)." >&2
 fi
 
+# ---- memory-headroom guard (hydra-agents lib-mem-check.sh) ----------------
+# Also checked after acquiring the slot, but this one WAITS instead of failing:
+# memory pressure usually passes (a build finishes, a session exits). We keep
+# the slot while waiting, so no other heavy build starts on a box that's out of
+# room. On 2026-10-30 alpha froze (livelock, no OOM kill) when a slot was granted
+# with swap ~93% full: a haskell sync's ghc (2.7 GB) and then update-json-main
+# (3.5 GB and climbing) exhausted RAM + swap. 6144 MB covers one such sync's
+# peak with a margin. Waits up to 1 h, re-checking every minute.
+# HA_MEM_CHECK_SKIP=1 bypasses it for a deliberate human override.
+MEM_CHECK_LIB="$(git rev-parse --show-toplevel 2>/dev/null)/../../external/agents/bin/lib-mem-check.sh"
+if [ -r "$MEM_CHECK_LIB" ]; then
+  # shellcheck disable=SC1090
+  . "$MEM_CHECK_LIB"
+  if ! ha_wait_mem_headroom 6144 3600 60; then
+    exit 1
+  fi
+else
+  echo "with-stack-slot: hydra-agents mem-check lib not found at $MEM_CHECK_LIB; skipping the guard (not fatal)." >&2
+fi
+
 # Run the wrapped command while holding fd 9. Children inherit fd 9, so the lock
 # stays held until the entire tree exits. Capture status to return it verbatim.
 # Export the reentrancy marker so nested wrappers pass through instead of deadlocking.
