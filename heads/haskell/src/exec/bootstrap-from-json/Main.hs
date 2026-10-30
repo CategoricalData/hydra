@@ -893,17 +893,25 @@ main = do
   -- deliverable 1/4, tracked separately) -- retiring it prematurely here would risk
   -- silently breaking Java-hosted generation of hydra.core.lib.system if it's still needed.
   javaKnownLibSubs <- overlayLibSubs javaOverlayLibDir
+  -- Main trees: lib-call redirect / line-wrap only. The testEnv redirect must NOT apply here:
+  -- it is a plain text replacement and would corrupt data that merely names the module
+  -- (e.g. the Python coder's overlayPythonModuleAliases key "hydra.core.test.testEnv"; #812).
   let consumerTransform = case target of
         "haskell"     -> id
         "java"        -> redirectForSubs libSubsJava "java"
         "python"      -> id
         "scala"       -> wrapLongScalaText
         "typescript"  -> id
-        "clojure"     -> redirectClojureTestEnv "clojure"
-        "scheme"      -> redirectSchemeTestEnv "scheme"
+        "clojure"     -> id
+        "scheme"      -> id
         "common-lisp" -> id
         "emacs-lisp"  -> id
         _             -> id
+  -- Test trees: the main transform plus the testEnv -> overlay redirect (#812).
+  let testConsumerTransform = case target of
+        "clojure"     -> redirectClojureTestEnv "clojure"
+        "scheme"      -> redirectSchemeTestEnv "scheme"
+        _             -> consumerTransform
   let genForDirT :: (String -> String) -> [Module] -> FilePath -> [Module] -> IO [FilePath]
       genForDirT xform universe dir mods = case target of
         "haskell"    -> generateSourcesWithTransform xform (moduleToHaskell haskellKnownLibSubs) haskellLanguage    False dir universe mods
@@ -1166,12 +1174,12 @@ main = do
             recordOwnedPaths (packageOutTest pkg) pkgMods
         (Nothing, False) -> return ()
 
-      -- Dispatch helper for the test source set. Uses the SAME consumer-pass
-      -- redirect transform as the main set (genForDirT) so test code's primitive
+      -- Dispatch helper for the test source set. Uses the main-set redirect transform
+      -- plus the testEnv redirect (testConsumerTransform, #812) so test code's primitive
       -- invocations are rewritten hydra.lib.* -> hydra.<lang>.lib.* too (#473 Step 0).
       -- The test universe is allUniverse (main + test modules).
       let genTestForDir :: FilePath -> [Module] -> IO [FilePath]
-          genTestForDir = genForDirT consumerTransform allUniverse
+          genTestForDir = genForDirT testConsumerTransform allUniverse
 
       testStart <- getCurrentTime
       count <- case (optPackage opts, optAllPackages opts) of
