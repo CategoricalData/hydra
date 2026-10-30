@@ -1,0 +1,115 @@
+name: VS Code extension
+
+# Builds, tests, and packages the Hydra VS Code extension (editors/vscode/, #806).
+#
+# This is intentionally a SEPARATE workflow from ci.yml, following the same model
+# as release-verify.yml: ci.yml runs the heavy per-language Hydra test matrix
+# (Stack/GHC, dist regeneration) on every push/PR, whereas this job is Node-only
+# and self-contained — it needs no Hydra toolchain, only the TextMate grammar, the
+# kernel's .hydra sources, and npm. Keeping it separate means a grammar change does
+# not wait on (or get buried in) the dist pipeline, and a Hydra-core change does not
+# needlessly re-run the extension build.
+#
+# Path-filtered so it runs only when something that can affect the extension or its
+# tests changes: the extension itself, the syntax specification it derives from, or
+# the kernel .hydra corpus the snapshot tests run against (a syntax.md / kernel
+# change that the grammar does not yet handle breaks these tests — the intended
+# coupling from #806).
+#
+# It stops at `vsce package` (produces + uploads a .vsix artifact). Publishing to the
+# VS Code Marketplace and Open VSX needs secret tokens and is a separate, human-gated
+# step; it is deliberately NOT wired here.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'editors/vscode/**'
+      - 'docs/specification/syntax.md'
+      - 'packages/hydra-kernel/src/main/hydra/**'
+      - '.github/workflows/vscode-extension.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'editors/vscode/**'
+      - 'docs/specification/syntax.md'
+      - 'packages/hydra-kernel/src/main/hydra/**'
+      - '.github/workflows/vscode-extension.yml'
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: editors/vscode
+
+jobs:
+  build-test-package:
+    name: Build, test, and package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: editors/vscode/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile the extension host
+        run: npm run compile
+
+      - name: Grammar scope tests
+        run: npm run test:grammar
+
+      - name: Refresh snapshot corpus from the live kernel sources
+        # Re-copies packages/hydra-kernel/src/main/hydra/*.hydra and regenerates the
+        # snapshots. The next step then fails if the committed snapshots drift from
+        # what the current grammar + current kernel sources produce.
+        run: npm run test:corpus:refresh
+
+      - name: Fail if the snapshot corpus drifted
+        # The committed tests/corpus/*.hydra and *.snap must match a fresh refresh.
+        # Drift means either the kernel .hydra sources changed (re-run the refresh and
+        # commit) or the grammar no longer matches syntax.md (fix the grammar).
+        run: |
+          if ! git diff --quiet -- tests/corpus; then
+            echo "::error::The grammar-test corpus is stale. Run 'npm run test:corpus:refresh' in editors/vscode and commit the result."
+            git diff --stat -- tests/corpus
+            exit 1
+          fi
+          echo "Corpus is up to date."
+
+      - name: Snapshot drift check (explicit)
+        # Belt-and-suspenders: run the snapshot tests in verify mode too, so a failure
+        # that somehow left the files byte-identical still surfaces.
+        run: npm run test:corpus
+
+      - name: Derive the package version from hydra.json
+        id: version
+        run: |
+          ver="$(grep -oE '"currentVersion"[[:space:]]*:[[:space:]]*"[0-9]+\.[0-9]+\.[0-9]+"' "$GITHUB_WORKSPACE/hydra.json" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')"
+          if [ -z "$ver" ]; then
+            echo "::error::Could not read currentVersion from hydra.json"
+            exit 1
+          fi
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
+          echo "Packaging version: $ver"
+
+      - name: Package the extension (.vsix)
+        # Injects the version from hydra.json WITHOUT mutating the committed
+        # package.json (--no-update-package-json). Stops short of publishing.
+        run: |
+          npx vsce package "${{ steps.version.outputs.version }}" \
+            --no-git-tag-version --no-update-package-json --no-dependencies \
+            -o "hydra-language-${{ steps.version.outputs.version }}.vsix"
+
+      - name: Upload the .vsix artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hydra-language-vsix
+          path: editors/vscode/hydra-language-*.vsix
+          if-no-files-found: error
