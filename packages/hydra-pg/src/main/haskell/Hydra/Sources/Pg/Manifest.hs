@@ -40,6 +40,9 @@ import qualified Hydra.Sources.Pg.Printing as PgPrinting
 import qualified Hydra.Sources.Pg.Query as PgQuery
 import qualified Hydra.Sources.Pg.Rdf.Environment as PgRdfEnvironment
 import qualified Hydra.Sources.Pg.Rdf.Mappings as PgRdfMappings
+import qualified Hydra.Sources.Pg.SubtermGraph as PgSubtermGraph
+import qualified Hydra.Sources.Pg.Test.SubtermGraph as PgSubtermGraphTest
+import qualified Hydra.Sources.Pg.Test.Suite as PgTestSuite
 import qualified Hydra.Sources.Pg.TermsToElements as TermsToElements
 import qualified Hydra.Sources.Pg.Utils as PgUtils
 import qualified Hydra.Sources.Print.Error.Pg as PrintErrorPg
@@ -76,6 +79,7 @@ mainModules = [
   PgQuery.module_,
   PgRdfEnvironment.module_,
   PgRdfMappings.module_,
+  PgSubtermGraph.module_,
   TermsToElements.module_,
   PgUtils.module_,
   PrintErrorPg.module_,
@@ -112,4 +116,6 @@ mainEncodingModules = [
   PgMapping.module_]
 
 testModules :: [Module]
-testModules = []
+testModules = [
+  PgSubtermGraphTest.module_,
+  PgTestSuite.module_]
