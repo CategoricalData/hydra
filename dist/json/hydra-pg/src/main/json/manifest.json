@@ -33,6 +33,7 @@
     "hydra.pg.query",
     "hydra.pg.rdf.environment",
     "hydra.pg.rdf.mappings",
+    "hydra.pg.subtermGraph",
     "hydra.pg.termsToElements",
     "hydra.pg.tinkerpop.examples.modern",
     "hydra.pg.tinkerpop.features",
@@ -44,4 +45,4 @@
   "manifestFormatVersion": 1,
   "moduleFormatVersion": 1,
   "package": "hydra-pg",
-  "testModules": []}
+  "testModules": ["hydra.pg.test.subtermGraph", "hydra.pg.test.testSuite"]}

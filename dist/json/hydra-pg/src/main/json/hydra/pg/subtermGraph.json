@@ -1,0 +1,2001 @@
+{
+  "name": "hydra.pg.subtermGraph",
+  "metadata": {
+    "description": "The property-graph encoding of a term graph (hydra.core.subterms.TermGraph): a total, lossless map from the already-built, already-classified term-graph view of a typed graph onto hydra.pg's element model. No bespoke term traversal; this module consumes only the TermGraph interface.",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.print.paths"},
+    {"module": "hydra.core.print.model"},
+    {"module": "hydra.pg.model"},
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.pg.subtermGraph.encodeTermGraph",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.paths.TermGraph"}, "isLazy": false}],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.pg.model.Graph"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "tg",
+                "domain": {"variable": "hydra.core.paths.TermGraph"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "roots",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.core.paths.TermGraph", "fieldName": "roots"}},
+                            "argument": {"variable": "tg"}}},
+                        "typeScheme": {
+                          "variables": [],
+                          "body": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.paths.TermNode"}}},
+                          "constraints": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "rootResults",
+                            "term": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.core.lib.lists.map"},
+                                            "type": {"pair": {"first": {"variable": "hydra.core.model.Name"}, "second": {"variable": "hydra.core.paths.TermNode"}}}}},
+                                        "type": {
+                                          "pair": {
+                                            "first": {
+                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                            "second": {
+                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "nt",
+                                        "domain": {"pair": {"first": {"variable": "hydra.core.model.Name"}, "second": {"variable": "hydra.core.paths.TermNode"}}},
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "name",
+                                                "term": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.pairs.first"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                                        "type": {"variable": "hydra.core.paths.TermNode"}}},
+                                                    "argument": {"variable": "nt"}}},
+                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.core.model.Name"}, "constraints": []}},
+                                              {
+                                                "name": "node",
+                                                "term": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.second"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                                        "type": {"variable": "hydra.core.paths.TermNode"}}},
+                                                    "argument": {"variable": "nt"}}},
+                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.core.paths.TermNode"}, "constraints": []}},
+                                              {
+                                                "name": "emptyPath",
+                                                "term": {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.paths.SubtermPath",
+                                                    "body": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.paths.SubtermStep"}}}}},
+                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.core.paths.SubtermPath"}, "constraints": []}},
+                                              {
+                                                "name": "sub",
+                                                "term": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"application": {"function": {"variable": "hydra.pg.subtermGraph.encodeTermNode"}, "argument": {"variable": "name"}}},
+                                                        "argument": {"variable": "emptyPath"}}},
+                                                    "argument": {"variable": "node"}}},
+                                                "typeScheme": {
+                                                  "variables": [],
+                                                  "body": {
+                                                    "pair": {
+                                                      "first": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.model.Term"}}},
+                                                      "second": {
+                                                        "pair": {
+                                                          "first": {
+                                                            "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                          "second": {
+                                                            "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                  "constraints": []}},
+                                              {
+                                                "name": "rootVertex",
+                                                "term": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "record": {
+                                                        "typeName": "hydra.pg.model.Vertex",
+                                                        "fields": [
+                                                          {
+                                                            "name": "label",
+                                                            "term": {
+                                                              "wrap": {
+                                                                "typeName": "hydra.pg.model.VertexLabel",
+                                                                "body": {
+                                                                  "application": {
+                                                                    "function": {"variable": "hydra.core.print.model.type"},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {"project": {"typeName": "hydra.core.paths.TermNode", "fieldName": "type"}},
+                                                                        "argument": {"variable": "node"}}}}}}}},
+                                                          {
+                                                            "name": "id",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {"variable": "hydra.pg.subtermGraph.termNodeIdTerm"},
+                                                                "argument": {
+                                                                  "record": {
+                                                                    "typeName": "hydra.core.paths.TermNodeId",
+                                                                    "fields": [{"name": "root", "term": {"variable": "name"}}, {"name": "path", "term": {"variable": "emptyPath"}}]}}}}},
+                                                          {
+                                                            "name": "properties",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.core.lib.pairs.first"},
+                                                                        "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.model.Term"}}}}},
+                                                                    "type": {
+                                                                      "pair": {
+                                                                        "first": {
+                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                        "second": {
+                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                "argument": {"variable": "sub"}}}}]}},
+                                                    "type": {"variable": "hydra.core.model.Term"}}},
+                                                "typeScheme": {
+                                                  "variables": [],
+                                                  "body": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}},
+                                                  "constraints": []}}],
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "pair": {
+                                                        "first": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.core.lib.lists.concat2"},
+                                                                    "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                                                "argument": {"list": [{"variable": "rootVertex"}]}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.core.lib.pairs.first"},
+                                                                        "type": {
+                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                    "type": {
+                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.core.lib.pairs.second"},
+                                                                            "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.model.Term"}}}}},
+                                                                        "type": {
+                                                                          "pair": {
+                                                                            "first": {
+                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                            "second": {
+                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                    "argument": {"variable": "sub"}}}}}}},
+                                                        "second": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.core.lib.pairs.second"},
+                                                                    "type": {
+                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                "type": {
+                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.core.lib.pairs.second"},
+                                                                        "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.model.Term"}}}}},
+                                                                    "type": {
+                                                                      "pair": {
+                                                                        "first": {
+                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                        "second": {
+                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                "argument": {"variable": "sub"}}}}}}},
+                                                    "type": {
+                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                "type": {
+                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.maps.toList"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                        "type": {"variable": "hydra.core.paths.TermNode"}}},
+                                    "argument": {"variable": "roots"}}}}},
+                            "typeScheme": {
+                              "variables": [],
+                              "body": {
+                                "list": {
+                                  "pair": {
+                                    "first": {
+                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                    "second": {
+                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}},
+                              "constraints": []}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "allVertices",
+                                "term": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.core.lib.lists.concat"},
+                                        "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.core.lib.lists.map"},
+                                                    "type": {
+                                                      "pair": {
+                                                        "first": {
+                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                        "second": {
+                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                "type": {
+                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                            "argument": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.core.lib.pairs.first"},
+                                                    "type": {
+                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                "type": {
+                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                        "argument": {"variable": "rootResults"}}}}},
+                                "typeScheme": {
+                                  "variables": [],
+                                  "body": {
+                                    "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                  "constraints": []}}],
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "allEdges",
+                                    "term": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.core.lib.lists.concat"},
+                                            "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.core.lib.lists.map"},
+                                                        "type": {
+                                                          "pair": {
+                                                            "first": {
+                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                            "second": {
+                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                    "type": {
+                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                "argument": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.core.lib.pairs.second"},
+                                                        "type": {
+                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                    "type": {
+                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                            "argument": {"variable": "rootResults"}}}}},
+                                    "typeScheme": {
+                                      "variables": [],
+                                      "body": {
+                                        "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                      "constraints": []}}],
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "record": {
+                                        "typeName": "hydra.pg.model.Graph",
+                                        "fields": [
+                                          {
+                                            "name": "vertices",
+                                            "term": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.maps.fromList"}, "type": {"variable": "hydra.core.model.Term"}}},
+                                                    "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.core.lib.lists.map"},
+                                                                "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                                            "type": {
+                                                              "pair": {
+                                                                "first": {"variable": "hydra.core.model.Term"},
+                                                                "second": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "v",
+                                                            "domain": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}},
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "first": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "id"}},
+                                                                                "type": {"variable": "hydra.core.model.Term"}}},
+                                                                            "argument": {"variable": "v"}}},
+                                                                        "second": {"variable": "v"}}},
+                                                                    "type": {"variable": "hydra.core.model.Term"}}},
+                                                                "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}},
+                                                    "argument": {"variable": "allVertices"}}}}}},
+                                          {
+                                            "name": "edges",
+                                            "term": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.maps.fromList"}, "type": {"variable": "hydra.core.model.Term"}}},
+                                                    "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.core.lib.lists.map"},
+                                                                "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                                            "type": {
+                                                              "pair": {
+                                                                "first": {"variable": "hydra.core.model.Term"},
+                                                                "second": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "e",
+                                                            "domain": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}},
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "first": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "id"}},
+                                                                                "type": {"variable": "hydra.core.model.Term"}}},
+                                                                            "argument": {"variable": "e"}}},
+                                                                        "second": {"variable": "e"}}},
+                                                                    "type": {"variable": "hydra.core.model.Term"}}},
+                                                                "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}},
+                                                    "argument": {"variable": "allEdges"}}}}}}]}},
+                                    "type": {"variable": "hydra.core.model.Term"}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Encode a term graph as a property graph: a vertex per non-leaf node, an edge per non-primitive variable reference, printed subterm paths as edge labels/ids and property keys"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.pg.subtermGraph.encodeTermNode",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.core.model.Name"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.core.paths.SubtermPath"}, "isLazy": false},
+            {"name": "arg2", "type": {"variable": "hydra.core.paths.TermNode"}, "isLazy": false}],
+          "result": {
+            "type": {
+              "pair": {
+                "first": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.model.Term"}}},
+                "second": {
+                  "pair": {
+                    "first": {
+                      "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                    "second": {
+                      "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "root",
+                "domain": {"variable": "hydra.core.model.Name"},
+                "body": {
+                  "lambda": {
+                    "parameter": "path",
+                    "domain": {"variable": "hydra.core.paths.SubtermPath"},
+                    "body": {
+                      "lambda": {
+                        "parameter": "node",
+                        "domain": {"variable": "hydra.core.paths.TermNode"},
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "nid",
+                                "term": {
+                                  "record": {
+                                    "typeName": "hydra.core.paths.TermNodeId",
+                                    "fields": [{"name": "root", "term": {"variable": "root"}}, {"name": "path", "term": {"variable": "path"}}]}},
+                                "typeScheme": {"variables": [], "body": {"variable": "hydra.core.paths.TermNodeId"}, "constraints": []}}],
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "steps",
+                                    "term": {"application": {"function": {"unwrap": "hydra.core.paths.SubtermPath"}, "argument": {"variable": "path"}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.paths.SubtermStep"}}, "constraints": []}}],
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "links",
+                                        "term": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.paths.TermNode", "fieldName": "links"}},
+                                            "argument": {"variable": "node"}}},
+                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.paths.TermLink"}}, "constraints": []}}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "childPathFor",
+                                            "term": {
+                                              "lambda": {
+                                                "parameter": "step",
+                                                "domain": {"variable": "hydra.core.paths.SubtermStep"},
+                                                "body": {
+                                                  "wrap": {
+                                                    "typeName": "hydra.core.paths.SubtermPath",
+                                                    "body": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat2"}, "type": {"variable": "hydra.core.paths.SubtermStep"}}},
+                                                            "argument": {"variable": "steps"}}},
+                                                        "argument": {"list": [{"variable": "step"}]}}}}}}},
+                                            "typeScheme": {
+                                              "variables": [],
+                                              "body": {
+                                                "function": {"domain": {"variable": "hydra.core.paths.SubtermStep"}, "codomain": {"variable": "hydra.core.paths.SubtermPath"}}},
+                                              "constraints": []}}],
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "keyFor",
+                                                "term": {
+                                                  "lambda": {
+                                                    "parameter": "p",
+                                                    "domain": {"variable": "hydra.core.paths.SubtermPath"},
+                                                    "body": {
+                                                      "wrap": {
+                                                        "typeName": "hydra.pg.model.PropertyKey",
+                                                        "body": {"application": {"function": {"variable": "hydra.core.print.paths.subtermPath"}, "argument": {"variable": "p"}}}}}}},
+                                                "typeScheme": {
+                                                  "variables": [],
+                                                  "body": {
+                                                    "function": {"domain": {"variable": "hydra.core.paths.SubtermPath"}, "codomain": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                  "constraints": []}}],
+                                            "body": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "attrKeyFor",
+                                                    "term": {
+                                                      "lambda": {
+                                                        "parameter": "a",
+                                                        "domain": {"variable": "hydra.core.paths.TermAttributeLink"},
+                                                        "body": {
+                                                          "wrap": {
+                                                            "typeName": "hydra.pg.model.PropertyKey",
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {"variable": "hydra.core.lib.strings.concat"},
+                                                                "argument": {
+                                                                  "list": [
+                                                                    {"application": {"function": {"variable": "hydra.core.print.paths.subtermPath"}, "argument": {"variable": "path"}}},
+                                                                    {"literal": {"string": "@"}},
+                                                                    {"application": {"function": {"variable": "hydra.pg.subtermGraph.termAttributeLinkTag"}, "argument": {"variable": "a"}}}]}}}}}}},
+                                                    "typeScheme": {
+                                                      "variables": [],
+                                                      "body": {
+                                                        "function": {"domain": {"variable": "hydra.core.paths.TermAttributeLink"}, "codomain": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                      "constraints": []}}],
+                                                "body": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "perLink",
+                                                        "term": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.paths.TermLink"}}},
+                                                                    "type": {
+                                                                      "pair": {
+                                                                        "first": {
+                                                                          "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}},
+                                                                        "second": {
+                                                                          "pair": {
+                                                                            "first": {
+                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                            "second": {
+                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}},
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "parameter": "link",
+                                                                    "domain": {"variable": "hydra.core.paths.TermLink"},
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "cases": {
+                                                                            "typeName": "hydra.core.paths.TermLink",
+                                                                            "cases": [
+                                                                              {
+                                                                                "name": "attribute",
+                                                                                "handler": {
+                                                                                  "lambda": {
+                                                                                    "parameter": "a",
+                                                                                    "domain": {"variable": "hydra.core.paths.TermAttributeLink"},
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "pair": {
+                                                                                                "first": {
+                                                                                                  "optional": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "pair": {
+                                                                                                              "first": {"application": {"function": {"variable": "attrKeyFor"}, "argument": {"variable": "a"}}},
+                                                                                                              "second": {
+                                                                                                                "application": {"function": {"variable": "hydra.pg.subtermGraph.termAttributeLinkValue"}, "argument": {"variable": "a"}}}}},
+                                                                                                          "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                                      "type": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                "second": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "pair": {
+                                                                                                            "first": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"list": []},
+                                                                                                                "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                                                                                            "second": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"list": []},
+                                                                                                                "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}},
+                                                                                                        "type": {
+                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                    "type": {
+                                                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                                            "type": {
+                                                                                              "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                        "type": {
+                                                                                          "pair": {
+                                                                                            "first": {
+                                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                            "second": {
+                                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}}},
+                                                                              {
+                                                                                "name": "subterm",
+                                                                                "handler": {
+                                                                                  "lambda": {
+                                                                                    "parameter": "sl",
+                                                                                    "domain": {"variable": "hydra.core.paths.SubtermLink"},
+                                                                                    "body": {
+                                                                                      "let": {
+                                                                                        "bindings": [
+                                                                                          {
+                                                                                            "name": "step",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "function": {"project": {"typeName": "hydra.core.paths.SubtermLink", "fieldName": "step"}},
+                                                                                                "argument": {"variable": "sl"}}},
+                                                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.paths.SubtermStep"}, "constraints": []}},
+                                                                                          {
+                                                                                            "name": "child",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "function": {"project": {"typeName": "hydra.core.paths.SubtermLink", "fieldName": "child"}},
+                                                                                                "argument": {"variable": "sl"}}},
+                                                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.paths.TermNode"}, "constraints": []}},
+                                                                                          {
+                                                                                            "name": "childPath",
+                                                                                            "term": {"application": {"function": {"variable": "childPathFor"}, "argument": {"variable": "step"}}},
+                                                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.paths.SubtermPath"}, "constraints": []}}],
+                                                                                        "body": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.core.lib.logic.ifElse"},
+                                                                                                        "type": {
+                                                                                                          "pair": {
+                                                                                                            "first": {
+                                                                                                              "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                            "second": {
+                                                                                                              "pair": {
+                                                                                                                "first": {
+                                                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                                "second": {
+                                                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}},
+                                                                                                    "argument": {"application": {"function": {"variable": "hydra.pg.subtermGraph.isLeafNode"}, "argument": {"variable": "child"}}}}},
+                                                                                                "argument": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "pair": {
+                                                                                                            "first": {
+                                                                                                              "optional": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {
+                                                                                                                        "pair": {
+                                                                                                                          "first": {"application": {"function": {"variable": "keyFor"}, "argument": {"variable": "childPath"}}},
+                                                                                                                          "second": {
+                                                                                                                            "application": {
+                                                                                                                              "function": {"project": {"typeName": "hydra.core.paths.TermNode", "fieldName": "term"}},
+                                                                                                                              "argument": {"variable": "child"}}}}},
+                                                                                                                      "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                                                  "type": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                            "second": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "pair": {
+                                                                                                                        "first": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"list": []},
+                                                                                                                            "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                                                                                                        "second": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"list": []},
+                                                                                                                            "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}},
+                                                                                                                    "type": {
+                                                                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                                "type": {
+                                                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                                                        "type": {
+                                                                                                          "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                    "type": {
+                                                                                                      "pair": {
+                                                                                                        "first": {
+                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                        "second": {
+                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}},
+                                                                                            "argument": {
+                                                                                              "let": {
+                                                                                                "bindings": [
+                                                                                                  {
+                                                                                                    "name": "sub",
+                                                                                                    "term": {
+                                                                                                      "application": {
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "function": {"application": {"function": {"variable": "hydra.pg.subtermGraph.encodeTermNode"}, "argument": {"variable": "root"}}},
+                                                                                                            "argument": {"variable": "childPath"}}},
+                                                                                                        "argument": {"variable": "child"}}},
+                                                                                                    "typeScheme": {
+                                                                                                      "variables": [],
+                                                                                                      "body": {
+                                                                                                        "pair": {
+                                                                                                          "first": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.model.Term"}}},
+                                                                                                          "second": {
+                                                                                                            "pair": {
+                                                                                                              "first": {
+                                                                                                                "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                              "second": {
+                                                                                                                "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                                                      "constraints": []}},
+                                                                                                  {
+                                                                                                    "name": "childVertex",
+                                                                                                    "term": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "record": {
+                                                                                                            "typeName": "hydra.pg.model.Vertex",
+                                                                                                            "fields": [
+                                                                                                              {
+                                                                                                                "name": "label",
+                                                                                                                "term": {
+                                                                                                                  "wrap": {
+                                                                                                                    "typeName": "hydra.pg.model.VertexLabel",
+                                                                                                                    "body": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {"variable": "hydra.core.print.model.type"},
+                                                                                                                        "argument": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {"project": {"typeName": "hydra.core.paths.TermNode", "fieldName": "type"}},
+                                                                                                                            "argument": {"variable": "child"}}}}}}}},
+                                                                                                              {
+                                                                                                                "name": "id",
+                                                                                                                "term": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {"variable": "hydra.pg.subtermGraph.termNodeIdTerm"},
+                                                                                                                    "argument": {
+                                                                                                                      "record": {
+                                                                                                                        "typeName": "hydra.core.paths.TermNodeId",
+                                                                                                                        "fields": [{"name": "root", "term": {"variable": "root"}}, {"name": "path", "term": {"variable": "childPath"}}]}}}}},
+                                                                                                              {
+                                                                                                                "name": "properties",
+                                                                                                                "term": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"variable": "hydra.core.lib.pairs.first"},
+                                                                                                                            "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.model.Term"}}}}},
+                                                                                                                        "type": {
+                                                                                                                          "pair": {
+                                                                                                                            "first": {
+                                                                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                                            "second": {
+                                                                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                                                                    "argument": {"variable": "sub"}}}}]}},
+                                                                                                        "type": {"variable": "hydra.core.model.Term"}}},
+                                                                                                    "typeScheme": {
+                                                                                                      "variables": [],
+                                                                                                      "body": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}},
+                                                                                                      "constraints": []}}],
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "pair": {
+                                                                                                            "first": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"optional": null},
+                                                                                                                "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}}},
+                                                                                                            "second": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "pair": {
+                                                                                                                        "first": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"variable": "hydra.core.lib.lists.concat2"},
+                                                                                                                                    "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                                                                                                                "argument": {"list": [{"variable": "childVertex"}]}}},
+                                                                                                                            "argument": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {"variable": "hydra.core.lib.pairs.first"},
+                                                                                                                                        "type": {
+                                                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                                                    "type": {
+                                                                                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                                                "argument": {
+                                                                                                                                  "application": {
+                                                                                                                                    "function": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"variable": "hydra.core.lib.pairs.second"},
+                                                                                                                                            "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.model.Term"}}}}},
+                                                                                                                                        "type": {
+                                                                                                                                          "pair": {
+                                                                                                                                            "first": {
+                                                                                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                                                            "second": {
+                                                                                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                                                                                    "argument": {"variable": "sub"}}}}}}},
+                                                                                                                        "second": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"variable": "hydra.core.lib.pairs.second"},
+                                                                                                                                    "type": {
+                                                                                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                                                "type": {
+                                                                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                                            "argument": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {"variable": "hydra.core.lib.pairs.second"},
+                                                                                                                                        "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.model.Term"}}}}},
+                                                                                                                                    "type": {
+                                                                                                                                      "pair": {
+                                                                                                                                        "first": {
+                                                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                                                        "second": {
+                                                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                                                                                "argument": {"variable": "sub"}}}}}}},
+                                                                                                                    "type": {
+                                                                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                                "type": {
+                                                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                                                        "type": {
+                                                                                                          "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                    "type": {
+                                                                                                      "pair": {
+                                                                                                        "first": {
+                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                        "second": {
+                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}}}}}}}}},
+                                                                              {
+                                                                                "name": "reference",
+                                                                                "handler": {
+                                                                                  "lambda": {
+                                                                                    "parameter": "rl",
+                                                                                    "domain": {"variable": "hydra.core.paths.TermReferenceLink"},
+                                                                                    "body": {
+                                                                                      "let": {
+                                                                                        "bindings": [
+                                                                                          {
+                                                                                            "name": "step",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "function": {"project": {"typeName": "hydra.core.paths.TermReferenceLink", "fieldName": "step"}},
+                                                                                                "argument": {"variable": "rl"}}},
+                                                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.paths.SubtermStep"}, "constraints": []}},
+                                                                                          {
+                                                                                            "name": "target",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "function": {"project": {"typeName": "hydra.core.paths.TermReferenceLink", "fieldName": "target"}},
+                                                                                                "argument": {"variable": "rl"}}},
+                                                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.paths.TermReference"}, "constraints": []}},
+                                                                                          {
+                                                                                            "name": "edgePath",
+                                                                                            "term": {"application": {"function": {"variable": "childPathFor"}, "argument": {"variable": "step"}}},
+                                                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.paths.SubtermPath"}, "constraints": []}},
+                                                                                          {
+                                                                                            "name": "edgeKey",
+                                                                                            "term": {"application": {"function": {"variable": "hydra.core.print.paths.subtermPath"}, "argument": {"variable": "edgePath"}}},
+                                                                                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
+                                                                                          {
+                                                                                            "name": "noVertices",
+                                                                                            "term": {"typeLambda": {"parameter": "t0", "body": {"typeApplication": {"body": {"list": []}, "type": {"variable": "t0"}}}}},
+                                                                                            "typeScheme": {"variables": ["t0"], "body": {"list": {"variable": "t0"}}, "constraints": []}},
+                                                                                          {
+                                                                                            "name": "noEdges",
+                                                                                            "term": {"typeLambda": {"parameter": "t0", "body": {"typeApplication": {"body": {"list": []}, "type": {"variable": "t0"}}}}},
+                                                                                            "typeScheme": {"variables": ["t0"], "body": {"list": {"variable": "t0"}}, "constraints": []}},
+                                                                                          {
+                                                                                            "name": "noProp",
+                                                                                            "term": {
+                                                                                              "typeLambda": {"parameter": "t0", "body": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "t0"}}}}},
+                                                                                            "typeScheme": {"variables": ["t0"], "body": {"optional": {"variable": "t0"}}, "constraints": []}}],
+                                                                                        "body": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.match"}, "type": {"variable": "hydra.core.paths.TermNodeId"}}},
+                                                                                                        "type": {
+                                                                                                          "pair": {
+                                                                                                            "first": {
+                                                                                                              "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                            "second": {
+                                                                                                              "pair": {
+                                                                                                                "first": {
+                                                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                                "second": {
+                                                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}},
+                                                                                                    "argument": {
+                                                                                                      "application": {"function": {"variable": "hydra.pg.subtermGraph.termReferenceNodeId"}, "argument": {"variable": "target"}}}}},
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.match"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                                                                                                "type": {
+                                                                                                                  "pair": {
+                                                                                                                    "first": {
+                                                                                                                      "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                                    "second": {
+                                                                                                                      "pair": {
+                                                                                                                        "first": {
+                                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                                        "second": {
+                                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}},
+                                                                                                            "argument": {
+                                                                                                              "application": {"function": {"variable": "hydra.pg.subtermGraph.termReferencePrimitiveName"}, "argument": {"variable": "target"}}}}},
+                                                                                                        "argument": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "pair": {
+                                                                                                                    "first": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"variable": "noProp"},
+                                                                                                                        "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}}},
+                                                                                                                    "second": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {
+                                                                                                                              "pair": {
+                                                                                                                                "first": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"variable": "noVertices"},
+                                                                                                                                    "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                                                                                                                "second": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"variable": "noEdges"},
+                                                                                                                                    "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}},
+                                                                                                                            "type": {
+                                                                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                                        "type": {
+                                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                                                                "type": {
+                                                                                                                  "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                            "type": {
+                                                                                                              "pair": {
+                                                                                                                "first": {
+                                                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                                "second": {
+                                                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}},
+                                                                                                    "argument": {
+                                                                                                      "lambda": {
+                                                                                                        "parameter": "pname",
+                                                                                                        "domain": {"variable": "hydra.core.model.Name"},
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "pair": {
+                                                                                                                    "first": {
+                                                                                                                      "optional": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {
+                                                                                                                                "pair": {
+                                                                                                                                  "first": {"application": {"function": {"variable": "keyFor"}, "argument": {"variable": "edgePath"}}},
+                                                                                                                                  "second": {
+                                                                                                                                    "inject": {
+                                                                                                                                      "typeName": "hydra.core.model.Term",
+                                                                                                                                      "field": {
+                                                                                                                                        "name": "literal",
+                                                                                                                                        "term": {
+                                                                                                                                          "inject": {
+                                                                                                                                            "typeName": "hydra.core.model.Literal",
+                                                                                                                                            "field": {
+                                                                                                                                              "name": "string",
+                                                                                                                                              "term": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "pname"}}}}}}}}}}},
+                                                                                                                              "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                                                          "type": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                                    "second": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {
+                                                                                                                              "pair": {
+                                                                                                                                "first": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"variable": "noVertices"},
+                                                                                                                                    "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                                                                                                                "second": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"variable": "noEdges"},
+                                                                                                                                    "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}},
+                                                                                                                            "type": {
+                                                                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                                        "type": {
+                                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                                                                "type": {
+                                                                                                                  "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                            "type": {
+                                                                                                              "pair": {
+                                                                                                                "first": {
+                                                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                                "second": {
+                                                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}}}}}},
+                                                                                            "argument": {
+                                                                                              "lambda": {
+                                                                                                "parameter": "targetId",
+                                                                                                "domain": {"variable": "hydra.core.paths.TermNodeId"},
+                                                                                                "body": {
+                                                                                                  "let": {
+                                                                                                    "bindings": [
+                                                                                                      {
+                                                                                                        "name": "edge",
+                                                                                                        "term": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {
+                                                                                                              "record": {
+                                                                                                                "typeName": "hydra.pg.model.Edge",
+                                                                                                                "fields": [
+                                                                                                                  {"name": "label", "term": {"wrap": {"typeName": "hydra.pg.model.EdgeLabel", "body": {"variable": "edgeKey"}}}},
+                                                                                                                  {
+                                                                                                                    "name": "id",
+                                                                                                                    "term": {
+                                                                                                                      "inject": {
+                                                                                                                        "typeName": "hydra.core.model.Term",
+                                                                                                                        "field": {
+                                                                                                                          "name": "literal",
+                                                                                                                          "term": {"inject": {"typeName": "hydra.core.model.Literal", "field": {"name": "string", "term": {"variable": "edgeKey"}}}}}}}},
+                                                                                                                  {
+                                                                                                                    "name": "out",
+                                                                                                                    "term": {"application": {"function": {"variable": "hydra.pg.subtermGraph.termNodeIdTerm"}, "argument": {"variable": "nid"}}}},
+                                                                                                                  {
+                                                                                                                    "name": "in",
+                                                                                                                    "term": {
+                                                                                                                      "application": {"function": {"variable": "hydra.pg.subtermGraph.termNodeIdTerm"}, "argument": {"variable": "targetId"}}}},
+                                                                                                                  {
+                                                                                                                    "name": "properties",
+                                                                                                                    "term": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {"body": {"variable": "hydra.core.lib.maps.empty"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                                                        "type": {"variable": "hydra.core.model.Term"}}}}]}},
+                                                                                                            "type": {"variable": "hydra.core.model.Term"}}},
+                                                                                                        "typeScheme": {
+                                                                                                          "variables": [],
+                                                                                                          "body": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}},
+                                                                                                          "constraints": []}}],
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {
+                                                                                                              "pair": {
+                                                                                                                "first": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"variable": "noProp"},
+                                                                                                                    "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}}},
+                                                                                                                "second": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "pair": {
+                                                                                                                            "first": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"variable": "noVertices"},
+                                                                                                                                "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                                                                                                            "second": {"list": [{"variable": "edge"}]}}},
+                                                                                                                        "type": {
+                                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                                    "type": {
+                                                                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                                                            "type": {
+                                                                                                              "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                        "type": {
+                                                                                                          "pair": {
+                                                                                                            "first": {
+                                                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                            "second": {
+                                                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}}}}}}}}}}}]}},
+                                                                        "argument": {"variable": "link"}}}}}}},
+                                                            "argument": {"variable": "links"}}},
+                                                        "typeScheme": {
+                                                          "variables": [],
+                                                          "body": {
+                                                            "list": {
+                                                              "pair": {
+                                                                "first": {
+                                                                  "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}},
+                                                                "second": {
+                                                                  "pair": {
+                                                                    "first": {
+                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                    "second": {
+                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}},
+                                                          "constraints": []}}],
+                                                    "body": {
+                                                      "let": {
+                                                        "bindings": [
+                                                          {
+                                                            "name": "ownProps",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.maps.fromList"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                    "type": {"variable": "hydra.core.model.Term"}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"variable": "hydra.core.lib.optionals.mapOptional"},
+                                                                                "type": {
+                                                                                  "pair": {
+                                                                                    "first": {
+                                                                                      "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}},
+                                                                                    "second": {
+                                                                                      "pair": {
+                                                                                        "first": {
+                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                        "second": {
+                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}},
+                                                                            "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}}},
+                                                                        "argument": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"variable": "hydra.core.lib.pairs.first"},
+                                                                                "type": {
+                                                                                  "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                            "type": {
+                                                                              "pair": {
+                                                                                "first": {
+                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                "second": {
+                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}},
+                                                                    "argument": {"variable": "perLink"}}}}},
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.model.Term"}}},
+                                                              "constraints": []}}],
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "descendants",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"variable": "hydra.core.lib.lists.map"},
+                                                                                "type": {
+                                                                                  "pair": {
+                                                                                    "first": {
+                                                                                      "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}},
+                                                                                    "second": {
+                                                                                      "pair": {
+                                                                                        "first": {
+                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                        "second": {
+                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}},
+                                                                            "type": {
+                                                                              "pair": {
+                                                                                "first": {
+                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                "second": {
+                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                        "argument": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"variable": "hydra.core.lib.pairs.second"},
+                                                                                "type": {
+                                                                                  "optional": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                            "type": {
+                                                                              "pair": {
+                                                                                "first": {
+                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                "second": {
+                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}},
+                                                                    "argument": {"variable": "perLink"}}},
+                                                                "typeScheme": {
+                                                                  "variables": [],
+                                                                  "body": {
+                                                                    "list": {
+                                                                      "pair": {
+                                                                        "first": {
+                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                        "second": {
+                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}},
+                                                                  "constraints": []}}],
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "first": {"variable": "ownProps"},
+                                                                        "second": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "pair": {
+                                                                                    "first": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.core.lib.lists.concat"},
+                                                                                            "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.core.lib.lists.map"},
+                                                                                                        "type": {
+                                                                                                          "pair": {
+                                                                                                            "first": {
+                                                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                            "second": {
+                                                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                                                    "type": {
+                                                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                "argument": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.core.lib.pairs.first"},
+                                                                                                        "type": {
+                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                    "type": {
+                                                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                                            "argument": {"variable": "descendants"}}}}},
+                                                                                    "second": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.core.lib.lists.concat"},
+                                                                                            "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.core.lib.lists.map"},
+                                                                                                        "type": {
+                                                                                                          "pair": {
+                                                                                                            "first": {
+                                                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                                                            "second": {
+                                                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                                                    "type": {
+                                                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                "argument": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.core.lib.pairs.second"},
+                                                                                                        "type": {
+                                                                                                          "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                                                    "type": {
+                                                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                                            "argument": {"variable": "descendants"}}}}}}},
+                                                                                "type": {
+                                                                                  "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}}}},
+                                                                            "type": {
+                                                                              "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}},
+                                                                    "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.model.Term"}}}}},
+                                                                "type": {
+                                                                  "pair": {
+                                                                    "first": {
+                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.model.Term"}}}},
+                                                                    "second": {
+                                                                      "list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "hydra.core.model.Term"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Encode one term-graph node into (this node's own properties, descendant vertices, descendant edges)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.pg.subtermGraph.isLeafNode",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.paths.TermNode"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "node",
+                "domain": {"variable": "hydra.core.paths.TermNode"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "typeApplication": {"body": {"variable": "hydra.core.lib.lists.isEmpty"}, "type": {"variable": "hydra.core.paths.TermLink"}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {"body": {"variable": "hydra.core.lib.lists.filter"}, "type": {"variable": "hydra.core.paths.TermLink"}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "link",
+                                "domain": {"variable": "hydra.core.paths.TermLink"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "cases": {
+                                        "typeName": "hydra.core.paths.TermLink",
+                                        "default": {"literal": {"boolean": true}},
+                                        "cases": [
+                                          {
+                                            "name": "attribute",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "_",
+                                                "domain": {"variable": "hydra.core.paths.TermAttributeLink"},
+                                                "body": {"literal": {"boolean": false}}}}}]}},
+                                    "argument": {"variable": "link"}}}}}}},
+                        "argument": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.core.paths.TermNode", "fieldName": "links"}},
+                            "argument": {"variable": "node"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Whether a term-graph node has only attribute links (no subterm or reference links), and so folds into a parent property rather than its own vertex"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.pg.subtermGraph.termAttributeLinkTag",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.paths.TermAttributeLink"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "attr",
+                "domain": {"variable": "hydra.core.paths.TermAttributeLink"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.paths.TermAttributeLink",
+                        "cases": [
+                          {
+                            "name": "casesTypeName",
+                            "handler": {
+                              "lambda": {"parameter": "_", "domain": {"variable": "hydra.core.model.Name"}, "body": {"literal": {"string": "casesTypeName"}}}}},
+                          {
+                            "name": "injectTypeName",
+                            "handler": {
+                              "lambda": {"parameter": "_", "domain": {"variable": "hydra.core.model.Name"}, "body": {"literal": {"string": "injectTypeName"}}}}},
+                          {
+                            "name": "lambdaDomainGiven",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"variable": "hydra.core.model.Type"},
+                                "body": {"literal": {"string": "lambdaDomainGiven"}}}}},
+                          {
+                            "name": "lambdaParameter",
+                            "handler": {
+                              "lambda": {"parameter": "_", "domain": {"variable": "hydra.core.model.Name"}, "body": {"literal": {"string": "lambdaParameter"}}}}},
+                          {
+                            "name": "letBindingTypeSchemeGiven",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"pair": {"first": {"variable": "hydra.core.model.Name"}, "second": {"variable": "hydra.core.model.TypeScheme"}}},
+                                "body": {"literal": {"string": "letBindingTypeSchemeGiven"}}}}},
+                          {
+                            "name": "literal",
+                            "handler": {
+                              "lambda": {"parameter": "_", "domain": {"variable": "hydra.core.model.Literal"}, "body": {"literal": {"string": "literal"}}}}},
+                          {
+                            "name": "projectFieldName",
+                            "handler": {
+                              "lambda": {"parameter": "_", "domain": {"variable": "hydra.core.model.Name"}, "body": {"literal": {"string": "projectFieldName"}}}}},
+                          {
+                            "name": "projectTypeName",
+                            "handler": {
+                              "lambda": {"parameter": "_", "domain": {"variable": "hydra.core.model.Name"}, "body": {"literal": {"string": "projectTypeName"}}}}},
+                          {
+                            "name": "recordTypeName",
+                            "handler": {
+                              "lambda": {"parameter": "_", "domain": {"variable": "hydra.core.model.Name"}, "body": {"literal": {"string": "recordTypeName"}}}}},
+                          {
+                            "name": "typeApplicationType",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"variable": "hydra.core.model.Type"},
+                                "body": {"literal": {"string": "typeApplicationType"}}}}},
+                          {
+                            "name": "typeLambdaParameter",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"variable": "hydra.core.model.Name"},
+                                "body": {"literal": {"string": "typeLambdaParameter"}}}}},
+                          {
+                            "name": "unwrapTypeName",
+                            "handler": {
+                              "lambda": {"parameter": "_", "domain": {"variable": "hydra.core.model.Name"}, "body": {"literal": {"string": "unwrapTypeName"}}}}},
+                          {
+                            "name": "wrapTypeName",
+                            "handler": {
+                              "lambda": {"parameter": "_", "domain": {"variable": "hydra.core.model.Name"}, "body": {"literal": {"string": "wrapTypeName"}}}}}]}},
+                    "argument": {"variable": "attr"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The variant tag of a term attribute link, used to disambiguate same-path attribute keys"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.pg.subtermGraph.termAttributeLinkValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.paths.TermAttributeLink"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.model.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "attr",
+                "domain": {"variable": "hydra.core.paths.TermAttributeLink"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.paths.TermAttributeLink",
+                        "cases": [
+                          {
+                            "name": "casesTypeName",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "n",
+                                "domain": {"variable": "hydra.core.model.Name"},
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.core.model.Term",
+                                    "field": {
+                                      "name": "literal",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.model.Literal",
+                                          "field": {
+                                            "name": "string",
+                                            "term": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "n"}}}}}}}}}}}},
+                          {
+                            "name": "injectTypeName",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "n",
+                                "domain": {"variable": "hydra.core.model.Name"},
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.core.model.Term",
+                                    "field": {
+                                      "name": "literal",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.model.Literal",
+                                          "field": {
+                                            "name": "string",
+                                            "term": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "n"}}}}}}}}}}}},
+                          {
+                            "name": "lambdaDomainGiven",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "t",
+                                "domain": {"variable": "hydra.core.model.Type"},
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.core.model.Term",
+                                    "field": {
+                                      "name": "literal",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.model.Literal",
+                                          "field": {
+                                            "name": "string",
+                                            "term": {"application": {"function": {"variable": "hydra.core.print.model.type"}, "argument": {"variable": "t"}}}}}}}}}}}},
+                          {
+                            "name": "lambdaParameter",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "n",
+                                "domain": {"variable": "hydra.core.model.Name"},
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.core.model.Term",
+                                    "field": {
+                                      "name": "literal",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.model.Literal",
+                                          "field": {
+                                            "name": "string",
+                                            "term": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "n"}}}}}}}}}}}},
+                          {
+                            "name": "letBindingTypeSchemeGiven",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "p",
+                                "domain": {"pair": {"first": {"variable": "hydra.core.model.Name"}, "second": {"variable": "hydra.core.model.TypeScheme"}}},
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.core.model.Term",
+                                    "field": {
+                                      "name": "literal",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.model.Literal",
+                                          "field": {
+                                            "name": "string",
+                                            "term": {
+                                              "application": {
+                                                "function": {"variable": "hydra.core.lib.strings.concat"},
+                                                "argument": {
+                                                  "list": [
+                                                    {
+                                                      "application": {
+                                                        "function": {"unwrap": "hydra.core.model.Name"},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.pairs.first"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                                                "type": {"variable": "hydra.core.model.TypeScheme"}}},
+                                                            "argument": {"variable": "p"}}}}},
+                                                    {"literal": {"string": ": "}},
+                                                    {
+                                                      "application": {
+                                                        "function": {"variable": "hydra.core.print.model.typeScheme"},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.second"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                                                "type": {"variable": "hydra.core.model.TypeScheme"}}},
+                                                            "argument": {"variable": "p"}}}}}]}}}}}}}}}}}},
+                          {
+                            "name": "literal",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "l",
+                                "domain": {"variable": "hydra.core.model.Literal"},
+                                "body": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "literal", "term": {"variable": "l"}}}}}}},
+                          {
+                            "name": "projectFieldName",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "n",
+                                "domain": {"variable": "hydra.core.model.Name"},
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.core.model.Term",
+                                    "field": {
+                                      "name": "literal",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.model.Literal",
+                                          "field": {
+                                            "name": "string",
+                                            "term": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "n"}}}}}}}}}}}},
+                          {
+                            "name": "projectTypeName",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "n",
+                                "domain": {"variable": "hydra.core.model.Name"},
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.core.model.Term",
+                                    "field": {
+                                      "name": "literal",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.model.Literal",
+                                          "field": {
+                                            "name": "string",
+                                            "term": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "n"}}}}}}}}}}}},
+                          {
+                            "name": "recordTypeName",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "n",
+                                "domain": {"variable": "hydra.core.model.Name"},
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.core.model.Term",
+                                    "field": {
+                                      "name": "literal",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.model.Literal",
+                                          "field": {
+                                            "name": "string",
+                                            "term": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "n"}}}}}}}}}}}},
+                          {
+                            "name": "typeApplicationType",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "t",
+                                "domain": {"variable": "hydra.core.model.Type"},
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.core.model.Term",
+                                    "field": {
+                                      "name": "literal",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.model.Literal",
+                                          "field": {
+                                            "name": "string",
+                                            "term": {"application": {"function": {"variable": "hydra.core.print.model.type"}, "argument": {"variable": "t"}}}}}}}}}}}},
+                          {
+                            "name": "typeLambdaParameter",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "n",
+                                "domain": {"variable": "hydra.core.model.Name"},
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.core.model.Term",
+                                    "field": {
+                                      "name": "literal",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.model.Literal",
+                                          "field": {
+                                            "name": "string",
+                                            "term": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "n"}}}}}}}}}}}},
+                          {
+                            "name": "unwrapTypeName",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "n",
+                                "domain": {"variable": "hydra.core.model.Name"},
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.core.model.Term",
+                                    "field": {
+                                      "name": "literal",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.model.Literal",
+                                          "field": {
+                                            "name": "string",
+                                            "term": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "n"}}}}}}}}}}}},
+                          {
+                            "name": "wrapTypeName",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "n",
+                                "domain": {"variable": "hydra.core.model.Name"},
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.core.model.Term",
+                                    "field": {
+                                      "name": "literal",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.model.Literal",
+                                          "field": {
+                                            "name": "string",
+                                            "term": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "n"}}}}}}}}}}}}]}},
+                    "argument": {"variable": "attr"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encode a term attribute link's payload as a term"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.pg.subtermGraph.termNodeIdTerm",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.paths.TermNodeId"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.model.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "nid",
+                "domain": {"variable": "hydra.core.paths.TermNodeId"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "root",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.core.paths.TermNodeId", "fieldName": "root"}},
+                            "argument": {"variable": "nid"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.model.Name"}, "constraints": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "path",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.core.paths.TermNodeId", "fieldName": "path"}},
+                                "argument": {"variable": "nid"}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.paths.SubtermPath"}, "constraints": []}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "steps",
+                                "term": {"application": {"function": {"unwrap": "hydra.core.paths.SubtermPath"}, "argument": {"variable": "path"}}},
+                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.paths.SubtermStep"}}, "constraints": []}}],
+                            "body": {
+                              "inject": {
+                                "typeName": "hydra.core.model.Term",
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.model.Literal",
+                                      "field": {
+                                        "name": "string",
+                                        "term": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"literal": "string"}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {"body": {"variable": "hydra.core.lib.lists.isEmpty"}, "type": {"variable": "hydra.core.paths.SubtermStep"}}},
+                                                        "argument": {"variable": "steps"}}}}},
+                                                "argument": {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "root"}}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"variable": "hydra.core.lib.strings.concat"},
+                                                "argument": {
+                                                  "list": [
+                                                    {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "root"}}},
+                                                    {"literal": {"string": "#"}},
+                                                    {"application": {"function": {"variable": "hydra.core.print.paths.subtermPath"}, "argument": {"variable": "path"}}}]}}}}}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Encode a TermNodeId as a term: the root binding name, plus '#' and the printed path if non-empty"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.pg.subtermGraph.termReferenceNodeId",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.paths.TermReference"}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "hydra.core.paths.TermNodeId"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "ref",
+                "domain": {"variable": "hydra.core.paths.TermReference"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.paths.TermReference",
+                        "cases": [
+                          {
+                            "name": "lambda",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "lv",
+                                "domain": {"variable": "hydra.core.paths.LambdaVariableReference"},
+                                "body": {
+                                  "optional": {
+                                    "application": {
+                                      "function": {"project": {"typeName": "hydra.core.paths.LambdaVariableReference", "fieldName": "boundByNode"}},
+                                      "argument": {"variable": "lv"}}}}}}},
+                          {
+                            "name": "let",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "lv",
+                                "domain": {"variable": "hydra.core.paths.LetVariableReference"},
+                                "body": {
+                                  "optional": {
+                                    "application": {
+                                      "function": {"project": {"typeName": "hydra.core.paths.LetVariableReference", "fieldName": "bindingNode"}},
+                                      "argument": {"variable": "lv"}}}}}}},
+                          {
+                            "name": "primitive",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"variable": "hydra.core.paths.PrimitiveReference"},
+                                "body": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.paths.TermNodeId"}}}}}}]}},
+                    "argument": {"variable": "ref"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "The binder node id of a lambda- or let-bound variable reference; Nothing for a primitive reference"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.pg.subtermGraph.termReferencePrimitiveName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.paths.TermReference"}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "hydra.core.model.Name"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "ref",
+                "domain": {"variable": "hydra.core.paths.TermReference"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.paths.TermReference",
+                        "cases": [
+                          {
+                            "name": "lambda",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"variable": "hydra.core.paths.LambdaVariableReference"},
+                                "body": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.model.Name"}}}}}},
+                          {
+                            "name": "let",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"variable": "hydra.core.paths.LetVariableReference"},
+                                "body": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.model.Name"}}}}}},
+                          {
+                            "name": "primitive",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "p",
+                                "domain": {"variable": "hydra.core.paths.PrimitiveReference"},
+                                "body": {
+                                  "optional": {
+                                    "application": {
+                                      "function": {"project": {"typeName": "hydra.core.paths.PrimitiveReference", "fieldName": "name"}},
+                                      "argument": {"variable": "p"}}}}}}}]}},
+                    "argument": {"variable": "ref"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The primitive's name, for a primitive reference; Nothing otherwise"}}}]}}}}}]}
