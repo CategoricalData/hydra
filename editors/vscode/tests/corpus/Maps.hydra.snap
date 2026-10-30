@@ -1,0 +1,1975 @@
+>## Primitives in the hydra.core.lib.maps module.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Ordered maps: finite collections of key-value bindings, with at most one value per key.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Hydra maps are ordered collections: iteration -- elems, keys, toList -- is in ascending key order, under the total order defined in the ordering-and-equality specification.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Because key ordering is part of the map type's contract, every map-typed variable in this module's signatures carries the ordering constraint on its key type, including in primitives that perform no comparison themselves.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.lib.maps
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>import hydra.core.paths
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.ast
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.coders
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.diff
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.docs
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.checking
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.file
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.errors
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.file
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.graph
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.json.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.markdown
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.parsing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.query
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.regex
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.relational
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.tabular
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.testing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.time
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.topology
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.typed
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.typing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.util
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.validation
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.variants
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>## Alter a value at a key using a function which sees the optional current value.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## alter(f, k, m) applies f to Just(v) when m contains key k with value v, or to Nothing when k is absent. If f returns Just(v'), the binding (k, v') is set in the result; if f returns Nothing, k is removed from the result.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## A single primitive that subsumes insert, delete, and adjust.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.alter :: Ord k => (Maybe v -> Maybe v) -> k -> Map k v -> Map k v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement insertsUpdatesOrDeletes alter applies the given function to the optional current value at the key: if the function returns given(v'), that binding is set (inserting if absent, overwriting if present); if it returns none, the key is removed.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive alter : ∀v,k.(ordering k) ⇒ (optional<v> → optional<v>) → k → map<k, v> → map<k, v> = λf.λk.λm.hydra.core.lib.optionals.match (f (hydra.core.lib.maps.lookup k m)) (hydra.core.lib.maps.delete k m) (λvNew.hydra.core.lib.maps.insert k vNew m)
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.forall-scheme.hydra
+#                   ^ source.hydra variable.parameter.hydra
+#                    ^ source.hydra punctuation.separator.binder.hydra
+#                     ^ source.hydra variable.parameter.hydra
+#                      ^ source.hydra punctuation.separator.binder.hydra
+#                       ^ source.hydra
+#                        ^^^^^^^^ source.hydra variable.other.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                     ^^ source.hydra
+#                                       ^^^^^^^^ source.hydra support.type.hydra
+#                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                ^ source.hydra variable.other.hydra
+#                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                  ^ source.hydra
+#                                                   ^ source.hydra keyword.operator.arrow.hydra
+#                                                    ^ source.hydra
+#                                                     ^^^^^^^^ source.hydra support.type.hydra
+#                                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                              ^ source.hydra variable.other.hydra
+#                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                ^^ source.hydra
+#                                                                  ^ source.hydra keyword.operator.arrow.hydra
+#                                                                   ^ source.hydra
+#                                                                    ^ source.hydra variable.other.hydra
+#                                                                     ^ source.hydra
+#                                                                      ^ source.hydra keyword.operator.arrow.hydra
+#                                                                       ^ source.hydra
+#                                                                        ^^^ source.hydra support.type.hydra
+#                                                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                            ^ source.hydra variable.other.hydra
+#                                                                             ^^ source.hydra
+#                                                                               ^ source.hydra variable.other.hydra
+#                                                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                 ^ source.hydra
+#                                                                                  ^ source.hydra keyword.operator.arrow.hydra
+#                                                                                   ^ source.hydra
+#                                                                                    ^^^ source.hydra support.type.hydra
+#                                                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                        ^ source.hydra variable.other.hydra
+#                                                                                         ^^ source.hydra
+#                                                                                           ^ source.hydra variable.other.hydra
+#                                                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                             ^ source.hydra
+#                                                                                              ^ source.hydra keyword.operator.equals.hydra
+#                                                                                               ^ source.hydra
+#                                                                                                ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                 ^ source.hydra variable.parameter.hydra
+#                                                                                                  ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                   ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                    ^ source.hydra variable.parameter.hydra
+#                                                                                                     ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                      ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                       ^ source.hydra variable.parameter.hydra
+#                                                                                                        ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                       ^^ source.hydra
+#                                                                                                                                         ^ source.hydra variable.other.hydra
+#                                                                                                                                          ^^ source.hydra
+#                                                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                      ^ source.hydra
+#                                                                                                                                                                       ^ source.hydra variable.other.hydra
+#                                                                                                                                                                        ^ source.hydra
+#                                                                                                                                                                         ^ source.hydra variable.other.hydra
+#                                                                                                                                                                          ^^^^ source.hydra
+#                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                                        ^ source.hydra
+#                                                                                                                                                                                                         ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                          ^ source.hydra
+#                                                                                                                                                                                                           ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                            ^^^ source.hydra
+#                                                                                                                                                                                                               ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                                                                                                                                ^^^^ source.hydra variable.parameter.hydra
+#                                                                                                                                                                                                                    ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                                                                               ^ source.hydra
+#                                                                                                                                                                                                                                                ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                                                                 ^ source.hydra
+#                                                                                                                                                                                                                                                  ^^^^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                                                                      ^ source.hydra
+#                                                                                                                                                                                                                                                       ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                                                                        ^^ source.hydra
+>
+>## Map functions over both the keys and values of a map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## bimap(fk, fv, m) returns a new map with key fk(k) and value fv(v) for each binding (k, v) in m.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Key collisions after applying fk are resolved by keeping the last binding encountered (host may differ on collision policy if fk is not injective).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires 'ordering' constraints on both the input and output key types.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to a key-and-value lift of Haskell's Data.Map.fromList . map (\(k,v) -> (fk k, fv v)) . toList.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement transformsKeysAndValues bimap returns a new map where each binding (k, v) becomes (fk(k), fv(v)), applying the key function and value function independently to every binding.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement emptyInput bimap of the empty map is the empty map, regardless of the key and value functions.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive bimap : ∀k1,k2,v1,v2.(ordering k1, ordering k2) ⇒ (k1 → k2) → (v1 → v2) → map<k1, v1> → map<k2, v2> = λfk.λfv.λm.hydra.core.lib.maps.fromList (hydra.core.lib.lists.map (λp.(fk (hydra.core.lib.pairs.first p), fv (hydra.core.lib.pairs.second p))) (hydra.core.lib.maps.toList m))
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.forall-scheme.hydra
+#                   ^^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^^ source.hydra variable.parameter.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^^ source.hydra variable.parameter.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^^ source.hydra variable.parameter.hydra
+#                              ^ source.hydra punctuation.separator.binder.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^ source.hydra variable.other.hydra
+#                                        ^ source.hydra
+#                                         ^^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+#                                             ^^^^^^^^ source.hydra variable.other.hydra
+#                                                     ^ source.hydra
+#                                                      ^^ source.hydra variable.other.hydra
+#                                                        ^^ source.hydra
+#                                                          ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                                           ^^ source.hydra
+#                                                             ^^ source.hydra variable.other.hydra
+#                                                               ^ source.hydra
+#                                                                ^ source.hydra keyword.operator.arrow.hydra
+#                                                                 ^ source.hydra
+#                                                                  ^^ source.hydra variable.other.hydra
+#                                                                    ^^ source.hydra
+#                                                                      ^ source.hydra keyword.operator.arrow.hydra
+#                                                                       ^^ source.hydra
+#                                                                         ^^ source.hydra variable.other.hydra
+#                                                                           ^ source.hydra
+#                                                                            ^ source.hydra keyword.operator.arrow.hydra
+#                                                                             ^ source.hydra
+#                                                                              ^^ source.hydra variable.other.hydra
+#                                                                                ^^ source.hydra
+#                                                                                  ^ source.hydra keyword.operator.arrow.hydra
+#                                                                                   ^ source.hydra
+#                                                                                    ^^^ source.hydra support.type.hydra
+#                                                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                        ^^ source.hydra variable.other.hydra
+#                                                                                          ^^ source.hydra
+#                                                                                            ^^ source.hydra variable.other.hydra
+#                                                                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                               ^ source.hydra
+#                                                                                                ^ source.hydra keyword.operator.arrow.hydra
+#                                                                                                 ^ source.hydra
+#                                                                                                  ^^^ source.hydra support.type.hydra
+#                                                                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                                      ^^ source.hydra variable.other.hydra
+#                                                                                                        ^^ source.hydra
+#                                                                                                          ^^ source.hydra variable.other.hydra
+#                                                                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                             ^ source.hydra
+#                                                                                                              ^ source.hydra keyword.operator.equals.hydra
+#                                                                                                               ^ source.hydra
+#                                                                                                                ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                                 ^^ source.hydra variable.parameter.hydra
+#                                                                                                                   ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                                    ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                                     ^^ source.hydra variable.parameter.hydra
+#                                                                                                                       ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                                        ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                                         ^ source.hydra variable.parameter.hydra
+#                                                                                                                          ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                       ^^ source.hydra
+#                                                                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                 ^^ source.hydra
+#                                                                                                                                                                                   ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                                                                                                    ^ source.hydra variable.parameter.hydra
+#                                                                                                                                                                                     ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                                                                                                      ^ source.hydra
+#                                                                                                                                                                                       ^^ source.hydra variable.other.hydra
+#                                                                                                                                                                                         ^^ source.hydra
+#                                                                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                                                     ^ source.hydra
+#                                                                                                                                                                                                                      ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                                       ^^^ source.hydra
+#                                                                                                                                                                                                                          ^^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                                            ^^ source.hydra
+#                                                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                                                                                         ^ source.hydra
+#                                                                                                                                                                                                                                                          ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                                                                           ^^^^^ source.hydra
+#                                                                                                                                                                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                                                                                                                          ^ source.hydra
+#                                                                                                                                                                                                                                                                                           ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                                                                                                            ^^^ source.hydra
+>
+>## Remove a key from a map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## delete(k, m) returns m with the binding for k removed; if k is not present, m is returned unchanged.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.delete :: Ord k => k -> Map k v -> Map k v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement removesKeyIfPresent delete removes the binding for the given key if present, leaving the rest of the map unchanged.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement noOpWhenAbsentOrEmpty delete leaves the map unchanged when the key is absent, including when the map is empty.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive delete : ∀k,v.(ordering k) ⇒ k → map<k, v> → map<k, v>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.forall-scheme.hydra
+#                    ^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra variable.other.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra keyword.operator.arrow.hydra
+#                                          ^ source.hydra
+#                                           ^^^ source.hydra support.type.hydra
+#                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                               ^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
+#                                                  ^ source.hydra variable.other.hydra
+#                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra keyword.operator.arrow.hydra
+#                                                      ^ source.hydra
+#                                                       ^^^ source.hydra support.type.hydra
+#                                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                           ^ source.hydra variable.other.hydra
+#                                                            ^^ source.hydra
+#                                                              ^ source.hydra variable.other.hydra
+#                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Compute the difference of two maps by key.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## difference(m1, m2) returns the map containing exactly the bindings of m1 whose keys do not appear in m2. Only the key set of m2 matters; its values are ignored.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The key-set analogue is hydra.core.lib.sets.difference.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.difference :: Ord k => Map k v -> Map k v -> Map k v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement removesBindingsWithKeysInSecondMap difference returns the bindings of the first map whose keys do not occur in the second map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement identityWhenSecondEmpty difference with an empty second map returns the first map unchanged.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive difference : ∀k,v.(ordering k) ⇒ map<k, v> → map<k, v> → map<k, v>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra punctuation.separator.type.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra keyword.operator.forall-scheme.hydra
+#                        ^ source.hydra variable.parameter.hydra
+#                         ^ source.hydra punctuation.separator.binder.hydra
+#                          ^ source.hydra variable.parameter.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^^ source.hydra
+#                                         ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                          ^ source.hydra
+#                                           ^^^ source.hydra support.type.hydra
+#                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                               ^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
+#                                                  ^ source.hydra variable.other.hydra
+#                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra keyword.operator.arrow.hydra
+#                                                      ^ source.hydra
+#                                                       ^^^ source.hydra support.type.hydra
+#                                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                           ^ source.hydra variable.other.hydra
+#                                                            ^^ source.hydra
+#                                                              ^ source.hydra variable.other.hydra
+#                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                ^ source.hydra
+#                                                                 ^ source.hydra keyword.operator.arrow.hydra
+#                                                                  ^ source.hydra
+#                                                                   ^^^ source.hydra support.type.hydra
+#                                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                       ^ source.hydra variable.other.hydra
+#                                                                        ^^ source.hydra
+#                                                                          ^ source.hydra variable.other.hydra
+#                                                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Return the values of a map (in key order).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## elems(m) returns the values of m as a list, ordered by their keys' ascending order.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.elems :: Map k v -> [v].
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement returnsValuesInKeyOrder elems returns the map's values as a list ordered by ascending key, including when keys were inserted out of order.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement emptyInput elems of the empty map is the empty list.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive elems : ∀k,v.(ordering k) ⇒ map<k, v> → list<v>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.forall-scheme.hydra
+#                   ^ source.hydra variable.parameter.hydra
+#                    ^ source.hydra punctuation.separator.binder.hydra
+#                     ^ source.hydra variable.parameter.hydra
+#                      ^ source.hydra punctuation.separator.binder.hydra
+#                       ^ source.hydra
+#                        ^^^^^^^^ source.hydra variable.other.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                     ^ source.hydra
+#                                      ^^^ source.hydra support.type.hydra
+#                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                          ^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+#                                             ^ source.hydra variable.other.hydra
+#                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                               ^ source.hydra
+#                                                ^ source.hydra keyword.operator.arrow.hydra
+#                                                 ^ source.hydra
+#                                                  ^^^^ source.hydra support.type.hydra
+#                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                       ^ source.hydra variable.other.hydra
+#                                                        ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## The empty map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## empty is the map with no bindings.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.empty :: Map k v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement hasNoBindings empty is the map containing no bindings.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive empty : ∀k,v.(ordering k) ⇒ map<k, v>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.forall-scheme.hydra
+#                   ^ source.hydra variable.parameter.hydra
+#                    ^ source.hydra punctuation.separator.binder.hydra
+#                     ^ source.hydra variable.parameter.hydra
+#                      ^ source.hydra punctuation.separator.binder.hydra
+#                       ^ source.hydra
+#                        ^^^^^^^^ source.hydra variable.other.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                     ^ source.hydra
+#                                      ^^^ source.hydra support.type.hydra
+#                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                          ^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+#                                             ^ source.hydra variable.other.hydra
+#                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Filter a map by value.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## filter(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(v) is true.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.filter :: (v -> Bool) -> Map k v -> Map k v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement keepsMatchingValues filter returns the submap containing exactly the bindings whose value satisfies the predicate, preserving all matching keys.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement boundaryCases filter degrades correctly at the boundaries: a predicate matching no value yields the empty map; filtering the empty map yields the empty map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive filter : ∀v,k.(ordering k) ⇒ (v → boolean) → map<k, v> → map<k, v> = λp.λm.hydra.core.lib.maps.fromList (hydra.core.lib.lists.filter (λpr.p (hydra.core.lib.pairs.second pr)) (hydra.core.lib.maps.toList m))
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.forall-scheme.hydra
+#                    ^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                      ^^ source.hydra
+#                                        ^ source.hydra variable.other.hydra
+#                                         ^ source.hydra
+#                                          ^ source.hydra keyword.operator.arrow.hydra
+#                                           ^ source.hydra
+#                                            ^^^^^^^ source.hydra support.type.hydra
+#                                                   ^^ source.hydra
+#                                                     ^ source.hydra keyword.operator.arrow.hydra
+#                                                      ^ source.hydra
+#                                                       ^^^ source.hydra support.type.hydra
+#                                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                           ^ source.hydra variable.other.hydra
+#                                                            ^^ source.hydra
+#                                                              ^ source.hydra variable.other.hydra
+#                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                ^ source.hydra
+#                                                                 ^ source.hydra keyword.operator.arrow.hydra
+#                                                                  ^ source.hydra
+#                                                                   ^^^ source.hydra support.type.hydra
+#                                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                       ^ source.hydra variable.other.hydra
+#                                                                        ^^ source.hydra
+#                                                                          ^ source.hydra variable.other.hydra
+#                                                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                            ^ source.hydra
+#                                                                             ^ source.hydra keyword.operator.equals.hydra
+#                                                                              ^ source.hydra
+#                                                                               ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                ^ source.hydra variable.parameter.hydra
+#                                                                                 ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                  ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                   ^ source.hydra variable.parameter.hydra
+#                                                                                    ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                 ^^ source.hydra
+#                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                              ^^ source.hydra
+#                                                                                                                                                ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                                                                 ^^ source.hydra variable.parameter.hydra
+#                                                                                                                                                   ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                                                                    ^ source.hydra variable.other.hydra
+#                                                                                                                                                     ^^ source.hydra
+#                                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                  ^ source.hydra
+#                                                                                                                                                                                   ^^ source.hydra variable.other.hydra
+#                                                                                                                                                                                     ^^^^ source.hydra
+#                                                                                                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                                                   ^ source.hydra
+#                                                                                                                                                                                                                    ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                                     ^^^ source.hydra
+>
+>## Filter a map by key and value.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## filterWithKey(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(k, v) is true.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement keepsMatchingBindings filterWithKey returns the submap containing exactly the bindings for which the predicate, given both key and value, is true.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement boundaryCases filterWithKey degrades correctly at the boundaries: a predicate matching no binding yields the empty map; filtering the empty map yields the empty map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive filterWithKey : ∀k,v.(ordering k) ⇒ (k → v → boolean) → map<k, v> → map<k, v> = λp.λm.hydra.core.lib.maps.fromList (hydra.core.lib.lists.filter (λpr.p (hydra.core.lib.pairs.first pr) (hydra.core.lib.pairs.second pr)) (hydra.core.lib.maps.toList m))
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.forall-scheme.hydra
+#                           ^ source.hydra variable.parameter.hydra
+#                            ^ source.hydra punctuation.separator.binder.hydra
+#                             ^ source.hydra variable.parameter.hydra
+#                              ^ source.hydra punctuation.separator.binder.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^ source.hydra variable.other.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra variable.other.hydra
+#                                          ^^ source.hydra
+#                                            ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                             ^^ source.hydra
+#                                               ^ source.hydra variable.other.hydra
+#                                                ^ source.hydra
+#                                                 ^ source.hydra keyword.operator.arrow.hydra
+#                                                  ^ source.hydra
+#                                                   ^ source.hydra variable.other.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra keyword.operator.arrow.hydra
+#                                                      ^ source.hydra
+#                                                       ^^^^^^^ source.hydra support.type.hydra
+#                                                              ^^ source.hydra
+#                                                                ^ source.hydra keyword.operator.arrow.hydra
+#                                                                 ^ source.hydra
+#                                                                  ^^^ source.hydra support.type.hydra
+#                                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                      ^ source.hydra variable.other.hydra
+#                                                                       ^^ source.hydra
+#                                                                         ^ source.hydra variable.other.hydra
+#                                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                           ^ source.hydra
+#                                                                            ^ source.hydra keyword.operator.arrow.hydra
+#                                                                             ^ source.hydra
+#                                                                              ^^^ source.hydra support.type.hydra
+#                                                                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                  ^ source.hydra variable.other.hydra
+#                                                                                   ^^ source.hydra
+#                                                                                     ^ source.hydra variable.other.hydra
+#                                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                       ^ source.hydra
+#                                                                                        ^ source.hydra keyword.operator.equals.hydra
+#                                                                                         ^ source.hydra
+#                                                                                          ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                           ^ source.hydra variable.parameter.hydra
+#                                                                                            ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                             ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                              ^ source.hydra variable.parameter.hydra
+#                                                                                               ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                            ^^ source.hydra
+#                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                         ^^ source.hydra
+#                                                                                                                                                           ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                                                                            ^^ source.hydra variable.parameter.hydra
+#                                                                                                                                                              ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                                                                               ^ source.hydra variable.other.hydra
+#                                                                                                                                                                ^^ source.hydra
+#                                                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                            ^ source.hydra
+#                                                                                                                                                                                             ^^ source.hydra variable.other.hydra
+#                                                                                                                                                                                               ^^^ source.hydra
+#                                                                                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                                                             ^ source.hydra
+#                                                                                                                                                                                                                              ^^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                                                ^^^^ source.hydra
+#                                                                                                                                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                                                                                              ^ source.hydra
+#                                                                                                                                                                                                                                                               ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                                                                                ^^^ source.hydra
+>
+>## Look up a value with a default if the key is absent.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## findWithDefault(def, k, m) returns the value bound to k in m if k is present, or def otherwise. Equivalent to maybe(def, identity, lookup(k, m)).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.findWithDefault :: Ord k => v -> k -> Map k v -> v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement returnsBoundValueOrDefault findWithDefault returns the value bound to the key when present, or the supplied default value when the key is absent.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive findWithDefault : ∀v,k.(ordering k) ⇒ lazy v → k → map<k, v> → v = λdef.λk.λm.hydra.core.lib.optionals.withDefault def (hydra.core.lib.maps.lookup k m)
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.forall-scheme.hydra
+#                             ^ source.hydra variable.parameter.hydra
+#                              ^ source.hydra punctuation.separator.binder.hydra
+#                               ^ source.hydra variable.parameter.hydra
+#                                ^ source.hydra punctuation.separator.binder.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^^^ source.hydra variable.other.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra variable.other.hydra
+#                                            ^^ source.hydra
+#                                              ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                               ^ source.hydra
+#                                                ^^^^ source.hydra keyword.control.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra variable.other.hydra
+#                                                      ^ source.hydra
+#                                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra variable.other.hydra
+#                                                          ^ source.hydra
+#                                                           ^ source.hydra keyword.operator.arrow.hydra
+#                                                            ^ source.hydra
+#                                                             ^^^ source.hydra support.type.hydra
+#                                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                 ^ source.hydra variable.other.hydra
+#                                                                  ^^ source.hydra
+#                                                                    ^ source.hydra variable.other.hydra
+#                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                      ^ source.hydra
+#                                                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                                                        ^ source.hydra
+#                                                                         ^ source.hydra variable.other.hydra
+#                                                                          ^ source.hydra
+#                                                                           ^ source.hydra keyword.operator.equals.hydra
+#                                                                            ^ source.hydra
+#                                                                             ^ source.hydra keyword.operator.lambda.hydra
+#                                                                              ^^^ source.hydra variable.parameter.hydra
+#                                                                                 ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                  ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                   ^ source.hydra variable.parameter.hydra
+#                                                                                    ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                     ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                      ^ source.hydra variable.parameter.hydra
+#                                                                                       ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                            ^ source.hydra
+#                                                                                                                             ^^^ source.hydra variable.other.hydra
+#                                                                                                                                ^^ source.hydra
+#                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                            ^ source.hydra
+#                                                                                                                                                             ^ source.hydra variable.other.hydra
+#                                                                                                                                                              ^ source.hydra
+#                                                                                                                                                               ^ source.hydra variable.other.hydra
+#                                                                                                                                                                ^^ source.hydra
+>
+>## Build a map from a list of key-value pairs.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## fromList(xs) returns the map containing exactly the bindings in xs. If xs contains multiple entries for the same key, the last one wins (matching Haskell's fromList behavior).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.fromList :: Ord k => [(k, v)] -> Map k v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement buildsMapFromPairs fromList returns the map containing exactly the bindings in the input list of key-value pairs.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement lastDuplicateWins fromList resolves multiple entries for the same key by keeping the value from the last occurrence in the input list.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement emptyInput fromList of the empty list of pairs is the empty map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive fromList : ∀k,v.(ordering k) ⇒ list<(k, v)> → map<k, v>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^^ source.hydra entity.name.function.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra punctuation.separator.type.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.forall-scheme.hydra
+#                      ^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^ source.hydra variable.parameter.hydra
+#                         ^ source.hydra punctuation.separator.binder.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra variable.other.hydra
+#                                     ^^ source.hydra
+#                                       ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                        ^ source.hydra
+#                                         ^^^^ source.hydra support.type.hydra
+#                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                              ^ source.hydra
+#                                               ^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
+#                                                  ^ source.hydra variable.other.hydra
+#                                                   ^ source.hydra
+#                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                     ^ source.hydra
+#                                                      ^ source.hydra keyword.operator.arrow.hydra
+#                                                       ^ source.hydra
+#                                                        ^^^ source.hydra support.type.hydra
+#                                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                            ^ source.hydra variable.other.hydra
+#                                                             ^^ source.hydra
+#                                                               ^ source.hydra variable.other.hydra
+#                                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Insert a key-value pair into a map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## insert(k, v, m) returns m with the binding (k, v) added or updated. If k is already present, its value is overwritten.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.insert :: Ord k => k -> v -> Map k v -> Map k v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement addsOrOverwritesBinding insert adds the given key-value binding to the map, overwriting any existing value at that key, including when the map was empty.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive insert : ∀k,v.(ordering k) ⇒ k → v → map<k, v> → map<k, v>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.forall-scheme.hydra
+#                    ^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra variable.other.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra keyword.operator.arrow.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra variable.other.hydra
+#                                            ^ source.hydra
+#                                             ^ source.hydra keyword.operator.arrow.hydra
+#                                              ^ source.hydra
+#                                               ^^^ source.hydra support.type.hydra
+#                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                   ^ source.hydra variable.other.hydra
+#                                                    ^^ source.hydra
+#                                                      ^ source.hydra variable.other.hydra
+#                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra keyword.operator.arrow.hydra
+#                                                          ^ source.hydra
+#                                                           ^^^ source.hydra support.type.hydra
+#                                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                               ^ source.hydra variable.other.hydra
+#                                                                ^^ source.hydra
+#                                                                  ^ source.hydra variable.other.hydra
+#                                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Compute the intersection of two maps by key.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## intersection(m1, m2) returns the map containing exactly the bindings of m1 whose keys also appear in m2. On each common key the value is taken from m1; only the key set of m2 matters, and its values are ignored.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The key-set analogue is hydra.core.lib.sets.intersection.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.intersection :: Ord k => Map k v -> Map k v -> Map k v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement keepsBindingsWithKeysInBoth intersection returns the bindings of the first map whose keys also occur in the second map, taking the value from the first map on each common key.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement emptyWhenNoOverlapOrEitherEmpty intersection is the empty map when the two maps share no keys, or when either map is empty.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive intersection : ∀k,v.(ordering k) ⇒ map<k, v> → map<k, v> → map<k, v>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra keyword.operator.forall-scheme.hydra
+#                          ^ source.hydra variable.parameter.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^ source.hydra variable.parameter.hydra
+#                             ^ source.hydra punctuation.separator.binder.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^^ source.hydra variable.other.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra variable.other.hydra
+#                                         ^^ source.hydra
+#                                           ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                            ^ source.hydra
+#                                             ^^^ source.hydra support.type.hydra
+#                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                 ^ source.hydra variable.other.hydra
+#                                                  ^^ source.hydra
+#                                                    ^ source.hydra variable.other.hydra
+#                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                      ^ source.hydra
+#                                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                                        ^ source.hydra
+#                                                         ^^^ source.hydra support.type.hydra
+#                                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                             ^ source.hydra variable.other.hydra
+#                                                              ^^ source.hydra
+#                                                                ^ source.hydra variable.other.hydra
+#                                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                  ^ source.hydra
+#                                                                   ^ source.hydra keyword.operator.arrow.hydra
+#                                                                    ^ source.hydra
+#                                                                     ^^^ source.hydra support.type.hydra
+#                                                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                         ^ source.hydra variable.other.hydra
+#                                                                          ^^ source.hydra
+#                                                                            ^ source.hydra variable.other.hydra
+#                                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Test whether a map is empty.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## isEmpty(m) returns true iff m has no bindings.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement testsZeroBindings isEmpty returns true exactly when the map has no bindings.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive isEmpty : ∀k,v.(ordering k) ⇒ map<k, v> → boolean
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra punctuation.separator.type.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.forall-scheme.hydra
+#                     ^ source.hydra variable.parameter.hydra
+#                      ^ source.hydra punctuation.separator.binder.hydra
+#                       ^ source.hydra variable.parameter.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^ source.hydra
+#                          ^^^^^^^^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra variable.other.hydra
+#                                    ^^ source.hydra
+#                                      ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                       ^ source.hydra
+#                                        ^^^ source.hydra support.type.hydra
+#                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                            ^ source.hydra variable.other.hydra
+#                                             ^^ source.hydra
+#                                               ^ source.hydra variable.other.hydra
+#                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                 ^ source.hydra
+#                                                  ^ source.hydra keyword.operator.arrow.hydra
+#                                                   ^ source.hydra
+#                                                    ^^^^^^^ source.hydra support.type.hydra
+>
+>## Return the keys of a map (in key order).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## keys(m) returns the keys of m as a list, in ascending order.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.keys :: Map k v -> [k].
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement returnsKeysInOrder keys returns the map's keys as a list in ascending order, including when keys were inserted out of order.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement emptyInput keys of the empty map is the empty list.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive keys : ∀k,v.(ordering k) ⇒ map<k, v> → list<k>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra punctuation.separator.type.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                  ^ source.hydra variable.parameter.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^ source.hydra
+#                       ^^^^^^^^ source.hydra variable.other.hydra
+#                               ^ source.hydra
+#                                ^ source.hydra variable.other.hydra
+#                                 ^^ source.hydra
+#                                   ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                    ^ source.hydra
+#                                     ^^^ source.hydra support.type.hydra
+#                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                         ^ source.hydra variable.other.hydra
+#                                          ^^ source.hydra
+#                                            ^ source.hydra variable.other.hydra
+#                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                              ^ source.hydra
+#                                               ^ source.hydra keyword.operator.arrow.hydra
+#                                                ^ source.hydra
+#                                                 ^^^^ source.hydra support.type.hydra
+#                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                      ^ source.hydra variable.other.hydra
+#                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Look up a value in a map by key, returning Nothing if absent.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## lookup(k, m) returns Just(v) where v is the value bound to k in m, or Nothing if k is not present.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.lookup :: Ord k => k -> Map k v -> Maybe v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement returnsBoundValue lookup returns the value bound to the given key, wrapped, when the key is present.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement noneWhenAbsentOrEmpty lookup returns none when the key is absent, including when the map is empty.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive lookup : ∀k,v.(ordering k) ⇒ k → map<k, v> → optional<v>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.forall-scheme.hydra
+#                    ^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra variable.other.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra keyword.operator.arrow.hydra
+#                                          ^ source.hydra
+#                                           ^^^ source.hydra support.type.hydra
+#                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                               ^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
+#                                                  ^ source.hydra variable.other.hydra
+#                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra keyword.operator.arrow.hydra
+#                                                      ^ source.hydra
+#                                                       ^^^^^^^^ source.hydra support.type.hydra
+#                                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                ^ source.hydra variable.other.hydra
+#                                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Map a function over the values of a map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## map(f, m) returns a map with the same keys as m and value f(v) for each binding (k, v).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.map :: (v -> w) -> Map k v -> Map k w / fmap on Map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement appliesFunctionToValues map applies the given function to every value in the map, leaving keys unchanged.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement emptyInput map over the empty map is the empty map, regardless of the function.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive map : ∀v1,v2,k.(ordering k) ⇒ (v1 → v2) → map<k, v1> → map<k, v2> = λf.λm.hydra.core.lib.maps.fromList (hydra.core.lib.lists.map (λp.(hydra.core.lib.pairs.first p, f (hydra.core.lib.pairs.second p))) (hydra.core.lib.maps.toList m))
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^^ source.hydra variable.parameter.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^^ source.hydra variable.parameter.hydra
+#                      ^ source.hydra punctuation.separator.binder.hydra
+#                       ^ source.hydra variable.parameter.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^ source.hydra
+#                          ^^^^^^^^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra variable.other.hydra
+#                                    ^^ source.hydra
+#                                      ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                       ^^ source.hydra
+#                                         ^^ source.hydra variable.other.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra keyword.operator.arrow.hydra
+#                                             ^ source.hydra
+#                                              ^^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
+#                                                  ^ source.hydra keyword.operator.arrow.hydra
+#                                                   ^ source.hydra
+#                                                    ^^^ source.hydra support.type.hydra
+#                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                        ^ source.hydra variable.other.hydra
+#                                                         ^^ source.hydra
+#                                                           ^^ source.hydra variable.other.hydra
+#                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                              ^ source.hydra
+#                                                               ^ source.hydra keyword.operator.arrow.hydra
+#                                                                ^ source.hydra
+#                                                                 ^^^ source.hydra support.type.hydra
+#                                                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                     ^ source.hydra variable.other.hydra
+#                                                                      ^^ source.hydra
+#                                                                        ^^ source.hydra variable.other.hydra
+#                                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                           ^ source.hydra
+#                                                                            ^ source.hydra keyword.operator.equals.hydra
+#                                                                             ^ source.hydra
+#                                                                              ^ source.hydra keyword.operator.lambda.hydra
+#                                                                               ^ source.hydra variable.parameter.hydra
+#                                                                                ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                 ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                  ^ source.hydra variable.parameter.hydra
+#                                                                                   ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                ^^ source.hydra
+#                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                          ^^ source.hydra
+#                                                                                                                                            ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                                                             ^ source.hydra variable.parameter.hydra
+#                                                                                                                                              ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                                                               ^ source.hydra
+#                                                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                          ^ source.hydra
+#                                                                                                                                                                           ^ source.hydra variable.other.hydra
+#                                                                                                                                                                            ^^ source.hydra
+#                                                                                                                                                                              ^ source.hydra variable.other.hydra
+#                                                                                                                                                                               ^^ source.hydra
+#                                                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                                            ^ source.hydra
+#                                                                                                                                                                                                             ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                              ^^^^^ source.hydra
+#                                                                                                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                                                                             ^ source.hydra
+#                                                                                                                                                                                                                                              ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                                                               ^^^ source.hydra
+>
+>## Map a function over the keys of a map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## mapKeys(f, m) returns a map where each binding (k, v) becomes (f(k), v). If f maps multiple keys to the same image, key collisions are resolved by keeping the binding with the greater original key (matching Haskell's mapKeys behavior).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires 'ordering' constraints on both the input and output key types.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> Map k1 v -> Map k2 v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement appliesFunctionToKeys mapKeys applies the given function to every key in the map, leaving the bound values unchanged.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement emptyInput mapKeys over the empty map is the empty map, regardless of the function.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive mapKeys : ∀k1,k2,v.(ordering k1, ordering k2) ⇒ (k1 → k2) → map<k1, v> → map<k2, v> = λf.λm.hydra.core.lib.maps.fromList (hydra.core.lib.lists.map (λp.(f (hydra.core.lib.pairs.first p), hydra.core.lib.pairs.second p)) (hydra.core.lib.maps.toList m))
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra punctuation.separator.type.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.forall-scheme.hydra
+#                     ^^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^^ source.hydra variable.parameter.hydra
+#                          ^ source.hydra punctuation.separator.binder.hydra
+#                           ^ source.hydra variable.parameter.hydra
+#                            ^ source.hydra punctuation.separator.binder.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^^ source.hydra variable.other.hydra
+#                                         ^^ source.hydra
+#                                           ^^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^ source.hydra
+#                                                    ^^ source.hydra variable.other.hydra
+#                                                      ^^ source.hydra
+#                                                        ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                                         ^^ source.hydra
+#                                                           ^^ source.hydra variable.other.hydra
+#                                                             ^ source.hydra
+#                                                              ^ source.hydra keyword.operator.arrow.hydra
+#                                                               ^ source.hydra
+#                                                                ^^ source.hydra variable.other.hydra
+#                                                                  ^^ source.hydra
+#                                                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                                                     ^ source.hydra
+#                                                                      ^^^ source.hydra support.type.hydra
+#                                                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                          ^^ source.hydra variable.other.hydra
+#                                                                            ^^ source.hydra
+#                                                                              ^ source.hydra variable.other.hydra
+#                                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                ^ source.hydra
+#                                                                                 ^ source.hydra keyword.operator.arrow.hydra
+#                                                                                  ^ source.hydra
+#                                                                                   ^^^ source.hydra support.type.hydra
+#                                                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                       ^^ source.hydra variable.other.hydra
+#                                                                                         ^^ source.hydra
+#                                                                                           ^ source.hydra variable.other.hydra
+#                                                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                             ^ source.hydra
+#                                                                                              ^ source.hydra keyword.operator.equals.hydra
+#                                                                                               ^ source.hydra
+#                                                                                                ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                 ^ source.hydra variable.parameter.hydra
+#                                                                                                  ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                   ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                    ^ source.hydra variable.parameter.hydra
+#                                                                                                     ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                  ^^ source.hydra
+#                                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                            ^^ source.hydra
+#                                                                                                                                                              ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                                                                               ^ source.hydra variable.parameter.hydra
+#                                                                                                                                                                ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                                                                                 ^ source.hydra
+#                                                                                                                                                                  ^ source.hydra variable.other.hydra
+#                                                                                                                                                                   ^^ source.hydra
+#                                                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                               ^ source.hydra
+#                                                                                                                                                                                                ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                 ^^^ source.hydra
+#                                                                                                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                                                               ^ source.hydra
+#                                                                                                                                                                                                                                ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                                                 ^^^^ source.hydra
+#                                                                                                                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                                                                                                                                               ^ source.hydra
+#                                                                                                                                                                                                                                                                ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                                                                                 ^^^ source.hydra
+>
+>## Test whether a key is present in a map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## member(k, m) returns true iff k is a key in m.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.member :: Ord k => k -> Map k v -> Bool.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement testsKeyPresence member returns true exactly when the given key is present in the map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement falseWhenAbsentOrEmpty member returns false when the key is absent, including when the map is empty.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive member : ∀k,v.(ordering k) ⇒ k → map<k, v> → boolean
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.forall-scheme.hydra
+#                    ^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra variable.other.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra keyword.operator.arrow.hydra
+#                                          ^ source.hydra
+#                                           ^^^ source.hydra support.type.hydra
+#                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                               ^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
+#                                                  ^ source.hydra variable.other.hydra
+#                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra keyword.operator.arrow.hydra
+#                                                      ^ source.hydra
+#                                                       ^^^^^^^ source.hydra support.type.hydra
+>
+>## Construct a map with a single key-value pair.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## singleton(k, v) returns the map containing exactly the binding (k, v).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.singleton :: k -> v -> Map k v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement wrapsOneBinding singleton returns the map containing exactly the one given key-value binding.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive singleton : ∀k,v.(ordering k) ⇒ k → v → map<k, v>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^^^ source.hydra entity.name.function.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra punctuation.separator.type.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra keyword.operator.forall-scheme.hydra
+#                       ^ source.hydra variable.parameter.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^ source.hydra variable.parameter.hydra
+#                          ^ source.hydra punctuation.separator.binder.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra variable.other.hydra
+#                                      ^^ source.hydra
+#                                        ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                         ^ source.hydra
+#                                          ^ source.hydra variable.other.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra keyword.operator.arrow.hydra
+#                                             ^ source.hydra
+#                                              ^ source.hydra variable.other.hydra
+#                                               ^ source.hydra
+#                                                ^ source.hydra keyword.operator.arrow.hydra
+#                                                 ^ source.hydra
+#                                                  ^^^ source.hydra support.type.hydra
+#                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                      ^ source.hydra variable.other.hydra
+#                                                       ^^ source.hydra
+#                                                         ^ source.hydra variable.other.hydra
+#                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Return the number of key-value pairs in a map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## size(m) returns the number of bindings in m as an int32.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.size :: Map k v -> Int (with narrowing to int32).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement countsBindings size returns the number of bindings in the map, including zero for the empty map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive size : ∀k,v.(ordering k) ⇒ map<k, v> → int32
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra punctuation.separator.type.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                  ^ source.hydra variable.parameter.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^ source.hydra
+#                       ^^^^^^^^ source.hydra variable.other.hydra
+#                               ^ source.hydra
+#                                ^ source.hydra variable.other.hydra
+#                                 ^^ source.hydra
+#                                   ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                    ^ source.hydra
+#                                     ^^^ source.hydra support.type.hydra
+#                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                         ^ source.hydra variable.other.hydra
+#                                          ^^ source.hydra
+#                                            ^ source.hydra variable.other.hydra
+#                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                              ^ source.hydra
+#                                               ^ source.hydra keyword.operator.arrow.hydra
+#                                                ^ source.hydra
+#                                                 ^^^^^ source.hydra support.type.hydra
+>
+>## Convert a map to a list of key-value pairs (in key order).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## toList(m) returns the bindings of m as a list of (key, value) pairs, in ascending key order.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.toList :: Map k v -> [(k, v)].
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement returnsPairsInKeyOrder toList returns the map's bindings as a list of key-value pairs ordered by ascending key, including when keys were inserted out of order.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement emptyInput toList of the empty map is the empty list.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive toList : ∀k,v.(ordering k) ⇒ map<k, v> → list<(k, v)>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.forall-scheme.hydra
+#                    ^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                      ^ source.hydra
+#                                       ^^^ source.hydra support.type.hydra
+#                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                           ^ source.hydra variable.other.hydra
+#                                            ^^ source.hydra
+#                                              ^ source.hydra variable.other.hydra
+#                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                ^ source.hydra
+#                                                 ^ source.hydra keyword.operator.arrow.hydra
+#                                                  ^ source.hydra
+#                                                   ^^^^ source.hydra support.type.hydra
+#                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra variable.other.hydra
+#                                                          ^^ source.hydra
+#                                                            ^ source.hydra variable.other.hydra
+#                                                             ^ source.hydra
+#                                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Compute the union of two maps; the first map's bindings take precedence on key collision.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## union(m1, m2) returns the map containing all bindings from m1 plus the bindings of m2 whose keys are not in m1. On key collision, the binding from m1 is preferred.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.union :: Ord k => Map k v -> Map k v -> Map k v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement firstMapTakesPrecedence union returns the map containing all bindings from the first map plus the bindings of the second map whose keys are not in the first; on key collision the first map's binding is kept.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement identityWithEmpty union with either map empty returns the other map unchanged.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive union : ∀k,v.(ordering k) ⇒ map<k, v> → map<k, v> → map<k, v>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.forall-scheme.hydra
+#                   ^ source.hydra variable.parameter.hydra
+#                    ^ source.hydra punctuation.separator.binder.hydra
+#                     ^ source.hydra variable.parameter.hydra
+#                      ^ source.hydra punctuation.separator.binder.hydra
+#                       ^ source.hydra
+#                        ^^^^^^^^ source.hydra variable.other.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                     ^ source.hydra
+#                                      ^^^ source.hydra support.type.hydra
+#                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                          ^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+#                                             ^ source.hydra variable.other.hydra
+#                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                               ^ source.hydra
+#                                                ^ source.hydra keyword.operator.arrow.hydra
+#                                                 ^ source.hydra
+#                                                  ^^^ source.hydra support.type.hydra
+#                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                      ^ source.hydra variable.other.hydra
+#                                                       ^^ source.hydra
+#                                                         ^ source.hydra variable.other.hydra
+#                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                           ^ source.hydra
+#                                                            ^ source.hydra keyword.operator.arrow.hydra
+#                                                             ^ source.hydra
+#                                                              ^^^ source.hydra support.type.hydra
+#                                                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                  ^ source.hydra variable.other.hydra
+#                                                                   ^^ source.hydra
+#                                                                     ^ source.hydra variable.other.hydra
+#                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Compute the left-biased union of a list of maps.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## unions(ms) returns the map containing every binding of every map in ms; when a key occurs in more than one map, the binding from the earliest such map in the list wins.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## unions(ms) is equivalent to folding union over ms from the left, starting from empty; unions([]) is empty, and the bias matches union and hydra.core.lib.sets.unions.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the key type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's Data.Map.unions :: Ord k => [Map k v] -> Map k v.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement earliestMapTakesPrecedence unions returns the bindings of every map in the list; when a key occurs in more than one map, the binding from the earliest such map in the list is kept.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement emptyListOfMapsYieldsEmptyMap unions of an empty list of maps is the empty map.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive unions : ∀k,v.(ordering k) ⇒ list<map<k, v>> → map<k, v>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.forall-scheme.hydra
+#                    ^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                      ^ source.hydra
+#                                       ^^^^ source.hydra support.type.hydra
+#                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                            ^^^ source.hydra support.type.hydra
+#                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                ^ source.hydra variable.other.hydra
+#                                                 ^^ source.hydra
+#                                                   ^ source.hydra variable.other.hydra
+#                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                      ^ source.hydra
+#                                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                                        ^ source.hydra
+#                                                         ^^^ source.hydra support.type.hydra
+#                                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                             ^ source.hydra variable.other.hydra
+#                                                              ^^ source.hydra
+#                                                                ^ source.hydra variable.other.hydra
+#                                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra

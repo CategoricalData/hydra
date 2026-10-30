@@ -1,0 +1,2275 @@
+>## Primitives in the hydra.core.lib.math module.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## The core arithmetic operations -- add, sub, mul, negate -- are polymorphic over the numeric class: fixed-width integer types wrap in two's complement, bigint is arbitrary-precision, and floating-point types follow IEEE 754.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The sign and magnitude operations abs and signum are likewise polymorphic over the numeric class.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The integer-division and parity operations (div, mod, rem, even, odd) are polymorphic over the integral class (the fixed-width integer types plus bigint).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Only range remains int32-typed.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.lib.math
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>import hydra.core.paths
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.ast
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.coders
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.diff
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.docs
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.checking
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.file
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.errors
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.file
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.graph
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.json.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.markdown
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.parsing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.query
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.regex
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.relational
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.tabular
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.testing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.time
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.topology
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.typed
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.typing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.util
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.validation
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.variants
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>## Numeric absolute value.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Constraint-polymorphic absolute value over any type with a 'numeric' instance. The per-type semantics live in the instance: for fixed-width signed integers the result is total but not injective at the boundary (abs(minBound) = minBound, e.g. abs(-2147483648) = -2147483648 for int32, because +2147483648 is not representable); for unsigned integers and bigint the result is the input itself or its arithmetic negation, whichever is non-negative; for floating-point it clears the sign bit per IEEE 754 ੵ.5.1 (abs(ଐ) = +0, abs(NaN) is NaN).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires a 'numeric' type-class constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's abs :: Num a => a -> a.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement preservesMagnitudeAcrossTypes abs returns the non-negative magnitude of the argument, for every numeric type with a 'numeric' instance (signed/unsigned integers of every width, bigint, float32/float64).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement boundaryAndSpecialValues abs at the signed-integer minimum value wraps to itself (not representable as its positive magnitude); abs of signed zero preserves sign to +0; abs(NaN) is NaN; abs(-Infinity) is +Infinity.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive abs : ∀x.(numeric x) ⇒ x → x
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^ source.hydra variable.other.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^^ source.hydra
+#                               ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.arrow.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra variable.other.hydra
+>
+>## The arc cosine of a floating-point number.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Principal value of the inverse cosine, in radians. The result is in [0, π].
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## For arguments outside the domain [-1, +1] (including ±∞), the result is NaN. acos(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੹.2 acos operation and to Haskell's acos :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement inverseCosineInPrincipalRange acos returns the principal value of the inverse cosine, in radians, in [0, pi], for arguments in its domain [-1, +1].
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement outOfDomainIsNanSpecialValuesPropagate acos of an argument outside [-1, +1] (including +-Infinity) is NaN; acos(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive acos : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra punctuation.separator.type.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^^^^^^^ source.hydra support.type.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.arrow.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^ source.hydra support.type.hydra
+>
+>## The hyperbolic arc cosine of a floating-point number.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Principal value of the inverse hyperbolic cosine. The result is in [0, +∞).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## For arguments less than 1 the result is NaN; acosh(1) = +0; acosh(+∞) = +∞; acosh(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੹.2 acosh operation and to Haskell's acosh :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement inverseHyperbolicCosineInNonnegativeRange acosh returns the principal value of the inverse hyperbolic cosine, in [0, +Infinity), for arguments in its domain [1, +Infinity).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement outOfDomainIsNanAsymmetricAtInfinity acosh of an argument less than 1 (including -Infinity) is NaN; acosh(+Infinity) is +Infinity; acosh(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive acosh : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.forall-scheme.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^^^^^^^ source.hydra support.type.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.arrow.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
+>
+>## Numeric addition.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Constraint-polymorphic addition over any type with a 'numeric' instance. The per-type semantics live in the instance: two's-complement wraparound for fixed-width integers (e.g. int32 addition reduces x + y modulo 2^32 and reinterprets as signed, wrapping silently on overflow), IEEE 754 round-to-nearest for floating-point, and arbitrary precision for bigint.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires a 'numeric' type-class constraint on the argument type, which is the closest Hydra equivalent to Haskell's Num instance.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The operation is total. Corresponds to Haskell's (+) :: Num a => a -> a -> a.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Generalized from int32-only; the numeric class is #566.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement wrapsOrRoundsPerType add combines two values of a numeric type per that type's own arithmetic: two's-complement wraparound for fixed-width integers, arbitrary precision for bigint, IEEE 754 round-to-nearest for floating-point -- and dispatches correctly regardless of which numeric type is supplied at the call site.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement boundaryWraparoundAndIeeeSpecialValues add wraps silently at every fixed-width integer type's boundary (no overflow exception); add of two bigints beyond int64/uint64 range remains exact; add on float64/float32 follows IEEE 754 special-value rules (opposite-sign infinities and any NaN operand yield NaN, ties round to even, -0 + -0 = -0).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive add : ∀x.(numeric x) ⇒ x → x → x
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^ source.hydra variable.other.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^^ source.hydra
+#                               ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.arrow.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra variable.other.hydra
+>
+>## Floating-point addition.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## IEEE 754 binary64 addition. The result is the value of x + y rounded to the nearest representable float64 under the roundTiesToEven rounding-direction attribute.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Adding infinities of opposite sign (+∞ + -∞ or -∞ + +∞) produces a NaN; adding any value to NaN produces a NaN. The sum of two zeros is +0, except (-0) + (-0) = -0.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 ੵ.4.1 addition operation and to Haskell's (+) :: Double -> Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Deprecated since 0.18. Use: hydra.core.lib.math.add.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @deprecatedSince 0.18
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                   ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement addsFloat64Values addFloat64 computes the IEEE 754 binary64 sum of its two arguments.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive addFloat64 : ∀.float64 → float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra punctuation.separator.type.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra keyword.operator.forall-scheme.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^^^^^^^ source.hydra support.type.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra keyword.operator.arrow.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^ source.hydra support.type.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra keyword.operator.arrow.hydra
+#                                            ^ source.hydra
+#                                             ^^^^^^^ source.hydra support.type.hydra
+>
+>## The arc sine of a floating-point number.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Principal value of the inverse sine, in radians. The result is in [-π/2, +π/2].
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## For arguments outside the domain [-1, +1] (including ±∞), the result is NaN; asin(ଐ) = ଐ; asin(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੹.2 asin operation and to Haskell's asin :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement inverseSineInPrincipalRange asin returns the principal value of the inverse sine, in radians, in [-pi/2, +pi/2], for arguments in its domain [-1, +1].
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement outOfDomainIsNanSpecialValuesPropagate asin of an argument outside [-1, +1] (including +-Infinity) is NaN; asin(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive asin : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra punctuation.separator.type.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^^^^^^^ source.hydra support.type.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.arrow.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^ source.hydra support.type.hydra
+>
+>## The hyperbolic arc sine of a floating-point number.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Principal value of the inverse hyperbolic sine. Defined for all finite reals; asinh(ଐ) = ଐ; asinh(±∞) = ±∞; asinh(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੹.2 asinh operation and to Haskell's asinh :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement inverseHyperbolicSineDefinedForAllFiniteReals asinh returns the principal value of the inverse hyperbolic sine, defined for every finite real argument.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement oddSymmetryAtInfinityNanPropagates asinh(+-Infinity) is +-Infinity respectively (odd symmetry preserved at the boundary); asinh(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive asinh : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.forall-scheme.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^^^^^^^ source.hydra support.type.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.arrow.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
+>
+>## The arc tangent of a floating-point number.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Principal value of the inverse tangent, in radians. The result is in (-π/2, +π/2); atan(ଐ) = ଐ; atan(±∞) = ±π/2; atan(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੹.2 atan operation and to Haskell's atan :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement inverseTangentInPrincipalRange atan returns the principal value of the inverse tangent, in radians, in (-pi/2, +pi/2), for any finite argument.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement saturatesAtInfinityNanPropagates atan of +-Infinity saturates to +-pi/2 respectively (rather than NaN); atan(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive atan : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra punctuation.separator.type.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^^^^^^^ source.hydra support.type.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.arrow.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^ source.hydra support.type.hydra
+>
+>## The two-argument arc tangent (atan2).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## atan2(y, x) returns the angle in radians, in (-π, +π], from the positive x-axis to the point (x, y), using the signs of both arguments to determine the quadrant.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Special match follow IEEE 754 ੹.2: atan2(ଐ, +x>0) = ଐ; atan2(ଐ, -x<0) = ±π; atan2(±y>0, 0) = ±π/2; atan2(±y, +∞) = ଐ; atan2(±y, -∞) = ±π; atan2(±∞, finite) = ±π/2; atan2(±∞, +∞) = ±π/4; atan2(±∞, -∞) = ଓπ/4; atan2 of any NaN argument is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's atan2 :: Double -> Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement quadrantAwareArcTangentOfTwoArguments atan2(y, x) returns the angle in radians, in (-pi, +pi], from the positive x-axis to the point (x, y), using the signs of both arguments to determine the quadrant.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement ieeeSpecialValueMatrix atan2 follows the IEEE 754 9.2 special-value table for signed-zero, infinite, and NaN arguments in either position, including the cross-infinity combinations where this implementation returns NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive atan2 : ∀.float64 → float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.forall-scheme.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^^^^^^^ source.hydra support.type.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.arrow.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra keyword.operator.arrow.hydra
+#                                       ^ source.hydra
+#                                        ^^^^^^^ source.hydra support.type.hydra
+>
+>## The hyperbolic arc tangent of a floating-point number.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Principal value of the inverse hyperbolic tangent. Defined for arguments in (-1, +1); atanh(଑) = ±∞ (with division-by-zero exception in IEEE 754); arguments outside [-1, +1] produce NaN; atanh(ଐ) = ଐ; atanh(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੹.2 atanh operation and to Haskell's atanh :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement inverseHyperbolicTangentOnOpenInterval atanh returns the principal value of the inverse hyperbolic tangent, defined on the open interval (-1, +1).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement boundaryIsInfiniteOutOfDomainIsNan atanh at the boundary (+-1) is +-Infinity respectively; atanh of an argument outside [-1, +1] (including +-Infinity) is NaN; atanh(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive atanh : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.forall-scheme.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^^^^^^^ source.hydra support.type.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.arrow.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
+>
+>## The smallest integer greater than or equal to the argument, as a float.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## The smallest integer value not less than the argument, returned as a float64. Equivalent to IEEE 754 ੵ.3.1 roundToIntegralTowardPositive: ceiling(ଐ) = ଐ; ceiling(±∞) = ±∞; ceiling(NaN) is NaN; the sign of a negative result is preserved when rounding to zero (e.g. ceiling(-0.5) = -0).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Note that the return type is float64, not an integer type, so the result can exceed the integer range.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's fromIntegral . ceiling :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement roundsTowardPositiveInfinityAsFloat ceiling returns the smallest integer value not less than the argument, as a float64.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement ieeeSpecialValuesPassThrough ceiling of +-Infinity or NaN passes the value through unchanged.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive ceiling : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra punctuation.separator.type.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.forall-scheme.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^^^^^^^ source.hydra support.type.hydra
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.arrow.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^ source.hydra support.type.hydra
+>
+>## The cosine of a floating-point number.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Cosine of an angle in radians, correctly rounded for finite arguments. The result is in [-1, +1]; cos(ଐ) = 1; cos(±∞) is NaN (with invalid-operation exception in IEEE 754); cos(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੹.2 cos operation and to Haskell's cos :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement cosineOfAngleInRadians cos returns the cosine of an angle in radians, correctly rounded for finite arguments, in the range [-1, +1].
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement undefinedAtInfinityNanPropagates cos of +-Infinity is NaN; cos(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive cos : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.arrow.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^ source.hydra support.type.hydra
+>
+>## The hyperbolic cosine of a floating-point number.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Hyperbolic cosine. The result is in [1, +∞]; cosh(ଐ) = 1; cosh(±∞) = +∞; cosh(NaN) is NaN. Large-magnitude arguments overflow to +∞.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੹.2 cosh operation and to Haskell's cosh :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement hyperbolicCosineInRangeAtLeastOne cosh returns the hyperbolic cosine, in [1, +Infinity), for any finite real argument.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement evenSymmetryAtInfinityNanPropagates cosh(+-Infinity) is +Infinity (even symmetry -- both signs saturate to the same value); cosh(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive cosh : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra punctuation.separator.type.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^^^^^^^ source.hydra support.type.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.arrow.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^ source.hydra support.type.hydra
+>
+>## Integral division, or Nothing if dividing by zero.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Constraint-polymorphic total integer division over any type with an 'integral' instance: div(x, y) returns Just(x divided by y, rounded toward negative infinity) when y is non-zero, and Nothing when y = 0.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The division rounds toward negative infinity (floor), so for example div(-7, 2) = Just(-4).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## For fixed-width signed integers, the boundary case div(minBound, -1) wraps to minBound (the two's-complement overflow), since the mathematical result is not representable at that width.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'integral' type-class constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's div :: Integral a => a -> a -> a, wrapped in maybe to make the zero-divisor case total.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Renamed from hydra.lib.math.maybeDiv.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement flooredQuotientWhenDivisorNonzero div returns the integer quotient of its two arguments rounded toward negative infinity (floor division), wrapped, for every integral type, when the divisor is non-zero.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement noneOnZeroDivisorWraparoundAtMinBound div is none when the divisor is zero, for every integral type; at a fixed-width signed integer type's boundary case (minimum value divided by -1), the result wraps to the minimum value rather than overflowing.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive div : ∀x.(integral x) ⇒ x → x → optional<x>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^^ source.hydra support.type.hydra
+#                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                   ^ source.hydra variable.other.hydra
+#                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Floating-point division.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Constraint-polymorphic division over any type with a 'fractional' instance (float32, float64). IEEE 754 division: the result is x / y correctly rounded (roundTiesToEven) for finite y ≠ 0.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The operation is total via IEEE sentinels rather than an optional codomain: for finite nonzero x, x / ଐ = ±∞ (sign = XOR of the operand signs); ଐ / ଐ and ±∞ / ±∞ are NaN; ±∞ / finite = ±∞ (sign XOR); finite / ±∞ = ଐ (sign XOR); NaN propagates unconditionally.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires a 'fractional' type-class constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's (/) :: Fractional a => a -> a -> a.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Generalized from int32-only; the numeric class is #566.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement roundsToNearestPerIeee754 divide computes the IEEE 754 correctly-rounded quotient of its two float32/float64 arguments for finite, non-zero-divisor cases.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement ieeeSpecialValuesAndSignedZeroDivision divide is total via IEEE 754 sentinels rather than a partial/optional result: dividing a finite non-zero value by signed zero yields signed infinity (sign = XOR of operand signs); zero divided by zero and infinity divided by infinity are NaN; infinity divided by a finite value is infinity (sign XOR); a finite value divided by infinity is signed zero; NaN propagates unconditionally.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive divide : ∀x.(fractional x) ⇒ x → x → x
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.forall-scheme.hydra
+#                    ^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^ source.hydra
+#                       ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra variable.other.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra keyword.operator.arrow.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra variable.other.hydra
+#                                            ^ source.hydra
+#                                             ^ source.hydra keyword.operator.arrow.hydra
+#                                              ^ source.hydra
+#                                               ^ source.hydra variable.other.hydra
+>
+>## Euler's constant (the base of the natural logarithm).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## The mathematical constant e ≈ 2.718281828459045, the base of the natural logarithm, as the nearest representable float64. Equal to exp(1).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's exp 1 :: Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement isEulersConstant e is the float64 value nearest to Euler's number, equal to exp(1).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive e : ∀.float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^ source.hydra entity.name.function.hydra
+#           ^ source.hydra
+#            ^ source.hydra punctuation.separator.type.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.forall-scheme.hydra
+#               ^ source.hydra punctuation.separator.binder.hydra
+#                ^^^^^^^ source.hydra support.type.hydra
+>
+>## Test whether a value is even.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Constraint-polymorphic parity test over any type with an 'integral' instance: true if the argument is divisible by 2 (i.e. x mod 2 = 0), false otherwise.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total on all integral inputs including negative numbers and signed minBound (parity is preserved by two's-complement wraparound).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'integral' type-class constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's even :: Integral a => a -> Bool.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement testsDivisibilityByTwo even returns true exactly when the argument is divisible by 2, for every integral type, including at the signed-integer minimum value and for negative values (parity is preserved under two's-complement wraparound).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive even : ∀x.(integral x) ⇒ x → boolean
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra punctuation.separator.type.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                  ^ source.hydra variable.parameter.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^^ source.hydra variable.other.hydra
+#                             ^ source.hydra
+#                              ^ source.hydra variable.other.hydra
+#                               ^^ source.hydra
+#                                 ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra variable.other.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra keyword.operator.arrow.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^ source.hydra support.type.hydra
+>
+>## The exponential function.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## The exponential function: exp(x) = e^x. exp(ଐ) = 1; exp(-∞) = +0; exp(+∞) = +∞; exp(NaN) is NaN. Large positive arguments overflow to +∞; large negative arguments underflow to +0.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੹.2 exp operation and to Haskell's exp :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement exponentialFunctionBaseE exp(x) returns e^x, correctly rounded, for finite x.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement saturatesAtInfinityNanPropagates exp(-Infinity) underflows to +0; exp(+Infinity) is +Infinity; exp(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive exp : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.arrow.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^ source.hydra support.type.hydra
+>
+>## The largest integer less than or equal to the argument, as a float.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## The largest integer value not greater than the argument, returned as a float64. Equivalent to IEEE 754 ੵ.3.1 roundToIntegralTowardNegative: floor(ଐ) = ଐ; floor(±∞) = ±∞; floor(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Note that the return type is float64, not an integer type, so the result can exceed the integer range.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's fromIntegral . floor :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement roundsTowardNegativeInfinityAsFloat floor returns the largest integer value not greater than the argument, as a float64.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement ieeeSpecialValuesPassThrough floor of +-Infinity or NaN passes the value through unchanged.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive floor : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.forall-scheme.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^^^^^^^ source.hydra support.type.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.arrow.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
+>
+>## The natural logarithm.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## The natural (base-e) logarithm. log(1) = +0; log(+0) = log(-0) = -∞ (with division-by-zero exception in IEEE 754); log(x) for x < 0 is NaN (with invalid-operation exception); log(+∞) = +∞; log(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੹.2 log operation and to Haskell's log :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement naturalLogarithmOnPositiveDomain log returns the natural (base-e) logarithm, correctly rounded, for positive finite arguments.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement boundaryIsNegativeInfinityNegativeIsNan log of zero (either sign) is -Infinity; log of a negative argument is NaN; log(+Infinity) is +Infinity; log(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive log : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.arrow.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^ source.hydra support.type.hydra
+>
+>## Logarithm of the second argument in the base of the first.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## logBase(b, x) computes the logarithm of x in base b, equivalent to log(x) / log(b).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Inherits the special-case behavior of log for each argument (NaN propagation, sign of zeros, division by zero on log of a zero, NaN on negative arguments).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's logBase :: Double -> Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement logarithmInArbitraryBase logBase(b, x) computes the logarithm of x in base b, equivalent to log(x) / log(b), for positive finite b and x.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement inheritsLogsSpecialCaseBehaviorInEachArgument logBase inherits the special-case behavior of log independently in each argument position: a zero or negative x yields -Infinity/NaN respectively (per log's own rule), a non-positive base yields NaN, and NaN/+-Infinity in either argument propagate per log's own special-value rules.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive logBase : ∀.float64 → float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra punctuation.separator.type.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.forall-scheme.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^^^^^^^ source.hydra support.type.hydra
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.arrow.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^ source.hydra support.type.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^ source.hydra support.type.hydra
+>
+>## Integral modulus, or Nothing if dividing by zero.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Constraint-polymorphic total integer modulus over any type with an 'integral' instance: mod(x, y) returns Just(x mod y) when y is non-zero, and Nothing when y = 0.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The result satisfies the identity x = (div(x, y) result) * y + (mod(x, y) result), so the sign of the result matches the sign of y (Knuth-style floor division). For example mod(-7, 2) = Just(1).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'integral' type-class constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's mod :: Integral a => a -> a -> a, wrapped in maybe to make the zero-divisor case total.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Renamed from hydra.lib.math.maybeMod.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement flooredRemainderSignFollowsDivisor mod returns the integer remainder of floored division, wrapped, whose sign matches the sign of the divisor (Knuth-style floor division), for every integral type, when the divisor is non-zero.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement noneOnZeroDivisor mod is none when the divisor is zero, for every integral type; at a fixed-width signed integer type's boundary case (minimum value divided by -1), the result is zero (no overflow -- the quotient's overflow is absorbed by div, not mod).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive mod : ∀x.(integral x) ⇒ x → x → optional<x>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^^ source.hydra support.type.hydra
+#                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                   ^ source.hydra variable.other.hydra
+#                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Numeric multiplication.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Constraint-polymorphic multiplication over any type with a 'numeric' instance. The per-type semantics live in the instance: two's-complement wraparound for fixed-width integers (e.g. int32 multiplication reduces x * y modulo 2^32 and reinterprets as signed, wrapping silently on overflow), IEEE 754 round-to-nearest for floating-point, and arbitrary precision for bigint.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires a 'numeric' type-class constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The operation is total. Corresponds to Haskell's (*) :: Num a => a -> a -> a.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Generalized from int32-only; the numeric class is #566.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement wrapsOrRoundsPerType mul computes the product of two values of a numeric type per that type's own arithmetic: two's-complement wraparound for fixed-width integers, arbitrary precision for bigint, IEEE 754 round-to-nearest for floating-point -- and dispatches correctly regardless of which numeric type is supplied at the call site.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement boundaryWraparoundAndIeeeSpecialValues mul wraps silently at every fixed-width integer type's boundary; mul on bigint beyond int64/uint64 range remains exact; mul on float64/float32 follows IEEE 754 special-value rules (zero times infinity is NaN, any NaN operand yields NaN, sign of the result is the XOR of operand signs, results underflow to signed zero or overflow to signed infinity when out of representable range).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive mul : ∀x.(numeric x) ⇒ x → x → x
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^ source.hydra variable.other.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^^ source.hydra
+#                               ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.arrow.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra variable.other.hydra
+>
+>## Floating-point multiplication.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## IEEE 754 binary64 multiplication. The result is the value of x * y rounded to the nearest representable float64 under the roundTiesToEven rounding-direction attribute.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Multiplying 0 by ±∞ (in either order) produces a NaN (with invalid-operation exception in IEEE 754); multiplying any value by NaN produces a NaN. The result's sign is the XOR of the operand signs (ଐ * ଐ = ଐ accordingly).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The operation is total: it never raises, but it may produce NaN or ±∞. Corresponds to the IEEE 754 ੵ.4.1 multiplication operation and to Haskell's (*) :: Double -> Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Deprecated since 0.18. Use: hydra.core.lib.math.mul.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @deprecatedSince 0.18
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                   ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement multipliesFloat64Values mulFloat64 computes the IEEE 754 binary64 product of its two arguments.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive mulFloat64 : ∀.float64 → float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra punctuation.separator.type.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra keyword.operator.forall-scheme.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^^^^^^^ source.hydra support.type.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra keyword.operator.arrow.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^ source.hydra support.type.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra keyword.operator.arrow.hydra
+#                                            ^ source.hydra
+#                                             ^^^^^^^ source.hydra support.type.hydra
+>
+>## Numeric negation.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Constraint-polymorphic arithmetic negation over any type with a 'numeric' instance. The per-type semantics live in the instance: for fixed-width integers the result is 0 - x reduced modulo 2^32 and reinterpreted as signed (total but not injective at the boundary: negate(minBound) = minBound, because +2147483648 is not representable in int32); for floating-point it flips the sign bit per IEEE 754 ੵ.5.1.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires a 'numeric' type-class constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's negate :: Num a => a -> a.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Generalized from int32-only; the numeric class is #566.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement arithmeticNegationPerType negate returns the arithmetic inverse of its argument per the argument's numeric type: two's-complement negation for fixed-width integers, sign-bit flip for floating-point, arbitrary precision for bigint -- and dispatches correctly regardless of which numeric type is supplied at the call site.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement boundaryAndIeeeSpecialValues negate at a signed fixed-width integer type's minimum value wraps to itself (not representable as its positive magnitude); negate on bigint beyond int64 range remains exact; negate on float64/float32 flips the sign of zero and of infinity, and preserves NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive negate : ∀x.(numeric x) ⇒ x → x
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.forall-scheme.hydra
+#                    ^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^ source.hydra
+#                       ^^^^^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra variable.other.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra variable.other.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra keyword.operator.arrow.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra variable.other.hydra
+>
+>## Negate a floating-point number.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Sign reversal of a float64. Equivalent to IEEE 754 ੵ.5.1 negate: flips the sign bit, so negate(ଐ) = ଐ (sign flips), negate(±∞) = ±∞ (sign flips), and negate(NaN) is a NaN (sign may flip; payload preserved).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## This is a bit-level operation that does not raise any floating-point exception. Corresponds to Haskell's negate :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Deprecated since 0.18. Use: hydra.core.lib.math.negate.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @deprecatedSince 0.18
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                   ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement negatesFloat64Values negateFloat64 flips the sign of its float64 argument, including zero.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive negateFloat64 : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.forall-scheme.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^^^^^^^ source.hydra support.type.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^^ source.hydra support.type.hydra
+>
+>## Test whether a value is odd.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Constraint-polymorphic parity test over any type with an 'integral' instance: true if the argument is not divisible by 2 (i.e. x mod 2 ≠ 0), false otherwise.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total on all integral inputs including negative numbers and signed minBound. Requires an 'integral' type-class constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's odd :: Integral a => a -> Bool.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement testsNonDivisibilityByTwo odd returns true exactly when the argument is not divisible by 2, for every integral type, including at the signed-integer minimum value and for negative values.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive odd : ∀x.(integral x) ⇒ x → boolean = λx.hydra.core.lib.logic.not (hydra.core.lib.math.even x)
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^^ source.hydra support.type.hydra
+#                                             ^ source.hydra
+#                                              ^ source.hydra keyword.operator.equals.hydra
+#                                               ^ source.hydra
+#                                                ^ source.hydra keyword.operator.lambda.hydra
+#                                                 ^ source.hydra variable.parameter.hydra
+#                                                  ^ source.hydra punctuation.separator.binder.hydra
+#                                                   ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                           ^^ source.hydra
+#                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                     ^ source.hydra
+#                                                                                                      ^ source.hydra variable.other.hydra
+#                                                                                                       ^^ source.hydra
+>
+>## The mathematical constant pi.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## The mathematical constant π ≈ 3.141592653589793, the ratio of a circle's circumference to its diameter, as the nearest representable float64.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's pi :: Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement isPiConstant pi is the float64 value nearest to the mathematical constant pi.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive pi : ∀.float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^ source.hydra entity.name.function.hydra
+#            ^ source.hydra
+#             ^ source.hydra punctuation.separator.type.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.forall-scheme.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^^^^^^^ source.hydra support.type.hydra
+>
+>## Raise the first argument to the power of the second.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## pow(x, y) = x^y.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Follows the IEEE 754 ੹.2 pow operation: pow(ଐ, y) for y < 0 is ±∞ (with division-by-zero exception); pow(ଐ, y) for y > 0 is ଐ if y is an odd integer, else +0; pow(1, y) = 1 for any y including NaN; pow(x, ଐ) = 1 for any x including NaN; pow(x, y) for negative x and non-integer y is NaN (with invalid-operation exception); pow(±∞, y) follows the limits in the usual way. Otherwise the result is x^y rounded to the nearest representable float64.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's (**) :: Double -> Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement exponentiationForFiniteArguments pow(x, y) = x^y, correctly rounded, for finite x and y within pow's defined domain.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement ieeeSpecialValueMatrix pow follows the IEEE 754 9.2 special-value table: 0^0 = 1; 0 raised to a negative exponent is +Infinity; a negative base raised to a non-integer exponent is NaN; 1 raised to any exponent (including NaN) is 1; any base raised to an exponent of 0 (including NaN) is 1; and NaN/+-Infinity in either argument otherwise follow the documented limit behavior.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive pow : ∀.float64 → float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.arrow.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^ source.hydra support.type.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^^ source.hydra support.type.hydra
+>
+>## Construct the half-open integer range from the first argument up to (but excluding) the second.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## range(a, b) returns the list [a, a+1, ..., b-1]. The range is inclusive of the lower bound and exclusive of the upper bound; if a >= b the result is the empty list (i.e. the range does not count downward, and an empty range is the natural result of equal bounds). The length of the result is max(0, b - a).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Does not directly correspond to Haskell's enumFromTo :: Int32 -> Int32 -> [Int32] (which is inclusive of both bounds, i.e. [a..b]); range(a, b) is equivalent to [a .. b-1]. This matches the half-open convention of Python's range, Rust's a..b, Go, and Java's IntStream.range.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement generatesHalfOpenAscendingSequence range(a, b) returns the list [a, a+1, ..., b-1] -- inclusive of the lower bound and exclusive of the upper bound, with length max(0, b-a).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement emptyWhenBoundsEqualOrDescending range(a, b) is the empty list whenever a >= b, including equal bounds and descending bounds -- the range never counts downward.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive range : ∀.int32 → int32 → list<int32>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.forall-scheme.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.arrow.hydra
+#                           ^ source.hydra
+#                            ^^^^^ source.hydra support.type.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra keyword.operator.arrow.hydra
+#                                   ^ source.hydra
+#                                    ^^^^ source.hydra support.type.hydra
+#                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                         ^^^^^ source.hydra support.type.hydra
+#                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Integral remainder, or Nothing if dividing by zero.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Constraint-polymorphic total integer remainder over any type with an 'integral' instance: rem(x, y) returns Just(x rem y) when y is non-zero, and Nothing when y = 0.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The result satisfies x = (truncate(x / y)) * y + (rem(x, y) result), so the sign of the result matches the sign of x (truncated division, C-style remainder). For example rem(-7, 2) = Just(-1).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## For fixed-width signed integers, the boundary case rem(minBound, -1) is 0 (no overflow, since the quotient overflow is absorbed by div, not rem).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'integral' type-class constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's rem :: Integral a => a -> a -> a, wrapped in maybe to make the zero-divisor case total.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Renamed from hydra.lib.math.maybeRem.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement truncatedRemainderSignFollowsDividend rem returns the integer remainder of truncated division (toward zero), wrapped, whose sign matches the sign of the dividend (C-style remainder), for every integral type, when the divisor is non-zero.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement noneOnZeroDivisorNoOverflowAtMinBound rem is none when the divisor is zero, for every integral type; at a fixed-width signed integer type's boundary case (minimum value divided by -1), the result is zero (no overflow -- the quotient's overflow is absorbed by div, not rem).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive rem : ∀x.(integral x) ⇒ x → x → optional<x>
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^^ source.hydra support.type.hydra
+#                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                   ^ source.hydra variable.other.hydra
+#                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Round a floating-point number to the nearest integer-valued float.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Round to the nearest integer value, returned as a float64, with ties rounded to the nearest even integer (banker's rounding). Equivalent to IEEE 754 ੵ.3.1 roundToIntegralTiesToEven: round(ଐ) = ଐ; round(±∞) = ±∞; round(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Note that the return type is float64, not an integer type, so the result can exceed the integer range.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's fromIntegral . round :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement roundsToNearestTiesToEvenAsFloat round returns the nearest integer value as a float64, with ties rounded to the nearest even integer (banker's rounding).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement ieeeSpecialValuesPassThrough round of +-Infinity or NaN passes the value through unchanged.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive round : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.forall-scheme.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^^^^^^^ source.hydra support.type.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.arrow.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
+>
+>## Round a float32 to the given number of decimal places.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## roundFloat32(n, x) rounds the float32 value x to n decimal places using round-half-to-even. The result is the nearest float32 representation of x rounded to that decimal precision; if the exact decimal-rounded value is not representable in float32 (the usual case), the closest float32 is returned.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Special values pass through: roundFloat32(n, ଐ) = ଐ; roundFloat32(n, ±∞) = ±∞; roundFloat32(n, NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement roundsToGivenDecimalPlacesHalfToEven roundFloat32(n, x) rounds the float32 value x to n decimal places using round-half-to-even, returning the nearest representable float32.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement specialValuesPassThroughUnrounded roundFloat32 passes NaN and +-Infinity through unrounded, regardless of the requested decimal-place count.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive roundFloat32 : ∀.int32 → float32 → float32
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra keyword.operator.forall-scheme.hydra
+#                          ^ source.hydra punctuation.separator.binder.hydra
+#                           ^^^^^ source.hydra support.type.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra keyword.operator.arrow.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^ source.hydra support.type.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra keyword.operator.arrow.hydra
+#                                            ^ source.hydra
+#                                             ^^^^^^^ source.hydra support.type.hydra
+>
+>## Round a float64 to the given number of decimal places.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## roundFloat64(n, x) rounds the float64 value x to n decimal places using round-half-to-even. The result is the nearest float64 representation of x rounded to that decimal precision; if the exact decimal-rounded value is not representable in float64 (the usual case), the closest float64 is returned.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Special values pass through: roundFloat64(n, ଐ) = ଐ; roundFloat64(n, ±∞) = ±∞; roundFloat64(n, NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement roundsToGivenDecimalPlacesHalfToEven roundFloat64(n, x) rounds the float64 value x to n decimal places using round-half-to-even, returning the nearest representable float64.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement specialValuesPassThroughUnrounded roundFloat64 passes NaN and +-Infinity through unrounded, regardless of the requested decimal-place count.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive roundFloat64 : ∀.int32 → float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra keyword.operator.forall-scheme.hydra
+#                          ^ source.hydra punctuation.separator.binder.hydra
+#                           ^^^^^ source.hydra support.type.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra keyword.operator.arrow.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^ source.hydra support.type.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra keyword.operator.arrow.hydra
+#                                            ^ source.hydra
+#                                             ^^^^^^^ source.hydra support.type.hydra
+>
+>## Numeric sign.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Constraint-polymorphic sign function over any type with a 'numeric' instance. For integer types, signum(x) returns -1 if x < 0, 0 if x = 0, and 1 if x > 0 (same width as the argument); unsigned integers return only 0 or 1. The function satisfies abs(x) * signum(x) = x for all integer instances except signed minBound (where the identity fails because +maxBound+1 is not representable).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## For floating-point, signum(x) returns ଑.0 for nonzero finite or infinite x (per IEEE 754 ੵ.5.1); signum(ଐ) = ଐ (the sign of the input zero is preserved, not collapsed to a single zero); signum(NaN) is NaN. A naive three-branch implementation (positive/negative/else- zero) gets both of these float match wrong and must not be used.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires a 'numeric' type-class constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's signum :: Num a => a -> a.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement signPerType signum returns the sign of its argument per the argument's numeric type: -1/0/1 (same width) for integers, +-1.0 for nonzero finite or infinite floats -- satisfying abs(x) * signum(x) = x for every integer instance except signed minBound.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement preservesSignedZeroAndNan signum of signed zero returns that same signed zero (not collapsed to a single zero), and signum(NaN) is NaN -- a naive positive/negative/else-zero branch implementation gets both of these cases wrong and must not be used.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive signum : ∀x.(numeric x) ⇒ x → x
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.forall-scheme.hydra
+#                    ^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^ source.hydra
+#                       ^^^^^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra variable.other.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra variable.other.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra keyword.operator.arrow.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra variable.other.hydra
+>
+>## The sine of a floating-point number.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Sine of an angle in radians, correctly rounded for finite arguments. The result is in [-1, +1]; sin(ଐ) = ଐ; sin(±∞) is NaN (with invalid-operation exception in IEEE 754); sin(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੹.2 sin operation and to Haskell's sin :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement sineOfAngleInRadians sin returns the sine of an angle in radians, correctly rounded for finite arguments, in the range [-1, +1].
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement undefinedAtInfinityNanPropagates sin of +-Infinity is NaN (not a finite oscillation); sin(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive sin : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.arrow.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^ source.hydra support.type.hydra
+>
+>## The hyperbolic sine of a floating-point number.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Hyperbolic sine. sinh(ଐ) = ଐ; sinh(±∞) = ±∞; sinh(NaN) is NaN. Large-magnitude arguments overflow to ±∞.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੹.2 sinh operation and to Haskell's sinh :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement hyperbolicSineDefinedForAllFiniteReals sinh returns the hyperbolic sine, defined for every finite real argument.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement oddSymmetryAtInfinityNanPropagates sinh(+-Infinity) is +-Infinity respectively; sinh(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive sinh : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra punctuation.separator.type.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^^^^^^^ source.hydra support.type.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.arrow.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^ source.hydra support.type.hydra
+>
+>## The non-negative square root of a floating-point number.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## IEEE 754 binary64 square root. The result is the value of √x correctly rounded to the nearest representable float64 under roundTiesToEven.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## sqrt(+0) = +0; sqrt(-0) = -0 (sign preserved); sqrt(x) for x < 0 (including -∞) is NaN (with invalid-operation exception); sqrt(+∞) = +∞; sqrt(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੵ.4.1 squareRoot operation and to Haskell's sqrt :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement nonnegativeSquareRootOnNonnegativeDomain sqrt returns the non-negative, correctly-rounded square root for non-negative finite arguments.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement preservesSignOfZeroNegativeIsNan sqrt(-0) is -0 (sign preserved, distinct from sqrt(+0) = +0); sqrt of a negative argument (including -Infinity) is NaN; sqrt(+Infinity) is +Infinity; sqrt(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive sqrt : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra punctuation.separator.type.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^^^^^^^ source.hydra support.type.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.arrow.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^ source.hydra support.type.hydra
+>
+>## Numeric subtraction.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Constraint-polymorphic subtraction over any type with a 'numeric' instance. The per-type semantics live in the instance: two's-complement wraparound for fixed-width integers (e.g. int32 subtraction reduces x - y modulo 2^32 and reinterprets as signed, wrapping silently on overflow), IEEE 754 round-to-nearest for floating-point, and arbitrary precision for bigint.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires a 'numeric' type-class constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The operation is total. Corresponds to Haskell's (-) :: Num a => a -> a -> a.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Generalized from int32-only; the numeric class is #566.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement wrapsOrRoundsPerType sub computes the difference of two values of a numeric type per that type's own arithmetic: two's-complement wraparound for fixed-width integers, arbitrary precision for bigint, IEEE 754 round-to-nearest for floating-point -- and dispatches correctly regardless of which numeric type is supplied at the call site.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement boundaryWraparoundAndIeeeSpecialValues sub wraps silently at every fixed-width integer type's boundary; sub on bigint beyond int64/uint64 range remains exact; sub on float64/float32 follows IEEE 754 special-value rules (subtracting same-sign infinities or any NaN operand yields NaN, the difference of two equal finite values is +0, ties round to even).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive sub : ∀x.(numeric x) ⇒ x → x → x
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^ source.hydra variable.other.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^^ source.hydra
+#                               ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.arrow.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra variable.other.hydra
+>
+>## Floating-point subtraction.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## IEEE 754 binary64 subtraction, defined as x + (-y). The result is correctly rounded to the nearest representable float64 under roundTiesToEven.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Subtracting infinities of the same sign (+∞ - +∞ or -∞ - -∞) produces a NaN; subtracting any value involving NaN produces a NaN. The difference of two equal finite values is +0 (or -0 under round-toward-negative, which is not the default).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 ੵ.4.1 subtraction operation and to Haskell's (-) :: Double -> Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Deprecated since 0.18. Use: hydra.core.lib.math.sub.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @deprecatedSince 0.18
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                   ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement subtractsFloat64Values subFloat64 computes the IEEE 754 binary64 difference of its two arguments.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive subFloat64 : ∀.float64 → float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra punctuation.separator.type.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra keyword.operator.forall-scheme.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^^^^^^^ source.hydra support.type.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra keyword.operator.arrow.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^ source.hydra support.type.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra keyword.operator.arrow.hydra
+#                                            ^ source.hydra
+#                                             ^^^^^^^ source.hydra support.type.hydra
+>
+>## The tangent of a floating-point number.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Tangent of an angle in radians, correctly rounded for finite arguments. tan(ଐ) = ଐ; near odd multiples of π/2 the result has large magnitude but remains finite (no exception is raised); tan(±∞) is NaN (with invalid-operation exception in IEEE 754); tan(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੹.2 tan operation and to Haskell's tan :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement tangentOfAngleInRadians tan returns the tangent of an angle in radians, correctly rounded for finite arguments; near odd multiples of pi/2 the result has large magnitude but remains finite (no exception is raised).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement undefinedAtInfinityNanPropagates tan of +-Infinity is NaN; tan(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive tan : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.arrow.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^ source.hydra support.type.hydra
+>
+>## The hyperbolic tangent of a floating-point number.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Hyperbolic tangent. The result is in [-1, +1]; tanh(ଐ) = ଐ; tanh(±∞) = ଑; tanh(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to the IEEE 754 ੹.2 tanh operation and to Haskell's tanh :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement hyperbolicTangentInRangeNegOneToOne tanh returns the hyperbolic tangent, in (-1, +1), for any finite real argument.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement saturatesAtInfinityNanPropagates tanh(+-Infinity) saturates to +-1 respectively; tanh(NaN) is NaN.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive tanh : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra punctuation.separator.type.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^^^^^^^ source.hydra support.type.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.arrow.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^ source.hydra support.type.hydra
+>
+>## Truncate a floating-point number toward zero, as a float.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Round toward zero (truncate the fractional part), returned as a float64. Equivalent to IEEE 754 ੵ.3.1 roundToIntegralTowardZero: truncate(ଐ) = ଐ; truncate(±∞) = ±∞; truncate(NaN) is NaN; sign of the result matches the sign of the argument (so truncate(-0.7) = -0, truncate(+0.7) = +0).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Note that the return type is float64, not an integer type, so the result can exceed the integer range.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Corresponds to Haskell's fromIntegral . truncate :: Double -> Double.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement roundsTowardZeroAsFloat truncate returns the argument with its fractional part discarded (rounded toward zero), as a float64, preserving the sign of the argument.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement ieeeSpecialValuesPassThrough truncate of +-Infinity or NaN passes the value through unchanged.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive truncate : ∀.float64 → float64
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^^ source.hydra entity.name.function.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra punctuation.separator.type.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.forall-scheme.hydra
+#                      ^ source.hydra punctuation.separator.binder.hydra
+#                       ^^^^^^^ source.hydra support.type.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra keyword.operator.arrow.hydra
+#                                ^ source.hydra
+#                                 ^^^^^^^ source.hydra support.type.hydra

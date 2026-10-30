@@ -1,0 +1,605 @@
+>## Primitives in the hydra.core.lib.ordering module.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Every type admitted by the ordering constraint has a total order, defined per type constructor: integers numerically; strings lexicographically by code point; lists element-wise; records by field in declaration order; union variants by declaration order; floats per the extended total order.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## For floating-point values the order is the extended total order, under which compare(x, y) is equalTo exactly when hydra.lib.equality.equal(x, y) is true.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.lib.ordering
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>import hydra.core.paths
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.ast
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.coders
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.diff
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.docs
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.checking
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.file
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.errors
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.file
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.graph
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.json.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.markdown
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.parsing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.query
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.regex
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.relational
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.tabular
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.testing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.time
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.topology
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.typed
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.typing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.util as util
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                      ^ source.hydra
+#                       ^^ source.hydra keyword.control.import.hydra
+#                         ^ source.hydra
+#                          ^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.validation
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.variants
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>## Compare two values and return a Comparison.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## compare(x, y) returns the hydra.core.util.Comparison value that classifies the relationship between x and y under the type's ordering: LessThan if x < y, EqualTo if x == y, GreaterThan if x > y.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The result type's three-valued tag is the canonical primitive comparison; the boolean comparators (lt/lte/gt/gte) are derivable from it.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' type-class constraint on the argument type, which is the closest Hydra equivalent to Haskell's Ord instance.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Since: 0.18 (moved from hydra.core.lib.equality.compare).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's compare :: Ord a => a -> a -> Ordering.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Moved from hydra.lib.equality.compare.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement threeWayClassification compare(x, y) returns lessThan, equalTo, or greaterThan classifying x relative to y under the type's ordering, for integers, strings (lexicographic, by Unicode code point), floats, lists (lexicographic, order-sensitive), sets, and maps (canonical sorted-order comparison, independent of construction/insertion order).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement decimalScaleTiebreak compare on decimals orders primarily by numeric value; when two decimals are numerically equal but have different scale, compare treats them as distinct (not equalTo) and breaks the tie by scale (smaller scale orders first), including transitively across more than two scale levels.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive compare : ∀x.(ordering x) ⇒ x → x → hydra.core.util.Comparison
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra punctuation.separator.type.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.forall-scheme.hydra
+#                     ^ source.hydra variable.parameter.hydra
+#                      ^ source.hydra punctuation.separator.binder.hydra
+#                       ^ source.hydra
+#                        ^^^^^^^^ source.hydra variable.other.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                         ^ source.hydra
+#                                          ^ source.hydra variable.other.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra keyword.operator.arrow.hydra
+#                                             ^ source.hydra
+#                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+>
+>## Check whether the first value is greater than the second.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## gt(x, y) returns true iff x > y under the type's ordering.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Since: 0.18 (moved from hydra.core.lib.equality.gt).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's (>) :: Ord a => a -> a -> Bool.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Moved from hydra.lib.equality.gt.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement strictGreaterThan gt(x, y) returns true exactly when x is strictly greater than y under the type's ordering, for integers, floats, and strings; equal values and lesser values both return false.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive gt : ∀x.(ordering x) ⇒ x → x → boolean
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^ source.hydra entity.name.function.hydra
+#            ^ source.hydra
+#             ^ source.hydra punctuation.separator.type.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.forall-scheme.hydra
+#                ^ source.hydra variable.parameter.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^^ source.hydra variable.other.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^^ source.hydra
+#                               ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.arrow.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^^ source.hydra support.type.hydra
+>
+>## Check whether the first value is greater than or equal to the second.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## gte(x, y) returns true iff x >= y under the type's ordering.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Since: 0.18 (moved from hydra.core.lib.equality.gte).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's (>=) :: Ord a => a -> a -> Bool.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Moved from hydra.lib.equality.gte.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement greaterThanOrEqual gte(x, y) returns true when x is greater than or strictly equal to y under the type's ordering, for integers, floats, strings, and decimals -- including the decimal scale-tiebreak rule (a numerically-equal, smaller-scale decimal is treated as lesser, so gte is true in that direction).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive gte : ∀x.(ordering x) ⇒ x → x → boolean
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^ source.hydra support.type.hydra
+>
+>## Check whether the first value is less than the second.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## lt(x, y) returns true iff x < y under the type's ordering.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Since: 0.18 (moved from hydra.core.lib.equality.lt).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's (<) :: Ord a => a -> a -> Bool.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Moved from hydra.lib.equality.lt.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement strictLessThan lt(x, y) returns true exactly when x is strictly less than y under the type's ordering, for integers, floats, and strings; equal values and greater values both return false.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive lt : ∀x.(ordering x) ⇒ x → x → boolean
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^ source.hydra entity.name.function.hydra
+#            ^ source.hydra
+#             ^ source.hydra punctuation.separator.type.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.forall-scheme.hydra
+#                ^ source.hydra variable.parameter.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^^ source.hydra variable.other.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^^ source.hydra
+#                               ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.arrow.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^^ source.hydra support.type.hydra
+>
+>## Check whether the first value is less than or equal to the second.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## lte(x, y) returns true iff x <= y under the type's ordering.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Since: 0.18 (moved from hydra.core.lib.equality.lte).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's (<=) :: Ord a => a -> a -> Bool.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Moved from hydra.lib.equality.lte.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement lessThanOrEqual lte(x, y) returns true when x is less than or strictly equal to y under the type's ordering, for integers, floats, strings, and decimals -- including the decimal scale-tiebreak rule.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive lte : ∀x.(ordering x) ⇒ x → x → boolean
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^ source.hydra support.type.hydra
+>
+>## Return the maximum of two values.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## max(x, y) returns the larger of x and y under the type's ordering; if x == y, it returns y (matching Haskell's convention).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Since: 0.18 (moved from hydra.core.lib.equality.max).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's max :: Ord a => a -> a -> a.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Moved from hydra.lib.equality.max.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement returnsLargerOperand max(x, y) returns whichever of x and y is larger under the type's ordering; when x and y are equal, max returns y (matching Haskell's tie-breaking convention) -- holds for integers, strings, floats, and decimals.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive max : ∀x.(ordering x) ⇒ x → x → x = λx.λy.hydra.core.lib.logic.ifElse (hydra.core.lib.ordering.gte x y) x y
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                         ^ source.hydra
+#                                          ^ source.hydra variable.other.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra keyword.operator.equals.hydra
+#                                             ^ source.hydra
+#                                              ^ source.hydra keyword.operator.lambda.hydra
+#                                               ^ source.hydra variable.parameter.hydra
+#                                                ^ source.hydra punctuation.separator.binder.hydra
+#                                                 ^ source.hydra keyword.operator.lambda.hydra
+#                                                  ^ source.hydra variable.parameter.hydra
+#                                                   ^ source.hydra punctuation.separator.binder.hydra
+#                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                               ^^ source.hydra
+#                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                            ^ source.hydra
+#                                                                                                             ^ source.hydra variable.other.hydra
+#                                                                                                              ^ source.hydra
+#                                                                                                               ^ source.hydra variable.other.hydra
+#                                                                                                                ^^ source.hydra
+#                                                                                                                  ^ source.hydra variable.other.hydra
+#                                                                                                                   ^ source.hydra
+#                                                                                                                    ^ source.hydra variable.other.hydra
+>
+>## Return the minimum of two values.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## min(x, y) returns the smaller of x and y under the type's ordering; if x == y, it returns x (matching Haskell's convention).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'ordering' constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Since: 0.18 (moved from hydra.core.lib.equality.min).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's min :: Ord a => a -> a -> a.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Moved from hydra.lib.equality.min.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement returnsSmallerOperand min(x, y) returns whichever of x and y is smaller under the type's ordering; when x and y are equal, min returns x (matching Haskell's tie-breaking convention) -- holds for integers, strings, floats, and decimals.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive min : ∀x.(ordering x) ⇒ x → x → x = λx.λy.hydra.core.lib.logic.ifElse (hydra.core.lib.ordering.lte x y) x y
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                         ^ source.hydra
+#                                          ^ source.hydra variable.other.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra keyword.operator.equals.hydra
+#                                             ^ source.hydra
+#                                              ^ source.hydra keyword.operator.lambda.hydra
+#                                               ^ source.hydra variable.parameter.hydra
+#                                                ^ source.hydra punctuation.separator.binder.hydra
+#                                                 ^ source.hydra keyword.operator.lambda.hydra
+#                                                  ^ source.hydra variable.parameter.hydra
+#                                                   ^ source.hydra punctuation.separator.binder.hydra
+#                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                               ^^ source.hydra
+#                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                            ^ source.hydra
+#                                                                                                             ^ source.hydra variable.other.hydra
+#                                                                                                              ^ source.hydra
+#                                                                                                               ^ source.hydra variable.other.hydra
+#                                                                                                                ^^ source.hydra
+#                                                                                                                  ^ source.hydra variable.other.hydra
+#                                                                                                                   ^ source.hydra
+#                                                                                                                    ^ source.hydra variable.other.hydra

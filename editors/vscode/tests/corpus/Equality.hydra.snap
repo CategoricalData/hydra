@@ -1,0 +1,289 @@
+>## Primitives in the hydra.core.lib.equality module.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Equality of values.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Equality is structural: two values are equal exactly when they are the same value of the same type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## For floating-point values equality is value identity.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.lib.equality
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>import hydra.core.paths
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.ast
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.coders
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.diff
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.docs
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.checking
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.file
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.errors
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.file
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.graph
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.json.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.markdown
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.parsing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.query
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.regex
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.relational
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.tabular
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.testing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.time
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.topology
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.typed
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.typing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.util
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.validation
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.variants
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>## Check whether two values are equal.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## equal(x, y) returns true if x and y are structurally equal under the type's notion of equality.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'equality' type-class constraint on the argument type, which is the closest Hydra equivalent to Haskell's Eq instance.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Equality is reflexive, symmetric, and transitive (no NaN-style exception on floating-point: floating-point equality is provided per the underlying host's IEEE 754 comparison rules, so NaN /= NaN at the level of float64/float32).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's (==) :: Eq a => a -> a -> Bool.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement structuralEquivalence equal returns true exactly when its two arguments are structurally equivalent under the type's equality notion -- identical scalars, or recursively equivalent collection contents regardless of construction/insertion order for sets and maps, and in the same order for lists.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement collectionContentsCompared equal compares collection (map/set) values structurally, not by a proxy such as a stringified representation -- two non-empty collections with different contents are never reported equal, including when a decimal value is nested inside a collection rather than appearing at the top level.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement decimalScaleSensitive equal treats two decimals of equal numeric value but different scale as unequal -- decimal equality is exact (value and scale), not numeric-value equality.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement ieee754ExtendedFloatSemantics equal on float64/float32 follows IEEE 754 extended totalOrder semantics rather than native host ==: NaN is equal to itself, and -0.0 is unequal to +0.0; ordinary finite values compare by numeric value.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive equal : ∀x.(equality x) ⇒ x → x → boolean
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.forall-scheme.hydra
+#                   ^ source.hydra variable.parameter.hydra
+#                    ^ source.hydra punctuation.separator.binder.hydra
+#                     ^ source.hydra
+#                      ^^^^^^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra variable.other.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra variable.other.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra keyword.operator.arrow.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra variable.other.hydra
+#                                         ^ source.hydra
+#                                          ^ source.hydra keyword.operator.arrow.hydra
+#                                           ^ source.hydra
+#                                            ^^^^^^^ source.hydra support.type.hydra
+>
+>## Check whether two values are unequal.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## notEqual(x, y) = logic.not(equal(x, y)); this defining equation is the specification, and the default implementation.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Requires an 'equality' type-class constraint on the argument type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's (/=) :: Eq a => a -> a -> Bool.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement negatesEqual notEqual(x, y) = not(equal(x, y)) for scalar values of any type -- integers, strings, and floats.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement negatesEqualOnCollections notEqual on collection values (lists, sets, maps) is likewise the negation of equal: order-sensitivity for lists and order-independence for sets/maps carry through unchanged.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive notEqual : ∀x.(equality x) ⇒ x → x → boolean = λx.λy.hydra.core.lib.logic.not (hydra.core.lib.equality.equal x y)
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^^^ source.hydra entity.name.function.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra punctuation.separator.type.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.forall-scheme.hydra
+#                      ^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra variable.other.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra keyword.operator.arrow.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra variable.other.hydra
+#                                            ^ source.hydra
+#                                             ^ source.hydra keyword.operator.arrow.hydra
+#                                              ^ source.hydra
+#                                               ^^^^^^^ source.hydra support.type.hydra
+#                                                      ^ source.hydra
+#                                                       ^ source.hydra keyword.operator.equals.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra keyword.operator.lambda.hydra
+#                                                          ^ source.hydra variable.parameter.hydra
+#                                                           ^ source.hydra punctuation.separator.binder.hydra
+#                                                            ^ source.hydra keyword.operator.lambda.hydra
+#                                                             ^ source.hydra variable.parameter.hydra
+#                                                              ^ source.hydra punctuation.separator.binder.hydra
+#                                                               ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                       ^^ source.hydra
+#                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                      ^ source.hydra
+#                                                                                                                       ^ source.hydra variable.other.hydra
+#                                                                                                                        ^ source.hydra
+#                                                                                                                         ^ source.hydra variable.other.hydra
+#                                                                                                                          ^^ source.hydra

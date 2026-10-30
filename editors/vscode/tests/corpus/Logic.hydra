@@ -1,0 +1,73 @@
+## Primitives in the hydra.core.lib.logic module.
+module hydra.core.lib.logic
+
+import hydra.core.paths
+import hydra.core.ast
+import hydra.core.coders
+import hydra.core.model
+import hydra.core.diff
+import hydra.core.docs
+import hydra.core.error.checking
+import hydra.core.error.model
+import hydra.core.error.file
+import hydra.core.error.packaging
+import hydra.core.error.system
+import hydra.core.errors
+import hydra.core.file
+import hydra.core.graph
+import hydra.core.json.model
+import hydra.core.markdown
+import hydra.core.packaging
+import hydra.core.parsing
+import hydra.core.query
+import hydra.core.regex
+import hydra.core.relational
+import hydra.core.system
+import hydra.core.tabular
+import hydra.core.testing
+import hydra.core.time
+import hydra.core.topology
+import hydra.core.typed
+import hydra.core.typing
+import hydra.core.util
+import hydra.core.validation
+import hydra.core.variants
+
+## Compute the logical AND of two boolean values.
+##
+## and(p, q) returns true iff both p and q are true.
+## Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.
+## Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation).
+##
+## @availableSince 0.15
+## @requirement trueOnlyWhenBothTrue and(p, q) returns true exactly when both p and q are true; any false operand makes the result false.
+primitive and : ∀.boolean → boolean → boolean = λa.λb.hydra.core.lib.logic.ifElse a b false
+
+## Compute a conditional expression.
+##
+## ifElse(p, t, f) returns t if p is true, or f if p is false.
+## The unselected branch is not necessarily evaluated; ifElse is the standard way to express short-circuiting boolean logic and branching in Hydra.
+## Total. Corresponds to Haskell's if/then/else.
+##
+## @availableSince 0.15
+## @requirement selectsBranchByCondition ifElse(p, t, f) returns t when p is true and f when p is false, for any value type of t/f including booleans, integers, and strings -- the then/else branches may be of any (matching) type.
+primitive ifElse : ∀x.boolean → lazy x → lazy x → x
+
+## Compute the logical NOT of a boolean value.
+##
+## not(p) returns false if p is true, or true if p is false.
+## Total. Corresponds to Haskell's not :: Bool -> Bool.
+##
+## @availableSince 0.15
+## @requirement negatesBoolean not(p) returns false when p is true and true when p is false.
+primitive not : ∀.boolean → boolean = λa.hydra.core.lib.logic.ifElse a false true
+
+## Compute the logical OR of two boolean values.
+##
+## or(p, q) returns true iff at least one of p and q is true.
+## Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.
+## Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation).
+##
+## @availableSince 0.15
+## @requirement trueWhenEitherTrue or(p, q) returns true when at least one of p and q is true; it returns false only when both are false.
+primitive or : ∀.boolean → boolean → boolean = λa.λb.hydra.core.lib.logic.ifElse a true b

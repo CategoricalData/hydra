@@ -1,0 +1,644 @@
+>## Primitives in the hydra.core.lib.effects module.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## A value of effect<t> describes a deferred, executable computation which, when executed by a host interpreter, produces a value of type t; describing a computation is separate from executing it, and Hydra uses the effect type to keep that boundary explicit.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## There is no eliminator (cases) for effects: an effect value is opaque, consumable only by further composition within this module or by an executor outside the language.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Every primitive in this module is pure: constructing or composing an effect description is a referentially transparent operation on ordinary values, and nothing observable happens until an executor runs the description. Effect descriptions have no identity semantics -- two equal descriptions are interchangeable -- so the usual pure-term transformations are valid over effect-building code. (Purity is independent of implementation strategy: a host may implement these combinators natively rather than from a default implementation.)
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## A host interpreter of effect<t> must honor, in addition to the purity of the combinators above: purity of construction (building or composing a description performs no host interaction; only an executor performing the described computation may interact with the host); order (when a combinator specifies an order between the effects it composes, an executor performs them in exactly that order); exactly-once (each composed effect is performed exactly once per execution, never skipped, never repeated); and deferral (an effect specified to run after another must not be performed, nor its producing function evaluated for effect, until the prior effect has run to completion and its value is available). These obligations are observable -- the effects are real host interactions -- so they are normative, not advisory.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## effect<t> is total: a leaf effect always completes and yields a value (for hydra.lib.files, an either<FileError, t>); the obligations above govern order, multiplicity, and deferral, not failure short-circuiting.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.lib.effects
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>import hydra.core.paths
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.ast
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.coders
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.diff
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.docs
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.checking
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.file
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.errors
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.file
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.graph
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.json.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.markdown
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.parsing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.query
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.regex
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.relational
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.tabular
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.testing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.time
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.topology
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.typed
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.typing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.util
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.validation
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.variants
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>## Applicative apply for effects.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## apply(ef, ex) describes an effectful computation which first interprets ef to produce a function, then interprets ex to produce an argument, and returns the result of applying the function to the argument.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement appliesEffectfulFunctionToEffectfulArgument apply interprets the function-producing effect and the argument-producing effect, then applies the resulting function to the resulting argument.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive apply : ∀x,y.effect<x → y> → effect<x> → effect<y>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^ source.hydra entity.name.function.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra keyword.operator.forall-scheme.hydra
+#                          ^ source.hydra variable.parameter.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^ source.hydra variable.parameter.hydra
+#                             ^ source.hydra punctuation.separator.binder.hydra
+#                              ^^^^^^ source.hydra support.type.hydra
+#                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                     ^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra variable.other.hydra
+#                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra keyword.operator.arrow.hydra
+#                                             ^ source.hydra
+#                                              ^^^^^^ source.hydra support.type.hydra
+#                                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                     ^ source.hydra variable.other.hydra
+#                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                       ^ source.hydra
+#                                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                                         ^ source.hydra
+#                                                          ^^^^^^ source.hydra support.type.hydra
+#                                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                 ^ source.hydra variable.other.hydra
+#                                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Sequence two effectful computations.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## bind(e, f) describes an effectful computation which first interprets e, then passes its result to f to obtain the next effect.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Host interpreters provide the operational meaning; Hydra uses the type effect<t> to keep the effect boundary explicit.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement threadsResultIntoNextEffect bind passes the result of the first effect to the given function to obtain the next effect, whose result is the overall result.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement performsEffectsInOrderExactlyOnce bind performs the first effect to completion, exactly once, before performing the second effect, also exactly once -- observable via real host side effects (not merely by return value), ruling out a host that reorders, double-runs, skips, or eagerly runs either effect.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive bind : ∀x,y.effect<x> → (x → effect<y>) → effect<y>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^ source.hydra entity.name.function.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra keyword.operator.forall-scheme.hydra
+#                         ^ source.hydra variable.parameter.hydra
+#                          ^ source.hydra punctuation.separator.binder.hydra
+#                           ^ source.hydra variable.parameter.hydra
+#                            ^ source.hydra punctuation.separator.binder.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
+#                                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                    ^ source.hydra variable.other.hydra
+#                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                        ^^ source.hydra
+#                                          ^ source.hydra variable.other.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra keyword.operator.arrow.hydra
+#                                             ^ source.hydra
+#                                              ^^^^^^ source.hydra support.type.hydra
+#                                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                     ^ source.hydra variable.other.hydra
+#                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                       ^^ source.hydra
+#                                                         ^ source.hydra keyword.operator.arrow.hydra
+#                                                          ^ source.hydra
+#                                                           ^^^^^^ source.hydra support.type.hydra
+#                                                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                  ^ source.hydra variable.other.hydra
+#                                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Kleisli composition for effects.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## compose(f, g, x) describes an effectful computation equivalent to bind(f(x), g).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement sequencesTwoKleisliArrows compose(f, g, x) runs f on x to obtain the first effect, then runs g on that effect's result to obtain the second effect, equivalent to bind(f(x), g).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive compose : ∀x,y,z.(x → effect<y>) → (y → effect<z>) → x → effect<z>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^^ source.hydra entity.name.function.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.forall-scheme.hydra
+#                            ^ source.hydra variable.parameter.hydra
+#                             ^ source.hydra punctuation.separator.binder.hydra
+#                              ^ source.hydra variable.parameter.hydra
+#                               ^ source.hydra punctuation.separator.binder.hydra
+#                                ^ source.hydra variable.parameter.hydra
+#                                 ^ source.hydra punctuation.separator.binder.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra variable.other.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra keyword.operator.arrow.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
+#                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                              ^ source.hydra variable.other.hydra
+#                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                ^^ source.hydra
+#                                                  ^ source.hydra keyword.operator.arrow.hydra
+#                                                   ^^ source.hydra
+#                                                     ^ source.hydra variable.other.hydra
+#                                                      ^ source.hydra
+#                                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                                        ^ source.hydra
+#                                                         ^^^^^^ source.hydra support.type.hydra
+#                                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                ^ source.hydra variable.other.hydra
+#                                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                  ^^ source.hydra
+#                                                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                                                     ^ source.hydra
+#                                                                      ^ source.hydra variable.other.hydra
+#                                                                       ^ source.hydra
+#                                                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                                                         ^ source.hydra
+#                                                                          ^^^^^^ source.hydra support.type.hydra
+#                                                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                 ^ source.hydra variable.other.hydra
+#                                                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Left-fold over a list with an effect-returning function.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## foldList(f, acc0, xs) describes an effectful left fold over xs, sequencing applications of f from left to right.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Renamed from hydra.lib.effects.foldl.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement sequencesEffectReturningStepOverList foldList sequences an effect-returning step function over the list's elements, threading the accumulator through, and the overall result is the final accumulator.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement performsElementEffectsLeftToRightExactlyOnce foldList performs the element effects left-to-right in list order, each exactly once -- observable via real host side effects, ruling out a host that reorders, double-runs, or skips an element's effect.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive foldList : ∀x,y.(x → y → effect<x>) → x → list<y> → effect<x>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^ source.hydra entity.name.function.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.forall-scheme.hydra
+#                             ^ source.hydra variable.parameter.hydra
+#                              ^ source.hydra punctuation.separator.binder.hydra
+#                               ^ source.hydra variable.parameter.hydra
+#                                ^ source.hydra punctuation.separator.binder.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^ source.hydra support.type.hydra
+#                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                 ^ source.hydra variable.other.hydra
+#                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                   ^^ source.hydra
+#                                                     ^ source.hydra keyword.operator.arrow.hydra
+#                                                      ^ source.hydra
+#                                                       ^ source.hydra variable.other.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra keyword.operator.arrow.hydra
+#                                                          ^ source.hydra
+#                                                           ^^^^ source.hydra support.type.hydra
+#                                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                ^ source.hydra variable.other.hydra
+#                                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                  ^ source.hydra
+#                                                                   ^ source.hydra keyword.operator.arrow.hydra
+#                                                                    ^ source.hydra
+#                                                                     ^^^^^^ source.hydra support.type.hydra
+#                                                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                            ^ source.hydra variable.other.hydra
+#                                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Map a pure function over the result of an effect.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## map(f, e) describes an effectful computation which interprets e and applies f to its result.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Equivalent to bind(e, \x -> pure(f x)).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement appliesPureFunctionToEffectResult map interprets the given effect and applies the pure function to its result; equivalent to bind(e, \x -> pure(f x)).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive map : ∀x,y.(x → y) → effect<x> → effect<y>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^ source.hydra entity.name.function.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra punctuation.separator.type.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra keyword.operator.forall-scheme.hydra
+#                        ^ source.hydra variable.parameter.hydra
+#                         ^ source.hydra punctuation.separator.binder.hydra
+#                          ^ source.hydra variable.parameter.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra keyword.operator.arrow.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^ source.hydra support.type.hydra
+#                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                             ^ source.hydra variable.other.hydra
+#                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                               ^ source.hydra
+#                                                ^ source.hydra keyword.operator.arrow.hydra
+#                                                 ^ source.hydra
+#                                                  ^^^^^^ source.hydra support.type.hydra
+#                                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                         ^ source.hydra variable.other.hydra
+#                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Map an effect-returning function over a list.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## mapList(f, xs) describes an effectful computation which applies f to each element of xs from left to right and collects the results.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement appliesEffectReturningFunctionAndCollectsResults mapList applies the effect-returning function to each element and collects the per-element results into a list of the same length, in order.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement performsElementEffectsLeftToRightExactlyOnce mapList performs the element effects left-to-right in list order, each exactly once -- observable via real host side effects, ruling out a host that reorders, double-runs, or skips an element's effect.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive mapList : ∀x,y.(x → effect<y>) → list<x> → effect<list<y>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^^ source.hydra entity.name.function.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.forall-scheme.hydra
+#                            ^ source.hydra variable.parameter.hydra
+#                             ^ source.hydra punctuation.separator.binder.hydra
+#                              ^ source.hydra variable.parameter.hydra
+#                               ^ source.hydra punctuation.separator.binder.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.arrow.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^ source.hydra support.type.hydra
+#                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                            ^ source.hydra variable.other.hydra
+#                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                              ^^ source.hydra
+#                                                ^ source.hydra keyword.operator.arrow.hydra
+#                                                 ^ source.hydra
+#                                                  ^^^^ source.hydra support.type.hydra
+#                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                       ^ source.hydra variable.other.hydra
+#                                                        ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                         ^ source.hydra
+#                                                          ^ source.hydra keyword.operator.arrow.hydra
+#                                                           ^ source.hydra
+#                                                            ^^^^^^ source.hydra support.type.hydra
+#                                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                   ^^^^ source.hydra support.type.hydra
+#                                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                        ^ source.hydra variable.other.hydra
+#                                                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Map an effect-returning function over an optional.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## mapOptional(f, m) describes an effectful computation which returns none when m is none, or applies f to the contained value and wraps the result in given.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement appliesFunctionWhenPresentPassesThroughNoneWhenAbsent mapOptional over a present value applies the effect-returning function and wraps the result in given; mapOptional over none yields none, with the function not applied.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement performsExactlyZeroOrOneEffect mapOptional over none performs zero effects; mapOptional over a present value performs exactly one effect -- observable via a real host side effect, distinguishing "the function was never invoked" from "the function was invoked and its effect ran".
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive mapOptional : ∀x,y.(x → effect<y>) → optional<x> → effect<optional<y>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra keyword.operator.forall-scheme.hydra
+#                                ^ source.hydra variable.parameter.hydra
+#                                 ^ source.hydra punctuation.separator.binder.hydra
+#                                  ^ source.hydra variable.parameter.hydra
+#                                   ^ source.hydra punctuation.separator.binder.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^ source.hydra support.type.hydra
+#                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                ^ source.hydra variable.other.hydra
+#                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                  ^^ source.hydra
+#                                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                                     ^ source.hydra
+#                                                      ^^^^^^^^ source.hydra support.type.hydra
+#                                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                               ^ source.hydra variable.other.hydra
+#                                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                 ^ source.hydra
+#                                                                  ^ source.hydra keyword.operator.arrow.hydra
+#                                                                   ^ source.hydra
+#                                                                    ^^^^^^ source.hydra support.type.hydra
+#                                                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                           ^^^^^^^^ source.hydra support.type.hydra
+#                                                                                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                    ^ source.hydra variable.other.hydra
+#                                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Lift a pure value into an effect.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## pure(x) describes an effectful computation which succeeds with x without requiring host interaction.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement liftsValueWithoutHostInteraction pure(x) succeeds with exactly x, without requiring any host interaction.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive pure : ∀x.x → effect<x>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^ source.hydra entity.name.function.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra keyword.operator.forall-scheme.hydra
+#                         ^ source.hydra variable.parameter.hydra
+#                          ^ source.hydra punctuation.separator.binder.hydra
+#                           ^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra keyword.operator.arrow.hydra
+#                              ^ source.hydra
+#                               ^^^^^^ source.hydra support.type.hydra
+#                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^ source.hydra punctuation.definition.typeargs.end.hydra

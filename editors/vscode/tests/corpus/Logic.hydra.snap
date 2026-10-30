@@ -1,0 +1,359 @@
+>## Primitives in the hydra.core.lib.logic module.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.lib.logic
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>import hydra.core.paths
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.ast
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.coders
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.diff
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.docs
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.checking
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.file
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.errors
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.file
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.graph
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.json.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.markdown
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.parsing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.query
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.regex
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.relational
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.tabular
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.testing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.time
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.topology
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.typed
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.typing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.util
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.validation
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.variants
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>## Compute the logical AND of two boolean values.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## and(p, q) returns true iff both p and q are true.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement trueOnlyWhenBothTrue and(p, q) returns true exactly when both p and q are true; any false operand makes the result false.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive and : ∀.boolean → boolean → boolean = λa.λb.hydra.core.lib.logic.ifElse a b false
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.arrow.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^ source.hydra support.type.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^^ source.hydra support.type.hydra
+#                                             ^ source.hydra
+#                                              ^ source.hydra keyword.operator.equals.hydra
+#                                               ^ source.hydra
+#                                                ^ source.hydra keyword.operator.lambda.hydra
+#                                                 ^ source.hydra variable.parameter.hydra
+#                                                  ^ source.hydra punctuation.separator.binder.hydra
+#                                                   ^ source.hydra keyword.operator.lambda.hydra
+#                                                    ^ source.hydra variable.parameter.hydra
+#                                                     ^ source.hydra punctuation.separator.binder.hydra
+#                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                 ^ source.hydra
+#                                                                                  ^ source.hydra variable.other.hydra
+#                                                                                   ^ source.hydra
+#                                                                                    ^ source.hydra variable.other.hydra
+#                                                                                     ^ source.hydra
+#                                                                                      ^^^^^ source.hydra constant.language.boolean.hydra
+>
+>## Compute a conditional expression.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## ifElse(p, t, f) returns t if p is true, or f if p is false.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The unselected branch is not necessarily evaluated; ifElse is the standard way to express short-circuiting boolean logic and branching in Hydra.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's if/then/else.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement selectsBranchByCondition ifElse(p, t, f) returns t when p is true and f when p is false, for any value type of t/f including booleans, integers, and strings -- the then/else branches may be of any (matching) type.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive ifElse : ∀x.boolean → lazy x → lazy x → x
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.forall-scheme.hydra
+#                    ^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^^^^^^^ source.hydra support.type.hydra
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.arrow.hydra
+#                               ^ source.hydra
+#                                ^^^^ source.hydra keyword.control.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                        ^ source.hydra
+#                                         ^^^^ source.hydra keyword.control.hydra
+#                                             ^ source.hydra
+#                                              ^ source.hydra variable.other.hydra
+#                                               ^ source.hydra
+#                                                ^ source.hydra keyword.operator.arrow.hydra
+#                                                 ^ source.hydra
+#                                                  ^ source.hydra variable.other.hydra
+>
+>## Compute the logical NOT of a boolean value.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## not(p) returns false if p is true, or true if p is false.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's not :: Bool -> Bool.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement negatesBoolean not(p) returns false when p is true and true when p is false.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive not : ∀.boolean → boolean = λa.hydra.core.lib.logic.ifElse a false true
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.forall-scheme.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.arrow.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^ source.hydra support.type.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.equals.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra keyword.operator.lambda.hydra
+#                                       ^ source.hydra variable.parameter.hydra
+#                                        ^ source.hydra punctuation.separator.binder.hydra
+#                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                    ^ source.hydra
+#                                                                     ^ source.hydra variable.other.hydra
+#                                                                      ^ source.hydra
+#                                                                       ^^^^^ source.hydra constant.language.boolean.hydra
+#                                                                            ^ source.hydra
+#                                                                             ^^^^ source.hydra constant.language.boolean.hydra
+>
+>## Compute the logical OR of two boolean values.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## or(p, q) returns true iff at least one of p and q is true.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.15
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement trueWhenEitherTrue or(p, q) returns true when at least one of p and q is true; it returns false only when both are false.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive or : ∀.boolean → boolean → boolean = λa.λb.hydra.core.lib.logic.ifElse a true b
+#^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#         ^ source.hydra
+#          ^^ source.hydra entity.name.function.hydra
+#            ^ source.hydra
+#             ^ source.hydra punctuation.separator.type.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.forall-scheme.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^^^^^^^ source.hydra support.type.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra keyword.operator.arrow.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^ source.hydra support.type.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.arrow.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^ source.hydra support.type.hydra
+#                                            ^ source.hydra
+#                                             ^ source.hydra keyword.operator.equals.hydra
+#                                              ^ source.hydra
+#                                               ^ source.hydra keyword.operator.lambda.hydra
+#                                                ^ source.hydra variable.parameter.hydra
+#                                                 ^ source.hydra punctuation.separator.binder.hydra
+#                                                  ^ source.hydra keyword.operator.lambda.hydra
+#                                                   ^ source.hydra variable.parameter.hydra
+#                                                    ^ source.hydra punctuation.separator.binder.hydra
+#                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                ^ source.hydra
+#                                                                                 ^ source.hydra variable.other.hydra
+#                                                                                  ^ source.hydra
+#                                                                                   ^^^^ source.hydra constant.language.boolean.hydra
+#                                                                                       ^ source.hydra
+#                                                                                        ^ source.hydra variable.other.hydra

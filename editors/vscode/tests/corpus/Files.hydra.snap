@@ -1,0 +1,833 @@
+>## Primitives in the hydra.core.lib.files module.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## Every primitive in this module is effectful: it describes a computation against the file system, and executing that computation is separate from describing it.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.lib.files
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>import hydra.core.paths
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.ast
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.coders
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.diff
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.docs
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.checking
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.file as error.file
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                            ^ source.hydra
+#                             ^^ source.hydra keyword.control.import.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.error.system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.errors
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.file as file
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                      ^ source.hydra
+#                       ^^ source.hydra keyword.control.import.hydra
+#                         ^ source.hydra
+#                          ^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.graph
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.json.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.markdown
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.parsing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.query
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.regex
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.relational
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.tabular
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.testing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.time
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.topology
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.typed
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.typing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.util
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.validation
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.variants
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>## Append bytes to the end of a file.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## appendFile(path, contents) describes an effectful computation which attempts to append the raw bytes contents to the end of the file at path, creating the file if it does not exist. Unlike writeFile, existing contents are preserved. File I/O is byte-oriented; to append text, encode it to bytes first (e.g. via hydra.core.lib.text.encodeUtf8). A recoverable file-system failure is returned as left(error); success is returned as right(unit).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement preservesExistingContentsAndAppends appendFile adds the given bytes to the end of a file's existing contents, preserving what was already there, rather than replacing it as writeFile does.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive appendFile : ∀.hydra.core.file.FilePath → binary → effect<either<hydra.core.error.file.FileError, unit>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.forall-scheme.hydra
+#                               ^ source.hydra punctuation.separator.binder.hydra
+#                                ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra keyword.operator.arrow.hydra
+#                                                          ^ source.hydra
+#                                                           ^^^^^^ source.hydra support.type.hydra
+#                                                                 ^ source.hydra
+#                                                                  ^ source.hydra keyword.operator.arrow.hydra
+#                                                                   ^ source.hydra
+#                                                                    ^^^^^^ source.hydra support.type.hydra
+#                                                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                           ^^^^^^ source.hydra support.type.hydra
+#                                                                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                 ^^ source.hydra
+#                                                                                                                   ^^^^ source.hydra support.type.hydra
+#                                                                                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                                        ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Copy a file, or a directory tree, to a destination path.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## copy(recursive, source, destination) describes an effectful computation which attempts to copy source to destination. When recursive is false, source must be a single file. When recursive is true, source may be a directory, whose entire tree is copied. Copying is performed by the host operating system rather than by reading and rewriting contents, preserving binary data and avoiding a round trip through the language runtime. A recoverable file-system failure is returned as left(error); success is returned as right(unit).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## Deprecated since 0.18. Use: copyFile.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @deprecatedSince 0.18
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                   ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement copiesSingleFile copy with recursive=false duplicates a single file's contents at the destination path.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement copiesDirectoryTreeWhenRecursive copy with recursive=true duplicates an entire directory tree, including nested files, at the destination path, succeeding even when the destination directory already exists.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement errorsOnNonRecursiveDirectory copy with recursive=false on a directory source yields an error, rather than silently copying only the directory entry or a subset of its contents.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive copy : ∀.boolean → hydra.core.file.FilePath → hydra.core.file.FilePath → effect<either<hydra.core.error.file.FileError, unit>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^ source.hydra entity.name.function.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra keyword.operator.forall-scheme.hydra
+#                         ^ source.hydra punctuation.separator.binder.hydra
+#                          ^^^^^^^ source.hydra support.type.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra keyword.operator.arrow.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                            ^ source.hydra
+#                                                             ^ source.hydra keyword.operator.arrow.hydra
+#                                                              ^ source.hydra
+#                                                               ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                       ^ source.hydra
+#                                                                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                                                                         ^ source.hydra
+#                                                                                          ^^^^^^ source.hydra support.type.hydra
+#                                                                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                                 ^^^^^^ source.hydra support.type.hydra
+#                                                                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                       ^^ source.hydra
+#                                                                                                                                         ^^^^ source.hydra support.type.hydra
+#                                                                                                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Create a directory.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## createDirectory(recursive, path) describes an effectful computation which attempts to create a directory at path. When recursive is false this corresponds to POSIX mkdir: it fails if path already exists or if a parent is missing. When recursive is true, any missing parent directories are created as well (as with mkdir -p) and an already-existing directory is not an error. A recoverable file-system failure is returned as left(error); success is returned as right(unit).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## 0.18 is planned to drop the leading recursive flag in favor of a flagless createDirectoryTree primitive, mirroring the copy/copyFile+copyTree split; not yet implemented.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement createsDirectoryThatThenExists createDirectory creates a directory at the given path such that a subsequent exists check on that path reports true.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive createDirectory : ∀.boolean → hydra.core.file.FilePath → effect<either<hydra.core.error.file.FileError, unit>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra punctuation.separator.type.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.forall-scheme.hydra
+#                                    ^ source.hydra punctuation.separator.binder.hydra
+#                                     ^^^^^^^ source.hydra support.type.hydra
+#                                            ^ source.hydra
+#                                             ^ source.hydra keyword.operator.arrow.hydra
+#                                              ^ source.hydra
+#                                               ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                       ^ source.hydra
+#                                                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                                                         ^ source.hydra
+#                                                                          ^^^^^^ source.hydra support.type.hydra
+#                                                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                 ^^^^^^ source.hydra support.type.hydra
+#                                                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                       ^^ source.hydra
+#                                                                                                                         ^^^^ source.hydra support.type.hydra
+#                                                                                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Create a symbolic link.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## createSymlink(target, link) describes an effectful computation which attempts to create a symbolic link at link, pointing to target (POSIX symlink). target is stored verbatim; it may be a relative path, and it need not exist. There is no force flag: if link already exists (including as a dangling symbolic link), the computation fails with left(alreadyExists); a caller that wants replace-if-exists semantics should compose status(false, link), removeFile, and createSymlink. A missing parent directory yields left(notFound); a host or file system which refuses to create the link (e.g. an unprivileged process on Windows, or an unsupported file system) yields left(permissionDenied) or left(other) as appropriate. A recoverable file-system failure is returned as left(error); success is returned as right(unit).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement createsLinkObservableAsLinkType createSymlink creates a symbolic link such that status(followLinks=false) on the link path reports fileType link; status(followLinks=true) on the link path reports the metadata of the link's target (not the link itself) when the target exists.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement allowsDanglingTargets createSymlink succeeds even when the target does not exist, creating a dangling link; the dangling link is itself reported as present by exists (observed via status, not treated as absent), and still reports fileType link under status(followLinks=false), but is reported as notFound when followed via status(followLinks=true).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement preservesTargetVerbatim createSymlink stores the target path exactly as given, including a relative path, with no resolution or canonicalization; readSymlink returns that exact stored target.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement errorsOnExistingLinkPath createSymlink fails (there is no force/replace flag) when the link path already exists, whether that existing entry is a regular file or another symbolic link (including a dangling one).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive createSymlink : ∀.hydra.core.file.FilePath → hydra.core.file.FilePath → effect<either<hydra.core.error.file.FileError, unit>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra punctuation.separator.type.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                                  ^ source.hydra punctuation.separator.binder.hydra
+#                                   ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                           ^ source.hydra
+#                                                            ^ source.hydra keyword.operator.arrow.hydra
+#                                                             ^ source.hydra
+#                                                              ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                      ^ source.hydra
+#                                                                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                                                                        ^ source.hydra
+#                                                                                         ^^^^^^ source.hydra support.type.hydra
+#                                                                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                                ^^^^^^ source.hydra support.type.hydra
+#                                                                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                      ^^ source.hydra
+#                                                                                                                                        ^^^^ source.hydra support.type.hydra
+#                                                                                                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Test whether a path exists.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## exists(path) describes an effectful computation which reports whether anything exists at path, whether a file, directory, or other type of file. It does not error when the path is absent; a missing path is reported as right(false). Use status to obtain the type of an existing path. A recoverable file-system failure is returned as left(error).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement falseForMissingPath exists returns right(false) for a missing path, without erroring on absence.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement trueAfterCreation exists returns right(true) for a path immediately after a file or directory has been created there.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive exists : ∀.hydra.core.file.FilePath → effect<either<hydra.core.error.file.FileError, boolean>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^ source.hydra entity.name.function.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.forall-scheme.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra keyword.operator.arrow.hydra
+#                                                      ^ source.hydra
+#                                                       ^^^^^^ source.hydra support.type.hydra
+#                                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                              ^^^^^^ source.hydra support.type.hydra
+#                                                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                    ^^ source.hydra
+#                                                                                                      ^^^^^^^ source.hydra support.type.hydra
+#                                                                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## List the immediate entries of a directory.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## listDirectory(path) describes an effectful computation which returns the immediate entries of the directory at path, excluding the special entries "." and "..". The result is one level deep and is not ordered; to traverse a tree recursively, recurse using status. A recoverable file-system failure is returned as left(error).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement listsImmediateEntries listDirectory returns exactly the immediate entries of the directory, one entry per file actually present, excluding the special "." and ".." entries.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive listDirectory : ∀.hydra.core.file.FilePath → effect<either<hydra.core.error.file.FileError, list<hydra.core.file.FilePath>>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra punctuation.separator.type.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                                  ^ source.hydra punctuation.separator.binder.hydra
+#                                   ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                           ^ source.hydra
+#                                                            ^ source.hydra keyword.operator.arrow.hydra
+#                                                             ^ source.hydra
+#                                                              ^^^^^^ source.hydra support.type.hydra
+#                                                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                     ^^^^^^ source.hydra support.type.hydra
+#                                                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                           ^^ source.hydra
+#                                                                                                             ^^^^ source.hydra support.type.hydra
+#                                                                                                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Read the complete contents of a file as raw bytes.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## readFile(path) describes an effectful computation which attempts to read the entire contents of the file at path as raw bytes, with no character decoding or newline translation. To interpret the result as text, decode it (e.g. via hydra.core.lib.text.decodeUtf8). A recoverable file-system failure is returned as left(error); success is returned as right(contents).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement roundTripsWithWriteFile readFile returns exactly the bytes most recently written to a file via writeFile (and any subsequent appendFile calls), byte-exactly, with no character decoding or translation.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive readFile : ∀.hydra.core.file.FilePath → effect<either<hydra.core.error.file.FileError, binary>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^ source.hydra entity.name.function.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.forall-scheme.hydra
+#                             ^ source.hydra punctuation.separator.binder.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                      ^ source.hydra
+#                                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                                        ^ source.hydra
+#                                                         ^^^^^^ source.hydra support.type.hydra
+#                                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                ^^^^^^ source.hydra support.type.hydra
+#                                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                      ^^ source.hydra
+#                                                                                                        ^^^^^^ source.hydra support.type.hydra
+#                                                                                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Read the target of a symbolic link.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## readSymlink(path) describes an effectful computation which attempts to read the target of the symbolic link at path (POSIX readlink). This is a single-hop, unresolved read: the target is returned exactly as stored, with no chain resolution or canonicalization; a relative target is returned relative, and a dangling target (one that does not exist) is returned as-is. To resolve a chain of links to a canonical path, compose repeated calls to readSymlink and status. A missing path yields left(notFound); a path which exists but is not a symbolic link yields left(invalidPath). A recoverable file-system failure is returned as left(error); success is returned as right(target).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17.6
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement returnsStoredTargetVerbatim readSymlink returns the target exactly as stored by createSymlink, with no chain resolution or canonicalization, including a relative target returned relative.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement errorsOnNonLinkOrMissingPath readSymlink yields left(invalidPath) when the path exists but is not a symbolic link, and left(notFound) when the path does not exist at all -- two distinct error conditions, neither of which is confused with a successful read.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive readSymlink : ∀.hydra.core.file.FilePath → effect<either<hydra.core.error.file.FileError, hydra.core.file.FilePath>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra keyword.operator.forall-scheme.hydra
+#                                ^ source.hydra punctuation.separator.binder.hydra
+#                                 ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                         ^ source.hydra
+#                                                          ^ source.hydra keyword.operator.arrow.hydra
+#                                                           ^ source.hydra
+#                                                            ^^^^^^ source.hydra support.type.hydra
+#                                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                   ^^^^^^ source.hydra support.type.hydra
+#                                                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                         ^^ source.hydra
+#                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Remove a directory.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## removeDirectory(recursive, path) describes an effectful computation which attempts to remove the directory at path. When recursive is false this corresponds to POSIX rmdir: it fails unless the directory is empty. When recursive is true, the directory and its entire contents are removed (as with rm -r). Removal is performed by the host operating system rather than by walking and deleting entries individually. A recoverable file-system failure is returned as left(error); success is returned as right(unit).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## 0.18 is planned to drop the leading recursive flag in favor of a flagless removeDirectoryTree primitive, mirroring the copy/copyFile+copyTree split; not yet implemented.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement removesEmptyDirectoryWhenNonRecursive removeDirectory with recursive=false removes an empty directory, so that it no longer exists.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement errorsOnNonEmptyDirectoryWhenNonRecursive removeDirectory with recursive=false on a non-empty directory yields an error, rather than silently removing it or its contents.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement removesPopulatedDirectoryWhenRecursive removeDirectory with recursive=true removes a directory and its entire contents, so that the directory no longer exists.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive removeDirectory : ∀.boolean → hydra.core.file.FilePath → effect<either<hydra.core.error.file.FileError, unit>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra punctuation.separator.type.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.forall-scheme.hydra
+#                                    ^ source.hydra punctuation.separator.binder.hydra
+#                                     ^^^^^^^ source.hydra support.type.hydra
+#                                            ^ source.hydra
+#                                             ^ source.hydra keyword.operator.arrow.hydra
+#                                              ^ source.hydra
+#                                               ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                       ^ source.hydra
+#                                                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                                                         ^ source.hydra
+#                                                                          ^^^^^^ source.hydra support.type.hydra
+#                                                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                 ^^^^^^ source.hydra support.type.hydra
+#                                                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                       ^^ source.hydra
+#                                                                                                                         ^^^^ source.hydra support.type.hydra
+#                                                                                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Remove a file.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## removeFile(path) describes an effectful computation which attempts to remove the file at path (POSIX unlink). A recoverable file-system failure is returned as left(error); success is returned as right(unit).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement deletesFileSoItNoLongerExists removeFile deletes the file at the given path, so that a subsequent exists check reports false.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive removeFile : ∀.hydra.core.file.FilePath → effect<either<hydra.core.error.file.FileError, unit>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.forall-scheme.hydra
+#                               ^ source.hydra punctuation.separator.binder.hydra
+#                                ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra keyword.operator.arrow.hydra
+#                                                          ^ source.hydra
+#                                                           ^^^^^^ source.hydra support.type.hydra
+#                                                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                  ^^^^^^ source.hydra support.type.hydra
+#                                                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                        ^^ source.hydra
+#                                                                                                          ^^^^ source.hydra support.type.hydra
+#                                                                                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Rename or move a file or directory.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## rename(source, destination) describes an effectful computation which attempts to rename the file or directory at source to destination. When source and destination are on the same file system this is atomic (POSIX rename) and cannot be reproduced by a copy followed by a delete. A recoverable file-system failure is returned as left(error); success is returned as right(unit).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement movesToNewPathPreservingContents rename moves a file (or directory) from source to destination, such that the original contents are readable at the destination path afterward.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive rename : ∀.hydra.core.file.FilePath → hydra.core.file.FilePath → effect<either<hydra.core.error.file.FileError, unit>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^ source.hydra entity.name.function.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.forall-scheme.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra keyword.operator.arrow.hydra
+#                                                      ^ source.hydra
+#                                                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                               ^ source.hydra
+#                                                                                ^ source.hydra keyword.operator.arrow.hydra
+#                                                                                 ^ source.hydra
+#                                                                                  ^^^^^^ source.hydra support.type.hydra
+#                                                                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                         ^^^^^^ source.hydra support.type.hydra
+#                                                                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                               ^^ source.hydra
+#                                                                                                                                 ^^^^ source.hydra support.type.hydra
+#                                                                                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Retrieve metadata about a file or directory.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## status(followLinks, path) describes an effectful computation which retrieves metadata about the file system entry at path, including its type, size, and modification time. When followLinks is true, this corresponds to POSIX stat: if path is a symbolic link, the metadata describes the link's target, and a dangling link (whose target does not exist) yields left(notFound). When followLinks is false, this corresponds to POSIX lstat: the metadata describes the link itself, with fileType link, a size equal to the length of the stored target path, and the link's own timestamps; a dangling link is not an error in this mode. status(false, path) is the only way to observe fileType link; status(true, path) never produces it, since a followed link's metadata is always that of its (non-link) target. For paths that are not symbolic links, both modes report identical metadata. A path which does not exist yields left(notFound); other recoverable file-system failures are also returned as left(error). Use exists for a boolean presence check that does not error on absence.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement reportsCorrectTypeAndSizeForRegularFileAndDirectory status reports the correct fileType and size for a regular file (size equal to its byte count) and reports directory as the fileType for a directory.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement followLinksControlsLinkResolution status(followLinks=false) reports the metadata of a symbolic link itself (fileType link), while status(followLinks=true) on the same path reports the metadata of the link's target (its true fileType, not link) when the target exists -- the only way to observe fileType link is followLinks=false.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement notFoundOnMissingOrDanglingTarget status yields left(notFound) for a path that does not exist, and also for a dangling symbolic link when followed via followLinks=true (even though the dangling link itself is not an error under followLinks=false).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive status : ∀.boolean → hydra.core.file.FilePath → effect<either<hydra.core.error.file.FileError, hydra.core.file.FileStatus>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^ source.hydra entity.name.function.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.forall-scheme.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^^^^^^^ source.hydra support.type.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                              ^ source.hydra
+#                                                               ^ source.hydra keyword.operator.arrow.hydra
+#                                                                ^ source.hydra
+#                                                                 ^^^^^^ source.hydra support.type.hydra
+#                                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                        ^^^^^^ source.hydra support.type.hydra
+#                                                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                              ^^ source.hydra
+#                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+>
+>## Write raw bytes as the complete contents of a file.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## writeFile(path, contents) describes an effectful computation which attempts to replace the file at path with the raw bytes contents, with no character encoding or newline translation. To write text, encode it to bytes first (e.g. via hydra.core.lib.text.encodeUtf8). A recoverable file-system failure is returned as left(error); success is returned as right(unit).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @availableSince 0.17
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#                  ^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement replacesCompleteFileContents writeFile replaces the complete contents of the file at the given path with the given bytes, creating the file if it does not already exist.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive writeFile : ∀.hydra.core.file.FilePath → binary → effect<either<hydra.core.error.file.FileError, unit>>
+#^^^^^^ source.hydra storage.modifier.impure.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^ source.hydra entity.name.function.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra keyword.operator.forall-scheme.hydra
+#                              ^ source.hydra punctuation.separator.binder.hydra
+#                               ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                       ^ source.hydra
+#                                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                                         ^ source.hydra
+#                                                          ^^^^^^ source.hydra support.type.hydra
+#                                                                ^ source.hydra
+#                                                                 ^ source.hydra keyword.operator.arrow.hydra
+#                                                                  ^ source.hydra
+#                                                                   ^^^^^^ source.hydra support.type.hydra
+#                                                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                          ^^^^^^ source.hydra support.type.hydra
+#                                                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                ^^ source.hydra
+#                                                                                                                  ^^^^ source.hydra support.type.hydra
+#                                                                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra

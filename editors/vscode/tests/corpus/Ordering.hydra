@@ -1,0 +1,123 @@
+## Primitives in the hydra.core.lib.ordering module.
+##
+## Every type admitted by the ordering constraint has a total order, defined per type constructor: integers numerically; strings lexicographically by code point; lists element-wise; records by field in declaration order; union variants by declaration order; floats per the extended total order.
+## For floating-point values the order is the extended total order, under which compare(x, y) is equalTo exactly when hydra.lib.equality.equal(x, y) is true.
+module hydra.core.lib.ordering
+
+import hydra.core.paths
+import hydra.core.ast
+import hydra.core.coders
+import hydra.core.model
+import hydra.core.diff
+import hydra.core.docs
+import hydra.core.error.checking
+import hydra.core.error.model
+import hydra.core.error.file
+import hydra.core.error.packaging
+import hydra.core.error.system
+import hydra.core.errors
+import hydra.core.file
+import hydra.core.graph
+import hydra.core.json.model
+import hydra.core.markdown
+import hydra.core.packaging
+import hydra.core.parsing
+import hydra.core.query
+import hydra.core.regex
+import hydra.core.relational
+import hydra.core.system
+import hydra.core.tabular
+import hydra.core.testing
+import hydra.core.time
+import hydra.core.topology
+import hydra.core.typed
+import hydra.core.typing
+import hydra.core.util as util
+import hydra.core.validation
+import hydra.core.variants
+
+## Compare two values and return a Comparison.
+##
+## compare(x, y) returns the hydra.core.util.Comparison value that classifies the relationship between x and y under the type's ordering: LessThan if x < y, EqualTo if x == y, GreaterThan if x > y.
+## The result type's three-valued tag is the canonical primitive comparison; the boolean comparators (lt/lte/gt/gte) are derivable from it.
+## Requires an 'ordering' type-class constraint on the argument type, which is the closest Hydra equivalent to Haskell's Ord instance.
+## Since: 0.18 (moved from hydra.core.lib.equality.compare).
+## Total. Corresponds to Haskell's compare :: Ord a => a -> a -> Ordering.
+## Moved from hydra.lib.equality.compare.
+##
+## @availableSince 0.17.6
+## @requirement threeWayClassification compare(x, y) returns lessThan, equalTo, or greaterThan classifying x relative to y under the type's ordering, for integers, strings (lexicographic, by Unicode code point), floats, lists (lexicographic, order-sensitive), sets, and maps (canonical sorted-order comparison, independent of construction/insertion order).
+## @requirement decimalScaleTiebreak compare on decimals orders primarily by numeric value; when two decimals are numerically equal but have different scale, compare treats them as distinct (not equalTo) and breaks the tie by scale (smaller scale orders first), including transitively across more than two scale levels.
+primitive compare : ∀x.(ordering x) ⇒ x → x → hydra.core.util.Comparison
+
+## Check whether the first value is greater than the second.
+##
+## gt(x, y) returns true iff x > y under the type's ordering.
+## Requires an 'ordering' constraint on the argument type.
+## Since: 0.18 (moved from hydra.core.lib.equality.gt).
+## Total. Corresponds to Haskell's (>) :: Ord a => a -> a -> Bool.
+## Moved from hydra.lib.equality.gt.
+##
+## @availableSince 0.17.6
+## @requirement strictGreaterThan gt(x, y) returns true exactly when x is strictly greater than y under the type's ordering, for integers, floats, and strings; equal values and lesser values both return false.
+primitive gt : ∀x.(ordering x) ⇒ x → x → boolean
+
+## Check whether the first value is greater than or equal to the second.
+##
+## gte(x, y) returns true iff x >= y under the type's ordering.
+## Requires an 'ordering' constraint on the argument type.
+## Since: 0.18 (moved from hydra.core.lib.equality.gte).
+## Total. Corresponds to Haskell's (>=) :: Ord a => a -> a -> Bool.
+## Moved from hydra.lib.equality.gte.
+##
+## @availableSince 0.17.6
+## @requirement greaterThanOrEqual gte(x, y) returns true when x is greater than or strictly equal to y under the type's ordering, for integers, floats, strings, and decimals -- including the decimal scale-tiebreak rule (a numerically-equal, smaller-scale decimal is treated as lesser, so gte is true in that direction).
+primitive gte : ∀x.(ordering x) ⇒ x → x → boolean
+
+## Check whether the first value is less than the second.
+##
+## lt(x, y) returns true iff x < y under the type's ordering.
+## Requires an 'ordering' constraint on the argument type.
+## Since: 0.18 (moved from hydra.core.lib.equality.lt).
+## Total. Corresponds to Haskell's (<) :: Ord a => a -> a -> Bool.
+## Moved from hydra.lib.equality.lt.
+##
+## @availableSince 0.17.6
+## @requirement strictLessThan lt(x, y) returns true exactly when x is strictly less than y under the type's ordering, for integers, floats, and strings; equal values and greater values both return false.
+primitive lt : ∀x.(ordering x) ⇒ x → x → boolean
+
+## Check whether the first value is less than or equal to the second.
+##
+## lte(x, y) returns true iff x <= y under the type's ordering.
+## Requires an 'ordering' constraint on the argument type.
+## Since: 0.18 (moved from hydra.core.lib.equality.lte).
+## Total. Corresponds to Haskell's (<=) :: Ord a => a -> a -> Bool.
+## Moved from hydra.lib.equality.lte.
+##
+## @availableSince 0.17.6
+## @requirement lessThanOrEqual lte(x, y) returns true when x is less than or strictly equal to y under the type's ordering, for integers, floats, strings, and decimals -- including the decimal scale-tiebreak rule.
+primitive lte : ∀x.(ordering x) ⇒ x → x → boolean
+
+## Return the maximum of two values.
+##
+## max(x, y) returns the larger of x and y under the type's ordering; if x == y, it returns y (matching Haskell's convention).
+## Requires an 'ordering' constraint on the argument type.
+## Since: 0.18 (moved from hydra.core.lib.equality.max).
+## Total. Corresponds to Haskell's max :: Ord a => a -> a -> a.
+## Moved from hydra.lib.equality.max.
+##
+## @availableSince 0.17.6
+## @requirement returnsLargerOperand max(x, y) returns whichever of x and y is larger under the type's ordering; when x and y are equal, max returns y (matching Haskell's tie-breaking convention) -- holds for integers, strings, floats, and decimals.
+primitive max : ∀x.(ordering x) ⇒ x → x → x = λx.λy.hydra.core.lib.logic.ifElse (hydra.core.lib.ordering.gte x y) x y
+
+## Return the minimum of two values.
+##
+## min(x, y) returns the smaller of x and y under the type's ordering; if x == y, it returns x (matching Haskell's convention).
+## Requires an 'ordering' constraint on the argument type.
+## Since: 0.18 (moved from hydra.core.lib.equality.min).
+## Total. Corresponds to Haskell's min :: Ord a => a -> a -> a.
+## Moved from hydra.lib.equality.min.
+##
+## @availableSince 0.17.6
+## @requirement returnsSmallerOperand min(x, y) returns whichever of x and y is smaller under the type's ordering; when x and y are equal, min returns x (matching Haskell's tie-breaking convention) -- holds for integers, strings, floats, and decimals.
+primitive min : ∀x.(ordering x) ⇒ x → x → x = λx.λy.hydra.core.lib.logic.ifElse (hydra.core.lib.ordering.lte x y) x y
