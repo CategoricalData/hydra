@@ -154,6 +154,13 @@ run_lang() {
                 p=$(python3 -c "import json; d=json.load(open('$ts_json')); print(d.get('numPassedTests', 0))" 2>/dev/null || echo 0)
                 f=$(python3 -c "import json; d=json.load(open('$ts_json')); print(d.get('numFailedTests', 0))" 2>/dev/null || echo 0)
                 s=$(python3 -c "import json; d=json.load(open('$ts_json')); print(d.get('numPendingTests', 0))" 2>/dev/null || echo 0)
+            elif [ "$ts_exit" -ne 0 ]; then
+                # #772: vitest exited non-zero (e.g. crashed/killed) before writing its JSON
+                # reporter output. Recording 0/0/0 here would be indistinguishable from a
+                # clean, empty run in the benchmark dashboard -- fail loudly instead.
+                echo "  ERROR: vitest exited $ts_exit and wrote no JSON output at $ts_json" >&2
+                rm -f "$ts_json"
+                exit 1
             else
                 p=0; f=0; s=0
             fi
