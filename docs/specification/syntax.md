@@ -70,6 +70,20 @@ The grammar is Unicode-only: there are no ASCII synonyms for the Unicode operato
 | `` ` `` | name escaping |
 | `#` | comment start |
 
+**Typing the Unicode operators.**
+Because the grammar is Unicode-only, every program needs `λ`, `Λ`, `∀`, `→`, `⇒`, `⟨`, and `⟩`,
+none of which are on a standard keyboard.
+The Hydra VS Code extension ([#806](https://github.com/CategoricalData/hydra/issues/806)) supplies
+them through a Lean/Agda-style abbreviation: type a backslash followed by a name and accept the
+completion — `\lambda` or `\l` inserts `λ`, `\Lambda` / `\L` inserts `Λ`, `\forall` / `\all` inserts
+`∀`, `\to` / `\r` inserts `→`, `\Rightarrow` / `\R` inserts `⇒`, and `\langle` / `\rangle`
+(or `\<` / `\>`) insert `⟨` / `⟩`.
+The same prefixes are also available as plain snippets.
+The extension's TextMate grammar (`source.hydra`) is the single source of truth for highlighting,
+and is intended to be reused by the IntelliJ plugin, the documentation site, and a future GitHub
+Linguist entry; editors without the extension can still enter these characters by any system input
+method, since the operators are ordinary Unicode code points.
+
 ### 2.4 Names
 
 A *bare* name is a nonempty sequence of dot-separated segments of alphanumeric characters.
