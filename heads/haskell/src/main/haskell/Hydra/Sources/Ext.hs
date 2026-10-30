@@ -121,6 +121,12 @@ hydraLispModules = LispManifest.mainModules
 hydraPgModules :: [Module]
 hydraPgModules = PgManifest.mainModules
 
+-- | hydra-pg's own test modules (hydra.pg.test.*, #738), following the hydra-build
+-- precedent above: routed to hydra-pg's test tree and honored by the JSON-writing
+-- drivers' generalized packageTestModules.
+hydraPgTestModules :: [Module]
+hydraPgTestModules = PgManifest.testModules
+
 -- | hydra-python is no longer sourced from a Haskell DSL (#346/#370). Its
 -- canonical hydra.python.* and hydra.python.dsl.* JSON is produced solely by the
 -- native Python driver (bin/update-python-json.py) running against the published
@@ -235,7 +241,9 @@ extRoutingInput =
   , ("hydra-java",       map moduleName hydraJavaModules ++ [ModuleName "hydra.java.gradle"])
   , ("hydra-typescript", map moduleName hydraTypeScriptModules)
   , ("hydra-lisp",       map moduleName hydraLispModules)
-  , ("hydra-pg",         map moduleName (hydraPgModules
+  -- hydra-pg carries BOTH its main and test module names so hydra.pg.test.*
+  -- routes to hydra-pg's test tree (#738), mirroring the hydra-build row above.
+  , ("hydra-pg",         map moduleName (hydraPgModules ++ hydraPgTestModules
                            ++ [GenPGTransform.module_]))
   -- hydra.python.pyproject is a build-config module authored in the hydra-python
   -- package's native Python DSL (no Haskell Module value to reference, hence listed

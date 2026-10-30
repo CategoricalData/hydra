@@ -17,6 +17,7 @@ import Hydra.Sources.Ext (
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraRustModules, hydraWasmModules,
   hydraBuildModules, hydraBuildTestModules,
+  hydraPgTestModules,
   hydraExtPackageModules,
   allDslModules, allEncodingModules, extRoutingInput)
 import Hydra.Sources.Test.All (testModules)
@@ -86,8 +87,8 @@ main = do
   -- testModules folds in hydra-build's test modules (#546): they route to
   -- hydra-build's manifest via routingMap, which now maps hydra.core.test.build.*
   -- to hydra-build (see Ext.extRoutingInput). hydra-build is the first
-  -- non-kernel package to contribute testModules here.
-  let allTestModules = testModules ++ hydraBuildTestModules
+  -- non-kernel package to contribute testModules here; hydra-pg is the second (#738).
+  let allTestModules = testModules ++ hydraBuildTestModules ++ hydraPgTestModules
   writePerPackageManifestsJson routingMap defaultDistJsonRoot dslSrcMods encSrcMods mainUniverse allTestModules
   -- #416 piece 3 step 2: emit the language scope lists the build shell scripts
   -- read via jq, so they stop hardcoding language enumerations (Option A bridge).

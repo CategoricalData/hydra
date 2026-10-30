@@ -30,7 +30,7 @@ import Hydra.Sources.Ext (
   kernelModules, haskellModules, jsonModules, otherModules,
   hydraCoqModules, hydraGoModules, hydraJvmModules, hydraJavaModules, hydraTypeScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
-  hydraPgModules, hydraRdfModules, hydraRustModules, hydraWasmModules,
+  hydraPgModules, hydraPgTestModules, hydraRdfModules, hydraRustModules, hydraWasmModules,
   hydraBuildModules, hydraBuildTestModules,
   hydraExtPackageModules, allEncodingModules,
   extRoutingInput)
@@ -189,6 +189,7 @@ allPackages =
 packageTestModules :: String -> [Kernel.Module]
 packageTestModules "hydra-kernel" = testModules
 packageTestModules "hydra-build"  = hydraBuildTestModules
+packageTestModules "hydra-pg"     = hydraPgTestModules
 packageTestModules _              = []
 
 

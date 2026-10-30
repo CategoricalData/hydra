@@ -12,7 +12,7 @@ module Main where
 import Hydra.Generation (writeTestModulesJson)
 import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.All (mainModules)
-import Hydra.Sources.Ext (extRoutingInput, hydraBuildModules, hydraBuildTestModules)
+import Hydra.Sources.Ext (extRoutingInput, hydraBuildModules, hydraBuildTestModules, hydraPgModules, hydraPgTestModules)
 import Hydra.Sources.Test.All (testModules)
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
@@ -28,8 +28,10 @@ main = do
   -- dist/json/hydra-build/src/main/json) and its test modules must be written;
   -- both are folded in here since Sources.All.mainModules / Test.All.testModules
   -- no longer contain the build family after the extraction.
-  let allMainModules = mainModules ++ hydraBuildModules
-      allTestModules = testModules ++ hydraBuildTestModules
+  -- #738: hydra-pg follows the same pattern as the second non-kernel package
+  -- with test modules.
+  let allMainModules = mainModules ++ hydraBuildModules ++ hydraPgModules
+      allTestModules = testModules ++ hydraBuildTestModules ++ hydraPgTestModules
 
   putStrLn "=== Generate Hydra test modules JSON ==="
   putStrLn ""
