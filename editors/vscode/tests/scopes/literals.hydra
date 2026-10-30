@@ -1,0 +1,48 @@
+# SYNTAX TEST "source.hydra" "literals"
+# Scope assertions for §2.6 literals. The leading '#' makes each assertion line a
+# Hydra line comment, so this file is itself valid .hydra. Run via `npm run test:grammar`.
+
+module hydra.test.literals
+
+term i = 42:int32
+#        ^^ constant.numeric.integer.hydra
+#          ^ punctuation.separator.type.hydra
+#           ^^^^^ support.type.literal.integer.hydra
+
+term neg = -7:int64
+#          ^^ constant.numeric.integer.hydra
+#             ^^^^^ support.type.literal.integer.hydra
+
+term f = 0.42:float32
+#        ^^^^ constant.numeric.float.hydra
+#            ^ punctuation.separator.type.hydra
+#             ^^^^^^^ support.type.literal.float.hydra
+
+term fe = 2.5e10:float64
+#         ^^^^^^ constant.numeric.float.hydra
+#                ^^^^^^^ support.type.literal.float.hydra
+
+term nan = NaN:float64
+#          ^^^ constant.numeric.float.hydra
+#              ^^^^^^^ support.type.literal.float.hydra
+
+term inf = Infinity:float32
+#          ^^^^^^^^ constant.numeric.float.hydra
+
+term ninf = -Infinity:float64
+#           ^^^^^^^^^ constant.numeric.float.hydra
+
+term d = 3.14
+#        ^^^^ constant.numeric.decimal.hydra
+
+term d2 = -0.5
+#         ^^^^ constant.numeric.decimal.hydra
+
+term d3 = 1.2e9
+#         ^^^^^ constant.numeric.decimal.hydra
+
+term b = true
+#        ^^^^ constant.language.boolean.hydra
+
+term b2 = false
+#         ^^^^^ constant.language.boolean.hydra

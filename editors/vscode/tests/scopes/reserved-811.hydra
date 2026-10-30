@@ -1,0 +1,34 @@
+# SYNTAX TEST "source.hydra" "forward-looking #811 operator/do/pattern sugar"
+# These forms are RESERVED in syntax.md §3 but not yet accepted by the parser. The
+# TextMate grammar tokenizes them anyway (highlighting-only); see the grammar's
+# #operators-reserved comment. If #811 lands with different spellings, update here.
+
+module hydra.test.reserved
+
+term add = x + y
+#            ^ keyword.operator.arithmetic.reserved.hydra
+
+term mul = x * y
+#            ^ keyword.operator.arithmetic.reserved.hydra
+
+term cmp = x == y
+#            ^^ keyword.operator.comparison.reserved.hydra
+
+term le = x <= y
+#           ^^ keyword.operator.comparison.reserved.hydra
+
+term andd = x && y
+#             ^^ keyword.operator.logical.reserved.hydra
+
+term orr = x || y
+#            ^^ keyword.operator.logical.reserved.hydra
+
+term pipe = x |> f |> g
+#             ^^ keyword.operator.pipeline.reserved.hydra
+#                  ^^ keyword.operator.pipeline.reserved.hydra
+
+term cat = x ++ y
+#            ^^ keyword.operator.concat.reserved.hydra
+
+term neg = !x
+#          ^ keyword.operator.negation.reserved.hydra

@@ -1,0 +1,59 @@
+# SYNTAX TEST "source.hydra" "terms, strings, binary, sugar"
+
+module hydra.test.terms
+
+term s = "hello\nworld"
+#        ^ string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#              ^^ constant.character.escape.hydra
+
+term bin = "aGVsbG8=":binary
+#          ^ string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                    ^ punctuation.separator.type.hydra
+#                     ^^^^^^ support.type.literal.binary.hydra
+
+term lam = λx.x
+#          ^ keyword.operator.lambda.hydra
+
+term lamv = λ foo . bar
+#           ^ keyword.operator.lambda.hydra
+
+term tlam = Λt.unit
+#           ^ keyword.operator.type-lambda.hydra
+#              ^^^^ support.type.hydra
+
+term letin = let x := 1:int32 in x
+#            ^^^ keyword.control.hydra
+#                ^ variable.other.hydra
+#                  ^^ keyword.operator.assignment.hydra
+#                             ^^ keyword.control.hydra
+
+term esc = `has space`
+#          ^ variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                    ^ variable.other.escaped.hydra punctuation.definition.name.end.hydra
+
+term rec = Person{firstName = "Alice", age = 30:int32}
+#          ^^^^^^ entity.name.type.nominal.hydra
+#                 ^^^^^^^^^ variable.other.hydra
+#                           ^ keyword.operator.equals.hydra
+
+term proj = Person[firstName]
+#           ^^^^^^ entity.name.type.nominal.hydra
+
+term unwr = Meters[]
+#           ^^^^^^ entity.name.type.nominal.hydra
+
+term app = Name {x}
+#          ^^^^ variable.other.hydra
+
+term ascribe = x : int32
+#                ^ punctuation.separator.type.hydra
+
+term ann = x @{description = "d"}
+#            ^ keyword.operator.annotation.hydra
+
+term tapp = f⟨int32⟩
+#            ^ punctuation.definition.typeapp.begin.hydra
+#                  ^ punctuation.definition.typeapp.end.hydra
+
+term qname = hydra.core.lib.lists.cons
+#            ^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.other.qualified.hydra

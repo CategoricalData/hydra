@@ -1,0 +1,41 @@
+# SYNTAX TEST "source.hydra" "type constructors, module header, defs, cases, reserved-word escaping"
+
+## A doc comment above the module header (§6.2).
+## @availableSince 0.20
+module hydra.test.types
+#      ^^^^^^^^^^^^^^^^ entity.name.namespace.hydra
+
+import hydra.core.model
+#^^^^^ keyword.control.import.hydra
+#      ^^^^^^^^^^^^^^^^ entity.name.namespace.hydra
+
+import hydra.core.lists as lists from hydra-core
+#                       ^^ keyword.control.import.hydra
+#                                ^^^^ keyword.control.import.hydra
+
+type MyList = ∀t.list<t>
+#^^^ keyword.other.definition.hydra
+#    ^^^^^^ entity.name.function.hydra
+#             ^ keyword.operator.forall-scheme.hydra
+#              ^ variable.parameter.hydra
+#                ^^^^ support.type.hydra
+
+type Pair2 = ∀.map<string, int32>
+#            ^ keyword.operator.forall-scheme.hydra
+#              ^^^ support.type.hydra
+#                  ^^^^^^ support.type.hydra
+
+impure partial primitive risky : ∀.unit → effect<unit>
+#^^^^^ storage.modifier.impure.hydra
+#      ^^^^^^^ storage.modifier.partial.hydra
+#              ^^^^^^^^^ keyword.other.definition.hydra
+#                        ^^^^^ entity.name.function.hydra
+
+term constr = x ⇒ y
+#               ^ keyword.operator.constraint-arrow.hydra
+
+term resv = `let`
+#           ^ variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+
+term c = cases (Color) {red = 1:int32, _ = 0:int32}
+#        ^^^^^ keyword.control.hydra
