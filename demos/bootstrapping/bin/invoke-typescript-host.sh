@@ -40,7 +40,7 @@ fi
 # The TS bootstrap driver lives in the dist tree alongside the kernel runtime.
 # It needs Node 18+ (excluding non-LTS Node 19, per vitest's engines range) with tsx
 # for ESM .ts execution.
-BOOTSTRAP_TS="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/main/typescript/hydra/bootstrap.ts"
+BOOTSTRAP_TS="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/main/typescript/hydra/core/bootstrap.ts"
 if [ ! -f "$BOOTSTRAP_TS" ]; then
     echo "ERROR: $BOOTSTRAP_TS not found. Run heads/typescript/bin/copy-kernel-runtime.sh first."
     exit 1

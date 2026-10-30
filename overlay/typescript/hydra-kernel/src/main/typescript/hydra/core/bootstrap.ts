@@ -124,37 +124,37 @@ const CODER_DISPATCH: Record<string, {
   lispDialect?: string; lispFileExt?: string;
 }> = {
   typescript: {
-    coderPath:    "../../../../../hydra-typescript/src/main/typescript/hydra/typeScript/coder.js",
+    coderPath:    "../../../../../../hydra-typescript/src/main/typescript/hydra/typeScript/coder.js",
     coderExport:  "moduleToTypeScript",
-    languagePath: "../../../../../hydra-typescript/src/main/typescript/hydra/typeScript/language.js",
+    languagePath: "../../../../../../hydra-typescript/src/main/typescript/hydra/typeScript/language.js",
     languageExport: "typeScriptLanguage",
     doInfer: false, doExpand: true, doHoistCase: true, doHoistPoly: false,
   },
   python:     {
-    coderPath:    "../../../../../hydra-python/src/main/typescript/hydra/python/coder.js",
+    coderPath:    "../../../../../../hydra-python/src/main/typescript/hydra/python/coder.js",
     coderExport:  "moduleToPython",
-    languagePath: "../../../../../hydra-python/src/main/typescript/hydra/python/language.js",
+    languagePath: "../../../../../../hydra-python/src/main/typescript/hydra/python/language.js",
     languageExport: "pythonLanguage",
     doInfer: false, doExpand: true, doHoistCase: true, doHoistPoly: false,
   },
   java:       {
-    coderPath:    "../../../../../hydra-java/src/main/typescript/hydra/java/coder.js",
+    coderPath:    "../../../../../../hydra-java/src/main/typescript/hydra/java/coder.js",
     coderExport:  "moduleToJava",
-    languagePath: "../../../../../hydra-java/src/main/typescript/hydra/java/language.js",
+    languagePath: "../../../../../../hydra-java/src/main/typescript/hydra/java/language.js",
     languageExport: "javaLanguage",
     doInfer: false, doExpand: true, doHoistCase: false, doHoistPoly: true,
   },
   haskell:    {
-    coderPath:    "../../../../../hydra-haskell/src/main/typescript/hydra/haskell/coder.js",
+    coderPath:    "../../../../../../hydra-haskell/src/main/typescript/hydra/haskell/coder.js",
     coderExport:  "moduleToHaskell",
-    languagePath: "../../../../../hydra-haskell/src/main/typescript/hydra/haskell/language.js",
+    languagePath: "../../../../../../hydra-haskell/src/main/typescript/hydra/haskell/language.js",
     languageExport: "haskellLanguage",
     doInfer: false, doExpand: false, doHoistCase: false, doHoistPoly: false,
   },
   scala:      {
-    coderPath:    "../../../../../hydra-scala/src/main/typescript/hydra/scala/coder.js",
+    coderPath:    "../../../../../../hydra-scala/src/main/typescript/hydra/scala/coder.js",
     coderExport:  "moduleToScala",
-    languagePath: "../../../../../hydra-scala/src/main/typescript/hydra/scala/language.js",
+    languagePath: "../../../../../../hydra-scala/src/main/typescript/hydra/scala/language.js",
     languageExport: "scalaLanguage",
     // doInfer=false because the kernel JSON already carries TypeSchemes;
     // running full inference in TS-host (where it does in the Haskell
@@ -167,9 +167,9 @@ const CODER_DISPATCH: Record<string, {
   // prefix, lambda keyword, etc.); fileExt selects the output extension.
   // Mirrors heads/haskell/.../ExtGeneration.hs writeClojure/writeScheme/etc.
   clojure: {
-    coderPath:    "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/coder.js",
+    coderPath:    "../../../../../../hydra-lisp/src/main/typescript/hydra/lisp/coder.js",
     coderExport:  "moduleToLisp",
-    languagePath: "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/language.js",
+    languagePath: "../../../../../../hydra-lisp/src/main/typescript/hydra/lisp/language.js",
     languageExport: "lispLanguage",
     // doInfer: false because the kernel JSON already carries per-binding
     // TypeSchemes; running full inference is redundant in TS-host and trips
@@ -182,9 +182,9 @@ const CODER_DISPATCH: Record<string, {
     lispDialect: "clojure", lispFileExt: "clj",
   },
   scheme: {
-    coderPath:    "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/coder.js",
+    coderPath:    "../../../../../../hydra-lisp/src/main/typescript/hydra/lisp/coder.js",
     coderExport:  "moduleToLisp",
-    languagePath: "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/language.js",
+    languagePath: "../../../../../../hydra-lisp/src/main/typescript/hydra/lisp/language.js",
     languageExport: "lispLanguage",
     // doInfer: false because the kernel JSON already carries per-binding
     // TypeSchemes; running full inference is redundant in TS-host and trips
@@ -197,9 +197,9 @@ const CODER_DISPATCH: Record<string, {
     lispDialect: "scheme", lispFileExt: "scm",
   },
   "common-lisp": {
-    coderPath:    "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/coder.js",
+    coderPath:    "../../../../../../hydra-lisp/src/main/typescript/hydra/lisp/coder.js",
     coderExport:  "moduleToLisp",
-    languagePath: "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/language.js",
+    languagePath: "../../../../../../hydra-lisp/src/main/typescript/hydra/lisp/language.js",
     languageExport: "lispLanguage",
     // doInfer: false because the kernel JSON already carries per-binding
     // TypeSchemes; running full inference is redundant in TS-host and trips
@@ -212,9 +212,9 @@ const CODER_DISPATCH: Record<string, {
     lispDialect: "commonLisp", lispFileExt: "lisp",
   },
   "emacs-lisp": {
-    coderPath:    "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/coder.js",
+    coderPath:    "../../../../../../hydra-lisp/src/main/typescript/hydra/lisp/coder.js",
     coderExport:  "moduleToLisp",
-    languagePath: "../../../../../hydra-lisp/src/main/typescript/hydra/lisp/language.js",
+    languagePath: "../../../../../../hydra-lisp/src/main/typescript/hydra/lisp/language.js",
     languageExport: "lispLanguage",
     // doInfer: false because the kernel JSON already carries per-binding
     // TypeSchemes; running full inference is redundant in TS-host and trips
@@ -269,8 +269,44 @@ const main = async (): Promise<void> => {
     process.exit(1);
   }
 
+  // #633/#762: every moduleTo<Lang> coder (and moduleToLisp) takes overlaySubs as
+  // its first argument — the on-disk overlay-existence set driving emission-time
+  // hydra.lib.<sub> redirects (#630). Compute it here, before building the
+  // moduleTo wrapper below, so both the Lisp-dialect and plain branches can
+  // thread it through. Mirrors libSubsForTarget in
+  // heads/java/src/main/java/hydra/Bootstrap.java (#569) and the per-target
+  // overlaySubs construction in heads/java/.../GenerationTargets.java (#633).
+  //
+  // #568/#569/#588: the redirectable subs are derived from the TARGET's own overlay lib
+  // directory (which hydra.lib.<sub> impls it actually ships), not a hand-maintained
+  // allowlist — a by-name list silently drops future subs (this is how TS's list ended
+  // up missing "hashing": #524 registered it in every host driver except this one).
+  const distJsonRoot = distJsonRootFromKernelDir(opts.jsonDir);
+  const LIB_SUBS_FALLBACK = ["chars","effects","eithers","equality","files","hashing","lists","literals","logic","maps","math","optionals","pairs","regex","sets","strings","system","text"];
+  const langSegByTarget: Record<string, string> = {
+    "common-lisp": "common_lisp",
+    "emacs-lisp":  "emacs_lisp",
+  };
+  const nonSubEntryNames = new Set(["libraries", "Libraries", "__init__", "PrimitiveType"]);
+  const libSubsForTarget = (target: string): string[] => {
+    if (target === "haskell" || target === "go") return [];
+    const langSeg = langSegByTarget[target] ?? target;
+    if (!distJsonRoot) return LIB_SUBS_FALLBACK;
+    const repoRoot = resolve(distJsonRoot, "..", "..");
+    const libDir = join(repoRoot, "overlay", target, "hydra-kernel", "src", "main", target, "hydra", "overlay", langSeg, "lib");
+    if (!existsSync(libDir)) return LIB_SUBS_FALLBACK;
+    const entries = readdirSync(libDir);
+    const subs = entries
+      .map((e) => (statSync(join(libDir, e)).isDirectory() ? e : e.replace(/\.[^.]+$/, "")))
+      .filter((name) => !nonSubEntryNames.has(name));
+    return subs.length > 0 ? subs : LIB_SUBS_FALLBACK;
+  };
+  const targetLibSubs = libSubsForTarget(opts.target);
+  const overlaySubs = new Set(targetLibSubs);
+
   // For Lisp dialects, wrap the raw coder so that:
-  //   1. The dialect tag is prepended to the args (moduleToLisp(dialect, mod, ...))
+  //   1. The dialect tag and overlaySubs are prepended to the args
+  //      (moduleToLisp(dialect, overlaySubs, mod, ...))
   //   2. The returned LispProgram is post-processed via programToExpr → parenthesize →
   //      printExpr to a single string, then keyed under the module's per-dialect file
   //      path. Mirrors heads/haskell/.../ExtGeneration.hs moduleToLispDialect.
@@ -283,11 +319,11 @@ const main = async (): Promise<void> => {
     const caseConvention = dispatch.lispDialect === "clojure"
       ? { tag: "camel" }
       : { tag: "lowerSnake" };
-    const lispSerde = await import("../../../../../hydra-lisp/src/main/typescript/hydra/lisp/serde.js") as { programToExpr: (p: unknown) => unknown };
+    const lispSerde = await import("../../../../../../hydra-lisp/src/main/typescript/hydra/lisp/serde.js") as { programToExpr: (p: unknown) => unknown };
     const serialization = await import("./serialization.js") as { parenthesize: (e: unknown) => unknown; printExpr: (e: unknown) => string };
     const namesMod = await import("./names.js") as { moduleNameToFilePath: (cc: unknown, ext: unknown, ns: unknown) => string };
     moduleTo = (mod, defs, cx, g) => {
-      const result = rawModuleTo(dialectArg, mod, defs, cx, g);
+      const result = rawModuleTo(dialectArg, overlaySubs, mod, defs, cx, g);
       if (result.tag === "left") return result;
       const program = result.value;
       const exprStr = serialization.printExpr(serialization.parenthesize(lispSerde.programToExpr(program)));
@@ -298,7 +334,7 @@ const main = async (): Promise<void> => {
       return { tag: "right" as const, value: out };
     };
   } else {
-    moduleTo = rawModuleTo as typeof moduleTo;
+    moduleTo = (mod, defs, cx, g) => rawModuleTo(overlaySubs, mod, defs, cx, g) as ReturnType<typeof moduleTo>;
   }
 
   // Step 2: collect JSON files. The kernel JSON layout is per-namespace:
@@ -315,7 +351,7 @@ const main = async (): Promise<void> => {
   // imports. Mirrors `bootstrap-from-json/Main.hs` Step 1 — baseline
   // packages always loaded into the universe; emission is filtered to
   // only the packages the target needs (see step 4 below).
-  const distJsonRoot = distJsonRootFromKernelDir(opts.jsonDir);
+  // (distJsonRoot computed above, alongside overlaySubs.)
   const mainJsonFiles: Array<{ path: string; json: unknown; pkg: string }> =
     readJsonTree(opts.jsonDir).map((f) => ({ ...f, pkg: "hydra-kernel" }));
   if (distJsonRoot) {
@@ -440,9 +476,10 @@ const main = async (): Promise<void> => {
   const outMain = join(opts.output, "src/main", opts.target);
   const outTest = join(opts.output, "src/test", opts.target);
 
-  // `generateSourceFiles` calls printDefinitions flat (mod, defs, cx, g),
-  // so the wrapper here just forwards. The result entries are
-  // [filePath, content] tuples from `maps.toList`.
+  // `generateSourceFiles` calls printDefinitions flat (mod, defs, cx, g); the
+  // wrapper here forwards into moduleTo, which closes over overlaySubs
+  // (computed above) as moduleTo<Lang>'s leading argument. The result entries
+  // are [filePath, content] tuples from `maps.toList`.
   const printDefinitions = (m: unknown, defs: unknown, c: unknown, g: unknown) =>
     moduleTo(m, defs as unknown[], c, g);
 
@@ -460,33 +497,7 @@ const main = async (): Promise<void> => {
   // `redirectForSubs` (Main.hs) and bootstrap.py's _LIB_SUBS — the TS host must apply
   // the same redirect when emitting other hosts (e.g. ts -> python). Applied to the
   // main and test (consumer) passes only, never the lib pass (which emits hydra.lib.*).
-  // For #507.
-  //
-  // #568/#569/#588: the redirectable subs are derived from the TARGET's own overlay lib
-  // directory (which hydra.lib.<sub> impls it actually ships), not a hand-maintained
-  // allowlist — a by-name list silently drops future subs (this is how TS's list ended
-  // up missing "hashing": #524 registered it in every host driver except this one).
-  // Mirrors libSubsForTarget in heads/java/src/main/java/hydra/Bootstrap.java (#569).
-  const LIB_SUBS_FALLBACK = ["chars","effects","eithers","equality","files","hashing","lists","literals","logic","maps","math","optionals","pairs","regex","sets","strings","system","text"];
-  const langSegByTarget: Record<string, string> = {
-    "common-lisp": "common_lisp",
-    "emacs-lisp":  "emacs_lisp",
-  };
-  const nonSubEntryNames = new Set(["libraries", "Libraries", "__init__", "PrimitiveType"]);
-  const libSubsForTarget = (target: string): string[] => {
-    if (target === "haskell" || target === "go") return [];
-    const langSeg = langSegByTarget[target] ?? target;
-    if (!distJsonRoot) return LIB_SUBS_FALLBACK;
-    const repoRoot = resolve(distJsonRoot, "..", "..");
-    const libDir = join(repoRoot, "overlay", target, "hydra-kernel", "src", "main", target, "hydra", "overlay", langSeg, "lib");
-    if (!existsSync(libDir)) return LIB_SUBS_FALLBACK;
-    const entries = readdirSync(libDir);
-    const subs = entries
-      .map((e) => (statSync(join(libDir, e)).isDirectory() ? e : e.replace(/\.[^.]+$/, "")))
-      .filter((name) => !nonSubEntryNames.has(name));
-    return subs.length > 0 ? subs : LIB_SUBS_FALLBACK;
-  };
-  const targetLibSubs = libSubsForTarget(opts.target);
+  // For #507. (targetLibSubs/langSegByTarget computed above, alongside overlaySubs.)
   const redirectLibRefs = (src: string): string => {
     const subs = targetLibSubs;
     if (subs.length === 0) return src;
