@@ -1,0 +1,74 @@
+{
+  "name": "hydra-language",
+  "displayName": "Hydra language support",
+  "description": "Syntax highlighting and editing support for the Hydra translingual graph language (.hydra textual syntax).",
+  "version": "0.20.0",
+  "comment-version": "TODO(#806): CI should overwrite 'version' from Hydra's single version number at package time rather than hardcoding here.",
+  "publisher": "categoricaldata",
+  "comment-publisher": "TODO(#495): confirm publisher ID / display name / icon with branding issue before first publish. Marketplace publisher 'Hydra' and Open VSX namespace 'hydra' are taken.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CategoricalData/hydra.git",
+    "directory": "editors/vscode"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "hydra",
+    "translingual",
+    "graph",
+    "lambdagraph",
+    "functional"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": ["onLanguage:hydra"],
+  "contributes": {
+    "languages": [
+      {
+        "id": "hydra",
+        "aliases": [
+          "Hydra",
+          "hydra"
+        ],
+        "extensions": [
+          ".hydra"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "hydra",
+        "scopeName": "source.hydra",
+        "path": "./syntaxes/hydra.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "hydra",
+        "path": "./snippets/hydra.json"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test:grammar": "vscode-tmgrammar-test -g syntaxes/hydra.tmLanguage.json \"tests/scopes/*.hydra\"",
+    "test:corpus:refresh": "bash tests/refresh-corpus.sh",
+    "test:corpus": "vscode-tmgrammar-snap -g syntaxes/hydra.tmLanguage.json \"tests/corpus/*.hydra\"",
+    "test": "npm run test:grammar && npm run test:corpus",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.0",
+    "@types/vscode": "^1.75.0",
+    "@vscode/vsce": "^2.24.0",
+    "typescript": "^5.4.0",
+    "vscode-tmgrammar-test": "^0.1.3"
+  }
+}

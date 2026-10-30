@@ -1,0 +1,321 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Hydra",
+  "scopeName": "source.hydra",
+  "fileTypes": ["hydra"],
+  "comment": "TextMate grammar for the Hydra textual syntax (.hydra). Single source of truth for highlighting, derived from docs/specification/syntax.md (#497 lexical/term/type grammar, #710/#6 module grammar, #809 nominal sugar). See #806. A TextMate grammar only TOKENIZES, never rejects; forms reserved for #811 (operator / do-block / destructuring-pattern sugar) that are not yet accepted by the parser are included here and tagged 'forward-looking (#811)' in their own comment keys.",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#module-header" },
+    { "include": "#import-decl" },
+    { "include": "#definition-keywords" },
+    { "include": "#expression" }
+  ],
+  "repository": {
+    "expression": {
+      "comment": "Everything that can appear in term/type position. Lexical patterns (literals, strings, names) come before structural keywords so e.g. a suffixed literal's ':int32' wins over a bare reserved word.",
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#strings" },
+        { "include": "#literals" },
+        { "include": "#backtick-name" },
+        { "include": "#binder-head" },
+        { "include": "#keywords-reserved" },
+        { "include": "#operators-unicode" },
+        { "include": "#operators-reserved" },
+        { "include": "#operators-ascii" },
+        { "include": "#type-brackets" },
+        { "include": "#nominal-sugar" },
+        { "include": "#qualified-name" }
+      ]
+    },
+
+    "binder-head": {
+      "comment": "§2.4 binder heads: the region between a binder (λ Λ forall ∀) and the dot that terminates it. At bracket depth zero bare names are SINGLE dot-free segments and the terminating '.' is STRUCTURAL (not part of a qualified name). A dotted name here must be backtick-escaped; inside nested <...>/(...)/backticks dots read greedily as usual. This begin/end scope claims the glyph + head so the greedy #qualified-name rule cannot glue 'y.either' (binder name + terminating dot + following keyword) into one token. The head ends at the first depth-zero '.'; nested '<...>' groups and backticks are consumed as inner patterns so their dots do not end the head.",
+      "begin": "(λ)|(Λ)|(∀)|\\b(forall)\\b",
+      "beginCaptures": {
+        "1": { "name": "keyword.operator.lambda.hydra" },
+        "2": { "name": "keyword.operator.type-lambda.hydra" },
+        "3": { "name": "keyword.operator.forall-scheme.hydra" },
+        "4": { "name": "support.type.hydra" }
+      },
+      "end": "\\.",
+      "endCaptures": {
+        "0": { "name": "punctuation.separator.binder.hydra" }
+      },
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#backtick-name" },
+        {
+          "comment": "A nested type-argument group '<...>' inside a binder-head domain type, where dots read greedily. Recurses into the full expression so inner qualified names, nested groups, etc. tokenize normally; the group's own dots never terminate the head.",
+          "begin": "<",
+          "end": ">",
+          "beginCaptures": { "0": { "name": "punctuation.definition.typeargs.begin.hydra" } },
+          "endCaptures": { "0": { "name": "punctuation.definition.typeargs.end.hydra" } },
+          "patterns": [ { "include": "#expression" } ]
+        },
+        {
+          "comment": "A nested parenthesized group inside a binder-head (e.g. a kinded binder '(f : * → *)' RESERVED #226, or a parenthesized domain type). Dots inside read greedily.",
+          "begin": "\\(",
+          "end": "\\)",
+          "patterns": [ { "include": "#expression" } ]
+        },
+        {
+          "comment": "The ':' separating a binder name from its domain type (λx:t. / kinded forall).",
+          "match": ":",
+          "name": "punctuation.separator.type.hydra"
+        },
+        {
+          "comment": "Separator between multiple binder names (∀x,y.).",
+          "match": ",",
+          "name": "punctuation.separator.binder.hydra"
+        },
+        {
+          "comment": "Literal type names appearing as a bare binder-head domain (λx:int32.body).",
+          "match": "\\b(bigint|binary|boolean|decimal|float32|float64|int8|int16|int32|int64|string|uint8|uint16|uint32|uint64|unit|void)\\b",
+          "name": "support.type.hydra"
+        },
+        {
+          "comment": "A single dot-free segment: a binder name OR a bare single-segment domain type name. (Dotted names at depth zero would be a spec violation unless backticked, handled above.)",
+          "match": "[A-Za-z_][A-Za-z0-9_]*",
+          "name": "variable.parameter.hydra"
+        }
+      ]
+    },
+
+    "comments": {
+      "patterns": [
+        {
+          "comment": "Doc comment (§6.2): '## ...' or a bare '##' separator line. Structured EntityMetadata, distinct from the whitespace-class '#' line comment. Must precede the plain-comment rule so '##' is not eaten as '#'.",
+          "name": "comment.block.documentation.hydra",
+          "begin": "##",
+          "end": "$",
+          "patterns": [
+            {
+              "comment": "@key metadata lines inside a doc comment (§6.2): @seeAlso @availableSince @deprecatedSince @requirement @recommendation.",
+              "match": "@(seeAlso|availableSince|deprecatedSince|requirement|recommendation)\\b",
+              "name": "keyword.other.documentation.directive.hydra"
+            }
+          ]
+        },
+        {
+          "comment": "Plain line comment (§2.2): '#' to end of line. Not special inside strings/backticks (handled by those rules consuming first).",
+          "name": "comment.line.number-sign.hydra",
+          "match": "#.*$"
+        }
+      ]
+    },
+
+    "module-header": {
+      "comment": "§6.1: 'module' <moduleName>. moduleName is a dotted name read greedily.",
+      "match": "^\\s*(module)\\s+([A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*)",
+      "captures": {
+        "1": { "name": "keyword.control.module.hydra" },
+        "2": { "name": "entity.name.namespace.hydra" }
+      }
+    },
+
+    "import-decl": {
+      "comment": "§6.1/§6.3: 'import' <moduleName> [as <alias>] [from <package>]. Alias and package may be dotted.",
+      "begin": "^\\s*(import)\\b",
+      "end": "$",
+      "beginCaptures": {
+        "1": { "name": "keyword.control.import.hydra" }
+      },
+      "patterns": [
+        {
+          "match": "\\b(as|from)\\b",
+          "name": "keyword.control.import.hydra"
+        },
+        { "include": "#comments" },
+        {
+          "match": "[A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*",
+          "name": "entity.name.namespace.hydra"
+        }
+      ]
+    },
+
+    "definition-keywords": {
+      "comment": "§6.1: definition kinds and their modifiers. 'type'/'term'/'primitive' with optional 'impure'/'partial' prefixes. These are also in the §2.7 reserved list; captured here at line start to additionally mark the defined name.",
+      "patterns": [
+        {
+          "comment": "A definition line: [impure] [partial] (type|term|primitive) <localName>. localName captured as the defined entity.",
+          "match": "^\\s*(?:(impure)\\s+)?(?:(partial)\\s+)?(type|term|primitive)\\s+(`(?:[^`\\\\]|\\\\.)*`|[A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": { "name": "storage.modifier.impure.hydra" },
+            "2": { "name": "storage.modifier.partial.hydra" },
+            "3": { "name": "keyword.other.definition.hydra" },
+            "4": { "name": "entity.name.function.hydra" }
+          }
+        }
+      ]
+    },
+
+    "strings": {
+      "comment": "§2.5: JSON string syntax and escapes. '#' is NOT special inside a string.",
+      "name": "string.quoted.double.hydra",
+      "begin": "\"",
+      "end": "\"",
+      "beginCaptures": { "0": { "name": "punctuation.definition.string.begin.hydra" } },
+      "endCaptures": { "0": { "name": "punctuation.definition.string.end.hydra" } },
+      "patterns": [
+        {
+          "comment": "JSON escapes: \\\" \\\\ \\b \\f \\n \\r \\t and \\u00xx (lowercase hex per §2.5).",
+          "match": "\\\\([\"\\\\bfnrt]|u[0-9a-fA-F]{4})",
+          "name": "constant.character.escape.hydra"
+        },
+        {
+          "match": "\\\\.",
+          "name": "invalid.illegal.unrecognized-string-escape.hydra"
+        }
+      ]
+    },
+
+    "literals": {
+      "patterns": [
+        {
+          "comment": "§2.6 Binary literal: a JSON string immediately followed by ':binary'. Matched before plain strings would be, but since the string body is complex we tag the ':binary' suffix and let the string rule handle the quotes via a separate higher-level include is impractical; here we only tag the suffix that abuts a closing quote.",
+          "match": "(?<=\")\\s*(:)(binary)\\b",
+          "captures": {
+            "1": { "name": "punctuation.separator.type.hydra" },
+            "2": { "name": "support.type.literal.binary.hydra" }
+          }
+        },
+        {
+          "comment": "§2.6 Float literal with mandatory precision suffix, incl. non-finite sentinels: 0.42:float32, 2.5e10:float64, NaN:float64, Infinity:float32, -Infinity:float64.",
+          "match": "(?:[-+]?(?:NaN|Infinity)|[-+]?[0-9][0-9]*(?:\\.[0-9]+)?(?:[eE][-+]?[0-9]+)?)(:)(float32|float64)\\b",
+          "captures": {
+            "0": { "name": "constant.numeric.float.hydra" },
+            "1": { "name": "punctuation.separator.type.hydra" },
+            "2": { "name": "support.type.literal.float.hydra" }
+          }
+        },
+        {
+          "comment": "§2.6 Integer literal with mandatory width suffix: 42:int32, -7:int64.",
+          "match": "([-+]?[0-9]+)(:)(bigint|int8|int16|int32|int64|uint8|uint16|uint32|uint64)\\b",
+          "captures": {
+            "1": { "name": "constant.numeric.integer.hydra" },
+            "2": { "name": "punctuation.separator.type.hydra" },
+            "3": { "name": "support.type.literal.integer.hydra" }
+          }
+        },
+        {
+          "comment": "§2.6 Decimal literal (arbitrary precision): a bare JSON number with NO suffix. Must NOT be followed by ':' + a width/float keyword (those are handled above). Negative lookahead on the suffix avoids double-matching the leading digits of a suffixed literal.",
+          "match": "[-+]?[0-9][0-9]*(?:\\.[0-9]+)?(?:[eE][-+]?[0-9]+)?(?!:(?:bigint|int8|int16|int32|int64|uint8|uint16|uint32|uint64|float32|float64)\\b)",
+          "name": "constant.numeric.decimal.hydra"
+        },
+        {
+          "comment": "§2.6 Booleans.",
+          "match": "\\b(true|false)\\b",
+          "name": "constant.language.boolean.hydra"
+        }
+      ]
+    },
+
+    "backtick-name": {
+      "comment": "§2.4: backtick-escaped name `...`, admitting any name (uses the §2.5 string escape set for its content). Example in-use: `_` (escaped reserved word).",
+      "name": "variable.other.escaped.hydra",
+      "begin": "`",
+      "end": "`",
+      "beginCaptures": { "0": { "name": "punctuation.definition.name.begin.hydra" } },
+      "endCaptures": { "0": { "name": "punctuation.definition.name.end.hydra" } },
+      "patterns": [
+        {
+          "match": "\\\\([\"\\\\bfnrt`]|u[0-9a-fA-F]{4})",
+          "name": "constant.character.escape.hydra"
+        }
+      ]
+    },
+
+    "keywords-reserved": {
+      "comment": "§2.7 reserved words, reserved in all positions. Split by role for richer highlighting. A reserved word is NOT highlighted as such when backtick-escaped — the #backtick-name rule consumes those first.",
+      "patterns": [
+        {
+          "comment": "Type-constructor and type-level keywords (§3 types + literal type names).",
+          "match": "\\b(bigint|binary|boolean|decimal|effect|either|float32|float64|forall|int8|int16|int32|int64|list|map|optional|set|string|uint8|uint16|uint32|uint64|union|unit|void)\\b",
+          "name": "support.type.hydra"
+        },
+        {
+          "comment": "Term-level keywords: binders, eliminators, constructors, let (§3).",
+          "match": "\\b(as|cases|from|given|import|in|inject|lazy|left|let|module|none|partial|primitive|project|record|right|term|type|unwrap|wrap|impure)\\b",
+          "name": "keyword.control.hydra"
+        },
+        {
+          "comment": "The case-default / anonymous wildcard '_' (reserved; backtick form handled separately).",
+          "match": "\\b_\\b",
+          "name": "keyword.other.wildcard.hydra"
+        },
+        {
+          "comment": "Float non-finite sentinel bare keywords NaN/Infinity when not part of a suffixed literal (those are handled in #literals).",
+          "match": "\\b(NaN|Infinity)\\b",
+          "name": "constant.language.float.hydra"
+        }
+      ]
+    },
+
+    "operators-unicode": {
+      "comment": "§2.3 Unicode operators/binders. λ Λ ∀ → ⇒ ⟨ ⟩. 'forall' (the keyword, §2.3) is handled as a type keyword above; ∀ is the type-scheme binder here.",
+      "patterns": [
+        { "match": "λ", "name": "keyword.operator.lambda.hydra" },
+        { "match": "Λ", "name": "keyword.operator.type-lambda.hydra" },
+        { "match": "∀", "name": "keyword.operator.forall-scheme.hydra" },
+        { "match": "→", "name": "keyword.operator.arrow.hydra" },
+        { "match": "⇒", "name": "keyword.operator.constraint-arrow.hydra" },
+        { "match": "⟨", "name": "punctuation.definition.typeapp.begin.hydra" },
+        { "match": "⟩", "name": "punctuation.definition.typeapp.end.hydra" }
+      ]
+    },
+
+    "operators-ascii": {
+      "comment": "§2.3 ASCII tokens. ':=' (let bindings) before '=' (fields/map entries) before ':' (ascription). '@' annotation marker.",
+      "patterns": [
+        { "match": ":=", "name": "keyword.operator.assignment.hydra" },
+        { "match": "@", "name": "keyword.operator.annotation.hydra" },
+        { "match": "=", "name": "keyword.operator.equals.hydra" },
+        { "match": ":", "name": "punctuation.separator.type.hydra" }
+      ]
+    },
+
+    "type-brackets": {
+      "comment": "§3: '<' '>' are type-argument delimiters (list<t>, map<k,v>, either<a,b>, effect<t>, optional<t>, set<t>) — structural punctuation, NOT operators. The #811 comparison operators share the '<'/'>' glyphs but are forward-looking and parse-only; the pervasive landed role is the delimiter, so single '<'/'>' tokenize as brackets here. The unambiguous 2-char comparison tokens ('<=' '>=' '==') are still tagged as reserved comparison operators in #operators-reserved (matched before this rule).",
+      "patterns": [
+        { "match": "<", "name": "punctuation.definition.typeargs.begin.hydra" },
+        { "match": ">", "name": "punctuation.definition.typeargs.end.hydra" }
+      ]
+    },
+
+    "operators-reserved": {
+      "comment": "forward-looking (#811): operator / pipeline sugar that the spec (§3) reserves but the parser does not yet accept. A TextMate grammar only tokenizes, so highlighting these early is harmless. NOTE on '-': per §2.6 '-' occurs only inside numeric literals today; the #literals rules match a numeric '-' first, so a standalone '-' reaching here is only the (reserved) binary-minus operator. '<' and '>' are deliberately EXCLUDED (they are type-argument delimiters, see #type-brackets); only the unambiguous 2-char comparison tokens are here.",
+      "patterns": [
+        { "match": "\\|>", "name": "keyword.operator.pipeline.reserved.hydra" },
+        { "match": "&&|\\|\\|", "name": "keyword.operator.logical.reserved.hydra" },
+        { "match": "\\+\\+", "name": "keyword.operator.concat.reserved.hydra" },
+        { "match": "==|<=|>=", "name": "keyword.operator.comparison.reserved.hydra" },
+        { "match": "[-+*/]", "name": "keyword.operator.arithmetic.reserved.hydra" },
+        { "match": "!|¬", "name": "keyword.operator.negation.reserved.hydra" }
+      ]
+    },
+
+    "nominal-sugar": {
+      "comment": "§3 nominal sugar (#809, LANDED): a type name immediately before '{...}' or '[...]' (NO intervening whitespace) is nominal construction/elimination. We tag the name as a type reference; the braces/brackets fall through to normal punctuation. The abutting (?=[{\\[]) lookahead enforces the no-space rule — 'Name {' (with a space) is ordinary application and NOT matched here.",
+      "match": "([A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*)(?=[{\\[])",
+      "name": "entity.name.type.nominal.hydra"
+    },
+
+    "qualified-name": {
+      "comment": "§2.4: a bare dotted name, read greedily as one qualified name (hydra.core.model.Term). Primitive references and variables share this form (§3 variableTerm). The last segment starting uppercase hints a type/constructor; we keep a single scope for simplicity and let themes distinguish via the dotted punctuation.",
+      "patterns": [
+        {
+          "comment": "Qualified (dotted) name — at least one dot.",
+          "match": "\\b[A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)+\\b",
+          "name": "variable.other.qualified.hydra"
+        },
+        {
+          "comment": "Single-segment name (variable, binder name, field name).",
+          "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b",
+          "name": "variable.other.hydra"
+        }
+      ]
+    }
+  }
+}

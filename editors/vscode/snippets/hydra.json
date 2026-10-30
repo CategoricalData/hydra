@@ -1,0 +1,95 @@
+{
+  "comment": "Snippets for common Hydra forms (#806 scope item 4) plus prefix snippets for the Unicode operators (scope item 3: '\\lambda' -> 'λ' etc.). The abbreviation prefixes mirror the Lean/Agda convention; they are plain completion snippets here (no extension host needed). A live '\\l<space>' abbreviation is additionally provided by the extension's completion provider in src/extension.ts.",
+
+  "Module header": {
+    "prefix": "module",
+    "body": ["module ${1:hydra.example}", "", "$0"],
+    "description": "Module header (§6.1)"
+  },
+  "Import": {
+    "prefix": "import",
+    "body": ["import ${1:hydra.core.model}"],
+    "description": "Bare import (§6.3)"
+  },
+  "Import as": {
+    "prefix": "importas",
+    "body": ["import ${1:hydra.core.model} as ${2:model}"],
+    "description": "Aliased import (§6.3)"
+  },
+  "Type definition": {
+    "prefix": "type",
+    "body": ["type ${1:Name} = ∀${2:a}.${0:type}"],
+    "description": "Type definition with a type scheme (§6.1)"
+  },
+  "Term definition": {
+    "prefix": "term",
+    "body": ["term ${1:name} : ∀${2:a}.${3:type} = ${0:term}"],
+    "description": "Term definition with a term signature (§6.1)"
+  },
+  "Primitive definition": {
+    "prefix": "primitive",
+    "body": ["primitive ${1:name} : ∀${2:a}.${0:type}"],
+    "description": "Primitive definition (§6.1)"
+  },
+  "Lambda": {
+    "prefix": "lambda",
+    "body": ["λ${1:x}.${0:body}"],
+    "description": "Term lambda (§3)"
+  },
+  "Lambda with domain": {
+    "prefix": "lambdat",
+    "body": ["λ${1:x}:${2:type}.${0:body}"],
+    "description": "Term lambda with explicit domain type (§3)"
+  },
+  "Type lambda": {
+    "prefix": "typelambda",
+    "body": ["Λ${1:t}.${0:body}"],
+    "description": "Type lambda / System F (§3)"
+  },
+  "Let ... in": {
+    "prefix": "let",
+    "body": ["let ${1:x} := ${2:value} in ${0:body}"],
+    "description": "Let binding (§3)"
+  },
+  "Cases": {
+    "prefix": "cases",
+    "body": ["cases (${1:UnionType}) {", "  ${2:variant} = ${3:handler},", "  _ = ${0:default}", "}"],
+    "description": "Case elimination with a wildcard default (§3)"
+  },
+
+  "Unicode lambda": {
+    "prefix": "\\lambda",
+    "body": ["λ"],
+    "description": "λ (term lambda binder)"
+  },
+  "Unicode type-lambda": {
+    "prefix": "\\Lambda",
+    "body": ["Λ"],
+    "description": "Λ (type-lambda / System F binder)"
+  },
+  "Unicode forall-scheme": {
+    "prefix": "\\forall",
+    "body": ["∀"],
+    "description": "∀ (type-scheme binder)"
+  },
+  "Unicode arrow": {
+    "prefix": "\\to",
+    "body": ["→"],
+    "description": "→ (function / kind arrow)"
+  },
+  "Unicode double-arrow": {
+    "prefix": "\\Rightarrow",
+    "body": ["⇒"],
+    "description": "⇒ (type-scheme constraint arrow)"
+  },
+  "Unicode angle-open": {
+    "prefix": "\\langle",
+    "body": ["⟨"],
+    "description": "⟨ (term-level type application, open)"
+  },
+  "Unicode angle-close": {
+    "prefix": "\\rangle",
+    "body": ["⟩"],
+    "description": "⟩ (term-level type application, close)"
+  }
+}

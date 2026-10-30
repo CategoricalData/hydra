@@ -1,0 +1,33 @@
+{
+  "comment": "Editor behavior for .hydra files (#806). Line comment '#' per §2.2; bracket pairs per §2.3 (( ), ⟨ ⟩ for type application, { } sets/maps/records, [ ] lists, < > type-constructor arguments); auto-close quotes and backticks per §2.5/§2.4.",
+  "comments": {
+    "lineComment": "#"
+  },
+  "brackets": [
+    ["(", ")"],
+    ["⟨", "⟩"],
+    ["{", "}"],
+    ["[", "]"],
+    ["<", ">"]
+  ],
+  "autoClosingPairs": [
+    { "open": "(", "close": ")" },
+    { "open": "⟨", "close": "⟩" },
+    { "open": "{", "close": "}" },
+    { "open": "[", "close": "]" },
+    { "open": "<", "close": ">", "notIn": ["comment"] },
+    { "open": "\"", "close": "\"", "notIn": ["string", "comment"] },
+    { "open": "`", "close": "`", "notIn": ["comment"] }
+  ],
+  "surroundingPairs": [
+    ["(", ")"],
+    ["⟨", "⟩"],
+    ["{", "}"],
+    ["[", "]"],
+    ["<", ">"],
+    ["\"", "\""],
+    ["`", "`"]
+  ],
+  "autoCloseBefore": ";:.,=}])>` \n\t",
+  "wordPattern": "(`(?:[^`\\\\]|\\\\.)*`|[A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*)"
+}
