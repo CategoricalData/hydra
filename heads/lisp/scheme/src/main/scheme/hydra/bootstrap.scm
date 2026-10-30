@@ -883,7 +883,7 @@
     (string-replace-all redirected sentinel "hydra.lib.")))
 
 ;; Common Lisp / Emacs Lisp redirect: rename consumer call sites
-;; hydra_lib_<sub>_ -> hydra_core_overlay_<lang-seg>_lib_<sub>_, and drop the def-module
+;; hydra_lib_<sub>_ -> hydra_overlay_<lang-seg>_lib_<sub>_, and drop the def-module
 ;; ":hydra.lib.<sub>" token from consumer defpackage (:use ...) clauses.
 (define (redirect-lisp-flat s subs lang-seg)
   (let* ((renamed (let loop ((remaining subs) (acc s))
@@ -892,7 +892,7 @@
                          (loop (cdr remaining)
                                (string-replace-all acc
                                                    (string-append "hydra_lib_" (car remaining) "_")
-                                                   (string-append "hydra_core_overlay_" lang-seg "_lib_" (car remaining) "_")))))))
+                                                   (string-append "hydra_overlay_" lang-seg "_lib_" (car remaining) "_")))))))
     (let loop ((remaining subs) (acc renamed))
       (if (null? remaining)
           acc

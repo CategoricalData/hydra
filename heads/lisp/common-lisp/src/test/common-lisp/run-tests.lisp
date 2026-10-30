@@ -173,7 +173,7 @@
         '("loader.lisp" "prelude.lisp" "prims.lisp" "lazy.lisp"
           "struct-compat.lisp" "json-reader.lisp")))
 
-;; Set function bindings for native library defvars (e.g. hydra_core_overlay_common_lisp_lib_maps_singleton)
+;; Set function bindings for native library defvars (e.g. hydra_overlay_common_lisp_lib_maps_singleton)
 ;; so they can be called in function position in generated code.
 (hydra-set-function-bindings)
 
@@ -203,7 +203,7 @@
 ;; dist/json/hydra-build/src/main/json/expected-libraries.json by update-json-manifest.
 ;; Here we fail LOUDLY, with the named culprit, if this host's native runtime is
 ;; missing any expected library — the #533 payoff. "Registered" is probed at the
-;; RUNTIME level (is there a bound hydra_core_overlay_common_lisp_lib_<name>_* symbol?)
+;; RUNTIME level (is there a bound hydra_overlay_common_lisp_lib_<name>_* symbol?)
 ;; rather than by inspecting any hardcoded load list, so the check is immune to
 ;; drift between the loader's and this harness's native-lib dolists.
 ;;

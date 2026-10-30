@@ -153,11 +153,11 @@
 
 (defn- redirect-lisp-flat
   "Common Lisp / Emacs Lisp redirect: rename consumer call sites
-   hydra_lib_<sub>_ -> hydra_core_overlay_<lang-seg>_lib_<sub>_, and drop the def-module
+   hydra_lib_<sub>_ -> hydra_overlay_<lang-seg>_lib_<sub>_, and drop the def-module
    \":hydra.lib.<sub>\" token from consumer defpackage (:use ...) clauses."
   [^String s subs lang-seg]
   (let [renamed (reduce (fn [^String acc sub]
-                          (.replace acc (str "hydra_lib_" sub "_") (str "hydra_core_overlay_" lang-seg "_lib_" sub "_")))
+                          (.replace acc (str "hydra_lib_" sub "_") (str "hydra_overlay_" lang-seg "_lib_" sub "_")))
                         s subs)]
     (reduce (fn [^String acc sub]
               (.replace acc (str " :hydra.lib." sub) ""))

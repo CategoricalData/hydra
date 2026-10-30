@@ -328,10 +328,10 @@
 
 ;; #473 Step 0 — lib pass + redirect (mirrors the other host drivers + bootstrap-from-json/Main.hs).
 ;; Common Lisp is flat-namespace: native primitive IMPLEMENTATIONS were relocated to symbols
-;; hydra_core_overlay_common_lisp_lib_<sub>_<fn> (in :cl-user); the def-modules ship as real packages :hydra.lib.<sub>
+;; hydra_overlay_common_lisp_lib_<sub>_<fn> (in :cl-user); the def-modules ship as real packages :hydra.lib.<sub>
 ;; exporting the bare def symbols hydra_lib_<sub>_<fn> (PrimitiveDefinition values). The CL host must
 ;; (1) emit the :hydra.lib.<sub> def-modules from their LOWERED form (lib pass), and (2) in generated
-;; consumers, rename call sites hydra_lib_<sub>_ -> hydra_core_overlay_common_lisp_lib_<sub>_ (hit the relocated impls) and
+;; consumers, rename call sites hydra_lib_<sub>_ -> hydra_overlay_common_lisp_lib_<sub>_ (hit the relocated impls) and
 ;; DROP the ":hydra.lib.<sub>" token from defpackage (:use ...) clauses (so a consumer doesn't import the
 ;; def-module DATA over the impl). Primitive NAME strings are dotted "hydra.lib..." and untouched by the
 ;; underscore rename. See project_473_self_host_lib_pass_gap.
@@ -441,13 +441,13 @@
                                     (string-equal base "libraries")))))))))
 
 (defun redirect-cl (s subs lang-seg)
-  "Rename consumer call sites hydra_lib_<sub>_ -> hydra_core_overlay_<lang-seg>_lib_<sub>_ and drop the
+  "Rename consumer call sites hydra_lib_<sub>_ -> hydra_overlay_<lang-seg>_lib_<sub>_ and drop the
    def-module :use token, per SUBS."
   (let ((out s))
     (dolist (sub subs out)
       (setf out (string-replace-all out
                                     (concatenate 'string "hydra_lib_" sub "_")
-                                    (concatenate 'string "hydra_core_overlay_" lang-seg "_lib_" sub "_")))
+                                    (concatenate 'string "hydra_overlay_" lang-seg "_lib_" sub "_")))
       ;; Drop the ":hydra.lib.<sub>" token from (:use ...) — appears on its own line.
       (setf out (string-replace-all out
                                     (concatenate 'string (string #\Newline) ":hydra.lib." sub)
