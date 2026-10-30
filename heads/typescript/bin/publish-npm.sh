@@ -211,7 +211,14 @@ gate_fail=0
 for pkg in "${PUBLISH_SET[@]}"; do
     manifest="$HYDRA_ROOT/dist/json/$pkg/src/main/json/manifest.json"
     tgz="$OUT_DIR/${pkg}-${VERSION}.tgz"
-    if [ ! -f "$manifest" ]; then echo "  -- $pkg: no manifest.json (skipped)"; continue; fi
+    if [ ! -f "$manifest" ]; then
+        # #772: manifest.json is a generated, always-expected path post-sync; its absence is
+        # a path regression, not a benign skip. Failing the gate (not just skipping) matches
+        # the whole point of #621 -- never publish a package that wasn't actually validated.
+        echo "  ERROR: $pkg: no manifest.json at $manifest — cannot verify completeness" >&2
+        gate_fail=1
+        continue
+    fi
     if [ ! -f "$tgz" ]; then echo "  ERROR: no tarball for $pkg at $VERSION" >&2; gate_fail=1; continue; fi
     if python3 "$HYDRA_ROOT/bin/check-artifact-complete.py" \
           --manifest "$manifest" --artifact "$tgz" --kind npm-tgz; then :; else

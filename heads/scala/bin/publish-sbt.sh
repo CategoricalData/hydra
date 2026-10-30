@@ -133,7 +133,14 @@ run_621_scala_gate() {
         # suffix (e.g. _3) is part of the sbt artifact name.
         jar=$(ls -t "$HYDRA_ROOT/dist/scala/$pkg"/target/scala-*/"$pkg"_*-"$VERSION".jar 2>/dev/null \
               | grep -viE 'sources|javadoc' | head -1)
-        if [ ! -f "$manifest" ]; then echo "  -- $pkg: no manifest.json (skipped)"; continue; fi
+        if [ ! -f "$manifest" ]; then
+            # #772: manifest.json is a generated, always-expected path post-sync; its absence is
+            # a path regression, not a benign skip. Failing the gate (not just skipping) matches
+            # the whole point of #621 -- never publish a package that wasn't actually validated.
+            echo "  ERROR: $pkg: no manifest.json at $manifest — cannot verify completeness" >&2
+            gate_fail=1
+            continue
+        fi
         if [ -z "$jar" ] || [ ! -f "$jar" ]; then
             echo "  ERROR: no Scala jar found for $pkg at $VERSION" >&2; gate_fail=1; continue
         fi

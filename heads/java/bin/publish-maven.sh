@@ -254,13 +254,30 @@ for pkg in "${PUBLISH_SET[@]}"; do
     [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
     manifest="$HYDRA_ROOT/dist/json/$pkg/src/main/json/manifest.json"
     jar=$(ls "$HYDRA_ROOT/dist/java/$pkg/build/libs/$pkg-$VERSION.jar" 2>/dev/null | head -1)
-    if [ ! -f "$manifest" ]; then echo "  -- $pkg: no manifest.json (skipped)"; continue; fi
+    if [ ! -f "$manifest" ]; then
+        # #772: manifest.json is a generated, always-expected path post-sync; its absence is
+        # a path regression, not a benign skip. Failing the gate (not just skipping) matches
+        # the whole point of #621 -- never publish a package that wasn't actually validated.
+        echo "  ERROR: $pkg: no manifest.json at $manifest — cannot verify completeness" >&2
+        gate_fail=1
+        continue
+    fi
     if [ -z "$jar" ] || [ ! -f "$jar" ]; then
         echo "  ERROR: no jar for $pkg at $VERSION (dist/java/$pkg/build/libs/)" >&2; gate_fail=1; continue
     fi
     # hydra-kernel additionally gets the #417 required-symbols check.
     req_args=()
-    [ "$pkg" = "hydra-kernel" ] && [ -f "$REQ_SYMS" ] && req_args=(--required-symbols "$REQ_SYMS")
+    if [ "$pkg" = "hydra-kernel" ]; then
+        if [ -f "$REQ_SYMS" ]; then
+            req_args=(--required-symbols "$REQ_SYMS")
+        else
+            # #772: REQ_SYMS is a tracked repo file, not a generated path -- its absence is
+            # always a regression (moved/renamed), never a legitimate skip. Silently dropping
+            # --required-symbols here would quietly disable the #417 completeness check.
+            echo "  ERROR: #417 required-symbols file not found: $REQ_SYMS" >&2
+            gate_fail=1
+        fi
+    fi
     if python3 "$HYDRA_ROOT/bin/check-artifact-complete.py" \
           --manifest "$manifest" --artifact "$jar" --kind java-jar ${req_args[@]+"${req_args[@]}"}; then :; else
         echo "  ARTIFACT INCOMPLETE: $pkg-$VERSION.jar missing declared modules/#417 symbols — refusing to publish" >&2
