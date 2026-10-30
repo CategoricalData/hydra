@@ -157,6 +157,7 @@ BENCHMARK_OUTPUT = os.environ.get("HYDRA_BENCHMARK_OUTPUT", "")
 # Global state for benchmark timing
 _benchmark_timers: dict[str, int] = {}  # path -> start time (perf_counter_ns)
 _benchmark_results: dict[str, float] = {}  # path -> elapsed ms
+_benchmark_outcomes: dict[str, dict[str, int]] = {}  # group path -> passed/failed/skipped counts
 _init_start_ns: int = 0  # start time for test infrastructure initialization
 
 
@@ -292,7 +293,7 @@ def get_test_graph() -> hydra.core.graph.Graph:
 _all_tests = generate_pytest_tests(
     test_suite.all_tests(), default_test_runner, test_suite,
     benchmark_output=BENCHMARK_OUTPUT, benchmark_timers=_benchmark_timers,
-    benchmark_results=_benchmark_results)
+    benchmark_results=_benchmark_results, benchmark_outcomes=_benchmark_outcomes)
 
 # Eagerly initialize test infrastructure so that JSON module loading
 # and graph construction are not counted inside the first test group's timer.
@@ -311,5 +312,5 @@ for test_name, hydra_path, test_fn in _all_tests:
 # Uses atexit to write JSON after all tests complete.
 if BENCHMARK_OUTPUT:
     atexit.register(
-        write_benchmark_json, BENCHMARK_OUTPUT, default_test_runner,
+        write_benchmark_json, BENCHMARK_OUTPUT, _benchmark_outcomes,
         test_suite.all_tests(), test_suite, "python", _benchmark_results)

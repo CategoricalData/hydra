@@ -84,35 +84,40 @@ def prepare_effectful_temp_dir() -> None:
     os.makedirs(EFFECTFUL_TEST_DIR, exist_ok=True)
 
 
-def _count_test_cases(group: hydra.core.testing.TestGroup, runner: TestRunner, suite_module) -> tuple[int, int]:
-    runnable = 0
-    skipped = 0
-    for tcase in group.cases:
-        if should_skip_test(tcase):
-            skipped += 1
-        elif runner(group.name, tcase) is not None:
-            runnable += 1
-        else:
-            skipped += 1
+Outcomes = dict[str, dict[str, int]]
+
+
+def _record_outcome(outcomes: Outcomes, group_path: str, status: str) -> None:
+    counts = outcomes.setdefault(group_path, {"passed": 0, "failed": 0, "skipped": 0})
+    counts[status] += 1
+
+
+def _tally(group, path: str, outcomes: Outcomes, suite_module) -> tuple[int, int, int]:
+    """Sum the recorded (passed, failed, skipped) outcomes over a group and its subgroups."""
+    own = outcomes.get(path, {})
+    passed = own.get("passed", 0)
+    failed = own.get("failed", 0)
+    skipped = own.get("skipped", 0)
     for subgroup_item in group.subgroups:
         sg = _resolve_subgroup(subgroup_item, suite_module)
-        r, s = _count_test_cases(sg, runner, suite_module)
-        runnable += r
+        p, f, s = _tally(sg, f"{path}/{sg.name}", outcomes, suite_module)
+        passed += p
+        failed += f
         skipped += s
-    return runnable, skipped
+    return passed, failed, skipped
 
 
-def _group_to_json_value(group, parent_path, runner, results, suite_module):
+def _group_to_json_value(group, parent_path, outcomes, results, suite_module):
     import hydra.core.json.model as json
 
     path = f"{parent_path}/{group.name}" if parent_path else group.name
-    runnable, skipped = _count_test_cases(group, runner, suite_module)
+    passed, failed, skipped = _tally(group, path, outcomes, suite_module)
     time_ms = results.get(path, 0.0)
 
     fields = {
         "path": json.ValueString(path),
-        "passed": json.ValueNumber(Decimal(runnable)),
-        "failed": json.ValueNumber(Decimal(0)),
+        "passed": json.ValueNumber(Decimal(passed)),
+        "failed": json.ValueNumber(Decimal(failed)),
         "skipped": json.ValueNumber(Decimal(skipped)),
         "totalTimeMs": json.ValueNumber(Decimal(str(round(time_ms, 1)))),
     }
@@ -120,7 +125,7 @@ def _group_to_json_value(group, parent_path, runner, results, suite_module):
     subgroups = []
     for subgroup_item in group.subgroups:
         sg = _resolve_subgroup(subgroup_item, suite_module)
-        subgroups.append(_group_to_json_value(sg, path, runner, results, suite_module))
+        subgroups.append(_group_to_json_value(sg, path, outcomes, results, suite_module))
 
     if subgroups:
         fields["subgroups"] = json.ValueArray(tuple(subgroups))
@@ -130,7 +135,7 @@ def _group_to_json_value(group, parent_path, runner, results, suite_module):
 
 def write_benchmark_json(
     output_path: str,
-    runner: TestRunner,
+    outcomes: Outcomes,
     root_group: hydra.core.testing.TestGroup,
     suite_module,
     language: str,
@@ -155,7 +160,7 @@ def write_benchmark_json(
     commit = git_output(["rev-parse", "--short", "HEAD"])
     commit_msg = git_output(["log", "-1", "--format=%s"])
 
-    total_runnable, total_skipped = _count_test_cases(root_group, runner, suite_module)
+    total_passed, total_failed, total_skipped = _tally(root_group, root_path, outcomes, suite_module)
     root_time = benchmark_results.get(root_path, 0.0)
 
     init_time_ms = benchmark_results.get(f"{root_path}/_initialization", 0.0)
@@ -171,7 +176,7 @@ def write_benchmark_json(
         )))
     for subgroup_item in root_group.subgroups:
         sg = _resolve_subgroup(subgroup_item, suite_module)
-        group_values.append(_group_to_json_value(sg, root_path, runner, benchmark_results, suite_module))
+        group_values.append(_group_to_json_value(sg, root_path, outcomes, benchmark_results, suite_module))
 
     json_value = json.ValueObject((
         ("metadata", json.ValueObject((
@@ -183,8 +188,8 @@ def write_benchmark_json(
         ))),
         ("groups", json.ValueArray(tuple(group_values))),
         ("summary", json.ValueObject((
-            ("totalPassed", json.ValueNumber(Decimal(total_runnable))),
-            ("totalFailed", json.ValueNumber(Decimal(0))),
+            ("totalPassed", json.ValueNumber(Decimal(total_passed))),
+            ("totalFailed", json.ValueNumber(Decimal(total_failed))),
             ("totalSkipped", json.ValueNumber(Decimal(total_skipped))),
             ("totalTimeMs", json.ValueNumber(Decimal(str(round(root_time, 1))))),
         ))),
@@ -205,6 +210,7 @@ def generate_pytest_tests(
     benchmark_output: str = "",
     benchmark_timers: dict[str, int] | None = None,
     benchmark_results: dict[str, float] | None = None,
+    benchmark_outcomes: Outcomes | None = None,
 ) -> list:
     """Generate pytest test functions from a test group, organized by group hierarchy."""
     tests = []
@@ -225,20 +231,31 @@ def generate_pytest_tests(
         desc = f"{group.name}, {tcase.name}"
 
         if should_skip_test(tcase):
-            def make_skip_test():
+            def make_skip_test(gp=new_hydra_path):
                 def test_fn():
+                    if benchmark_outcomes is not None:
+                        _record_outcome(benchmark_outcomes, gp, "skipped")
                     pytest.skip("Test is disabled or too slow")
                 return test_fn
             tests.append((test_name, case_hydra_path, make_skip_test()))
             continue
 
-        def make_test(test_desc: str, test_case: hydra.core.testing.TestCaseWithMetadata):
+        def make_test(test_desc: str, test_case: hydra.core.testing.TestCaseWithMetadata, gp=new_hydra_path):
             def test_fn():
                 test_func = runner(test_desc, test_case)
-                if test_func:
-                    test_func()
-                else:
+                if not test_func:
+                    if benchmark_outcomes is not None:
+                        _record_outcome(benchmark_outcomes, gp, "skipped")
                     pytest.skip("Test is disabled or not supported")
+                try:
+                    test_func()
+                except BaseException as e:
+                    if benchmark_outcomes is not None:
+                        _record_outcome(benchmark_outcomes, gp,
+                                        "skipped" if isinstance(e, pytest.skip.Exception) else "failed")
+                    raise
+                if benchmark_outcomes is not None:
+                    _record_outcome(benchmark_outcomes, gp, "passed")
             return test_fn
 
         tests.append((test_name, case_hydra_path, make_test(desc, tcase)))
@@ -247,7 +264,7 @@ def generate_pytest_tests(
         sg = _resolve_subgroup(subgroup_item, suite_module)
         tests.extend(generate_pytest_tests(
             sg, runner, suite_module, new_prefix, new_hydra_path,
-            benchmark_output, benchmark_timers, benchmark_results))
+            benchmark_output, benchmark_timers, benchmark_results, benchmark_outcomes))
 
     if benchmark_output and benchmark_timers is not None and benchmark_results is not None:
         timer_stop_name = f"{new_prefix}999_TIMER_END"
