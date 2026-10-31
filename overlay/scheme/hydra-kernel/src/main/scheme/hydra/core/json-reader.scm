@@ -1,7 +1,7 @@
 ;;; Minimal JSON reader for Scheme
 ;;; Parses JSON files to native Scheme structures:
 ;;;   objects -> alists, arrays -> lists, strings -> strings,
-;;;   numbers -> numbers, true -> #t, false -> json-false, null -> json-null
+;;;   integers -> numbers, other numbers -> (json-decimal . text), true -> #t, false -> json-false, null -> json-null
 ;;;
 ;;; Uses only R7RS-compatible procedures for portability across
 ;;; Guile, Chibi, Chicken, etc.
@@ -65,9 +65,14 @@
     (let ((ch (peek-char port)))
       (if (and (not (eof-object? ch)) (json-number-char? ch))
           (begin (read-char port) (loop (cons ch acc)))
-          (let* ((s (list->string (reverse acc)))
-                 (n (string->number s)))
-            (if n n (error "Invalid JSON number" s)))))))
+          ;; #727: a fractional/exponent number is a scale-preserving decimal ("1.10" keeps scale 2), so
+          ;; it is returned as (json-decimal . text) for the caller to parse, not read as an inexact.
+          (let ((s (list->string (reverse acc))))
+            (cond
+              ((not (string->number s)) (error "Invalid JSON number" s))
+              ((or (memv #\. (string->list s)) (memv #\e (string->list s)) (memv #\E (string->list s)))
+               (cons 'json-decimal s))
+              (else (string->number s))))))))
 
 (define (json-read-array port)
   (read-char port) ; consume [

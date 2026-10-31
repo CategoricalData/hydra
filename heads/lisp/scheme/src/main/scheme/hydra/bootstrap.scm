@@ -126,13 +126,19 @@
         (string-append (getcwd) "/"))))
 
 ;; Determine the gen-main base directory: resolves to
-;;   <worktree>/dist/scheme/hydra-kernel/src/main/scheme/hydra/
+;;   <worktree>/dist/scheme/hydra-kernel/src/main/scheme/hydra/core/
 ;; given that *script-dir* is
 ;;   <worktree>/heads/lisp/scheme/src/main/scheme/hydra/
 ;; (find "heads/lisp/scheme/" and replace with "dist/scheme/hydra-kernel/").
 ;; Defined here, immediately after *script-dir*, so the runtime loads below (loader.scm etc.,
 ;; migrated to dist by #434) can reference it.
-(define *gen-main-base*
+;; #729/#769: the module-grammar rename moved the hydra.core.* kernel (runtime + gen-main content,
+;; incl. loader.scm/json-reader.scm) down one level into hydra/core/. The kernel base therefore ends
+;; in hydra/core/; the target coders (hydra.python.coder etc.) stayed in their own packages at
+;; hydra/<lang>/ (siblings of core/), so *coder-root* below strips the trailing core/ for them. Without
+;; the core/ suffix, (load "<base>loader.scm") looked for the pre-#729 hydra/loader.scm and failed with
+;; "No such file or directory" (the scheme->python regression).
+(define *coder-root*
   (let* ((main-dir *script-dir*)
          (len (string-length main-dir))
          (needle "heads/lisp/scheme/")
@@ -148,6 +154,10 @@
                        (substring main-dir (+ pos nlen)))
         ;; Fallback: legacy gen-main location
         (string-append main-dir "../../gen-main/scheme/hydra/"))))
+
+;; The kernel runtime + gen-main tree live under hydra/core/ (post-#729); coders are siblings at
+;; hydra/<lang>/ reached via *coder-root* (the hydra/ package root, one level up).
+(define *gen-main-base* (string-append *coder-root* "core/"))
 
 ;; Load the kernel loader. Use *gen-main-base* (dist), not *script-dir* (heads): #434 migrated the
 ;; runtime (loader.scm, json-reader.scm, prims.scm, lib/libraries.scm, scheme/lib/*) out of the head
@@ -243,7 +253,9 @@
 (display "  Loading native libraries...\n")
 (force-output (current-output-port))
 ;; Load bytevector compatibility shim (provides snap-to-float32). Migrated to dist by #434 (see above).
-(hydra-load-native-lib (string-append *gen-main-base* "../scheme/bytevector.sld"))
+;; #769: bytevector.sld lives at src/main/scheme/scheme/bytevector.sld — resolve from *coder-root*
+;; (the hydra/ root); "../scheme/" from hydra/core/ would wrongly point at hydra/scheme/.
+(hydra-load-native-lib (string-append *coder-root* "../scheme/bytevector.sld"))
 ;; POSIX type modules (#494/#498) must load BEFORE the effectful impls below: the system/files impls
 ;; construct hydra.core.time.Timespec / hydra.core.file.* records at load time (e.g. get_time -> make-rec (hydra
 ;; time) make-hydra_core_time_timespec ...), so their record constructors must already be bound. These are
@@ -251,12 +263,15 @@
 ;; here is harmless. Dependency order: time (leaf) -> file (imports hydra.core.time) -> system (imports file).
 (for-each
   (lambda (m) (hydra-load-native-lib (string-append *gen-main-base* m)))
-  '("core.scm" "time.scm" "file.scm" "system.scm"))
+  '("model.scm" "time.scm" "file.scm" "system.scm"))
 ;; #473 Step 0 relocated the native lib impls from hydra/lib/ to hydra/scheme/lib/;
 ;; #501 relocated them again to hydra/overlay/scheme/lib/ (hydra.core.overlay.scheme.* namespace).
 (for-each
+  ;; #769: overlay/scheme/ is the documented #729 EXCEPTION — it stayed at hydra/overlay/scheme/
+  ;; (NOT hydra/core/overlay/scheme/), so resolve from *coder-root* (hydra/), not *gen-main-base*
+  ;; (hydra/core/).
   (lambda (f)
-    (hydra-load-native-lib (string-append *gen-main-base* "overlay/scheme/lib/" f)))
+    (hydra-load-native-lib (string-append *coder-root* "overlay/scheme/lib/" f)))
   ;; All hydra.core.overlay.scheme.lib.* impls (the registry references every one's impl procedure).
   ;; Must include the effectful/newer libs (effects/files/system #494/#498, hashing, text) or the
   ;; registry fails with "Unbound variable: hydra_lib_<sub>_<fn>".
@@ -344,7 +359,8 @@
     (hydra-load-def-module (string-append *gen-main-base* "lib/" sub ".scm")))
   '("chars" "defaults" "effects" "eithers" "equality" "files" "functions" "hashing" "lists" "literals"
     "logic" "maps" "math" "optionals" "ordering" "pairs" "regex" "sets" "strings" "system" "text"))
-(hydra-load-native-lib (string-append *gen-main-base* "overlay/scheme/libraries.scm"))
+;; #769: overlay/scheme/libraries.scm — same #729 exception as overlay/scheme/lib/ above; from *coder-root*.
+(hydra-load-native-lib (string-append *coder-root* "overlay/scheme/libraries.scm"))
 
 ;; Load coder modules based on target. Coder modules use define-record-type
 ;; with field names where the accessor needs to be a first-class procedure
@@ -375,7 +391,9 @@
             (else '()))))
     (for-each
       (lambda (f)
-        (let ((path (string-append *gen-main-base* f)))
+        ;; #769: coders live at hydra/<lang>/<f> — siblings of the kernel's hydra/core/, so resolve
+        ;; them from *coder-root* (the hydra/ package root), NOT *gen-main-base* (which ends in core/).
+        (let ((path (string-append *coder-root* f)))
           (when (file-exists? path)
             (display (string-append "  Loading " f " (alist-rec)...\n"))
             (force-output (current-output-port))
@@ -402,7 +420,11 @@
     ((eq? obj #t) (list 'boolean #t))
     ((eq? obj 'json-false) (list 'boolean #f))
     ((eq? obj 'json-empty-object) (list 'object '()))
-    ((number? obj) (list 'number (inexact obj)))
+    ;; #727: JSON numbers are scale-preserving decimals, not floats (integers exact at scale 0;
+    ;; json-reader returns other numbers as (json-decimal . text), parsed here with their scale).
+    ((number? obj) (list 'number (hydra_overlay_scheme_lib_literals_bigint_to_decimal obj)))
+    ((and (pair? obj) (eq? (car obj) 'json-decimal))
+     (list 'number (cadr (hydra_overlay_scheme_lib_literals_parse_decimal (cdr obj)))))
     ((string? obj) (list 'string obj))
     ((null? obj) (list 'array '()))  ;; empty JSON arrays
     ((and (pair? obj) (pair? (car obj)) (string? (caar obj)))
@@ -897,11 +919,15 @@
                    (when (not (string=? out s)) (write-file-content path out))))
                 ((and s (string=? *target* "python")
                       (or (string-contains-substr? s "hydra.lib.") (string-contains-substr? s "hydra.core.test.test")))
-                 (let ((out (redirect-dotted s subs "overlay.python")))
+                 ;; #729/#769: hydra.core.overlay.<lang>.* (same seg as the Clojure driver and
+                 ;; bootstrap-from-json's redirectForSubs), not the pre-#729 hydra.overlay.<lang>.*.
+                 (let ((out (redirect-dotted s subs "core.overlay.python")))
                    (when (not (string=? out s)) (write-file-content path out))))
                 ((and s (string=? *target* "clojure")
                       (or (string-contains-substr? s "hydra.lib.") (string-contains-substr? s "hydra.core.test.test")))
-                 (let ((out (redirect-dotted s subs "overlay.clojure")))
+                 ;; #729/#769: hydra.core.overlay.<lang>.* (same seg as the Clojure driver and
+                 ;; bootstrap-from-json's redirectForSubs), not the pre-#729 hydra.overlay.<lang>.*.
+                 (let ((out (redirect-dotted s subs "core.overlay.clojure")))
                    (when (not (string=? out s)) (write-file-content path out))))
                 ((and s (string=? *target* "common-lisp")
                       (or (string-contains-substr? s "hydra_lib_") (string-contains-substr? s ":hydra.lib.")))
