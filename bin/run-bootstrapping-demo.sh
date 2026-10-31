@@ -36,10 +36,23 @@ if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
 fi
 
 # --- #730 build-slot guard: serialize shared-~/.stack GHC builds fleet-wide. ---
-# The bootstrap demo generates + tests across hosts (Haskell builds included).
-# Re-exec under the slot wrapper unless already held (reentrant) or this is the
-# dashboard-only mode below, which just renders a prior run and does no build.
-if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && [ "${1:-}" != "dashboard" ]; then
+# Hold the slot only for the stack calls this demo makes DIRECTLY: a haskell host or target
+# (invoke-haskell-host.sh, test-haskell-target.sh, bootstrap-all.sh's haskell `stack test`). Lisp
+# hosts seed their coders via the Java driver (seed-lisp-coders.sh). Everything else reaches GHC only via
+# bin/sync.sh, which takes the slot itself unless its #773/#797 freshness-gated fast path applies,
+# so the demo must not second-guess that decision here. Defaults mirror bootstrap-all.sh
+# (java,python); `all`/`others` scopes are treated as needing the slot.
+_demo_needs_slot() {
+  local hosts="java,python" targets="java,python" prev="" a
+  for a in "$@"; do
+    case "$prev" in --hosts) hosts="$a" ;; --targets) targets="$a" ;; esac
+    case "$a" in --hosts=*) hosts="${a#--hosts=}" ;; --targets=*) targets="${a#--targets=}" ;; esac
+    prev="$a"
+  done
+  case ",$hosts,$targets," in *,all,*|*,others,*|*,haskell,*) return 0 ;; esac
+  return 1
+}
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && [ "${1:-}" != "dashboard" ] && _demo_needs_slot "$@"; then
   exec "$REPO_ROOT/bin/with-stack-slot.sh" --label "run-bootstrapping-demo.sh $*" -- "$0" "$@"
 fi
 
