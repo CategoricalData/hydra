@@ -445,31 +445,45 @@ Run at least:
   `emacs-lisp`. Use a fresh `--tag` per cell and confirm the cell actually **generated files** (a cached
   no-op can exit 0 having written nothing — that is not a pass).
 
-  **Of these, only `scala → python` is release-BLOCKING.** Scala is a full cross-generation build host;
-  the rest (`typescript`, `clojure`, `common-lisp`, `scheme`, `emacs-lisp`) are self-host-only dialects,
-  and per the scope note at the end of this section a red cell for one of them is a known gap, not a
-  regression. Run them for information — a *newly* red cell that was previously green is still worth
-  investigating — but do not hold the release on one.
+  **Of these, only `scala → python` is release-BLOCKING.** Scala is a full cross-generation build host.
+  The rest (`typescript`, `clojure`, `common-lisp`, `scheme`, `emacs-lisp`) are **not yet verified
+  all-pairs** ([#409](https://github.com/CategoricalData/hydra/issues/409)) — but "not all-pairs" is
+  not the same as "self-host-only." The wiki
+  [Language-support](https://github.com/CategoricalData/hydra/wiki/Language-support) page places them on
+  the mutual-bootstrapping tier, and Common Lisp in particular has historically cross-generated into
+  Python (Python was the usual demonstration target for the Lisp coder). So a red `L → python` cell for
+  one of these is **not automatically a known gap** — it may be a genuine regression. Run them for
+  information; treat a red cell as a suspected regression to investigate, not a tolerated limitation,
+  and consult [docs/bootstrap-matrix.md](bootstrap-matrix.md) for whether that cell was previously
+  green. Do not hold the release on a non-blocking cell, but do file/track any regression it exposes.
 
   **Known-red as of 0.17.7 (do not be surprised):**
 
   | Cell | Status | Detail |
   |------|--------|--------|
-  | `typescript → python` | **RED, known, non-blocking** | Never passed. Failed 2026-07-13 with `ModuleNotFoundError: hydra.test.test_suite` (run `run_2026-07-13_061427_335_typescript_to_python`, `{"status":"fail"}`) and again at 0.17.7 with `TypeError: xs.map is not a function` at `overlay/typescript/lib/lists.ts` (via `encodePythonModule → reorderDefs → partitionDefinitions`), 168+ occurrences, one per module. Different symptom, same standing gap: TypeScript self-hosts (proved by `/test all`) but has never cross-generated. Tracked as [#762](https://github.com/CategoricalData/hydra/issues/762). |
+  | `typescript → python` | **RED, known, non-blocking** | Never passed. Failed 2026-07-13 with `ModuleNotFoundError: hydra.test.test_suite` (run `run_2026-07-13_061427_335_typescript_to_python`, `{"status":"fail"}`) and again at 0.17.7 with `TypeError: xs.map is not a function` at `overlay/typescript/lib/lists.ts` (via `encodePythonModule → reorderDefs → partitionDefinitions`), 168+ occurrences, one per module. TypeScript self-hosts (proved by `/test all`) but has never cross-generated. Tracked as [#762](https://github.com/CategoricalData/hydra/issues/762). |
+  | `common-lisp → python` | **Was RED at 0.18.0 (regression); FIXED by [#769](https://github.com/CategoricalData/hydra/issues/769)** | Failed with `HYDRA_PYTHON_CODER_MODULE_TO_PYTHON is unbound`. A genuine regression introduced by a #729 rename commit (`f0a4a24bcb`): `bootstrap.lisp`'s coder-code walk was narrowed from `hydra/` to `hydra/core/`, silently excluding the sibling coder dirs (`hydra/python/`, etc.). #769 restores coder loading via `hydra-load-coders`. |
 
-  The other self-host-only dialects were not separately re-verified at 0.17.7; treat a red cell from any
-  of them the same way unless it was previously green.
+  For the authoritative per-cell record — status, timings, and the date/commit each cell was last
+  verified against — see [docs/bootstrap-matrix.md](bootstrap-matrix.md). The remaining non-triad
+  dialects were not separately re-verified at 0.18.0; treat a red cell as a suspected regression (check
+  the matrix doc for the last-known-green state) rather than a tolerated gap.
 
 - **Targets:** `haskell → L` for each remaining target, plus `haskell → go` (`go` is a head bud — target
   only, tolerated if it fails; tracked by #289).
 
-**Scope note (learned the hard way, 0.17.2):** "works as a host" means **self-hosting**, which `/test all`
-already proves. It does **not** require every language to cross-generate every *other* language. Per the
-README status table, only Haskell, Java, Scala, and Python are full cross-generation build hosts; the
-self-host-only dialects (TypeScript, Clojure, Common Lisp, Scheme) and Emacs Lisp (maturing as a host) are
-**not** expected to generate arbitrary other languages. Do not treat a failing `self-host-only-dialect →
-some-other-language` cell as a release blocker; that is a future enhancement, not a regression. Demonstrate
-cross-gen with the `L → python` cells above and stop there.
+**Scope note (learned the hard way, 0.17.2; refined by #769):** "works as a host" means **self-hosting**,
+which `/test all` already proves. Release *gating* does **not** require every language to cross-generate
+every *other* language — only `scala → python` is release-blocking beyond the triad. But do not conflate
+"not release-gating" with "self-host-only": per the wiki
+[Language-support](https://github.com/CategoricalData/hydra/wiki/Language-support) page, the non-triad
+dialects sit on the **mutual-bootstrapping** tier (cross-gen demonstrated in part, not yet all-pairs —
+[#409](https://github.com/CategoricalData/hydra/issues/409)), not a "self-host-only" tier. Common Lisp,
+for instance, has cross-generated into Python historically. So a red `L → python` cell is a **suspected
+regression to investigate** (compare against [docs/bootstrap-matrix.md](bootstrap-matrix.md)'s
+last-known state), not a tolerated future-enhancement gap. It still need not block a release, but it
+should be tracked. Demonstrate cross-gen with the `L → python` cells above; a *newly* red one gets a
+regression issue.
 
 ## GitHub Releases (not used yet)
 

@@ -50,6 +50,11 @@ The pipeline works in four steps:
 The `demos/bootstrapping/bin/bootstrap-all.sh` script runs all paths and diffs the output against the canonical baselines
 in the repository, reporting pass/diff/fail per path.
 
+Every run of `bin/run-bootstrapping-demo.sh` also persists the cells it exercised into
+[docs/bootstrap-matrix.md](bootstrap-matrix.md) — the durable N×N cross-generation record
+(#409/#769). Cells refresh opportunistically; each carries the date and commit it was last verified
+against, so the page's staleness is itself informative rather than something to avoid.
+
 See the [Bootstrapping README](../demos/bootstrapping/README.md) for prerequisites,
 usage, architecture details, and known limitations.
 

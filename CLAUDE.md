@@ -390,6 +390,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Inference benchmarks | [hydra-bench README](packages/hydra-bench/README.md) — synthetic workloads + `bin/run-inference-bench.sh` |
 | Release policy + procedure | [Release policy wiki](https://github.com/CategoricalData/hydra/wiki/Release-policy) (policy); [docs/release-workflow.md](docs/release-workflow.md) (procedure) |
 | Demos | [docs/demos.md](docs/demos.md) |
+| Cross-generation status (which host generates which target, per-cell) | [docs/bootstrap-matrix.md](docs/bootstrap-matrix.md) — the durable N×N matrix (#409/#769); auto-updated by `/bootstrap` runs |
 | Recipes index (full list) | [docs/recipes/index.md](docs/recipes/index.md) |
 | Wiki index | [github.com/CategoricalData/hydra/wiki](https://github.com/CategoricalData/hydra/wiki) |
 | Python-host perf history | [docs/history/python-host-perf-investigation.md](docs/history/python-host-perf-investigation.md) |
