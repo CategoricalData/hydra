@@ -113,6 +113,13 @@
 ;; Load the Hydra Emacs Lisp kernel
 ;; ============================================================================
 
+(defvar bootstrap-test-file-count 0
+  "Number of test files generated (0 unless --include-tests).")
+(defvar bootstrap-coder-base nil
+  "The dist hydra/ dir holding the seeded coder packages, siblings of the hydra/core/ kernel (#729).")
+(defvar bootstrap-coder-dirs nil
+  "Seeded coder package dir names under `bootstrap-coder-base' (hydra/python/, hydra/lisp/, ...).")
+
 (let* ((script-path (or load-file-name buffer-file-name
                         (expand-file-name "hydra/bootstrap.el" default-directory)))
        (hydra-dir (file-name-directory script-path))
@@ -120,32 +127,34 @@
        ;; overlay -> dist/emacs-lisp/hydra-kernel, leaving only this driver (bootstrap.el) in the head.
        (dist-base (expand-file-name "../../../../../../../dist/emacs-lisp/hydra-kernel/" hydra-dir))
        (dist-hydra-dir (expand-file-name "src/main/emacs-lisp/hydra/" dist-base)))
+  ;; #729: the kernel (incl. the loader.el overlay copy) lives under hydra/core/; the seeded coder
+  ;; packages are its siblings (hydra/python/, hydra/lisp/, ...). Mirrors run-tests.el.
+  (setq hydra-gen-main-dir (expand-file-name "core/" dist-hydra-dir))
+  (setq hydra-gen-test-dir (expand-file-name "src/test/emacs-lisp/hydra/core/" dist-base))
+  (setq bootstrap-coder-base dist-hydra-dir)
+  (setq bootstrap-coder-dirs
+        (cl-remove-if-not (lambda (d) (file-directory-p (expand-file-name d dist-hydra-dir)))
+                          '("haskell" "jvm" "java" "python" "scala" "lisp" "typescript")))
   ;; Load the kernel loader from dist, not hydra-dir (heads, now empty).
-  (load (expand-file-name "loader.el" dist-hydra-dir) nil t)
-  ;; Point gen-main/gen-test dirs at the dist/ generated content (loader.el defaults to
-  ;; heads/lisp/emacs-lisp/src/gen-main/..., which no longer exists; mirrors run-tests.el).
-  (setq hydra-gen-main-dir dist-hydra-dir)
-  (setq hydra-gen-test-dir (expand-file-name "src/test/emacs-lisp/hydra/" dist-base)))
+  (load (expand-file-name "loader.el" hydra-gen-main-dir) nil t))
 
 (princ "Loading kernel...\n")
 
-;; Pre-declare all exported symbols from coder modules.
-;; The loader's retry mechanism drops forms with forward references;
-;; pre-declaration ensures all symbols exist (as nil) before loading.
-(defun bootstrap-pre-declare-exports (dir)
-  "Scan all .el files in DIR recursively and pre-declare their defvar symbols."
-  (dolist (file (directory-files-recursively dir "\\.el$"))
-    (with-temp-buffer
-      (insert-file-contents file)
-      (goto-char (point-min))
-      (while (re-search-forward "^(defvar \\(hydra_[a-zA-Z0-9_]+\\)" nil t)
-        (let ((sym (intern (match-string 1))))
-          (unless (boundp sym)
-            (set sym nil)))))))
-
-(let ((ext-dir (expand-file-name "ext/" hydra-gen-main-dir)))
-  (when (file-directory-p ext-dir)
-    (bootstrap-pre-declare-exports ext-dir)))
+(defun bootstrap-load-coders ()
+  "Load the seeded coder packages' generated modules. Their paths in `hydra-gen-main-file-order'
+are relative to hydra/ (java/syntax.el before java/coder.el), so load relative to
+`bootstrap-coder-base' in that order, then any unlisted files sorted (#729)."
+  (let* ((files (cl-mapcan (lambda (d)
+                             (mapcar (lambda (f) (concat d "/" f))
+                                     (hydra-collect-el-files (expand-file-name d bootstrap-coder-base))))
+                           bootstrap-coder-dirs))
+         (listed (cl-remove-if-not (lambda (f) (member f files)) hydra-gen-main-file-order))
+         (rest (sort (cl-set-difference files listed :test #'string=) #'string<)))
+    (dolist (f (append listed rest))
+      (message "Loading %s..." f)
+      (hydra-load-file (expand-file-name f bootstrap-coder-base)))
+    (hydra-set-function-bindings)
+    (hydra-byte-compile-all)))
 
 ;; Override byte-compile-all: skip deeply nested functions that overflow
 ;; Emacs's C stack during byte-compilation or at runtime.
@@ -180,6 +189,7 @@
         (princ (format "Byte-compiled %d hydra functions (%d kept interpreted)\n" compiled skipped))))))
 
 (hydra-load-gen-main)
+(bootstrap-load-coders)
 (hydra-load-prims-and-libraries)
 (hydra-set-function-bindings)
 
@@ -196,12 +206,51 @@
 ;; JSON to Hydra conversion
 ;; ============================================================================
 
+;; #727: a JSON number is a scale-preserving decimal ("1.10" keeps scale 2; big integers stay exact), but
+;; json-parse-string reads fractions as lossy floats and rejects integers outside int64 ("too big integer").
+;; It also rejects a \u0000 escape inside a string (Emacs exposes no JSON_ALLOW_NUL). So before parsing, a
+;; text pre-pass escapes both with U+0001 plus a tag character, which bootstrap-json-to-hydra undoes:
+;;   number literal -> the string "<U+0001>N<literal text>"
+;;   \u0000 / \u0001 inside a string -> <U+0001>0 / <U+0001>1
+;; Every U+0001 in a parsed string is thus followed by a tag, so decoding is unambiguous. Mirrors the
+;; TypeScript host driver's number sentinel.
+(defun bootstrap-quote-json-numbers ()
+  "Apply the U+0001-tag pre-pass (numbers, \\u0000, \\u0001) to the JSON text in the current buffer."
+  (goto-char (point-min))
+  (while (progn (skip-chars-forward "^\"0-9-") (not (eobp)))
+    (if (eq (char-after) ?\")
+        ;; Walk a whole string literal, honouring backslash escapes.
+        (progn
+          (forward-char 1)
+          (while (progn (skip-chars-forward "^\"\\\\") (eq (char-after) ?\\))
+            (if (looking-at "\\\\u000\\([01]\\)")
+                (let ((tag (match-string 1)))
+                  (replace-match (concat "\\u0001" tag) t t))
+              (forward-char 2)))
+          (forward-char 1))
+      (let ((start (point)))
+        (skip-chars-forward "-0-9eE+.")
+        (let ((text (buffer-substring-no-properties start (point))))
+          (delete-region start (point))
+          (insert "\"\\u0001N" text "\""))))))
+
+(defun bootstrap-unquote-json-string (s)
+  "Undo the U+0001-tag pre-pass for a parsed string S: (:number decimal) or (:string text)."
+  (cond
+   ((not (string-search "\1" s)) (list :string s))
+   ((and (> (length s) 1) (eq (aref s 0) 1) (eq (aref s 1) ?N))
+    (list :number (or (hydra-parse-decimal-1 (substring s 2))
+                      (error "Malformed JSON number: %s" (substring s 2)))))
+   (t (list :string (replace-regexp-in-string
+                     "\1\\([01]\\)" (lambda (m) (if (eq (aref m 1) ?0) "\0" "\1")) s t t)))))
+
 (defun bootstrap-read-json-file (path)
   "Read and parse a JSON file at PATH. Returns parsed JSON with hash-tables for objects."
   (with-temp-buffer
     (set-buffer-multibyte t)
     (let ((coding-system-for-read 'utf-8-unix))
       (insert-file-contents path))
+    (bootstrap-quote-json-numbers)
     (json-parse-string (buffer-string)
                        :object-type 'hash-table
                        :null-object :null
@@ -214,8 +263,8 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
    ((eq obj :null) (list :null nil))
    ((eq obj t) (list :boolean t))
    ((eq obj :json-false) (list :boolean nil))
-   ((numberp obj) (list :number (float obj)))
-   ((stringp obj) (list :string obj))
+   ;; #727: numbers come back as tagged strings holding their exact text (bootstrap-quote-json-numbers).
+   ((stringp obj) (bootstrap-unquote-json-string obj))
    ((hash-table-p obj)
     ;; JSON object → Hydra object (list of (key value) pairs, matching the
     ;; Hydra `Pair k v` term shape that hydra.core.lib.maps.from_list expects —
@@ -223,7 +272,7 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
     ;; one level (#586).
     (let ((pairs nil))
       (maphash (lambda (k v)
-                 (push (list k (bootstrap-json-to-hydra v)) pairs))
+                 (push (list (cadr (bootstrap-unquote-json-string k)) (bootstrap-json-to-hydra v)) pairs))
                obj)
       (list :object (nreverse pairs))))
    ((vectorp obj)
@@ -509,11 +558,15 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
                                      bootstrap-output-base bootstrap-target subdir)))
               (princ (format "  Loaded %d test modules.\n" (length test-mods)))
               (princ (format "\nMapping test modules to %s...\n" target-cap))
-              (let ((test-count (bootstrap-generate-sources coder language flags out-test all-universe test-mods-to-emit)))
-                (princ (format "  Generated %d test files.\n" test-count)))))
+              (setq bootstrap-test-file-count
+                    (bootstrap-generate-sources coder language flags out-test all-universe test-mods-to-emit))
+              (princ (format "  Generated %d test files.\n" bootstrap-test-file-count))))
 
           (princ (format "\n==========================================\n"))
-          (princ (format "Done: %d main files\n" file-count))
+          ;; Same summary shape as the other hosts; bootstrap-all.sh's parse_bootstrap_log reads both counts.
+          (if (> bootstrap-test-file-count 0)
+              (princ (format "Done: %d main + %d test files\n" file-count bootstrap-test-file-count))
+            (princ (format "Done: %d main files\n" file-count)))
           (princ (format "  Output: %s/emacs-lisp-to-%s\n" bootstrap-output-base bootstrap-target))
           (princ (format "==========================================\n")))))))
 

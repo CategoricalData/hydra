@@ -450,7 +450,7 @@ is the power of 10 of the leading significant digit (e.g. 3 for 1234.0,
   "Snap a double to IEEE 754 float32 precision (24-bit mantissa)."
   (cond ((isnan x) x)
         ((hydra--literals-infinitep x) x)
-        ((= x 0.0) 0.0)
+        ((= x 0.0) x)  ; keep the sign of -0.0, like hydra--to-float32 in math.el
         (t (let* ((sign (if (< x 0) -1.0 1.0))
                   (ax (abs x))
                   (e (max -126 (floor (log ax 2.0))))
@@ -466,7 +466,7 @@ is the power of 10 of the leading significant digit (e.g. 3 for 1234.0,
    (t
   (let ((f32 (round-to-float32 (float x))))
     (cond
-      ((= f32 0.0) "0.0")
+      ((= f32 0.0) (if (< (copysign 1.0 f32) 0) "-0.0" "0.0"))
       ((and (/= f32 0.0)
             (or (< (abs f32) 0.1) (>= (abs f32) 1.0e7)))
        ;; Scientific notation: find the fewest digits that round-trip at float32
