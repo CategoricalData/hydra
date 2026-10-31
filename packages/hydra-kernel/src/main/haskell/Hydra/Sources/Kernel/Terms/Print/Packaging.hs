@@ -534,7 +534,19 @@ module' = define "moduleDefinition" $
   "headerStr" <~ (withDefinitionDoc @@ (Packaging.moduleMetadata $ var "mod") @@
     (Strings.concat (list [string "module ", moduleNameString @@ (Packaging.moduleName $ var "mod")]))) $
   "aliases" <~ (moduleAliases @@ var "mod") $
-  "importStrs" <~ Lists.map (importDecl @@ (var "aliases" :: TypedTerm (M.Map ModuleName String))) (Packaging.moduleDependencies $ var "mod") $
+  -- Print exactly one import per module actually referenced by this module's definitions (per
+  -- 'aliases'' key set) -- not filtered from the declared 'moduleDependencies', and not limited to
+  -- it either. 'moduleDependencies' may be broader than real usage (e.g. the kernel DSL's blanket
+  -- per-module convention of depending on every kernel type module) AND narrower (e.g. a Lib
+  -- module's default implementation calling another Lib module's primitive, which the blanket
+  -- convention never declares) -- so real usage ('aliases'' keys) is the sole source of which
+  -- imports to print; 'moduleDependencies' is consulted only to recover a declared 'package' for
+  -- dependencies that do happen to list one (#711).
+  "declaredByModule" <~ Maps.fromList (Lists.map ("d" ~> pair (Packaging.moduleDependencyModule $ var "d") (var "d")) (Packaging.moduleDependencies $ var "mod")) $
+  "usedDeps" <~ Lists.map
+    ("nm" ~> Maps.findWithDefault (Packaging.moduleDependency (var "nm") nothing) (var "nm") (var "declaredByModule" :: TypedTerm (M.Map ModuleName ModuleDependency)))
+    (Maps.keys (var "aliases" :: TypedTerm (M.Map ModuleName String))) $
+  "importStrs" <~ Lists.map (importDecl @@ (var "aliases" :: TypedTerm (M.Map ModuleName String))) (var "usedDeps") $
   "defStrs" <~ Lists.map (definition @@ (var "aliases" :: TypedTerm (M.Map ModuleName String))) (Packaging.moduleDefinitions $ var "mod") $
   Strings.join (string "\n\n") (Lists.cons (var "headerStr")
     (Lists.cons (Strings.join (string "\n") (var "importStrs"))

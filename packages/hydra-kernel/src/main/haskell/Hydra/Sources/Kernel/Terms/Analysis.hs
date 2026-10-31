@@ -294,7 +294,15 @@ definitionDependencyModuleNames = define "definitionDependencyModuleNames" $
     _Definition_term>>: "termDef" ~>
       Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionBody (var "termDef"),
     _Definition_primitive>>: "primDef" ~>
-      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "primDef"))]) $
+      -- A primitive's referenced modules come from its signature AND its optional
+      -- defaultImplementation term, if present -- the latter is easy to miss (see
+      -- checkUndeclaredDependencies's own note on this exact gap) since most of a
+      -- primitive's module dependencies are visible in the signature alone.
+      Sets.union
+        (Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "primDef")))
+        (Optionals.match (Packaging.primitiveDefinitionDefaultImplementation $ var "primDef")
+          (Sets.empty :: TypedTerm (S.Set Name))
+          ("impl" ~> Dependencies.termDependencyNames @@ true @@ true @@ true @@ var "impl"))]) $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs") :: TypedTerm [S.Set Name]) $
   Sets.fromList (Optionals.givens (Lists.map (asTerm Names.moduleNameOf) (Sets.toList (var "allNames"))))
 
