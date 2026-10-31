@@ -44,8 +44,11 @@
                             (member ch '(#\- #\+ #\. #\e #\E))))
           do (push (read-char stream) chars))
     (let ((s (coerce (nreverse chars) 'string)))
+      ;; #727: a fractional/exponent number is a scale-preserving decimal ("1.10" keeps scale 2), so it
+      ;; is not read as a float. Tagged :json-decimal so callers can tell it from a JSON array/object.
       (if (or (find #\. s) (find #\e s) (find #\E s))
-          (read-from-string s)
+          (cons :json-decimal
+                (or (hydra-parse-decimal-1 s) (error "Malformed JSON number: ~A" s)))
           (parse-integer s)))))
 
 (defun json-read-value (stream)

@@ -2,11 +2,13 @@
 
 ;; A Literal.decimal wrapped as a Hydra term, as `equal`/`compare`'s generic x/x TermCoder
 ;; (which just passes terms through unchanged -- see prims.lisp's tc-variable) actually
-;; receives it: (:literal (:decimal (coefficient . scale))), not a bare cons.
+;; receives it: (:literal (:decimal (coefficient . scale))), not a bare cons. The payload must be
+;; a cons: the same-shaped LiteralType (:literal (:decimal nil)) carries a unit payload and is
+;; compared structurally (e.g. the Python coder's `ftype == literal decimal` check).
 (defun hydra-decimal-term-p (term)
   (and (consp term) (eq (car term) :literal)
        (let ((lit (cadr term)))
-         (and (consp lit) (eq (car lit) :decimal)))))
+         (and (consp lit) (eq (car lit) :decimal) (consp (cadr lit))))))
 
 (defun hydra-decimal-term-value (term) (cadr (cadr term)))
 

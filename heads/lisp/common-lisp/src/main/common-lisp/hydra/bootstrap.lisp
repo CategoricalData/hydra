@@ -50,6 +50,11 @@
   (format t "Usage: sbcl --script bootstrap.lisp --target <target> --json-dir <path> [OPTIONS]~%")
   (sb-ext:exit :code 1))
 
+;; #769: the hydra/ package root (parent of the kernel's hydra/core/ dir). The target coders live in
+;; sibling packages (hydra.python.coder etc.) assembled into hydra/<lang>/... alongside hydra/core/,
+;; so hydra-load-coders walks from here to bind the coder functions the kernel walk cannot reach.
+(defvar *hydra-coder-root* nil)
+
 ;; Load the Hydra Common Lisp kernel
 (let* ((script-path (or *load-truename*
                         (merge-pathnames "hydra/bootstrap.lisp"
@@ -62,19 +67,26 @@
        ;; copy, incl. loader.lisp/json-reader.lisp) down one level into hydra/core/.
        (dist-hydra-dir (merge-pathnames
                          "../../../../../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/core/"
-                         hydra-dir)))
+                         hydra-dir))
+       ;; The hydra/ package root: strip the trailing "core/" so the coder siblings resolve.
+       (coder-root (merge-pathnames "../" dist-hydra-dir)))
   ;; Load the kernel loader
   (load (merge-pathnames "loader.lisp" dist-hydra-dir))
   ;; Load JSON reader
   (load (merge-pathnames "json-reader.lisp" dist-hydra-dir))
   ;; Point *hydra-gen-main-dir* at the dist/ generated content (loader.lisp defaults to
   ;; heads/lisp/common-lisp/src/gen-main/..., which no longer exists; mirrors run-tests.lisp).
-  (setf *hydra-gen-main-dir* dist-hydra-dir))
+  (setf *hydra-gen-main-dir* dist-hydra-dir)
+  (setf *hydra-coder-root* coder-root))
 
 (format t "Loading kernel...~%")
 (force-output)
 
 (hydra-load-gen-main)
+;; #769: bind the target coder functions (hydra_<lang>_coder_module_to_<lang>) that resolve-coder
+;; needs. They live under hydra/<lang>/ (siblings of the kernel's core/), which the kernel walk above
+;; does not reach — this was the common-lisp -> python regression (unbound coder symbol).
+(hydra-load-coders *hydra-coder-root*)
 (hydra-load-prims-and-libraries)
 (hydra-set-function-bindings)
 (format t "Kernel loaded.~%")
@@ -90,7 +102,10 @@
     ((eq obj :json-false) (list :boolean nil))
     ((eq obj :json-empty-object) (list :object nil))
     ((null obj) (list :array nil))  ;; empty JSON arrays
-    ((numberp obj) (list :number (coerce obj 'double-float)))
+    ;; #727: JSON numbers are scale-preserving decimals, not floats (integers exact at scale 0;
+    ;; json-reader tags fractional numbers :json-decimal, already parsed with their scale).
+    ((integerp obj) (list :number (hydra-make-decimal obj 0)))
+    ((and (consp obj) (eq (car obj) :json-decimal)) (list :number (cdr obj)))
     ((stringp obj) (list :string obj))
     ((and (consp obj) (consp (car obj)) (stringp (caar obj)))
      ;; alist (JSON object); each entry becomes a 2-element Pair list
@@ -469,9 +484,12 @@
           (flat-seg (cond ((string= target "common-lisp") "common_lisp")
                           ((string= target "emacs-lisp") "emacs_lisp")
                           (t nil)))
-          (dotted-seg (cond ((string= target "python") "overlay.python")
-                            ((string= target "scala") "overlay.scala")
-                            ((string= target "clojure") "overlay.clojure")
+          ;; #729/#769: relocated impls live under hydra.core.overlay.<lang>.* (same seg as the Clojure
+          ;; driver and bootstrap-from-json's redirectForSubs); the pre-#729 "overlay.<lang>" seg emitted
+          ;; nonexistent hydra.overlay.<lang>.* paths.
+          (dotted-seg (cond ((string= target "python") "core.overlay.python")
+                            ((string= target "scala") "core.overlay.scala")
+                            ((string= target "clojure") "core.overlay.clojure")
                             (t nil))))
       (dolist (path (directory (merge-pathnames "**/*.*" (pathname (concatenate 'string lang-dir "/")))))
         (when (and (pathname-name path) (not (lib-def-path-p path)))

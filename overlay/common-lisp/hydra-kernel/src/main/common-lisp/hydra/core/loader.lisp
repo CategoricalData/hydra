@@ -701,21 +701,14 @@ forward references."
                      "json/encode.lisp" "json/decode.lisp" "json/bootstrap.lisp"
                      "yaml/model.lisp" "dsl/yaml/model.lisp"
                      "json/yaml/encode.lisp" "json/yaml/decode.lisp"
-                     ;; Language-specific coder modules (dependency order: syntax, environment, names, utils, serde, language, testing, coder)
-                     "haskell/syntax.lisp" "haskell/language.lisp" "haskell/operators.lisp"
-                     "haskell/environment.lisp" "haskell/utils.lisp"
-                     "haskell/serde.lisp" "haskell/testing.lisp" "haskell/coder.lisp"
-                     "java/syntax.lisp" "java/environment.lisp" "java/names.lisp"
-                     "java/language.lisp"
-                     "java/utils.lisp" "java/serde.lisp" "java/testing.lisp" "java/coder.lisp"
-                     "python/syntax.lisp" "python/environment.lisp" "python/language.lisp"
-                     "python/names.lisp" "python/utils.lisp" "python/serde.lisp"
-                     "python/testing.lisp" "python/coder.lisp"
-                     "scala/syntax.lisp" "scala/language.lisp" "scala/utils.lisp"
-                     "scala/serde.lisp" "scala/coder.lisp"
-                     "lisp/syntax.lisp" "lisp/language.lisp"
-                     "lisp/serde.lisp" "lisp/coder.lisp"
-                     "org/json/decoding.lisp"
+                     ;; #769: the language-specific coder modules (haskell/*, java/*, python/*,
+                     ;; scala/*, lisp/*, org/json/*) formerly listed here were dead under this walk:
+                     ;; they are hydra/-relative (the coders live in sibling packages at hydra/<lang>/),
+                     ;; but this priority list is core/-relative, so "python/coder.lisp" resolved to
+                     ;; the nonexistent hydra/core/python/coder.lisp and silently skipped. They now
+                     ;; load via hydra-load-coders (see *hydra-coder-priority*), which walks the sibling
+                     ;; coder dirs from the hydra/ root. Removing them here removes the core/-vs-hydra/
+                     ;; inconsistency that regressed common-lisp -> python codegen.
                      ;; #416: hydra.build.registry is a leaf that hydra.build.langexpansion
                      ;; and hydra.build.syncmatrix consume via cross-module refs. The flat
                      ;; loader otherwise loads the build/ modules alphabetically, which puts
@@ -762,6 +755,64 @@ forward references."
         (when (probe-file path)
           (format t "Loading ~A...~%" f)
           (hydra-load-file path))))))
+
+(defvar *hydra-coder-priority*
+  '(;; Dependency order within each coder: syntax/environment/names/utils/serde/language/testing/coder.
+    "haskell/syntax.lisp" "haskell/language.lisp" "haskell/operators.lisp"
+    "haskell/environment.lisp" "haskell/utils.lisp"
+    "haskell/serde.lisp" "haskell/testing.lisp" "haskell/coder.lisp"
+    ;; hydra-jvm (its own package) supplies hydra.jvm.serde, which the Java coder calls.
+    "jvm/serde.lisp"
+    "java/syntax.lisp" "java/environment.lisp" "java/names.lisp"
+    "java/language.lisp"
+    "java/utils.lisp" "java/serde.lisp" "java/testing.lisp" "java/coder.lisp"
+    "python/syntax.lisp" "python/environment.lisp" "python/language.lisp"
+    "python/names.lisp" "python/utils.lisp" "python/serde.lisp"
+    "python/testing.lisp" "python/coder.lisp"
+    "scala/syntax.lisp" "scala/language.lisp" "scala/utils.lisp"
+    "scala/serde.lisp" "scala/coder.lisp"
+    "lisp/syntax.lisp" "lisp/language.lisp"
+    "lisp/serde.lisp" "lisp/coder.lisp")
+  "#769: per-coder dependency-ordered load list, relative to the hydra/ package root (the parent of
+   the kernel's hydra/core/ dir). Each target coder lives in its OWN package (hydra-python ->
+   hydra.python.coder etc.), so its generated .lisp files land at hydra/<lang>/... — a SIBLING of
+   hydra/core/, not under it. hydra-load-gen-main walks only the kernel tree (rooted at hydra/core/),
+   so it never binds the coder functions (hydra_python_coder_module_to_python, ...). This list drives
+   hydra-load-coders, which walks the sibling coder dirs. Kept separate from the kernel priority list
+   in hydra-load-gen-main precisely because the two are relative to different roots (core/ vs hydra/);
+   #729's grammar rename created that split, and conflating them is what regressed common-lisp ->
+   python (see #769).")
+
+(defun hydra-load-coders (hydra-root &key (coder-dirs '("haskell" "jvm" "java" "python" "scala" "lisp" "typescript" "org")))
+  "#769: load the generated coder modules that live under HYDRA-ROOT/<lang>/ (siblings of the kernel's
+core/ dir). HYDRA-ROOT is the hydra/ package root — i.e. the PARENT of *hydra-gen-main-dir* when the
+latter points at hydra/core/. Only present coder dirs are walked; a target whose coder was not
+assembled into this tree is silently skipped. Loads *hydra-coder-priority* entries first (dependency
+order), then any remaining .lisp under each coder dir alphabetically. Mirrors hydra-load-gen-main's
+priority-then-alphabetical discipline but scoped to the coder trees, so the kernel walk and its
+callers (run-tests.lisp) are untouched."
+  (let* ((dir-only (make-pathname :name nil :type nil :defaults hydra-root))
+         (base (or (probe-file dir-only) dir-only))
+         ;; Collect .lisp under each present coder dir, as paths relative to base (hydra/).
+         (all-files nil))
+    (dolist (cd coder-dirs)
+      (let ((cd-path (probe-file (merge-pathnames
+                                   (make-pathname :directory (list :relative cd)) base))))
+        (when cd-path
+          (setf all-files (append all-files (collect-lisp-files cd-path cd))))))
+    ;; Exclude the authoring DSL wrappers (hydra.<lang>.dsl.*): they are only assembled under
+    ;; --include-dsls (off in the bootstrap demo) and are not needed to run the coder. The rewriting
+    ;; hydra-load-file is for generated coder modules, not the DSL meta-layer.
+    (setf all-files (remove-if (lambda (f) (search "/dsl/" f)) all-files))
+    (let* ((priority (remove-if-not (lambda (f) (member f all-files :test #'equal))
+                                    *hydra-coder-priority*))
+           (remaining (remove-if (lambda (f) (member f priority :test #'equal)) all-files))
+           (ordered (append priority (sort (copy-list remaining) #'string<))))
+      (dolist (f ordered)
+        (let ((path (merge-pathnames f base)))
+          (when (probe-file path)
+            (format t "Loading ~A...~%" f)
+            (hydra-load-file path)))))))
 
 (defvar *hydra-gen-test-dir*
   (let* ((loader-dir (pathname-directory (truename *load-truename*)))
