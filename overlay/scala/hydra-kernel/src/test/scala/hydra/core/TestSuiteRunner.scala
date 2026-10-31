@@ -36,10 +36,18 @@ class TestSuiteRunner extends AnyFunSuite with BeforeAndAfterAll with HydraTestG
     super.afterAll()
   }
 
+  // Sibling groups may share a name (e.g. one group per primitive named after the same provision), so
+  // sentinel names carry a per-group sequence number to stay unique (ScalaTest rejects duplicate names);
+  // durations for a repeated path accumulate.
+  private var groupSeq = 0
+
   private def registerTests(group: TestGroup, path: String): Unit = {
+    groupSeq += 1
+    val seq = groupSeq // captured: subgroup registration below advances groupSeq
+    val timerKey = path + "#" + seq
     // Timer start sentinel
     if (benchmarkOutput.isDefined) {
-      test(path + "/000_TIMER_START") { benchmarkTimers += (path -> System.nanoTime()) }
+      test(path + "/000_TIMER_START#" + seq) { benchmarkTimers += (timerKey -> System.nanoTime()) }
     }
 
     for (tc <- group.cases) {
@@ -52,9 +60,10 @@ class TestSuiteRunner extends AnyFunSuite with BeforeAndAfterAll with HydraTestG
 
     // Timer stop sentinel
     if (benchmarkOutput.isDefined) {
-      test(path + "/999_TIMER_END") {
-        benchmarkTimers.get(path).foreach { start =>
-          benchmarkResults += (path -> (System.nanoTime() - start) / 1_000_000.0)
+      test(path + "/999_TIMER_END#" + seq) {
+        benchmarkTimers.get(timerKey).foreach { start =>
+          val ms = (System.nanoTime() - start) / 1_000_000.0
+          benchmarkResults += (path -> (benchmarkResults.getOrElse(path, 0.0) + ms))
         }
       }
     }
