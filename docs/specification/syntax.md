@@ -568,12 +568,31 @@ detail of the printer, not part of the grammar.
 - A `term`/`primitive` definition's `: termSignature` ascription is the term-signature notation
   of §3 (`∀` header, `lazy` parameters), not a plain `type`; a `type` definition's own `=`
   right-hand side is always a `typeScheme`, never a `termSignature`.
-- **Bare-import round-trip gap (#805).** The printer may leave two colliding imports split bare
-  vs. aliased (the one with fewer references gets the alias; see §6.4). A single-file parser,
-  with no access to a bare-imported module's own definitions, cannot always re-qualify a bare
-  name back to the bare-imported module in that collision case — `print → parse → print` is
-  textually stable when no collision exists, but not guaranteed stable across a reparse in the
-  collision case. This is a tracked, open gap, not a design decision to leave unfixed.
+- **Bare-import round-trip gap (#805, #711).** A single-file parser has no access to a
+  bare-imported module's own definitions, so it cannot re-qualify a bare body name back to the
+  module it came from — there is no alias table entry for a bare (no `as`) import to look the
+  name up by, and nothing else in the printed text records which module defines it. Two distinct
+  symptoms follow from this, both present even with no local-name collision at all (an earlier
+  version of this note claimed the no-collision case was textually stable across a reparse;
+  that claim was never exercised against a real build and was found to be wrong while
+  implementing #711):
+  - **Collision case (#805):** the printer may leave two colliding imports split bare vs. aliased
+    (the one with fewer references gets the alias; see §6.4). On reparse, the aliased side's name
+    re-qualifies correctly (the alias supplies the lookup key), but the bare side's name does not,
+    so the second print sees only one module referenced and may print it bare too.
+  - **No-collision case (#711):** even with nothing to disambiguate, a bare body reference (e.g.
+    `FilePath` from a bare `import hydra.core.file`) survives the round trip as a bare,
+    module-less name — the identifier text itself is unchanged — but since nothing can attribute
+    it back to `hydra.core.file` anymore, the printer no longer sees that module as referenced and
+    omits its `import` line on the second print. The body is textually stable; the import block is
+    not.
+  Both symptoms share one root cause and one of two possible fixes, neither implemented: give the
+  parser access to each imported module's own declared names (so a bare reference can be matched
+  against them), or have the printer always alias every import, bare or not (removing the
+  ambiguity at the source, at the cost of `#803`'s bare-import readability win). This is a
+  tracked, open gap, not a design decision to leave unfixed; Josh is deciding between accepting
+  the gap (adjusting the affected round-trip test's expectation) and committing to one of the two
+  fixes above (2026-10-31, Decision Desk card `711-bare-import-roundtrip`).
 - The parser does not yet reconstruct `EntityMetadata` from `##` comments (§6.2): a parsed
   module's and every parsed definition's metadata is always `Nothing`, matching the printer's
   intentional omission of doc-comment output when metadata is absent. Doc-comment printing
