@@ -66,21 +66,8 @@ case "$TARGET" in
 esac
 
 if [ -n "$CODER_CHECK" ] && [ ! -f "$CODER_CHECK" ]; then
-    echo "  Coder modules not found. Generating from per-package JSON..."
-
-    # Build the Haskell bootstrap-from-json if needed
-    cd "$HYDRA_ROOT/heads/haskell"
-    stack build hydra:exe:bootstrap-from-json
-
-    # --dist-json-root points at the dist/json root; the bootstrap walks
-    # per-package subdirectories in dependency order.
-    stack exec bootstrap-from-json -- \
-        --target clojure \
-        --output "$HYDRA_ROOT/dist/clojure/hydra-kernel" \
-        --include-coders \
-        --dist-json-root "$HYDRA_ROOT/dist/json" 2>&1
-
-    echo "  Coder modules generated."
+    echo "  Coder modules not found. Generating from per-package JSON (Java host)..."
+    "$SCRIPT_DIR/seed-lisp-coders.sh" clojure
     echo ""
 fi
 
