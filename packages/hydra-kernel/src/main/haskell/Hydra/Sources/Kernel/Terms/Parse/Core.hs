@@ -1210,49 +1210,56 @@ termSignatureArrowChain = define "termSignatureArrowChain" $
 -- isLazy to false. The header (vars/constraints) parsing is identical to typeScheme's.
 termSignature :: TypedTermDefinition (Parser TermSignature)
 termSignature = define "termSignature" $
-  doc "Parse a term signature: '∀' [binderName (',' binderName)*] '.' [constraints '⇒'] arrow chain, with optional 'lazy' markers on parameter positions" $
-  P.bind @@ (lexeme @@ (P.char @@ int32 8704)) @@ (constant $    -- '∀'
-    P.bind @@ (P.sepBy @@ (asTerm binderName) @@ (lexeme @@ (P.char @@ int32 44))) @@ ("vars" ~>    -- ','
-      P.bind @@ (lexeme @@ (P.char @@ int32 46)) @@ (constant $    -- '.'
-        -- 'try' needed here for the same reason as typeScheme's header (#711): a constraints
-        -- block and a parenthesized parameter type (e.g. bimap's '(a → c) → ...') share a
-        -- leading '(', so a failed constraints-block attempt must rewind, not hard-fail.
-        P.bind @@ (P.optional @@ (P.try @@ constraintsBlock)) @@ ("mcs" ~>
-          "typeParams" <~ Lists.map
-            ("v" ~> Typing.typeParameter (var "v")
-              (Optionals.withDefault (list ([] :: [TypedTerm TypeClassConstraint]))
-                (Maps.lookup (var "v" :: TypedTerm Name)
-                  (Maps.fromList (Lists.map (asTerm toTypeParamConstraintsEntry) (Optionals.withDefault (list ([] :: [TypedTerm (Name, Name)])) (var "mcs")))))))
-            (var "vars") $
-          P.map @@ ("chain" ~>
-              -- The chain accumulator is already in forward (left-to-right, domain-first) order:
-              -- each level of the right-associative recursion prepends its OWN (outer, earlier)
-              -- domain onto the inner recursive result as it returns, so the leftmost-parsed
-              -- domain ends up at the head of the list.
-              "fwdParams" <~ Pairs.first (var "chain" :: TypedTerm ([(Bool, Type)], Type)) $
-              "resultType" <~ Pairs.second (var "chain") $
-              -- Build Parameters with synthetic names arg0, arg1, ... via a (length-1)-indexed
-              -- fold, since there is no DSL `range` helper -- same idiom as
-              -- Scoping.typeSchemeToTermSignature.
-              "params" <~ Lists.reverse (Pairs.first $ Lists.foldl
-                ("acc" ~> "item" ~>
-                  "pairAcc" <~ Pairs.first (var "acc") $
-                  "i" <~ Pairs.second (var "acc") $
-                  pair
-                    (Lists.cons
-                      (Typing.parameter
-                        (Core.name $ Strings.concat (list [string "arg", Literals.printInt32 (var "i")]))
-                        Phantoms.nothing
-                        (Pairs.second (var "item" :: TypedTerm (Bool, Type)))
-                        (Pairs.first (var "item")))
-                      (var "pairAcc"))
-                    (Math.add (var "i") (int32 1)))
-                (pair (list ([] :: [TypedTerm Parameter])) (int32 0))
-                (var "fwdParams")) $
-              "result" <~ Typing.result Phantoms.nothing (var "resultType") $
-              Typing.termSignature (var "typeParams") (var "params") (var "result")) @@
-            (asTerm termSignatureArrowChain)))))
+  doc "Parse a term signature: either '∀' [binderName (',' binderName)*] '.' [constraints '⇒'] arrow chain, or (when there are no type variables) a bare arrow chain with no '∀.' header at all" $
+  P.alt
+    @@ (P.bind @@ (lexeme @@ (P.char @@ int32 8704)) @@ (constant $    -- '∀'
+          P.bind @@ (P.sepBy @@ (asTerm binderName) @@ (lexeme @@ (P.char @@ int32 44))) @@ ("vars" ~>    -- ','
+            P.bind @@ (lexeme @@ (P.char @@ int32 46)) @@ (constant $    -- '.'
+              -- 'try' needed here for the same reason as typeScheme's header (#711): a
+              -- constraints block and a parenthesized parameter type (e.g. bimap's
+              -- '(a → c) → ...') share a leading '(', so a failed constraints-block attempt
+              -- must rewind, not hard-fail.
+              P.bind @@ (P.optional @@ (P.try @@ constraintsBlock)) @@ ("mcs" ~>
+                sigFromVarsAndConstraints @@ var "vars" @@ var "mcs")))))
+    -- No '∀' at all: a monomorphic signature, printed without the superfluous header (#711).
+    -- Equivalent to the '∀' branch with no variables and no constraints.
+    @@ (sigFromVarsAndConstraints @@ (list ([] :: [TypedTerm Name])) @@ Phantoms.nothing)
   where
+    sigFromVarsAndConstraints = "vars" ~> "mcs" ~>
+      "typeParams" <~ Lists.map
+        ("v" ~> Typing.typeParameter (var "v")
+          (Optionals.withDefault (list ([] :: [TypedTerm TypeClassConstraint]))
+            (Maps.lookup (var "v" :: TypedTerm Name)
+              (Maps.fromList (Lists.map (asTerm toTypeParamConstraintsEntry) (Optionals.withDefault (list ([] :: [TypedTerm (Name, Name)])) (var "mcs")))))))
+        (var "vars") $
+      P.map @@ ("chain" ~>
+          -- The chain accumulator is already in forward (left-to-right, domain-first) order:
+          -- each level of the right-associative recursion prepends its OWN (outer, earlier)
+          -- domain onto the inner recursive result as it returns, so the leftmost-parsed
+          -- domain ends up at the head of the list.
+          "fwdParams" <~ Pairs.first (var "chain" :: TypedTerm ([(Bool, Type)], Type)) $
+          "resultType" <~ Pairs.second (var "chain") $
+          -- Build Parameters with synthetic names arg0, arg1, ... via a (length-1)-indexed
+          -- fold, since there is no DSL `range` helper -- same idiom as
+          -- Scoping.typeSchemeToTermSignature.
+          "params" <~ Lists.reverse (Pairs.first $ Lists.foldl
+            ("acc" ~> "item" ~>
+              "pairAcc" <~ Pairs.first (var "acc") $
+              "i" <~ Pairs.second (var "acc") $
+              pair
+                (Lists.cons
+                  (Typing.parameter
+                    (Core.name $ Strings.concat (list [string "arg", Literals.printInt32 (var "i")]))
+                    Phantoms.nothing
+                    (Pairs.second (var "item" :: TypedTerm (Bool, Type)))
+                    (Pairs.first (var "item")))
+                  (var "pairAcc"))
+                (Math.add (var "i") (int32 1)))
+            (pair (list ([] :: [TypedTerm Parameter])) (int32 0))
+            (var "fwdParams")) $
+          "result" <~ Typing.result Phantoms.nothing (var "resultType") $
+          Typing.termSignature (var "typeParams") (var "params") (var "result")) @@
+        (asTerm termSignatureArrowChain)
     constraintsBlock =
       P.bind @@ (termKeyword @@ string "(") @@ (constant $
         P.bind @@ (P.sepBy1 @@ (asTerm constraint) @@ (termKeyword @@ string ",")) @@ ("cs" ~>

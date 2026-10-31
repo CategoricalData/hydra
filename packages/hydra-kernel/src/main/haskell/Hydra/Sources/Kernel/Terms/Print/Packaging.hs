@@ -148,7 +148,7 @@ entityMetadataDoc = define "entityMetadataDoc" $
       "tag">: match _ProvisionKind (Packaging.provisionKind $ var "p") Nothing [
         _ProvisionKind_requirement>>: constant $ string "@requirement",
         _ProvisionKind_recommendation>>: constant $ string "@recommendation"]] $
-      Strings.concat $ list [string "## ", var "tag", string " ", var "localName", string " ", Packaging.provisionStatement $ var "p"])
+      Strings.concat $ list [string "## ", var "tag", string " ", var "localName", string ": ", Packaging.provisionStatement $ var "p"])
     (Packaging.entityMetadataProvisions $ var "em") $
   "keyLines" <~ Lists.concat (list [var "seeAlsoLines", var "lifecycleLines", var "provisionLines"]) $
   "sections" <~ Lists.filter ("s" ~> Logic.not (Lists.isEmpty (var "s"))) (list [

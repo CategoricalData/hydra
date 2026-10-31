@@ -949,14 +949,20 @@ termSignatureAliased = define "termSignatureAliased" $
   "paramStrs" <~ Lists.map (var "paramStr") (var "params") $
   "resultStr" <~ typeAtPrec @@ var "aliases" @@ int32 precApp @@ (Typing.resultType $ var "result") $
   "bodyStr" <~ Strings.join (string " → ") (Lists.concat2 (var "paramStrs") (list [var "resultStr"])) $
-  Strings.concat $ list [
-    string "∀",
-    Strings.join (string ",") (var "varNames"),
-    string ".",
-    Logic.ifElse (Lists.isEmpty $ var "tc")
-      (string "")
-      (Strings.concat $ list [
-        string "(",
-        Strings.join (string ", ") (var "tc"),
-        string ") ⇒ "]),
-    var "bodyStr"]
+  -- Omit the '∀.' header entirely when there are no type variables (and therefore no
+  -- constraints, which are always attached to a quantified variable) -- a monomorphic
+  -- signature like 'not : boolean → boolean' reads better than 'not : ∀.boolean → boolean'.
+  -- typeScheme's header is unchanged (not in scope here); only termSignature drops it.
+  Logic.ifElse (Lists.isEmpty $ var "varNames")
+    (var "bodyStr")
+    (Strings.concat $ list [
+      string "∀",
+      Strings.join (string ",") (var "varNames"),
+      string ".",
+      Logic.ifElse (Lists.isEmpty $ var "tc")
+        (string "")
+        (Strings.concat $ list [
+          string "(",
+          Strings.join (string ", ") (var "tc"),
+          string ") ⇒ "]),
+      var "bodyStr"])
