@@ -54,6 +54,9 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Serialization as Serialization
+import Hydra.Core.Ast
+
 
 ns :: ModuleName
 ns = ModuleName "hydra.core.print.model"
@@ -62,7 +65,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "String representations of hydra.core.model types")}
   where
    definitions = [
@@ -74,6 +77,7 @@ module_ = Module {
      toDefinition field,
      toDefinition fieldTermIsUnit,
      toDefinition fieldType,
+     toDefinition fieldTypeExpr,
      toDefinition fields,
      toDefinition floatValue,
      toDefinition floatType,
@@ -94,6 +98,7 @@ module_ = Module {
      toDefinition (map_ :: TypedTermDefinition ((Int -> String) -> (v -> String) -> M.Map Int v -> String)),
      toDefinition optional_,
      toDefinition pair_,
+     toDefinition peelDescriptionAnnotation,
      toDefinition printBacktickedName,
      toDefinition printBinderName,
      toDefinition printName,
@@ -204,16 +209,70 @@ field = define "field" $
   "fterm" <~ Core.fieldTerm (var "field") $
   Strings.concat $ list [var "fname", string "=", termAliased @@ var "aliases" @@ var "fterm"]
 
+-- | Peel a single '@{description = "..."}' annotation off the top of a type, if present, and
+-- return its description string. The annotation payload is checked directly (a one-entry TermMap
+-- whose key is the bare variable "description" and whose value is a string literal) rather than
+-- via the heavier 'Hydra.Sources.Kernel.Terms.Annotations' decoders -- those need an
+-- InferenceContext/Graph for the general case (any annotation key, term-valued), but a type's
+-- doc-comment description (set by the DSL's own 'doc' helper, Core.Overlay.Haskell.Dsl.Annotations)
+-- is always exactly this shape, so a direct pattern match suffices here and avoids pulling in
+-- that dependency. Returns the annotation's body type unchanged, paired with the description, so
+-- the caller can print the UNANNOTATED type and emit the description as a preceding '##' comment
+-- instead of a trailing '@{...}' suffix (#711 field-layout readability pass).
+peelDescriptionAnnotation :: TypedTermDefinition (Type -> (Maybe String, Type))
+peelDescriptionAnnotation = define "peelDescriptionAnnotation" $
+  doc "Peel a single '@{description = ...}' annotation off a type, returning (description, body) if found" $
+  "typ" ~> match _Type (var "typ") (Just $ pair nothing (var "typ")) [
+    _Type_annotated>>: "at" ~>
+      "body" <~ Core.annotatedTypeBody (var "at") $
+      "ann" <~ Core.annotatedTypeAnnotation (var "at") $
+      match _Term (var "ann") (Just $ pair nothing (var "typ")) [
+        _Term_map>>: "m" ~>
+          "entries" <~ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)) $
+          Logic.ifElse (Equality.equal (Lists.length $ var "entries") (int32 1))
+            ("entry" <~ (Optionals.withDefault (pair (Core.termUnit) (Core.termUnit)) (Lists.head $ var "entries")) $
+             "k" <~ Pairs.first (var "entry") $
+             "v" <~ Pairs.second (var "entry") $
+             match _Term (var "k") (Just $ pair nothing (var "typ")) [
+               _Term_variable>>: "n" ~>
+                 Logic.ifElse (Equality.equal (Core.unName $ var "n") (string "description"))
+                   (match _Term (var "v") (Just $ pair nothing (var "typ")) [
+                     _Term_literal>>: "l" ~> match _Literal (var "l") (Just $ pair nothing (var "typ")) [
+                       _Literal_string>>: "s" ~> pair (just $ var "s") (var "body")]])
+                   (pair nothing (var "typ"))])
+            (pair nothing (var "typ"))]]
+
 fieldType :: TypedTermDefinition (M.Map ModuleName String -> FieldType -> String)
 fieldType = define "fieldType" $
   doc "Show a field type as a string, shortening nominal references in its type via the given alias map (#803)" $
   "aliases" ~> "ft" ~>
   "fname" <~ printName @@ (Core.fieldTypeName $ var "ft") $
   "ftyp" <~ Core.fieldTypeType (var "ft") $
+  "peeled" <~ peelDescriptionAnnotation @@ var "ftyp" $
   Strings.concat $ list [
     var "fname",
-    string ":",
-    typeAliased @@ var "aliases" @@ var "ftyp"]
+    string ": ",
+    typeAliased @@ var "aliases" @@ (Pairs.second $ var "peeled")]
+
+-- | Show a field type as a block-layout 'Expr' (#711): a preceding '## description' comment line
+-- (if the field's type carries a description annotation), then the 'name: type' declaration line.
+-- Used by the record/union row-type printer to lay out each field on its own line, indented,
+-- rather than inline with a trailing '@{description=...}' suffix.
+fieldTypeExpr :: TypedTermDefinition (M.Map ModuleName String -> FieldType -> Expr)
+fieldTypeExpr = define "fieldTypeExpr" $
+  doc "Show a field type as a block-layout expression, with its description (if any) as a preceding '##' comment line" $
+  "aliases" ~> "ft" ~>
+  "ftyp" <~ Core.fieldTypeType (var "ft") $
+  "peeled" <~ peelDescriptionAnnotation @@ var "ftyp" $
+  "mdesc" <~ Pairs.first (var "peeled") $
+  "fname" <~ printName @@ (Core.fieldTypeName $ var "ft") $
+  "declLine" <~ Strings.concat (list [
+    var "fname",
+    string ": ",
+    typeAliased @@ var "aliases" @@ (Pairs.second $ var "peeled")]) $
+  Serialization.cst @@ Optionals.match (var "mdesc")
+    (var "declLine")
+    ("d" ~> Strings.concat $ list [string "## ", var "d", string "\n", var "declLine"])
 
 fields :: TypedTermDefinition (M.Map ModuleName String -> [Field] -> String)
 fields = define "fields" $
@@ -779,12 +838,15 @@ typeAtPrec :: TypedTermDefinition (M.Map ModuleName String -> Int -> Type -> Str
 typeAtPrec = define "typeAtPrec" $
   doc "Show a type as a string at a given minimum context precedence, adding minimal parentheses" $
   "aliases" ~> "ctx" ~> "typ" ~>
+  -- Lay out a record/union's fields one per line, indented, each preceded by its own '##'
+  -- description comment (#711 readability pass) -- reusing the shared hydra.core.ast/
+  -- hydra.core.serialization block-printing machinery ('curlyBracesList'/'printExpr') that every
+  -- other Hydra coder already uses for this exact "braced, comma-separated, one-per-line" shape,
+  -- rather than hand-rolling indentation here. 'curlyBracesList' itself renders the empty-fields
+  -- case as a bare '{}', so no separate check is needed.
   "showRowType" <~ ("flds" ~>
-    "fieldStrs" <~ Lists.map (fieldType @@ var "aliases") (var "flds") $
-    Strings.concat $ list [
-      string "{",
-      Strings.join (string ", ") (var "fieldStrs"),
-      string "}"]) $
+    "fieldExprs" <~ Lists.map (fieldTypeExpr @@ var "aliases") (var "flds") $
+    Serialization.printExpr @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ var "fieldExprs")) $
   "gatherTypes" <~ ("prev" ~> "app" ~>
     "lhs" <~ Core.applicationTypeFunction (var "app") $
     "rhs" <~ Core.applicationTypeArgument (var "app") $
@@ -901,17 +963,24 @@ typeSchemeAliased = define "typeSchemeAliased" $
   "tc" <~ Lists.concat (Lists.map (var "toConstraintPairs") $
     Lists.sortBy (reify Pairs.first) $
     Maps.toList (Core.typeSchemeConstraints (var "ts") :: TypedTerm (M.Map Name TypeVariableConstraints))) $
-  Strings.concat $ list [
-    string "∀",
-    Strings.join (string ",") (var "varNames"),
-    string ".",
-    Logic.ifElse (Lists.isEmpty $ var "tc")
-      (string "")
-      (Strings.concat $ list [
-        string "(",
-        Strings.join (string ", ") (var "tc"),
-        string ") ⇒ "]),
-    typeAliased @@ var "aliases" @@ var "body"]
+  "bodyStr" <~ typeAliased @@ var "aliases" @@ var "body" $
+  -- Omit the '∀.' header entirely when there are no type variables (and therefore no
+  -- constraints, which are always attached to a quantified variable) -- a monomorphic
+  -- type definition like 'type Flag = boolean' reads better than 'type Flag = ∀.boolean'.
+  -- Mirrors 'termSignatureAliased's identical convention, settled for signatures first.
+  Logic.ifElse (Lists.isEmpty $ var "varNames")
+    (var "bodyStr")
+    (Strings.concat $ list [
+      string "∀",
+      Strings.join (string ",") (var "varNames"),
+      string ".",
+      Logic.ifElse (Lists.isEmpty $ var "tc")
+        (string "")
+        (Strings.concat $ list [
+          string "(",
+          Strings.join (string ", ") (var "tc"),
+          string ") ⇒ "]),
+      var "bodyStr"])
 
 -- | Show a term signature as a string: like typeScheme's '∀vars.[constraints⇒]' header, but the
 -- arrow chain is printed from the signature's own parameters/result rather than from a bare

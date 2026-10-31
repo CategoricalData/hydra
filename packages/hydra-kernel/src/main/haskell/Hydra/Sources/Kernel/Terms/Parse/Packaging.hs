@@ -103,6 +103,9 @@ module_ = Module {
      toDefinition expandAliasesInTerm,
      toDefinition expandAliasesInTermSignature,
      toDefinition expandAliasesInType,
+     toDefinition expandAliasesInTypeSelfAware,
+     toDefinition expandAliasesInTypeSelfAwareGo,
+     toDefinition expandTypeNameRefSelfAware,
      toDefinition identifier,
      toDefinition importDecl,
      toDefinition isUnionType,
@@ -350,6 +353,86 @@ expandAliasesInType = define "expandAliasesInType" $
       _Type_variable>>: "n" ~> Core.typeVariable (expandAliasedName @@ (var "aliases" :: TypedTerm (M.Map String ModuleName)) @@ var "n")]) $
   Rewriting.rewriteType @@ var "rewrite" @@ var "typ0"
 
+-- | Core helper for 'expandAliasesInTypeSelfAware': expand a single name reference, given the
+-- currently bound type-variable set. A bound name is left alone (it's a genuine type variable,
+-- not a nominal reference); otherwise it is expanded via the alias table, falling back to a
+-- same-module self-reference (#711) when the name is bare (single segment, no dots) and no
+-- alias matched -- an unaliased but already fully-dotted name is left as-is (out of scope per
+-- 'expandAliasedName's own doc comment).
+expandTypeNameRefSelfAware :: TypedTermDefinition (ModuleName -> M.Map String ModuleName -> S.Set String -> Name -> Name)
+expandTypeNameRefSelfAware = define "expandTypeNameRefSelfAware" $
+  doc "Expand a single type-level name reference, treating a bare unbound name as a self-reference" $
+  "modName" ~> "aliases" ~> "bound" ~> "n" ~>
+  "s" <~ Core.unName (var "n") $
+  Logic.ifElse (Sets.member (var "s") (var "bound" :: TypedTerm (S.Set String)))
+    (var "n")
+    ("expanded" <~ (expandAliasedName @@ (var "aliases" :: TypedTerm (M.Map String ModuleName)) @@ var "n") $
+     Logic.ifElse (Equality.equal (var "expanded") (var "n"))
+       (Logic.ifElse (Equality.equal (Lists.length (Strings.splitOn (string ".") (var "s"))) (int32 1))
+         (qualifyLocalName @@ var "modName" @@ var "s")
+         (var "n"))
+       (var "expanded"))
+
+-- | Recursive walker for 'expandAliasesInTypeSelfAware': descends through a type, extending
+-- 'bound' with each nested 'Type_forall's own parameter before recursing into its body (a rare,
+-- not currently used by the kernel, but syntactically valid shadowing case). Must be a registered
+-- top-level 'TypedTermDefinition', not a local recursive let-binding -- a bare self-referencing
+-- 'TypedTerm' inlines its own body at every recursive call site (AsTerm's non-definition instance
+-- is 'id'), producing an infinite Haskell-level term graph that overflows the stack the instant
+-- anything traverses it (same hazard 'termSignatureArrowChain' documents and avoids the same way).
+expandAliasesInTypeSelfAwareGo :: TypedTermDefinition (ModuleName -> M.Map String ModuleName -> S.Set String -> Type -> Type)
+expandAliasesInTypeSelfAwareGo = define "expandAliasesInTypeSelfAwareGo" $
+  doc "Recursively expand aliased and bare self-referencing names inside a type, tracking bound type variables" $
+  "modName" ~> "aliases" ~> "bound" ~> "typ" ~>
+  "recurse" <~ (expandAliasesInTypeSelfAwareGo @@ var "modName" @@ var "aliases" @@ var "bound") $
+  "forField" <~ ("field" ~> Core.fieldTypeWithType (var "field") (var "recurse" @@ (Core.fieldTypeType $ var "field"))) $
+  match _Type (var "typ") Nothing [
+    _Type_annotated>>: "at" ~> Core.typeAnnotated $ Core.annotatedType
+      (var "recurse" @@ (Core.annotatedTypeBody $ var "at")) (Core.annotatedTypeAnnotation $ var "at"),
+    _Type_application>>: "app" ~> Core.typeApplication $ Core.applicationType
+      (var "recurse" @@ (Core.applicationTypeFunction $ var "app")) (var "recurse" @@ (Core.applicationTypeArgument $ var "app")),
+    _Type_effect>>: "t" ~> Core.typeEffect $ var "recurse" @@ var "t",
+    _Type_either>>: "et" ~> Core.typeEither $ Core.eitherType
+      (var "recurse" @@ (Core.eitherTypeLeft $ var "et")) (var "recurse" @@ (Core.eitherTypeRight $ var "et")),
+    _Type_forall>>: "ft" ~>
+      "param" <~ Core.forallTypeParameter (var "ft") $
+      "bound'" <~ Sets.insert (Core.unName $ var "param") (var "bound" :: TypedTerm (S.Set String)) $
+      Core.typeForall (Core.forallType (var "param")
+        (expandAliasesInTypeSelfAwareGo @@ var "modName" @@ var "aliases" @@ var "bound'" @@ (Core.forallTypeBody $ var "ft"))),
+    _Type_function>>: "fun" ~> Core.typeFunction $ Core.functionType
+      (var "recurse" @@ (Core.functionTypeDomain $ var "fun")) (var "recurse" @@ (Core.functionTypeCodomain $ var "fun")),
+    _Type_list>>: "t" ~> Core.typeList $ var "recurse" @@ var "t",
+    _Type_literal>>: "lt" ~> Core.typeLiteral $ var "lt",
+    _Type_map>>: "mt" ~> Core.typeMap $ Core.mapType
+      (var "recurse" @@ (Core.mapTypeKeys $ var "mt")) (var "recurse" @@ (Core.mapTypeValues $ var "mt")),
+    _Type_optional>>: "t" ~> Core.typeOptional $ var "recurse" @@ var "t",
+    _Type_pair>>: "pt" ~> Core.typePair $ Core.pairType
+      (var "recurse" @@ (Core.pairTypeFirst $ var "pt")) (var "recurse" @@ (Core.pairTypeSecond $ var "pt")),
+    _Type_record>>: "rt" ~> Core.typeRecord $ Lists.map (var "forField") (var "rt"),
+    _Type_set>>: "t" ~> Core.typeSet $ var "recurse" @@ var "t",
+    _Type_union>>: "rt" ~> Core.typeUnion $ Lists.map (var "forField") (var "rt"),
+    _Type_unit>>: constant Core.typeUnit,
+    _Type_variable>>: "n" ~> Core.typeVariable
+      (expandTypeNameRefSelfAware @@ var "modName" @@ (var "aliases" :: TypedTerm (M.Map String ModuleName)) @@ var "bound" @@ var "n"),
+    _Type_void>>: constant Core.typeVoid,
+    _Type_wrap>>: "wt" ~> Core.typeWrap $ var "recurse" @@ var "wt"]
+
+-- | Like 'expandAliasesInType', but ALSO expands a bare (single-segment, unaliased) name to a
+-- self-reference under 'modName' -- the current module's own namespace -- unless that bare name
+-- is a currently in-scope bound type variable. This distinguishes 'CodeBlock' (a reference to a
+-- same-module type definition, printed bare per the printer's own self-reference shortening,
+-- #711) from 'a' in '\8704a.record{...a...}' (a genuinely bound, non-nominal type variable) --
+-- both are syntactically identical bare single-segment names, so the distinction can only be made
+-- by tracking which names are currently bound. 'boundNames' starts as the type SCHEME's own
+-- quantified variables (the caller's responsibility -- see 'expandAliasesInDefinition').
+-- Does NOT walk into terms (a type's only term-valued position is an annotation's payload, which
+-- carries no type-level names) -- scope intentionally narrower than 'expandAliasesInTerm' (#805).
+expandAliasesInTypeSelfAware :: TypedTermDefinition (ModuleName -> S.Set String -> M.Map String ModuleName -> Type -> Type)
+expandAliasesInTypeSelfAware = define "expandAliasesInTypeSelfAware" $
+  doc "Expand aliased AND bare self-referencing names inside a type, tracking bound type variables" $
+  "modName" ~> "bound0" ~> "aliases" ~> "typ0" ~>
+  expandAliasesInTypeSelfAwareGo @@ var "modName" @@ var "aliases" @@ var "bound0" @@ var "typ0"
+
 -- | Expand every aliased name reference inside a term signature's parameter and result types,
 -- per the given alias table. Operates directly on TermSignature (not via a TypeScheme bridge),
 -- preserving parameter names, descriptions, and isLazy flags (#800) exactly.
@@ -371,13 +454,16 @@ expandAliasesInTermSignature = define "expandAliasesInTermSignature" $
 -- alias table. Dispatches by definition kind, rewriting only the parts that can carry name
 -- references (a type definition's body, a term definition's body and signature, a primitive
 -- definition's signature and default implementation).
-expandAliasesInDefinition :: TypedTermDefinition (M.Map String ModuleName -> Definition -> Definition)
+expandAliasesInDefinition :: TypedTermDefinition (ModuleName -> M.Map String ModuleName -> Definition -> Definition)
 expandAliasesInDefinition = define "expandAliasesInDefinition" $
   doc "Expand every aliased name reference inside a definition's body/signature" $
-  "aliases" ~> "def" ~>
-  "expandScheme" <~ ("ts" ~> Core.typeScheme (Core.typeSchemeVariables $ var "ts")
-    (expandAliasesInType @@ (var "aliases" :: TypedTerm (M.Map String ModuleName)) @@ (Core.typeSchemeBody $ var "ts"))
-    (Core.typeSchemeConstraints $ var "ts")) $
+  "modName" ~> "aliases" ~> "def" ~>
+  "expandScheme" <~ ("ts" ~>
+    "vars" <~ Core.typeSchemeVariables (var "ts") $
+    "boundNames" <~ Sets.fromList (Lists.map ("v" ~> Core.unName (var "v")) (var "vars" :: TypedTerm [Name])) $
+    Core.typeScheme (var "vars")
+      (expandAliasesInTypeSelfAware @@ (var "modName" :: TypedTerm ModuleName) @@ (var "boundNames" :: TypedTerm (S.Set String)) @@ (var "aliases" :: TypedTerm (M.Map String ModuleName)) @@ (Core.typeSchemeBody $ var "ts"))
+      (Core.typeSchemeConstraints $ var "ts")) $
   match _Definition (var "def") Nothing [
     _Definition_type>>: "td" ~> Packaging.definitionType (Packaging.typeDefinition
       (Packaging.typeDefinitionName $ var "td") (Packaging.typeDefinitionMetadata $ var "td")
@@ -553,8 +639,10 @@ moduleParser = define "moduleParser" $
           ("p" ~> Optionals.map ("alias" ~> pair (var "alias") (Packaging.moduleDependencyModule (Pairs.first $ var "p"))) (Pairs.second $ var "p"))
           (var "imports"))) :: TypedTerm (M.Map String ModuleName)) $
       P.map @@ ("defs" ~>
-          -- 1. expand import aliases to fully-qualified names (#803/#804)
-          "expanded" <~ Lists.map (expandAliasesInDefinition @@ (var "aliases" :: TypedTerm (M.Map String ModuleName))) (var "defs") $
+          -- 1. expand import aliases to fully-qualified names (#803/#804), AND resolve same-module
+          --    bare self-references vs. bound type variables (#711) -- both need the module's own
+          --    name, hence 'expandAliasesInDefinition's two-argument form.
+          "expanded" <~ Lists.map (expandAliasesInDefinition @@ (var "modName" :: TypedTerm ModuleName) @@ (var "aliases" :: TypedTerm (M.Map String ModuleName))) (var "defs") $
           -- 2. build the type env from the (now fully-qualified) type definitions, then correct the
           --    record/injection sugar ambiguity against it (#809). Done AFTER alias expansion so the
           --    env keys and the record type names being looked up are both fully qualified.

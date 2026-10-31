@@ -326,9 +326,17 @@ mwisSolve = define "mwisSolve" $
 -- "<alias>" -> 'alias.Local', absent (never, since every dependency module is a key) -> full dotted.
 -- Dependency modules are collected via a pure walk of the definitions' term/type contents (no
 -- InferenceContext/Graph needed; the printer always prints a module's own in-memory 'Definition's).
+--
+-- The printed module's OWN namespace ('ownNs') is also inserted into the result, mapped to the
+-- empty-string alias, so 'PrintCore.printNameAliased's existing "empty alias -> bare local name"
+-- branch (#803) also covers same-module self-references -- a reference to a type defined in the
+-- SAME module prints as its bare local name (e.g. 'Block', not 'hydra.core.markdown.Block'),
+-- matching every other host's own intra-module reference style (#711). This entry is deliberately
+-- excluded from import-line generation: 'module'' filters it back out of 'usedDeps' (a module
+-- never imports itself), so it affects only name-shortening, not the printed 'import' block.
 moduleAliases :: TypedTermDefinition (Module -> M.Map ModuleName String)
 moduleAliases = define "moduleAliases" $
-  doc "Compute the printing alias for every module referenced by the given module's definitions (#804)" $
+  doc "Compute the printing alias for every module referenced by the given module's definitions (#804), plus the module's own namespace (mapped to the empty alias, for self-reference shortening, #711)" $
   "mod" ~>
   "ownNs" <~ Packaging.moduleName (var "mod") $
   "defs" <~ (Packaging.moduleDefinitions $ var "mod") $
@@ -384,14 +392,20 @@ moduleAliases = define "moduleAliases" $
     (Lists.map ("nm" ~> Lists.length (var "segmentsOf" @@ var "nm")) (var "aliasedList")) $
   "initialState" <~ Maps.fromList (Lists.map ("nm" ~> pair (var "nm") (int32 1)) (var "aliasedList")) $
   "finalState" <~ Lists.foldl (growAliasesStep @@ (var "segsMap" :: TypedTerm (M.Map ModuleName [String]))) (var "initialState") (Lists.replicate (var "maxSegs") unit) $
-  -- Assemble the result: bare modules -> "", aliased modules -> their grown dotted alias.
-  Maps.fromList (Lists.map
+  -- Assemble the per-OTHER-module result: bare modules -> "", aliased modules -> their grown
+  -- dotted alias. Then insert the printed module's OWN namespace, mapped to the empty alias
+  -- too, so 'PrintCore.printNameAliased's existing "empty alias -> bare local name" branch
+  -- (#803) also covers same-module self-references (e.g. 'Block', not
+  -- 'hydra.core.markdown.Block') -- this entry is deliberately excluded from import-line
+  -- generation; 'module'' filters it back out of 'usedDeps' (a module never imports itself).
+  "otherAliases" <~ Maps.fromList (Lists.map
     ("nm" ~> pair (var "nm")
       (Logic.ifElse (Sets.member (var "nm") (var "bareSet" :: TypedTerm (S.Set ModuleName)))
         (string "")
         (aliasFromSuffix @@ (Optionals.withDefault (list ([] :: [TypedTerm String])) (Maps.lookup (var "nm") (var "segsMap" :: TypedTerm (M.Map ModuleName [String]))))
                          @@ (Optionals.withDefault (int32 1) (Maps.lookup (var "nm") (var "finalState" :: TypedTerm (M.Map ModuleName Int)))))))
-    (var "nssAsList"))
+    (var "nssAsList")) $
+  Maps.insert (var "ownNs") (string "") (var "otherAliases" :: TypedTerm (M.Map ModuleName String))
 
 -- | Show a module dependency as an import declaration, given the printer's computed alias for
 -- that dependency (per 'moduleAliases'). The alias map's value for this module decides the form
@@ -543,9 +557,12 @@ module' = define "moduleDefinition" $
   -- imports to print; 'moduleDependencies' is consulted only to recover a declared 'package' for
   -- dependencies that do happen to list one (#711).
   "declaredByModule" <~ Maps.fromList (Lists.map ("d" ~> pair (Packaging.moduleDependencyModule $ var "d") (var "d")) (Packaging.moduleDependencies $ var "mod")) $
+  -- 'aliases'' keys include the module's own namespace (added by 'moduleAliases' for
+  -- self-reference shortening) -- excluded here, since a module never imports itself.
+  "ownNs" <~ Packaging.moduleName (var "mod") $
   "usedDeps" <~ Lists.map
     ("nm" ~> Maps.findWithDefault (Packaging.moduleDependency (var "nm") nothing) (var "nm") (var "declaredByModule" :: TypedTerm (M.Map ModuleName ModuleDependency)))
-    (Maps.keys (var "aliases" :: TypedTerm (M.Map ModuleName String))) $
+    (Lists.filter ("nm" ~> Logic.not (Equality.equal (var "nm") (var "ownNs"))) (Maps.keys (var "aliases" :: TypedTerm (M.Map ModuleName String)))) $
   "importStrs" <~ Lists.map (importDecl @@ (var "aliases" :: TypedTerm (M.Map ModuleName String))) (var "usedDeps") $
   "defStrs" <~ Lists.map (definition @@ (var "aliases" :: TypedTerm (M.Map ModuleName String))) (Packaging.moduleDefinitions $ var "mod") $
   Strings.join (string "\n\n") (Lists.cons (var "headerStr")

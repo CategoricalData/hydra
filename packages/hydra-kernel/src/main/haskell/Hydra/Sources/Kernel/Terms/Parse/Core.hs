@@ -974,18 +974,52 @@ parseTerm = define "parseTerm" $
 ----------------------------------------------------------------------------------------------
 -- Types
 
--- | Parse a typeFields block: '{' [typeField (',' typeField)*] '}', typeField ::= name ':' type.
+-- | Parse a typeFields block: '{' [typeField (',' typeField)*] '}', typeField ::=
+-- ['##' doc comment line] name ':' type. A field's optional preceding '##' line (#711's
+-- field-level readability layout: the printer emits a field's description, if any, as a '##'
+-- comment on the line above the field, inside a 'description'-only '@{...}' annotation on the
+-- field's TYPE -- see 'PrintCore.fieldTypeExpr'/'peelDescriptionAnnotation') is re-wrapped onto
+-- the parsed field's type as that same annotation shape, so the round-trip is lossless.
+--
+-- This block's own '{'/','/'}' tokens deliberately do NOT use the ordinary 'typeKeyword'/'lexeme'
+-- (which eats trailing '#'-comments as part of generic whitespace-skipping, per syntax.md #2.2) --
+-- if they did, a field's '##' comment would already be consumed as throwaway whitespace by the
+-- PRECEDING token before 'fieldDocComment' ever got a chance to see it. 'typeFieldsPunct' is a
+-- local, non-comment-consuming lexeme variant used only here, so every other grammar production's
+-- comment-skipping is untouched.
 typeFieldsBlock :: TypedTerm (Parser [FieldType])
 typeFieldsBlock =
-  P.bind @@ (typeKeyword @@ string "{") @@ (constant $
-    P.bind @@ (P.sepBy @@ typeFieldParser @@ (typeKeyword @@ string ",")) @@ ("flds" ~>
-      P.bind @@ (typeKeyword @@ string "}") @@ (constant $
+  P.bind @@ (typeFieldsPunct @@ string "{") @@ (constant $
+    P.bind @@ (P.sepBy @@ typeFieldParser @@ (typeFieldsPunct @@ string ",")) @@ ("flds" ~>
+      P.bind @@ (typeFieldsPunct @@ string "}") @@ (constant $
         P.pure @@ var "flds")))
   where
+    -- Non-comment-consuming lexeme: skip the keyword, then plain whitespace only (no '#' lines).
+    typeFieldsPunct = "kw" ~>
+      P.bind @@ (P.string_ @@ var "kw") @@ (constant $
+        P.bind @@ plainWhitespace @@ (constant $ P.pure @@ var "kw"))
+    plainWhitespace =
+      P.map @@ ("_" ~> unit) @@ (P.many @@ (P.satisfy @@ ("c" ~> Chars.isSpace (var "c"))))
+    -- An optional '## text' line (plus its own trailing plain whitespace, so multiple consecutive
+    -- '##' lines -- not expected from this printer, but not disallowed either -- don't each need
+    -- their own separate skip): '#' '#' ' '? (not newline)* , consumed only up to end of line.
+    fieldDocComment =
+      P.optional @@ (
+        P.bind @@ (P.char @@ int32 35) @@ (constant $    -- '#'
+          P.bind @@ (P.char @@ int32 35) @@ (constant $    -- '#'
+            P.bind @@ (P.optional @@ (P.char @@ int32 32)) @@ (constant $    -- optional ' '
+              P.bind @@ (P.map @@ ("cs" ~> Strings.fromList (var "cs")) @@
+                  (P.many @@ (P.satisfy @@ ("c" ~> Logic.not (Equality.equal (var "c") (int32 10)))))) @@ ("s" ~>
+                P.bind @@ plainWhitespace @@ (constant $
+                  P.pure @@ var "s"))))))
+    withDescription = "mdesc" ~> "t" ~> Optionals.match (var "mdesc") (var "t")
+      ("d" ~> Core.typeAnnotated (Core.annotatedType (var "t")
+        (Core.termMap (Maps.fromList (list [pair (Core.termVariable (Core.name $ string "description")) (Core.termLiteral $ Core.literalString (var "d"))])))))
     typeFieldParser =
-      P.bind @@ (asTerm name) @@ ("fname" ~>
-        P.bind @@ (typeKeyword @@ string ":") @@ (constant $
-          P.map @@ ("t" ~> Core.fieldType (var "fname") (var "t")) @@ (P.lazy @@ (constant $ asTerm type_))))
+      P.bind @@ fieldDocComment @@ ("mdesc" ~>
+        P.bind @@ (asTerm name) @@ ("fname" ~>
+          P.bind @@ (typeFieldsPunct @@ string ":") @@ (constant $
+            P.map @@ ("t" ~> Core.fieldType (var "fname") (withDescription @@ var "mdesc" @@ var "t")) @@ (P.lazy @@ (constant $ asTerm type_)))))
 
 -- | Parse an 'angleType' suffix: '<' type '>', used by effect/list/optional/set type constructs.
 angleType :: TypedTerm (Parser Type)
@@ -1051,11 +1085,16 @@ typeAtom = define "typeAtom" $
 
 -- | Parse the postfix level for types: a typeAtom, then zero or more trailing '@' annotation
 -- suffixes (types have no '⟨⟩' type-application postfix of their own -- that notation belongs
--- to terms).
+-- to terms), left-chaining exactly like 'postfixTerm' (an annotated type is itself atomic-at-
+-- this-level for the next suffix).
 postfixType :: TypedTermDefinition (Parser Type)
 postfixType = define "postfixType" $
   doc "Parse an atomic type followed by zero or more trailing '@annotation' suffixes" $
-  asTerm typeAtom
+  P.bind @@ (asTerm typeAtom) @@ ("t0" ~>
+    P.map @@ ("anns" ~> Lists.foldl (asTerm applyAnn) (var "t0") (var "anns")) @@
+      (P.many @@ (asTerm annotSuffix)))
+  where
+    applyAnn = "t" ~> "ann" ~> Core.typeAnnotated (Core.annotatedType (var "t") (var "ann"))
 
 -- | Parse the application level for types (syntax.md #3 precedence 2): one postfix-level type,
 -- then greedily more, left-folding into nested ApplicationType.
@@ -1141,21 +1180,28 @@ constraint = define "constraint" $
   P.bind @@ (asTerm name) @@ ("cls" ~>
     P.map @@ ("v" ~> pair (var "cls") (var "v")) @@ (asTerm name))
 
--- | Parse a typeScheme: '∀' [binderName (',' binderName)*] '.' [schemeConstraints '⇒'] type.
--- '∀.t' is a monomorphic scheme (empty binder list).
+-- | Parse a typeScheme: '∀' [binderName (',' binderName)*] '.' [schemeConstraints '⇒'] type, or
+-- (when there are no type variables) a bare type with no '∀.' header at all -- mirroring
+-- 'termSignature's identical convention (#711): a monomorphic type definition prints without the
+-- superfluous header, so the parser must accept that form too.
 typeScheme :: TypedTermDefinition (Parser TypeScheme)
 typeScheme = define "typeScheme" $
-  doc "Parse a type scheme: '∀' [binderName (',' binderName)*] '.' [constraints '⇒'] type" $
-  P.bind @@ (lexeme @@ (P.char @@ int32 8704)) @@ (constant $    -- '∀'
-    P.bind @@ (P.sepBy @@ (asTerm binderName) @@ (lexeme @@ (P.char @@ int32 44))) @@ ("vars" ~>    -- ','
-      P.bind @@ (lexeme @@ (P.char @@ int32 46)) @@ (constant $    -- '.'
-        -- constraintsBlock and a parenthesized function-type body share a leading '(': wrap in
-        -- 'try' so a failed constraints-block attempt (e.g. '(a → c) → ...', not a constraint
-        -- list) rewinds cleanly instead of hard-failing the whole typeScheme (#711).
-        P.bind @@ (P.optional @@ (P.try @@ constraintsBlock)) @@ ("mcs" ~>
-          P.map @@ ("body" ~> Core.typeScheme (var "vars") (var "body")
-              (Maps.fromList (Lists.map (asTerm toConstraintsEntry) (Optionals.withDefault (list ([] :: [TypedTerm (Name, Name)])) (var "mcs"))))) @@
-            (P.lazy @@ (constant $ asTerm type_))))))
+  doc "Parse a type scheme: '∀' [binderName (',' binderName)*] '.' [constraints '⇒'] type, or a bare type with no '∀.' header when there are no type variables" $
+  P.alt
+    @@ (P.bind @@ (lexeme @@ (P.char @@ int32 8704)) @@ (constant $    -- '∀'
+          P.bind @@ (P.sepBy @@ (asTerm binderName) @@ (lexeme @@ (P.char @@ int32 44))) @@ ("vars" ~>    -- ','
+            P.bind @@ (lexeme @@ (P.char @@ int32 46)) @@ (constant $    -- '.'
+              -- constraintsBlock and a parenthesized function-type body share a leading '(':
+              -- wrap in 'try' so a failed constraints-block attempt (e.g. '(a → c) → ...', not a
+              -- constraint list) rewinds cleanly instead of hard-failing the whole typeScheme (#711).
+              P.bind @@ (P.optional @@ (P.try @@ constraintsBlock)) @@ ("mcs" ~>
+                P.map @@ ("body" ~> Core.typeScheme (var "vars") (var "body")
+                    (Maps.fromList (Lists.map (asTerm toConstraintsEntry) (Optionals.withDefault (list ([] :: [TypedTerm (Name, Name)])) (var "mcs"))))) @@
+                  (P.lazy @@ (constant $ asTerm type_)))))))
+    -- No '∀' at all: a monomorphic scheme, equivalent to the '∀' branch with no variables and no
+    -- constraints.
+    @@ (P.map @@ ("body" ~> Core.typeScheme (list ([] :: [TypedTerm Name])) (var "body") (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))) @@
+          (P.lazy @@ (constant $ asTerm type_)))
   where
     constraintsBlock =
       P.bind @@ (termKeyword @@ string "(") @@ (constant $

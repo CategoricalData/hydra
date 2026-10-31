@@ -197,7 +197,7 @@ moduleAliasPrintTest = universalCase "no local-name collision: imports print bar
     "import hydra.core.error.file",
     "import hydra.core.file",
     "",
-    "type Thing = \8704.(FilePath, FileError)"])
+    "type Thing = (FilePath, FileError)"])
 
 -- | A genuine two-module collision: both hydra.a and hydra.b contribute a local name 'Foo'. They
 -- conflict, so at most one may be bare. hydra.a's Foo is referenced TWICE (two type defs) vs
