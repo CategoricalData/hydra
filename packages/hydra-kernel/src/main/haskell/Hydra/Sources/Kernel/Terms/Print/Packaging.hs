@@ -455,14 +455,32 @@ withDefinitionDoc = define "withDefinitionDoc" $
 -- | Show a type definition: 'type Name = <type>', with its doc-comment block (if any) prepended.
 -- The import-alias map (#803) is threaded into the body printer so nominal references in the
 -- type are shortened via the module's own 'import ... as <alias>' lines.
+--
+-- A type definition's own description never lives in 'typeDefinitionMetadata' -- the DSL's
+-- 'defineType'/'datatype' helper (Overlay.Haskell.Bootstrap) always sets that field to Nothing;
+-- every description, definition-level or field-level, is instead carried as a '@{description=
+-- ...}' annotation on the TYPE itself (the DSL's 'doc' wraps the body the same way at both
+-- levels). So the whole-definition description is peeled off the type scheme's BODY here (via
+-- 'PrintCore.peelDescriptionAnnotation', the same helper 'fieldTypeExpr' uses for fields) and
+-- printed as a leading '##' comment, instead of letting it ride through as a trailing
+-- '@{description=...}' suffix after the printed type (#711 readability pass).
 typeDefinition :: TypedTermDefinition (M.Map ModuleName String -> TypeDefinition -> String)
 typeDefinition = define "typeDefinition" $
   doc "Show a type definition as a string, shortening nominal references via the given import-alias map (#803)" $
   "aliases" ~> "td" ~>
   "localName" <~ (Names.localNameOf @@ (Packaging.typeDefinitionName $ var "td")) $
-  "typeStr" <~ (PrintCore.typeSchemeAliased @@ var "aliases" @@ (Packaging.typeDefinitionBody $ var "td")) $
-  withDefinitionDoc @@ (Packaging.typeDefinitionMetadata $ var "td") @@
-    (Strings.concat $ list [string "type ", var "localName", string " = ", var "typeStr"])
+  "scheme" <~ (Packaging.typeDefinitionBody $ var "td") $
+  "body" <~ Core.typeSchemeBody (var "scheme") $
+  "peeled" <~ PrintCore.peelDescriptionAnnotation @@ var "body" $
+  "mdesc" <~ Pairs.first (var "peeled") $
+  "unwrappedScheme" <~ Core.typeScheme (Core.typeSchemeVariables $ var "scheme")
+    (Pairs.second $ var "peeled") (Core.typeSchemeConstraints $ var "scheme") $
+  "typeStr" <~ (PrintCore.typeSchemeAliased @@ var "aliases" @@ var "unwrappedScheme") $
+  "declStr" <~ (Strings.concat $ list [string "type ", var "localName", string " = ", var "typeStr"]) $
+  "withDescDoc" <~ Optionals.match (var "mdesc")
+    (var "declStr")
+    ("d" ~> Strings.concat $ list [string "## ", var "d", string "\n", var "declStr"]) $
+  withDefinitionDoc @@ (Packaging.typeDefinitionMetadata $ var "td") @@ var "withDescDoc"
 
 -- | Show a term definition: 'term name [: <typeScheme>] = <term>', with its doc-comment block
 -- (if any) prepended. Signature is printed only when present -- conventionally omitted per #710

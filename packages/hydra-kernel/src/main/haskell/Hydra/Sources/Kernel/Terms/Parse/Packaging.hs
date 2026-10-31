@@ -55,6 +55,7 @@ import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Parse.Core as ParseCore
+import qualified Hydra.Sources.Kernel.Terms.Parse.Docs as ParseDocs
 import qualified Hydra.Sources.Kernel.Terms.Parsers as P
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
@@ -90,13 +91,14 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, ParseCore.ns, P.ns, Rewriting.ns, Strip.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, ParseCore.ns, ParseDocs.ns, P.ns, Rewriting.ns, Strip.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Parsers for hydra.core.packaging types")}
   where
    definitions = [
      toDefinition correctInjectionsInDefinition,
      toDefinition correctInjectionsInTerm,
      toDefinition definitionParser,
+     toDefinition docCommentBlock,
      toDefinition dottedIdentifier,
      toDefinition expandAliasedName,
      toDefinition expandAliasesInDefinition,
@@ -130,20 +132,160 @@ define = definitionInModule module_
 -- | Skip zero or more whitespace characters, including '#' line comments (syntax.md 2.2).
 -- Mirrors Parse/Core.hs's own 'whitespace' (duplicated rather than shared: that module depends
 -- on Hydra.Sources.Kernel.Terms.All, so importing it here would create a module-graph cycle).
--- A '##' doc-comment block is just two consecutive '#' line comments under this rule -- it is
--- skipped like any other comment, not parsed into 'EntityMetadata' (that reconstruction is a
--- separate, open design question; metadata stays 'Nothing' on parse, matching the printer's
--- intentional skip of this case).
+--
+-- Deliberately does NOT consume a '##' (doc-comment) line -- only an ordinary single-'#'
+-- comment. A doc comment is grammatically significant (it becomes a definition's or module's
+-- 'EntityMetadata' -- see 'docCommentBlock' below), unlike an ordinary comment, which really is
+-- pure throwaway whitespace per syntax.md #2.2. If this function swallowed '##' lines too, by
+-- the time a definition/module parser tried to capture its own leading doc comment, the
+-- PRECEDING token's trailing whitespace-skip would already have consumed and discarded it --
+-- this is the same hazard 'typeFieldsBlock's non-comment-eating 'typeFieldsPunct' was introduced
+-- to avoid at the type-field level (#711); the two-hash lookahead here fixes it once, for every
+-- caller of 'whitespace'/'token'/'keyword', instead of needing a parallel non-comment-eating
+-- token family at every definition/module boundary.
 whitespace :: TypedTermDefinition (Parser ())
 whitespace = define "whitespace" $
-  doc "Skip zero or more whitespace characters and '#' line comments" $
+  doc "Skip zero or more whitespace characters and ordinary (non-'##') '#' line comments" $
   P.map @@ ("_" ~> unit) @@ (P.many @@ (P.alt @@ wsChar @@ lineComment))
   where
     wsChar = P.map @@ (constant unit) @@ (P.satisfy @@ ("c" ~> Chars.isSpace (var "c")))
+    -- Consume '#', then require (via 'try', so a non-match rewinds to right after that first
+    -- '#' rather than skipping a character) that it is NOT followed by a second '#' -- i.e. this
+    -- is an ordinary comment, not the start of a '##' doc-comment line. On success, consume the
+    -- rest of the line as usual; on a genuine '##' line, 'try' at the OUTER call site (this
+    -- whole 'lineComment') rewinds all the way past the leading '#' too, leaving the full '##'
+    -- line untouched for 'docCommentBlock' to parse explicitly.
     lineComment =
       P.bind @@ (P.char @@ int32 35) @@ (constant $    -- '#'
-        P.map @@ (constant unit) @@
-          (P.many @@ (P.satisfy @@ ("c" ~> Logic.not (Equality.equal (var "c") (int32 10))))))  -- not '\n'
+        -- Not a second '#' -- either the input ends right here (a bare trailing '#' with no
+        -- content), or the next character genuinely isn't '#'. Either way this is an ordinary
+        -- comment, not a '##' doc-comment line.
+        P.bind @@ (P.try @@ (P.alt @@ P.eof @@ (P.map @@ (constant unit) @@ (P.satisfy @@ ("c" ~> Logic.not (Equality.equal (var "c") (int32 35))))))) @@ (constant $
+          P.map @@ (constant unit) @@
+            (P.many @@ (P.satisfy @@ ("c" ~> Logic.not (Equality.equal (var "c") (int32 10)))))))  -- not '\n'
+
+-- | Capture zero or more consecutive '##'-prefixed lines (a doc-comment block), returning each
+-- line's content with the '## ' (or bare '##') prefix stripped. Consumes only plain whitespace
+-- between/after lines (never an ordinary '#' comment or further input) -- this parser is meant
+-- to run at exactly the point a module/definition's leading doc comment belongs, where
+-- 'whitespace' has already stopped short of the first '##' line (see 'whitespace's own doc
+-- comment above). Returns the empty list, consuming nothing, when no '##' line is present.
+docCommentLines :: TypedTerm (Parser [String])
+docCommentLines = P.many @@ docCommentLine
+  where
+    plainWhitespace = P.map @@ ("_" ~> unit) @@ (P.many @@ (P.satisfy @@ ("c" ~> Chars.isSpace (var "c"))))
+    docCommentLine =
+      P.bind @@ (P.char @@ int32 35) @@ (constant $    -- '#'
+        P.bind @@ (P.char @@ int32 35) @@ (constant $    -- '#'
+          P.bind @@ (P.optional @@ (P.char @@ int32 32)) @@ (constant $    -- optional ' '
+            P.bind @@ (P.map @@ ("cs" ~> Strings.fromList (var "cs")) @@
+                (P.many @@ (P.satisfy @@ ("c" ~> Logic.not (Equality.equal (var "c") (int32 10)))))) @@ ("s" ~>
+              P.bind @@ plainWhitespace @@ (constant $
+                P.pure @@ var "s")))))
+
+-- | Split a doc-comment block's lines into sections on blank-line ('##' with no text) boundaries,
+-- dropping empty sections (consecutive or leading/trailing blank lines collapse away). Mirrors
+-- 'entityMetadataDoc's own section-join ('\n##\n' between non-empty [description, comments,
+-- keyLines] sections) in reverse.
+docCommentSections :: TypedTerm ([String] -> [[String]])
+docCommentSections = "lns" ~>
+  "step" <~ ("acc" ~> "ln" ~>
+    Logic.ifElse (Strings.isEmpty $ var "ln")
+      (Lists.concat2 (var "acc") (list [list ([] :: [TypedTerm String])]))
+      ("i" <~ Math.sub (Lists.length (var "acc" :: TypedTerm [[String]])) (int32 1) $
+       "cur" <~ Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.head (Lists.drop (var "i") (var "acc" :: TypedTerm [[String]]))) $
+       Lists.concat2 (Lists.take (var "i") (var "acc")) (list [Lists.concat2 (var "cur") (list [var "ln"])]))) $
+  Lists.filter ("sec" ~> Logic.not (Lists.isEmpty (var "sec" :: TypedTerm [String])))
+    (Lists.foldl (var "step") (list [list ([] :: [TypedTerm String])]) (var "lns"))
+
+-- | True iff a doc-comment line is a '@tag ...' key line (seeAlso/availableSince/
+-- deprecatedSince/requirement/recommendation), as opposed to plain description/comment prose.
+isDocKeyLine :: TypedTerm (String -> Bool)
+isDocKeyLine = "s" ~>
+  Optionals.match (Strings.charAt (int32 0) (var "s")) (boolean False) ("c" ~> Equality.equal (var "c") (int32 64))    -- '@'
+
+-- | Parse a single '@seeAlso <ref>' key line's payload into an 'EntityReference', per
+-- 'entityReferenceDoc'/'ParseDocs.parseDocAnnotation' (the same tag vocabulary used by the
+-- existing doc-escape-annotation mechanism, #710 \167 6.6). Returns 'Nothing' if the line isn't
+-- tagged '@seeAlso', or for a malformed/unrecognized reference (matching 'parseDocAnnotation's
+-- own behavior).
+parseSeeAlsoLine :: TypedTerm (String -> Maybe EntityReference)
+parseSeeAlsoLine = "ln" ~>
+  "parts" <~ Strings.splitOn (string " ") (var "ln") $
+  Logic.ifElse (Equality.equal (Optionals.withDefault (string "") (Lists.head $ var "parts")) (string "@seeAlso"))
+    (ParseDocs.parseDocAnnotation @@ (Strings.join (string " ") (Lists.drop (int32 1) $ var "parts")))
+    nothing
+
+-- | Parse a single '@requirement <localName>: <statement>' or '@recommendation <localName>:
+-- <statement>' key line into a 'Provision', the inverse of 'entityMetadataDoc's provision-line
+-- format. 'localName' is re-qualified under 'modName' (mirroring 'qualifyLocalName', used the
+-- same way for type/term/primitive names elsewhere in this file) since the printed form -- per
+-- 'Names.localNameOf' -- always drops the module prefix.
+parseProvisionLine :: TypedTerm (ModuleName -> String -> Maybe Provision)
+parseProvisionLine = "modName" ~> "ln" ~>
+  "tag" <~ Optionals.withDefault (string "") (Lists.head (Strings.splitOn (string " ") (var "ln"))) $
+  "afterTag" <~ Strings.join (string " ") (Lists.drop (int32 1) (Strings.splitOn (string " ") (var "ln"))) $
+  "nameAndStmt" <~ Strings.splitOn (string ": ") (var "afterTag") $
+  "localName" <~ Optionals.withDefault (string "") (Lists.head (var "nameAndStmt" :: TypedTerm [String])) $
+  "stmt" <~ Strings.join (string ": ") (Lists.drop (int32 1) (var "nameAndStmt" :: TypedTerm [String])) $
+  Logic.ifElse (Equality.equal (var "tag") (string "@requirement"))
+    (just $ Packaging.provision (qualifyLocalName @@ var "modName" @@ var "localName") Packaging.provisionKindRequirement (var "stmt"))
+  $ Logic.ifElse (Equality.equal (var "tag") (string "@recommendation"))
+    (just $ Packaging.provision (qualifyLocalName @@ var "modName" @@ var "localName") Packaging.provisionKindRecommendation (var "stmt"))
+    nothing
+
+-- | Parse a '@availableSince <version>' or '@deprecatedSince <version>' key line's version
+-- payload, given the expected tag. Returns 'Nothing' if the line's tag doesn't match.
+parseVersionLine :: TypedTerm (String -> String -> Maybe Version)
+parseVersionLine = "tag" ~> "ln" ~>
+  "parts" <~ Strings.splitOn (string " ") (var "ln") $
+  Logic.ifElse (Equality.equal (Optionals.withDefault (string "") (Lists.head $ var "parts")) (var "tag"))
+    (just $ Packaging.version (Strings.join (string " ") (Lists.drop (int32 1) $ var "parts")))
+    nothing
+
+-- | Build an 'EntityMetadata' from a doc-comment block's already-captured lines (per
+-- 'docCommentLines') and the enclosing module's name (needed only to qualify '@requirement'/
+-- '@recommendation' provision names, per 'parseProvisionLine'). The inverse of
+-- 'entityMetadataDoc': splits the lines into sections (per 'docCommentSections'), classifying
+-- each by its first line -- a section whose first line is a '@tag' key line (per
+-- 'isDocKeyLine') contributes to seeAlso/lifecycle/provisions; any other section is treated as
+-- the description if it is the FIRST such section encountered, or as a block of plain comments
+-- (one entry per line, per 'entityMetadataDoc's own 'commentBlocks') if it is a later one --
+-- matching 'entityMetadataDoc's fixed emission order [description, comments, keyLines], each
+-- independently optional. Shared by 'docCommentBlock' (definition-level: lines captured and
+-- turned into metadata in one step) and 'moduleParser' (module-level: lines must be captured
+-- BEFORE 'moduleHeader' parses the module name out of the text that follows, so this step is
+-- applied separately, once the name is known).
+docCommentLinesToMetadata :: TypedTerm (ModuleName -> [String] -> EntityMetadata)
+docCommentLinesToMetadata = "modName" ~> "lns" ~>
+  "sections" <~ (docCommentSections @@ var "lns") $
+  "isKeySection" <~ ("sec" ~> Optionals.match (Lists.head (var "sec" :: TypedTerm [String])) false (isDocKeyLine)) $
+  "keyLines" <~ Lists.concat (Lists.filter (var "isKeySection") (var "sections" :: TypedTerm [[String]])) $
+  "nonKeySections" <~ Lists.filter ("sec" ~> Logic.not (var "isKeySection" @@ var "sec")) (var "sections" :: TypedTerm [[String]]) $
+  "mdesc" <~ Optionals.map ("sec" ~> Strings.join (string "\n") (var "sec")) (Lists.head (var "nonKeySections" :: TypedTerm [[String]])) $
+  "comments" <~ Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.head (Lists.drop (int32 1) (var "nonKeySections" :: TypedTerm [[String]]))) $
+  "seeAlso" <~ Optionals.givens (Lists.map (asTerm parseSeeAlsoLine) (var "keyLines" :: TypedTerm [String])) $
+  "avail" <~ Optionals.givens (Lists.map (parseVersionLine @@ string "@availableSince") (var "keyLines" :: TypedTerm [String])) $
+  "depr" <~ Optionals.givens (Lists.map (parseVersionLine @@ string "@deprecatedSince") (var "keyLines" :: TypedTerm [String])) $
+  "provisions" <~ Optionals.givens (Lists.map (parseProvisionLine @@ var "modName") (var "keyLines" :: TypedTerm [String])) $
+  "mlifecycle" <~ Logic.ifElse (Logic.and (Lists.isEmpty (var "avail" :: TypedTerm [Version])) (Lists.isEmpty (var "depr" :: TypedTerm [Version])))
+    nothing
+    (just $ Packaging.lifecycleInfo (Lists.head (var "avail" :: TypedTerm [Version])) (Lists.head (var "depr" :: TypedTerm [Version]))) $
+  Packaging.entityMetadata (var "mdesc") (var "comments") (var "seeAlso") (var "mlifecycle") (var "provisions")
+
+-- | Parse an optional leading doc-comment block (per 'docCommentLines') into an 'EntityMetadata'
+-- (per 'docCommentLinesToMetadata'), or 'Nothing' (having consumed nothing) when no '##' line is
+-- present at all -- matching 'entityMetadataDoc's own "empty EntityMetadata prints nothing" rule
+-- in reverse. The definition-level counterpart of 'moduleParser's own module-level doc-comment
+-- handling (see that function's comment for why the module case can't just call this directly).
+docCommentBlock :: TypedTermDefinition (ModuleName -> Parser (Maybe EntityMetadata))
+docCommentBlock = define "docCommentBlock" $
+  doc "Parse an optional leading '##' doc-comment block into an EntityMetadata, the inverse of entityMetadataDoc" $
+  "modName" ~>
+  P.bind @@ (asTerm docCommentLines) @@ ("lns" ~>
+    Logic.ifElse (Lists.isEmpty (var "lns" :: TypedTerm [String]))
+      (P.pure @@ nothing)
+      (P.pure @@ (just $ docCommentLinesToMetadata @@ var "modName" @@ var "lns")))
 
 -- | Parse a token followed by trailing whitespace. Whitespace is consumed AFTER a token, never
 -- before one -- this is the convention the existing hydra.core.json.parser ('token' there, see
@@ -453,7 +595,12 @@ expandAliasesInTermSignature = define "expandAliasesInTermSignature" $
 -- | Expand every aliased name reference inside a definition's body/signature, per the given
 -- alias table. Dispatches by definition kind, rewriting only the parts that can carry name
 -- references (a type definition's body, a term definition's body and signature, a primitive
--- definition's signature and default implementation).
+-- definition's signature and default implementation). 'modName' is the enclosing module's own
+-- name, needed only by the type-definition branch's bare-self-reference expansion (see
+-- 'expandAliasesInTypeSelfAware') -- term/primitive bodies don't yet get this treatment (#805:
+-- the term side has the same bound-vs-free ambiguity for lambda/case/record/wrap names, deferred
+-- as a separate, correctly-scoped-out parser limitation; the Types/*.hs batch has no term
+-- definitions, so it isn't exercised here).
 expandAliasesInDefinition :: TypedTermDefinition (ModuleName -> M.Map String ModuleName -> Definition -> Definition)
 expandAliasesInDefinition = define "expandAliasesInDefinition" $
   doc "Expand every aliased name reference inside a definition's body/signature" $
@@ -558,14 +705,15 @@ correctInjectionsInDefinition = define "correctInjectionsInDefinition" $
 -- design question, not attempted here) -- metadata is always Nothing.
 typeDefinitionParser :: TypedTermDefinition (ModuleName -> Parser Definition)
 typeDefinitionParser = define "typeDefinitionParser" $
-  doc "Parse a type definition: 'type name = typeScheme'" $
+  doc "Parse a type definition: ['##' doc comment] 'type name = typeScheme'" $
   "modName" ~>
-  P.bind @@ (keyword @@ string "type") @@ (constant $
-    P.bind @@ identifier @@ ("local" ~>
-      P.bind @@ (keyword @@ string "=") @@ (constant $
-        P.map @@ ("ts" ~> Packaging.definitionType
-            (Packaging.typeDefinition (qualifyLocalName @@ var "modName" @@ var "local") nothing (var "ts"))) @@
-          (token @@ (asTerm ParseCore.typeScheme)))))
+  P.bind @@ (docCommentBlock @@ var "modName") @@ ("mmeta" ~>
+    P.bind @@ (keyword @@ string "type") @@ (constant $
+      P.bind @@ identifier @@ ("local" ~>
+        P.bind @@ (keyword @@ string "=") @@ (constant $
+          P.map @@ ("ts" ~> Packaging.definitionType
+              (Packaging.typeDefinition (qualifyLocalName @@ var "modName" @@ var "local") (var "mmeta") (var "ts"))) @@
+            (token @@ (asTerm ParseCore.typeScheme))))))
 
 -- | Parse a term definition: 'term name [: termSignature] = term'. The optional ': termSignature'
 -- ascription becomes the TermDefinition's signature, parsed directly as a TermSignature (not via
@@ -573,15 +721,16 @@ typeDefinitionParser = define "typeDefinitionParser" $
 -- parsing -- metadata is always Nothing.
 termDefinitionParser :: TypedTermDefinition (ModuleName -> Parser Definition)
 termDefinitionParser = define "termDefinitionParser" $
-  doc "Parse a term definition: 'term name [: termSignature] = term'" $
+  doc "Parse a term definition: ['##' doc comment] 'term name [: termSignature] = term'" $
   "modName" ~>
-  P.bind @@ (keyword @@ string "term") @@ (constant $
-    P.bind @@ identifier @@ ("local" ~>
-      P.bind @@ (P.optional @@ ascribedSignature) @@ ("msig" ~>
-        P.bind @@ (keyword @@ string "=") @@ (constant $
-          P.map @@ ("t" ~> Packaging.definitionTerm
-              (Packaging.termDefinition (qualifyLocalName @@ var "modName" @@ var "local") nothing (var "msig") (var "t"))) @@
-            (token @@ (asTerm ParseCore.term))))))
+  P.bind @@ (docCommentBlock @@ var "modName") @@ ("mmeta" ~>
+    P.bind @@ (keyword @@ string "term") @@ (constant $
+      P.bind @@ identifier @@ ("local" ~>
+        P.bind @@ (P.optional @@ ascribedSignature) @@ ("msig" ~>
+          P.bind @@ (keyword @@ string "=") @@ (constant $
+            P.map @@ ("t" ~> Packaging.definitionTerm
+                (Packaging.termDefinition (qualifyLocalName @@ var "modName" @@ var "local") (var "mmeta") (var "msig") (var "t"))) @@
+              (token @@ (asTerm ParseCore.term)))))))
   where
     ascribedSignature =
       P.bind @@ (keyword @@ string ":") @@ (constant $ asTerm ParseCore.termSignature)
@@ -590,19 +739,20 @@ termDefinitionParser = define "termDefinitionParser" $
 -- No doc-comment parsing -- metadata is always Nothing.
 primitiveDefinitionParser :: TypedTermDefinition (ModuleName -> Parser Definition)
 primitiveDefinitionParser = define "primitiveDefinitionParser" $
-  doc "Parse a primitive definition: '[impure] [partial] primitive name : termSignature [= term]'" $
+  doc "Parse a primitive definition: ['##' doc comment] '[impure] [partial] primitive name : termSignature [= term]'" $
   "modName" ~>
-  P.bind @@ primitiveModifiers @@ ("mods" ~>
-    "isPure" <~ Pairs.first (var "mods") $
-    "isTotal" <~ Pairs.second (var "mods") $
-    P.bind @@ (keyword @@ string "primitive") @@ (constant $
-      P.bind @@ identifier @@ ("local" ~>
-        P.bind @@ (keyword @@ string ":") @@ (constant $
-          P.bind @@ (asTerm ParseCore.termSignature) @@ ("sig" ~>
-            P.map @@ ("mimpl" ~> Packaging.definitionPrimitive
-                (Packaging.primitiveDefinition (qualifyLocalName @@ var "modName" @@ var "local") nothing
-                  (var "sig") (var "isPure") (var "isTotal") (var "mimpl"))) @@
-              (P.optional @@ defaultImpl))))))
+  P.bind @@ (docCommentBlock @@ var "modName") @@ ("mmeta" ~>
+    P.bind @@ primitiveModifiers @@ ("mods" ~>
+      "isPure" <~ Pairs.first (var "mods") $
+      "isTotal" <~ Pairs.second (var "mods") $
+      P.bind @@ (keyword @@ string "primitive") @@ (constant $
+        P.bind @@ identifier @@ ("local" ~>
+          P.bind @@ (keyword @@ string ":") @@ (constant $
+            P.bind @@ (asTerm ParseCore.termSignature) @@ ("sig" ~>
+              P.map @@ ("mimpl" ~> Packaging.definitionPrimitive
+                  (Packaging.primitiveDefinition (qualifyLocalName @@ var "modName" @@ var "local") (var "mmeta")
+                    (var "sig") (var "isPure") (var "isTotal") (var "mimpl"))) @@
+                (P.optional @@ defaultImpl)))))))
   where
     defaultImpl = P.bind @@ (keyword @@ string "=") @@ (constant $ token @@ (asTerm ParseCore.term))
 
@@ -629,28 +779,41 @@ definitionParser = define "definitionParser" $
 -- draft-syntax-extension-497-and-710.md) -- not fixed here, tracked there.
 moduleParser :: TypedTermDefinition (Parser Module)
 moduleParser = define "moduleParser" $
-  doc ("Parse a complete module: header, imports, then definitions. Aliased name references"
-    <> " inside definition bodies (per syntax.md #6.3's 'import X as alias' convenience) are"
-    <> " expanded to their fully-qualified form after parsing, using the alias table built from"
-    <> " this module's own import declarations -- see 'expandAliasesInDefinition'.") $
-  P.bind @@ moduleHeader @@ ("modName" ~>
-    P.bind @@ (P.many @@ importDecl) @@ ("imports" ~>
-      "aliases" <~ (Maps.fromList (Optionals.givens (Lists.map
-          ("p" ~> Optionals.map ("alias" ~> pair (var "alias") (Packaging.moduleDependencyModule (Pairs.first $ var "p"))) (Pairs.second $ var "p"))
-          (var "imports"))) :: TypedTerm (M.Map String ModuleName)) $
-      P.map @@ ("defs" ~>
-          -- 1. expand import aliases to fully-qualified names (#803/#804), AND resolve same-module
-          --    bare self-references vs. bound type variables (#711) -- both need the module's own
-          --    name, hence 'expandAliasesInDefinition's two-argument form.
-          "expanded" <~ Lists.map (expandAliasesInDefinition @@ (var "modName" :: TypedTerm ModuleName) @@ (var "aliases" :: TypedTerm (M.Map String ModuleName))) (var "defs") $
-          -- 2. build the type env from the (now fully-qualified) type definitions, then correct the
-          --    record/injection sugar ambiguity against it (#809). Done AFTER alias expansion so the
-          --    env keys and the record type names being looked up are both fully qualified.
-          "env" <~ (typeEnvFromDefinitions @@ var "expanded") $
-          Packaging.module_ (var "modName") nothing
-            (Lists.map ("p" ~> Pairs.first (var "p")) (var "imports"))
-            (Lists.map (correctInjectionsInDefinition @@ (var "env" :: TypedTerm (M.Map Name Type))) (var "expanded"))) @@
-        (P.many @@ (definitionParser @@ var "modName"))))
+  doc ("Parse a complete module: ['##' doc comment] header, imports, then definitions. Aliased"
+    <> " name references inside definition bodies (per syntax.md #6.3's 'import X as alias'"
+    <> " convenience) are expanded to their fully-qualified form after parsing, using the alias"
+    <> " table built from this module's own import declarations -- see"
+    <> " 'expandAliasesInDefinition'. The module's own leading doc comment is captured as plain"
+    <> " lines (via 'docCommentLines') BEFORE 'moduleHeader' runs -- unlike a definition's doc"
+    <> " comment ('docCommentBlock'), which already has its enclosing module's name in scope to"
+    <> " qualify provision names with, the module-level comment precedes the very 'module ...'"
+    <> " line that introduces that name; the lines are captured first and only turned into an"
+    <> " 'EntityMetadata' (via 'docCommentLinesToMetadata') once 'modName' is available. After"
+    <> " alias expansion, the record/injection sugar ambiguity (#809) is corrected against a type"
+    <> " env built from the (now fully-qualified) type definitions.") $
+  P.bind @@ (asTerm docCommentLines) @@ ("lns" ~>
+    P.bind @@ moduleHeader @@ ("modName" ~>
+      P.bind @@ (P.many @@ importDecl) @@ ("imports" ~>
+        "aliases" <~ (Maps.fromList (Optionals.givens (Lists.map
+            ("p" ~> Optionals.map ("alias" ~> pair (var "alias") (Packaging.moduleDependencyModule (Pairs.first $ var "p"))) (Pairs.second $ var "p"))
+            (var "imports"))) :: TypedTerm (M.Map String ModuleName)) $
+        "mmeta" <~ Logic.ifElse (Lists.isEmpty (var "lns" :: TypedTerm [String]))
+          nothing
+          (just $ docCommentLinesToMetadata @@ var "modName" @@ var "lns") $
+        P.map @@ ("defs" ~>
+            -- 1. expand import aliases to fully-qualified names (#803/#804), AND resolve
+            --    same-module bare self-references vs. bound type variables (#711) -- both need
+            --    the module's own name, hence 'expandAliasesInDefinition's two-argument form.
+            "expanded" <~ Lists.map (expandAliasesInDefinition @@ (var "modName" :: TypedTerm ModuleName) @@ (var "aliases" :: TypedTerm (M.Map String ModuleName))) (var "defs") $
+            -- 2. build the type env from the (now fully-qualified) type definitions, then correct
+            --    the record/injection sugar ambiguity against it (#809). Done AFTER alias
+            --    expansion so the env keys and the record type names being looked up are both
+            --    fully qualified.
+            "env" <~ (typeEnvFromDefinitions @@ var "expanded") $
+            Packaging.module_ (var "modName") (var "mmeta")
+              (Lists.map ("p" ~> Pairs.first (var "p")) (var "imports"))
+              (Lists.map (correctInjectionsInDefinition @@ (var "env" :: TypedTerm (M.Map Name Type))) (var "expanded"))) @@
+          (P.many @@ (definitionParser @@ var "modName")))))
 
 -- | Parse a complete module from a string, requiring the parse to consume all input (after
 -- trailing whitespace).
