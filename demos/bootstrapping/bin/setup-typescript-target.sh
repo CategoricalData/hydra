@@ -49,14 +49,17 @@ cp "$TS_RESOURCES/vitest.config.ts" "$OUTPUT_DIR/"
 # matches the in-tree heads/typescript layout. The host invoker writes
 # generated kernel files alongside; `runtime.ts` does not collide.
 # Source: dist/typescript/hydra-kernel/ (assembled from overlay/ by #434).
+# #729/#501: the hand-written runtime moved from hydra/ down to hydra/core/ (runtime.ts, primitives.ts)
+# and the lib impls to hydra/core/overlay/typescript/lib/ — mirroring copy-kernel-runtime.sh's authoritative
+# source→dist mapping (heads/typescript/bin/copy-kernel-runtime.sh:13-24). Both the SOURCE (dist) and the
+# DEST must use hydra/core/ so they match the paths generated TS and the heads tests import
+# (e.g. .../hydra/core/runtime.js, .../hydra/core/overlay/typescript/lib/math.js). The old hydra/ paths
+# were pre-#729 and broke every →typescript cell with `cp: cannot stat .../hydra/runtime.ts`.
 echo "  Copying hand-written runtime..."
-mkdir -p "$OUTPUT_DIR/src/main/typescript/hydra/lib"
-cp "$HYDRA_TS_DIST/hydra/runtime.ts" "$OUTPUT_DIR/src/main/typescript/hydra/"
-cp "$HYDRA_TS_DIST/hydra/primitives.ts" "$OUTPUT_DIR/src/main/typescript/hydra/"
-cp -r "$HYDRA_TS_DIST/hydra/lib/." "$OUTPUT_DIR/src/main/typescript/hydra/lib/"
-if [ -d "$HYDRA_TS_DIST/hydra/overlay" ]; then
-    cp -r "$HYDRA_TS_DIST/hydra/overlay/." "$OUTPUT_DIR/src/main/typescript/hydra/overlay/"
-fi
+mkdir -p "$OUTPUT_DIR/src/main/typescript/hydra/core/overlay/typescript/lib"
+cp "$HYDRA_TS_DIST/hydra/core/runtime.ts" "$OUTPUT_DIR/src/main/typescript/hydra/core/"
+cp "$HYDRA_TS_DIST/hydra/core/primitives.ts" "$OUTPUT_DIR/src/main/typescript/hydra/core/"
+cp -r "$HYDRA_TS_DIST/hydra/core/overlay/typescript/lib/." "$OUTPUT_DIR/src/main/typescript/hydra/core/overlay/typescript/lib/"
 
 # Mark the bootstrap target tree as ESM so `import.meta` works under
 # NodeNext (same as dist/typescript/hydra-kernel/package.json written by
@@ -74,13 +77,15 @@ fi
 # the hand-written file must be copied in or reduceTerm gets an empty primitives
 # map and every reduction test fails. (heads/.../hydra/test/ is empty.)
 echo "  Copying hand-written test runtime..."
-mkdir -p "$OUTPUT_DIR/src/test/typescript/hydra/test"
+# #729: the hand-written test modules live under hydra/core/test/ (hydra.core.test.testEnv), not hydra/test/.
+mkdir -p "$OUTPUT_DIR/src/test/typescript/hydra/core/test"
 cp "$HYDRA_TS_HEAD/src/test/typescript/test-suite-runner.test.ts" "$OUTPUT_DIR/src/test/typescript/"
-HYDRA_TS_TEST_OVERLAY="$HYDRA_ROOT/overlay/typescript/hydra-kernel/src/test/typescript/hydra/test"
-for f in "$HYDRA_TS_TEST_OVERLAY"/*.ts; do
-    [ -f "$f" ] || continue
-    cp "$f" "$OUTPUT_DIR/src/test/typescript/hydra/test/"
-done
+HYDRA_TS_TEST_OVERLAY="$HYDRA_ROOT/overlay/typescript/hydra-kernel/src/test/typescript/hydra/core/test"
+if ! ls "$HYDRA_TS_TEST_OVERLAY"/*.ts >/dev/null 2>&1; then
+    echo "ERROR: TypeScript test overlay (testEnv.ts, jsonBindings.ts) not found under $HYDRA_TS_TEST_OVERLAY" >&2
+    exit 1
+fi
+cp "$HYDRA_TS_TEST_OVERLAY"/*.ts "$OUTPUT_DIR/src/test/typescript/hydra/core/test/"
 
 # #546: overlay hydra-build's generated main+test (hydra.build.* + hydra.core.test.build.*),
 # referenced by the kernel testSuite but absent from the hydra-kernel dist tree.
@@ -89,20 +94,25 @@ if [ -d "$HYDRA_TS_BUILD_DIST/main/typescript/hydra/build" ]; then
     mkdir -p "$OUTPUT_DIR/src/main/typescript/hydra/build"
     cp -r "$HYDRA_TS_BUILD_DIST/main/typescript/hydra/build/." "$OUTPUT_DIR/src/main/typescript/hydra/build/"
 fi
-if [ -d "$HYDRA_TS_BUILD_DIST/test/typescript/hydra/test/build" ]; then
-    mkdir -p "$OUTPUT_DIR/src/test/typescript/hydra/test/build"
-    cp -r "$HYDRA_TS_BUILD_DIST/test/typescript/hydra/test/build/." "$OUTPUT_DIR/src/test/typescript/hydra/test/build/"
+# #729: hydra-build's test modules are hydra.build.test.* (hydra/build/test/), not hydra/test/build/.
+if [ -d "$HYDRA_TS_BUILD_DIST/test/typescript/hydra/build" ]; then
+    mkdir -p "$OUTPUT_DIR/src/test/typescript/hydra/build"
+    cp -r "$HYDRA_TS_BUILD_DIST/test/typescript/hydra/build/." "$OUTPUT_DIR/src/test/typescript/hydra/build/"
 fi
 
 # Rewrite the test runner's import of testSuite from the heads/typescript
 # dev path (`../../../../../dist/typescript/hydra-kernel/.../testSuite.ts`)
-# to the demo-local path (`./hydra/test/testSuite.ts`). In the demo
+# to the demo-local path (`./hydra/core/test/testSuite.ts`; #729). In the demo
 # layout, the generated testSuite is a sibling of the runner under
 # src/test/typescript/.
 RUNNER="$OUTPUT_DIR/src/test/typescript/test-suite-runner.test.ts"
 if [ -f "$RUNNER" ]; then
     # Use a stable Perl one-liner that works on both BSD and GNU.
-    perl -i -pe 's{from "\.\./\.\./\.\./\.\./\.\./dist/typescript/hydra-kernel/src/test/typescript/hydra/test/testSuite\.[jt]s"}{from "./hydra/test/testSuite.js"}g' "$RUNNER"
+    perl -i -pe 's{from "\.\./\.\./\.\./\.\./\.\./dist/typescript/hydra-kernel/src/test/typescript/hydra/core/test/testSuite\.[jt]s"}{from "./hydra/core/test/testSuite.js"}g' "$RUNNER"
+    if grep -q 'from "[./]*dist/typescript/hydra-kernel/src/test' "$RUNNER"; then
+        echo "ERROR: test runner still imports testSuite from the dev dist path; update the rewrite above" >&2
+        exit 1
+    fi
 fi
 
 # npm install for vitest + typescript. Use --no-audit/--no-fund to keep

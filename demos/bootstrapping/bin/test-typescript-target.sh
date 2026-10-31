@@ -15,7 +15,6 @@ echo "Running TypeScript tests..."
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_TS_HEAD="$HYDRA_ROOT/heads/typescript"
 # Runtime sources live in dist/typescript/hydra-kernel/ since #434 moved
 # them from heads/typescript/src/main/ to overlay/typescript/.
 HYDRA_TS_DIST="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/main/typescript"
@@ -25,31 +24,35 @@ HYDRA_TS_DIST="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/main/typescript"
 # `runtime.ts` and `primitives.ts` (`primitives.ts` is hand-written and
 # is not overwritten by the host invoker, but copying defensively is
 # cheap).
-if [ -f "$HYDRA_TS_DIST/hydra/runtime.ts" ]; then
-    cp "$HYDRA_TS_DIST/hydra/runtime.ts" \
-       "$OUTPUT_DIR/src/main/typescript/hydra/runtime.ts"
+# #729/#501: runtime.ts + primitives.ts live under hydra/core/ (not hydra/); keep source and dest aligned.
+if [ -f "$HYDRA_TS_DIST/hydra/core/runtime.ts" ]; then
+    cp "$HYDRA_TS_DIST/hydra/core/runtime.ts" \
+       "$OUTPUT_DIR/src/main/typescript/hydra/core/runtime.ts"
 fi
-if [ -f "$HYDRA_TS_DIST/hydra/primitives.ts" ]; then
-    cp "$HYDRA_TS_DIST/hydra/primitives.ts" \
-       "$OUTPUT_DIR/src/main/typescript/hydra/primitives.ts"
+if [ -f "$HYDRA_TS_DIST/hydra/core/primitives.ts" ]; then
+    cp "$HYDRA_TS_DIST/hydra/core/primitives.ts" \
+       "$OUTPUT_DIR/src/main/typescript/hydra/core/primitives.ts"
 fi
 # Same for test-tree files: testEnv.ts and jsonBindings.ts are
 # hand-written counterparts of the DSL stubs `hydra.core.test.testEnv` and
 # `hydra.core.test.jsonBindings`. The TS host emits stubbed (empty) versions
 # when --include-tests is set; restore the hand-written versions so the
 # test graph has primitives + kernel JSON loaded.
+# #729: test-tree hand-written files moved to hydra/core/test/ (not hydra/test/).
+# They live in the overlay tree (#434), not heads/typescript; a missing file is an error, not a skip.
+HYDRA_TS_TEST_OVERLAY="$HYDRA_ROOT/overlay/typescript/hydra-kernel/src/test/typescript/hydra/core/test"
+mkdir -p "$OUTPUT_DIR/src/test/typescript/hydra/core/test"
 for f in testEnv.ts jsonBindings.ts; do
-    if [ -f "$HYDRA_TS_HEAD/src/test/typescript/hydra/test/$f" ]; then
-        cp "$HYDRA_TS_HEAD/src/test/typescript/hydra/test/$f" \
-           "$OUTPUT_DIR/src/test/typescript/hydra/test/$f"
-    fi
+    cp "$HYDRA_TS_TEST_OVERLAY/$f" "$OUTPUT_DIR/src/test/typescript/hydra/core/test/$f"
 done
 # The libraries.ts primitive registry is hand-written under src/main/lib/
 # (see gap 4 commit b6d603409). The TS host doesn't emit it (no DSL stub
 # for it), but in the bootstrap layout it lives where testEnv expects it.
-if [ -f "$HYDRA_TS_DIST/hydra/lib/libraries.ts" ]; then
-    cp "$HYDRA_TS_DIST/hydra/lib/libraries.ts" \
-       "$OUTPUT_DIR/src/main/typescript/hydra/lib/libraries.ts"
+# #501/#729: libraries.ts lives at hydra/core/overlay/typescript/lib/ (not hydra/lib/).
+if [ -f "$HYDRA_TS_DIST/hydra/core/overlay/typescript/lib/libraries.ts" ]; then
+    mkdir -p "$OUTPUT_DIR/src/main/typescript/hydra/core/overlay/typescript/lib"
+    cp "$HYDRA_TS_DIST/hydra/core/overlay/typescript/lib/libraries.ts" \
+       "$OUTPUT_DIR/src/main/typescript/hydra/core/overlay/typescript/lib/libraries.ts"
 fi
 
 # Resolve HYDRA_JSON_DIR so jsonBindings.ts can locate the kernel JSON.

@@ -46,16 +46,22 @@ echo "  Copying hand-written source files..."
 if [ -d "$HYDRA_SCALA_OVERLAY/src/main/scala" ]; then
     mkdir -p "$OUTPUT_DIR/src/main/scala/hydra"
     # Copy the hydra.core.overlay.scala.* runtime (native primitive IMPLEMENTATIONS + Libraries.scala
-    # registry). #501 moved these under hydra/overlay/scala/ (was hydra/scala/lib pre-#501, and
-    # hydra/lib pre-#473). The generated consumers + registry call hydra.core.overlay.scala.lib.*;
-    # without them the cell fails to compile with "value overlay is not a member of hydra".
+    # registry). #729 moved these to hydra/core/overlay/scala/ (hydra/overlay/scala/ after #501,
+    # hydra/scala/lib pre-#501, hydra/lib pre-#473). The generated consumers + registry call
+    # hydra.core.overlay.scala.lib.*; without them the cell fails to compile with
+    # "value overlay is not a member of hydra.core".
     # Blanket-copy the whole overlay subtree (as the Java/Python cells do) so it stays correct
     # across future namespace moves rather than cherry-picking paths that a rename can orphan.
     # (The hydra.lib.* PrimitiveDefinition def-modules are NOT here — they are generated into
     # dist/scala/hydra-kernel/hydra/lib/ and arrive via the dist copy above.)
-    if [ -d "$HYDRA_SCALA_OVERLAY/src/main/scala/hydra/overlay" ]; then
-        cp -r "$HYDRA_SCALA_OVERLAY/src/main/scala/hydra/overlay" "$OUTPUT_DIR/src/main/scala/hydra/"
+    # Fail loudly if the overlay moved again: a silent skip here only surfaces later as a
+    # confusing compile error in the generated code.
+    if [ ! -d "$HYDRA_SCALA_OVERLAY/src/main/scala/hydra/core/overlay" ]; then
+        echo "ERROR: Scala overlay runtime not found at $HYDRA_SCALA_OVERLAY/src/main/scala/hydra/core/overlay" >&2
+        exit 1
     fi
+    mkdir -p "$OUTPUT_DIR/src/main/scala/hydra/core"
+    cp -r "$HYDRA_SCALA_OVERLAY/src/main/scala/hydra/core/overlay" "$OUTPUT_DIR/src/main/scala/hydra/core/"
 fi
 
 # Test runner (TestSuiteRunner.scala + test/testEnv.scala) from the overlay tree.
