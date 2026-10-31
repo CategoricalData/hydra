@@ -167,15 +167,24 @@ def _redirect_dotted(s, lang_seg, subs):
     return out.replace(sentinel, "hydra.core.lib.")
 
 
-def _redirect_scheme(s, subs):
-    """Scheme (R7RS) redirect: `(hydra core lib <sub>)` -> `(hydra core overlay scheme lib <sub>)`.
-    Call sites use the flattened identifier hydra_core_lib_<sub>_<fn> (unchanged, resolved via the
-    renamed import); primitive NAME strings are dotted "hydra.core.lib..." (untouched by this
-    rewrite)."""
-    out = s
-    for sub in subs:
-        out = out.replace(f"(hydra core lib {sub})", f"(hydra core overlay scheme lib {sub})")
-    return out
+def _redirect_test_env(target, lang_dir):
+    """Clojure test-env redirect: the hand-written hydra.core.test.testEnv is skip-emitted and supplied by
+    overlay/clojure/ as hydra.core.overlay.clojure.test.testEnv (#501), and Clojure tests resolve it by
+    namespace reference. Mirrors Bootstrap.redirectTestEnv (Java) / redirectClojureTestEnv
+    (bootstrap-from-json). Scheme needs none: its generated tests import (hydra core test test_env), which
+    its runner supplies directly. Generated TEST trees only (#769): no main module references testEnv, and a
+    main-tree pass corrupts coder data that merely names it."""
+    if target != "clojure" or not os.path.isdir(lang_dir):
+        return
+    for dirpath, _dirs, files in os.walk(lang_dir):
+        for fn in files:
+            p = os.path.join(dirpath, fn)
+            with open(p, "r", encoding="utf-8") as fh:
+                s = fh.read()
+            out = s.replace("hydra.core.test.testEnv", "hydra.core.overlay.clojure.test.testEnv")
+            if out != s:
+                with open(p, "w", encoding="utf-8") as fh:
+                    fh.write(out)
 
 
 def _redirect_lisp_flat(s, subs, lang_seg):
@@ -195,7 +204,7 @@ def _redirect_lib_calls(repo_root, target, lang_dir):
     native hydra.core.overlay.<lang>.lib.* impls instead of the hydra.lib.* def-modules
     (PrimitiveDefinition data, not callable). Dispatches per target's actual reference shape,
     mirroring redirectFor / redirectSchemeFor / redirectLispFlat in bootstrap-from-json/Main.hs:
-    dotted (python/scala/clojure), R7RS sexp (scheme), flat identifier (common-lisp/emacs-lisp).
+    dotted (python/scala/clojure) or flat identifier (common-lisp/emacs-lisp); scheme needs none.
     No-op for java/typescript/haskell (typescript's coder resolves lib references via a generated
     import alias, never raw dotted call-site text). The sub-list comes from
     _lib_subs_for_target()'s overlay-directory existence check (#568), not a hand-maintained
@@ -219,10 +228,9 @@ def _redirect_lib_calls(repo_root, target, lang_dir):
                 if "hydra.core.lib." not in s:
                     continue
                 out = _redirect_dotted(s, dotted_seg, subs)
-            elif target == "scheme":
-                if "(hydra core lib " not in s:
-                    continue
-                out = _redirect_scheme(s, subs)
+            # No scheme branch (#769): the Scheme coder already emits (hydra overlay scheme lib <sub>)
+            # for consumers (#630), and a text pass here rewrote the registry's intentional
+            # (hydra core lib <sub>) def-module imports into a nonexistent namespace.
             elif target == "common-lisp":
                 if "hydra_core_lib_" not in s and ":hydra.core.lib." not in s:
                     continue
@@ -583,6 +591,7 @@ def main():
         _redirect_lib_calls(repo_root, args.target, os.path.join(out_main, args.target))
         if args.include_tests:
             _redirect_lib_calls(repo_root, args.target, os.path.join(out_dir, "src/test", args.target))
+            _redirect_test_env(args.target, os.path.join(out_dir, "src/test", args.target))
 
     total_time = time.time() - total_start
 

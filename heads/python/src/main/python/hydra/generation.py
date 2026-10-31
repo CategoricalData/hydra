@@ -429,8 +429,8 @@ def write_scala(base_path, universe, mods):
 
 def write_typescript(base_path, universe, mods):
     """Generate TypeScript source files from modules."""
-    from hydra.type_script.coder import module_to_type_script
-    from hydra.type_script.language import type_script_language
+    from hydra.typescript.coder import module_to_type_script
+    from hydra.typescript.language import type_script_language
     known_subs = _overlay_lib_subs("typescript")
     generate_sources(
         (lambda mod, defs, cx, g: module_to_type_script(known_subs, mod, defs, cx, g)),
@@ -442,21 +442,25 @@ def write_typescript(base_path, universe, mods):
 def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
     """Generate source files for a Lisp dialect (Clojure, Scheme, Common Lisp, or Emacs Lisp)."""
     from hydra.lisp.coder import module_to_lisp
-    from hydra.lisp.language import lisp_language
+    import hydra.lisp.language as lisp_lang
     from hydra.lisp.serde import program_to_expr
     from hydra.lisp.syntax import Dialect
     from hydra.core.serialization import print_expr, parenthesize
     from hydra.core.names import module_name_to_file_path
     from hydra.core.packaging import ModuleName
-    from hydra.core.util import CaseConvention, FileExtension
+    from hydra.core.file import FileExtension
+    from hydra.core.util import CaseConvention
 
+    # Each dialect has its own Language (#727): e.g. scale-preserving decimals are supported per dialect,
+    # and the generic lisp_language() lacks them, so adapting to it silently lowered every decimal literal to
+    # float64 (python->common-lisp emitted 1.1 for 1.10). Mirrors GenerationTargets.writeLispDialect (Java).
     dialect_map = {
-        "clojure": Dialect.CLOJURE,
-        "scheme": Dialect.SCHEME,
-        "common_lisp": Dialect.COMMON_LISP,
-        "emacs_lisp": Dialect.EMACS_LISP,
+        "clojure": (Dialect.CLOJURE, lisp_lang.clojure_language),
+        "scheme": (Dialect.SCHEME, lisp_lang.scheme_language),
+        "common_lisp": (Dialect.COMMON_LISP, lisp_lang.common_lisp_language),
+        "emacs_lisp": (Dialect.EMACS_LISP, lisp_lang.emacs_lisp_language),
     }
-    dialect = dialect_map[dialect_name]
+    dialect, dialect_language = dialect_map[dialect_name]
 
     case_conv = CaseConvention.CAMEL if dialect_name == "clojure" else CaseConvention.LOWER_SNAKE
 
@@ -476,7 +480,7 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
                 return Right(FrozenDict({file_path: code}))
 
     generate_sources(
-        lisp_coder, lisp_language(),
+        lisp_coder, dialect_language(),
         False,
         base_path, universe, mods)
 
