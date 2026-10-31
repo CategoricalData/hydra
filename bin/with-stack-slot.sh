@@ -19,6 +19,9 @@
 # USAGE
 #   bin/with-stack-slot.sh [--timeout SECONDS] [--label TEXT] -- <command> [args...]
 #   bin/with-stack-slot.sh <command> [args...]           # '--' optional if unambiguous
+#   bin/with-stack-slot.sh --priority [...] -- <command> [args...]  # go ahead of ordinary waiters
+#   bin/with-stack-slot.sh --boost <worktree>            # coordinator: promote that worktree's waiter
+#   bin/with-stack-slot.sh --unboost <worktree>          # coordinator: withdraw a boost
 #
 # EXAMPLES
 #   bin/with-stack-slot.sh --label "staging /sync" -- bin/sync.sh --hosts all --targets all
@@ -37,6 +40,7 @@
 #   HYDRA_STACK_SLOT_WAIT   default -w seconds   (default: 0 = block indefinitely)
 #   HYDRA_STACK_SLOT_STALE  stale-holder age (s) (default: 21600 = 6h; 0 disables)
 #   HYDRA_STACK_SLOT_BYPASS =1 skips the lock entirely (escape hatch; logs a warning)
+#   HYDRA_STACK_SLOT_PRIORITY =1 is the same as --priority
 #   HYDRA_STACK_SLOT_HELD   set by this wrapper for its child tree; presence => reentrant
 #                           pass-through (do not set by hand).
 #
@@ -56,6 +60,9 @@ LOCKFILE="${HYDRA_STACK_SLOT_LOCK:-$HOME/.hydra-stack-slot.lock}"
 WAIT="${HYDRA_STACK_SLOT_WAIT:-0}"        # 0 => block until acquired
 STALE="${HYDRA_STACK_SLOT_STALE:-21600}"  # 6h; 0 disables stale recovery
 LABEL=""
+PRIORITY="${HYDRA_STACK_SLOT_PRIORITY:-0}"
+BOOST=""
+UNBOOST=""
 
 # ---- arg parsing ----------------------------------------------------------
 while [ $# -gt 0 ]; do
@@ -64,6 +71,9 @@ while [ $# -gt 0 ]; do
     --timeout=*) WAIT="${1#*=}"; shift ;;
     --label)   LABEL="${2:-}"; shift 2 ;;
     --label=*) LABEL="${1#*=}"; shift ;;
+    --priority) PRIORITY=1; shift ;;
+    --boost)   BOOST="${2:?--boost needs a worktree name}"; shift 2 ;;
+    --unboost) UNBOOST="${2:?--unboost needs a worktree name}"; shift 2 ;;
     --lockfile) LOCKFILE="${2:?--lockfile needs a value}"; shift 2 ;;
     --lockfile=*) LOCKFILE="${1#*=}"; shift ;;
     --) shift; break ;;
@@ -71,6 +81,21 @@ while [ $# -gt 0 ]; do
     *) break ;;   # first non-option token starts the command
   esac
 done
+
+# ---- coordinator boost (no command) ----------------------------------------
+# A boost marks a worktree so its next (or current) waiter counts as a priority
+# waiter. The marker is consumed when that worktree acquires the slot.
+if [ -n "$BOOST$UNBOOST" ]; then
+  mkdir -p "${LOCKFILE}.priority.d"
+  if [ -n "$BOOST" ]; then
+    : > "${LOCKFILE}.priority.d/wt-${BOOST//\//_}"
+    echo "with-stack-slot: boosted ${BOOST}; its waiter goes ahead of ordinary waiters (within ~30s)." >&2
+  else
+    rm -f "${LOCKFILE}.priority.d/wt-${UNBOOST//\//_}"
+    echo "with-stack-slot: removed boost for ${UNBOOST}." >&2
+  fi
+  exit 0
+fi
 
 if [ $# -eq 0 ]; then
   echo "with-stack-slot: no command given (usage: with-stack-slot.sh [--timeout N] -- <cmd>...)" >&2
@@ -123,6 +148,7 @@ elif command -v perl >/dev/null 2>&1; then
     local mode="block" secs=0 fd
     case "${1:-}" in
       -n) mode="nb"; fd="${2:?}" ;;
+      -u) mode="un"; fd="${2:?}" ;;
       -w) mode="timed"; secs="${2:?}"; fd="${3:?}" ;;
       *)  fd="${1:?}" ;;
     esac
@@ -132,7 +158,9 @@ elif command -v perl >/dev/null 2>&1; then
       my $secs = $ENV{HYDRA_SLOT_SECS} || 0;
       open(my $fh, ">&=", $fd) or exit 2;   # reuse the ALREADY-OPEN inherited fd
       my $LOCK_EX = 2; my $LOCK_NB = 4;
-      if ($mode eq "nb") {
+      if ($mode eq "un") {
+        exit(flock($fh, 8) ? 0 : 1);        # LOCK_UN
+      } elsif ($mode eq "nb") {
         exit(flock($fh, $LOCK_EX | $LOCK_NB) ? 0 : 1);
       } elsif ($mode eq "timed") {
         my $deadline = time + $secs;
@@ -167,6 +195,31 @@ acquire_epoch=$(date +%s)
 # "held for the whole build tree" semantics we want.
 exec 9>"$LOCKFILE"
 
+# ---- priority lane --------------------------------------------------------
+# Waiters started with --priority, or from a worktree a coordinator boosted with
+# `with-stack-slot.sh --boost <worktree>`, go ahead of ordinary waiters. See the
+# wait loop below. Waiters running an older copy of this script ignore the lane
+# and still compete normally.
+PRIODIR="${LOCKFILE}.priority.d"
+mkdir -p "$PRIODIR"
+
+is_priority_waiter() {
+  [ "$PRIORITY" = "1" ] || [ -e "$PRIODIR/wt-${WORKTREE//\//_}" ]
+}
+
+# True if a live priority waiter other than this process exists. Removes pid
+# files whose process has gone (a waiter killed with SIGKILL leaves one behind).
+other_priority_waiters() {
+  local f pid found=1
+  for f in "$PRIODIR"/pid-*; do
+    [ -e "$f" ] || continue
+    pid="${f##*/pid-}"
+    [ "$pid" = "$$" ] && continue
+    if kill -0 "$pid" 2>/dev/null; then found=0; else rm -f "$f"; fi
+  done
+  return $found
+}
+
 # ---- who-holds-it reporting + stale note ----------------------------------
 # flock() itself is auto-released if the holder dies, so a crashed holder never
 # actually keeps the mutex. The stale check below only inspects the *advisory*
@@ -178,6 +231,9 @@ report_holder() {
     sed 's/^/    /' "$METAFILE" >&2
   fi
 }
+
+# A priority waiter's pid file must not outlive it.
+trap 'rm -f "$PRIODIR/pid-$$"' EXIT
 
 # Try a non-blocking grab first so we can report who holds it and enforce -w.
 if ! _slot_flock -n 9; then
@@ -198,14 +254,36 @@ if ! _slot_flock -n 9; then
 
   if [ "$WAIT" = "0" ]; then
     echo "with-stack-slot: waiting for the build slot (blocking; set --timeout N to bound the wait)..." >&2
-    _slot_flock 9   # block until acquired
   else
     echo "with-stack-slot: waiting up to ${WAIT}s for the build slot..." >&2
-    if ! _slot_flock -w "$WAIT" 9; then
-      echo "with-stack-slot: timed out after ${WAIT}s waiting for the slot; giving up." >&2
-      exit 124
-    fi
   fi
+  # flock() wakes waiters in no particular order, so without help a release goes to
+  # an arbitrary waiter. Priority waiters (--priority, or a coordinator --boost of
+  # this worktree) advertise themselves with a pid file in $PRIODIR; ordinary
+  # waiters stand back while any live one exists, and hand the slot straight back
+  # if they win a race against one. Waits are short and re-checked, so a boost
+  # applied mid-wait takes effect within ~30s.
+  while :; do
+    step=30
+    if [ "$WAIT" != "0" ]; then
+      left=$(( WAIT - ($(date +%s) - acquire_epoch) ))
+      if [ "$left" -le 0 ]; then
+        echo "with-stack-slot: timed out after ${WAIT}s waiting for the slot; giving up." >&2
+        exit 124
+      fi
+      [ "$left" -lt "$step" ] && step="$left"
+    fi
+    if is_priority_waiter; then
+      : > "$PRIODIR/pid-$$"
+      _slot_flock -w "$step" 9 && break
+    elif other_priority_waiters; then
+      sleep $(( step < 10 ? step : 10 ))
+    elif _slot_flock -w $(( step < 10 ? step : 10 )) 9; then
+      other_priority_waiters || break
+      _slot_flock -u 9
+      sleep 2
+    fi
+  done
 fi
 
 # ---- we hold the slot -----------------------------------------------------
@@ -221,6 +299,9 @@ HOLDER_DESC="pid=$$ worktree=${WORKTREE} label=${LABEL:-none} started=$(date '+%
 printf '%s\n' "$HOLDER_DESC" > "$METAFILE"
 waited=$(( $(date +%s) - acquire_epoch ))
 echo "with-stack-slot: acquired build slot after ${waited}s — ${HOLDER_DESC}" >&2
+
+# Leave the priority lane: drop this waiter's pid file and consume any boost.
+rm -f "$PRIODIR/pid-$$" "$PRIODIR/wt-${WORKTREE//\//_}"
 
 # Clear the advisory metafile when we release, whatever the outcome.
 cleanup() { : > "$METAFILE" 2>/dev/null || true; }
