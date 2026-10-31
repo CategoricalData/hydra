@@ -5,37 +5,10 @@
 ## The bare foldl and foldr are the plain, non-monadic folds.
 module hydra.core.lib.lists
 
-import hydra.core.paths
-import hydra.core.ast
-import hydra.core.coders
-import hydra.core.model
-import hydra.core.diff
-import hydra.core.docs
-import hydra.core.error.checking
-import hydra.core.error.model
-import hydra.core.error.file
-import hydra.core.error.packaging
-import hydra.core.error.system
-import hydra.core.errors
-import hydra.core.file
-import hydra.core.graph
-import hydra.core.json.model
-import hydra.core.markdown
-import hydra.core.packaging
-import hydra.core.parsing
-import hydra.core.query
-import hydra.core.regex
-import hydra.core.relational
-import hydra.core.system
-import hydra.core.tabular
-import hydra.core.testing
-import hydra.core.time
-import hydra.core.topology
-import hydra.core.typed
-import hydra.core.typing
-import hydra.core.util
-import hydra.core.validation
-import hydra.core.variants
+import hydra.core.lib.logic as logic
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.pairs as pairs
+import hydra.core.lib.sets as sets
 
 ## Apply a list of functions to a list of values (applicative style).
 ##
@@ -44,8 +17,8 @@ import hydra.core.variants
 ## Total. Corresponds to Haskell's (<*>) :: [a -> b] -> [a] -> [b].
 ##
 ## @availableSince 0.15
-## @requirement sequentialComposition apply threads the input list through every function in the function list in order, concatenating each function's output.
-## @requirement identityCases apply with an empty function list, or an empty input list, or a single function/input, degrades correctly: zero functions or zero inputs yields an empty result; one of either acts as a direct map.
+## @requirement sequentialComposition: apply threads the input list through every function in the function list in order, concatenating each function's output.
+## @requirement identityCases: apply with an empty function list, or an empty input list, or a single function/input, degrades correctly: zero functions or zero inputs yields an empty result; one of either acts as a direct map.
 primitive apply : ∀x,y.list<x → y> → list<x> → list<y>
 
 ## Return the element at the given index, or Nothing if out of bounds.
@@ -55,8 +28,8 @@ primitive apply : ∀x,y.list<x → y> → list<x> → list<y>
 ## Renamed from hydra.lib.lists.maybeAt.
 ##
 ## @availableSince 0.17.6
-## @requirement returnsElementAtIndex at returns the element at the given zero-based index, wrapped, for any valid index including the first and last.
-## @requirement noneWhenOutOfRange at returns none when the index is negative, at or beyond the list's length, or when the list is empty.
+## @requirement returnsElementAtIndex: at returns the element at the given zero-based index, wrapped, for any valid index including the first and last.
+## @requirement noneWhenOutOfRange: at returns none when the index is negative, at or beyond the list's length, or when the list is empty.
 primitive at : ∀x.int32 → list<x> → optional<x>
 
 ## Apply a function that returns lists to each element and flatten the results.
@@ -65,8 +38,8 @@ primitive at : ∀x.int32 → list<x> → optional<x>
 ## Total. Corresponds to Haskell's (>>=) :: [a] -> (a -> [b]) -> [b].
 ##
 ## @availableSince 0.15
-## @requirement flatMapsOverElements bind applies a list-producing function to each element and concatenates the results, in order, including when the function returns duplicate or negative values.
-## @requirement emptyInput bind over an empty list is the empty list, regardless of the function supplied.
+## @requirement flatMapsOverElements: bind applies a list-producing function to each element and concatenates the results, in order, including when the function returns duplicate or negative values.
+## @requirement emptyInput: bind over an empty list is the empty list, regardless of the function supplied.
 primitive bind : ∀x,y.list<x> → (x → list<y>) → list<y> = λxs.λf.hydra.core.lib.lists.foldr (λx.λacc.hydra.core.lib.lists.concat2 (f x) acc) [] xs
 
 ## Compose two functions that return lists (Kleisli composition in the list monad).
@@ -83,8 +56,8 @@ primitive compose : ∀x,y,z.(x → list<y>) → (y → list<z>) → x → list<
 ## Total. Corresponds to Haskell's concat :: [[a]] -> [a].
 ##
 ## @availableSince 0.15
-## @requirement flattensPreservingOrder concat flattens a list of lists into a single list, preserving element order within and across the constituent lists.
-## @requirement emptyInputs concat of a list of lists in which every list is empty, or of an empty list of lists, is the empty list.
+## @requirement flattensPreservingOrder: concat flattens a list of lists into a single list, preserving element order within and across the constituent lists.
+## @requirement emptyInputs: concat of a list of lists in which every list is empty, or of an empty list of lists, is the empty list.
 primitive concat : ∀x.list<list<x>> → list<x>
 
 ## Concatenate two lists.
@@ -93,8 +66,8 @@ primitive concat : ∀x.list<list<x>> → list<x>
 ## Total. Corresponds to Haskell's (++) :: [a] -> [a] -> [a].
 ##
 ## @availableSince 0.15
-## @requirement appendsPreservingOrder concat2 appends its second list argument to its first, preserving the order of both, for both numeric and string element types.
-## @requirement identityOnEmpty concat2 with either or both arguments empty returns the other argument unchanged (the empty list is the identity element).
+## @requirement appendsPreservingOrder: concat2 appends its second list argument to its first, preserving the order of both, for both numeric and string element types.
+## @requirement identityOnEmpty: concat2 with either or both arguments empty returns the other argument unchanged (the empty list is the identity element).
 primitive concat2 : ∀x.list<x> → list<x> → list<x>
 
 ## Prepend a value to a list.
@@ -103,7 +76,7 @@ primitive concat2 : ∀x.list<x> → list<x> → list<x>
 ## Total. Corresponds to Haskell's (:) :: a -> [a] -> [a].
 ##
 ## @availableSince 0.15
-## @requirement prependsElement cons prepends its first argument to the front of its second argument (the list), for empty and non-empty lists, any element type, and any value including negative numbers.
+## @requirement prependsElement: cons prepends its first argument to the front of its second argument (the list), for empty and non-empty lists, any element type, and any value including negative numbers.
 primitive cons : ∀x.x → list<x> → list<x>
 
 ## Remove duplicate elements from a list.
@@ -114,8 +87,8 @@ primitive cons : ∀x.x → list<x> → list<x>
 ## Renamed from hydra.lib.lists.nub.
 ##
 ## @availableSince 0.17.6
-## @requirement removesDuplicatesPreservingFirstOccurrence distinct removes repeated elements, keeping only the first occurrence of each distinct value and preserving the relative order of the survivors, for numeric and string element types.
-## @requirement emptyInput distinct of an empty list is the empty list.
+## @requirement removesDuplicatesPreservingFirstOccurrence: distinct removes repeated elements, keeping only the first occurrence of each distinct value and preserving the relative order of the survivors, for numeric and string element types.
+## @requirement emptyInput: distinct of an empty list is the empty list.
 primitive distinct : ∀x.(equality x) ⇒ list<x> → list<x>
 
 ## Drop the first n elements from a list.
@@ -124,8 +97,8 @@ primitive distinct : ∀x.(equality x) ⇒ list<x> → list<x>
 ## Total. Corresponds to Haskell's drop :: Int -> [a] -> [a].
 ##
 ## @availableSince 0.15
-## @requirement dropsFromFront drop n removes the first n elements from the front of the list, or all elements if n is greater than or equal to the list's length.
-## @requirement nonPositiveIsIdentity drop with n equal to zero or negative returns the list unchanged.
+## @requirement dropsFromFront: drop n removes the first n elements from the front of the list, or all elements if n is greater than or equal to the list's length.
+## @requirement nonPositiveIsIdentity: drop with n equal to zero or negative returns the list unchanged.
 primitive drop : ∀x.int32 → list<x> → list<x>
 
 ## Drop elements from the beginning of a list while the predicate is true.
@@ -134,8 +107,8 @@ primitive drop : ∀x.int32 → list<x> → list<x>
 ## Total. Corresponds to Haskell's dropWhile :: (a -> Bool) -> [a] -> [a].
 ##
 ## @availableSince 0.15
-## @requirement dropsLeadingMatches dropWhile removes elements from the front of the list for as long as the predicate holds, stopping at (and keeping) the first element for which it does not; an empty list, a predicate matching no elements, or a predicate matching every element are each handled correctly as boundary cases.
-primitive dropWhile : ∀x.(x → boolean) → list<x> → list<x> = λp.λxs.hydra.core.lib.pairs.second (hydra.core.lib.lists.span p xs)
+## @requirement dropsLeadingMatches: dropWhile removes elements from the front of the list for as long as the predicate holds, stopping at (and keeping) the first element for which it does not; an empty list, a predicate matching no elements, or a predicate matching every element are each handled correctly as boundary cases.
+primitive dropWhile : ∀x.(x → boolean) → list<x> → list<x> = λp.λxs.pairs.second (hydra.core.lib.lists.span p xs)
 
 ## Filter a list by a predicate.
 ##
@@ -143,9 +116,9 @@ primitive dropWhile : ∀x.(x → boolean) → list<x> → list<x> = λp.λxs.hy
 ## Total. Corresponds to Haskell's filter :: (a -> Bool) -> [a] -> [a].
 ##
 ## @availableSince 0.15
-## @requirement keepsMatchingElements filter returns the sublist of elements satisfying the predicate, preserving their relative order, whether the predicate matches some, all, or none of the elements.
-## @requirement emptyInput filter over an empty list is the empty list, regardless of the predicate.
-primitive filter : ∀x.(x → boolean) → list<x> → list<x> = λp.λxs.hydra.core.lib.lists.foldr (λx.λacc.hydra.core.lib.logic.ifElse (p x) (hydra.core.lib.lists.cons x acc) acc) [] xs
+## @requirement keepsMatchingElements: filter returns the sublist of elements satisfying the predicate, preserving their relative order, whether the predicate matches some, all, or none of the elements.
+## @requirement emptyInput: filter over an empty list is the empty list, regardless of the predicate.
+primitive filter : ∀x.(x → boolean) → list<x> → list<x> = λp.λxs.hydra.core.lib.lists.foldr (λx.λacc.logic.ifElse (p x) (hydra.core.lib.lists.cons x acc) acc) [] xs
 
 ## Find the first element matching a predicate.
 ##
@@ -153,9 +126,9 @@ primitive filter : ∀x.(x → boolean) → list<x> → list<x> = λp.λxs.hydra
 ## Total. Corresponds to Haskell's find :: (a -> Bool) -> [a] -> Maybe a.
 ##
 ## @availableSince 0.15
-## @requirement returnsFirstMatch find returns the first element (wrapped) satisfying the predicate, scanning in list order.
-## @requirement noneWhenNoMatchOrEmpty find returns none when no element satisfies the predicate, including when the list is empty.
-primitive find : ∀x.(x → boolean) → list<x> → optional<x> = λp.λxs.hydra.core.lib.lists.foldr (λx.λacc.hydra.core.lib.logic.ifElse (p x) given(x) acc) none xs
+## @requirement returnsFirstMatch: find returns the first element (wrapped) satisfying the predicate, scanning in list order.
+## @requirement noneWhenNoMatchOrEmpty: find returns none when no element satisfies the predicate, including when the list is empty.
+primitive find : ∀x.(x → boolean) → list<x> → optional<x> = λp.λxs.hydra.core.lib.lists.foldr (λx.λacc.logic.ifElse (p x) given(x) acc) none xs
 
 ## Left-fold a list in the list monad (a nondeterministic fold).
 ##
@@ -174,8 +147,8 @@ primitive foldList : ∀x,y.(x → y → list<x>) → x → list<y> → list<x> 
 ## Total on finite inputs. Corresponds to Haskell's foldl' :: (b -> a -> b) -> b -> [a] -> b.
 ##
 ## @availableSince 0.15
-## @requirement appliesLeftAssociatively foldl combines the accumulator with each element left-to-right using the given binary operation, so order-sensitive operations (e.g. subtraction) reflect strict left associativity.
-## @requirement emptyListReturnsAccumulator foldl over an empty list returns the initial accumulator unchanged.
+## @requirement appliesLeftAssociatively: foldl combines the accumulator with each element left-to-right using the given binary operation, so order-sensitive operations (e.g. subtraction) reflect strict left associativity.
+## @requirement emptyListReturnsAccumulator: foldl over an empty list returns the initial accumulator unchanged.
 primitive foldl : ∀y,x.(y → x → y) → y → list<x> → y
 
 ## Right-fold a list with an accumulator.
@@ -184,8 +157,8 @@ primitive foldl : ∀y,x.(y → x → y) → y → list<x> → y
 ## Total on finite inputs. Corresponds to Haskell's foldr :: (a -> b -> b) -> b -> [a] -> b.
 ##
 ## @availableSince 0.15
-## @requirement appliesRightAssociatively foldr combines each element with the accumulator right-to-left using the given binary operation, so order-sensitive operations (e.g. subtraction) reflect strict right associativity, and differ from the equivalent foldl where the operation is non-commutative.
-## @requirement emptyListReturnsAccumulator foldr over an empty list returns the initial accumulator unchanged.
+## @requirement appliesRightAssociatively: foldr combines each element with the accumulator right-to-left using the given binary operation, so order-sensitive operations (e.g. subtraction) reflect strict right associativity, and differ from the equivalent foldl where the operation is non-commutative.
+## @requirement emptyListReturnsAccumulator: foldr over an empty list returns the initial accumulator unchanged.
 primitive foldr : ∀x,y.(x → y → y) → y → list<x> → y
 
 ## Group consecutive equal elements.
@@ -195,8 +168,8 @@ primitive foldr : ∀x,y.(x → y → y) → y → list<x> → y
 ## Total. Corresponds to Haskell's Data.List.group :: Eq a => [a] -> [[a]].
 ##
 ## @availableSince 0.15
-## @requirement groupsConsecutiveDuplicates group partitions the list into maximal runs of consecutive equal elements, preserving overall order; non-adjacent duplicates (e.g. [1,1,2,2,2,3,1]) are not merged into the same run.
-## @requirement emptyInput group of an empty list is the empty list.
+## @requirement groupsConsecutiveDuplicates: group partitions the list into maximal runs of consecutive equal elements, preserving overall order; non-adjacent duplicates (e.g. [1,1,2,2,2,3,1]) are not merged into the same run.
+## @requirement emptyInput: group of an empty list is the empty list.
 primitive group : ∀x.(equality x) ⇒ list<x> → list<list<x>>
 
 ## Return the first element, or Nothing if the list is empty.
@@ -206,8 +179,8 @@ primitive group : ∀x.(equality x) ⇒ list<x> → list<list<x>>
 ## Renamed from hydra.lib.lists.maybeHead.
 ##
 ## @availableSince 0.17.6
-## @requirement returnsFirstElement head returns the first element of a non-empty list, wrapped, for any element type.
-## @requirement noneWhenEmpty head of an empty list is none, for any element type.
+## @requirement returnsFirstElement: head returns the first element of a non-empty list, wrapped, for any element type.
+## @requirement noneWhenEmpty: head of an empty list is none, for any element type.
 primitive head : ∀x.list<x> → optional<x>
 
 ## Return all elements except the last, or Nothing if the list is empty.
@@ -217,8 +190,8 @@ primitive head : ∀x.list<x> → optional<x>
 ## Renamed from hydra.lib.lists.maybeInit.
 ##
 ## @availableSince 0.17.6
-## @requirement returnsAllButLast init returns all elements of a non-empty list except the last, wrapped, including the empty list when the input has exactly one element.
-## @requirement noneWhenEmpty init of an empty list is none.
+## @requirement returnsAllButLast: init returns all elements of a non-empty list except the last, wrapped, including the empty list when the input has exactly one element.
+## @requirement noneWhenEmpty: init of an empty list is none.
 primitive init : ∀x.list<x> → optional<list<x>>
 
 ## Intersperse a value between consecutive elements of a list.
@@ -227,8 +200,8 @@ primitive init : ∀x.list<x> → optional<list<x>>
 ## Total. Corresponds to Haskell's intersperse :: a -> [a] -> [a].
 ##
 ## @availableSince 0.15
-## @requirement insertsElementBetweenItems intersperse inserts a copy of the given element between each pair of adjacent elements of the list (not before the first or after the last), for string and numeric element types.
-## @requirement noInsertionBelowTwoElements intersperse on a list of zero or one elements returns the list unchanged -- there are no adjacent pairs to separate.
+## @requirement insertsElementBetweenItems: intersperse inserts a copy of the given element between each pair of adjacent elements of the list (not before the first or after the last), for string and numeric element types.
+## @requirement noInsertionBelowTwoElements: intersperse on a list of zero or one elements returns the list unchanged -- there are no adjacent pairs to separate.
 primitive intersperse : ∀x.x → list<x> → list<x>
 
 ## Test whether a list is empty.
@@ -237,7 +210,7 @@ primitive intersperse : ∀x.x → list<x> → list<x>
 ## Total. Corresponds to Haskell's null :: [a] -> Bool.
 ##
 ## @availableSince 0.15
-## @requirement testsZeroLength isEmpty returns true exactly when the list has no elements, for any element type.
+## @requirement testsZeroLength: isEmpty returns true exactly when the list has no elements, for any element type.
 primitive isEmpty : ∀x.list<x> → boolean
 
 ## Intercalate a list of lists with a separator list between each.
@@ -247,8 +220,8 @@ primitive isEmpty : ∀x.list<x> → boolean
 ## Renamed from hydra.lib.lists.intercalate.
 ##
 ## @availableSince 0.17.6
-## @requirement insertsSeparatorBetweenLists join concatenates a list of lists with a copy of the separator list inserted between each pair of adjacent lists (not before the first or after the last), for separators of any length including empty, and skips the separator insertion where it has no visible effect (a single list, or lists containing empty lists).
-## @requirement emptyListOfLists join of an empty list of lists is the empty list, regardless of the separator.
+## @requirement insertsSeparatorBetweenLists: join concatenates a list of lists with a copy of the separator list inserted between each pair of adjacent lists (not before the first or after the last), for separators of any length including empty, and skips the separator insertion where it has no visible effect (a single list, or lists containing empty lists).
+## @requirement emptyListOfLists: join of an empty list of lists is the empty list, regardless of the separator.
 primitive join : ∀x.list<x> → list<list<x>> → list<x>
 
 ## Return the last element, or Nothing if the list is empty.
@@ -258,8 +231,8 @@ primitive join : ∀x.list<x> → list<list<x>> → list<x>
 ## Renamed from hydra.lib.lists.maybeLast.
 ##
 ## @availableSince 0.17.6
-## @requirement returnsLastElement last returns the final element of a non-empty list, wrapped, for any element type.
-## @requirement noneWhenEmpty last of an empty list is none.
+## @requirement returnsLastElement: last returns the final element of a non-empty list, wrapped, for any element type.
+## @requirement noneWhenEmpty: last of an empty list is none.
 primitive last : ∀x.list<x> → optional<x>
 
 ## Return the length of a list.
@@ -269,7 +242,7 @@ primitive last : ∀x.list<x> → optional<x>
 ## Corresponds to Haskell's length :: [a] -> Int (with narrowing to Int32).
 ##
 ## @availableSince 0.15
-## @requirement countsElements length returns the number of elements in the list, for any element type, including zero for the empty list.
+## @requirement countsElements: length returns the number of elements in the list, for any element type, including zero for the empty list.
 primitive length : ∀x.list<x> → int32
 
 ## Map a function over a list.
@@ -278,15 +251,15 @@ primitive length : ∀x.list<x> → int32
 ## Total. Corresponds to Haskell's map :: (a -> b) -> [a] -> [b] / fmap on lists.
 ##
 ## @availableSince 0.15
-## @requirement appliesFunctionElementwise map applies the given function to each element of the list in place, preserving list order and length, for any element and function.
-## @requirement identityAndEmptyCases map with the identity function returns the list unchanged; map over an empty list is the empty list.
+## @requirement appliesFunctionElementwise: map applies the given function to each element of the list in place, preserving list order and length, for any element and function.
+## @requirement identityAndEmptyCases: map with the identity function returns the list unchanged; map over an empty list is the empty list.
 primitive map : ∀x,y.(x → y) → list<x> → list<y>
 
 ## Map a partial function over a list, keeping only the present results.
 ##
 ## mapGivens(f, xs) applies f to each element of xs and returns the list of contained values from given results in original order; none results are discarded.
 ## Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b].
-primitive mapGivens : ∀x,y.(x → optional<y>) → list<x> → list<y> = λf.λxs.hydra.core.lib.optionals.givens (hydra.core.lib.lists.map f xs)
+primitive mapGivens : ∀x,y.(x → optional<y>) → list<x> → list<y> = λf.λxs.optionals.givens (hydra.core.lib.lists.map f xs)
 
 ## Traverse a list in the list monad.
 ##
@@ -303,7 +276,7 @@ primitive mapList : ∀x,y.(x → list<y>) → list<x> → list<list<y>> = λf.�
 ## Total on finite inputs. The list-monad instance of the traversal family, applied to the optional container.
 ##
 ## @availableSince 0.17.6
-primitive mapOptional : ∀x,y.(x → list<y>) → optional<x> → list<optional<y>> = λf.λm.hydra.core.lib.optionals.match m [none] (λx.hydra.core.lib.lists.bind (f x) (λy.[given(y)]))
+primitive mapOptional : ∀x,y.(x → list<y>) → optional<x> → list<optional<y>> = λf.λm.optionals.match m [none] (λx.hydra.core.lib.lists.bind (f x) (λy.[given(y)]))
 
 ## Traverse a set in the list monad.
 ##
@@ -312,7 +285,7 @@ primitive mapOptional : ∀x,y.(x → list<y>) → optional<x> → list<optional
 ## Requires 'ordering' constraints on both element types (the set type contract).
 ##
 ## @availableSince 0.17.6
-primitive mapSet : ∀x,y.(ordering x, ordering y) ⇒ (x → list<y>) → set<x> → list<set<y>> = λf.λs.hydra.core.lib.lists.map (λys.hydra.core.lib.sets.fromList ys) (hydra.core.lib.lists.foldr (λx.λacc.hydra.core.lib.lists.bind (f x) (λy.hydra.core.lib.lists.bind acc (λys.[hydra.core.lib.lists.cons y ys]))) [[]] (hydra.core.lib.sets.toList s))
+primitive mapSet : ∀x,y.(ordering x, ordering y) ⇒ (x → list<y>) → set<x> → list<set<y>> = λf.λs.hydra.core.lib.lists.map (λys.sets.fromList ys) (hydra.core.lib.lists.foldr (λx.λacc.hydra.core.lib.lists.bind (f x) (λy.hydra.core.lib.lists.bind acc (λys.[hydra.core.lib.lists.cons y ys]))) [[]] (sets.toList s))
 
 ## Test whether an element is in a list.
 ##
@@ -322,8 +295,8 @@ primitive mapSet : ∀x,y.(ordering x, ordering y) ⇒ (x → list<y>) → set<x
 ## Renamed from hydra.lib.lists.elem.
 ##
 ## @availableSince 0.17.6
-## @requirement testsSetMembership member returns true exactly when the given value occurs at least once in the list, for both numeric and string elements, including lists with duplicates.
-## @requirement falseWhenAbsentOrEmpty member returns false when the value does not occur in the list, including when the list is empty.
+## @requirement testsSetMembership: member returns true exactly when the given value occurs at least once in the list, for both numeric and string elements, including lists with duplicates.
+## @requirement falseWhenAbsentOrEmpty: member returns false when the value does not occur in the list, including when the list is empty.
 primitive member : ∀x.(equality x) ⇒ x → list<x> → boolean
 
 ## Partition a list into elements that satisfy a predicate and those that do not.
@@ -332,9 +305,9 @@ primitive member : ∀x.(equality x) ⇒ x → list<x> → boolean
 ## Total. Corresponds to Haskell's partition :: (a -> Bool) -> [a] -> ([a], [a]).
 ##
 ## @availableSince 0.15
-## @requirement splitsBySatisfaction partition returns a pair of (elements satisfying the predicate, elements not satisfying it), each sublist preserving the original relative order of its members.
-## @requirement boundaryCases partition degrades correctly at the boundaries: a predicate matching every element yields (whole list, empty); matching none yields (empty, whole list); an empty input list yields (empty, empty).
-primitive partition : ∀x.(x → boolean) → list<x> → (list<x>, list<x>) = λp.λxs.hydra.core.lib.lists.foldr (λx.λacc.hydra.core.lib.logic.ifElse (p x) (hydra.core.lib.lists.cons x (hydra.core.lib.pairs.first acc), hydra.core.lib.pairs.second acc) (hydra.core.lib.pairs.first acc, hydra.core.lib.lists.cons x (hydra.core.lib.pairs.second acc))) ([], []) xs
+## @requirement splitsBySatisfaction: partition returns a pair of (elements satisfying the predicate, elements not satisfying it), each sublist preserving the original relative order of its members.
+## @requirement boundaryCases: partition degrades correctly at the boundaries: a predicate matching every element yields (whole list, empty); matching none yields (empty, whole list); an empty input list yields (empty, empty).
+primitive partition : ∀x.(x → boolean) → list<x> → (list<x>, list<x>) = λp.λxs.hydra.core.lib.lists.foldr (λx.λacc.logic.ifElse (p x) (hydra.core.lib.lists.cons x (pairs.first acc), pairs.second acc) (pairs.first acc, hydra.core.lib.lists.cons x (pairs.second acc))) ([], []) xs
 
 ## Build a list of n copies of a value.
 ##
@@ -342,7 +315,7 @@ primitive partition : ∀x.(x → boolean) → list<x> → (list<x>, list<x>) = 
 ## Total. Corresponds to Haskell's replicate :: Int -> a -> [a].
 ##
 ## @availableSince 0.15
-## @requirement repeatsValueNTimes replicate n x returns a list containing n copies of x, including the empty list when n is zero, for numeric and string element types.
+## @requirement repeatsValueNTimes: replicate n x returns a list containing n copies of x, including the empty list when n is zero, for numeric and string element types.
 primitive replicate : ∀x.int32 → x → list<x>
 
 ## Reverse a list.
@@ -351,7 +324,7 @@ primitive replicate : ∀x.int32 → x → list<x>
 ## Total. Corresponds to Haskell's reverse :: [a] -> [a].
 ##
 ## @availableSince 0.15
-## @requirement reversesElementOrder reverse returns the list with its elements in the opposite order, for any element type, including lists of zero or one elements (which are unaffected).
+## @requirement reversesElementOrder: reverse returns the list with its elements in the opposite order, for any element type, including lists of zero or one elements (which are unaffected).
 primitive reverse : ∀x.list<x> → list<x>
 
 ## Construct a single-element list.
@@ -361,7 +334,7 @@ primitive reverse : ∀x.list<x> → list<x>
 ## Total. Corresponds to Haskell's singleton :: a -> [a].
 ##
 ## @availableSince 0.15
-## @requirement wrapsOneElement singleton x returns a one-element list containing exactly x, for any value including negative numbers, zero, and strings.
+## @requirement wrapsOneElement: singleton x returns a one-element list containing exactly x, for any value including negative numbers, zero, and strings.
 primitive singleton : ∀x.x → list<x>
 
 ## Sort a list.
@@ -371,7 +344,7 @@ primitive singleton : ∀x.x → list<x>
 ## Total. Corresponds to Haskell's Data.List.sort :: Ord a => [a] -> [a].
 ##
 ## @availableSince 0.15
-## @requirement ordersAscending sort returns the list's elements in ascending order under the type's natural ordering, preserving multiplicity (duplicates are kept), and leaves already-sorted or single-element lists unchanged.
+## @requirement ordersAscending: sort returns the list's elements in ascending order under the type's natural ordering, preserving multiplicity (duplicates are kept), and leaves already-sorted or single-element lists unchanged.
 primitive sort : ∀x.(ordering x) ⇒ list<x> → list<x>
 
 ## Sort a list using a key-extraction function.
@@ -382,8 +355,8 @@ primitive sort : ∀x.(ordering x) ⇒ list<x> → list<x>
 ## Renamed from hydra.lib.lists.sortOn.
 ##
 ## @availableSince 0.17.6
-## @requirement ordersByKeyFunction sortBy returns the list ordered ascending by the natural ordering of the given key function's output, not the elements' own ordering, so the result changes with the key function (e.g. sorting strings by length, or numbers by absolute value, differs from sorting by natural value).
-## @requirement boundaryInputs sortBy on an empty or single-element list returns it unchanged, regardless of the key function.
+## @requirement ordersByKeyFunction: sortBy returns the list ordered ascending by the natural ordering of the given key function's output, not the elements' own ordering, so the result changes with the key function (e.g. sorting strings by length, or numbers by absolute value, differs from sorting by natural value).
+## @requirement boundaryInputs: sortBy on an empty or single-element list returns it unchanged, regardless of the key function.
 primitive sortBy : ∀x,y.(ordering y) ⇒ (x → y) → list<x> → list<x>
 
 ## Split a list at the first element where the predicate fails.
@@ -392,8 +365,8 @@ primitive sortBy : ∀x,y.(ordering y) ⇒ (x → y) → list<x> → list<x>
 ## Total. Corresponds to Haskell's span :: (a -> Bool) -> [a] -> ([a], [a]).
 ##
 ## @availableSince 0.15
-## @requirement splitsAtFirstNonMatch span returns a pair of (longest prefix for which the predicate holds, the remaining suffix), degrading correctly when the predicate matches every element (whole list, empty), no elements (empty, whole list), or the input is empty (empty, empty).
-primitive span : ∀x.(x → boolean) → list<x> → (list<x>, list<x>) = λp.λxs.hydra.core.lib.lists.foldl (λacc.λx.hydra.core.lib.logic.ifElse (hydra.core.lib.logic.and (hydra.core.lib.lists.isEmpty (hydra.core.lib.pairs.second acc)) (p x)) (hydra.core.lib.lists.concat2 (hydra.core.lib.pairs.first acc) [x], hydra.core.lib.pairs.second acc) (hydra.core.lib.pairs.first acc, hydra.core.lib.lists.concat2 (hydra.core.lib.pairs.second acc) [x])) ([], []) xs
+## @requirement splitsAtFirstNonMatch: span returns a pair of (longest prefix for which the predicate holds, the remaining suffix), degrading correctly when the predicate matches every element (whole list, empty), no elements (empty, whole list), or the input is empty (empty, empty).
+primitive span : ∀x.(x → boolean) → list<x> → (list<x>, list<x>) = λp.λxs.hydra.core.lib.lists.foldl (λacc.λx.logic.ifElse (logic.and (hydra.core.lib.lists.isEmpty (pairs.second acc)) (p x)) (hydra.core.lib.lists.concat2 (pairs.first acc) [x], pairs.second acc) (pairs.first acc, hydra.core.lib.lists.concat2 (pairs.second acc) [x])) ([], []) xs
 
 ## Return all elements except the first, or Nothing if the list is empty.
 ##
@@ -402,8 +375,8 @@ primitive span : ∀x.(x → boolean) → list<x> → (list<x>, list<x>) = λp.�
 ## Renamed from hydra.lib.lists.maybeTail.
 ##
 ## @availableSince 0.17.6
-## @requirement returnsAllButFirst tail returns all elements of a non-empty list except the first, wrapped, including the empty list when the input has exactly one element.
-## @requirement noneWhenEmpty tail of an empty list is none.
+## @requirement returnsAllButFirst: tail returns all elements of a non-empty list except the first, wrapped, including the empty list when the input has exactly one element.
+## @requirement noneWhenEmpty: tail of an empty list is none.
 primitive tail : ∀x.list<x> → optional<list<x>>
 
 ## Take the first n elements of a list.
@@ -412,8 +385,8 @@ primitive tail : ∀x.list<x> → optional<list<x>>
 ## Total. Corresponds to Haskell's take :: Int -> [a] -> [a].
 ##
 ## @availableSince 0.15
-## @requirement takesFromFront take n returns the first n elements of the list, or the whole list if n is greater than or equal to its length.
-## @requirement nonPositiveIsEmpty take with n equal to zero or negative returns the empty list.
+## @requirement takesFromFront: take n returns the first n elements of the list, or the whole list if n is greater than or equal to its length.
+## @requirement nonPositiveIsEmpty: take with n equal to zero or negative returns the empty list.
 primitive take : ∀x.int32 → list<x> → list<x>
 
 ## Take elements from the beginning of a list while a predicate holds.
@@ -423,7 +396,7 @@ primitive take : ∀x.int32 → list<x> → list<x>
 ## Total. Corresponds to Haskell's takeWhile :: (a -> Bool) -> [a] -> [a].
 ##
 ## @availableSince 0.17.6
-primitive takeWhile : ∀x.(x → boolean) → list<x> → list<x> = λp.λxs.hydra.core.lib.pairs.first (hydra.core.lib.lists.span p xs)
+primitive takeWhile : ∀x.(x → boolean) → list<x> → list<x> = λp.λxs.pairs.first (hydra.core.lib.lists.span p xs)
 
 ## Transpose a list of lists.
 ##
@@ -431,7 +404,7 @@ primitive takeWhile : ∀x.(x → boolean) → list<x> → list<x> = λp.λxs.hy
 ## Total. Corresponds to Haskell's Data.List.transpose :: [[a]] -> [[a]].
 ##
 ## @availableSince 0.15
-## @requirement swapsRowsAndColumns transpose converts a list of rows into a list of columns, where column i holds the i-th element of every row that has one; rows need not be the same length (a ragged matrix is handled by omitting absent elements, not by padding or erroring), and an empty list of rows yields the empty list.
+## @requirement swapsRowsAndColumns: transpose converts a list of rows into a list of columns, where column i holds the i-th element of every row that has one; rows need not be the same length (a ragged matrix is handled by omitting absent elements, not by padding or erroring), and an empty list of rows yields the empty list.
 primitive transpose : ∀x.list<list<x>> → list<list<x>>
 
 ## Decompose a list into its head and tail, or Nothing if empty.
@@ -440,8 +413,8 @@ primitive transpose : ∀x.list<list<x>> → list<list<x>>
 ## Total. Corresponds to Haskell's Data.List.uncons :: [a] -> Maybe (a, [a]).
 ##
 ## @availableSince 0.15
-## @requirement splitsHeadAndTail uncons on a non-empty list returns (wrapped) the pair of its first element and the remaining list, including when the remaining list is empty.
-## @requirement noneWhenEmpty uncons of an empty list is none.
+## @requirement splitsHeadAndTail: uncons on a non-empty list returns (wrapped) the pair of its first element and the remaining list, including when the remaining list is empty.
+## @requirement noneWhenEmpty: uncons of an empty list is none.
 primitive uncons : ∀x.list<x> → optional<(x, list<x>)>
 
 ## Zip two lists element-wise into pairs.
@@ -450,8 +423,8 @@ primitive uncons : ∀x.list<x> → optional<(x, list<x>)>
 ## Total. Corresponds to Haskell's zip :: [a] -> [b] -> [(a, b)].
 ##
 ## @availableSince 0.15
-## @requirement pairsElementwise zip combines two lists into a list of pairs by position, truncating to the length of the shorter list when the lengths differ.
-## @requirement emptyWhenEitherEmpty zip is the empty list whenever either input list is empty.
+## @requirement pairsElementwise: zip combines two lists into a list of pairs by position, truncating to the length of the shorter list when the lengths differ.
+## @requirement emptyWhenEitherEmpty: zip is the empty list whenever either input list is empty.
 primitive zip : ∀x,y.list<x> → list<y> → list<(x, y)>
 
 ## Zip two lists with a combining function.
@@ -460,6 +433,6 @@ primitive zip : ∀x,y.list<x> → list<y> → list<(x, y)>
 ## Total. Corresponds to Haskell's zipWith :: (a -> b -> c) -> [a] -> [b] -> [c].
 ##
 ## @availableSince 0.15
-## @requirement combinesElementwiseByFunction zipWith combines two lists position-by-position using the given binary function, truncating to the length of the shorter list when the lengths differ, for numeric and string element/result types.
-## @requirement emptyWhenEitherEmpty zipWith is the empty list whenever either input list is empty, regardless of the function.
+## @requirement combinesElementwiseByFunction: zipWith combines two lists position-by-position using the given binary function, truncating to the length of the shorter list when the lengths differ, for numeric and string element/result types.
+## @requirement emptyWhenEitherEmpty: zipWith is the empty list whenever either input list is empty, regardless of the function.
 primitive zipWith : ∀x,y,z.(x → y → z) → list<x> → list<y> → list<z>

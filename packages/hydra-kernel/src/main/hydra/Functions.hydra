@@ -3,37 +3,7 @@
 ## Function combinators: the identity/compose/const/flip basis. These primitives manipulate functions themselves, independently of any particular data type.
 module hydra.core.lib.functions
 
-import hydra.core.paths
-import hydra.core.ast
-import hydra.core.coders
-import hydra.core.model
-import hydra.core.diff
-import hydra.core.docs
-import hydra.core.error.checking
-import hydra.core.error.model
-import hydra.core.error.file
-import hydra.core.error.packaging
-import hydra.core.error.system
-import hydra.core.errors
-import hydra.core.file
-import hydra.core.graph
-import hydra.core.json.model
-import hydra.core.markdown
-import hydra.core.packaging
-import hydra.core.parsing
-import hydra.core.query
-import hydra.core.regex
-import hydra.core.relational
-import hydra.core.system
-import hydra.core.tabular
-import hydra.core.testing
-import hydra.core.time
-import hydra.core.topology
-import hydra.core.typed
-import hydra.core.typing
-import hydra.core.util
-import hydra.core.validation
-import hydra.core.variants
+
 
 ## Eliminate a value of the uninhabited void type, producing any type.
 ##
@@ -62,7 +32,7 @@ primitive compose : ∀t1,t2,t3.(t2 → t3) → (t1 → t2) → t1 → t3 = λg.
 ## Total. Corresponds to Haskell's const :: a -> b -> a.
 ##
 ## @availableSince 0.17.6
-## @requirement returnsFirstArgumentIgnoringSecond const returns its first argument unchanged and ignores its second argument entirely, regardless of the second argument's type or value.
+## @requirement returnsFirstArgumentIgnoringSecond: const returns its first argument unchanged and ignores its second argument entirely, regardless of the second argument's type or value.
 primitive const : ∀t1,t2.t1 → t2 → t1 = λx.λy.x
 
 ## Swap the argument order of a binary function.
@@ -71,7 +41,7 @@ primitive const : ∀t1,t2.t1 → t2 → t1 = λx.λy.x
 ## Total. Corresponds to Haskell's flip :: (a -> b -> c) -> b -> a -> c.
 ##
 ## @availableSince 0.17.6
-## @requirement swapsArgumentOrder flip(f, x, y) applies f with its two arguments in reversed order, i.e. flip(f, x, y) = f(y, x).
+## @requirement swapsArgumentOrder: flip(f, x, y) applies f with its two arguments in reversed order, i.e. flip(f, x, y) = f(y, x).
 primitive flip : ∀t1,t2,t3.(t1 → t2 → t3) → t2 → t1 → t3 = λf.λx.λy.f y x
 
 ## Return the argument unchanged.
@@ -82,5 +52,5 @@ primitive flip : ∀t1,t2,t3.(t1 → t2 → t3) → t2 → t1 → t3 = λf.λx.�
 ## Moved from hydra.lib.equality.identity.
 ##
 ## @availableSince 0.17.6
-## @requirement returnsArgumentUnchanged identity returns its argument completely unchanged, for any value.
+## @requirement returnsArgumentUnchanged: identity returns its argument completely unchanged, for any value.
 primitive identity : ∀t1.t1 → t1 = λx.x

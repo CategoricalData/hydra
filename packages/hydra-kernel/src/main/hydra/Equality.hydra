@@ -5,37 +5,7 @@
 ## For floating-point values equality is value identity.
 module hydra.core.lib.equality
 
-import hydra.core.paths
-import hydra.core.ast
-import hydra.core.coders
-import hydra.core.model
-import hydra.core.diff
-import hydra.core.docs
-import hydra.core.error.checking
-import hydra.core.error.model
-import hydra.core.error.file
-import hydra.core.error.packaging
-import hydra.core.error.system
-import hydra.core.errors
-import hydra.core.file
-import hydra.core.graph
-import hydra.core.json.model
-import hydra.core.markdown
-import hydra.core.packaging
-import hydra.core.parsing
-import hydra.core.query
-import hydra.core.regex
-import hydra.core.relational
-import hydra.core.system
-import hydra.core.tabular
-import hydra.core.testing
-import hydra.core.time
-import hydra.core.topology
-import hydra.core.typed
-import hydra.core.typing
-import hydra.core.util
-import hydra.core.validation
-import hydra.core.variants
+import hydra.core.lib.logic as logic
 
 ## Check whether two values are equal.
 ##
@@ -45,10 +15,10 @@ import hydra.core.variants
 ## Total. Corresponds to Haskell's (==) :: Eq a => a -> a -> Bool.
 ##
 ## @availableSince 0.15
-## @requirement structuralEquivalence equal returns true exactly when its two arguments are structurally equivalent under the type's equality notion -- identical scalars, or recursively equivalent collection contents regardless of construction/insertion order for sets and maps, and in the same order for lists.
-## @requirement collectionContentsCompared equal compares collection (map/set) values structurally, not by a proxy such as a stringified representation -- two non-empty collections with different contents are never reported equal, including when a decimal value is nested inside a collection rather than appearing at the top level.
-## @requirement decimalScaleSensitive equal treats two decimals of equal numeric value but different scale as unequal -- decimal equality is exact (value and scale), not numeric-value equality.
-## @requirement ieee754ExtendedFloatSemantics equal on float64/float32 follows IEEE 754 extended totalOrder semantics rather than native host ==: NaN is equal to itself, and -0.0 is unequal to +0.0; ordinary finite values compare by numeric value.
+## @requirement structuralEquivalence: equal returns true exactly when its two arguments are structurally equivalent under the type's equality notion -- identical scalars, or recursively equivalent collection contents regardless of construction/insertion order for sets and maps, and in the same order for lists.
+## @requirement collectionContentsCompared: equal compares collection (map/set) values structurally, not by a proxy such as a stringified representation -- two non-empty collections with different contents are never reported equal, including when a decimal value is nested inside a collection rather than appearing at the top level.
+## @requirement decimalScaleSensitive: equal treats two decimals of equal numeric value but different scale as unequal -- decimal equality is exact (value and scale), not numeric-value equality.
+## @requirement ieee754ExtendedFloatSemantics: equal on float64/float32 follows IEEE 754 extended totalOrder semantics rather than native host ==: NaN is equal to itself, and -0.0 is unequal to +0.0; ordinary finite values compare by numeric value.
 primitive equal : ∀x.(equality x) ⇒ x → x → boolean
 
 ## Check whether two values are unequal.
@@ -58,6 +28,6 @@ primitive equal : ∀x.(equality x) ⇒ x → x → boolean
 ## Total. Corresponds to Haskell's (/=) :: Eq a => a -> a -> Bool.
 ##
 ## @availableSince 0.17.6
-## @requirement negatesEqual notEqual(x, y) = not(equal(x, y)) for scalar values of any type -- integers, strings, and floats.
-## @requirement negatesEqualOnCollections notEqual on collection values (lists, sets, maps) is likewise the negation of equal: order-sensitivity for lists and order-independence for sets/maps carry through unchanged.
-primitive notEqual : ∀x.(equality x) ⇒ x → x → boolean = λx.λy.hydra.core.lib.logic.not (hydra.core.lib.equality.equal x y)
+## @requirement negatesEqual: notEqual(x, y) = not(equal(x, y)) for scalar values of any type -- integers, strings, and floats.
+## @requirement negatesEqualOnCollections: notEqual on collection values (lists, sets, maps) is likewise the negation of equal: order-sensitivity for lists and order-independence for sets/maps carry through unchanged.
+primitive notEqual : ∀x.(equality x) ⇒ x → x → boolean = λx.λy.logic.not (hydra.core.lib.equality.equal x y)

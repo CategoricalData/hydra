@@ -1578,17 +1578,53 @@
                                             "body": {
                                               "application": {
                                                 "function": {
-                                                  "application": {"function": {"variable": "hydra.core.dependencies.typeDependencyNames"}, "argument": {"literal": {"boolean": true}}}},
-                                                "argument": {
                                                   "application": {
-                                                    "function": {"project": {"typeName": "hydra.core.model.TypeScheme", "fieldName": "body"}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.sets.union"}, "type": {"variable": "hydra.core.model.Name"}}},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"variable": "hydra.core.scoping.termSignatureToTypeScheme"},
+                                                        "function": {
+                                                          "application": {"function": {"variable": "hydra.core.dependencies.typeDependencyNames"}, "argument": {"literal": {"boolean": true}}}},
                                                         "argument": {
                                                           "application": {
-                                                            "function": {"project": {"typeName": "hydra.core.packaging.PrimitiveDefinition", "fieldName": "signature"}},
-                                                            "argument": {"variable": "primDef"}}}}}}}}}}}}]}},
+                                                            "function": {"project": {"typeName": "hydra.core.model.TypeScheme", "fieldName": "body"}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {"variable": "hydra.core.scoping.termSignatureToTypeScheme"},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {"project": {"typeName": "hydra.core.packaging.PrimitiveDefinition", "fieldName": "signature"}},
+                                                                    "argument": {"variable": "primDef"}}}}}}}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.match"}, "type": {"variable": "hydra.core.model.Term"}}},
+                                                                "type": {"set": {"variable": "hydra.core.model.Name"}}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {"project": {"typeName": "hydra.core.packaging.PrimitiveDefinition", "fieldName": "defaultImplementation"}},
+                                                                "argument": {"variable": "primDef"}}}}},
+                                                        "argument": {"typeApplication": {"body": {"variable": "hydra.core.lib.sets.empty"}, "type": {"variable": "hydra.core.model.Name"}}}}},
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "parameter": "impl",
+                                                        "domain": {"variable": "hydra.core.model.Term"},
+                                                        "body": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {"function": {"variable": "hydra.core.dependencies.termDependencyNames"}, "argument": {"literal": {"boolean": true}}}},
+                                                                    "argument": {"literal": {"boolean": true}}}},
+                                                                "argument": {"literal": {"boolean": true}}}},
+                                                            "argument": {"variable": "impl"}}}}}}}}}}}}]}},
                                 "argument": {"variable": "def"}}}}},
                         "typeScheme": {
                           "variables": [],
