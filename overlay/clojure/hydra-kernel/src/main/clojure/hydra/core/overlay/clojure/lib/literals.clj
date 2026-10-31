@@ -27,9 +27,14 @@
 (def hydra_overlay_clojure_lib_literals_decimal_to_float64 (fn [x] (double (.doubleValue (bigdec x)))))
 
 ;; Float conversions
-(def hydra_overlay_clojure_lib_literals_float32_to_decimal (fn [x] (bigdec (Float/toString (float x)))))
+;; The JDK float string minus a trailing ".0" (as main's Java Float64ToDecimal does), so a whole value converts at
+;; scale 0 (2.0 -> 2, not 2.0): print_decimal is scale-preserving. Float/toString and Double/toString are not
+;; shortest-round-trip before JDK 19 (JDK-4511638), and NaN/Infinity are unguarded: both are open (#783 proposal).
+(defn- float-string-to-decimal [s]
+  (bigdec (if (.endsWith ^String s ".0") (subs s 0 (- (count s) 2)) s)))
+(def hydra_overlay_clojure_lib_literals_float32_to_decimal (fn [x] (float-string-to-decimal (Float/toString (float x)))))
 (def hydra_overlay_clojure_lib_literals_float32_to_float64 (fn [x] (double x)))
-(def hydra_overlay_clojure_lib_literals_float64_to_decimal (fn [x] (bigdec (str x))))
+(def hydra_overlay_clojure_lib_literals_float64_to_decimal (fn [x] (float-string-to-decimal (Double/toString (double x)))))
 (def hydra_overlay_clojure_lib_literals_float64_to_float32 (fn [x] (float x)))
 
 ;; Integer to BigInt conversions
@@ -224,22 +229,26 @@
 ;; than Double's own show threshold, so e.g. "0.01"/"0.001" print plainly
 ;; rather than in scientific form.
 (def hydra_overlay_clojure_lib_literals_print_decimal
+  ;; Scale-preserving, mirroring the Java PrintDecimal: 1.10 prints "1.10", not "1.1" -- decimals are
+  ;; scale-sensitive (equal/compare tiebreak on scale), so stripping trailing zeros would break the
+  ;; round-trip through parseDecimal back to the original value.
   (fn [x]
-    (let [bd (.stripTrailingZeros (bigdec x))]
-      (if (zero? (.signum bd))
-        "0"
-        (let [precision (.precision bd)
-              scale (.scale bd)
-              e (- precision scale 1)
-              sign (if (neg? (.signum bd)) "-" "")
-              plain (.toString (.abs (.unscaledValue bd)))]
-          (if (or (>= e 21) (< e -6))
-            (let [mantissa (if (= (count plain) 1)
-                             (str plain ".0")
-                             (str (subs plain 0 1) "." (subs plain 1)))]
-              (str sign mantissa "e" e))
-            (let [s (.toPlainString bd)]
-              s)))))))
+    (let [bd (bigdec x)
+          scale (.scale bd)
+          digits (.toString (.abs (.unscaledValue bd)))
+          n (count digits)
+          sign (if (neg? (.signum bd)) "-" "")
+          e (- n scale 1)]
+      (if (or (>= e 21) (< e -6))
+        (let [mantissa (if (= n 1)
+                         (str digits ".0")
+                         (str (subs digits 0 1) "." (subs digits 1)))]
+          (str sign mantissa "e" e))
+        (str sign
+             (cond
+               (<= scale 0) (str digits (apply str (repeat (- scale) "0")))
+               (< scale n) (str (subs digits 0 (- n scale)) "." (subs digits (- n scale)))
+               :else (str "0." (apply str (repeat (- scale n) "0")) digits)))))))
 
 ;; parse_float64 :: String -> Maybe Float64
 (def hydra_overlay_clojure_lib_literals_parse_float64

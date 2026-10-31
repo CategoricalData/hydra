@@ -34,11 +34,13 @@
   (cond
     (nil? obj) (list :null nil)
     (boolean? obj) (list :boolean obj)
-    (number? obj) (list :number (double obj))
+    (number? obj) (list :number (bigdec obj))
     (string? obj) (list :string obj)
     (vector? obj) (list :array (mapv clojure-to-hydra-json obj))
     (sequential? obj) (list :array (vec (map clojure-to-hydra-json obj)))
-    (map? obj) (list :object (into {} (map (fn [[k v]] [k (clojure-to-hydra-json v)]) obj)))
+    ;; Value.object is a list of Pair String Value ([k v] vectors), not a Clojure map: the
+    ;; generated decoder indexes into it with lists.at (#586; same fix as the Emacs Lisp driver).
+    (map? obj) (list :object (mapv (fn [[k v]] [k (clojure-to-hydra-json v)]) obj))
     :else (throw (IllegalArgumentException. (str "Unexpected JSON type: " (type obj))))))
 
 (defn- bootstrap-graph []
@@ -57,7 +59,7 @@
         schema-map (bootstrap-schema-map)]
     (mapv (fn [ns-str]
             (let [file-path (str base-path "/" ((r 'hydra_core_codegen_module_name_to_path) ns-str) ".json")
-                  obj (json/read-str (slurp file-path))
+                  obj (json/read-str (slurp file-path) :bigdec true)
                   json-val (clojure-to-hydra-json obj)
                   mod-type (list :variable "hydra.core.packaging.Module")
                   json-result (((((r 'hydra_core_json_decode_from_json) schema-map) "hydra.core.packaging.Module") mod-type) json-val)

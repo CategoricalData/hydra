@@ -66,7 +66,9 @@
     (string? obj) (list :string obj)
     (vector? obj) (list :array (mapv clojure-to-hydra-json obj))
     (sequential? obj) (list :array (vec (map clojure-to-hydra-json obj)))
-    (map? obj) (list :object (into {} (map (fn [[k v]] [k (clojure-to-hydra-json v)]) obj)))
+    ;; Value.object is a list of Pair String Value ([k v] vectors), not a Clojure map: the
+    ;; generated decoder indexes into it with lists.at (#586; same fix as the Emacs Lisp driver).
+    (map? obj) (list :object (mapv (fn [[k v]] [k (clojure-to-hydra-json v)]) obj))
     :else (throw (IllegalArgumentException. (str "Unexpected JSON type: " (type obj))))))
 
 (defn parse-json-file

@@ -118,8 +118,9 @@
 
 (defn- redirect-dotted
   "Rewrite consumer references from the un-relocated hydra.lib.<sub> / hydra.core.test.testEnv namespaces to
-   their relocated impls under hydra.core.overlay.<lang-seg>.* for the TARGET language (lang-seg is
-   e.g. \"overlay.clojure\" or \"overlay.python\"). Protects quoted primitive-NAME strings. Mirrors the
+   their relocated impls under hydra.<lang-seg>.* for the TARGET language (lang-seg is
+   e.g. \"core.overlay.clojure\" or \"core.overlay.python\", already including the core.overlay prefix).
+   Protects quoted primitive-NAME strings. Mirrors the
    Scala host's redirectDotted; needed for cross-host targets (e.g. clojure->python) as well as
    clojure self-host — without it the target's generated consumers call the def-modules
    (\"'PrimitiveDefinition' object is not callable\") and import the pre-#501 hydra.core.test.test_env path
@@ -173,10 +174,16 @@
     (let [dir (java.io.File. ^String lang-dir)]
       (when (.isDirectory dir)
         (let [subs (lib-subs-for-target repo-root target)
+              ;; #729/#769: the relocated impls live under hydra.core.overlay.<lang>.* (see the
+              ;; reference redirectForSubs in bootstrap-from-json/Main.hs: "hydra.core.overlay." ++
+              ;; langSeg ++ ".lib.", and names.py's "hydra.core.overlay.python.test_env"). The seg
+              ;; MUST include the "core." prefix — omitting it (pre-#769 "overlay.python") emitted the
+              ;; stale hydra.overlay.python.* paths, which broke clojure->python at pytest collection
+              ;; with `ModuleNotFoundError: No module named 'hydra.overlay'`.
               dotted-seg (case target
-                           "python" "overlay.python"
-                           "scala" "overlay.scala"
-                           "clojure" "overlay.clojure"
+                           "python" "core.overlay.python"
+                           "scala" "core.overlay.scala"
+                           "clojure" "core.overlay.clojure"
                            nil)]
           (doseq [^java.io.File f (all-files-under dir)]
             (when-not (lib-def-file? f)
