@@ -319,6 +319,44 @@ termPrintTest testName t expectedStr = universalCase testName
   (PrintCore.term @@ t)
   (Phantoms.string expectedStr)
 
+-- | Parse an input string, re-print the parsed term, and compare to the printed form of an expected
+-- term. Used for the applied 'case' sugar (#809 Wave 2), which is PARSE-ONLY: 'case T x {…}'
+-- desugars to 'application(cases(T){…}) x', and the printer re-emits only that desugared form, so a
+-- self-round-trip would not reproduce the 'case' spelling. This checks the desugaring directly:
+-- parse('case …') must equal the hand-built applied-'cases' term (compared via their printed forms).
+caseSugarParseTest :: String -> String -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+caseSugarParseTest testName input expected = universalCase testName
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "t2" $ PrintCore.term @@ Phantoms.var "t2")
+    (ParseCore.parseTerm @@ Phantoms.string input))
+  (PrintCore.term @@ expected)
+
+-- Applied-case desugaring builders (#809 Wave 2).
+lamT :: String -> TypedTerm Term -> TypedTerm Term
+lamT v body = Core.termLambda (Core.lambda (nm v) nothing body)
+
+varT :: String -> TypedTerm Term
+varT v = Core.termVariable (nm v)
+
+appT :: TypedTerm Term -> TypedTerm Term -> TypedTerm Term
+appT f a = Core.termApplication (Core.application f a)
+
+-- cases(T){alts}, with optional default
+casesT :: String -> [TypedTerm Field] -> Maybe (TypedTerm Term) -> TypedTerm Term
+casesT tname alts mdef = Core.termCases (Core.caseStatement (nm tname)
+  (maybe nothing just mdef)
+  (Phantoms.list [Core.caseAlternative (Core.fieldName f) (Core.fieldTerm f) | f <- alts]))
+
+-- Expected desugaring of: case example.Color x { red y = "r", green = "g", _ = "c" }
+--   → application(cases(example.Color){ red = λy. "r", green = "g", _default = "c" }) x
+caseSugarExpected :: TypedTerm Term
+caseSugarExpected = appT
+  (casesT "example.Color"
+    [fld "red" (lamT "y" (strT "r")), fld "green" (strT "g")]
+    (Just (strT "c")))
+  (varT "x")
+
 -- Term builders (shallow DSL) for the sugar fixtures.
 nm :: String -> TypedTerm Name
 nm s = Core.name $ Phantoms.string s
@@ -403,4 +441,28 @@ nominalSugarGroup = define "nominalSugarGroup" $
 
     termPrintTest "unwrap sugar: Name[]"
       unwrapTermVal "example.Meters[]",
-    termRoundtripTest "unwrap sugar round-trips" unwrapTermVal])
+    termRoundtripTest "unwrap sugar round-trips" unwrapTermVal,
+
+    -- #809 Wave 2: applied 'case' sugar (parse-only; desugars to an applied 'cases').
+    caseSugarParseTest "case sugar: binder branch → λ-handler, nullary branch as-is, default"
+      "case example.Color x { red y = \"r\", green = \"g\", _ = \"c\" }"
+      caseSugarExpected,
+
+    caseSugarParseTest "case sugar: single nullary branch desugars to applied cases"
+      "case example.Color x { red = \"stop\" }"
+      (appT (casesT "example.Color" [fld "red" (strT "stop")] Nothing) (varT "x")),
+
+    -- edge: a binder branch alone → λ-handler binding the payload (no default)
+    caseSugarParseTest "case sugar: binder branch desugars handler to a lambda over the payload"
+      "case example.Length len { meters m = m }"
+      (appT (casesT "example.Length" [fld "meters" (lamT "m" (varT "m"))] Nothing) (varT "len")),
+
+    -- edge: a no-binder (nullary) branch keeps the handler as-is, no spurious lambda
+    caseSugarParseTest "case sugar: no-binder branch keeps handler as-is"
+      "case example.Color c { red = \"r\", green = \"g\" }"
+      (appT (casesT "example.Color" [fld "red" (strT "r"), fld "green" (strT "g")] Nothing) (varT "c")),
+
+    -- edge: a compound scrutinee must be parenthesized (scrutinee parsed at postfix level)
+    caseSugarParseTest "case sugar: parenthesized compound scrutinee"
+      "case example.Color (f y) { red = \"r\" }"
+      (appT (casesT "example.Color" [fld "red" (strT "r")] Nothing) (appT (varT "f") (varT "y")))])

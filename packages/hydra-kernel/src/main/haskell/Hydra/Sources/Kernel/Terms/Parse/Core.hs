@@ -94,6 +94,8 @@ module_ = Module {
      toDefinition braceConstruct,
      toDefinition braceContent,
      toDefinition bracketEliminate,
+     toDefinition caseSugarField,
+     toDefinition caseSugarTerm,
      toDefinition caseTerm,
      toDefinition constraint,
      toDefinition decimalDigits,
@@ -582,6 +584,60 @@ caseTerm = define "caseTerm" $
       Core.termCases (Core.caseStatement (var "tname") (var "mdef") (var "alts"))) @@
     (asTerm termFields))
 
+-- | Parse one branch of the applied 'case' sugar (#809 Wave 2): 'name [binder] = body', or the
+-- default '_ = body'. A branch with a binder desugars its handler to 'λbinder. body' (binding the
+-- variant's payload); a branch without a binder keeps 'body' as-is (a handler is any term in the
+-- underlying 'cases' form, so a nullary/unit variant maps to a plain value with no spurious lambda).
+-- Yields the field 'name = handler'; the caller splits off a '_' field as the default.
+caseSugarField :: TypedTermDefinition (Parser Field)
+caseSugarField = define "caseSugarField" $
+  doc "Parse an applied-case branch: 'name [binder] = body' (binder ⇒ λ-handler), or '_ = body' (#809)" $
+  P.choice @@ list [
+    -- default branch: '_ = body'. '_' is a reserved word and not a bare-name segment char, so it is
+    -- matched as a literal token here (the ordinary 'name' parser rejects it). The field is named
+    -- '_' so caseSugarTerm's isDefault filter routes it to the caseStatement default handler. A
+    -- default takes no payload binder.
+    P.bind @@ (termKeyword @@ string "_") @@ (constant $
+      P.bind @@ (termKeyword @@ string "=") @@ (constant $
+        P.map @@ ("body" ~> Core.field (Core.name $ string "_") (var "body")) @@
+          (P.lazy @@ (constant $ asTerm term)))),
+    -- variant branch: 'name [binder] = body'
+    P.bind @@ (asTerm name) @@ ("vname" ~>
+      P.bind @@ (P.optional @@ (asTerm binderName)) @@ ("mbinder" ~>
+        P.bind @@ (termKeyword @@ string "=") @@ (constant $
+          P.map @@ ("body" ~>
+            "handler" <~ Optionals.match (var "mbinder")
+              (var "body")
+              ("b" ~> Core.termLambda (Core.lambda (var "b") nothing (var "body"))) $
+            Core.field (var "vname") (var "handler")) @@
+            (P.lazy @@ (constant $ asTerm term))))) ]
+
+-- | Parse the applied 'case' sugar (#809 Wave 2): 'case' name scrutinee '{' caseSugarField (','
+-- caseSugarField)* '}'. Desugars to the UNAPPLIED matcher applied to the scrutinee:
+-- 'application(cases(TypeName){ branch handlers }) scrutinee'. No new AST node -- this is pure
+-- parser sugar producing an ordinary Application of a Term.cases (the printer re-emits the
+-- 'cases(...)' applied form, not this spelling). The scrutinee is parsed at postfix level, so a
+-- compound scrutinee must be parenthesized: 'case T (f y) {...}'. A trailing '_' field becomes the
+-- caseStatement default handler, mirroring 'caseTerm'. The 'case' keyword is free (#810 renamed the
+-- raw case-statement keyword to 'cases'); this atom is tried after 'caseTerm' and under 'P.try' so
+-- a variable merely beginning with 'case' (e.g. 'caseload', or a bare 'case') rewinds cleanly.
+caseSugarTerm :: TypedTermDefinition (Parser Term)
+caseSugarTerm = define "caseSugarTerm" $
+  doc "Parse applied case sugar: 'case' TypeName scrutinee '{' branches '}', desugaring to an applied cases (#809)" $
+  P.bind @@ (termKeyword @@ string "case") @@ (constant $
+    P.bind @@ (asTerm name) @@ ("tname" ~>
+      P.bind @@ (asTerm postfixTerm) @@ ("scrutinee" ~>
+        P.bind @@ (termKeyword @@ string "{") @@ (constant $
+          P.bind @@ (P.sepBy @@ (asTerm caseSugarField) @@ (termKeyword @@ string ",")) @@ ("flds" ~>
+            P.bind @@ (termKeyword @@ string "}") @@ (constant $
+              "isDefault" <~ ("f" ~> Equality.equal (Core.unName (Core.fieldName (var "f"))) (string "_")) $
+              "defFields" <~ Lists.filter (var "isDefault") (var "flds") $
+              "caseFields" <~ Lists.filter ("f" ~> Logic.not (var "isDefault" @@ var "f")) (var "flds") $
+              "mdef" <~ Optionals.match (Lists.head (var "defFields")) nothing ("f" ~> just (Core.fieldTerm (var "f"))) $
+              "alts" <~ Lists.map ("f" ~> Core.caseAlternative (Core.fieldName (var "f")) (Core.fieldTerm (var "f"))) (var "caseFields") $
+              "matcher" <~ Core.termCases (Core.caseStatement (var "tname") (var "mdef") (var "alts")) $
+              P.pure @@ Core.termApplication (Core.application (var "matcher") (var "scrutinee"))))))))
+
 -- | Parse an eitherTerm: 'left' '(' term ')' | 'right' '(' term ')'.
 eitherTerm :: TypedTermDefinition (Parser Term)
 eitherTerm = define "eitherTerm" $
@@ -806,6 +862,10 @@ atomicTerm = define "atomicTerm" $
   doc "Parse a tightest-level term: any construct other than application, annotation, or type application" $
   P.choice @@ list [
     asTerm caseTerm,
+    -- #809 Wave 2: applied 'case' sugar. Tried AFTER caseTerm (whose 'cases' keyword fails cleanly,
+    -- zero-consumption, on 'case ...'), and under 'P.try' so a variable merely starting with 'case'
+    -- (e.g. 'caseload', or a bare 'case' — 'case' is unreserved) rewinds to the name fallback below.
+    P.try @@ (asTerm caseSugarTerm),
     asTerm eitherTerm,
     asTerm injectTerm,
     asTerm lambdaTerm,

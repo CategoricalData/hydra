@@ -223,6 +223,10 @@ applicationTerm ::= term term     -- adjacency; left-associative: add 1 2
 caseTerm      ::= 'cases' '(' name ')' termFields   -- default handler, if present,
                                                     -- appears LAST as the wildcard
                                                     -- field '_'
+                | 'case' name term caseSugarFields  -- SUGAR (#809): applied form;
+                                                    -- desugars to the unapplied matcher
+                                                    -- applied to the scrutinee:
+                                                    -- application(cases(name){…}) term
 eitherTerm    ::= 'left' '(' term ')' | 'right' '(' term ')'
 injectTerm    ::= 'inject' '(' name ')' termFields   -- exactly one field
                 | name sugarFields                   -- SUGAR (#809): one field;
@@ -269,6 +273,10 @@ termField     ::= name '=' term
 sugarFields   ::= '{' [sugarField (',' sugarField)*] '}'   -- #809; no whitespace
                                                            -- between name and '{'
 sugarField    ::= name '=' term | name        -- a bare 'name' ⇒ 'name = unit'
+caseSugarFields ::= '{' [caseSugarField (',' caseSugarField)*] '}'   -- #809 applied case
+caseSugarField ::= name [binderName] '=' term  -- variant branch; a binder ⇒ handler
+                 | '_' '=' term                --   λbinder.term, else term as-is;
+                                                --   '_' is the default (no binder)
 
 -- Destructuring patterns (SUGAR, RESERVED (#811), not yet implemented): a pattern
 -- stands for a single fresh parameter immediately taken apart by a 'let', e.g.
@@ -409,6 +417,17 @@ Notes:
     a name, so there is no collision with qualified variable names.
   - The whitespace rule is load-bearing: `Name{…}` / `Name[…]` (abutting) are sugar; `Name {…}` /
     `Name […]` (with a space) are ordinary application of `Name` to a set/map/list.
+  - **Applied `case` (#809, Wave 2).** `case TypeName scrutinee { variant [binder] = body, …, _ = default }`
+    is the *applied* elimination sugar: it desugars to the unapplied matcher applied to the
+    scrutinee — `application(cases(TypeName){ variant = handler, …, _ = default }) scrutinee`. A branch
+    with a binder (`meters m = body`) gives the handler `λm. body` (the binder names the variant's
+    payload); a branch without a binder (`red = body`) keeps `body` as the handler as-is. The default
+    `_ = body` is the case-statement default handler (no payload binder). This is **parse-only**: there
+    is no new AST node, so the printer re-emits the desugared `cases(TypeName){…} scrutinee` form, not
+    the `case` spelling (a scoped carve-out of §1's round-trip contract, like #811's reserved sugar).
+    The scrutinee is parsed at postfix level, so a compound scrutinee must be parenthesized:
+    `case T (f y) {…}`. `cases` (plural) remains the unapplied matcher; `case` (singular) is this
+    applied form.
 - **Operator, destructuring, and `do`-block sugar (RESERVED, #811).** `operatorTerm`, `pattern`
   (destructuring in `lambdaTerm`/`binding`), and `doTerm` are reserved for #811 and are not yet
   produced or accepted by any printer or parser. Several spellings are explicitly unsettled in
