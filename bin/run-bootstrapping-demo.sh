@@ -78,3 +78,19 @@ else
     scope="$(basename "$REPO_ROOT")"
     "$DEMO_DIR/bootstrap-all.sh" ${subcommand:+"$subcommand"} --output "/tmp/hydra-bootstrapping-demo-$scope" "$@"
 fi
+
+# --- #769: persist the exercised cells into the tracked cross-generation matrix doc. ---
+# The demo's per-cell results (bootstrap/runs/run_*/) are gitignored and otherwise discarded.
+# Merge whatever this run just exercised into docs/bootstrap-matrix.md, leaving all other cells
+# at their last-known state. Skip on dashboard-only/display modes (no new run dir), and never
+# let a doc-update hiccup fail the bootstrap run itself (informational, best-effort).
+if [ "$subcommand" != "display" ] && [ -f "$REPO_ROOT/bin/bootstrap-matrix.py" ]; then
+    latest_run="$(ls -dt "$RUNS_DIR"/run_* 2>/dev/null | head -1 || true)"
+    if [ -n "$latest_run" ] && [ -d "$latest_run" ]; then
+        echo ""
+        echo "Persisting cross-generation matrix (docs/bootstrap-matrix.md)..."
+        python3 "$REPO_ROOT/bin/bootstrap-matrix.py" update --run "$latest_run" \
+            --doc "$REPO_ROOT/docs/bootstrap-matrix.md" || \
+            echo "  (matrix doc update skipped — non-fatal)"
+    fi
+fi
