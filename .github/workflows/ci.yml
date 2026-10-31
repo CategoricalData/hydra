@@ -150,6 +150,14 @@ jobs:
       # native Python self-host, default INTERP=uv) which runs as part of
       # the sync step below.
       - uses: astral-sh/setup-uv@v5
+      # The sync below cold-seeds dist/haskell via the Java-host seeder (#703), a
+      # Gradle 7.6.4 build, which runs only on JDKs up to 19. Pin the JDK as
+      # cold-clone-haskell does; on 2026-10-30 ubuntu-latest moved to ubuntu-26.04,
+      # whose default JDK 25 failed this job ("Unsupported class file major version 69").
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11.0.19'
       - uses: actions/cache@v4
         with:
           path: ~/.stack
