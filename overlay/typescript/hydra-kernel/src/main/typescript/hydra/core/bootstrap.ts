@@ -4,7 +4,7 @@
 // and the Haskell bootstrap-from-json executable.
 //
 // Usage:
-//   tsx hydra/bootstrap.ts --target <lang> --json-dir <dist/json> [OPTIONS]
+//   tsx hydra/core/bootstrap.ts --target <lang> --json-dir <dist/json> [OPTIONS]
 //
 // Options:
 //   --output <dir>      Output base directory (default: /tmp/hydra-bootstrapping-demo)
@@ -26,6 +26,7 @@ import * as jsonBootstrap from "./json/bootstrap.js";
 import * as decodePackaging from "./decode/packaging.js";
 import * as lexical from "./lexical.js";
 import * as maps from "./overlay/typescript/lib/maps.js";
+import * as literalsLib from "./overlay/typescript/lib/literals.js";
 import * as codegen from "./codegen.js";
 import * as libraries from "./overlay/typescript/lib/libraries.js";
 
@@ -89,6 +90,36 @@ const distJsonRootFromKernelDir = (kernelDir: string): string | null => {
 const BASELINE_EXTRA_PACKAGES: readonly string[] = ["hydra-haskell"];
 
 // Read every .json under <root> and return its (relative-namespace, parsed-JSON) pairs.
+// #727: a JSON number is a scale-preserving decimal ("1.10" keeps scale 2; big integers stay exact), but
+// JSON.parse turns every number into a lossy JS double, and Node 18 has no reviver source-text access. So before
+// parsing, rewrite each number literal outside a string into a sentinel-tagged string holding its exact text;
+// toHydraJson turns those back into Decimals.
+const JSON_NUMBER_SENTINEL = "\u0001hydra-json-number\u0001";
+
+const parseJsonPreservingNumbers = (raw: string): unknown => {
+  let out = "";
+  let i = 0;
+  while (i < raw.length) {
+    const c = raw[i]!;
+    if (c === '"') {
+      // Copy a whole string literal, honouring backslash escapes.
+      let j = i + 1;
+      while (j < raw.length && raw[j] !== '"') j += raw[j] === "\\" ? 2 : 1;
+      out += raw.slice(i, j + 1);
+      i = j + 1;
+    } else if (c === "-" || (c >= "0" && c <= "9")) {
+      let j = i + 1;
+      while (j < raw.length && /[0-9eE+.\-]/.test(raw[j]!)) j++;
+      out += JSON.stringify(JSON_NUMBER_SENTINEL + raw.slice(i, j));
+      i = j;
+    } else {
+      out += c;
+      i++;
+    }
+  }
+  return JSON.parse(out);
+};
+
 const readJsonTree = (root: string): Array<{ path: string; json: unknown }> => {
   const out: Array<{ path: string; json: unknown }> = [];
   const walk = (dir: string): void => {
@@ -100,7 +131,7 @@ const readJsonTree = (root: string): Array<{ path: string; json: unknown }> => {
       if (entry === "manifest.json") continue;
       try {
         const raw = readFileSync(full, "utf-8");
-        out.push({ path: full, json: JSON.parse(raw) });
+        out.push({ path: full, json: parseJsonPreservingNumbers(raw) });
       } catch (e) {
         console.error(`  warning: failed to parse ${full}: ${(e as Error).message}`);
       }
@@ -112,8 +143,9 @@ const readJsonTree = (root: string): Array<{ path: string; json: unknown }> => {
 
 // Coder dispatch: map --target lang to (coder, language, codegen flags) loaded
 // from `dist/typescript/hydra-<lang>/src/main/typescript/hydra/<lang>/{coder,language}.js`.
-// importPath is resolved from `dist/typescript/hydra-kernel/src/main/typescript/hydra/bootstrap.ts`,
-// so going up 5 levels lands at `dist/typescript/`, then dispatching into each sibling package.
+// importPath is resolved from `dist/typescript/hydra-kernel/src/main/typescript/hydra/core/bootstrap.ts`
+// (hydra/core/ since #729), so going up 6 levels lands at `dist/typescript/`, then dispatching into each
+// sibling package.
 // Flags mirror the Haskell bootstrap-from-json switch (Main.hs): doInfer/doExpand/doHoistCase/doHoistPoly.
 // `lispDialect` and `lispFileExt` are set for the four Lisp dialects, which
 // share a single hydra-lisp coder package (moduleToLisp takes a dialect arg).
@@ -124,9 +156,9 @@ const CODER_DISPATCH: Record<string, {
   lispDialect?: string; lispFileExt?: string;
 }> = {
   typescript: {
-    coderPath:    "../../../../../../hydra-typescript/src/main/typescript/hydra/typeScript/coder.js",
+    coderPath:    "../../../../../../hydra-typescript/src/main/typescript/hydra/typescript/coder.js",
     coderExport:  "moduleToTypeScript",
-    languagePath: "../../../../../../hydra-typescript/src/main/typescript/hydra/typeScript/language.js",
+    languagePath: "../../../../../../hydra-typescript/src/main/typescript/hydra/typescript/language.js",
     languageExport: "typeScriptLanguage",
     doInfer: false, doExpand: true, doHoistCase: true, doHoistPoly: false,
   },
@@ -293,7 +325,9 @@ const main = async (): Promise<void> => {
     const langSeg = langSegByTarget[target] ?? target;
     if (!distJsonRoot) return LIB_SUBS_FALLBACK;
     const repoRoot = resolve(distJsonRoot, "..", "..");
-    const libDir = join(repoRoot, "overlay", target, "hydra-kernel", "src", "main", target, "hydra", "overlay", langSeg, "lib");
+    // #729: kernel overlays live under hydra/core/overlay/<seg>/; Scheme's is the exception at hydra/overlay/scheme/.
+    const overlaySeg = target === "scheme" ? ["hydra", "overlay"] : ["hydra", "core", "overlay"];
+    const libDir = join(repoRoot, "overlay", target, "hydra-kernel", "src", "main", target, ...overlaySeg, langSeg, "lib");
     if (!existsSync(libDir)) return LIB_SUBS_FALLBACK;
     const entries = readdirSync(libDir);
     const subs = entries
@@ -413,8 +447,11 @@ const main = async (): Promise<void> => {
   const toHydraJson = (v: unknown): unknown => {
     if (v === null) return { tag: "null" };
     if (typeof v === "boolean") return { tag: "boolean", value: v };
-    if (typeof v === "number") return { tag: "number", value: v };
-    if (typeof v === "string") return { tag: "string", value: v };
+    if (typeof v === "string") {
+      return v.startsWith(JSON_NUMBER_SENTINEL)
+        ? { tag: "number", value: literalsLib.decimalFromString(v.slice(JSON_NUMBER_SENTINEL.length)) }
+        : { tag: "string", value: v };
+    }
     if (Array.isArray(v)) return { tag: "array", value: v.map(toHydraJson) };
     if (typeof v === "object") {
       const m = new Map<string, unknown>();
