@@ -357,7 +357,9 @@ public class TransformJsonToTarget {
         // block for haskell is a safe no-op for those two calls.
         written.addAll(Bootstrap.runLibPass(repoRoot, target, outDir, universeMods, modsToGenerate));
         Bootstrap.redirectLibCalls(repoRoot, target, outDir);
-        Bootstrap.redirectTestEnv(target, outDir);
+        // Test trees only: no main module references testEnv, and a main-tree rewrite corrupts data
+        // that merely names it (the Python coder's overlayPythonModuleAliases key, #769).
+        if (includeTests) Bootstrap.redirectTestEnv(target, outDir);
 
         // #459 (H1): prune stale outputs — delete any file under outDir not just written and not
         // protected by --keep-paths-from. The Java counterpart to bootstrap-from-json's pruneDir

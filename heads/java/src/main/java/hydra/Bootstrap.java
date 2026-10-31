@@ -412,7 +412,6 @@ public class Bootstrap {
         // rewritten to hydra.<lang>.lib.*. See the lib-pass note above and project_473_self_host_lib_pass_gap.
         if (!target.equals("haskell")) {
             redirectLibCalls(repoRoot, target, outMain + File.separator + target);
-            redirectTestEnv(target, outMain + File.separator + target);
             if (includeTests) {
                 redirectLibCalls(repoRoot, target, outDir + File.separator + "src/test" + File.separator + target);
                 redirectTestEnv(target, outDir + File.separator + "src/test" + File.separator + target);
@@ -903,6 +902,9 @@ public class Bootstrap {
      *   - clojure: dotted `hydra.core.test.testEnv` -&gt; `hydra.core.overlay.clojure.test.testEnv`
      *   - scheme:  R7RS library form `(hydra test testEnv)` -&gt; `(hydra overlay scheme test testEnv)`,
      *              plus the dotted form for any residual dotted references
+     * Applied to generated TEST trees only (#769): no main module references testEnv, and a main-tree
+     * pass corrupts data that merely names it -- the Python coder's overlayPythonModuleAliases key
+     * "hydra.core.test.testEnv", so a Scheme/Clojure-hosted Python coder missed the alias.
      * common-lisp / emacs-lisp load the hand-written test_env explicitly via their run-tests loader
      * (see run-tests.lisp / run-tests.el), so they need no code redirect here — their loader path is
      * fixed separately. Mirrors redirectClojureTestEnv / redirectSchemeTestEnv in
