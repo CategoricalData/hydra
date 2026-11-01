@@ -267,6 +267,7 @@
     "hydra.core.parsers",
     "hydra.core.parsing",
     "hydra.core.paths",
+    "hydra.core.positions",
     "hydra.core.predicates",
     "hydra.core.print.docs",
     "hydra.core.print.emacs.regex",

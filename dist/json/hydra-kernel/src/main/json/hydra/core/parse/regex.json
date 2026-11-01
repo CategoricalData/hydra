@@ -702,11 +702,14 @@
                                                     "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.isEmpty"}, "type": {"literal": {"integer": "int32"}}}},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
-                                                            "type": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}}}},
-                                                        "argument": {"variable": "s"}}}}}}},
+                                                        "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "codepoints"}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                "type": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}}}},
+                                                            "argument": {"variable": "s"}}}}}}}}},
                                             "argument": {
                                               "optional": {
                                                 "application": {

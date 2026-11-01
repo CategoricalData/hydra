@@ -74,7 +74,7 @@
                                 "term": {
                                   "lambda": {
                                     "parameter": "input",
-                                    "domain": {"list": {"literal": {"integer": "int32"}}},
+                                    "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                     "body": {
                                       "application": {
                                         "function": {
@@ -113,13 +113,18 @@
                                                                       "application": {
                                                                         "function": {
                                                                           "application": {
-                                                                            "function": {
-                                                                              "typeApplication": {"body": {"variable": "hydra.core.lib.equality.equal"}, "type": {"list": {"literal": {"integer": "int32"}}}}},
+                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.equality.equal"}, "type": {"literal": {"integer": "int32"}}}},
                                                                             "argument": {
                                                                               "application": {
-                                                                                "function": {"project": {"typeName": "hydra.core.parsing.ParseError", "fieldName": "remainder"}},
-                                                                                "argument": {"variable": "e"}}}}},
-                                                                        "argument": {"variable": "input"}}}}},
+                                                                                "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "offset"}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {"project": {"typeName": "hydra.core.parsing.ParseError", "fieldName": "remainder"}},
+                                                                                    "argument": {"variable": "e"}}}}}}},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "offset"}},
+                                                                            "argument": {"variable": "input"}}}}}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {
@@ -143,7 +148,7 @@
                                   "variables": [],
                                   "body": {
                                     "function": {
-                                      "domain": {"list": {"literal": {"integer": "int32"}}},
+                                      "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                       "codomain": {"application": {"function": {"variable": "hydra.core.parsing.ParseResult"}, "argument": {"variable": "t0"}}}}},
                                   "constraints": []}}],
                             "body": {
@@ -214,7 +219,7 @@
                                     "term": {
                                       "lambda": {
                                         "parameter": "input",
-                                        "domain": {"list": {"literal": {"integer": "int32"}}},
+                                        "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                         "body": {
                                           "application": {
                                             "function": {
@@ -335,7 +340,7 @@
                                       "variables": [],
                                       "body": {
                                         "function": {
-                                          "domain": {"list": {"literal": {"integer": "int32"}}},
+                                          "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                           "codomain": {"application": {"function": {"variable": "hydra.core.parsing.ParseResult"}, "argument": {"variable": "t1"}}}}},
                                       "constraints": []}}],
                                 "body": {
@@ -480,7 +485,7 @@
                                     "term": {
                                       "lambda": {
                                         "parameter": "input",
-                                        "domain": {"list": {"literal": {"integer": "int32"}}},
+                                        "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                         "body": {
                                           "application": {
                                             "function": {
@@ -537,7 +542,7 @@
                                       "variables": [],
                                       "body": {
                                         "function": {
-                                          "domain": {"list": {"literal": {"integer": "int32"}}},
+                                          "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                           "codomain": {"application": {"function": {"variable": "hydra.core.parsing.ParseResult"}, "argument": {"variable": "t1"}}}}},
                                       "constraints": []}}],
                                 "body": {
@@ -636,7 +641,7 @@
                     "body": {
                       "lambda": {
                         "parameter": "input",
-                        "domain": {"list": {"literal": {"integer": "int32"}}},
+                        "domain": {"variable": "hydra.core.parsing.ParseInput"},
                         "body": {
                           "application": {
                             "function": {
@@ -650,7 +655,10 @@
                                     "argument": {
                                       "application": {
                                         "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.isEmpty"}, "type": {"literal": {"integer": "int32"}}}},
-                                        "argument": {"variable": "input"}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "codepoints"}},
+                                            "argument": {"variable": "input"}}}}}}},
                                 "argument": {
                                   "typeApplication": {
                                     "body": {
@@ -710,7 +718,7 @@
                             "body": {
                               "lambda": {
                                 "parameter": "input",
-                                "domain": {"list": {"literal": {"integer": "int32"}}},
+                                "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                 "body": {
                                   "typeApplication": {
                                     "body": {
@@ -763,7 +771,7 @@
                             "body": {
                               "lambda": {
                                 "parameter": "input",
-                                "domain": {"list": {"literal": {"integer": "int32"}}},
+                                "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                 "body": {
                                   "application": {
                                     "function": {
@@ -808,7 +816,7 @@
                             "term": {
                               "lambda": {
                                 "parameter": "input",
-                                "domain": {"list": {"literal": {"integer": "int32"}}},
+                                "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                 "body": {
                                   "application": {
                                     "function": {
@@ -823,7 +831,7 @@
                               "variables": [],
                               "body": {
                                 "function": {
-                                  "domain": {"list": {"literal": {"integer": "int32"}}},
+                                  "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                   "codomain": {"application": {"function": {"variable": "hydra.core.parsing.ParseResult"}, "argument": {"list": {"variable": "t0"}}}}}},
                               "constraints": []}}],
                         "body": {
@@ -845,7 +853,7 @@
               "name": "arg0",
               "type": {"application": {"function": {"variable": "hydra.core.parsing.Parser"}, "argument": {"variable": "t0"}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"list": {"literal": {"integer": "int32"}}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.core.parsing.ParseInput"}, "isLazy": false},
             {"name": "arg2", "type": {"list": {"variable": "t0"}}, "isLazy": false}],
           "result": {
             "type": {"application": {"function": {"variable": "hydra.core.parsing.ParseResult"}, "argument": {"list": {"variable": "t0"}}}}}},
@@ -861,7 +869,7 @@
                     "body": {
                       "lambda": {
                         "parameter": "input",
-                        "domain": {"list": {"literal": {"integer": "int32"}}},
+                        "domain": {"variable": "hydra.core.parsing.ParseInput"},
                         "body": {
                           "lambda": {
                             "parameter": "acc",
@@ -983,7 +991,7 @@
                                     "term": {
                                       "lambda": {
                                         "parameter": "input",
-                                        "domain": {"list": {"literal": {"integer": "int32"}}},
+                                        "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                         "body": {
                                           "application": {
                                             "function": {
@@ -1054,13 +1062,79 @@
                                       "variables": [],
                                       "body": {
                                         "function": {
-                                          "domain": {"list": {"literal": {"integer": "int32"}}},
+                                          "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                           "codomain": {"application": {"function": {"variable": "hydra.core.parsing.ParseResult"}, "argument": {"variable": "t1"}}}}},
                                       "constraints": []}}],
                                 "body": {
                                   "typeApplication": {"body": {"wrap": {"typeName": "hydra.core.parsing.Parser", "body": {"variable": "parse"}}}, "type": {"variable": "t1"}}}}}}}}},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Apply a function to the result of a parser"}}}]}}}}}}}}},
+    {
+      "term": {
+        "name": "hydra.core.parsers.markTokenEnd",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {"type": {"application": {"function": {"variable": "hydra.core.parsing.Parser"}, "argument": "unit"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "typeApplication": {
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.parsing.Parser",
+                    "body": {
+                      "lambda": {
+                        "parameter": "input",
+                        "domain": {"variable": "hydra.core.parsing.ParseInput"},
+                        "body": {
+                          "typeApplication": {
+                            "body": {
+                              "inject": {
+                                "typeName": "hydra.core.parsing.ParseResult",
+                                "field": {
+                                  "name": "success",
+                                  "term": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "record": {
+                                          "typeName": "hydra.core.parsing.ParseSuccess",
+                                          "fields": [
+                                            {"name": "value", "term": "unit"},
+                                            {
+                                              "name": "remainder",
+                                              "term": {
+                                                "record": {
+                                                  "typeName": "hydra.core.parsing.ParseInput",
+                                                  "fields": [
+                                                    {
+                                                      "name": "offset",
+                                                      "term": {
+                                                        "application": {
+                                                          "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "offset"}},
+                                                          "argument": {"variable": "input"}}}},
+                                                    {
+                                                      "name": "tokenEnd",
+                                                      "term": {
+                                                        "application": {
+                                                          "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "offset"}},
+                                                          "argument": {"variable": "input"}}}},
+                                                    {
+                                                      "name": "codepoints",
+                                                      "term": {
+                                                        "application": {
+                                                          "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "codepoints"}},
+                                                          "argument": {"variable": "input"}}}}]}}}]}},
+                                      "type": "unit"}}}}},
+                            "type": "unit"}}}}}},
+                "type": "unit"}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Record that a token has just been completed, so that a surrounding 'spanned' parser can end its span here rather than after any trailing whitespace or comments. Consumes no input."}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.parsers.optional",
@@ -1130,7 +1204,7 @@
                             "body": {
                               "lambda": {
                                 "parameter": "input",
-                                "domain": {"list": {"literal": {"integer": "int32"}}},
+                                "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                 "body": {
                                   "typeApplication": {
                                     "body": {
@@ -1183,7 +1257,15 @@
                               "application": {
                                 "function": {"typeApplication": {"body": {"unwrap": "hydra.core.parsing.Parser"}, "type": {"variable": "t0"}}},
                                 "argument": {"variable": "p"}}},
-                            "argument": {"application": {"function": {"variable": "hydra.core.lib.strings.toList"}, "argument": {"variable": "input"}}}}}}}}},
+                            "argument": {
+                              "record": {
+                                "typeName": "hydra.core.parsing.ParseInput",
+                                "fields": [
+                                  {"name": "offset", "term": {"literal": {"integer": {"int32": 0}}}},
+                                  {"name": "tokenEnd", "term": {"literal": {"integer": {"int32": 0}}}},
+                                  {
+                                    "name": "codepoints",
+                                    "term": {"application": {"function": {"variable": "hydra.core.lib.strings.toList"}, "argument": {"variable": "input"}}}}]}}}}}}}},
                 "annotation": {
                   "map": [
                     {
@@ -1217,7 +1299,7 @@
                         "term": {
                           "lambda": {
                             "parameter": "input",
-                            "domain": {"list": {"literal": {"integer": "int32"}}},
+                            "domain": {"variable": "hydra.core.parsing.ParseInput"},
                             "body": {
                               "application": {
                                 "function": {
@@ -1235,7 +1317,10 @@
                                         "argument": {
                                           "application": {
                                             "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.uncons"}, "type": {"literal": {"integer": "int32"}}}},
-                                            "argument": {"variable": "input"}}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "codepoints"}},
+                                                "argument": {"variable": "input"}}}}}}},
                                     "argument": {
                                       "typeApplication": {
                                         "body": {
@@ -1304,7 +1389,33 @@
                                                                   "body": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.parsing.ParseSuccess",
-                                                                      "fields": [{"name": "value", "term": {"variable": "c"}}, {"name": "remainder", "term": {"variable": "rest"}}]}},
+                                                                      "fields": [
+                                                                        {"name": "value", "term": {"variable": "c"}},
+                                                                        {
+                                                                          "name": "remainder",
+                                                                          "term": {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.parsing.ParseInput",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "offset",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "offset"}},
+                                                                                              "argument": {"variable": "input"}}}}},
+                                                                                      "argument": {"literal": {"integer": {"int32": 1}}}}}},
+                                                                                {
+                                                                                  "name": "tokenEnd",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "tokenEnd"}},
+                                                                                      "argument": {"variable": "input"}}}},
+                                                                                {"name": "codepoints", "term": {"variable": "rest"}}]}}}]}},
                                                                   "type": {"literal": {"integer": "int32"}}}}}}},
                                                         "type": {"literal": {"integer": "int32"}}}}}},
                                                 "argument": {
@@ -1325,7 +1436,7 @@
                           "variables": [],
                           "body": {
                             "function": {
-                              "domain": {"list": {"literal": {"integer": "int32"}}},
+                              "domain": {"variable": "hydra.core.parsing.ParseInput"},
                               "codomain": {
                                 "application": {"function": {"variable": "hydra.core.parsing.ParseResult"}, "argument": {"literal": {"integer": "int32"}}}}}},
                           "constraints": []}}],
@@ -1546,6 +1657,167 @@
                       "value": {"literal": {"string": "Parse one or more occurrences of the given parser"}}}]}}}}}}},
     {
       "term": {
+        "name": "hydra.core.parsers.spanned",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.core.parsing.Parser"}, "argument": {"variable": "t0"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.parsing.Parser"},
+                "argument": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "hydra.core.parsing.SourceSpan"}}}}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "p",
+                    "domain": {"application": {"function": {"variable": "hydra.core.parsing.Parser"}, "argument": {"variable": "t0"}}},
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "parse",
+                            "term": {
+                              "lambda": {
+                                "parameter": "input",
+                                "domain": {"variable": "hydra.core.parsing.ParseInput"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "cases": {
+                                            "typeName": "hydra.core.parsing.ParseResult",
+                                            "cases": [
+                                              {
+                                                "name": "success",
+                                                "handler": {
+                                                  "lambda": {
+                                                    "parameter": "s",
+                                                    "domain": {"application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "t0"}}},
+                                                    "body": {
+                                                      "let": {
+                                                        "bindings": [
+                                                          {
+                                                            "name": "start",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "offset"}},
+                                                                "argument": {"variable": "input"}}},
+                                                            "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "end",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.max"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                        "argument": {"variable": "start"}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "tokenEnd"}},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                "type": {"variable": "t0"}}},
+                                                                            "argument": {"variable": "s"}}}}}}},
+                                                                "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.parsing.ParseResult",
+                                                                    "field": {
+                                                                      "name": "success",
+                                                                      "term": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.parsing.ParseSuccess",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "value",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "pair": {
+                                                                                              "first": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "typeApplication": {"body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}}, "type": {"variable": "t0"}}},
+                                                                                                  "argument": {"variable": "s"}}},
+                                                                                              "second": {
+                                                                                                "record": {
+                                                                                                  "typeName": "hydra.core.parsing.SourceSpan",
+                                                                                                  "fields": [{"name": "start", "term": {"variable": "start"}}, {"name": "end", "term": {"variable": "end"}}]}}}},
+                                                                                          "type": {"variable": "t0"}}},
+                                                                                      "type": {"variable": "hydra.core.parsing.SourceSpan"}}}},
+                                                                                {
+                                                                                  "name": "remainder",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                                          "type": {"variable": "t0"}}},
+                                                                                      "argument": {"variable": "s"}}}}]}},
+                                                                          "type": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "hydra.core.parsing.SourceSpan"}}}}}}}},
+                                                                "type": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "hydra.core.parsing.SourceSpan"}}}}}}}}}}}},
+                                              {
+                                                "name": "failure",
+                                                "handler": {
+                                                  "lambda": {
+                                                    "parameter": "e",
+                                                    "domain": {"variable": "hydra.core.parsing.ParseError"},
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"inject": {"typeName": "hydra.core.parsing.ParseResult", "field": {"name": "failure", "term": {"variable": "e"}}}},
+                                                        "type": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "hydra.core.parsing.SourceSpan"}}}}}}}}]}},
+                                        "type": {"variable": "t0"}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"unwrap": "hydra.core.parsing.Parser"}, "type": {"variable": "t0"}}},
+                                            "argument": {"variable": "p"}}},
+                                        "argument": {"variable": "input"}}}}}}},
+                            "typeScheme": {
+                              "variables": [],
+                              "body": {
+                                "function": {
+                                  "domain": {"variable": "hydra.core.parsing.ParseInput"},
+                                  "codomain": {
+                                    "application": {
+                                      "function": {"variable": "hydra.core.parsing.ParseResult"},
+                                      "argument": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "hydra.core.parsing.SourceSpan"}}}}}}},
+                              "constraints": []}}],
+                        "body": {
+                          "typeApplication": {
+                            "body": {"wrap": {"typeName": "hydra.core.parsing.Parser", "body": {"variable": "parse"}}},
+                            "type": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "hydra.core.parsing.SourceSpan"}}}}}}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Run a parser and pair its result with the source span it consumed. The span starts at the first codepoint the parser consumed and ends at the end of the last token it completed (see markTokenEnd), so trailing whitespace and comments are excluded."}}}]}}}}}}},
+    {
+      "term": {
         "name": "hydra.core.parsers.string",
         "signature": {
           "typeParameters": [],
@@ -1582,7 +1854,7 @@
                                 "body": {
                                   "lambda": {
                                     "parameter": "input",
-                                    "domain": {"list": {"literal": {"integer": "int32"}}},
+                                    "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -1594,7 +1866,10 @@
                                                   "application": {
                                                     "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.take"}, "type": {"literal": {"integer": "int32"}}}},
                                                     "argument": {"variable": "strLen"}}},
-                                                "argument": {"variable": "input"}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "codepoints"}},
+                                                    "argument": {"variable": "input"}}}}},
                                             "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}, "constraints": []}}],
                                         "body": {
                                           "application": {
@@ -1631,12 +1906,39 @@
                                                                     {
                                                                       "name": "remainder",
                                                                       "term": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.drop"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                              "argument": {"variable": "strLen"}}},
-                                                                          "argument": {"variable": "input"}}}}]}},
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.parsing.ParseInput",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "offset",
+                                                                              "term": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "offset"}},
+                                                                                          "argument": {"variable": "input"}}}}},
+                                                                                  "argument": {"variable": "strLen"}}}},
+                                                                            {
+                                                                              "name": "tokenEnd",
+                                                                              "term": {
+                                                                                "application": {
+                                                                                  "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "tokenEnd"}},
+                                                                                  "argument": {"variable": "input"}}}},
+                                                                            {
+                                                                              "name": "codepoints",
+                                                                              "term": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.drop"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                      "argument": {"variable": "strLen"}}},
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "codepoints"}},
+                                                                                      "argument": {"variable": "input"}}}}}}]}}}]}},
                                                               "type": {"literal": "string"}}}}}},
                                                     "type": {"literal": "string"}}}}},
                                             "argument": {
@@ -1689,7 +1991,7 @@
                             "term": {
                               "lambda": {
                                 "parameter": "input",
-                                "domain": {"list": {"literal": {"integer": "int32"}}},
+                                "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                 "body": {
                                   "application": {
                                     "function": {
@@ -1745,7 +2047,7 @@
                               "variables": [],
                               "body": {
                                 "function": {
-                                  "domain": {"list": {"literal": {"integer": "int32"}}},
+                                  "domain": {"variable": "hydra.core.parsing.ParseInput"},
                                   "codomain": {"application": {"function": {"variable": "hydra.core.parsing.ParseResult"}, "argument": {"variable": "t0"}}}}},
                               "constraints": []}}],
                         "body": {

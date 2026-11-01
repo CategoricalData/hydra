@@ -22,14 +22,63 @@
                     "name": "remainder",
                     "type": {
                       "annotated": {
+                        "body": {"variable": "hydra.core.parsing.ParseInput"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error which occurred while parsing"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.parsing.ParseInput",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "offset",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "The number of codepoints consumed so far, i.e. the absolute offset of the first remaining codepoint"}}}]}}}},
+                  {
+                    "name": "tokenEnd",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The offset just past the most recently completed token, excluding any whitespace or comments that followed it. Used to give source spans a tight end"}}}]}}}},
+                  {
+                    "name": "codepoints",
+                    "type": {
+                      "annotated": {
                         "body": {"list": {"literal": {"integer": "int32"}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "The remaining input (as codepoints) at the point of failure"}}}]}}}}]},
+                              "value": {
+                                "literal": {
+                                  "string": "The remaining unparsed input, as codepoints. Represented as a list rather than a string, so that consuming one character is a constant-time operation"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error which occurred while parsing"}}}]}}},
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "The input state threaded through a parser: the unconsumed codepoints, together with the number of codepoints already consumed, and where the last token ended. The offset makes the absolute source position of any parse step available in constant time, without rescanning the input."}}}]}}},
           "constraints": []}}},
     {
       "type": {
@@ -87,12 +136,8 @@
                         "name": "remainder",
                         "type": {
                           "annotated": {
-                            "body": {"list": {"literal": {"integer": "int32"}}},
-                            "annotation": {
-                              "map": [
-                                {
-                                  "key": {"variable": "description"},
-                                  "value": {"literal": {"string": "The remaining unparsed input, as codepoints. Represented as a list rather than a string"}}}]}}}}]}}},
+                            "body": {"variable": "hydra.core.parsing.ParseInput"},
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]}}}}]}}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A successful parse result"}}}]}}},
           "constraints": []}}},
     {
@@ -108,7 +153,7 @@
                   "body": {
                     "wrap": {
                       "function": {
-                        "domain": {"list": {"literal": {"integer": "int32"}}},
+                        "domain": {"variable": "hydra.core.parsing.ParseInput"},
                         "codomain": {"application": {"function": {"variable": "hydra.core.parsing.ParseResult"}, "argument": {"variable": "a"}}}}}}}},
               "annotation": {
                 "map": [
@@ -117,4 +162,76 @@
                     "value": {
                       "literal": {
                         "string": "A parser which consumes characters from a codepoint list and produces a value. The input is a list, rather than a string, so that consuming one character is a constant-time operation rather than a linear-time string copy."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.parsing.SourcePosition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "line",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The zero-based line number. Lines are terminated by LF, CR, or CR LF"}}}]}}}},
+                  {
+                    "name": "column",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The zero-based column, in UTF-16 code units from the start of the line"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A position in source text, as an editor reports it: zero-based line and zero-based column. The column counts UTF-16 code units, matching the Language Server Protocol's Position."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.parsing.SourceSpan",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "start",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The offset of the first codepoint of the span"}}}]}}}},
+                  {
+                    "name": "end",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The offset one past the last codepoint of the span"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A half-open range [start, end) of source text, measured in codepoints from the start of the input. Attached to parsed terms and types as a reserved, round-trip-exempt annotation (see hydra.core.positions)."}}}]}}},
           "constraints": []}}}]}
