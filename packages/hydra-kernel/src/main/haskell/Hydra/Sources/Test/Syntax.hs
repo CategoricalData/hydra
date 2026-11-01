@@ -19,13 +19,17 @@ import qualified Data.Map                     as M
 
 import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals as LibLiterals
 import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Dsl.Paths        as Paths
 import qualified Hydra.Core.Dsl.Packaging     as Packaging
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Print.Packaging as PrintPackaging
 import qualified Hydra.Sources.Kernel.Terms.Parse.Core as ParseCore
 import qualified Hydra.Sources.Kernel.Terms.Parse.Packaging as ParsePackaging
+import qualified Hydra.Sources.Kernel.Terms.Positions as Positions
 
 import Hydra.Core.Testing
 
@@ -37,7 +41,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, PrintCore.ns, PrintPackaging.ns, ParseCore.ns, ParsePackaging.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, PrintCore.ns, PrintPackaging.ns, ParseCore.ns, ParsePackaging.ns, Positions.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Round-trip test cases for the textual syntax"))}
   where
     definitions = [
@@ -45,7 +49,9 @@ module_ = Module {
       Phantoms.toDefinition doSugarGroup,
       Phantoms.toDefinition lazyParameterRoundtripGroup,
       Phantoms.toDefinition moduleAliasGroup,
-      Phantoms.toDefinition nominalSugarGroup]
+      Phantoms.toDefinition nominalSugarGroup,
+      Phantoms.toDefinition sourcePositionGroup,
+      Phantoms.toDefinition sourceSpanGroup]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -55,7 +61,7 @@ allTests = define "allTests" $
     doc "Test cases for the textual syntax (#497/#710)" $
     Testing.testGroup (string "textual syntax") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
-    subgroups = [doSugarGroup, lazyParameterRoundtripGroup, moduleAliasGroup, nominalSugarGroup]
+    subgroups = [doSugarGroup, lazyParameterRoundtripGroup, moduleAliasGroup, nominalSugarGroup, sourceSpanGroup, sourcePositionGroup]
 
 -- | Print a term signature, then parse the printed text back, and show the round-tripped
 -- signature. Compares against the original signature's own printed form, so the test both
@@ -571,3 +577,102 @@ doSugarGroup = define "doSugarGroup" $
       "do effect { eff, r }" doEffectSeqExpected,
     termParseTest "do list: single result clause (no bind)"
       "do list { r }" doListSingleExpected])
+
+----------------------------------------------------------------------------------------------
+-- #815: source spans
+
+-- | Show an optional span as "[start,end)" (or "none")
+showSpan :: TypedTerm (Maybe SourceSpan) -> TypedTerm String
+showSpan m = Optionals.match m (string "none") (Phantoms.lambda "sp" $ Strings.concat (list [
+  string "[",
+  LibLiterals.printInt32 (Phantoms.project _SourceSpan _SourceSpan_start Phantoms.@@ Phantoms.var "sp"),
+  string ",",
+  LibLiterals.printInt32 (Phantoms.project _SourceSpan _SourceSpan_end Phantoms.@@ Phantoms.var "sp"),
+  string ")"]))
+
+-- | Parse with spans, resolve a subterm path, and show the resulting span
+spanAtPathTest :: String -> String -> [TypedTerm SubtermStep] -> String -> TypedTerm TestCaseWithMetadata
+spanAtPathTest testName input steps expectedStr = universalCase testName
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "t" $ showSpan (Positions.spanAtPath @@ Paths.subtermPath (list steps) @@ Phantoms.var "t"))
+    (ParseCore.parseTermWithSpans @@ string input))
+  (string expectedStr)
+
+-- | The span-free term recovered from a span-annotated parse prints identically to the plain parse
+stripSpansTest :: String -> String -> TypedTerm TestCaseWithMetadata
+stripSpansTest testName input = universalCase testName
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "t" $ PrintCore.term @@ (Positions.stripSpans @@ Phantoms.var "t"))
+    (ParseCore.parseTermWithSpans @@ string input))
+  (Eithers.either (Phantoms.lambda "e" $ Phantoms.var "e") (Phantoms.lambda "t" $ PrintCore.term @@ Phantoms.var "t")
+    (ParseCore.parseTerm @@ string input))
+
+-- | The plain parser leaves no span annotations behind
+plainParseHasNoSpansTest :: String -> String -> TypedTerm TestCaseWithMetadata
+plainParseHasNoSpansTest testName input = universalCase testName
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "t" $ showSpan (Positions.termSpan @@ Phantoms.var "t"))
+    (ParseCore.parseTerm @@ string input))
+  (string "none")
+
+rootSpanTest :: String -> String -> String -> TypedTerm TestCaseWithMetadata
+rootSpanTest testName input expectedStr = spanAtPathTest testName input [] expectedStr
+
+sourceSpanGroup :: TypedTermDefinition TestGroup
+sourceSpanGroup = define "sourceSpanGroup" $
+  doc "Source spans recorded by the term parser, and SubtermPath-to-span resolution (#815)" $
+  Testing.testGroup (string "source spans") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    rootSpanTest "literal" "42:int32" "[0,8)",
+    rootSpanTest "span excludes leading whitespace" "  x" "[2,3)",
+    rootSpanTest "span excludes trailing whitespace" "x   " "[0,1)",
+    rootSpanTest "span excludes trailing comment" "x # note\n" "[0,1)",
+    rootSpanTest "application spans function through argument" "f x" "[0,3)",
+    rootSpanTest "chained application" "f x y" "[0,5)",
+    spanAtPathTest "application function" "f x" [inject _SubtermStep _SubtermStep_applicationFunction unit] "[0,1)",
+    spanAtPathTest "application argument" "f x" [inject _SubtermStep _SubtermStep_applicationArgument unit] "[2,3)",
+    spanAtPathTest "nested application argument" "f g x"
+      [inject _SubtermStep _SubtermStep_applicationFunction unit,
+       inject _SubtermStep _SubtermStep_applicationArgument unit] "[2,3)",
+    spanAtPathTest "list element" "[1:int32, 22:int32]" [inject _SubtermStep _SubtermStep_listElement (Phantoms.int32 1)] "[10,18)",
+    spanAtPathTest "lambda body" "\955x . x" [inject _SubtermStep _SubtermStep_lambdaBody unit] "[5,6)",
+    spanAtPathTest "path that cannot be followed yields the last node reached" "f x"
+      [inject _SubtermStep _SubtermStep_lambdaBody unit] "[0,3)",
+    spanAtPathTest "parenthesized term" "(x)" [] "[0,3)",
+    stripSpansTest "strip spans: application" "f x y",
+    stripSpansTest "strip spans: lambda" "\955x . f x",
+    stripSpansTest "strip spans: list" "[1:int32, 2:int32]",
+    plainParseHasNoSpansTest "plain parse records no spans" "f x"])
+
+-- | Convert an offset in a text to a position and show it as "line:column"
+positionTest :: String -> String -> Int -> String -> TypedTerm TestCaseWithMetadata
+positionTest testName text offset expectedStr = universalCase testName
+  (Strings.concat (list [
+    LibLiterals.printInt32 (Phantoms.project _SourcePosition _SourcePosition_line Phantoms.@@ pos),
+    string ":",
+    LibLiterals.printInt32 (Phantoms.project _SourcePosition _SourcePosition_column Phantoms.@@ pos)]))
+  (string expectedStr)
+  where
+    pos = Positions.offsetToPosition @@ string text @@ Phantoms.int32 offset
+
+sourcePositionGroup :: TypedTermDefinition TestGroup
+sourcePositionGroup = define "sourcePositionGroup" $
+  doc "Conversion of codepoint offsets to (line, column) positions, with UTF-16 column accounting (#815)" $
+  Testing.testGroup (string "source positions") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    positionTest "start of text" "abc" 0 "0:0",
+    positionTest "within first line" "abc" 2 "0:2",
+    positionTest "end of text" "abc" 3 "0:3",
+    positionTest "after LF" "ab\ncd" 3 "1:0",
+    positionTest "within second line" "ab\ncd" 4 "1:1",
+    positionTest "at the LF itself" "ab\ncd" 2 "0:2",
+    positionTest "after CR LF counts one line break" "ab\r\ncd" 4 "1:0",
+    positionTest "between CR and LF" "ab\r\ncd" 3 "0:3",
+    positionTest "lone CR is a line break" "ab\rcd" 3 "1:0",
+    positionTest "blank lines" "a\n\n\nb" 4 "3:0",
+    positionTest "BMP non-ASCII is one UTF-16 unit" "\233a" 2 "0:2",
+    positionTest "astral codepoint is two UTF-16 units" "\128512a" 2 "0:3",
+    positionTest "astral codepoint then next line" "\128512\na" 2 "1:0",
+    positionTest "offset beyond end is clamped" "ab" 10 "0:2",
+    positionTest "empty text" "" 0 "0:0"])
