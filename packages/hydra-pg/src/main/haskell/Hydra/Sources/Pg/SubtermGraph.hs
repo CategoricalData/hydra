@@ -245,7 +245,7 @@ encodeTermNode = define "encodeTermNode" $
           ("targetId" ~> lets [
             "edge">: record PG._Edge [
               PG._Edge_label>>: wrap PG._EdgeLabel (var "edgeKey"),
-              PG._Edge_id>>: Core.termLiteral $ Core.literalString (var "edgeKey"),
+              PG._Edge_id>>: Core.termLiteral $ Core.literalString (Strings.concat (list [Core.unName $ var "root", string "#", var "edgeKey"])),
               PG._Edge_out>>: termNodeIdTerm @@ var "nid",
               PG._Edge_in>>: termNodeIdTerm @@ var "targetId",
               PG._Edge_properties>>: (Maps.empty :: TypedTerm (M.Map PG.PropertyKey Term))]]

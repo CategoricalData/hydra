@@ -99,6 +99,27 @@ referenceGraph = Graph.graph
     Maps.empty
     Sets.empty
 
+-- | A typed graph with `x = 42` and two roots that each hold a reference to it at the same path:
+--   `y = [x]` and `z = [x]`. Guards edge-id uniqueness across roots.
+twoReferrerGraph :: TypedTerm Graph
+twoReferrerGraph = Graph.graph
+    (Maps.fromList (list [
+      pair (nm "x") (int32Term 42),
+      pair (nm "y") (Core.termList $ list [Core.termVariable $ nm "x"]),
+      pair (nm "z") (Core.termList $ list [Core.termVariable $ nm "x"])]))
+    (Maps.fromList (list [
+      pair (nm "x") intScheme,
+      pair (nm "y") listScheme,
+      pair (nm "z") listScheme]))
+    Maps.empty
+    Sets.empty
+    Maps.empty
+    Maps.empty
+    Maps.empty
+    Sets.empty
+  where
+    listScheme = Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeList $ Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt32) Maps.empty
+
 -- | Build the term graph for a fixture, assuming the build succeeds (a precondition failure here is
 --   a fixture bug, not something under test).
 termGraphOf :: TypedTerm Graph -> TypedTerm TermGraph
@@ -139,7 +160,10 @@ endToEndGroup = subgroup "end-to-end (graphToTermGraph -> encodeTermGraph)" [
       (Literals.printInt32 $ int32 2),
     universalCase "reference graph: one edge (y references x)"
       (Literals.printInt32 $ edgeCount referenceGraph)
-      (Literals.printInt32 $ int32 1)]
+      (Literals.printInt32 $ int32 1),
+    universalCase "two roots referencing x at the same path: two distinct edges"
+      (Literals.printInt32 $ edgeCount twoReferrerGraph)
+      (Literals.printInt32 $ int32 2)]
   where
     pgOf g = SubtermGraphEncoder.encodeTermGraph @@ (termGraphOf g)
     vertexCount g = Lists.length (Maps.elems ((project PG._Graph PG._Graph_vertices @@ pgOf g) :: TypedTerm (M.Map Term (PG.Vertex Term))))
