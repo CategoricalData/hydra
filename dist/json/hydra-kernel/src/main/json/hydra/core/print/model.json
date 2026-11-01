@@ -1361,6 +1361,7 @@
                             {"literal": {"string": "boolean"}},
                             {"literal": {"string": "cases"}},
                             {"literal": {"string": "decimal"}},
+                            {"literal": {"string": "do"}},
                             {"literal": {"string": "effect"}},
                             {"literal": {"string": "either"}},
                             {"literal": {"string": "false"}},
