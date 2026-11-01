@@ -33,6 +33,16 @@ Consequences:
   The "outermost wins" aggregate view of annotation maps is a reader-side convention
   with no syntactic footprint.
 - Binary literals carry their full payload (base64; see §2.6).
+- **[HYDRA-SYN-SOURCE-SPANS]** Source spans are surface trivia, like comments: they are exempt from the
+  round-trip contract. `parseTermWithSpans` wraps each parsed term node in a span-only annotation layer
+  (reserved key `sourceSpan`, value a pair of `int32` codepoint offsets `(start, end)`, half-open) recording the
+  text it was parsed from; the span excludes surrounding whitespace and comments. `parseTerm` returns the
+  same term with these layers removed (`hydra.core.positions.stripSpans`), so `parse . print = id` is
+  unaffected. A `SubtermPath` computed on the span-free term resolves against the span-annotated one
+  (`hydra.core.positions.spanAtPath`), skipping span layers; if the node itself has no span, the nearest
+  enclosing node's span is returned. `hydra.core.positions.offsetToPosition` converts an offset to a
+  zero-based line and a UTF-16 column (Language Server Protocol convention; lines end at LF, CR, or CR LF).
+  Spans cover terms only; type nodes and module-level parsing do not yet record spans.
 
 ## 2. Lexical structure
 
