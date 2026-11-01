@@ -815,7 +815,12 @@ encodeTerm = def "encodeTerm" $
          (lambda "e" $ var "e"),
      _Term_unit>>: constant $ tsUndefined,
      _Term_list>>: lambda "els" $
-       tsArray @@ Lists.map (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs") (var "els"),
+       -- An empty list emits as `[] as any`: a bare `[]` bound by `const` infers as an implicit
+       -- `any[]` and fails strict tsc (TS7034/TS7005), and the element type is not known here.
+       -- The cast follows the pair precedent below.
+       Logic.ifElse (Lists.isEmpty (var "els"))
+         (tsAsAny @@ (tsArray @@ list ([] :: [TypedTerm TS.Expression])))
+         (tsArray @@ Lists.map (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs") (var "els")),
      _Term_set>>: lambda "s" $
        -- new Set([e1, e2, ...])
        tsNew @@ (tsExprIdent @@ string "Set") @@ list [
