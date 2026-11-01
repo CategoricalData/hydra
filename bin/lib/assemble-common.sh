@@ -488,10 +488,10 @@ run_layer1_transform() {
 # Print the package list emitted by a Layer 2 batch assembler — i.e.
 # the set of packages that `bootstrap-from-json --all-packages
 # --include-coders` produces output for, regardless of target language.
-# This is the union of:
-#   - the two baseline packages (hydra-kernel, hydra-haskell), always loaded
-#   - the five coder packages (hydra-java, hydra-python, hydra-scala,
-#     hydra-lisp, hydra-typescript), loaded by --include-coders
+# This is PUBLISHED_HOSTS (bin/lib/hydra-packages.py) — the packages that have
+# a published host artifact and participate in the #370 consume-vs-local gate:
+# hydra-kernel, hydra-haskell, hydra-java, hydra-jvm, hydra-python,
+# hydra-scala, hydra-lisp, hydra-typescript.
 #
 # It does NOT include the ext / ext-demo packages (hydra-pg, hydra-rdf,
 # hydra-coq, hydra-wasm, hydra-ext) — those are auto-loaded only when
@@ -507,5 +507,5 @@ run_layer1_transform() {
 #
 # Usage: batch_emit_packages
 batch_emit_packages() {
-    echo "hydra-kernel hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hydra-typescript"
+    "$HYDRA_ROOT_DIR/bin/lib/hydra-packages.py" published-hosts
 }

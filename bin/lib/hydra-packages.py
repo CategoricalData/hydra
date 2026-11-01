@@ -32,6 +32,13 @@ Subcommands:
                                 targetLanguages (see supports-target). Fails
                                 loudly (nonzero exit, no output) if the result
                                 is empty, since an empty publish set is a bug.
+  published-hosts               Print PUBLISHED_HOSTS, space-separated: the
+                                packages that have a published host artifact
+                                and participate in the #370 consume-vs-local
+                                gate (see host-version). Distinct from
+                                publish-set — this answers "does this host have
+                                a published artifact at all," not "which
+                                registries publish package P."
 
 Version accessors (single source of truth is hydra.json; the standalone VERSION
 file has been retired):
@@ -357,6 +364,14 @@ def cmd_publish_set(root: Path, args: list[str]) -> int:
     return cmd_topo(root, candidates)
 
 
+def cmd_published_hosts(root: Path, args: list[str]) -> int:
+    if args:
+        print("Usage: hydra-packages.py published-hosts", file=sys.stderr)
+        return 2
+    print(" ".join(sorted(PUBLISHED_HOSTS)))
+    return 0
+
+
 _VERSION_RE = None
 
 
@@ -491,6 +506,7 @@ COMMANDS = {
     "supports-target": cmd_supports_target,
     "source-language": cmd_source_language,
     "publish-set": cmd_publish_set,
+    "published-hosts": cmd_published_hosts,
     "current-version": cmd_current_version,
     "set-current-version": cmd_set_current_version,
     "host-version": cmd_host_version,
