@@ -101,14 +101,16 @@ Term person = Terms.record(new Name("Person"),
 Wraps raw `Term` construction in a `TypedTerm<A>` whose phantom parameter `A` *names the intended*
 Hydra type at the Java level.
 
-> **On the phantom `A`:** it is documentation of intent, not a load-bearing type check. The DSL is a
-> meta-program that manipulates `Term` as data, so most builders are `<A> TypedTerm<A>` with `A`
-> unconstrained (it surfaces as `<?>`/`Object` at nearly every call site — see the many `TypedTerm<?>`
-> signatures in `Phantoms`). It gives near-zero compile-time safety today; treat it as a readable
-> annotation and **do not** write code that depends on `A` being accurate. This is a deliberate stance
-> (a usability review considered both making `A` real end-to-end and dropping it, and chose to leave the
-> signatures as-is): the meta-program never needs it, and threading real Hydra types through `A` would be
-> a large change for no functional gain.
+> **On the phantom `A`:** since #731, it *is* load-bearing for composition — `apply`/`project`/`proj`/
+> `match`/`matchWithDefault`/`cases`/`casesWithDefault` thread the phantom's arrow structure (mirroring
+> the Haskell DSL), so the compiler rejects ill-typed application, domain mismatches, and the `cases`
+> (function phantom) vs. `match` (value phantom) confusion that #615 introduced the split to prevent.
+> Most other builders — `record`, `inject`, `wrap`, `unwrap`, literals, and the many internal
+> `TypedTerm<?>` plumbing methods — still leave `A` unconstrained; it is documentation of intent there,
+> not a type check (field-level fidelity is the separate #467 record-field-authoring concern, out of
+> scope for #731). Call sites built from untyped `var("name")`/`ref(Def)` references still infer freely
+> and are unaffected; the new checking only engages where a producer (`project`, `cases`) already
+> declares a concrete phantom.
 
 ```java
 import static hydra.core.overlay.java.dsl.Phantoms.*;
@@ -400,6 +402,16 @@ TypedTerm<Object> result = match(Term.TYPE_, var("myTerm"),
     field(Term.VARIABLE,
         lambda("v", var("v"))));
 ```
+
+**Conformance (#731, #615):** `cases`/`casesWithDefault` return a *function* phantom
+(`TypedTerm<Function<A, B>>`, an unapplied eliminator); `match`/`matchWithDefault` return a *value*
+phantom (`TypedTerm<B>`, the eliminator already applied to `arg`). These are now distinct types —
+assigning a `cases` result where a `match` result (or vice versa) is expected is a compile error,
+not a runtime or inference-time surprise. `apply` and `project`/`proj` are threaded the same way
+(`apply(TypedTerm<? extends Function<A,B>>, TypedTerm<A>) -> TypedTerm<B>`), so applying a
+non-function or passing an argument of the wrong domain is also a compile error — but only once a
+producer (`project`, `cases`) has already given the term a concrete function-shaped phantom; terms
+built from untyped `var("name")`/`ref(Def)` references still infer freely, as before.
 
 ### Let bindings
 
