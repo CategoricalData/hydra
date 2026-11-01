@@ -55,6 +55,7 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Parsers as P
+import qualified Hydra.Sources.Kernel.Terms.Positions as Positions
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 
 
@@ -80,7 +81,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([P.ns, PrintCore.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([P.ns, Positions.ns, PrintCore.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just
               "Parsers for hydra.core.model types, per docs/specification/syntax.md. The counterpart to hydra.core.print.model.")}
   where
@@ -121,6 +122,7 @@ module_ = Module {
      toDefinition optionalTerm,
      toDefinition parseTerm,
      toDefinition parseTermSignature,
+     toDefinition parseTermWithSpans,
      toDefinition parseType,
      toDefinition parseTypeScheme,
      toDefinition postfixTerm,
@@ -172,8 +174,11 @@ whitespace = define "whitespace" $
 -- would collide with this module's own atomic-term-vs-keyword terminology).
 lexeme :: TypedTermDefinition (Parser a -> Parser a)
 lexeme = define "lexeme" $
-  doc "Parse a token followed by optional trailing whitespace/comments" $
-  "p" ~> P.bind @@ var "p" @@ ("x" ~> P.bind @@ whitespace @@ (constant $ P.pure @@ var "x"))
+  doc ("Parse a token followed by optional trailing whitespace/comments, recording where the token itself ended"
+    <> " so that source spans exclude the trailing trivia") $
+  "p" ~> P.bind @@ var "p" @@ ("x" ~>
+    P.bind @@ P.markTokenEnd @@ (constant $
+      P.bind @@ whitespace @@ (constant $ P.pure @@ var "x")))
 
 -- | Parse a specific keyword as a lexeme.
 termKeyword :: TypedTermDefinition (String -> Parser String)
@@ -996,9 +1001,11 @@ atomicTerm = define "atomicTerm" $
 postfixTerm :: TypedTermDefinition (Parser Term)
 postfixTerm = define "postfixTerm" $
   doc "Parse an atomic term followed by zero or more postfix '@annotation'/'⟨type⟩' suffixes, left-chaining" $
-  P.bind @@ (asTerm atomicTerm) @@ ("t0" ~>
-    P.map @@ ("sufs" ~> Lists.foldl (asTerm applySuffix) (var "t0") (var "sufs")) @@
-      (P.many @@ (P.alt @@ (P.map @@ (asTerm left_) @@ (asTerm annotSuffix)) @@ (P.map @@ (asTerm right_) @@ (asTerm typeApplicationSuffix)))))
+  P.map @@ ("spanned" ~> Positions.annotateSpan @@ (Pairs.second $ var "spanned") @@ (Pairs.first $ var "spanned")) @@
+    (P.spanned @@
+      (P.bind @@ (asTerm atomicTerm) @@ ("t0" ~>
+        P.map @@ ("sufs" ~> Lists.foldl (asTerm applySuffix) (var "t0") (var "sufs")) @@
+          (P.many @@ (P.alt @@ (P.map @@ (asTerm left_) @@ (asTerm annotSuffix)) @@ (P.map @@ (asTerm right_) @@ (asTerm typeApplicationSuffix)))))))
   where
     applySuffix = "t" ~> "suf" ~> Eithers.either
       ("ann" ~> Core.termAnnotated (Core.annotatedTerm (var "t") (var "ann")))
@@ -1024,7 +1031,8 @@ applicationLevel =
     P.map @@ ("rest" ~> Lists.foldl (asTerm applyLeft) (var "t0") (var "rest")) @@
       (P.many @@ (asTerm postfixTerm)))
   where
-    applyLeft = "f" ~> "a" ~> Core.termApplication (Core.application (var "f") (var "a"))
+    applyLeft = "f" ~> "a" ~>
+      Positions.annotateApplicationSpan @@ var "f" @@ var "a" @@ Core.termApplication (Core.application (var "f") (var "a"))
 
 -- | Parse a term (the full grammar, top-level entry point): the application level.
 -- NOTE: this entry point does not itself implement the '@'/'⟨⟩' postfix loop or the right-hand
@@ -1036,6 +1044,21 @@ term = define "term" $
   doc "Parse a full term: application of postfix-level terms" $
   applicationLevel
 
+-- | Like 'parseTerm', but keeps the source spans: every parsed node is wrapped in a span-only annotation layer
+-- (see hydra.core.positions) recording the codepoint range [start, end) it was parsed from.
+parseTermWithSpans :: TypedTermDefinition (String -> Either String Term)
+parseTermWithSpans = define "parseTermWithSpans" $
+  doc ("Parse a complete term from a string, keeping source spans as reserved annotations. Use"
+    <> " hydra.core.positions.spanAtPath to resolve a SubtermPath to a span, and"
+    <> " hydra.core.positions.stripSpans to recover the span-free term.") $
+  "input" ~>
+  match _ParseResult (P.runParser @@ (P.bind @@ whitespace @@ (constant $ asTerm term)) @@ var "input") Nothing [
+    _ParseResult_success>>: "s" ~>
+      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ Parsing.parseSuccessRemainder $ var "s"))
+        (right (Parsing.parseSuccessValue (var "s")))
+        (left (string "trailing input after term")),
+    _ParseResult_failure>>: "e" ~> left (Parsing.parseErrorMessage (var "e"))]
+
 -- | Run the term parser on a full input string, requiring all input to be consumed (after
 -- trailing whitespace/comments). Returns the parse error message on failure or trailing input.
 parseTerm :: TypedTermDefinition (String -> Either String Term)
@@ -1044,8 +1067,8 @@ parseTerm = define "parseTerm" $
   "input" ~>
   match _ParseResult (P.runParser @@ (P.bind @@ whitespace @@ (constant $ asTerm term)) @@ var "input") Nothing [
     _ParseResult_success>>: "s" ~>
-      Logic.ifElse (Lists.isEmpty (Parsing.parseSuccessRemainder $ var "s"))
-        (right (Parsing.parseSuccessValue (var "s")))
+      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ Parsing.parseSuccessRemainder $ var "s"))
+        (right (Positions.stripSpans @@ (Parsing.parseSuccessValue $ var "s")))
         (left (string "trailing input after term")),
     _ParseResult_failure>>: "e" ~> left (Parsing.parseErrorMessage (var "e"))]
 
@@ -1240,7 +1263,7 @@ parseType = define "parseType" $
   "input" ~>
   match _ParseResult (P.runParser @@ (P.bind @@ whitespace @@ (constant $ asTerm type_)) @@ var "input") Nothing [
     _ParseResult_success>>: "s" ~>
-      Logic.ifElse (Lists.isEmpty (Parsing.parseSuccessRemainder $ var "s"))
+      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ Parsing.parseSuccessRemainder $ var "s"))
         (right (Parsing.parseSuccessValue (var "s")))
         (left (string "trailing input after type")),
     _ParseResult_failure>>: "e" ~> left (Parsing.parseErrorMessage (var "e"))]
@@ -1404,7 +1427,7 @@ parseTermSignature = define "parseTermSignature" $
   "input" ~>
   match _ParseResult (P.runParser @@ (P.bind @@ whitespace @@ (constant $ asTerm termSignature)) @@ var "input") Nothing [
     _ParseResult_success>>: "s" ~>
-      Logic.ifElse (Lists.isEmpty (Parsing.parseSuccessRemainder $ var "s"))
+      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ Parsing.parseSuccessRemainder $ var "s"))
         (right (Parsing.parseSuccessValue (var "s")))
         (left (string "trailing input after term signature")),
     _ParseResult_failure>>: "e" ~> left (Parsing.parseErrorMessage (var "e"))]
@@ -1416,7 +1439,7 @@ parseTypeScheme = define "parseTypeScheme" $
   "input" ~>
   match _ParseResult (P.runParser @@ (P.bind @@ whitespace @@ (constant $ asTerm typeScheme)) @@ var "input") Nothing [
     _ParseResult_success>>: "s" ~>
-      Logic.ifElse (Lists.isEmpty (Parsing.parseSuccessRemainder $ var "s"))
+      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ Parsing.parseSuccessRemainder $ var "s"))
         (right (Parsing.parseSuccessValue (var "s")))
         (left (string "trailing input after type scheme")),
     _ParseResult_failure>>: "e" ~> left (Parsing.parseErrorMessage (var "e"))]

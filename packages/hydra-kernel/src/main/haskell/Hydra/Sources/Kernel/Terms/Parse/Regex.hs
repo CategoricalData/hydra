@@ -344,7 +344,7 @@ parseRegex = define "parseRegex" $
     -- parse consumed ALL input (no trailing garbage).
     match _ParseResult (Parsers.runParser @@ (asTerm regex) @@ var "input") Nothing [
       _ParseResult_success>>: "s" ~>
-        Logic.ifElse (Lists.isEmpty (Parsing.parseSuccessRemainder $ var "s"))
+        Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ Parsing.parseSuccessRemainder $ var "s"))
           (just (Parsing.parseSuccessValue (var "s")))
           nothing,
       _ParseResult_failure>>: "e" ~> nothing]

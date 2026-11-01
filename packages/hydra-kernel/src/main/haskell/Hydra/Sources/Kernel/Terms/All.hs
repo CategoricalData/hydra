@@ -49,6 +49,7 @@ import qualified Hydra.Sources.Kernel.Lib.System            as LibSystem
 import qualified Hydra.Sources.Kernel.Lib.Text              as LibText
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
 import qualified Hydra.Sources.Kernel.Terms.Parsers         as Parsers
+import qualified Hydra.Sources.Kernel.Terms.Positions       as Positions
 import qualified Hydra.Sources.Kernel.Terms.Predicates     as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Reduction       as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect         as Reflect
@@ -140,6 +141,7 @@ kernelPrimaryTermsModules = [
 
   Names.module_,
   Parsers.module_,
+  Positions.module_,
   Predicates.module_,
   Reduction.module_,
   Reflect.module_,

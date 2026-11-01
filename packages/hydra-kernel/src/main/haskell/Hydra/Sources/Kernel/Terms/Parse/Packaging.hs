@@ -57,6 +57,7 @@ import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Parse.Core as ParseCore
 import qualified Hydra.Sources.Kernel.Terms.Parse.Docs as ParseDocs
 import qualified Hydra.Sources.Kernel.Terms.Parsers as P
+import qualified Hydra.Sources.Kernel.Terms.Positions as Positions
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 
@@ -91,7 +92,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, ParseCore.ns, ParseDocs.ns, P.ns, Rewriting.ns, Strip.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, ParseCore.ns, ParseDocs.ns, P.ns, Positions.ns, Rewriting.ns, Strip.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Parsers for hydra.core.packaging types")}
   where
    definitions = [
@@ -750,7 +751,7 @@ termDefinitionParser = define "termDefinitionParser" $
           P.bind @@ (keyword @@ string "=") @@ (constant $
             P.map @@ ("t" ~> Packaging.definitionTerm
                 (Packaging.termDefinition (qualifyLocalName @@ var "modName" @@ var "local") (var "mmeta") (var "msig") (var "t"))) @@
-              (token @@ (asTerm ParseCore.term)))))))
+              (token @@ (P.map @@ Positions.stripSpans @@ (asTerm ParseCore.term))))))))
   where
     ascribedSignature =
       P.bind @@ (keyword @@ string ":") @@ (constant $ asTerm ParseCore.termSignature)
@@ -774,7 +775,7 @@ primitiveDefinitionParser = define "primitiveDefinitionParser" $
                     (var "sig") (var "isPure") (var "isTotal") (var "mimpl"))) @@
                 (P.optional @@ defaultImpl)))))))
   where
-    defaultImpl = P.bind @@ (keyword @@ string "=") @@ (constant $ token @@ (asTerm ParseCore.term))
+    defaultImpl = P.bind @@ (keyword @@ string "=") @@ (constant $ token @@ (P.map @@ Positions.stripSpans @@ (asTerm ParseCore.term)))
 
 -- | Parse a definition: a type, term, or primitive definition, dispatching on the leading
 -- keyword (the primitive-modifier keywords 'impure'/'partial' also mark a primitive definition,
@@ -854,7 +855,7 @@ parseModule = define "parseModule" $
   "input" ~>
   match _ParseResult (P.runParser @@ (P.bind @@ whitespace @@ (constant $ asTerm moduleParser)) @@ var "input") Nothing [
     _ParseResult_success>>: "s" ~>
-      Logic.ifElse (Lists.isEmpty (Parsing.parseSuccessRemainder $ var "s"))
+      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ Parsing.parseSuccessRemainder $ var "s"))
         (right (Parsing.parseSuccessValue (var "s")))
         (left (string "trailing input after module")),
     _ParseResult_failure>>: "e" ~> left (Parsing.parseErrorMessage (var "e"))]

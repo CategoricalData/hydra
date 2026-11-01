@@ -150,7 +150,7 @@ parserFailureCase name input = universalCase name
 parserCaseWithTags :: String -> [Tag] -> String -> TypedTerm Value -> TypedTerm TestCaseWithMetadata
 parserCaseWithTags name tags input expectedValue = universalCaseWithTags name tags
   (showParseResult (Parsers.runParser @@ JsonParser.jsonValue @@ Phantoms.string input))
-  (showParseResult (Parsing.parseResultSuccess $ Parsing.parseSuccess expectedValue (Phantoms.list ([] :: [TypedTerm Int]))))
+  (showParseResult (Parsing.parseResultSuccess $ Parsing.parseSuccess expectedValue emptyInput))
 
 primitivesGroup :: TypedTerm TestGroup
 primitivesGroup = subgroup "primitives" [
@@ -187,7 +187,11 @@ writerRoundtripGroup = subgroup "writer round-trip" [
       (showParseResult (Parsers.runParser @@ JsonParser.jsonValue @@
         (JsonWriter.printJson @@ Json.valueString (Phantoms.string allC0ControlChars))))
       (showParseResult (Parsing.parseResultSuccess $ Parsing.parseSuccess
-        (Json.valueString (Phantoms.string allC0ControlChars)) (Phantoms.list ([] :: [TypedTerm Int]))))]
+        (Json.valueString (Phantoms.string allC0ControlChars)) emptyInput))]
+
+-- The state after all input is consumed (only the remaining codepoints are compared; see showParseResult)
+emptyInput :: TypedTerm ParseInput
+emptyInput = Parsing.parseInput (Phantoms.int32 0) (Phantoms.int32 0) (Phantoms.list ([] :: [TypedTerm Int]))
 
 -- Show a ParseResult Value as a string for universal test comparison.
 -- Uses Phantoms.match to pattern-match the ParseResult union.
@@ -198,7 +202,7 @@ showParseResult pr = Phantoms.match _ParseResult pr Nothing [
       (Strings.concat2
         (JsonWriter.printJson @@ Parsing.parseSuccessValue (Phantoms.var "ps"))
         (Strings.concat2 (Phantoms.string ", ")
-          (Strings.concat2 (Strings.fromList (Parsing.parseSuccessRemainder (Phantoms.var "ps"))) (Phantoms.string ")"))))),
+          (Strings.concat2 (Strings.fromList (Parsing.parseInputCodepoints (Parsing.parseSuccessRemainder (Phantoms.var "ps")))) (Phantoms.string ")"))))),
     _ParseResult_failure Phantoms.>>: Phantoms.lambda "pe" (Strings.concat2
       (Phantoms.string "failure(")
       (Strings.concat2 (Phantoms.string "parse error") (Phantoms.string ")")))]

@@ -20,6 +20,7 @@ import qualified Hydra.Core.Dsl.Lib.Literals as Literals
 import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
 import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
 import qualified Hydra.Core.Dsl.Lib.Math     as Math
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
 import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
 import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
@@ -75,6 +76,7 @@ module_ = Module {
      toDefinition many,
      toDefinition manyLoop,
      toDefinition map,
+     toDefinition markTokenEnd,
      toDefinition optional,
      toDefinition pure,
      toDefinition runParser,
@@ -82,6 +84,7 @@ module_ = Module {
      toDefinition sepBy,
      toDefinition sepBy1,
      toDefinition some,
+     toDefinition spanned,
      toDefinition string_,
      toDefinition try]
 
@@ -98,7 +101,9 @@ alt = define "alt" $
       Parsing.parseResultSuccess (var "s"),
     _ParseResult_failure>>: "e" ~>
       -- Only try alternative if no input was consumed
-      Logic.ifElse (Equality.equal (Parsing.parseErrorRemainder $ var "e") (var "input"))
+      Logic.ifElse (Equality.equal
+          (Parsing.parseInputOffset $ Parsing.parseErrorRemainder $ var "e")
+          (Parsing.parseInputOffset $ var "input"))
         (unwrap _Parser @@ (var "p2") @@ (var "input"))
         (Parsing.parseResultFailure (var "e"))]) $
   Parsing.parser (var "parse")
@@ -170,7 +175,7 @@ eof :: TypedTermDefinition (Parser ())
 eof = define "eof" $
   doc "A parser that succeeds only at the end of input" $
   Parsing.parser ("input" ~>
-    Logic.ifElse (Lists.isEmpty $ var "input")
+    Logic.ifElse (Lists.isEmpty $ Parsing.parseInputCodepoints $ var "input")
       (Parsing.parseResultSuccess (Parsing.parseSuccess unit (var "input")))
       (Parsing.parseResultFailure (Parsing.parseError (string "expected end of input") (var "input"))))
 
@@ -203,7 +208,7 @@ many = define "many" $
 -- | Tail-recursive accumulation loop for 'many'. Repeatedly applies p to the input,
 --   consuming one element per self-call in constant stack space, until p fails
 --   without consuming input.
-manyLoop :: TypedTermDefinition (Parser a -> [Int] -> [a] -> ParseResult [a])
+manyLoop :: TypedTermDefinition (Parser a -> ParseInput -> [a] -> ParseResult [a])
 manyLoop = define "manyLoop" $
   doc "Repeatedly apply a parser, accumulating results, until it fails" $
   "p" ~> "input" ~> "acc" ~>
@@ -228,6 +233,18 @@ map = define "map" $
       Parsing.parseResultFailure (var "e")]) $
   Parsing.parser (var "parse")
 
+-- | Record the end of the token just completed
+markTokenEnd :: TypedTermDefinition (Parser ())
+markTokenEnd = define "markTokenEnd" $
+  doc ("Record that a token has just been completed, so that a surrounding 'spanned' parser can end its span"
+    <> " here rather than after any trailing whitespace or comments. Consumes no input.") $
+  Parsing.parser ("input" ~>
+    Parsing.parseResultSuccess (Parsing.parseSuccess unit
+      (Parsing.parseInput
+        (Parsing.parseInputOffset $ var "input")
+        (Parsing.parseInputOffset $ var "input")
+        (Parsing.parseInputCodepoints $ var "input"))))
+
 -- | Optionally parse something
 optional :: TypedTermDefinition (Parser a -> Parser (Maybe a))
 optional = define "optional" $
@@ -251,7 +268,7 @@ runParser = define "runParser" $
   doc ("Run a parser on the given input string. The string is converted to a codepoint list"
     <> " once, up front, so that the parser itself can consume characters in constant time.") $
   "p" ~> "input" ~>
-    unwrap _Parser @@ (var "p") @@ (Strings.toList $ var "input")
+    unwrap _Parser @@ (var "p") @@ (Parsing.parseInput (int32 0) (int32 0) (Strings.toList $ var "input"))
 
 -- | Parse a character that satisfies a predicate (characters represented as codepoints)
 satisfy :: TypedTermDefinition ((Int -> Bool) -> Parser Int)
@@ -259,11 +276,15 @@ satisfy = define "satisfy" $
   doc "Parse a character (codepoint) that satisfies the given predicate" $
   "pred" ~>
   "parse" <~ ("input" ~>
-    Optionals.match (Lists.uncons $ var "input") (Parsing.parseResultFailure (Parsing.parseError (string "unexpected end of input") (var "input"))) ("uc" ~>
+    Optionals.match (Lists.uncons $ Parsing.parseInputCodepoints $ var "input") (Parsing.parseResultFailure (Parsing.parseError (string "unexpected end of input") (var "input"))) ("uc" ~>
        "c" <~ Pairs.first (var "uc") $
        "rest" <~ Pairs.second (var "uc") $
        Logic.ifElse (var "pred" @@ var "c")
-         (Parsing.parseResultSuccess (Parsing.parseSuccess (var "c") (var "rest")))
+         (Parsing.parseResultSuccess (Parsing.parseSuccess (var "c")
+           (Parsing.parseInput
+             (Math.add (Parsing.parseInputOffset $ var "input") (int32 1))
+             (Parsing.parseInputTokenEnd $ var "input")
+             (var "rest"))))
          (Parsing.parseResultFailure (Parsing.parseError (string "character did not satisfy predicate") (var "input"))))) $
   Parsing.parser (var "parse")
 
@@ -292,6 +313,24 @@ some = define "some" $
       bind @@ (many @@ var "p") @@ ("xs" ~>
         pure @@ (Lists.cons (var "x") (var "xs"))))
 
+-- | Run a parser and also report the source span it consumed
+spanned :: TypedTermDefinition (Parser a -> Parser (a, SourceSpan))
+spanned = define "spanned" $
+  doc ("Run a parser and pair its result with the source span it consumed. The span starts at the first"
+    <> " codepoint the parser consumed and ends at the end of the last token it completed (see markTokenEnd),"
+    <> " so trailing whitespace and comments are excluded.") $
+  "p" ~>
+  "parse" <~ ("input" ~> match _ParseResult (unwrap _Parser @@ (var "p") @@ (var "input")) Nothing [
+    _ParseResult_success>>: "s" ~>
+      "start" <~ Parsing.parseInputOffset (var "input") $
+      "end" <~ Ordering.max (var "start") (Parsing.parseInputTokenEnd $ Parsing.parseSuccessRemainder $ var "s") $
+      Parsing.parseResultSuccess (Parsing.parseSuccess
+        (pair (Parsing.parseSuccessValue $ var "s") (Parsing.sourceSpan (var "start") (var "end")))
+        (Parsing.parseSuccessRemainder $ var "s")),
+    _ParseResult_failure>>: "e" ~>
+      Parsing.parseResultFailure (var "e")]) $
+  Parsing.parser (var "parse")
+
 -- | Parse a specific string
 string_ :: TypedTermDefinition (String -> Parser String)
 string_ = define "string" $
@@ -300,11 +339,14 @@ string_ = define "string" $
     "strCodes" <~ Strings.toList (var "str") $
     "strLen" <~ Lists.length (var "strCodes") $
     Parsing.parser ("input" ~>
-      "inputPrefix" <~ Lists.take (var "strLen") (var "input") $
+      "inputPrefix" <~ Lists.take (var "strLen") (Parsing.parseInputCodepoints $ var "input") $
       Logic.ifElse (Equality.equal (var "strCodes") (var "inputPrefix"))
         (Parsing.parseResultSuccess (Parsing.parseSuccess
           (var "str")
-          (Lists.drop (var "strLen") (var "input"))))
+          (Parsing.parseInput
+            (Math.add (Parsing.parseInputOffset $ var "input") (var "strLen"))
+            (Parsing.parseInputTokenEnd $ var "input")
+            (Lists.drop (var "strLen") (Parsing.parseInputCodepoints $ var "input")))))
         (Parsing.parseResultFailure (Parsing.parseError
           (string "expected: " ++ var "str")
           (var "input"))))
