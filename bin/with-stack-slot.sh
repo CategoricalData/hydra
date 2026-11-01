@@ -22,6 +22,24 @@
 #   bin/with-stack-slot.sh --priority [...] -- <command> [args...]  # go ahead of ordinary waiters
 #   bin/with-stack-slot.sh --boost <worktree>            # coordinator: promote that worktree's waiter
 #   bin/with-stack-slot.sh --unboost <worktree>          # coordinator: withdraw a boost
+#   bin/with-stack-slot.sh --assign <worktree> A|B       # coordinator: pin a worktree to a build lane
+#   bin/with-stack-slot.sh --lanes                       # show lane assignments, holders, free memory
+#
+# BUILD LANES
+#   There are two slots ("lanes"), so two Haskell builds can run at once. Lane A
+#   is the original slot on the shared ~/.stack. Lane B uses its own STACK_ROOT
+#   (~/.stack-laneB; programs/ is a symlink to ~/.stack/programs, so GHC itself is
+#   shared read-only), so the two lanes never write the same package database --
+#   the race this wrapper exists to prevent (#730). Each worktree is pinned to one
+#   lane (default A; see --assign) because its heads/haskell/.stack-work is built
+#   against that lane's snapshot database: moving a worktree to the other lane
+#   costs one full rebuild. Lane B is the yielding lane: it needs more free memory
+#   to start (HYDRA_STACK_SLOT_MEM_B, default 9216 MB, vs 6144 MB for lane A), and
+#   while it runs a guard pauses its build (SIGSTOP) when available memory drops
+#   below HYDRA_STACK_SLOT_PAUSE_MB (2560), resumes it above
+#   HYDRA_STACK_SLOT_RESUME_MB (5120), and kills it if memory falls below
+#   HYDRA_STACK_SLOT_KILL_MB (1024) while paused -- a failed build is better than a
+#   livelocked machine.
 #
 # EXAMPLES
 #   bin/with-stack-slot.sh --label "staging /sync" -- bin/sync.sh --hosts all --targets all
@@ -41,6 +59,9 @@
 #   HYDRA_STACK_SLOT_STALE  stale-holder age (s) (default: 21600 = 6h; 0 disables)
 #   HYDRA_STACK_SLOT_BYPASS =1 skips the lock entirely (escape hatch; logs a warning)
 #   HYDRA_STACK_SLOT_PRIORITY =1 is the same as --priority
+#   HYDRA_STACK_SLOT_LOCK_B lane B lockfile     (default: ~/.hydra-stack-slot-b.lock)
+#   HYDRA_STACK_ROOT_B      lane B STACK_ROOT   (default: ~/.stack-laneB)
+#   HYDRA_STACK_LANES       lane assignments    (default: ~/.hydra-stack-lanes; "<worktree> B" lines)
 #   HYDRA_STACK_SLOT_HELD   set by this wrapper for its child tree; presence => reentrant
 #                           pass-through (do not set by hand).
 #
@@ -57,12 +78,27 @@
 set -euo pipefail
 
 LOCKFILE="${HYDRA_STACK_SLOT_LOCK:-$HOME/.hydra-stack-slot.lock}"
+LOCKFILE_A="$HOME/.hydra-stack-slot.lock"
+LOCKFILE_B="${HYDRA_STACK_SLOT_LOCK_B:-$HOME/.hydra-stack-slot-b.lock}"
+STACK_ROOT_B="${HYDRA_STACK_ROOT_B:-$HOME/.stack-laneB}"
+LANES_FILE="${HYDRA_STACK_LANES:-$HOME/.hydra-stack-lanes}"
+LOCK_OVERRIDE=0
+[ -n "${HYDRA_STACK_SLOT_LOCK:-}" ] && LOCK_OVERRIDE=1
 WAIT="${HYDRA_STACK_SLOT_WAIT:-0}"        # 0 => block until acquired
 STALE="${HYDRA_STACK_SLOT_STALE:-21600}"  # 6h; 0 disables stale recovery
 LABEL=""
 PRIORITY="${HYDRA_STACK_SLOT_PRIORITY:-0}"
 BOOST=""
 UNBOOST=""
+ASSIGN_WT=""
+ASSIGN_LANE=""
+SHOW_LANES=0
+
+# lane_of <worktree>: prints A or B.
+lane_of() {
+  if [ -r "$LANES_FILE" ] && grep -qx "${1} B" "$LANES_FILE"; then echo B; else echo A; fi
+}
+lockfile_of_lane() { if [ "$1" = B ]; then echo "$LOCKFILE_B"; else echo "$LOCKFILE_A"; fi; }
 
 # ---- arg parsing ----------------------------------------------------------
 while [ $# -gt 0 ]; do
@@ -74,8 +110,10 @@ while [ $# -gt 0 ]; do
     --priority) PRIORITY=1; shift ;;
     --boost)   BOOST="${2:?--boost needs a worktree name}"; shift 2 ;;
     --unboost) UNBOOST="${2:?--unboost needs a worktree name}"; shift 2 ;;
-    --lockfile) LOCKFILE="${2:?--lockfile needs a value}"; shift 2 ;;
-    --lockfile=*) LOCKFILE="${1#*=}"; shift ;;
+    --assign)  ASSIGN_WT="${2:?--assign needs a worktree name}"; ASSIGN_LANE="${3:?--assign needs A or B}"; shift 3 ;;
+    --lanes)   SHOW_LANES=1; shift ;;
+    --lockfile) LOCKFILE="${2:?--lockfile needs a value}"; LOCK_OVERRIDE=1; shift 2 ;;
+    --lockfile=*) LOCKFILE="${1#*=}"; LOCK_OVERRIDE=1; shift ;;
     --) shift; break ;;
     -*) echo "with-stack-slot: unknown option: $1" >&2; exit 125 ;;
     *) break ;;   # first non-option token starts the command
@@ -86,6 +124,7 @@ done
 # A boost marks a worktree so its next (or current) waiter counts as a priority
 # waiter. The marker is consumed when that worktree acquires the slot.
 if [ -n "$BOOST$UNBOOST" ]; then
+  [ "$LOCK_OVERRIDE" = 1 ] || LOCKFILE="$(lockfile_of_lane "$(lane_of "${BOOST:-$UNBOOST}")")"
   mkdir -p "${LOCKFILE}.priority.d"
   if [ -n "$BOOST" ]; then
     : > "${LOCKFILE}.priority.d/wt-${BOOST//\//_}"
@@ -94,6 +133,27 @@ if [ -n "$BOOST$UNBOOST" ]; then
     rm -f "${LOCKFILE}.priority.d/wt-${UNBOOST//\//_}"
     echo "with-stack-slot: removed boost for ${UNBOOST}." >&2
   fi
+  exit 0
+fi
+
+# ---- coordinator lane commands (no command) ---------------------------------
+if [ -n "$ASSIGN_WT" ]; then
+  case "$ASSIGN_LANE" in A|B) ;; *) echo "with-stack-slot: --assign lane must be A or B" >&2; exit 125 ;; esac
+  touch "$LANES_FILE"
+  grep -vx "${ASSIGN_WT} B" "$LANES_FILE" > "${LANES_FILE}.tmp" || true
+  [ "$ASSIGN_LANE" = B ] && echo "${ASSIGN_WT} B" >> "${LANES_FILE}.tmp"
+  mv "${LANES_FILE}.tmp" "$LANES_FILE"
+  echo "with-stack-slot: ${ASSIGN_WT} -> lane ${ASSIGN_LANE} (its next Haskell build in the new lane is a full rebuild)." >&2
+  exit 0
+fi
+if [ "$SHOW_LANES" = 1 ]; then
+  for l in A B; do
+    lf="$(lockfile_of_lane "$l")"
+    h="$(sed -n 's/.*worktree=\([^ ]*\).*started=\([^ ]*\).*/\1 since \2/p' "${lf}.holder" 2>/dev/null | head -1 || true)"
+    echo "lane $l: ${h:-free}"
+  done
+  echo "lane B worktrees: $(awk '$2=="B"{printf "%s ", $1}' "$LANES_FILE" 2>/dev/null || true)"
+  awk '/^MemAvailable:/{printf "memory available: %d MB\n", $2/1024}' /proc/meminfo 2>/dev/null || true
   exit 0
 fi
 
@@ -182,6 +242,17 @@ fi
 
 # Identify this holder. Prefer the git worktree name for human readability.
 WORKTREE="$(git rev-parse --show-toplevel 2>/dev/null | sed 's#.*/worktrees/##' || echo "$PWD")"
+
+# Pick this worktree's lane (an explicit --lockfile / HYDRA_STACK_SLOT_LOCK wins).
+LANE=A
+if [ "$LOCK_OVERRIDE" = 0 ] && [ "$(lane_of "$WORKTREE")" = B ]; then
+  LANE=B
+  LOCKFILE="$LOCKFILE_B"
+  if [ ! -d "$STACK_ROOT_B" ]; then
+    echo "with-stack-slot: lane B STACK_ROOT $STACK_ROOT_B does not exist; set it up (see BUILD LANES) or --assign ${WORKTREE} A." >&2
+    exit 125
+  fi
+fi
 
 # The metadata file sits next to the lock and records the current holder. It is
 # advisory (for humans + stale detection); the flock() on $LOCKFILE is the real mutex.
@@ -295,7 +366,7 @@ fi
 # build that simply queued for a long time — exactly what a busy fleet does daily.
 # startedEpoch is what stale detection parses: `date -d` (GNU-only) is unavailable on
 # BSD/macOS, and `date -Is` is likewise GNU-only, so neither may be used here.
-HOLDER_DESC="pid=$$ worktree=${WORKTREE} label=${LABEL:-none} started=$(date '+%Y-%m-%dT%H:%M:%S%z') startedEpoch=$(date +%s) cmd=[$*]"
+HOLDER_DESC="pid=$$ lane=${LANE} worktree=${WORKTREE} label=${LABEL:-none} started=$(date '+%Y-%m-%dT%H:%M:%S%z') startedEpoch=$(date +%s) cmd=[$*]"
 printf '%s\n' "$HOLDER_DESC" > "$METAFILE"
 waited=$(( $(date +%s) - acquire_epoch ))
 echo "with-stack-slot: acquired build slot after ${waited}s — ${HOLDER_DESC}" >&2
@@ -341,7 +412,8 @@ MEM_CHECK_LIB="$(git rev-parse --show-toplevel 2>/dev/null)/../../external/agent
 if [ -r "$MEM_CHECK_LIB" ]; then
   # shellcheck disable=SC1090
   . "$MEM_CHECK_LIB"
-  if ! ha_wait_mem_headroom 6144 3600 60; then
+  if [ "$LANE" = B ]; then mem_needed="${HYDRA_STACK_SLOT_MEM_B:-9216}"; else mem_needed=6144; fi
+  if ! ha_wait_mem_headroom "$mem_needed" 3600 60; then
     exit 1
   fi
 else
@@ -352,9 +424,62 @@ fi
 # stays held until the entire tree exits. Capture status to return it verbatim.
 # Export the reentrancy marker so nested wrappers pass through instead of deadlocking.
 export HYDRA_STACK_SLOT_HELD="$HOLDER_DESC"
+
+# ---- lane B: own STACK_ROOT + runtime memory guard -------------------------
+GUARD_PID=""
+if [ "$LANE" = B ]; then
+  export STACK_ROOT="$STACK_ROOT_B"
+  if [ -r /proc/meminfo ]; then
+    PAUSE_MB="${HYDRA_STACK_SLOT_PAUSE_MB:-2560}"
+    RESUME_MB="${HYDRA_STACK_SLOT_RESUME_MB:-5120}"
+    KILL_MB="${HYDRA_STACK_SLOT_KILL_MB:-1024}"
+    # descendants <root> <skip>: all PIDs under <root>, excluding the <skip> subtree.
+    descendants() {
+      ps -eo pid=,ppid= | awk -v r="$1" -v s="$2" '
+        { par[$1] = $2; pids[n++] = $1 }
+        END {
+          changed = 1; in_[r] = 1
+          while (changed) {
+            changed = 0
+            for (i = 0; i < n; i++) {
+              p = pids[i]
+              if (!(p in in_) && (par[p] in in_) && p != s) { in_[p] = 1; changed = 1 }
+            }
+          }
+          for (p in in_) if (p != r) print p
+        }'
+    }
+    (
+      me="$BASHPID"; paused=0
+      log() { echo "with-stack-slot[lane B guard] $(date -u +%H:%M:%S): $*" >&2; }
+      while kill -0 "$$" 2>/dev/null; do
+        avail=$(awk '/^MemAvailable:/{print int($2/1024)}' /proc/meminfo)
+        if [ "$paused" = 0 ] && [ "$avail" -lt "$PAUSE_MB" ]; then
+          log "only ${avail} MB available (< ${PAUSE_MB}); pausing this lane-B build"
+          for p in $(descendants "$$" "$me"); do kill -STOP "$p" 2>/dev/null; done
+          paused=1
+        elif [ "$paused" = 1 ] && [ "$avail" -lt "$KILL_MB" ]; then
+          log "only ${avail} MB available while paused (< ${KILL_MB}); killing this lane-B build to protect the machine"
+          for p in $(descendants "$$" "$me"); do kill -TERM "$p" 2>/dev/null; kill -CONT "$p" 2>/dev/null; done
+          sleep 10
+          for p in $(descendants "$$" "$me"); do kill -KILL "$p" 2>/dev/null; done
+          exit 0
+        elif [ "$paused" = 1 ] && [ "$avail" -ge "$RESUME_MB" ]; then
+          log "${avail} MB available again; resuming"
+          for p in $(descendants "$$" "$me"); do kill -CONT "$p" 2>/dev/null; done
+          paused=0
+        fi
+        sleep 10
+      done
+    ) &
+    GUARD_PID=$!
+  fi
+fi
+
 set +e
 "$@"
 status=$?
 set -e
+[ -n "$GUARD_PID" ] && kill "$GUARD_PID" 2>/dev/null
 
 exit "$status"
