@@ -641,6 +641,17 @@ sourceSpanGroup = define "sourceSpanGroup" $
     spanAtPathTest "path that cannot be followed yields the last node reached" "f x"
       [inject _SubtermStep _SubtermStep_lambdaBody unit] "[0,3)",
     spanAtPathTest "parenthesized term" "(x)" [] "[0,3)",
+    rootSpanTest "do block spans the whole construct" "do either { x := f a, g x }" "[0,27)",
+    spanAtPathTest "do clause expression keeps its own span" "do either { x := f a, g x }"
+      [inject _SubtermStep _SubtermStep_applicationFunction unit,
+       inject _SubtermStep _SubtermStep_applicationArgument unit] "[17,20)",
+    spanAtPathTest "do result expression keeps its own span" "do either { x := f a, g x }"
+      [inject _SubtermStep _SubtermStep_applicationArgument unit,
+       inject _SubtermStep _SubtermStep_lambdaBody unit] "[22,25)",
+    spanAtPathTest "do bind primitive falls back to the do block's span" "do either { x := f a, g x }"
+      [inject _SubtermStep _SubtermStep_applicationFunction unit,
+       inject _SubtermStep _SubtermStep_applicationFunction unit] "[0,27)",
+    stripSpansTest "strip spans: do block" "do either { x := f a, g x }",
     stripSpansTest "strip spans: application" "f x y",
     stripSpansTest "strip spans: lambda" "\955x . f x",
     stripSpansTest "strip spans: list" "[1:int32, 2:int32]",
