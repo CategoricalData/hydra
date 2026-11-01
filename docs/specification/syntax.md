@@ -166,7 +166,7 @@ The following bare names are reserved in all positions.
 To use one as a name, write it backticked.
 
 ```
-_ as bigint binary boolean cases decimal effect either false float32 float64
+_ as bigint binary boolean cases decimal do effect either false float32 float64
 forall from given impure in import inject int8 int16 int32 int64 lazy left let
 list map module none optional partial primitive project record right set
 string term true type uint8 uint16 uint32 uint64 union unit unwrap void wrap
@@ -205,13 +205,13 @@ A parenthesized single term or type is grouping; with a comma it is a pair.
 
 ```
 -- Terms (21 variants of hydra.core.model.Term)
-term          ::= annotatedTerm | applicationTerm | caseTerm | eitherTerm
+term          ::= annotatedTerm | applicationTerm | caseTerm | doTerm | eitherTerm
                 | injectTerm | lambdaTerm | letTerm | listTerm | literalTerm
                 | mapTerm | optionalTerm | pairTerm | projectTerm | recordTerm
                 | setTerm | typeApplicationTerm | typeLambdaTerm | unitTerm
                 | unwrapTerm | variableTerm | wrapTerm
                 | '(' term ')'
-                | operatorTerm | doTerm   -- SUGAR, RESERVED (#811), not yet implemented
+                | operatorTerm   -- SUGAR, RESERVED (#811), not yet implemented
 
 annotatedTerm ::= term annot
 annot         ::= '@' term        -- postfix; payload parsed at tightest level,
@@ -227,6 +227,10 @@ caseTerm      ::= 'cases' '(' name ')' termFields   -- default handler, if prese
                                                     -- desugars to the unapplied matcher
                                                     -- applied to the scrutinee:
                                                     -- application(cases(name){…}) term
+doTerm        ::= 'do' monadTag '{' doClause (',' doClause)* '}'  -- SUGAR (#811), parse-only
+monadTag      ::= 'either' | 'list' | 'optional' | 'effect'
+doClause      ::= name ':=' term | term   -- 'name := e' binds; a bare 'term' sequences
+                                          -- (wildcard binder) or, if LAST, is the result
 eitherTerm    ::= 'left' '(' term ')' | 'right' '(' term ')'
 injectTerm    ::= 'inject' '(' name ')' termFields   -- exactly one field
                 | name sugarFields                   -- SUGAR (#809): one field;
@@ -302,16 +306,8 @@ operatorTerm  ::= term arithOp term             -- 'x + y' ⇒ 'math.add x y', e
 arithOp       ::= '+' | '-' | '*' | '/'         -- '-' as binary minus: exact
                                                -- primitive TBD, see #811
 compareOp     ::= '<' | '<=' | '==' | '>=' | '>'
-
--- Monadic 'do' block (SUGAR, RESERVED (#811), not yet implemented): parse-only,
--- desugaring immediately (driven by the monad tag, not by inference) to nested
--- calls on the tagged monad's 'bind' primitive. 'map' is excluded (no lawful
--- uniform 'bind' over a two-parameter map). An untagged 'do', resolved by a
--- Monad typeclass at inference time, is a separate, not-yet-tracked follow-up.
-doTerm        ::= 'do' doTag '{' doClause (',' doClause)* '}'
-doTag         ::= 'either' | 'list' | 'optional' | 'effect'
-doClause      ::= name ':=' term                -- a bind; desugars to <tag>.bind
-                | term                          -- the final result (last clause only)
+-- (The monadic 'do' block, formerly reserved here, has landed — its production
+-- 'doTerm'/'monadTag'/'doClause' is defined above alongside 'caseTerm'.)
 
 -- Literals (lexical forms in §2.6)
 literal       ::= booleanLit | integerLit | floatLit | stringLit | binaryLit
@@ -428,13 +424,30 @@ Notes:
     The scrutinee is parsed at postfix level, so a compound scrutinee must be parenthesized:
     `case T (f y) {…}`. `cases` (plural) remains the unapplied matcher; `case` (singular) is this
     applied form.
-- **Operator, destructuring, and `do`-block sugar (RESERVED, #811).** `operatorTerm`, `pattern`
-  (destructuring in `lambdaTerm`/`binding`), and `doTerm` are reserved for #811 and are not yet
-  produced or accepted by any printer or parser. Several spellings are explicitly unsettled in
-  #811 itself rather than decided here: binary `-`'s underlying primitive, the concat operator's
-  token (candidate `++`), and whether `!` or `¬` is the boolean-negation spelling. `case`
-  extended to match nested shapes (not just the top-level variant tag) is noted in #811 as
-  in-scope but not yet designed, and is intentionally omitted from this grammar.
+  - **Monadic `do` sugar (#811), parse-only.** `do <tag> { c1, c2, … , cn }` is Haskell-style monadic
+    sequencing over one of four monads named by `<tag>` (`either`, `list`, `optional`, `effect`). Each
+    clause is `name := term` (a bind) or a bare `term`; the **last** clause is the result, and no
+    `pure`/`return` is injected — the author writes the result term explicitly. The form desugars,
+    purely syntactically (no schema, no type information), to a right-nested chain of the tag's `bind`
+    primitive (`hydra.core.lib.<tag>s.bind`): `do either { x := e1, y := e2, r }` becomes
+    `eithers.bind e1 (λx. eithers.bind e2 (λy. r))`; a bare non-final clause `e` becomes
+    `bind e (λ_. …)` with the wildcard binder. The monad **must** be named in the surface syntax
+    because the parser is context-free and cannot infer which `bind` to emit from operand types; an
+    untagged `do` resolved by a `Monad` typeclass at inference time is a possible future extension
+    (a type-checker feature, not parser sugar). Clauses are comma-separated and newlines are
+    insignificant, as elsewhere in the grammar.
+    Unlike the nominal sugar above, `do` sugar is **parse-only**: the underlying desugared term is
+    indistinguishable from a hand-written `bind` chain, so the printer does not reconstruct the `do`
+    form — it emits the prefix-application form. Round-tripping *through* the `do` surface is therefore
+    not expected (`parse(print(parse(s))) ≠ s` in general for `do`-sugared input).
+- **Operator and destructuring sugar (RESERVED, #811).** `operatorTerm` and `pattern`
+  (destructuring in `lambdaTerm`/`binding`) are reserved for #811 and are not yet produced or
+  accepted by any printer or parser. (The monadic `do`-block sugar, formerly reserved here, has
+  landed — see the note just above.) Several spellings are explicitly unsettled in #811 itself
+  rather than decided here: binary `-`'s underlying primitive, the concat operator's token
+  (candidate `++`), and whether `!` or `¬` is the boolean-negation spelling. `case` extended to
+  match nested shapes (not just the top-level variant tag) is noted in #811 as in-scope but not yet
+  designed, and is intentionally omitted from this grammar.
   This sugar is **parse-only when it lands**: #811 states the parser will desugar it immediately
   to the existing primitive-application/`let`/`λ`/`cases` forms shown above, with no new `Term`
   AST node, and the printer will not re-emit the sugared spelling. This is a scoped carve-out of

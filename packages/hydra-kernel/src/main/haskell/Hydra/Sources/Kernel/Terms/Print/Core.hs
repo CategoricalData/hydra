@@ -395,7 +395,7 @@ integerType = define "integerType" $
 reservedWords :: TypedTerm (S.Set String)
 reservedWords = Sets.fromList $ list [
   string "_", string "as", string "bigint", string "binary", string "boolean", string "cases",
-  string "decimal", string "effect", string "either", string "false", string "float32",
+  string "decimal", string "do", string "effect", string "either", string "false", string "float32",
   string "float64", string "forall", string "from", string "given", string "impure", string "in",
   string "import", string "inject", string "int8", string "int16", string "int32", string "int64",
   string "left", string "let", string "list", string "map", string "module", string "none",

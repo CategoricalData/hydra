@@ -42,6 +42,7 @@ module_ = Module {
   where
     definitions = [
       Phantoms.toDefinition allTests,
+      Phantoms.toDefinition doSugarGroup,
       Phantoms.toDefinition lazyParameterRoundtripGroup,
       Phantoms.toDefinition moduleAliasGroup,
       Phantoms.toDefinition nominalSugarGroup]
@@ -54,7 +55,7 @@ allTests = define "allTests" $
     doc "Test cases for the textual syntax (#497/#710)" $
     Testing.testGroup (string "textual syntax") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
-    subgroups = [lazyParameterRoundtripGroup, moduleAliasGroup, nominalSugarGroup]
+    subgroups = [doSugarGroup, lazyParameterRoundtripGroup, moduleAliasGroup, nominalSugarGroup]
 
 -- | Print a term signature, then parse the printed text back, and show the round-tripped
 -- signature. Compares against the original signature's own printed form, so the test both
@@ -388,6 +389,20 @@ caseSugarExpected = appT
     (Just (strT "c")))
   (varT "x")
 
+-- | Parse a sugared input string and compare the PRINTED parse result against the printed form of an
+-- expected (hand-built, already-desugared) term. This is the test shape for #811 PARSE-ONLY sugar:
+-- the printer never emits these forms, so round-trip can't exercise them; instead we assert that
+-- 'parse(sugar)' yields exactly the explicit desugared term. Comparing printed strings (rather than
+-- the raw 'Either') keeps a parse failure legible (the error message surfaces as the actual value).
+termParseTest :: String -> String -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+termParseTest testName input expectedTerm = universalCase testName actual expected
+  where
+    actual = Eithers.either
+      (Phantoms.lambda "e" $ Phantoms.var "e")
+      (Phantoms.lambda "t2" $ PrintCore.term @@ Phantoms.var "t2")
+      (ParseCore.parseTerm @@ Phantoms.string input)
+    expected = PrintCore.term @@ expectedTerm
+
 -- Term builders (shallow DSL) for the sugar fixtures.
 nm :: String -> TypedTerm Name
 nm s = Core.name $ Phantoms.string s
@@ -497,3 +512,56 @@ nominalSugarGroup = define "nominalSugarGroup" $
     caseSugarParseTest "case sugar: parenthesized compound scrutinee"
       "case example.Color (f y) { red = \"r\" }"
       (appT (casesT "example.Color" [fld "red" (strT "r")] Nothing) (appT (varT "f") (varT "y")))])
+
+-- #811 'do'-block fixtures ------------------------------------------------------------------------
+-- (reuses appT/lamT/varT from the #809 Wave 2 builders above; adds refT/bindT)
+
+-- A primitive/variable reference term, e.g. the bind primitive or a plain variable.
+refT :: String -> TypedTerm Term
+refT s = Core.termVariable (nm s)
+
+-- '<tag>s.bind e k' == app (app bindRef e) k
+bindT :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm Term
+bindT bindPrim e k = appT (appT (refT bindPrim) e) k
+
+-- Expected desugaring of 'do either { x := e1, y := e2, r }':
+--   eithers.bind e1 (λx. eithers.bind e2 (λy. r))
+-- (e1 = readFile, e2 = decode applied to x; kept abstract as variable applications.)
+doEitherExpected :: TypedTerm Term
+doEitherExpected =
+  bindT "hydra.core.lib.eithers.bind" (appT (refT "readFile") (refT "path"))
+    (lamT "x"
+      (bindT "hydra.core.lib.eithers.bind" (appT (refT "decode") (refT "x"))
+        (lamT "y" (refT "y"))))
+
+-- Expected desugaring of a single-bind block 'do optional { x := e, x }':
+--   optionals.bind e (λx. x)
+doOptionalExpected :: TypedTerm Term
+doOptionalExpected =
+  bindT "hydra.core.lib.optionals.bind" (refT "e") (lamT "x" (refT "x"))
+
+-- Expected desugaring of a bare (non-binding) non-final clause 'do effect { eff, r }':
+--   effects.bind eff (λ_. r)   -- wildcard binder for a sequenced/discarded clause
+doEffectSeqExpected :: TypedTerm Term
+doEffectSeqExpected =
+  bindT "hydra.core.lib.effects.bind" (refT "eff") (lamT "_" (refT "r"))
+
+-- Expected desugaring of a single-clause block 'do list { r }': just the result, no bind.
+doListSingleExpected :: TypedTerm Term
+doListSingleExpected = refT "r"
+
+doSugarGroup :: TypedTermDefinition TestGroup
+doSugarGroup = define "doSugarGroup" $
+  doc "Monadic 'do' sugar (#811): parse-only; 'do <tag> { clauses }' desugars to <tag>s.bind chains" $
+  Testing.testGroup (string "monadic do sugar") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    termParseTest "do either: two binds + result"
+      "do either { x := readFile path, y := decode x, y }" doEitherExpected,
+    -- newlines are insignificant: same block, multi-line, must parse identically
+    termParseTest "do either: multi-line (newlines insignificant)"
+      "do either {\n  x := readFile path,\n  y := decode x,\n  y\n}" doEitherExpected,
+    termParseTest "do optional: single bind"
+      "do optional { x := e, x }" doOptionalExpected,
+    termParseTest "do effect: bare non-final clause uses wildcard binder"
+      "do effect { eff, r }" doEffectSeqExpected,
+    termParseTest "do list: single result clause (no bind)"
+      "do list { r }" doListSingleExpected])

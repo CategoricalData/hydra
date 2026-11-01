@@ -99,6 +99,8 @@ module_ = Module {
      toDefinition caseTerm,
      toDefinition constraint,
      toDefinition decimalDigits,
+     toDefinition doClause,
+     toDefinition doTerm,
      toDefinition eitherTerm,
      toDefinition escapeHex4,
      toDefinition escapeHexDigit,
@@ -638,6 +640,64 @@ caseSugarTerm = define "caseSugarTerm" $
               "matcher" <~ Core.termCases (Core.caseStatement (var "tname") (var "mdef") (var "alts")) $
               P.pure @@ Core.termApplication (Core.application (var "matcher") (var "scrutinee"))))))))
 
+-- | Parse a single 'do' clause: 'name ':=' term' (a monadic bind) or a bare 'term' (a
+-- sequence/result clause). Returned as a (Name, Term) pair where a bare clause uses the wildcard
+-- binder '_' -- this lets 'doTerm' fold every clause uniformly as 'bind e (λn. rest)'. The binding
+-- form is tried first under 'P.try' because both forms start with a term that may begin with a
+-- 'name'; without the ':=' the attempt rewinds and the clause reparses as a bare term.
+doClause :: TypedTermDefinition (Parser (Name, Term))
+doClause = define "doClause" $
+  doc "Parse a 'do' clause: 'name := term' (bind) or a bare term (sequence); bare uses binder '_'" $
+  P.alt
+    @@ (P.try @@ (P.bind @@ (asTerm name) @@ ("n" ~>
+          P.bind @@ (termKeyword @@ string ":=") @@ (constant $
+            P.map @@ ("e" ~> pair (var "n") (var "e")) @@ (P.lazy @@ (constant $ asTerm term))))))
+    @@ (P.map @@ ("e" ~> pair (Core.name (string "_")) (var "e")) @@ (P.lazy @@ (constant $ asTerm term)))
+
+-- | Parse a 'doTerm' (#811 monadic sugar): 'do' <monadTag> '{' doClause (',' doClause)* '}'.
+-- The monad tag (either/list/optional/effect) selects a concrete 'bind' primitive -- the parser is
+-- type-blind, so the surface names the monad. Desugars PURELY SYNTACTICALLY: the LAST clause's term
+-- is the result R; each earlier clause '(n, e)' wraps the rest K as '<tag>s.bind e (λn. K)' (a bare
+-- non-final clause uses the wildcard binder '_'). 'do' is a reserved word (§2.7); the whole form is
+-- brace-delimited, so it is an ordinary 'atomicTerm' alternative with no precedence interaction. The
+-- clause list is comma-separated (newlines are insignificant, like 'let' bindings); no 'pure' is
+-- injected -- the author writes the final result term explicitly.
+-- Example: 'do either { x := e1, y := e2, r }'
+--   =>  eithers.bind e1 (λx. eithers.bind e2 (λy. r))
+doTerm :: TypedTermDefinition (Parser Term)
+doTerm = define "doTerm" $
+  doc "Parse a monadic do-block: 'do' tag '{' clause (',' clause)* '}', desugaring to <tag>s.bind chains" $
+  P.bind @@ (termKeyword @@ string "do") @@ (constant $
+    P.bind @@ monadTag @@ ("bindName" ~>
+      P.bind @@ (termKeyword @@ string "{") @@ (constant $
+        P.bind @@ (P.sepBy1 @@ (asTerm doClause) @@ (termKeyword @@ string ",")) @@ ("clauses" ~>
+          P.bind @@ (termKeyword @@ string "}") @@ (constant $
+            P.pure @@ (
+              -- Fold right over ALL clauses with an optional<Term> accumulator, avoiding
+              -- 'Lists.last'/'init' (both optional-returning). 'nothing' means "no later clause yet",
+              -- so the rightmost clause becomes the result R (its binder dropped); every earlier
+              -- clause '(n, e)' over accumulated rest 'k' becomes 'bind e (λn. k)'. 'P.sepBy1'
+              -- guarantees >=1 clause, so the final accumulator is always 'just' -- the withDefault
+              -- fallback (unit) is unreachable.
+              "bindRef" <~ Core.termVariable (Core.name (var "bindName")) $
+              "step" <~ ("clause" ~> "acc" ~>
+                Optionals.match (var "acc")
+                  (just (Pairs.second (var "clause")))
+                  ("k" ~> just (Core.termApplication (Core.application
+                    (Core.termApplication (Core.application (var "bindRef") (Pairs.second (var "clause"))))
+                    (Core.termLambda (Core.lambda (Pairs.first (var "clause")) nothing (var "k"))))))) $
+              Optionals.withDefault Core.termUnit
+                (Lists.foldr (var "step") nothing (var "clauses"))))))))
+  where
+    -- The monad tag maps to its 'bind' primitive's fully-qualified name. Tags are existing reserved
+    -- words (either/list/optional/effect); the primitive is 'hydra.core.lib.<tag>s.bind'.
+    monadTag = P.choice @@ list [
+      tag "either" "hydra.core.lib.eithers.bind",
+      tag "list" "hydra.core.lib.lists.bind",
+      tag "optional" "hydra.core.lib.optionals.bind",
+      tag "effect" "hydra.core.lib.effects.bind"]
+    tag kw prim = P.bind @@ (termKeyword @@ string kw) @@ (constant $ P.pure @@ string prim)
+
 -- | Parse an eitherTerm: 'left' '(' term ')' | 'right' '(' term ')'.
 eitherTerm :: TypedTermDefinition (Parser Term)
 eitherTerm = define "eitherTerm" $
@@ -866,6 +926,7 @@ atomicTerm = define "atomicTerm" $
     -- zero-consumption, on 'case ...'), and under 'P.try' so a variable merely starting with 'case'
     -- (e.g. 'caseload', or a bare 'case' — 'case' is unreserved) rewinds to the name fallback below.
     P.try @@ (asTerm caseSugarTerm),
+    asTerm doTerm,
     asTerm eitherTerm,
     asTerm injectTerm,
     asTerm lambdaTerm,
