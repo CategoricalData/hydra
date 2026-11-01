@@ -2956,23 +2956,43 @@
                                             "domain": {"list": {"variable": "hydra.core.model.Term"}},
                                             "body": {
                                               "application": {
-                                                "function": {"variable": "hydra.typescript.coder.tsArray"},
-                                                "argument": {
+                                                "function": {
                                                   "application": {
                                                     "function": {
                                                       "application": {
                                                         "function": {
-                                                          "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.model.Term"}}},
-                                                            "type": {"variable": "hydra.typescript.syntax.Expression"}}},
+                                                          "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"variable": "hydra.typescript.syntax.Expression"}}},
                                                         "argument": {
                                                           "application": {
                                                             "function": {
+                                                              "typeApplication": {"body": {"variable": "hydra.core.lib.lists.isEmpty"}, "type": {"variable": "hydra.core.model.Term"}}},
+                                                            "argument": {"variable": "els"}}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"variable": "hydra.typescript.coder.tsAsAny"},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"variable": "hydra.typescript.coder.tsArray"},
+                                                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.typescript.syntax.Expression"}}}}}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"variable": "hydra.typescript.coder.tsArray"},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.model.Term"}}},
+                                                                "type": {"variable": "hydra.typescript.syntax.Expression"}}},
+                                                            "argument": {
                                                               "application": {
-                                                                "function": {"application": {"function": {"variable": "hydra.typescript.coder.encodeTerm"}, "argument": {"variable": "cx"}}},
-                                                                "argument": {"variable": "g"}}},
-                                                            "argument": {"variable": "currentNs"}}}}},
-                                                    "argument": {"variable": "els"}}}}}}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {"application": {"function": {"variable": "hydra.typescript.coder.encodeTerm"}, "argument": {"variable": "cx"}}},
+                                                                    "argument": {"variable": "g"}}},
+                                                                "argument": {"variable": "currentNs"}}}}},
+                                                        "argument": {"variable": "els"}}}}}}}}}},
                                       {
                                         "name": "set",
                                         "handler": {

@@ -1144,7 +1144,19 @@
                                                                                                                         "typeName": "hydra.core.model.Term",
                                                                                                                         "field": {
                                                                                                                           "name": "literal",
-                                                                                                                          "term": {"inject": {"typeName": "hydra.core.model.Literal", "field": {"name": "string", "term": {"variable": "edgeKey"}}}}}}}},
+                                                                                                                          "term": {
+                                                                                                                            "inject": {
+                                                                                                                              "typeName": "hydra.core.model.Literal",
+                                                                                                                              "field": {
+                                                                                                                                "name": "string",
+                                                                                                                                "term": {
+                                                                                                                                  "application": {
+                                                                                                                                    "function": {"variable": "hydra.core.lib.strings.concat"},
+                                                                                                                                    "argument": {
+                                                                                                                                      "list": [
+                                                                                                                                        {"application": {"function": {"unwrap": "hydra.core.model.Name"}, "argument": {"variable": "root"}}},
+                                                                                                                                        {"literal": {"string": "#"}},
+                                                                                                                                        {"variable": "edgeKey"}]}}}}}}}}}},
                                                                                                                   {
                                                                                                                     "name": "out",
                                                                                                                     "term": {"application": {"function": {"variable": "hydra.pg.subtermGraph.termNodeIdTerm"}, "argument": {"variable": "nid"}}}},
