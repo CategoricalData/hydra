@@ -154,19 +154,24 @@ echo ""
 # always go through bin/sync.sh, which knows how to populate those
 # dependencies; warm-cache runs are nearly free anyway.
 #
-# --hosts haskell is intentionally kept here even though java,python is now
-# the no-arg default scope (TARGETS): this pre-sync call's own Haskell
-# dependency is a SEPARATE question from what /test's default target set is,
-# and changing it needs its own careful verification (the compileHeadsExtrasJava
-# source set pulls in dist/java/hydra-{kernel,haskell,jvm,java,python,scala,
-# lisp,typescript} regardless of which host generated them -- a java/python-only
-# HOST scope here would not by itself address that TARGET-side need). Left
-# as a deliberate follow-up rather than changed under time pressure, given
-# this exact sync.sh/transform-json-to-target.sh ordering machinery just caused
-# a real multi-hour CI outage (#747) from an under-verified change.
+# #741: --hosts must include the requested targets themselves, not just
+# haskell. sync.sh's Phase 4 static-dependency assembly (sibling-coder
+# packages that heads/{java,scala}/.../Generation.* hard-import, e.g. the
+# Scala head's hydra.typeScript.* import) is keyed on $HOSTS, not $TARGETS —
+# it never fires for a language that is only a target. Passing $TARGETS as
+# --hosts too ensures a scoped /test java or /test scala pre-assembles those
+# sibling packages. We do NOT add haskell here unconditionally: per #773,
+# /test's default scope dropped haskell precisely to stop every ordinary
+# sync/test cycle from forcing a Haskell host build, and Phase 4 skips
+# H=haskell outright (no STATIC_DEPS entry), so seeding it in --hosts would
+# only reintroduce that cost for no Phase-4 benefit. haskell is included here
+# only when the caller explicitly requested it as a target. The extra hosts
+# are cheap otherwise: Phase 2's regen is already a hosts∪targets union, and
+# Phase 4's per-package assemble-distribution.sh digest-skips on a warm tree.
 if [ "$DO_SYNC" = "1" ]; then
     echo "=== Pre-sync via bin/sync.sh (warm-cache fast) ==="
-    "$HYDRA_ROOT/bin/sync.sh" --no-tests --hosts haskell --targets "$(echo $TARGETS | tr ' ' ',')"
+    SYNC_HOSTS=$(printf '%s\n' $TARGETS | awk '!seen[$0]++' | tr '\n' ',' | sed 's/,$//')
+    "$HYDRA_ROOT/bin/sync.sh" --no-tests --hosts "$SYNC_HOSTS" --targets "$(echo $TARGETS | tr ' ' ',')"
     echo ""
 fi
 
