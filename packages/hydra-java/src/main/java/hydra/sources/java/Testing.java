@@ -55,7 +55,11 @@ public class Testing {
     }
 
     // ---- Primitive references ----
-    private static TypedTerm<?> prim(String fqName) { return var(fqName); }
+    // Untyped pre-#467 primitive-wrapper layer; prim()'s Function-shaped phantom lets it satisfy
+    // apply()'s arrow-threaded signature without claiming any real domain/codomain type.
+    private static <A, B> TypedTerm<java.util.function.Function<A, B>> prim(String fqName) {
+        return Phantoms.<java.util.function.Function<A, B>>var(fqName);
+    }
 
     private static TypedTerm<?> stringsCat2(TypedTerm<?> a, TypedTerm<?> b) {
         return apply(prim("hydra.core.lib.strings.concat2"), a, b);

@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Term-level phantom-typed DSL. Java analogue of
@@ -129,23 +130,37 @@ public final class Phantoms {
 
     // ---- Application ----
 
-    /** {@code f @@ x} — apply a function to an argument. */
-    public static <A> TypedTerm<A> apply(TypedTerm<?> fun, TypedTerm<?> arg) {
+    /**
+     * {@code f @@ x} — apply a function to an argument. The phantom threads the arrow: a
+     * mistake class the signature now catches is applying a non-function ({@code fun} must be a
+     * {@code TypedTerm} of some {@code Function<A, B>}) or passing an argument of the wrong
+     * domain type (compile error if {@code arg}'s phantom doesn't match {@code fun}'s declared
+     * domain). This constrains call sites where {@code fun}'s phantom is already concrete (e.g.
+     * from {@link #cases} or {@link #project}); a {@code fun} obtained from an untyped
+     * {@link #var(String)} or {@link hydra.core.overlay.java.dsl.meta.Defs#ref} still infers a
+     * free {@code Function<A, B>} and imposes no constraint, as before.
+     */
+    public static <A, B> TypedTerm<B> apply(TypedTerm<? extends Function<A, B>> fun, TypedTerm<A> arg) {
         return tterm(Terms.apply(fun.value, arg.value));
     }
 
-    /** Two-argument application. */
-    public static <A> TypedTerm<A> apply(TypedTerm<?> fun, TypedTerm<?> a, TypedTerm<?> b) {
+    /** Two-argument (curried) application: {@code apply(apply(fun, a), b)}. */
+    public static <A, B, C> TypedTerm<C> apply(
+            TypedTerm<? extends Function<A, Function<B, C>>> fun, TypedTerm<A> a, TypedTerm<B> b) {
         return tterm(Terms.apply(Terms.apply(fun.value, a.value), b.value));
     }
 
-    /** Three-argument application. */
-    public static <A> TypedTerm<A> apply(TypedTerm<?> fun, TypedTerm<?> a, TypedTerm<?> b, TypedTerm<?> c) {
+    /** Three-argument (curried) application. */
+    public static <A, B, C, D> TypedTerm<D> apply(
+            TypedTerm<? extends Function<A, Function<B, Function<C, D>>>> fun,
+            TypedTerm<A> a, TypedTerm<B> b, TypedTerm<C> c) {
         return tterm(Terms.apply(Terms.apply(Terms.apply(fun.value, a.value), b.value), c.value));
     }
 
-    /** Four-argument application. */
-    public static <A> TypedTerm<A> apply(TypedTerm<?> fun, TypedTerm<?> a, TypedTerm<?> b, TypedTerm<?> c, TypedTerm<?> d) {
+    /** Four-argument (curried) application. */
+    public static <A, B, C, D, E> TypedTerm<E> apply(
+            TypedTerm<? extends Function<A, Function<B, Function<C, Function<D, E>>>>> fun,
+            TypedTerm<A> a, TypedTerm<B> b, TypedTerm<C> c, TypedTerm<D> d) {
         Term r = Terms.apply(fun.value, a.value);
         r = Terms.apply(r, b.value);
         r = Terms.apply(r, c.value);
@@ -153,11 +168,12 @@ public final class Phantoms {
         return tterm(r);
     }
 
-    /** Variadic application: {@code apply(f, a1, a2, ..., an)}.
+    /** Variadic application: {@code apply(f, a1, a2, ..., an)} for more than 4 arguments.
      *
      * <p>Used when the call has more than 4 arguments — for 1..4 args the
      * fixed-arity overloads above resolve first (Java prefers them over
-     * varargs).
+     * varargs). The phantom is not threaded past the 4th argument: beyond that
+     * arity, curried {@code Function<...>} nesting stops paying for itself.
      */
     public static <A> TypedTerm<A> apply(TypedTerm<?> fun, TypedTerm<?> a, TypedTerm<?> b, TypedTerm<?> c, TypedTerm<?> d, TypedTerm<?>... rest) {
         Term r = Terms.apply(fun.value, a.value);
@@ -364,34 +380,36 @@ public final class Phantoms {
         return tterm(Terms.inject(typeName.value, fieldName.value, Terms.unit()));
     }
 
-    /** {@code project TypeName fieldName} — field projection function. */
-    public static <A> TypedTerm<A> project(String typeName, String fieldName) {
+    /** {@code project TypeName fieldName} — field projection function. The phantom is a
+     *  {@code Function<A, B>}: {@code A} is the record/union type being projected from, {@code B}
+     *  is the field's type, so the result composes directly with {@link #apply}. */
+    public static <A, B> TypedTerm<Function<A, B>> project(String typeName, String fieldName) {
         return tterm(Terms.project(typeName, fieldName));
     }
 
     /** {@code project TypeName fieldName} — Name overload. */
-    public static <A> TypedTerm<A> project(Name typeName, Name fieldName) {
+    public static <A, B> TypedTerm<Function<A, B>> project(Name typeName, Name fieldName) {
         return tterm(Terms.project(typeName.value, fieldName.value));
     }
 
     /** {@code project TypeName fieldName @@ var varName} — combined projection + application.
      *  Collapses the common {@code apply(project(T, F), var("x"))} pattern. */
-    public static <A> TypedTerm<A> proj(String typeName, String fieldName, String varName) {
+    public static <A, B> TypedTerm<B> proj(String typeName, String fieldName, String varName) {
         return apply(project(typeName, fieldName), var(varName));
     }
 
     /** {@code project TypeName fieldName @@ var varName} — Name overload. */
-    public static <A> TypedTerm<A> proj(Name typeName, Name fieldName, String varName) {
+    public static <A, B> TypedTerm<B> proj(Name typeName, Name fieldName, String varName) {
         return apply(project(typeName, fieldName), var(varName));
     }
 
     /** {@code project TypeName fieldName @@ term} — Name overload, term argument. */
-    public static <A> TypedTerm<A> proj(Name typeName, Name fieldName, TypedTerm<?> term) {
+    public static <A, B> TypedTerm<B> proj(Name typeName, Name fieldName, TypedTerm<A> term) {
         return apply(project(typeName, fieldName), term);
     }
 
     /** {@code project TypeName fieldName @@ term} — String overload, term argument. */
-    public static <A> TypedTerm<A> proj(String typeName, String fieldName, TypedTerm<?> term) {
+    public static <A, B> TypedTerm<B> proj(String typeName, String fieldName, TypedTerm<A> term) {
         return apply(project(typeName, fieldName), term);
     }
 
@@ -416,51 +434,57 @@ public final class Phantoms {
     }
 
     // ---- Pattern matching ----
+    //
+    // match/matchWithDefault yield a VALUE phantom (the eliminator is applied to arg already);
+    // cases/casesWithDefault yield a FUNCTION phantom (the eliminator is left unapplied). This
+    // mirrors the Haskell DSL's cases/match split (#615): a case-elimination function can no
+    // longer be confused with a matched value, because their TypedTerm phantoms disagree
+    // (Function<A, B> vs. B) and the branches' own value type doesn't unify with a bare function.
 
-    /** {@code match TypeName x Nothing [branches]} — pattern match on union. */
-    public static <A> TypedTerm<A> match(String typeName, TypedTerm<?> arg, Field... branches) {
+    /** {@code match TypeName x Nothing [branches]} — pattern match on union, applied to {@code arg}. */
+    public static <A, B> TypedTerm<B> match(String typeName, TypedTerm<A> arg, Field... branches) {
         Term match = Terms.match(typeName, Optional.<Term>none(), branches);
         return tterm(Terms.apply(match, arg.value));
     }
 
     /** {@code match TypeName x Nothing [branches]} — Name overload. */
-    public static <A> TypedTerm<A> match(Name typeName, TypedTerm<?> arg, Field... branches) {
+    public static <A, B> TypedTerm<B> match(Name typeName, TypedTerm<A> arg, Field... branches) {
         Term match = Terms.match(typeName.value, Optional.<Term>none(), branches);
         return tterm(Terms.apply(match, arg.value));
     }
 
     /** {@code match TypeName x (Just default) [branches]} — pattern match with default. */
-    public static <A> TypedTerm<A> matchWithDefault(String typeName, TypedTerm<?> arg,
-                                                 TypedTerm<?> defaultBranch, Field... branches) {
+    public static <A, B> TypedTerm<B> matchWithDefault(String typeName, TypedTerm<A> arg,
+                                                 TypedTerm<B> defaultBranch, Field... branches) {
         Term match = Terms.match(typeName, Optional.<Term>given(defaultBranch.value), branches);
         return tterm(Terms.apply(match, arg.value));
     }
 
     /** {@code match TypeName x (Just default) [branches]} — Name overload. */
-    public static <A> TypedTerm<A> matchWithDefault(Name typeName, TypedTerm<?> arg,
-                                                 TypedTerm<?> defaultBranch, Field... branches) {
+    public static <A, B> TypedTerm<B> matchWithDefault(Name typeName, TypedTerm<A> arg,
+                                                 TypedTerm<B> defaultBranch, Field... branches) {
         Term match = Terms.match(typeName.value, Optional.<Term>given(defaultBranch.value), branches);
         return tterm(Terms.apply(match, arg.value));
     }
 
     /** {@code cases TypeName Nothing [branches]} — unapplied case-match function. */
-    public static <A> TypedTerm<A> cases(String typeName, Field... branches) {
+    public static <A, B> TypedTerm<Function<A, B>> cases(String typeName, Field... branches) {
         return tterm(Terms.match(typeName, Optional.<Term>none(), branches));
     }
 
     /** {@code cases TypeName Nothing [branches]} — Name overload. */
-    public static <A> TypedTerm<A> cases(Name typeName, Field... branches) {
+    public static <A, B> TypedTerm<Function<A, B>> cases(Name typeName, Field... branches) {
         return tterm(Terms.match(typeName.value, Optional.<Term>none(), branches));
     }
 
     /** {@code cases TypeName (Just default) [branches]}. */
-    public static <A> TypedTerm<A> casesWithDefault(String typeName, TypedTerm<?> defaultBranch,
+    public static <A, B> TypedTerm<Function<A, B>> casesWithDefault(String typeName, TypedTerm<B> defaultBranch,
                                                  Field... branches) {
         return tterm(Terms.match(typeName, Optional.<Term>given(defaultBranch.value), branches));
     }
 
     /** {@code cases TypeName (Just default) [branches]} — Name overload. */
-    public static <A> TypedTerm<A> casesWithDefault(Name typeName, TypedTerm<?> defaultBranch,
+    public static <A, B> TypedTerm<Function<A, B>> casesWithDefault(Name typeName, TypedTerm<B> defaultBranch,
                                                  Field... branches) {
         return tterm(Terms.match(typeName.value, Optional.<Term>given(defaultBranch.value), branches));
     }
