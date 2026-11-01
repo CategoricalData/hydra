@@ -239,5 +239,7 @@ Five demos exercise this package end-to-end:
 
 ## See also
 
+- [Subterm graph: property-graph encoding](../../docs/specification/pg/subterm-graph.md) — the encoding of a Hydra term graph
+  implemented by `hydra.pg.subtermGraph`.
 - [HydraPop](https://github.com/CategoricalData/HydraPop) — translingual extensions
   for Apache TinkerPop, built on top of this package.

@@ -183,6 +183,8 @@ Part IV — Interchange:
 
 - [Serialization](serialization.md) — serializability of types; the encode/decode contract
 - [JSON format](json-format.md) — the wire format
+- [Term graphs](term-graph.md) — the subterm-graph structure consumed by graph-model encodings
+- [Subterm graph: property-graph encoding](pg/subterm-graph.md) — the `hydra.pg.subtermGraph` encoding
 
 Planned (deferred beyond the current release): effects · graphs and modules ·
 reduction semantics · standard mappings (property graphs, RDF) ·
