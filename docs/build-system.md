@@ -368,19 +368,32 @@ larger than GitHub Actions' `ubuntu-latest` (7 GB), so the cold-CI path silently
 overflowed the heap.
 
 Phase 1 now iterates **packages** instead. The driver
-(`Hydra.Generation.inferAndWriteByPackage`) topologically sorts the package dep graph
-from each `packages/<pkg>/package.json`'s `dependencies` field, then for each package
-in order calls `inferModulesGiven` with the typed-so-far universe (deps that finished
-in earlier iterations) plus that package's own modules as the focus subset. Each
-iteration writes the focus package's JSON to disk immediately, which forces the inferred
-TypeSchemes through serialization and breaks any lazy thunk chain across iterations.
+(`Hydra.Generation.inferAndWriteByPackage` / `inferAndWriteByPackageSeeded`)
+topologically sorts the package dep graph from each `packages/<pkg>/package.json`'s
+`dependencies` field, then for each package in order runs the Generation-side wrapper
+`inferModulesGivenSchemes` over only that package's own modules, merging the typed-so-far
+universe in as `(Name, TypeScheme)` maps rather than full `Module` values (see
+[`modulesToGraph` realloc per Phase 1 iteration](#3-modulestograph-realloc-per-phase-1-iteration)
+below — that realloc problem is fixed; this section covers the memory-envelope motivation
+only). Each iteration writes the focus package's JSON to disk immediately, which forces
+the inferred TypeSchemes through serialization and breaks any lazy thunk chain across
+iterations.
 
 Peak memory per iteration is bounded by ≈ *type-schemes of transitive deps + bindings of
 the focus package*, not by the universe-wide
-*bindings of every module + full substitution map + constraint set*. Trade-off: each
-iteration rebuilds `modulesToGraph` over an accumulator that grows linearly, so wall
-time goes up roughly 2× on a roomy host (≈5 min → ≈13 min). On `ubuntu-latest` the
-old path doesn't fit at all, so this is the only path that runs there.
+*bindings of every module + full substitution map + constraint set*. On `ubuntu-latest`
+the old all-at-once path doesn't fit at all, so this is the only path that runs there.
+
+[#592](https://github.com/CategoricalData/hydra/issues/592) found a separate,
+genuinely superlinear cost on a cold (fully-dirty) universe: `Hydra.Inference.generalize`
+called `isUnbound` once per candidate free type variable, and `isUnbound` internally
+rescanned every bound type scheme in the context from scratch
+(`freeVariablesInContext`) — with no caching, and with `generalize` invoked once per
+binding in a let-group that all share the same context. Since the per-package driver's
+typed-so-far accumulator grows with every package processed, this made the whole cold
+pass O(N²) in the total binding count, not O(N). Fixed by hoisting the context scan out
+of `generalize`'s per-variable filter so it runs once per let-group instead of once per
+binding.
 
 The committed CI heap cap is `RTS_FLAGS=-M6G`. Local syncs are free to raise it; CI
 must surface a heap-overflow diagnostic if the per-package cap is ever exceeded, not
