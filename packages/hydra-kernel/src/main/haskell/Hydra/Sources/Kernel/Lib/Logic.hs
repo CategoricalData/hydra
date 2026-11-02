@@ -30,18 +30,19 @@ define = primitiveInModule module_
 defineWithDefault :: String -> String -> TermSignature -> [String] -> TypedTerm a -> PrimitiveDefinition
 defineWithDefault = primitiveWithDefaultInModule module_
 
+-- and is lazy in its second operand (position 1): it is only evaluated when the first is true.
 and :: PrimitiveDefinition
 and = availableSince "0.15" $ withProvisions [
   requirement "trueOnlyWhenBothTrue"
     "and(p, q) returns true exactly when both p and q are true; any false operand makes the result\
     \ false."]
   $ defineWithDefault "and" "Compute the logical AND of two boolean values."
-  (sigWithParams [("p", "the first boolean operand"),
+  (markLazyParams [1] $ sigWithParams [("p", "the first boolean operand"),
                   ("q", "the second boolean operand")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) mempty)
   ["and(p, q) returns true iff both p and q are true.",
-   "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use\
-   \ ifElse.",
-   "Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."]
+   "The second operand is not necessarily evaluated: and is short-circuiting, and returns false as\
+   \ soon as the first operand is false without evaluating the second.",
+   "Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool."]
   ("a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TypedTerm Bool) false)
 
 -- ifElse is lazy in its then/else branches (positions 1, 2): only the
@@ -73,16 +74,17 @@ not_ = availableSince "0.15" $ withProvisions [
    "Total. Corresponds to Haskell's not :: Bool -> Bool."]
   ("a" ~> Logic.ifElse (var "a") false true)
 
+-- or is lazy in its second operand (position 1): it is only evaluated when the first is false.
 or_ :: PrimitiveDefinition
 or_ = availableSince "0.15" $ withProvisions [
   requirement "trueWhenEitherTrue"
     "or(p, q) returns true when at least one of p and q is true; it returns false only when both\
     \ are false."]
   $ defineWithDefault "or" "Compute the logical OR of two boolean values."
-  (sigWithParams [("p", "the first boolean operand"),
+  (markLazyParams [1] $ sigWithParams [("p", "the first boolean operand"),
                   ("q", "the second boolean operand")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) mempty)
   ["or(p, q) returns true iff at least one of p and q is true.",
-   "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use\
-   \ ifElse.",
-   "Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."]
+   "The second operand is not necessarily evaluated: or is short-circuiting, and returns true as\
+   \ soon as the first operand is true without evaluating the second.",
+   "Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool."]
   ("a" ~> "b" ~> Logic.ifElse (var "a") true (var "b" :: TypedTerm Bool))
