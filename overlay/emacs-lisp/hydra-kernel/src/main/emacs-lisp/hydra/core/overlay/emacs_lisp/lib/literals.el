@@ -326,6 +326,15 @@
        (or (> x 1.7976931348623157e308)
            (< x -1.7976931348623157e308))))
 
+(defun hydra--format-sci-digits (digits-and-exp negative)
+  "Render (sig . e) from `hydra--decimal-digits-and-exponent' as Haskell's X.YeN."
+  (let ((sig (car digits-and-exp)))
+    (format "%s%s.%se%d"
+            (if negative "-" "")
+            (substring sig 0 1)
+            (if (> (length sig) 1) (substring sig 1) "0")
+            (cdr digits-and-exp))))
+
 (defun haskell-show-float (x)
   "Format a double-float in Haskell's show style."
   (cond
@@ -334,15 +343,9 @@
     ((= x 0.0) (if (< (copysign 1.0 x) 0) "-0.0" "0.0"))
     ((and (/= x 0.0)
           (or (< (abs x) 0.1) (>= (abs x) 1.0e7)))
-     ;; Scientific notation
-     (let* ((exp-val (floor (log (abs x) 10.0)))
-            (mantissa (/ x (expt 10.0 exp-val)))
-            (adj-exp (if (>= (abs mantissa) 10.0) (1+ exp-val) exp-val))
-            (adj-mantissa (if (>= (abs mantissa) 10.0) (/ mantissa 10.0) mantissa)))
-       (format "%s%se%d"
-               (if (< adj-mantissa 0) "-" "")
-               (haskell-show-float-simple (abs adj-mantissa))
-               adj-exp)))
+     ;; Scientific notation: derive digits from the shortest-round-trip printer by
+     ;; string manipulation (log/expt rescaling overflows for subnormals).
+     (hydra--format-sci-digits (hydra--decimal-digits-and-exponent x) (< x 0)))
     (t (haskell-show-float-simple x))))
 
 (defun haskell-show-float-simple (x)
@@ -450,7 +453,7 @@ is the power of 10 of the leading significant digit (e.g. 3 for 1234.0,
         ((= x 0.0) 0.0)
         (t (let* ((sign (if (< x 0) -1.0 1.0))
                   (ax (abs x))
-                  (e (floor (log ax 2.0)))
+                  (e (max -126 (floor (log ax 2.0))))
                   (scale (expt 2.0 (- 23 e)))
                   (mantissa (round (* ax scale))))
              (* sign (/ mantissa scale))))))
@@ -466,19 +469,15 @@ is the power of 10 of the leading significant digit (e.g. 3 for 1234.0,
       ((= f32 0.0) "0.0")
       ((and (/= f32 0.0)
             (or (< (abs f32) 0.1) (>= (abs f32) 1.0e7)))
-       ;; Scientific notation
-       (let* ((exp-val (floor (log (abs f32) 10.0)))
-              (mantissa (/ f32 (expt 10.0 exp-val)))
-              (adj-exp (if (>= (abs mantissa) 10.0) (1+ exp-val) exp-val))
-              (adj-mantissa (if (>= (abs mantissa) 10.0) (/ mantissa 10.0) mantissa))
-              (sign (if (< f32 0) "-" "")))
-         ;; Find minimum digits for mantissa
-         (cl-loop for n from 1 to 9
-                  for rounded = (/ (round (* (abs adj-mantissa) (expt 10.0 (1- n)))) (expt 10.0 (1- n)))
-                  when (= (round-to-float32 (* rounded (expt 10.0 adj-exp)))
-                          (round-to-float32 (* (abs adj-mantissa) (expt 10.0 adj-exp))))
-                  return (format "%s%se%d" sign (haskell-show-float-simple (* 1.0 rounded)) adj-exp)
-                  finally return (format "%s%se%d" sign (haskell-show-float-simple (abs adj-mantissa)) adj-exp))))
+       ;; Scientific notation: find the fewest digits that round-trip at float32
+       ;; precision, then take them from the printer by string manipulation
+       ;; (log/expt rescaling overflows for subnormals).
+       (let ((cand (cl-loop for n from 1 to 9
+                            for c = (string-to-number (format (format "%%.%de" (1- n)) (abs f32)))
+                            when (= (round-to-float32 c) (abs f32))
+                            return c
+                            finally return (abs f32))))
+         (hydra--format-sci-digits (hydra--decimal-digits-and-exponent cand) (< f32 0))))
       (t
        ;; Normal range: find minimum digits
        (cl-loop for n from 1 to 9
