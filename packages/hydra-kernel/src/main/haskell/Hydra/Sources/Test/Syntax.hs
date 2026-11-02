@@ -18,7 +18,9 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Core.Dsl.Packaging     as Packaging
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Print.Packaging as PrintPackaging
@@ -149,18 +151,25 @@ lazyParameterRoundtripGroup = define "lazyParameterRoundtripGroup" $
 
     signatureRoundtripTest "no lazy parameters: round-trips cleanly" noLazyParamsSignature])
 
--- #804: import aliasing is gated by actual LOCAL-NAME collisions, not module-name-suffix
--- collisions. A dependency module is imported BARE (no 'as') iff none of its referenced local
--- names collide with another bare import's (or with the printed module's own declared names); only
--- genuine collisions force the shortest-unique-suffix alias machinery (#803's growAliasesStep).
--- The set of modules left bare is the Maximum-Weight Independent Set of the local-name conflict
--- graph (PrintPackaging.mwisSolve), weight = reference count. These tests exercise the gate.
+-- #804 introduced bare (unqualified) cross-module imports, gated by actual LOCAL-NAME collisions
+-- rather than module-name-suffix collisions: a dependency module was imported BARE (no 'as') iff
+-- none of its referenced local names collided with another bare import's (or with the printed
+-- module's own declared names), with genuine collisions resolved by the shortest-unique-suffix
+-- alias machinery (#803's growAliasesStep) and the bare/alias split chosen by
+-- 'PrintPackaging.mwisSolve' (a Maximum-Weight Independent Set over the local-name conflict
+-- graph, weight = reference count).
 --
--- NOTE for anyone diffing #803 -> #804: 'moduleAliasPrintTest' below changed its expected output.
--- Under #803, FilePath (hydra.core.file) and FileError (hydra.core.error.file) were wrongly aliased
--- 'file'/'error.file' purely because the two MODULE names share the trailing segment 'file'. But
--- the two LOCAL names never collide, so #804 prints both imports bare and both names unqualified.
--- This is the exact bug #804 fixes -- not a regression against #803.
+-- #804's bare imports turned out to be unparseable in general (#805): a single-file parser has no
+-- access to a bare import's own declared names, so it can never re-qualify a bare body reference
+-- back to the module it came from -- not in the no-collision case (#711) and not in the
+-- split-bare-vs-aliased collision case (#805) #804 itself surfaced. Per Josh's 2026-10-31
+-- Decision Desk ruling (card '711-bare-import-roundtrip'), the required contract is
+-- 'module -> print -> parse == original module' (structural identity), which a bare cross-module
+-- import can never satisfy. The fix (folded into #711): 'moduleAliases' no longer leaves any
+-- cross-module dependency bare -- every one gets a real alias from the existing shortest-suffix
+-- fixed point; 'mwisSolve' and the bare/alias MWIS split it solved are removed as dead code. The
+-- tests below are updated accordingly: no import line is ever bare, and the round-trip test now
+-- asserts true module-definitions identity, not just printed-text stability.
 
 -- | A monomorphic type scheme (no quantified variables, no constraints) wrapping the given type.
 monoScheme :: TypedTerm Type -> TypedTerm TypeScheme
@@ -178,32 +187,34 @@ testModule modName deps typeDefs = Packaging.module_
       (Core.name $ Phantoms.string (modName L.++ "." L.++ local)) nothing scheme)
     | (local, scheme) <- typeDefs])
 
--- | The #804 no-collision example: FilePath (hydra.core.file) and FileError (hydra.core.error.file)
--- have DIFFERENT local names, so even though the two module names share the trailing segment 'file',
--- neither needs an alias. Both imports print bare and both names print unqualified. (Under #803 this
--- same module wrongly produced 'import ... as file' / 'as error.file'.)
+-- | The former #804 no-collision example: FilePath (hydra.core.file) and FileError
+-- (hydra.core.error.file) have DIFFERENT local names, so leaving either bare would have
+-- introduced no local-name collision -- but since 2026-10-31 every cross-module import is
+-- aliased regardless (see 'PrintPackaging.moduleAliases'), both still get a real alias from the
+-- shortest-unique-suffix fixed point: 'hydra.core.file' -> 'file' (its one-segment suffix is
+-- already unique), 'hydra.core.error.file' -> 'error.file' (its one-segment suffix 'file'
+-- collides with the former, so it grows one segment).
 aliasExampleModule :: TypedTerm Module
 aliasExampleModule = testModule "hydra.example.app"
   ["hydra.core.error.file", "hydra.core.file"]
   [("Thing", monoScheme (T.pair (T.variable "hydra.core.file.FilePath") (T.variable "hydra.core.error.file.FileError")))]
 
--- | Exact-print test: no collision -> both imports bare, both names unqualified (#804).
+-- | Exact-print test: every import is aliased, even with no local-name collision (2026-10-31
+-- round-trip-identity ruling superseding #804's bare-import case).
 moduleAliasPrintTest :: TypedTerm TestCaseWithMetadata
-moduleAliasPrintTest = universalCase "no local-name collision: imports print bare, names unqualified"
+moduleAliasPrintTest = universalCase "no local-name collision: imports are still aliased (round-trip identity)"
   (PrintPackaging.module' @@ aliasExampleModule)
   (Phantoms.string $ L.intercalate "\n" [
     "module hydra.example.app",
     "",
-    "import hydra.core.error.file",
-    "import hydra.core.file",
+    "import hydra.core.error.file as error.file",
+    "import hydra.core.file as file",
     "",
-    "type Thing = (FilePath, FileError)"])
+    "type Thing = (file.FilePath, error.file.FileError)"])
 
--- | A genuine two-module collision: both hydra.a and hydra.b contribute a local name 'Foo'. They
--- conflict, so at most one may be bare. hydra.a's Foo is referenced TWICE (two type defs) vs
--- hydra.b's once, so hydra.a has the higher MWIS weight and wins the bare slot; hydra.b loses and
--- is aliased by the shortest-unique-suffix rule (its distinct suffix 'b'). The printed body shows
--- a bare 'Foo' (from a) and a qualified 'b.Foo' (from b).
+-- | A genuine two-module collision: both hydra.a and hydra.b contribute a local name 'Foo'. Under
+-- #804 this chose a bare/aliased split by MWIS weight; since 2026-10-31 both are unconditionally
+-- aliased by the (unchanged) shortest-unique-suffix rule: 'hydra.a' -> 'a', 'hydra.b' -> 'b'.
 collisionModule :: TypedTerm Module
 collisionModule = testModule "hydra.app"
   ["hydra.a", "hydra.b"]
@@ -211,111 +222,108 @@ collisionModule = testModule "hydra.app"
    ("T2", monoScheme (T.pair (T.variable "hydra.a.Foo") (T.variable "hydra.b.Foo")))]
 
 moduleCollisionPrintTest :: TypedTerm TestCaseWithMetadata
-moduleCollisionPrintTest = universalCase "local-name collision: higher-weight module wins the bare slot, loser is aliased"
+moduleCollisionPrintTest = universalCase "local-name collision: both sides are aliased, never bare"
   (PrintPackaging.module' @@ collisionModule)
   (Phantoms.string $ L.intercalate "\n" [
     "module hydra.app",
     "",
-    "import hydra.a",
+    "import hydra.a as a",
     "import hydra.b as b",
     "",
-    "type T1 = Foo",
+    "type T1 = a.Foo",
     "",
-    "type T2 = (Foo, b.Foo)"])
+    "type T2 = (a.Foo, b.Foo)"])
 
--- | MWIS path case A-B-C, the greedy-catcher: three dependency modules where A and C each collide
--- only with B (B shares local name 'X' with A and 'Y' with C; A and C share nothing). Weights:
--- aa=2 (its X is referenced in D1 and D3), bb=2 (X in D1, Y in D2), cc=1 (Y in D2). The independent
--- set {aa, cc} has weight 3, STRICTLY greater than {bb} alone at weight 2 -- so the exact solver
--- leaves aa and cc bare and aliases only bb. A greedy "highest-degree first" heuristic would wrongly
--- take bb (degree 2) and alias both aa and cc, scoring only 2. Asserted via the printed module text
--- (a String, as universalCase requires): the bare vs aliased split shows up directly as bare 'X'/'Y'
--- (from aa/cc) vs qualified 'bb.X'/'bb.Y' (from bb).
+-- | Three dependency modules, formerly exercising #804's MWIS path case (A-B-C: A and C each
+-- collide only with B). Since bareness is no longer a printer choice at all, the MWIS weighting
+-- that used to decide which side of each collision stayed bare is moot -- all three simply get
+-- their shortest-unique-suffix alias ('aa', 'bb', 'cc', none colliding with each other).
 pathModule :: TypedTerm Module
 pathModule = testModule "hydra.app"
   ["hydra.aa", "hydra.bb", "hydra.cc"]
-  -- A (hydra.aa) and B (hydra.bb) collide on 'X'; B and C (hydra.cc) collide on 'Y'; A,C disjoint.
-  -- aa.X referenced twice (D1, D3) so {aa,cc} STRICTLY outweighs {bb}.
   [("D1", monoScheme (T.pair (T.variable "hydra.aa.X") (T.variable "hydra.bb.X"))),
    ("D2", monoScheme (T.pair (T.variable "hydra.bb.Y") (T.variable "hydra.cc.Y"))),
    ("D3", monoScheme (T.variable "hydra.aa.X"))]
 
--- | Expected print of 'pathModule': aa and cc bare, bb aliased (its distinct suffix 'bb'); the
--- bodies therefore show bare X/Y for aa/cc and qualified bb.X/bb.Y for bb.
+-- | Expected print of 'pathModule': all three dependencies aliased by their one-segment suffix
+-- (none collide with each other), so every body reference is qualified.
 moduleAliasPathTest :: TypedTerm TestCaseWithMetadata
-moduleAliasPathTest = universalCase "MWIS path A-B-C: A+C stay bare, only B is aliased (exact solver beats greedy)"
+moduleAliasPathTest = universalCase "three non-colliding dependencies: all three are still aliased"
   (PrintPackaging.module' @@ pathModule)
   (Phantoms.string $ L.intercalate "\n" [
     "module hydra.app",
     "",
-    "import hydra.aa",
+    "import hydra.aa as aa",
     "import hydra.bb as bb",
-    "import hydra.cc",
+    "import hydra.cc as cc",
     "",
-    "type D1 = (X, bb.X)",
+    "type D1 = (aa.X, bb.X)",
     "",
-    "type D2 = (bb.Y, Y)",
+    "type D2 = (bb.Y, cc.Y)",
     "",
-    "type D3 = X"])
+    "type D3 = aa.X"])
 
--- | Round-trip test for the no-collision module: print -> parse -> print.
---
--- This does NOT reproduce the first print verbatim, for the same root cause as
--- 'collisionModule's documented gap below, minus the collision: a BARE (alias-less) import gives
--- the parser no lookup key at all, so a bare body reference like 'FilePath' cannot be
--- re-attributed to the module (hydra.core.file) it came from on reparse -- the single-file parser
--- has no access to that module's own definitions to confirm the match (see
--- 'expandTypeNameRefSelfAware's doc comment in Parse/Packaging.hs). The name survives the
--- round-trip as a bare, module-less reference (the body text itself is unchanged: 'FilePath'
--- stays 'FilePath'), but since 'Names.moduleNameOf' can no longer recover ANY module from it,
--- 'Analysis.definitionDependencyNamesByModule' no longer attributes it to hydra.core.file, so
--- 'moduleAliases'/'module'' no longer sees that module as referenced -- its 'import' line is
--- correctly omitted on the SECOND print, since nothing in the reparsed body still points to it.
--- (An earlier version of this test, and its '#711' round-trip fix, assumed the no-collision case
--- escaped this gap entirely because it has "no alias to lose" -- that assumption was never
--- actually exercised against a real build until this fix, and turned out to be wrong: the alias
--- is not what's lost here, the MODULE ATTRIBUTION of a bare name is.) Both bodies are asserted
--- unchanged; only the (correctly empty) import block differs between first and second print.
-moduleAliasRoundtripTest :: TypedTerm TestCaseWithMetadata
-moduleAliasRoundtripTest = universalCase "bare-import module's body round-trips; its own (unrecoverable) import lines do not"
-  (roundtripPrint aliasExampleModule)
-  (Phantoms.string $ L.intercalate "\n" [
-    "module hydra.example.app",
-    "",
-    "",
-    "",
-    "type Thing = (FilePath, FileError)"])
+-- | Structural round-trip fingerprint for a module: its name plus every definition's LOCAL name
+-- and FULLY-QUALIFIED (alias-independent, 'PrintCore.noAliases') type/term text. Deliberately
+-- excludes 'moduleDependencies' (the printer may choose different import lines on reprint -- "the
+-- import structure need not be preserved", 2026-10-31 ruling) and metadata (doc-comment parsing
+-- is a separate, already-tracked gap). Comparing fully-qualified bodies rather than the aliased
+-- printed text means this fingerprint is itself immune to any alias-choice difference between two
+-- prints of structurally-identical modules -- exactly the identity bar the round-trip tests below
+-- must satisfy: 'module -> print -> parse' must yield a module whose fingerprint matches the
+-- original's.
+moduleFingerprint :: TypedTerm Module -> TypedTerm String
+moduleFingerprint m =
+  Strings.concat (Phantoms.list [
+    Packaging.unModuleName (Packaging.moduleName m), Phantoms.string "\n",
+    Strings.join (Phantoms.string "\n") (Lists.map ("d" ~> defFingerprint (Phantoms.var "d")) (Packaging.moduleDefinitions m))])
+  where
+    defFingerprint :: TypedTerm Definition -> TypedTerm String
+    defFingerprint d = Phantoms.match _Definition d Nothing [
+      _Definition_type>>: "td" ~> Strings.concat (Phantoms.list [
+        Core.unName (Packaging.typeDefinitionName (var "td")), Phantoms.string " = ",
+        PrintCore.typeScheme @@ (Packaging.typeDefinitionBody (var "td"))]),
+      _Definition_term>>: "td" ~> Strings.concat (Phantoms.list [
+        Core.unName (Packaging.termDefinitionName (var "td")), Phantoms.string " = ",
+        PrintCore.term @@ (Packaging.termDefinitionBody (var "td"))]),
+      _Definition_primitive>>: "pd" ~> Core.unName (Packaging.primitiveDefinitionName (var "pd"))]
 
--- NO collision round-trip test (#804): a module whose collision forces one import bare and the
--- other aliased does NOT survive a TEXTUAL print->parse->print through the single-file parser, and
--- that is a pre-existing PARSER limitation, not a printer bug. Concretely, 'collisionModule' first
--- prints 'import hydra.b as b' with body '(Foo, b.Foo)' (hydra.a bare, hydra.b aliased -- correct,
--- asserted by 'moduleCollisionPrintTest'). On reparse the bare 'Foo' from bare-imported hydra.a
--- cannot be re-qualified to 'hydra.a.Foo': the single-file parser has no access to hydra.a's
--- definitions, so it keeps 'Foo' as a module-less local name (see Parse/Packaging.hs's
--- 'expandAliasedName' note, lines ~254-262). 'b.Foo' DOES re-expand via its alias. The second print
--- then sees only hydra.b referenced (hydra.a's contribution became a module-less name), finds no
--- collision, and prints hydra.b bare too -> '(Foo, Foo)'. Asserting that lossy second print as the
--- expected output would enshrine broken round-trip as correct, so there is deliberately no such
--- assertion here. The no-collision case ('moduleAliasRoundtripTest') round-trips fine because it has
--- no alias to lose. Full semantic (collision) round-trip needs parser bare-name re-qualification
--- against a real module environment -- tracked as a separate follow-up, out of #804's printer scope.
-
--- | print -> parse -> print of a module (yielding the error message on a parse failure).
-roundtripPrint :: TypedTerm Module -> TypedTerm String
-roundtripPrint m = Eithers.either
+-- | print -> parse -> fingerprint of a module (yielding the parse error message on failure).
+roundtripFingerprint :: TypedTerm Module -> TypedTerm String
+roundtripFingerprint m = Eithers.either
   (Phantoms.lambda "e" $ Phantoms.var "e")
-  (Phantoms.lambda "mod2" $ PrintPackaging.module' @@ Phantoms.var "mod2")
+  (Phantoms.lambda "mod2" $ moduleFingerprint (Phantoms.var "mod2"))
   (ParsePackaging.parseModule @@ (PrintPackaging.module' @@ m))
+
+-- | Round-trip identity test for the former #804 no-collision module: 'module -> print -> parse'
+-- must yield a module whose fingerprint matches the original -- the 2026-10-31 Decision Desk bar
+-- (card '711-bare-import-roundtrip'), folding #711's no-collision symptom into a real fix rather
+-- than an accepted gap. Every cross-module import now being aliased (see 'moduleAliasPrintTest')
+-- gives the parser a lookup key for every body reference, so this holds unconditionally.
+moduleAliasRoundtripTest :: TypedTerm TestCaseWithMetadata
+moduleAliasRoundtripTest = universalCase "no-collision module round-trips to an identical module (module->print->parse)"
+  (roundtripFingerprint aliasExampleModule)
+  (moduleFingerprint aliasExampleModule)
+
+-- | Round-trip identity test for the former #805 collision module: same bar as
+-- 'moduleAliasRoundtripTest', now also covering the split-bare-vs-aliased collision case #805
+-- found unparseable under #804. Since both sides of a collision are now always aliased (see
+-- 'moduleCollisionPrintTest'), the parser has a lookup key for both, and this holds too -- #805 is
+-- closed by the same fix, not by a separate parser change.
+moduleCollisionRoundtripTest :: TypedTerm TestCaseWithMetadata
+moduleCollisionRoundtripTest = universalCase "collision module round-trips to an identical module (module->print->parse, #805)"
+  (roundtripFingerprint collisionModule)
+  (moduleFingerprint collisionModule)
 
 moduleAliasGroup :: TypedTermDefinition TestGroup
 moduleAliasGroup = define "moduleAliasGroup" $
-  doc "Import-alias gating by local-name collision + MWIS, printing and round-trip (#804)" $
+  doc "Import aliasing: every cross-module dependency is aliased, and module->print->parse round-trips to an identical module (#711, #804, #805)" $
   Testing.testGroup (string "import aliases") nothing (list ([] :: [TypedTerm TestGroup])) (list [
     moduleAliasPrintTest,
     moduleCollisionPrintTest,
     moduleAliasPathTest,
-    moduleAliasRoundtripTest])
+    moduleAliasRoundtripTest,
+    moduleCollisionRoundtripTest])
 
 ----------------------------------------------------------------------------------------------
 -- #809: nominal construction/elimination sugar (Wave 1 -- record/injection/wrap + project/unwrap).

@@ -24,7 +24,6 @@ import qualified Hydra.Core.Dsl.Lib.Math     as Math
 import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
 import qualified Hydra.Core.Dsl.Lib.Ordering    as Ordering
 import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
 import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals          as Literals
 import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
@@ -89,7 +88,6 @@ module_ = Module {
      toDefinition moduleAliases,
      toDefinition module',
      toDefinition moduleNameString,
-     toDefinition mwisSolve,
      toDefinition primitiveDefinitionDoc,
      toDefinition termDefinition,
      toDefinition typeDefinition,
@@ -257,75 +255,34 @@ growAliasesStep = define "growAliasesStep" $
       pair (var "nm") (Logic.ifElse (var "canGrow") (Math.add (var "n") (int32 1)) (var "n")))
     (var "entries"))
 
--- | Exact Maximum-Weight Independent Set solver over a candidate list of module vertices (#804).
--- 'weights' gives each vertex's weight (total reference count), 'adj' gives each vertex's conflict
--- neighbors (modules sharing at least one referenced local name). Returns the (totalWeight,
--- selectedModules) of a maximum-weight independent set. Standard include/exclude branching:
--- OPT(S) = max(OPT(S \ {v}), weight(v) + OPT(S \ ({v} u N(v)))). The first vertex 'v' of the
--- (canonically sorted) list is the branch pivot; the exclude branch recurses on the tail, the
--- include branch recurses on the tail with v's neighbors removed. This is exact (not greedy): it
--- correctly handles the path A-B-C where weight(A)+weight(C) > weight(B) by trying both A+C and B.
---
--- Determinism: the caller passes vertices in canonical (module-name-sorted) order, and ties in
--- objective weight are broken by preferring the INCLUDE branch -- so identical input always yields
--- identical output, which matters for stable regeneration diffs. Zero-weight vertices never improve
--- the objective, so a zero-weight module is only ever selected to stay bare when including it is
--- free (no higher-weight neighbor loses), and never at the expense of a positive-weight module.
---
--- No silent cap: the solver has no vertex limit. It is exponential in the worst case, which is
--- acceptable because real per-module conflict graphs are small and usually sparse/disconnected (the
--- include branch's neighbor-pruning naturally exploits that sparsity). Explicit connected-component
--- decomposition and subset memoization (recommended in #804 for pathological inputs) are deferred
--- performance optimizations, not correctness requirements; if a pathological graph ever makes this
--- too slow, the documented fallback is a greedy heuristic -- never a silent change of result.
-mwisSolve :: TypedTermDefinition (M.Map ModuleName Int -> M.Map ModuleName (S.Set ModuleName) -> [ModuleName] -> (Int, [ModuleName]))
-mwisSolve = define "mwisSolve" $
-  doc "Exact maximum-weight independent set over a candidate list of module vertices (#804)" $
-  "weights" ~> "adj" ~> "verts" ~>
-  Optionals.match (Lists.uncons (var "verts"))
-    (pair (int32 0) (list ([] :: [TypedTerm ModuleName])))
-    ("vh" ~>
-      "v" <~ Pairs.first (var "vh") $
-      "rest" <~ Pairs.second (var "vh") $
-      "wv" <~ Optionals.withDefault (int32 0) (Maps.lookup (var "v") (var "weights" :: TypedTerm (M.Map ModuleName Int))) $
-      "nbrs" <~ Optionals.withDefault (Sets.empty :: TypedTerm (S.Set ModuleName)) (Maps.lookup (var "v") (var "adj" :: TypedTerm (M.Map ModuleName (S.Set ModuleName)))) $
-      -- exclude v: solve the rest as-is
-      "excl" <~ (mwisSolve @@ (var "weights" :: TypedTerm (M.Map ModuleName Int)) @@ (var "adj" :: TypedTerm (M.Map ModuleName (S.Set ModuleName))) @@ var "rest") $
-      "wExcl" <~ Pairs.first (var "excl") $
-      -- include v: solve the rest with v's neighbors removed, then add v and its weight
-      "restNoNbr" <~ Lists.filter ("u" ~> Logic.not (Sets.member (var "u") (var "nbrs" :: TypedTerm (S.Set ModuleName)))) (var "rest") $
-      "inclSub" <~ (mwisSolve @@ (var "weights" :: TypedTerm (M.Map ModuleName Int)) @@ (var "adj" :: TypedTerm (M.Map ModuleName (S.Set ModuleName))) @@ var "restNoNbr") $
-      "wIncl" <~ Math.add (var "wv") (Pairs.first (var "inclSub")) $
-      "inclSel" <~ Lists.cons (var "v") (Pairs.second (var "inclSub")) $
-      -- tie-break: prefer include when weights are equal (deterministic given canonical vert order)
-      Logic.ifElse (Ordering.gte (var "wIncl") (var "wExcl"))
-        (pair (var "wIncl") (var "inclSel"))
-        (var "excl"))
-
--- | Compute the printing alias for every module referenced by the given module's definitions
--- (#804 rewrite of the earlier module-name-suffix-collision gate). Per the issue's settled design:
+-- | Compute the printing alias for every module referenced by the given module's definitions.
+-- Per Josh's 2026-10-31 Decision Desk ruling (card '711-bare-import-roundtrip', folding #805 into
+-- #711's scope): the required round-trip contract is 'module -> print -> parse == original
+-- module' (structural identity on the module, not just textual stability of repeated prints).
+-- A single-file parser has no access to a bare (unaliased) import's own declared names, so it can
+-- NEVER re-qualify a bare cross-module body reference back to the module that declared it -- not
+-- even in the no-collision case (#711) and not in the split bare/aliased collision case (#805);
+-- both are the same root cause (see syntax.md #6.4's notes). Of the two possible fixes the
+-- bare-import gap note laid out -- give the parser a multi-module environment, or have the
+-- printer always alias every cross-module import -- Josh picked the simplest: this is the
+-- printer-only fix, applied by routing every referenced dependency straight into the
+-- shortest-unique-suffix aliasing fixed point below, bypassing the MWIS bare/alias split
+-- entirely, so every ACTUAL dependency always receives a real (non-empty) alias. 'mwisSolve' and
+-- the collision-avoidance machinery it fed (#804) are therefore unused now; only the
+-- self-reference case below (the printed module's OWN namespace, mapped unconditionally to "")
+-- still prints bare, since that one IS round-trip-safe -- 'ownNames' is available to the parser
+-- from the module being parsed itself, no other module's definitions are needed to resolve it.
 --
 -- (1) Collect, per dependency module, the COUNTED set of its local names referenced by the printed
 --     module's definitions ('Analysis.definitionDependencyNamesByModule'), plus the printed
 --     module's OWN declared local names.
--- (2) A dependency module may be imported BARE (unqualified, no 'as' alias) iff leaving it bare
---     introduces no local-name collision. Two constraints forbid bareness:
---     - inter-import: two dependency modules whose referenced-local-name sets intersect cannot both
---       be bare (the conflict-graph edges);
---     - shadowing: a dependency module whose local-name set intersects the printed module's own
---       declared names can NEVER be bare (a forbidden vertex, dropped before the solver).
--- (3) Among the non-forbidden modules, choose the Maximum-Weight Independent Set to leave bare
---     ('mwisSolve'; weight = total reference count). Selected modules map to "" (printed bare: the
---     import line drops its 'as', and 'Print/Core.printNameAliased' prints their names with no
---     qualifier).
--- (4) Every module NOT selected bare (MWIS losers + forbidden modules) is aliased by the EXISTING,
---     UNCHANGED shortest-unique-suffix fixed point ('growAliasesStep'/'aliasFromSuffix') -- run
---     only over those modules, so the alias machinery stops firing on modules that never needed one.
+-- (2) Every dependency module is aliased (never left bare) by the shortest-unique-suffix fixed
+--     point ('growAliasesStep'/'aliasFromSuffix'), run over the full dependency list.
 --
--- The result map's three states feed 'Print/Core.printNameAliased' directly: ""-> bare local name,
--- "<alias>" -> 'alias.Local', absent (never, since every dependency module is a key) -> full dotted.
--- Dependency modules are collected via a pure walk of the definitions' term/type contents (no
--- InferenceContext/Graph needed; the printer always prints a module's own in-memory 'Definition's).
+-- The result map's two states feed 'Print/Core.printNameAliased' directly: ""-> bare local name
+-- (self-reference only), "<alias>" -> 'alias.Local' (every real dependency). Dependency modules
+-- are collected via a pure walk of the definitions' term/type contents (no InferenceContext/Graph
+-- needed; the printer always prints a module's own in-memory 'Definition's).
 --
 -- The printed module's OWN namespace ('ownNs') is also inserted into the result, mapped to the
 -- empty-string alias, so 'PrintCore.printNameAliased's existing "empty alias -> bare local name"
@@ -336,7 +293,7 @@ mwisSolve = define "mwisSolve" $
 -- never imports itself), so it affects only name-shortening, not the printed 'import' block.
 moduleAliases :: TypedTermDefinition (Module -> M.Map ModuleName String)
 moduleAliases = define "moduleAliases" $
-  doc "Compute the printing alias for every module referenced by the given module's definitions (#804), plus the module's own namespace (mapped to the empty alias, for self-reference shortening, #711)" $
+  doc "Compute the printing alias for every module referenced by the given module's definitions, plus the module's own namespace (mapped to the empty alias, for self-reference shortening, #711)" $
   "mod" ~>
   "ownNs" <~ Packaging.moduleName (var "mod") $
   "defs" <~ (Packaging.moduleDefinitions $ var "mod") $
@@ -344,46 +301,9 @@ moduleAliases = define "moduleAliases" $
   "namesByModRaw" <~ (Analysis.definitionDependencyNamesByModule @@ var "defs") $
   "namesByMod" <~ Maps.delete (var "ownNs") (var "namesByModRaw" :: TypedTerm (M.Map ModuleName (M.Map String Int))) $
   "nssAsList" <~ Lists.sortBy ("nm" ~> Packaging.unModuleName $ var "nm") (Maps.keys (var "namesByMod" :: TypedTerm (M.Map ModuleName (M.Map String Int)))) $
-  -- The printed module's OWN declared local names (for the shadowing constraint).
-  "ownLocalNames" <~ Sets.fromList (Lists.map
-    ("def" ~> Names.localNameOf @@ (match _Definition (var "def") Nothing [
-      _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td"),
-      _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
-      _Definition_primitive>>: "pd" ~> Packaging.primitiveDefinitionName (var "pd")]))
-    (var "defs")) $
-  -- The set of referenced local names for a given dependency module.
-  "localSetOf" <~ ("nm" ~> Sets.fromList (Maps.keys
-    (Optionals.withDefault (Maps.empty :: TypedTerm (M.Map String Int))
-      (Maps.lookup (var "nm") (var "namesByMod" :: TypedTerm (M.Map ModuleName (M.Map String Int))))))) $
-  -- Vertex weight: total reference count across the module's local names.
-  "weightOf" <~ ("nm" ~> Lists.foldl ("a" ~> "b" ~> Math.add (var "a") (var "b")) (int32 0)
-    (Maps.elems (Optionals.withDefault (Maps.empty :: TypedTerm (M.Map String Int))
-      (Maps.lookup (var "nm") (var "namesByMod" :: TypedTerm (M.Map ModuleName (M.Map String Int))))))) $
-  "weights" <~ Maps.fromList (Lists.map ("nm" ~> pair (var "nm") (var "weightOf" @@ var "nm")) (var "nssAsList")) $
-  -- Forbidden (never-bare) modules: those whose local names intersect the printed module's own
-  -- declared names (local-declaration shadowing). These are excluded from the MWIS candidate set
-  -- and always aliased.
-  "forbidden" <~ Lists.filter
-    ("nm" ~> Logic.not (Sets.isEmpty (Sets.intersection (var "localSetOf" @@ var "nm") (var "ownLocalNames" :: TypedTerm (S.Set String)))))
-    (var "nssAsList") $
-  "candidates" <~ Lists.filter
-    ("nm" ~> Logic.not (Lists.member (var "nm") (var "forbidden")))
-    (var "nssAsList") $
-  -- Conflict adjacency over the CANDIDATE modules only: an edge between two candidates whose
-  -- referenced-local-name sets intersect.
-  "adj" <~ Maps.fromList (Lists.map
-    ("nm" ~> pair (var "nm") (Sets.fromList (Lists.filter
-      ("other" ~> Logic.and
-        (Logic.not (Equality.equal (var "other") (var "nm")))
-        (Logic.not (Sets.isEmpty (Sets.intersection (var "localSetOf" @@ var "nm") (var "localSetOf" @@ var "other")))))
-      (var "candidates"))))
-    (var "candidates")) $
-  -- Choose the max-weight independent set of candidates to leave bare.
-  "bareList" <~ Pairs.second (mwisSolve @@ (var "weights" :: TypedTerm (M.Map ModuleName Int)) @@ (var "adj" :: TypedTerm (M.Map ModuleName (S.Set ModuleName))) @@ var "candidates") $
-  "bareSet" <~ Sets.fromList (var "bareList") $
-  -- Losers (non-bare candidates) + forbidden modules are aliased via the existing shortest-unique-
-  -- suffix fixed point, run over just those modules.
-  "aliasedList" <~ Lists.filter ("nm" ~> Logic.not (Sets.member (var "nm") (var "bareSet" :: TypedTerm (S.Set ModuleName)))) (var "nssAsList") $
+  -- Every referenced dependency module is aliased (never left bare) -- see this definition's own
+  -- doc comment for why cross-module bareness was removed (2026-10-31 round-trip-identity ruling).
+  "aliasedList" <~ var "nssAsList" $
   "segmentsOf" <~ ("nm" ~> Strings.splitOn (string ".") (Packaging.unModuleName $ var "nm")) $
   "segsMap" <~ Maps.fromList (Lists.map ("nm" ~> pair (var "nm") (var "segmentsOf" @@ var "nm")) (var "aliasedList")) $
   "maxSegs" <~ Lists.foldl
@@ -400,18 +320,20 @@ moduleAliases = define "moduleAliases" $
   -- generation; 'module'' filters it back out of 'usedDeps' (a module never imports itself).
   "otherAliases" <~ Maps.fromList (Lists.map
     ("nm" ~> pair (var "nm")
-      (Logic.ifElse (Sets.member (var "nm") (var "bareSet" :: TypedTerm (S.Set ModuleName)))
-        (string "")
-        (aliasFromSuffix @@ (Optionals.withDefault (list ([] :: [TypedTerm String])) (Maps.lookup (var "nm") (var "segsMap" :: TypedTerm (M.Map ModuleName [String]))))
-                         @@ (Optionals.withDefault (int32 1) (Maps.lookup (var "nm") (var "finalState" :: TypedTerm (M.Map ModuleName Int)))))))
+      (aliasFromSuffix @@ (Optionals.withDefault (list ([] :: [TypedTerm String])) (Maps.lookup (var "nm") (var "segsMap" :: TypedTerm (M.Map ModuleName [String]))))
+                       @@ (Optionals.withDefault (int32 1) (Maps.lookup (var "nm") (var "finalState" :: TypedTerm (M.Map ModuleName Int))))))
     (var "nssAsList")) $
   Maps.insert (var "ownNs") (string "") (var "otherAliases" :: TypedTerm (M.Map ModuleName String))
 
 -- | Show a module dependency as an import declaration, given the printer's computed alias for
--- that dependency (per 'moduleAliases'). The alias map's value for this module decides the form
--- (#804):
---   * ""        -> 'import <module>'            (bare/unqualified -- no local-name collision)
---   * "<alias>" -> 'import <module> as <alias>' (qualified -- a collision forced an alias)
+-- that dependency (per 'moduleAliases'). The alias map's value for this module decides the form:
+--   * "<alias>" -> 'import <module> as <alias>' (every real cross-module dependency, always
+--                                                aliased since 2026-10-31 -- see 'moduleAliases')
+--   * ""        -> 'import <module>'            (bare/unqualified; never produced for an actual
+--                                                dependency, only for the printed module's own
+--                                                namespace, which 'module'' excludes from import
+--                                                generation entirely -- so this branch is dead in
+--                                                practice for a true dependency)
 --   * absent    -> 'import <module>'            (bare; a true dependency is always a key, so this
 --                                                is a defensive fallback, not an expected state)
 -- ModuleDependency carries no alias field, so a module authored with an explicit 'as' does not
