@@ -297,6 +297,16 @@ echo ""
 # files reference test_env.* directly with no rewriting needed.
 echo "  (No post-processing needed — all patches eliminated, see #307.)"
 
+# Assemble downstream packages whose MAIN tree the head compiles but step 4 does not
+# emit (#823). `bootstrap-from-json --all-packages` regenerates only the baseline, DSL, and
+# test trees; ext packages are normally assembled per-package. hydra-pg's test tree (on the
+# head's source path, see package.yaml) imports hydra-pg main modules, so without this a new
+# main module (e.g. Hydra.Pg.SubtermGraph) leaves the test spec failing with
+# "Could not find module". Runs before the overlay re-apply so the overlay lands last.
+echo ""
+echo "  Assembling hydra-pg main tree (#823)..."
+GENERATOR_HOST=haskell "$SCRIPT_DIR/assemble-distribution.sh" hydra-pg
+
 # Re-apply the overlay: step 4's `bootstrap-from-json --prune-stale` deletes
 # files in each per-package output dir that are not part of its generated set,
 # which includes the hand-written Hydra.Core.Overlay.Haskell.Lib.* runtime modules overlaid
