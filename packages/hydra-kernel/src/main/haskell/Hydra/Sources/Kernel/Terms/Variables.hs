@@ -4,7 +4,9 @@ module Hydra.Sources.Kernel.Terms.Variables where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
+  applicationSpine,
   eagerFreeVariablesInTerm,
+  eagerVarsOfRedexBody,
   freeTypeVariablesInTerm,
   freeVariablesInTerm,
   freeVariablesInType,
@@ -87,7 +89,9 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Free variable analysis, term-level substitution, and unshadowing"))}
   where
    definitions = [
+     toDefinition applicationSpine,
      toDefinition eagerFreeVariablesInTerm,
+     toDefinition eagerVarsOfRedexBody,
      toDefinition freeTypeVariablesInTerm,
      toDefinition freeVariablesInTerm,
      toDefinition freeVariablesInType,
@@ -117,6 +121,52 @@ freshNameAvoiding = define "freshNameAvoiding" $
       (var "candidate")) $
   var "go" @@ int32 2
 
+-- | Peel one application layer at a time, collecting (in order, outermost-first) the chain of
+-- arguments applied, down to the ultimate function head. Returns '(head, [arg0, arg1, ...])'
+-- where 'arg0' is the OUTERMOST (first-applied) argument -- e.g. for
+-- 'Application(Application(f, a), b)' (i.e. 'f a b' via left-associative application), this
+-- yields '(f, [a, b])'. Helper for 'eagerFreeVariablesInTerm's beta-redex detection (#711); must
+-- be a registered top-level 'TypedTermDefinition', not a local 'where'-bound closure -- it
+-- self-references recursively below, and a bare self-referencing 'TypedTerm' would inline its
+-- own body at every recursive call site (AsTerm's non-definition instance is 'id'), producing an
+-- infinite Haskell-level term graph that overflows the stack the instant anything traverses it
+-- (same hazard 'termSignatureArrowChain' in Parse/Core.hs documents and avoids the same way).
+applicationSpine :: TypedTermDefinition (Application -> (Term, [Term]))
+applicationSpine = define "applicationSpine" $
+  doc "Peel an Application chain into its ultimate function head and the ordered list of arguments applied to it" $
+  "app" ~>
+  "fn" <~ Core.applicationFunction (var "app") $
+  "arg" <~ Core.applicationArgument (var "app") $
+  match _Term (var "fn") (Just $ pair (var "fn") (list [var "arg"])) [
+    _Term_application>>: "innerApp" ~>
+      "inner" <~ (applicationSpine @@ var "innerApp") $
+      pair (Pairs.first (var "inner")) (Lists.concat2 (Pairs.second (var "inner")) (list [var "arg"]))]
+
+-- | Find the eager free variables of a (possibly curried) beta-redex's body: a chain of nested
+-- lambdas each immediately consumed by one of 'remainingArgs', e.g.
+-- '(lambda vars. lambda mcs. BODY) [] nothing' applies two arguments to two curried lambda
+-- layers, so this walks both layers (removing 'vars' and 'mcs' from scope as each is peeled) and
+-- returns BODY's own eager free variables (minus those two bound names). If a lambda layer has no
+-- corresponding argument left (a genuinely deferred, partially-applied continuation, not a full
+-- redex), that layer -- and everything inside it -- is deferred per the ordinary lambda rule,
+-- matching 'eagerFreeVariablesInTerm's own top-level '_Term_lambda' case. Helper for
+-- 'eagerFreeVariablesInTerm' (#711); a registered top-level definition for the same
+-- self-recursion reason as 'applicationSpine' above.
+eagerVarsOfRedexBody :: TypedTermDefinition (S.Set Name -> Term -> [Term] -> S.Set Name)
+eagerVarsOfRedexBody = define "eagerVarsOfRedexBody" $
+  doc "Find the eager free variables of a curried beta-redex's body, descending through each immediately-applied lambda layer" $
+  "boundSoFar" ~> "body" ~> "remainingArgs" ~>
+  match _Term (var "body")
+    (Just $ Sets.difference (eagerFreeVariablesInTerm @@ var "body") (var "boundSoFar" :: TypedTerm (S.Set Name))) [
+    _Term_lambda>>: "lam" ~>
+      Logic.ifElse (Lists.isEmpty (var "remainingArgs" :: TypedTerm [Term]))
+        (Sets.empty :: TypedTerm (S.Set Name))
+        ("param" <~ Core.lambdaParameter (var "lam") $
+         eagerVarsOfRedexBody
+           @@ (Sets.insert (var "param") (var "boundSoFar" :: TypedTerm (S.Set Name)))
+           @@ (Core.lambdaBody $ var "lam")
+           @@ (Lists.drop (int32 1) (var "remainingArgs" :: TypedTerm [Term])))]
+
 eagerFreeVariablesInTerm :: TypedTermDefinition (Term -> S.Set Name)
 eagerFreeVariablesInTerm = define "eagerFreeVariablesInTerm" $
   doc ("Find the free variables of a term that are referenced eagerly, i.e. outside of any nested "
@@ -130,10 +180,44 @@ eagerFreeVariablesInTerm = define "eagerFreeVariablesInTerm" $
     -- A lambda body is not evaluated at definition time: any reference
     -- inside it is deferred, so it contributes no eager free variables.
     _Term_lambda>>: "_l" ~> (Sets.empty :: TypedTerm (S.Set Name)),
+    -- An application whose (possibly curried) head is a lambda is a beta-redex, not a deferred
+    -- call: DSL-authoring 'where'-bound helper functions (e.g. a term-definition's own local
+    -- 'sigFromVarsAndConstraints'-style helper) compile to exactly this shape -- an immediately-
+    -- applied lambda chain, not a genuinely deferred parser-combinator continuation (contrast
+    -- 'P.bind @@ parser @@ continuation', an ordinary application whose argument happens to be a
+    -- lambda that stays deferred via the _Term_lambda case above). Recognizing the redex and
+    -- descending into its body (with the applied parameters removed from scope) instead of
+    -- treating it as an opaque deferred lambda is what makes a definition's real eager
+    -- dependencies -- reached only through such a helper -- visible to the dependency-ordering
+    -- analysis (Environment.reorderDefs) that every Lisp dialect's coder relies on to emit
+    -- definitions before their eager dependents; a false "deferred" verdict here let Guile Scheme
+    -- load a dependent before its dependency and fail with an unbound-variable error at load
+    -- time (#711) even though every other dialect's looser load-time semantics tolerated it.
+    _Term_application>>: "app" ~> eagerVarsOfApp @@ var "app",
     _Term_let>>: "l" ~> Sets.difference
       (var "dfltVars" @@ unit)
       (Sets.fromList (Lists.map (reify Core.bindingName) (Core.letBindings $ var "l"))),
     _Term_variable>>: "v" ~> Sets.singleton (var "v" :: TypedTerm Name)]
+  where
+    -- Union the eager vars of every argument in the applied chain, each evaluated at its own
+    -- (eager) call site regardless of whether the head turns out to be a redex or not. Not
+    -- self-recursive (only calls the top-level 'eagerFreeVariablesInTerm'), so safe as an
+    -- ordinary 'where'-bound closure.
+    eagerVarsOfArgs = "argList" ~> Lists.foldl
+      ("s" ~> "a" ~> Sets.union (var "s") (eagerFreeVariablesInTerm @@ var "a"))
+      (Sets.empty :: TypedTerm (S.Set Name))
+      (var "argList" :: TypedTerm [Term])
+    eagerVarsOfApp = "app" ~>
+      "spined" <~ (applicationSpine @@ var "app") $
+      "headTerm" <~ Pairs.first (var "spined") $
+      "args" <~ Pairs.second (var "spined") $
+      "argsVars" <~ (eagerVarsOfArgs @@ (var "args" :: TypedTerm [Term])) $
+      match _Term (var "headTerm")
+        (Just $ Sets.union (eagerFreeVariablesInTerm @@ var "headTerm") (var "argsVars")) [
+        _Term_lambda>>: constant $
+          Sets.union
+            (eagerVarsOfRedexBody @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ var "headTerm" @@ (var "args" :: TypedTerm [Term]))
+            (var "argsVars")]
 
 freeTypeVariablesInTerm :: TypedTermDefinition (Term -> S.Set Name)
 freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $

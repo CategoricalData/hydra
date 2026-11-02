@@ -118,6 +118,68 @@ freeVarsCase cname input expected = universalCase cname
   (showNameSet (Variables.freeVariablesInTerm @@ input))
   (showNameSet expected)
 
+-- | Test cases for eagerFreeVariablesInTerm, which 'Environment.reorderDefs' relies on to order
+-- top-level definitions so that a Lisp-dialect coder emits a definition before anything that
+-- eagerly depends on it. #711: a definition whose only reference to a real eager dependency
+-- is reached through an immediately-applied ('where'-bound DSL helper function) lambda chain
+-- was wrongly treated as fully deferred, since the ordinary rule (any lambda body is deferred)
+-- does not distinguish a genuine deferred continuation (e.g. a 'P.bind' callback, never applied
+-- at THIS point) from a beta-redex (a lambda immediately applied to its arguments, evaluated
+-- right here). The bug let Guile Scheme's strict top-level load order surface an
+-- "unbound variable" error that every other Lisp dialect's coder (same shared ordering logic,
+-- looser load-time semantics) tolerated.
+eagerFreeVariablesGroup :: TypedTerm TestGroup
+eagerFreeVariablesGroup = subgroup "eagerFreeVariables" [
+    eagerFreeVarsCase "string literal has no eager free variables"
+      (string "foo")
+      (nameSet []),
+
+    eagerFreeVarsCase "unapplied lambda body is deferred, not eager"
+      (lambda "y" (var "dep"))
+      (nameSet []),
+
+    eagerFreeVarsCase "ordinary application: argument lambda stays deferred, function is eager"
+      (apply (var "bind") (lambda "y" (var "dep")))
+      (nameSet ["bind"]),
+
+    -- Mirrors #711's real shape: a 'where'-bound DSL helper function, compiled to a
+    -- single-argument immediately-applied lambda -- (lambda vars. BODY) arg0 -- where BODY
+    -- references a genuine eager dependency ('dep') not visible to the ordinary "any lambda
+    -- body is deferred" rule.
+    eagerFreeVarsCase "single-argument beta-redex: body's eager reference is visible, not deferred"
+      (apply (lambda "vars" (var "dep")) (list []))
+      (nameSet ["dep"]),
+
+    -- The exact curried shape from #711's real bug: a two-argument 'where'-bound helper,
+    -- compiled to (lambda vars. lambda mcs. BODY) arg0 arg1. Both 'vars' and 'mcs' must be
+    -- removed from scope, leaving only the genuine free reference to 'dep'.
+    eagerFreeVarsCase "curried two-argument beta-redex: body's eager reference survives both layers"
+      (apply (apply (lambda "vars" (lambda "mcs" (var "dep"))) (list [])) (string "arg1"))
+      (nameSet ["dep"]),
+
+    -- The redex's own BOUND parameters must not leak out as free -- only a genuinely different
+    -- name ('dep') should appear.
+    eagerFreeVarsCase "curried beta-redex: bound parameters are not themselves free"
+      (apply (apply (lambda "vars" (lambda "mcs" (apply (var "vars") (var "mcs")))) (list [])) (string "arg1"))
+      (nameSet []),
+
+    -- A partially-applied (under-applied) curried lambda is a genuinely deferred continuation,
+    -- not a full redex -- the unapplied final layer, and everything inside it, stays deferred.
+    eagerFreeVarsCase "partially-applied curried lambda: unapplied final layer stays deferred"
+      (apply (lambda "vars" (lambda "mcs" (var "dep"))) (list []))
+      (nameSet []),
+
+    -- The redex's own ARGUMENTS are evaluated eagerly regardless of the head shape -- a free
+    -- reference inside an argument expression is always eager, redex or not.
+    eagerFreeVarsCase "beta-redex argument is itself evaluated eagerly"
+      (apply (lambda "vars" (var "vars")) (var "argDep"))
+      (nameSet ["argDep"])]
+
+eagerFreeVarsCase :: String -> TypedTerm Term -> TypedTerm (S.Set Name) -> TypedTerm TestCaseWithMetadata
+eagerFreeVarsCase cname input expected = universalCase cname
+  (showNameSet (Variables.eagerFreeVariablesInTerm @@ input))
+  (showNameSet expected)
+
 -- | Test cases for normalizing type variables in terms
 -- The function normalizeTypeVariablesInTerm renames type variables to a canonical form (t0, t1, t2, etc.)
 normalizeTypeVariablesGroup :: TypedTerm TestGroup
@@ -510,6 +572,7 @@ allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for variable analysis and manipulation" $
     supergroup "variables" [
+      eagerFreeVariablesGroup,
       freeVariablesGroup,
       normalizeTypeVariablesGroup,
       unshadowVariablesGroup]
