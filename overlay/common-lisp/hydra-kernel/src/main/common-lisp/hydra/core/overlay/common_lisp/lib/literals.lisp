@@ -453,15 +453,51 @@
        (or (> x most-positive-double-float)
            (< x most-negative-double-float))))
 
+(defun hydra--round-trips-p (cand x r)
+  "True if the rational CAND lies within the rounding interval of the positive
+float X (exact value R), so it reads back as X. Done in exact arithmetic
+because SBCL's rational-to-float conversion is unreliable for subnormals
+(it yields 0.0 for single-float denormals) and overflows near the maximum."
+  (multiple-value-bind (m ex) (integer-decode-float x)
+    (let* ((ulp (expt 2 ex))
+           (diff (- cand r))
+           ;; Below a power of two the gap to the lower neighbour is half as wide.
+           (lower-narrow (and (= m (expt 2 (1- (float-digits x))))
+                              (> ex (- (nth-value 1 (integer-decode-float
+                                                     (if (typep x 'single-float)
+                                                         least-positive-normalized-single-float
+                                                         least-positive-normalized-double-float)))))))
+           (bound (if (and (minusp diff) lower-narrow) (/ ulp 4) (/ ulp 2)))
+           (adiff (abs diff)))
+      (or (< adiff bound) (and (= adiff bound) (evenp m))))))
+
+(defun hydra--shortest-sig-and-exp (x e)
+  "Shortest (significant-digit-string . exponent) that round-trips to the
+positive float X, where E is the exponent of X's leading digit. Searches
+increasing digit counts, rounding the exact rational value of X and checking
+that the candidate lies in X's rounding interval (SBCL's native printer
+prints the full exact expansion for subnormals, e.g. 4.9406564584124654d-324)."
+  (let ((r (rational x)))
+    (loop for n from 1 to 17
+          do (let* ((scale (expt 10 (- e (1- n))))
+                    (m (round r scale))
+                    (cand (* m scale)))
+               (when (or (= n 17) (hydra--round-trips-p cand x r))
+                 (let* ((str (format nil "~D" m))
+                        (e2 (if (> (length str) n) (1+ e) e))
+                        (sig (string-right-trim "0" str)))
+                   (return (cons (if (string= sig "") "0" sig) e2))))))))
+
 (defun hydra--sci-from-native (x)
   "Render a non-zero float in Haskell's scientific style, exactly.
 
-Derives the digits from the implementation's own printer, which is
-correctly-rounded and shortest-round-tripping, then re-normalizes the mantissa
-to [1,10). Rescaling by (expt 10 exp) instead loses precision and, for a
-subnormal such as least-positive-double-float, overflows to infinity -- which
-write-to-string renders as the reader macro #.DOUBLE-FLOAT-POSITIVE-INFINITY,
-corrupting any generated source the value lands in."
+Locates the leading digit's exponent from the implementation's own printer,
+then finds the shortest digit string that round-trips by exact rational
+rounding (the native printer is not shortest-round-tripping for subnormals).
+Rescaling by (expt 10 exp) instead loses precision and, for a subnormal such
+as least-positive-double-float, overflows to infinity -- which write-to-string
+renders as the reader macro #.DOUBLE-FLOAT-POSITIVE-INFINITY, corrupting any
+generated source the value lands in."
   (let* ((s (write-to-string (abs x)))
          (epos (position-if (lambda (c) (member c '(#\d #\D #\e #\E #\f #\F #\s #\S #\l #\L))) s))
          (mant (if epos (subseq s 0 epos) s))
@@ -473,8 +509,9 @@ corrupting any generated source the value lands in."
          (lead    (or (position-if (lambda (c) (char/= c #\0)) digits) 0))
          (pt      (+ (length intpart) ex))
          (e       (- pt lead 1))
-         (sig     (string-right-trim "0" (subseq digits lead)))
-         (sig     (if (string= sig "") "0" sig))
+         (se      (hydra--shortest-sig-and-exp (abs x) e))
+         (sig     (car se))
+         (e       (cdr se))
          (out     (if (= (length sig) 1)
                       (format nil "~A.0" sig)
                       (format nil "~A.~A" (subseq sig 0 1) (subseq sig 1)))))
