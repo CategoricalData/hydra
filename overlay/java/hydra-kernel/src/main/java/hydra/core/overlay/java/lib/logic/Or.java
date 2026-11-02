@@ -9,6 +9,7 @@ import hydra.core.overlay.java.tools.PrimitiveFunction;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static hydra.core.overlay.java.dsl.Types.boolean_;
 import static hydra.core.overlay.java.dsl.Types.function;
@@ -28,6 +29,11 @@ public class Or extends PrimitiveFunction {
         return hydra.core.lib.Logic.or().name;
     }
 
+    @Override
+    protected List<Integer> lazyParams() {
+        return List.of(1);
+    }
+
     /**
      * Returns the type scheme for this function.
      * @return a type scheme representing a function that takes two booleans and returns a boolean
@@ -43,7 +49,9 @@ public class Or extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.boolean_(graph, args.get(0)), b1 -> hydra.core.overlay.java.lib.eithers.Map.apply(b2 -> Terms.boolean_(Or.apply(b1, b2)), hydra.core.extract.Model.boolean_(graph, args.get(1))));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.boolean_(graph, args.get(0)), b1 ->
+            b1 ? Either.right(Terms.boolean_(true))
+               : hydra.core.overlay.java.lib.eithers.Map.apply(b2 -> Terms.boolean_(b2), hydra.core.extract.Model.boolean_(graph, args.get(1))));
     }
 
     /**
@@ -63,5 +71,13 @@ public class Or extends PrimitiveFunction {
      */
     public static boolean apply(boolean b1, boolean b2) {
         return b1 || b2;
+    }
+
+    /**
+     * Lazily performs logical OR. The second operand is only evaluated if the first is false,
+     * providing short-circuit evaluation semantics matching Haskell's lazy or.
+     */
+    public static boolean applyLazy(boolean b1, Supplier<Boolean> b2) {
+        return b1 || b2.get();
     }
 }

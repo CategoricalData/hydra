@@ -6,9 +6,9 @@ from typing import Callable, overload, TypeVar
 A = TypeVar('A')
 
 
-def and_(x: bool, y: bool) -> bool:
-    """Compute the logical AND of two boolean values."""
-    return x and y
+def and_(x: bool, y: bool | Callable[[], bool]) -> bool:
+    """Compute the logical AND of two boolean values. The second operand is lazy (#391, #802)."""
+    return bool(x and (y() if callable(y) else y))
 
 
 @overload
@@ -28,6 +28,6 @@ def not_(x: bool) -> bool:
     return not x
 
 
-def or_(x: bool, y: bool) -> bool:
-    """Compute the logical OR of two boolean values."""
-    return x or y
+def or_(x: bool, y: bool | Callable[[], bool]) -> bool:
+    """Compute the logical OR of two boolean values. The second operand is lazy (#391, #802)."""
+    return bool(x or (y() if callable(y) else y))

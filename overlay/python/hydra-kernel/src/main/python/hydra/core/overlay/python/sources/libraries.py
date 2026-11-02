@@ -565,7 +565,8 @@ def register_logic_primitives() -> dict[Name, Primitive]:
     _a = prims.v("a")
 
     primitives[def_logic.and_.name] = prims.prim2(
-        def_logic.and_.name, logic.and_, [], prims.boolean(), prims.boolean(), prims.boolean()
+        def_logic.and_.name, logic.and_, [], prims.boolean(), prims.boolean(), prims.boolean(),
+        lazy_args=[1]
     )
     primitives[def_logic.if_else.name] = prims.prim3(
         def_logic.if_else.name, logic.if_else, [_a],
@@ -576,7 +577,8 @@ def register_logic_primitives() -> dict[Name, Primitive]:
         def_logic.not_.name, logic.not_, [], prims.boolean(), prims.boolean()
     )
     primitives[def_logic.or_.name] = prims.prim2(
-        def_logic.or_.name, logic.or_, [], prims.boolean(), prims.boolean(), prims.boolean()
+        def_logic.or_.name, logic.or_, [], prims.boolean(), prims.boolean(), prims.boolean(),
+        lazy_args=[1]
     )
 
     return primitives
