@@ -100,43 +100,49 @@
                    (list :none)))
                (catch Exception _ (list :none)))))
 
+;; Shortest significant digits that round-trip, as [digit-string exponent].
+;; Double/toString and Float/toString are NOT shortest-round-trip for subnormals
+;; on JDK < 19 (JDK-4511638: Double.MIN_VALUE prints as 4.9E-324), so search
+;; increasing precisions with String/format and verify each by reparsing.
+(defn- shortest-digits [abs-d float32?]
+  (loop [n 1]
+    (let [s (String/format java.util.Locale/ROOT (str "%." (dec n) "e") (object-array [abs-d]))
+          ok (or (= n 17)
+                 (if float32?
+                   (= (Float/parseFloat s) (.floatValue (Double. abs-d)))
+                   (= (Double/parseDouble s) abs-d)))]
+      (if ok
+        (let [[_ mant exp-str] (re-matches #"([\d.]+)e([+-]?\d+)" s)
+              digits (.replace ^String mant "." "")
+              sig (loop [i (count digits)]
+                    (if (and (> i 1) (= \0 (.charAt ^String digits (dec i))))
+                      (recur (dec i))
+                      (subs digits 0 i)))]
+          [sig (Integer/parseInt exp-str)])
+        (recur (inc n))))))
+
 ;; Haskell-compatible float formatting
-(defn- haskell-show-float [x]
-  (let [d (double x)]
-    (cond
-      (Double/isNaN d) "NaN"
-      (Double/isInfinite d) (if (pos? d) "Infinity" "-Infinity")
-      (zero? d) (if (neg? (Double/doubleToRawLongBits d)) "-0.0" "0.0")
-      :else
-      (let [abs-d (Math/abs d)
-            neg? (neg? d)]
-        (if (and (>= abs-d 0.1) (< abs-d 1.0E7))
-          ;; Fixed notation
-          (let [s (str d)]
-            (if (.contains s ".") s (str s ".0")))
-          ;; Scientific notation (Haskell style: X.YeN).
-          ;; Derive the digits from Double/toString, which is shortest-round-trip,
-          ;; rather than String/format "%.15e": a fixed 15-place format is lossy
-          ;; (1.0e-2 becomes 1.000000000000000e-02, which reparses as
-          ;; 1.0000000000000002e-2) and loses precision on subnormals.
-          (let [s (str abs-d)
-                [_ mant exp-str] (re-matches #"([\d.]+)E([+-]?\d+)" s)
-                digits (.replace ^String (or mant s) "." "")
-                pt (if mant
-                     (+ (.indexOf ^String mant ".") (Integer/parseInt exp-str))
-                     (.indexOf ^String s "."))
-                lead (or (first (keep-indexed #(when (not= %2 \0) %1) digits)) 0)
-                e (- pt lead 1)
-                sig (let [t (subs digits lead)]
-                      (loop [i (count t)]
-                        (if (and (> i 1) (= \0 (.charAt ^String t (dec i))))
-                          (recur (dec i))
-                          (subs t 0 i))))
-                sig (if (empty? sig) "0" sig)
-                out (if (= 1 (count sig))
-                      (str sig ".0")
-                      (str (subs sig 0 1) "." (subs sig 1)))]
-            (str (if neg? "-" "") out "e" e)))))))
+(defn- haskell-show-float
+  ([x] (haskell-show-float x false))
+  ([x float32?]
+   (let [d (double x)]
+     (cond
+       (Double/isNaN d) "NaN"
+       (Double/isInfinite d) (if (pos? d) "Infinity" "-Infinity")
+       (zero? d) (if (neg? (Double/doubleToRawLongBits d)) "-0.0" "0.0")
+       :else
+       (let [abs-d (Math/abs d)
+             neg? (neg? d)]
+         (if (and (>= abs-d 0.1) (< abs-d 1.0E7))
+           ;; Fixed notation
+           (let [s (str d)]
+             (if (.contains s ".") s (str s ".0")))
+           ;; Scientific notation (Haskell style: X.YeN).
+           (let [[sig e] (shortest-digits abs-d float32?)
+                 out (if (= 1 (count sig))
+                       (str sig ".0")
+                       (str (subs sig 0 1) "." (subs sig 1)))]
+             (str (if neg? "-" "") out "e" e))))))))
 
 ;; Show functions
 (def hydra_overlay_clojure_lib_literals_print_bigint (fn [x] (str x)))
@@ -152,7 +158,7 @@
           ;; Parse at float precision then format with Haskell rules
           (let [s (Float/toString (float dx))
                 d (Double/parseDouble s)]
-            (haskell-show-float d))))))
+            (haskell-show-float d true))))))
 (def hydra_overlay_clojure_lib_literals_print_float64 (fn [x] (haskell-show-float x)))
 (def hydra_overlay_clojure_lib_literals_show_int (fn [x] (str x)))
 (def hydra_overlay_clojure_lib_literals_print_int8 (fn [x] (str x)))
