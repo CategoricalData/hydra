@@ -307,6 +307,20 @@ echo ""
 echo "  Assembling hydra-pg main tree (#823)..."
 GENERATOR_HOST=haskell "$SCRIPT_DIR/assemble-distribution.sh" hydra-pg
 
+# Regression guard (#823): fail fast, with a clear message, if any Hydra.Pg.* module imported by the
+# hydra-pg test tree has no file in the main tree, instead of dying later inside stack test.
+PG_DIST="$HYDRA_ROOT_DIR/dist/haskell/hydra-pg/src"
+PG_MISSING=0
+for mod in $(grep -rhoE '^import +(qualified +)?Hydra\.Pg\.[A-Za-z0-9_.]+' "$PG_DIST/test/haskell" 2>/dev/null \
+        | awk '{print $NF}' | sort -u); do
+    rel="$(echo "$mod" | tr . /).hs"
+    if [ ! -f "$PG_DIST/main/haskell/$rel" ] && [ ! -f "$PG_DIST/test/haskell/$rel" ]; then
+        echo "ERROR: hydra-pg test tree imports $mod but $rel is missing from dist/haskell/hydra-pg main (#823)" >&2
+        PG_MISSING=1
+    fi
+done
+[ "$PG_MISSING" = 0 ] || exit 1
+
 # Re-apply the overlay: step 4's `bootstrap-from-json --prune-stale` deletes
 # files in each per-package output dir that are not part of its generated set,
 # which includes the hand-written Hydra.Core.Overlay.Haskell.Lib.* runtime modules overlaid
