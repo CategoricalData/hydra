@@ -357,7 +357,16 @@ generalize = define "generalize" $
   "isTypeVarName" <~ ("name" ~>
     "parts" <~ Strings.splitOn (string ".") (Core.unName $ var "name") $
     Ordering.lte (Lists.length $ var "parts") (int32 1)) $
-  "vars" <~ Lists.distinct (Lists.filter ("v" ~> Logic.and (isUnbound @@ var "cx" @@ var "v") (var "isTypeVarName" @@ var "v")) $
+  -- Hoisted out of the per-variable filter below: 'generalize' is called once per binding in a
+  -- let-group sharing the same 'cx', so computing this per-candidate-variable (as isUnbound does)
+  -- rescans all of graphBoundTypes once per binding instead of once per group. That's quadratic in
+  -- the per-package driver's growing accumulator (#381), which is what #592 traced the cold-clone
+  -- slowdown to.
+  "boundFreeVars" <~ freeVariablesInContext @@ var "cx" $
+  "isUnboundFast" <~ ("v" ~> Logic.and
+    (Logic.not $ Sets.member (var "v" :: TypedTerm Name) (var "boundFreeVars"))
+    (Logic.not $ Maps.member (var "v" :: TypedTerm Name) (Graph.graphSchemaTypes $ var "cx"))) $
+  "vars" <~ Lists.distinct (Lists.filter ("v" ~> Logic.and (var "isUnboundFast" @@ var "v") (var "isTypeVarName" @@ var "v")) $
      Variables.freeVariablesInTypeOrdered @@ var "typ") $
   -- Extract constraints for the generalized variables from the context
   "allConstraints" <~ Graph.graphClassConstraints (var "cx") $
