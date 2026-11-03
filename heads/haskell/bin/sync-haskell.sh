@@ -297,6 +297,16 @@ echo ""
 # files reference test_env.* directly with no rewriting needed.
 echo "  (No post-processing needed — all patches eliminated, see #307.)"
 
+# Re-apply the overlay: step 4's `bootstrap-from-json --prune-stale` deletes
+# files in each per-package output dir that are not part of its generated set,
+# which includes the hand-written Hydra.Core.Overlay.Haskell.Lib.* runtime modules overlaid
+# before step 1. Without this re-overlay, the rebuild below (and dependent
+# packages like hydra-ext, which import Hydra.Core.Overlay.Haskell.Lib.{Pairs,Strings,...})
+# fail with "Could not find module 'Hydra.Overlay.Haskell.Lib.Pairs'". The overlay
+# script is idempotent. (#418)
+echo ""
+"$SCRIPT_DIR/overlay-kernel-runtime.sh"
+
 # Assemble every downstream package's MAIN tree that the head compiles but step 4 does not
 # emit (#823). `bootstrap-from-json --all-packages` regenerates only the baseline, DSL, and
 # test trees; ext packages are normally assembled per-package. Two failure shapes otherwise:
@@ -305,8 +315,8 @@ echo "  (No post-processing needed — all patches eliminated, see #307.)"
 #   * a package's JSON changes but its main tree is left stale, so stack test runs OLD code
 #     (hydra-rdf: ShaclRdf.hs after the #751 SHACL fix).
 # assemble-distribution.sh is digest-gated (input JSON digest vs recorded output digest), so
-# packages with unchanged JSON are skipped cheaply. Runs before the overlay re-apply so the
-# overlay lands last.
+# packages with unchanged JSON are skipped cheaply. Must run AFTER the overlay re-apply above:
+# the assembler's stack build needs the kernel runtime overlay that step 4's --prune-stale deleted.
 DOWNSTREAM_MAIN_PKGS="hydra-pg hydra-rdf hydra-ext hydra-coq hydra-typescript hydra-wasm"
 echo ""
 for pkg in $DOWNSTREAM_MAIN_PKGS; do
@@ -328,16 +338,6 @@ for mod in $(grep -rhoE '^import +(qualified +)?Hydra\.Pg\.[A-Za-z0-9_.]+' "$PG_
     fi
 done
 [ "$PG_MISSING" = 0 ] || exit 1
-
-# Re-apply the overlay: step 4's `bootstrap-from-json --prune-stale` deletes
-# files in each per-package output dir that are not part of its generated set,
-# which includes the hand-written Hydra.Core.Overlay.Haskell.Lib.* runtime modules overlaid
-# before step 1. Without this re-overlay, the rebuild below (and dependent
-# packages like hydra-ext, which import Hydra.Core.Overlay.Haskell.Lib.{Pairs,Strings,...})
-# fail with "Could not find module 'Hydra.Overlay.Haskell.Lib.Pairs'". The overlay
-# script is idempotent. (#418)
-echo ""
-"$SCRIPT_DIR/overlay-kernel-runtime.sh"
 
 # Rebuild so subsequent steps (test, lexicon) pick up step 4's regenerated
 # Haskell dist plus the freshly-re-overlaid runtime.
