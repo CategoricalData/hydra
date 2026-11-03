@@ -29,8 +29,12 @@
   "Derive a primitive's canonical name from its generated hydra.lib.* PrimitiveDefinition (#473).
    The def var is loaded into :cl-user by the dolist above (hydra-load-file flattens generated
    modules into :cl-user; defpackage/in-package forms are skipped by the loader), so callers pass the
-   bare def var, e.g. (prim-name hydra_core_lib_chars_is_alpha_num)."
-  (hydra_core_packaging_primitive_definition-name def))
+   bare def var, e.g. (prim-name hydra_core_lib_chars_is_alpha_num).
+   Also records DEF in *kernel-prim-defs* so that registrations can adopt the kernel's declared
+   type-variable order (#814)."
+  (let ((name (hydra_core_packaging_primitive_definition-name def)))
+    (setf (gethash name *kernel-prim-defs*) def)
+    name))
 
 (defun fun (dom cod)
   "A TermCoder for function types using beta reduction to bridge
@@ -819,8 +823,27 @@
     ((eq (first m) :none) (list :optional nil))
     (t (list :optional m))))
 
+(defun passthrough-coder (type)
+  "A Term passthrough coder declared at TYPE. The annotations primitives below take and return
+   raw Term values at runtime, but their DECLARED types must match the kernel definitions they
+   shadow (hydra.core.annotations.*): a Term-typed placeholder made the Java coder's type checking
+   reject e.g. setTermDescription's optional<string> first argument (#814)."
+  (make-term_coder type
+    (lambda (cx) (declare (ignore cx)) (lambda (g) (declare (ignore g)) (lambda (t_) (list :right t_))))
+    (lambda (cx) (declare (ignore cx)) (lambda (t_) (list :right t_)))))
+
 (defun register-annotations ()
-  (let ((t_ (tc-term)))
+  (let* ((t_ (tc-term))
+         (term-t (list :variable "hydra.core.model.Term"))
+         (opt-string-t (list :optional (list :literal (list :string nil))))
+         (name-c (passthrough-coder (list :variable "hydra.core.model.Name")))
+         (opt-term-c (passthrough-coder (list :optional term-t)))
+         (opt-string-c (passthrough-coder opt-string-t))
+         (cx-c (passthrough-coder (list :variable "t0")))
+         (graph-c (passthrough-coder (list :variable "hydra.core.graph.Graph")))
+         (either-desc-c (passthrough-coder
+                          (list :either (make-either_type (list :variable "hydra.core.errors.Error")
+                                                          opt-string-t)))))
     (list
       ;; setTermAnnotation :: Name -> Maybe Term -> Term -> Term
       (cons "hydra.core.annotations.setTermAnnotation"
@@ -830,7 +853,7 @@
                        (lambda (term)
                          (let ((native-maybe (term-maybe-to-native val)))
                            (funcall (funcall (funcall hydra_core_annotations_set_term_annotation key) native-maybe) term)))))
-                   nil t_ t_ t_ t_))
+                   nil name-c opt-term-c t_ t_))
       ;; getTermAnnotation :: Name -> Term -> Maybe Term
       (cons "hydra.core.annotations.getTermAnnotation"
             (prim2 "hydra.core.annotations.getTermAnnotation"
@@ -838,7 +861,7 @@
                      (lambda (term)
                        (native-maybe-to-term
                          (funcall (funcall hydra_core_annotations_get_term_annotation key) term))))
-                   nil t_ t_ t_))
+                   nil name-c t_ opt-term-c))
       ;; setTermDescription :: Maybe String -> Term -> Term
       (cons "hydra.core.annotations.setTermDescription"
             (prim2 "hydra.core.annotations.setTermDescription"
@@ -854,7 +877,7 @@
                                            (list :given (second (second inner)))
                                            native-d))))))
                          (funcall (funcall hydra_core_annotations_set_term_description native-str-d) term))))
-                   nil t_ t_ t_))
+                   nil opt-string-c t_ t_))
       ;; getTermDescription :: InferenceContext -> Graph -> Term -> Either (Maybe String)
       (cons "hydra.core.annotations.getTermDescription"
             (prim3 "hydra.core.annotations.getTermDescription"
@@ -874,7 +897,7 @@
                                            (list :optional (list :literal (list :string (second maybe-str)))))
                                           (t (list :optional maybe-str)))))
                                  (list :either (list :right term-maybe))))))))
-                   nil t_ t_ t_ t_)))))
+                   (list "t0") cx-c graph-c t_ either-desc-c)))))
 
 ;; ============================================================================
 ;; Regex
@@ -925,7 +948,8 @@
         (t3 (tc-variable "t3"))
         (eq-x '(("x" . ("equality"))))
         (ord-xy '(("x" . ("ordering")) ("y" . ("ordering")))))
-    (remove nil
+    (append
+     (remove nil
       (list
         (unless (member (prim-name hydra_core_lib_lists_take_while) already-native :test #'equal)
           (cons (prim-name hydra_core_lib_lists_take_while)
@@ -966,7 +990,34 @@
         (unless (member (prim-name hydra_core_lib_lists_map_set) already-native :test #'equal)
           (cons (prim-name hydra_core_lib_lists_map_set)
                 (default-fallback-primitive (prim-name hydra_core_lib_lists_map_set)
-                  (list "x" "y") (list (fun x (tc-list y)) (tc-set x)) (tc-list (tc-set y)) ord-xy)))))))
+                  (list "x" "y") (list (fun x (tc-list y)) (tc-set x)) (tc-list (tc-set y)) ord-xy)))))
+     ;; #814: every other kernel primitive that declares a portable default implementation and has no
+     ;; native implementation here, taken verbatim from its generated definition.
+     (let ((covered already-native) (extra nil))
+       (dolist (curated-name (list (prim-name hydra_core_lib_lists_take_while)
+                                   (prim-name hydra_core_lib_equality_not_equal)
+                                   (prim-name hydra_core_lib_functions_const)
+                                   (prim-name hydra_core_lib_functions_flip)
+                                   (prim-name hydra_core_lib_functions_compose)
+                                   (prim-name hydra_core_lib_lists_compose)
+                                   (prim-name hydra_core_lib_lists_fold_list)
+                                   (prim-name hydra_core_lib_lists_map_list)
+                                   (prim-name hydra_core_lib_lists_map_optional)
+                                   (prim-name hydra_core_lib_lists_map_set)))
+         (push curated-name covered))
+       (do-symbols (sym :cl-user)
+         (when (and (eq (symbol-package sym) (find-package :cl-user))
+                    (let ((n (symbol-name sym)))
+                      (and (> (length n) 15) (string= "HYDRA_CORE_LIB_" n :end2 15)))
+                    (boundp sym))
+           (let ((v (symbol-value sym)))
+             (when (and (consp v) (assoc :default_implementation v)
+                        (eq :given (first (hydra_core_packaging_primitive_definition-default_implementation v)))
+                        (not (member (hydra_core_packaging_primitive_definition-name v) covered :test #'equal)))
+               (push (cons (hydra_core_packaging_primitive_definition-name v)
+                           (default-fallback-primitive-from-definition v))
+                     extra)))))
+       extra))))
 
 ;; ============================================================================
 ;; Standard library: all primitives combined

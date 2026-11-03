@@ -100,9 +100,36 @@
                            constraints))))
     (make-type_scheme vars fun-type constraint-map)))
 
+(defvar *kernel-prim-defs* (make-hash-table :test #'equal)
+  "Generated hydra.core.lib.* PrimitiveDefinitions by primitive name, recorded by prim-name (#814).")
+
+(defun kernel-type-variable-order (pname variables inputs output)
+  "The kernel's declared type-variable order for PNAME (#814). Type-scheme variable order is
+   significant: applyTypeArgumentsToType peels foralls left-to-right, so auto-detected
+   first-appearance order (e.g. [x z y] for mapList) swaps type arguments relative to the kernel's
+   [x y z]. Returns VARIABLES when given explicitly, else the kernel definition's type parameters when
+   they name the same variables as those detected from the coders' types, else NIL (auto-detect)."
+  (or variables
+      (let ((def (gethash pname *kernel-prim-defs*)))
+        (when def
+          (let* ((kernel-vars (mapcar #'hydra_core_typing_type_parameter-name
+                                      (hydra_core_typing_term_signature-type_parameters
+                                       (hydra_core_packaging_primitive_definition-signature def))))
+                 (fun-type (reduce (lambda (result-type input-tc)
+                                     (list :function (make-function_type
+                                                      (or (term_coder-type input-tc) (list :unit))
+                                                      result-type)))
+                                   (reverse inputs)
+                                   :initial-value (or (term_coder-type output) (list :unit))))
+                 (detected (remove-if (lambda (v) (find #\. v)) (collect-type-vars-ordered fun-type))))
+            (when (and (= (length kernel-vars) (length detected))
+                       (null (set-exclusive-or kernel-vars detected :test #'equal)))
+              kernel-vars))))))
+
 (defun build-prim-def (pname variables inputs output constraints)
   "Build a PrimitiveDefinition (#156 shape) from name + signature."
-  (let* ((ts (build-type-scheme variables inputs output constraints))
+  (let* ((ts (build-type-scheme (kernel-type-variable-order pname variables inputs output)
+                                inputs output constraints))
          (sig (funcall hydra_core_scoping_type_scheme_to_term_signature ts)))
     (make-hydra_core_packaging_primitive_definition pname (list :none) sig t t (list :none))))
 
@@ -479,13 +506,27 @@
    Note: the default term is already real and directly reducible, not an encoded/reified
    term-as-data requiring a decode step (mirrors the Java/Python/Scala/Clojure/TS fallback,
    #609 Stage 2/3/4)."
-  (let* ((ts (build-type-scheme variables inputs output constraints))
+  (let* ((ts (build-type-scheme (kernel-type-variable-order pname variables inputs output)
+                                inputs output constraints))
          (sig (funcall hydra_core_scoping_type_scheme_to_term_signature ts))
          (default-impl (cdr (assoc pname hydra_core_lib_defaults_default_implementations :test #'equal)))
          (definition (progn
                        (when (null default-impl)
                          (error "default-fallback-primitive: no defaultImplementation for ~A" pname))
                        (make-hydra_core_packaging_primitive_definition pname (list :none) sig t t (list :given default-impl)))))
+    (make-primitive definition
+      (lambda (g)
+        (lambda (args)
+          (let* ((applied (reduce (lambda (fn-term arg) (list :application (make-application fn-term arg)))
+                                   args :initial-value default-impl)))
+            (funcall (funcall (funcall (funcall hydra_core_reduction_reduce_term *prim-cx*) g) t) applied)))))))
+
+(defun default-fallback-primitive-from-definition (definition)
+  "Like default-fallback-primitive, but takes the kernel's generated PrimitiveDefinition (which
+   already carries its signature and a :given default implementation) verbatim, so no
+   hand-written coder types are needed (#814: kernel primitives with portable defaults, e.g.
+   sets.filter, were simply unregistered and the Java coder rejected references to them)."
+  (let ((default-impl (second (hydra_core_packaging_primitive_definition-default_implementation definition))))
     (make-primitive definition
       (lambda (g)
         (lambda (args)
