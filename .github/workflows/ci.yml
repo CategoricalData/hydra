@@ -111,7 +111,11 @@ jobs:
     # accretion risk. If this ceiling is approached again, look for a similar
     # self-contained tail to split out before raising it further.
     # See #494 CI investigation.
-    timeout-minutes: 300
+    # 2026-11-03: run 41668202231 hit 300 at 5h01m. Regeneration alone took 3h51m (now
+    # including the sbt-backed Scala native pass), and the job was cut off in stack tests.
+    # Raised to 360 (GitHub's ceiling for hosted runners) as a stopgap; splitting a tail out
+    # of this job is still the real fix.
+    timeout-minutes: 360
     steps:
       # #617: fetch-depth: 0 (full history) so the #617 Check 2 step below can
       # resolve `git merge-base HEAD origin/main` — the default fetch-depth: 1
