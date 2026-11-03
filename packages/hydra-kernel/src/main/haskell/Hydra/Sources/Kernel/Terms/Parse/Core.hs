@@ -97,6 +97,7 @@ module_ = Module {
      toDefinition caseSugarField,
      toDefinition caseSugarTerm,
      toDefinition caseTerm,
+     toDefinition caseTermField,
      toDefinition constraint,
      toDefinition decimalDigits,
      toDefinition doClause,
@@ -584,7 +585,23 @@ caseTerm = define "caseTerm" $
       "mdef" <~ Optionals.match (Lists.head (var "defFields")) nothing ("f" ~> just (Core.fieldTerm (var "f"))) $
       "alts" <~ Lists.map ("f" ~> Core.caseAlternative (Core.fieldName (var "f")) (Core.fieldTerm (var "f"))) (var "caseFields") $
       Core.termCases (Core.caseStatement (var "tname") (var "mdef") (var "alts"))) @@
-    (asTerm termFields))
+    (P.bind @@ (termKeyword @@ string "{") @@ (constant $
+      P.bind @@ (P.sepBy @@ (asTerm caseTermField) @@ (termKeyword @@ string ",")) @@ ("flds" ~>
+        P.bind @@ (termKeyword @@ string "}") @@ (constant $
+          P.pure @@ var "flds")))))
+
+-- | Parse one field of a raw 'cases' block (#822): the wildcard default '_ = term', or an ordinary
+-- termField. '_' is a reserved word and not a bare-name segment char, so it is matched as a literal
+-- token (as in caseSugarField) rather than via 'name'; this keeps '_' out of record/other termFields.
+caseTermField :: TypedTermDefinition (Parser Field)
+caseTermField = define "caseTermField" $
+  doc "Parse a raw cases field: '_' '=' term (default handler) or an ordinary term field (#822)" $
+  P.choice @@ list [
+    P.bind @@ (termKeyword @@ string "_") @@ (constant $
+      P.bind @@ (termKeyword @@ string "=") @@ (constant $
+        P.map @@ ("body" ~> Core.field (Core.name $ string "_") (var "body")) @@
+          (P.lazy @@ (constant $ asTerm term)))),
+    asTerm termField ]
 
 -- | Parse one branch of the applied 'case' sugar (#809 Wave 2): 'name [binder] = body', or the
 -- default '_ = body'. A branch with a binder desugars its handler to 'λbinder. body' (binding the

@@ -489,6 +489,12 @@ nominalSugarGroup = define "nominalSugarGroup" $
       unwrapTermVal "example.Meters[]",
     termRoundtripTest "unwrap sugar round-trips" unwrapTermVal,
 
+    -- #822: raw 'cases' with a '_' default handler must round-trip print -> parse -> print.
+    termRoundtripTest "cases: '_' default handler round-trips"
+      (casesT "example.Color" [fld "red" (strT "stop"), fld "green" (strT "go")] (Just (strT "caution"))),
+    termRoundtripTest "cases: '_' default only round-trips"
+      (casesT "example.Color" [] (Just (strT "caution"))),
+
     -- #809 Wave 2: applied 'case' sugar (parse-only; desugars to an applied 'cases').
     caseSugarParseTest "case sugar: binder branch → λ-handler, nullary branch as-is, default"
       "case example.Color x { red y = \"r\", green = \"g\", _ = \"c\" }"
