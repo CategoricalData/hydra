@@ -52,6 +52,7 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
+import qualified Hydra.Sources.Kernel.Terms.Generation as Generation
 
 
 -- | Pure module-list utilities shared by the code-generation drivers (#416 Phase 2).
@@ -72,13 +73,15 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, Generation.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Pure module-list utilities shared by the code-generation drivers")}
   where
    definitions = [
      toDefinition dedupPreservingOrder,
      toDefinition filterKernelModules,
      toDefinition filterTypeModules,
+     toDefinition isLibModule,
+     toDefinition partitionLibModules,
      toDefinition secondLevelDir,
      toDefinition stripAllTermTypes,
      toDefinition stripTermTypes]
@@ -135,6 +138,63 @@ filterTypeModules = define "filterTypeModules" $
       false
       (Packaging.moduleDefinitions $ var "m"))
     (var "mods")
+
+-- | Whether a module is one of the @hydra.core.lib.*@ primitive-registry
+-- modules (#788).
+--
+-- This is the predicate whose hand-copied drift across host drivers caused
+-- #788: the Java driver's copy checked this (correct) prefix, while the Scala
+-- driver's copy checked @hydra.lib.*@ instead — the *post-redirect* namespace
+-- consumer call-sites get rewritten to, never an actual module name at
+-- filter time. Scala's copy matched zero real modules, so its lib pass never
+-- lowered or emitted the registry, producing "cannot find symbol" errors on
+-- @scala -> java@ cross-generation. One promoted definition makes this
+-- specific drift impossible by construction.
+isLibModule :: TypedTermDefinition (Module -> Bool)
+isLibModule = define "isLibModule" $
+  doc "Whether a module is one of the hydra.core.lib.* primitive-registry modules" $
+  "m" ~>
+  "name" <~ Packaging.unModuleName (Packaging.moduleName $ var "m") $
+  "parts" <~ Strings.splitOn (string "hydra.core.lib.") (var "name") $
+  Optionals.match (Lists.uncons $ var "parts")
+    false
+    ("uc" ~> Logic.and
+      (Strings.isEmpty $ Pairs.first $ var "uc")
+      (Logic.not $ Lists.isEmpty $ Pairs.second $ var "uc"))
+
+-- | Partition a module universe for the lib pass (#473, #788): lower every
+-- @hydra.core.lib.*@ module via 'Generation.lowerPrimitiveDefinitions' and
+-- split the result into (1) the lowered lib modules alone, to be emitted as
+-- the def-module registry, and (2) the full universe with lib modules
+-- replaced by their lowered form (non-lib modules pass through unchanged),
+-- for use as the generation universe so consumer references resolve
+-- correctly.
+--
+-- Mirrors the identical hand-written logic every host driver's @runLibPass@
+-- previously duplicated (@Bootstrap.java@, @Bootstrap.scala@, and their
+-- counterparts for the other hosts): this is the "lib/universe partition"
+-- promoted per #788/#416 Phase B. The per-target emission (file I/O, coder
+-- dispatch) and the per-dialect consumer call-site redirect
+-- (@redirectLibCalls@) remain host-native; only this pure partition step is
+-- promoted.
+--
+-- The first list (lowered lib modules) doubles as the source of the written
+-- paths a driver's orphan-pruner needs to keep: every module in it will be
+-- written by the lib pass, so @moduleNameToPath@ applied to each gives the
+-- keep-set without a driver needing to track it separately.
+partitionLibModules :: TypedTermDefinition ([Module] -> [Module] -> ([Module], [Module]))
+partitionLibModules = define "partitionLibModules" $
+  doc "Lower hydra.core.lib.* modules and partition (lowered lib mods, full lowered universe)" $
+  "allMainMods" ~> "modsToGenerate" ~>
+  "libMods" <~ Lists.map
+    ("m" ~> Generation.lowerPrimitiveDefinitions @@ var "m")
+    (Lists.filter ("m" ~> isLibModule @@ var "m") (var "modsToGenerate" :: TypedTerm [Module])) $
+  "libUniverse" <~ Lists.map
+    ("m" ~> Logic.ifElse (isLibModule @@ var "m")
+      (Generation.lowerPrimitiveDefinitions @@ var "m")
+      (var "m"))
+    (var "allMainMods" :: TypedTerm [Module]) $
+  pair (var "libMods") (var "libUniverse")
 
 -- | The first two forward-slash-separated segments of a relative path, joined by
 -- "/", or nothing if the path has fewer than two segments.
