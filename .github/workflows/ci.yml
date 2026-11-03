@@ -158,6 +158,18 @@ jobs:
         with:
           distribution: temurin
           java-version: '11.0.19'
+      # The sync's Phase 5 runs the native Scala DSL -> JSON driver via sbt
+      # (bin/generate-hydra-scala-from-scala.sh). Since #756 a failure there is no longer
+      # swallowed, so this job needs sbt as the scala job does.
+      - name: Install sbt
+        uses: ./.github/actions/install-sbt
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.sbt
+            ~/.cache/coursier
+          key: sbt-${{ hashFiles('packages/hydra-scala/build.sbt', 'packages/hydra-scala/project/build.properties') }}
+          restore-keys: sbt-
       - uses: actions/cache@v4
         with:
           path: ~/.stack
@@ -651,44 +663,7 @@ jobs:
           distribution: temurin
           java-version: '17'
       - name: Install sbt
-        run: |
-          set -euo pipefail
-          # Use signed-by keyring (modern pattern; apt-key is deprecated).
-          # The GitHub Actions ubuntu-latest image doesn't ship dirmngr (so
-          # `gpg --recv-keys` can't speak HKP), and `keys.openpgp.org`'s web
-          # lookup endpoint serves HTML "not found" pages with 200 status for
-          # unverified keys -- which an unconditional `curl | gpg --dearmor`
-          # accepts and then fails on. So we curl the HTTP keyserver lookup
-          # to a temp file, validate it really is an OpenPGP block before
-          # importing, and try multiple keyservers in order.
-          KEYID=2EE0EA64E40A89B84B2DF73499E82A75642AC823
-          KEYRING=/etc/apt/keyrings/sbt.gpg
-          sudo install -m 0755 -d /etc/apt/keyrings
-          tmpkey=$(mktemp)
-
-          fetched=0
-          for ks in keyserver.ubuntu.com pgp.mit.edu keys.openpgp.org; do
-            if curl -sSfL --max-time 30 \
-                 "https://${ks}/pks/lookup?op=get&options=mr&search=0x${KEYID}" \
-                 -o "$tmpkey" \
-               && head -1 "$tmpkey" | grep -qF -- "-----BEGIN PGP PUBLIC KEY BLOCK-----"
-            then
-              echo "Fetched SBT signing key from ${ks}"
-              fetched=1
-              break
-            fi
-            echo "Keyserver ${ks} did not return an armored OpenPGP key; trying next..."
-          done
-          test "$fetched" -eq 1
-
-          sudo gpg --dearmor -o "$KEYRING" < "$tmpkey"
-          rm -f "$tmpkey"
-          test -s "$KEYRING"
-
-          echo "deb [signed-by=$KEYRING] https://repo.scala-sbt.org/scalasbt/debian all main" \
-            | sudo tee /etc/apt/sources.list.d/sbt.list
-          sudo apt-get update
-          sudo apt-get install -y sbt
+        uses: ./.github/actions/install-sbt
       - uses: actions/cache@v4
         with:
           path: |
