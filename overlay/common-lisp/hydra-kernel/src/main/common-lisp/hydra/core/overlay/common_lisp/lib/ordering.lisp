@@ -8,6 +8,8 @@
 (defun hydra-decimal-term-p (term)
   (and (consp term) (eq (car term) :literal)
        (let ((lit (cadr term)))
+         ;; The payload must be a (coefficient . scale) cons: the LiteralType.decimal *type*
+         ;; (:literal (:decimal nil)) has the same head but a unit payload (#814).
          (and (consp lit) (eq (car lit) :decimal) (consp (cadr lit))))))
 
 (defun hydra-decimal-term-value (term) (cadr (cadr term)))
@@ -40,9 +42,9 @@
 ;; resolve the family from BOTH sides' tags and require them to agree.
 (defparameter *hydra-variant-order*
   (list
-   (cons "term" '(:annotated :application :cases :either :lambda :let :list
+   (cons "term" '(:annotated :application :cases :either :inject :lambda :let :list
                    :literal :map :optional :pair :project :record :set
-                   :type_lambda :type_application :inject :unit :unwrap
+                   :type_application :type_lambda :unit :unwrap
                    :variable :wrap))
    (cons "type" '(:annotated :application :effect :either :forall :function
                    :list :literal :map :optional :pair :record :set :union

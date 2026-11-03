@@ -49,7 +49,9 @@
 
 ;; elems :: Map k v -> [v]
 (def hydra_overlay_clojure_lib_maps_elems
-  (fn [m] (vals (to-hash-map m))))
+  ;; Values in ascending key order, as keys/toList (#814: hash order reordered Hydra's
+  ;; ordered Map.elems consumers, e.g. type-argument order in checking).
+  (fn [m] (map val (sort-by key generic-compare (to-hash-map m)))))
 
 ;; empty :: Map k v
 (def hydra_overlay_clojure_lib_maps_empty {})

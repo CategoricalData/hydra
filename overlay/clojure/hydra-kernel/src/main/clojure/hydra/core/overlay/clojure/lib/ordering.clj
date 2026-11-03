@@ -16,9 +16,9 @@
 ;; (docs/specification/ordering-and-equality.md), so it is safe to resolve
 ;; the family from BOTH sides' tags and require them to agree.
 (def ^:private variant-order
-  {"term" [:annotated :application :cases :either :lambda :let :list
+  {"term" [:annotated :application :cases :either :inject :lambda :let :list
            :literal :map :optional :pair :project :record :set
-           :type_lambda :type_application :inject :unit :unwrap
+           :type_application :type_lambda :unit :unwrap
            :variable :wrap]
    "type" [:annotated :application :effect :either :forall :function
            :list :literal :map :optional :pair :record :set :union
