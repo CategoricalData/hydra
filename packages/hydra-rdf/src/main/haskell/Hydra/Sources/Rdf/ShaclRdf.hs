@@ -27,6 +27,7 @@ import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
 import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
 import qualified Hydra.Core.Dsl.Lib.Math                   as Math
 import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Ordering               as Ordering
 import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
 import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Core.Dsl.Packaging                     as Packaging
@@ -101,10 +102,14 @@ module_ = Module {
               "Serialize a SHACL ShapesGraph to RDF triples using the SHACL vocabulary")}
   where
     definitions = [
+      toDefinition anonymousBlankNode,
       toDefinition booleanNode,
       toDefinition commonConstraintToTriples,
       toDefinition commonPropertiesToTriples,
       toDefinition definitionToTriples,
+      toDefinition escapeBlankNodeLabelPart,
+      toDefinition inlineNodeShapeToTriples,
+      toDefinition inlineShapeToTriples,
       toDefinition integerNode,
       toDefinition iriNode,
       toDefinition iriOrLiteralToNode,
@@ -115,6 +120,10 @@ module_ = Module {
       toDefinition propertyShapeConstraintToTriples,
       toDefinition propertyShapeToTriples,
       toDefinition rdf,
+      toDefinition rdfListToTriples,
+      toDefinition referenceListToTriples,
+      toDefinition referenceToObject,
+      toDefinition referenceToTriples,
       toDefinition sh,
       toDefinition shapesGraphToNtriples,
       toDefinition shapesGraphToTriples,
@@ -126,6 +135,21 @@ module_ = Module {
       toDefinition tripleToDescription,
       toDefinition xsd]
 
+
+-- | Allocate a deterministic blank node for an anonymous object of a SHACL property
+anonymousBlankNode :: TypedTermDefinition (Rdf.Resource -> String -> Int -> Rdf.Resource)
+anonymousBlankNode = define "anonymousBlankNode" $
+  doc ("Allocate a deterministic blank node for the k-th anonymous object of a SHACL property (given by its"
+    <> " local name) on a subject. The label is derived from the subject, the property, and the ordinal, so"
+    <> " serialization stays pure and stable. An IRI subject is escaped to [A-Za-z0-9_] characters; a blank"
+    <> " node subject (itself allocated here) is used as-is. Because every allocated label contains '-' and"
+    <> " an escaped IRI never does, the labels are injective.") $
+  lambda "subj" $ lambda "rel" $ lambda "k" $ lets [
+    "parentKey">: match Rdf._Resource (var "subj") Nothing [
+      Rdf._Resource_iri>>: lambda "i" $ escapeBlankNodeLabelPart @@ (unwrap Rdf._Iri @@ var "i"),
+      Rdf._Resource_bnode>>: lambda "b" $ unwrap Rdf._BlankNode @@ var "b"]] $
+    inject Rdf._Resource Rdf._Resource_bnode $ wrap Rdf._BlankNode $ Strings.concat (list [
+      var "parentKey", string "-", var "rel", string "-", Literals.printInt32 (var "k")])
 
 -- | Create a boolean literal node
 booleanNode :: TypedTermDefinition (Bool -> Rdf.Node)
@@ -152,7 +176,7 @@ commonConstraintToTriples = define "commonConstraintToTriples" $
       Shacl._CommonConstraint_nodeKind>>: lambda "nk" $
         list [tripleRII @@ var "subj" @@ (sh @@ string "nodeKind") @@ (nodeKindToIri @@ var "nk")],
       Shacl._CommonConstraint_property>>: lambda "refs" $
-        Lists.concat (Lists.map (propertyRefToTriples @@ var "subj") (Sets.toList (var "refs"))),
+        Lists.concat (indexedMap (propertyRefToTriples @@ var "subj") (Sets.toList (var "refs"))),
       Shacl._CommonConstraint_maxInclusive>>: lambda "lit" $
         list [tripleRIN @@ var "subj" @@ (sh @@ string "maxInclusive") @@ (inject Rdf._Node Rdf._Node_literal (var "lit"))],
       Shacl._CommonConstraint_minInclusive>>: lambda "lit" $
@@ -179,42 +203,35 @@ commonConstraintToTriples = define "commonConstraintToTriples" $
         Lists.map (lambda "n" $ tripleRIN @@ var "subj" @@ (sh @@ string "hasValue") @@ var "n")
           (Sets.toList (var "nodes" :: TypedTerm (S.Set Rdf.Node))),
       Shacl._CommonConstraint_in>>: lambda "nodes" $
-        -- sh:in is an RDF list; simplified here as individual triples
-        Lists.map (lambda "n" $ tripleRIN @@ var "subj" @@ (sh @@ string "in") @@ var "n") (var "nodes"),
+        rdfListToTriples @@ var "subj" @@ string "in" @@ var "nodes",
       Shacl._CommonConstraint_node>>: lambda "refs" $
-        Lists.concat (Lists.map
-          (lambda "ref" $ match Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
-            Shacl._Reference_named>>: lambda "i" $ list [tripleRII @@ var "subj" @@ (sh @@ string "node") @@ var "i"]])
+        Lists.concat (indexedMap (referenceToTriples @@ var "subj" @@ string "node" @@ inlineNodeShapeToTriples)
           (Sets.toList (var "refs" :: TypedTerm (S.Set (Shacl.Reference Shacl.NodeShape))))),
       Shacl._CommonConstraint_not>>: lambda "refs" $
-        Lists.concat (Lists.map
-          (lambda "ref" $ match Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
-            Shacl._Reference_named>>: lambda "i" $ list [tripleRII @@ var "subj" @@ (sh @@ string "not") @@ var "i"]])
+        Lists.concat (indexedMap (referenceToTriples @@ var "subj" @@ string "not" @@ inlineShapeToTriples)
           (Sets.toList (var "refs" :: TypedTerm (S.Set (Shacl.Reference Shacl.Shape))))),
       Shacl._CommonConstraint_and>>: lambda "refs" $
-        Lists.concat (Lists.map
-          (lambda "ref" $ match Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
-            Shacl._Reference_named>>: lambda "i" $ list [tripleRII @@ var "subj" @@ (sh @@ string "and") @@ var "i"]])
-          (Sets.toList (var "refs" :: TypedTerm (S.Set (Shacl.Reference Shacl.Shape))))),
+        -- sh:and takes a single SHACL list of shapes
+        referenceListToTriples @@ var "subj" @@ string "and" @@ inlineShapeToTriples
+          @@ (Sets.toList (var "refs" :: TypedTerm (S.Set (Shacl.Reference Shacl.Shape)))),
       Shacl._CommonConstraint_or>>: lambda "refs" $
-        Lists.concat (Lists.map
-          (lambda "ref" $ match Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
-            Shacl._Reference_named>>: lambda "i" $ list [tripleRII @@ var "subj" @@ (sh @@ string "or") @@ var "i"]])
-          (Sets.toList (var "refs" :: TypedTerm (S.Set (Shacl.Reference Shacl.Shape))))),
+        -- sh:or takes a single SHACL list of shapes
+        referenceListToTriples @@ var "subj" @@ string "or" @@ inlineShapeToTriples
+          @@ (Sets.toList (var "refs" :: TypedTerm (S.Set (Shacl.Reference Shacl.Shape)))),
       Shacl._CommonConstraint_xone>>: lambda "refs" $
-        Lists.concat (Lists.map
-          (lambda "ref" $ match Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
-            Shacl._Reference_named>>: lambda "i" $ list [tripleRII @@ var "subj" @@ (sh @@ string "xone") @@ var "i"]])
-          (Sets.toList (var "refs" :: TypedTerm (S.Set (Shacl.Reference Shacl.Shape))))),
+        -- sh:xone takes a single SHACL list of shapes
+        referenceListToTriples @@ var "subj" @@ string "xone" @@ inlineShapeToTriples
+          @@ (Sets.toList (var "refs" :: TypedTerm (S.Set (Shacl.Reference Shacl.Shape)))),
       Shacl._CommonConstraint_equals>>: constant $
         -- Property is a stand-in type, not usable as an IRI
         list ([] :: [TypedTerm Rdf.Triple]),
       Shacl._CommonConstraint_disjoint>>: constant $
         -- Property is a stand-in type, not usable as an IRI
         list ([] :: [TypedTerm Rdf.Triple]),
-      Shacl._CommonConstraint_languageIn>>: constant $
-        -- Language-in requires RDF list encoding; omit for now
-        list ([] :: [TypedTerm Rdf.Triple])]
+      Shacl._CommonConstraint_languageIn>>: lambda "tags" $
+        rdfListToTriples @@ var "subj" @@ string "languageIn" @@ Lists.map
+          (lambda "t" $ stringNode @@ (unwrap Rdf._LanguageTag @@ var "t"))
+          (Sets.toList (var "tags" :: TypedTerm (S.Set Rdf.LanguageTag)))]
 
 -- | Serialize CommonProperties to triples
 commonPropertiesToTriples :: TypedTermDefinition (Rdf.Resource -> Shacl.CommonProperties -> [Rdf.Triple])
@@ -247,6 +264,41 @@ definitionToTriples = define "definitionToTriples" $
     match Shacl._Shape (var "shape") Nothing [
       Shacl._Shape_node>>: lambda "ns_" $ nodeShapeToTriples @@ var "iri_" @@ var "ns_",
       Shacl._Shape_property>>: lambda "ps" $ propertyShapeToTriples @@ (iriResource @@ var "iri_") @@ var "ps"]
+
+-- | Escape a string to a blank node label fragment
+escapeBlankNodeLabelPart :: TypedTermDefinition (String -> String)
+escapeBlankNodeLabelPart = define "escapeBlankNodeLabelPart" $
+  doc ("Escape a string for use in a blank node label: ASCII letters and digits are kept, and every other"
+    <> " character becomes '_' followed by its decimal code point and '_'. The result is valid in N-Triples"
+    <> " blank node labels and never contains '-'.") $
+  lambda "s" $
+    Strings.concat (Lists.map
+      (lambda "c" $ Logic.ifElse
+        (Logic.or (Logic.and (Ordering.gte (var "c") (int32 48)) (Ordering.lte (var "c") (int32 57)))
+          (Logic.or (Logic.and (Ordering.gte (var "c") (int32 65)) (Ordering.lte (var "c") (int32 90)))
+            (Logic.and (Ordering.gte (var "c") (int32 97)) (Ordering.lte (var "c") (int32 122)))))
+        (Strings.fromList (list [var "c"]))
+        (Strings.concat (list [string "_", Literals.printInt32 (var "c"), string "_"])))
+      (Strings.toList (var "s")))
+
+-- | Serialize an inline (possibly anonymous) NodeShape to triples, given its subject resource
+inlineNodeShapeToTriples :: TypedTermDefinition (Rdf.Resource -> Shacl.NodeShape -> [Rdf.Triple])
+inlineNodeShapeToTriples = define "inlineNodeShapeToTriples" $
+  doc "Serialize a NodeShape to triples, given a subject resource (may be blank node), without any target" $
+  lambda "subj" $ lambda "ns_" $
+    Lists.cons
+      (tripleRII @@ var "subj" @@ (rdf @@ string "type") @@ (sh @@ string "NodeShape"))
+      (commonPropertiesToTriples @@ var "subj"
+        @@ (project Shacl._NodeShape Shacl._NodeShape_common @@ var "ns_"))
+
+-- | Serialize an inline (possibly anonymous) Shape to triples, given its subject resource
+inlineShapeToTriples :: TypedTermDefinition (Rdf.Resource -> Shacl.Shape -> [Rdf.Triple])
+inlineShapeToTriples = define "inlineShapeToTriples" $
+  doc "Serialize a Shape to triples, given a subject resource (may be blank node), without any target" $
+  lambda "subj" $ lambda "shape" $
+    match Shacl._Shape (var "shape") Nothing [
+      Shacl._Shape_node>>: lambda "ns_" $ inlineNodeShapeToTriples @@ var "subj" @@ var "ns_",
+      Shacl._Shape_property>>: lambda "ps" $ propertyShapeToTriples @@ var "subj" @@ var "ps"]
 
 -- | Create an integer literal node
 integerNode :: TypedTermDefinition (Integer -> Rdf.Node)
@@ -300,30 +352,24 @@ nodeShapeToTriples :: TypedTermDefinition (Rdf.Iri -> Shacl.NodeShape -> [Rdf.Tr
 nodeShapeToTriples = define "nodeShapeToTriples" $
   doc "Serialize a NodeShape to triples" $
   lambda "iri_" $ lambda "ns_" $
-    Lists.concat (list [
-      list [
-        tripleIII @@ var "iri_" @@ (rdf @@ string "type") @@ (sh @@ string "NodeShape"),
-        tripleIII @@ var "iri_" @@ (sh @@ string "targetClass") @@ var "iri_"],
-      commonPropertiesToTriples @@ (iriResource @@ var "iri_")
-        @@ (project Shacl._NodeShape Shacl._NodeShape_common @@ var "ns_")])
+    Lists.cons
+      (tripleIII @@ var "iri_" @@ (sh @@ string "targetClass") @@ var "iri_")
+      (inlineNodeShapeToTriples @@ (iriResource @@ var "iri_") @@ var "ns_")
 
 -- | Serialize a property shape reference (may be inline or named)
-propertyRefToTriples :: TypedTermDefinition (Rdf.Resource -> Shacl.Reference Shacl.PropertyShape -> [Rdf.Triple])
+propertyRefToTriples :: TypedTermDefinition (Rdf.Resource -> Int -> Shacl.Reference Shacl.PropertyShape -> [Rdf.Triple])
 propertyRefToTriples = define "propertyRefToTriples" $
-  doc "Serialize a property shape reference (may be inline or named)" $
-  lambda "subj" $ lambda "ref" $
-    match Shacl._Reference (var "ref") Nothing [
-      Shacl._Reference_named>>: lambda "i" $
-        list [tripleRII @@ var "subj" @@ (sh @@ string "property") @@ var "i"],
+  doc ("Serialize the k-th property shape reference of a subject (may be named, anonymous, or an inline"
+    <> " definition)") $
+  lambda "subj" $ lambda "k" $ lambda "ref" $
+    match Shacl._Reference (var "ref")
+      (Just $ referenceToTriples @@ var "subj" @@ string "property" @@ propertyShapeToTriples @@ var "k" @@ var "ref") [
       Shacl._Reference_definition>>: lambda "def" $ lets [
         "iri_">: project Shacl._Definition Shacl._Definition_iri @@ var "def",
         "ps">: project Shacl._Definition Shacl._Definition_target @@ var "def"] $
         Lists.concat (list [
           list [tripleRII @@ var "subj" @@ (sh @@ string "property") @@ var "iri_"],
-          propertyShapeToTriples @@ (iriResource @@ var "iri_") @@ var "ps"]),
-      Shacl._Reference_anonymous>>: constant $
-        -- Anonymous property shapes would need blank node allocation; skip for now
-        list ([] :: [TypedTerm Rdf.Triple])]
+          propertyShapeToTriples @@ (iriResource @@ var "iri_") @@ var "ps"])]
 
 -- | Serialize a PropertyShapeConstraint to triples
 propertyShapeConstraintToTriples :: TypedTermDefinition (Rdf.Resource -> Shacl.PropertyShapeConstraint -> [Rdf.Triple])
@@ -371,6 +417,68 @@ rdf = define "rdf" $
   doc "Construct an IRI in the RDF namespace" $
   lambda "local" $
     RdfUtils.rdfIri @@ var "local"
+
+-- | Serialize a list-valued SHACL property as an RDF collection
+rdfListToTriples :: TypedTermDefinition (Rdf.Resource -> String -> [Rdf.Node] -> [Rdf.Triple])
+rdfListToTriples = define "rdfListToTriples" $
+  doc ("Serialize a list-valued SHACL property (given by its local name, e.g. sh:in) as a single triple whose"
+    <> " object is an RDF collection: a chain of rdf:first/rdf:rest cells on deterministic blank nodes,"
+    <> " terminated by rdf:nil. An empty list is rdf:nil itself. Cell labels use the property name suffixed"
+    <> " with 'List', so they never collide with blank nodes allocated for the list's own members.") $
+  lambda "subj" $ lambda "rel" $ lambda "nodes" $ lets [
+    "n">: Lists.length (var "nodes"),
+    "cell">: lambda "i" $ anonymousBlankNode @@ var "subj" @@ Strings.concat2 (var "rel") (string "List") @@ var "i",
+    "cellNode">: lambda "i" $ Logic.ifElse (Ordering.lt (var "i") (var "n"))
+      (RdfUtils.resourceToNode @@ (var "cell" @@ var "i"))
+      (iriNode @@ (rdf @@ string "nil"))] $
+    Lists.cons
+      (tripleRIN @@ var "subj" @@ (sh @@ var "rel") @@ (var "cellNode" @@ int32 0))
+      (Lists.concat (Lists.map
+        (lambda "p" $ lets [
+          "i">: Pairs.first (var "p"),
+          "c">: var "cell" @@ var "i"] $ list [
+          tripleRIN @@ var "c" @@ (rdf @@ string "first") @@ Pairs.second (var "p"),
+          tripleRIN @@ var "c" @@ (rdf @@ string "rest") @@ (var "cellNode" @@ Math.add (var "i") (int32 1))])
+        (Lists.zip (Math.range (int32 0) (var "n")) (var "nodes"))))
+
+-- | Serialize a reference-valued SHACL property whose value is a single list of shapes
+referenceListToTriples :: TypedTermDefinition (Rdf.Resource -> String -> (Rdf.Resource -> a -> [Rdf.Triple]) -> [Shacl.Reference a] -> [Rdf.Triple])
+referenceListToTriples = define "referenceListToTriples" $
+  doc ("Serialize a reference-valued SHACL property whose value is a single SHACL list of shapes (sh:and,"
+    <> " sh:or, sh:xone): one triple whose object is the list of referenced shapes, plus the triples of any"
+    <> " anonymous shapes.") $
+  lambda "subj" $ lambda "rel" $ lambda "toTriples" $ lambda "refs" $ lets [
+    "objs">: Optionals.givens (indexedMap (referenceToObject @@ var "subj" @@ var "rel" @@ var "toTriples") (var "refs"))] $
+    Lists.concat2
+      (rdfListToTriples @@ var "subj" @@ var "rel" @@ Lists.map (lambda "o" $ Pairs.first (var "o")) (var "objs"))
+      (Lists.concat (Lists.map (lambda "o" $ Pairs.second (var "o")) (var "objs")))
+
+-- | Resolve the k-th reference-valued object of a SHACL property to an RDF node plus supporting triples
+referenceToObject :: TypedTermDefinition (Rdf.Resource -> String -> (Rdf.Resource -> a -> [Rdf.Triple]) -> Int -> Shacl.Reference a -> Maybe (Rdf.Node, [Rdf.Triple]))
+referenceToObject = define "referenceToObject" $
+  doc ("Resolve the k-th reference-valued object of a SHACL property (given by its local name) on a subject"
+    <> " to an RDF node, together with any triples describing it. A named reference is its IRI; an anonymous"
+    <> " reference is a fresh deterministic blank node, onto which the inline shape is serialized using the"
+    <> " given function. Inline definitions are not handled here (see propertyRefToTriples), and yield nothing.") $
+  lambda "subj" $ lambda "rel" $ lambda "toTriples" $ lambda "k" $ lambda "ref" $
+    match Shacl._Reference (var "ref") (Just nothing) [
+      Shacl._Reference_named>>: lambda "i" $
+        just (pair (iriNode @@ var "i") (list ([] :: [TypedTerm Rdf.Triple]))),
+      Shacl._Reference_anonymous>>: lambda "x" $ lets [
+        "b">: anonymousBlankNode @@ var "subj" @@ var "rel" @@ var "k"] $
+        just (pair (RdfUtils.resourceToNode @@ var "b") (var "toTriples" @@ var "b" @@ var "x"))]
+
+-- | Serialize the k-th reference-valued object of a SHACL property on a subject
+referenceToTriples :: TypedTermDefinition (Rdf.Resource -> String -> (Rdf.Resource -> a -> [Rdf.Triple]) -> Int -> Shacl.Reference a -> [Rdf.Triple])
+referenceToTriples = define "referenceToTriples" $
+  doc ("Serialize the k-th reference-valued object of a SHACL property (given by its local name) on a"
+    <> " subject, as a triple linking the subject to the referenced shape plus any triples describing it.") $
+  lambda "subj" $ lambda "rel" $ lambda "toTriples" $ lambda "k" $ lambda "ref" $
+    Optionals.match (referenceToObject @@ var "subj" @@ var "rel" @@ var "toTriples" @@ var "k" @@ var "ref")
+      (list ([] :: [TypedTerm Rdf.Triple]))
+      (lambda "o" $ Lists.cons
+        (tripleRIN @@ var "subj" @@ (sh @@ var "rel") @@ Pairs.first (var "o"))
+        (Pairs.second (var "o")))
 
 -- | SHACL namespace
 sh :: TypedTermDefinition (String -> Rdf.Iri)
@@ -463,3 +571,11 @@ xsd = define "xsd" $
   doc "Construct an IRI in the XML Schema namespace" $
   lambda "local" $
     RdfUtils.xmlSchemaDatatypeIri @@ var "local"
+
+-- | Apply a binary function to each element of a list along with its 0-based ordinal. The ordinal is what
+-- anonymousBlankNode uses to keep sibling blank nodes distinct; Sets.toList is ascending on every host, so
+-- ordinals over a set's elements (and hence blank node labels) are deterministic.
+indexedMap :: TypedTerm (Int -> x -> y) -> TypedTerm [x] -> TypedTerm [y]
+indexedMap f xs = Lists.map
+  (lambda "p" $ f @@ Pairs.first (var "p") @@ Pairs.second (var "p"))
+  (Lists.zip (Math.range (int32 0) (Lists.length xs)) xs)
