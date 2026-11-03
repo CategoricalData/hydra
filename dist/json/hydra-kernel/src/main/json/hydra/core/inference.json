@@ -1457,125 +1457,174 @@
                           "let": {
                             "bindings": [
                               {
-                                "name": "vars",
+                                "name": "boundFreeVars",
                                 "term": {
-                                  "application": {
-                                    "function": {
-                                      "typeApplication": {"body": {"variable": "hydra.core.lib.lists.distinct"}, "type": {"variable": "hydra.core.model.Name"}}},
-                                    "argument": {
-                                      "application": {
-                                        "function": {
-                                          "application": {
-                                            "function": {
-                                              "typeApplication": {"body": {"variable": "hydra.core.lib.lists.filter"}, "type": {"variable": "hydra.core.model.Name"}}},
-                                            "argument": {
-                                              "lambda": {
-                                                "parameter": "v",
-                                                "domain": {"variable": "hydra.core.model.Name"},
-                                                "body": {
-                                                  "application": {
-                                                    "function": {
-                                                      "application": {
-                                                        "function": {"variable": "hydra.core.lib.logic.and"},
-                                                        "argument": {
-                                                          "application": {
-                                                            "function": {"application": {"function": {"variable": "hydra.core.inference.isUnbound"}, "argument": {"variable": "cx"}}},
-                                                            "argument": {"variable": "v"}}}}},
-                                                    "argument": {"application": {"function": {"variable": "isTypeVarName"}, "argument": {"variable": "v"}}}}}}}}},
-                                        "argument": {
-                                          "application": {"function": {"variable": "hydra.core.variables.freeVariablesInTypeOrdered"}, "argument": {"variable": "typ"}}}}}}},
-                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.model.Name"}}, "constraints": []}}],
+                                  "application": {"function": {"variable": "hydra.core.inference.freeVariablesInContext"}, "argument": {"variable": "cx"}}},
+                                "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.core.model.Name"}}, "constraints": []}}],
                             "body": {
                               "let": {
                                 "bindings": [
                                   {
-                                    "name": "allConstraints",
+                                    "name": "isUnboundFast",
                                     "term": {
-                                      "application": {
-                                        "function": {"project": {"typeName": "hydra.core.graph.Graph", "fieldName": "classConstraints"}},
-                                        "argument": {"variable": "cx"}}},
-                                    "typeScheme": {
-                                      "variables": [],
-                                      "body": {
-                                        "map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.TypeVariableConstraints"}}},
-                                      "constraints": []}}],
-                                "body": {
-                                  "let": {
-                                    "bindings": [
-                                      {
-                                        "name": "relevantConstraints",
-                                        "term": {
+                                      "lambda": {
+                                        "parameter": "v",
+                                        "domain": {"variable": "hydra.core.model.Name"},
+                                        "body": {
                                           "application": {
                                             "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.core.lib.maps.fromList"}, "type": {"variable": "hydra.core.model.Name"}}},
-                                                "type": {"variable": "hydra.core.model.TypeVariableConstraints"}}},
+                                              "application": {
+                                                "function": {"variable": "hydra.core.lib.logic.and"},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"variable": "hydra.core.lib.logic.not"},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.sets.member"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                                            "argument": {"variable": "v"}}},
+                                                        "argument": {"variable": "boundFreeVars"}}}}}}},
                                             "argument": {
                                               "application": {
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.core.lib.optionals.givens"},
-                                                    "type": {
-                                                      "pair": {"first": {"variable": "hydra.core.model.Name"}, "second": {"variable": "hydra.core.model.TypeVariableConstraints"}}}}},
+                                                "function": {"variable": "hydra.core.lib.logic.not"},
                                                 "argument": {
                                                   "application": {
                                                     "function": {
                                                       "application": {
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.maps.member"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                                            "type": {"variable": "hydra.core.model.TypeScheme"}}},
+                                                        "argument": {"variable": "v"}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"project": {"typeName": "hydra.core.graph.Graph", "fieldName": "schemaTypes"}},
+                                                        "argument": {"variable": "cx"}}}}}}}}}}},
+                                    "typeScheme": {
+                                      "variables": [],
+                                      "body": {"function": {"domain": {"variable": "hydra.core.model.Name"}, "codomain": {"literal": "boolean"}}},
+                                      "constraints": []}}],
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "vars",
+                                        "term": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {"body": {"variable": "hydra.core.lib.lists.distinct"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.lists.filter"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "parameter": "v",
+                                                        "domain": {"variable": "hydra.core.model.Name"},
+                                                        "body": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {"variable": "hydra.core.lib.logic.and"},
+                                                                "argument": {"application": {"function": {"variable": "isUnboundFast"}, "argument": {"variable": "v"}}}}},
+                                                            "argument": {"application": {"function": {"variable": "isTypeVarName"}, "argument": {"variable": "v"}}}}}}}}},
+                                                "argument": {
+                                                  "application": {"function": {"variable": "hydra.core.variables.freeVariablesInTypeOrdered"}, "argument": {"variable": "typ"}}}}}}},
+                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.model.Name"}}, "constraints": []}}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "allConstraints",
+                                            "term": {
+                                              "application": {
+                                                "function": {"project": {"typeName": "hydra.core.graph.Graph", "fieldName": "classConstraints"}},
+                                                "argument": {"variable": "cx"}}},
+                                            "typeScheme": {
+                                              "variables": [],
+                                              "body": {
+                                                "map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.TypeVariableConstraints"}}},
+                                              "constraints": []}}],
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "relevantConstraints",
+                                                "term": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {"body": {"variable": "hydra.core.lib.maps.fromList"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                                        "type": {"variable": "hydra.core.model.TypeVariableConstraints"}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.core.lib.optionals.givens"},
                                                             "type": {
-                                                              "optional": {
-                                                                "pair": {"first": {"variable": "hydra.core.model.Name"}, "second": {"variable": "hydra.core.model.TypeVariableConstraints"}}}}}},
+                                                              "pair": {"first": {"variable": "hydra.core.model.Name"}, "second": {"variable": "hydra.core.model.TypeVariableConstraints"}}}}},
                                                         "argument": {
-                                                          "lambda": {
-                                                            "parameter": "v",
-                                                            "domain": {"variable": "hydra.core.model.Name"},
-                                                            "body": {
+                                                          "application": {
+                                                            "function": {
                                                               "application": {
                                                                 "function": {
-                                                                  "application": {
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.map"}, "type": {"variable": "hydra.core.model.TypeVariableConstraints"}}},
-                                                                        "type": {
-                                                                          "pair": {"first": {"variable": "hydra.core.model.Name"}, "second": {"variable": "hydra.core.model.TypeVariableConstraints"}}}}},
-                                                                    "argument": {
-                                                                      "lambda": {
-                                                                        "parameter": "meta",
-                                                                        "domain": {"variable": "hydra.core.model.TypeVariableConstraints"},
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {"pair": {"first": {"variable": "v"}, "second": {"variable": "meta"}}},
-                                                                                "type": {"variable": "hydra.core.model.Name"}}},
-                                                                            "type": {"variable": "hydra.core.model.TypeVariableConstraints"}}}}}}},
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                                                    "type": {
+                                                                      "optional": {
+                                                                        "pair": {"first": {"variable": "hydra.core.model.Name"}, "second": {"variable": "hydra.core.model.TypeVariableConstraints"}}}}}},
                                                                 "argument": {
-                                                                  "application": {
-                                                                    "function": {
+                                                                  "lambda": {
+                                                                    "parameter": "v",
+                                                                    "domain": {"variable": "hydra.core.model.Name"},
+                                                                    "body": {
                                                                       "application": {
                                                                         "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.maps.lookup"}, "type": {"variable": "hydra.core.model.Name"}}},
-                                                                            "type": {"variable": "hydra.core.model.TypeVariableConstraints"}}},
-                                                                        "argument": {"variable": "v"}}},
-                                                                    "argument": {"variable": "allConstraints"}}}}}}}}},
-                                                    "argument": {"variable": "vars"}}}}}}},
-                                        "typeScheme": {
-                                          "variables": [],
-                                          "body": {
-                                            "map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.TypeVariableConstraints"}}},
-                                          "constraints": []}}],
-                                    "body": {
-                                      "record": {
-                                        "typeName": "hydra.core.model.TypeScheme",
-                                        "fields": [
-                                          {"name": "variables", "term": {"variable": "vars"}},
-                                          {"name": "body", "term": {"variable": "typ"}},
-                                          {"name": "constraints", "term": {"variable": "relevantConstraints"}}]}}}}}}}}}}}}}},
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.map"}, "type": {"variable": "hydra.core.model.TypeVariableConstraints"}}},
+                                                                                "type": {
+                                                                                  "pair": {"first": {"variable": "hydra.core.model.Name"}, "second": {"variable": "hydra.core.model.TypeVariableConstraints"}}}}},
+                                                                            "argument": {
+                                                                              "lambda": {
+                                                                                "parameter": "meta",
+                                                                                "domain": {"variable": "hydra.core.model.TypeVariableConstraints"},
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"pair": {"first": {"variable": "v"}, "second": {"variable": "meta"}}},
+                                                                                        "type": {"variable": "hydra.core.model.Name"}}},
+                                                                                    "type": {"variable": "hydra.core.model.TypeVariableConstraints"}}}}}}},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.maps.lookup"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                                                                    "type": {"variable": "hydra.core.model.TypeVariableConstraints"}}},
+                                                                                "argument": {"variable": "v"}}},
+                                                                            "argument": {"variable": "allConstraints"}}}}}}}}},
+                                                            "argument": {"variable": "vars"}}}}}}},
+                                                "typeScheme": {
+                                                  "variables": [],
+                                                  "body": {
+                                                    "map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.TypeVariableConstraints"}}},
+                                                  "constraints": []}}],
+                                            "body": {
+                                              "record": {
+                                                "typeName": "hydra.core.model.TypeScheme",
+                                                "fields": [
+                                                  {"name": "variables", "term": {"variable": "vars"}},
+                                                  {"name": "body", "term": {"variable": "typ"}},
+                                                  {"name": "constraints", "term": {"variable": "relevantConstraints"}}]}}}}}}}}}}}}}}}}}},
             "annotation": {
               "map": [
                 {

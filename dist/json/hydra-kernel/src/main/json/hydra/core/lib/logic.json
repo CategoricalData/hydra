@@ -41,8 +41,8 @@
           "description": "Compute the logical AND of two boolean values.",
           "comments": [
             "and(p, q) returns true iff both p and q are true.",
-            "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.",
-            "Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
+            "The second operand is not necessarily evaluated: and is short-circuiting, and returns false as soon as the first operand is false without evaluating the second.",
+            "Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool."],
           "seeAlso": [],
           "lifecycle": {"availableSince": "0.15"},
           "provisions": [
@@ -54,7 +54,7 @@
           "typeParameters": [],
           "parameters": [
             {"name": "p", "description": "the first boolean operand", "type": {"literal": "boolean"}, "isLazy": false},
-            {"name": "q", "description": "the second boolean operand", "type": {"literal": "boolean"}, "isLazy": false}],
+            {"name": "q", "description": "the second boolean operand", "type": {"literal": "boolean"}, "isLazy": true}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
@@ -132,8 +132,8 @@
           "description": "Compute the logical OR of two boolean values.",
           "comments": [
             "or(p, q) returns true iff at least one of p and q is true.",
-            "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.",
-            "Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
+            "The second operand is not necessarily evaluated: or is short-circuiting, and returns true as soon as the first operand is true without evaluating the second.",
+            "Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool."],
           "seeAlso": [],
           "lifecycle": {"availableSince": "0.15"},
           "provisions": [
@@ -145,7 +145,7 @@
           "typeParameters": [],
           "parameters": [
             {"name": "p", "description": "the first boolean operand", "type": {"literal": "boolean"}, "isLazy": false},
-            {"name": "q", "description": "the second boolean operand", "type": {"literal": "boolean"}, "isLazy": false}],
+            {"name": "q", "description": "the second boolean operand", "type": {"literal": "boolean"}, "isLazy": true}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
