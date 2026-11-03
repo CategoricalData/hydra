@@ -871,11 +871,9 @@ fi
 #     compiles, not just when generating those targets specifically. hydra-haskell/hydra-lisp
 #     are "sourceLanguage": "haskell" (like hydra-kernel), but Phase 3's loop below is
 #     hardcoded to kernel/build/rdf/pg, so they need the same explicit seeding here.
-# On a warm tree this is silently already satisfied by a previous sync; a genuinely cold
-# checkout has none of these directories and nothing else creates them (confirmed: this
-# bug predates #497, reproduces on main from an equally cold dist/, unrelated to the
-# hydra.core.print.* rename). Guarded by a directory-exists sentinel + HOSTS/TARGETS membership
-# so this is a no-op on a warm tree and skips languages not in scope for this sync.
+# On a genuinely cold checkout, none of these directories exist and nothing else creates
+# them (confirmed: this bug predates #497, reproduces on main from an equally cold dist/,
+# unrelated to the hydra.core.print.* rename).
 #
 # #756: hydra-typescript was missing from the scala list below even though
 # Generation.scala needs it just as unconditionally as the other six — on a sync where
@@ -884,30 +882,46 @@ fi
 # hydra-typescript for scala, only runs when scala is literally in --hosts). The gap let
 # Phase 5's native Scala DSL->JSON driver fail an sbt compile ("value typeScript is not a
 # member of hydra") that was then silently swallowed by that phase's `|| echo WARNING...`
-# fallback. Fixed here; see also the Phase 5 sentinel gate added below, which now fails
-# loudly instead of swallowing if the prerequisite is still somehow missing.
+# fallback. Fixed in an earlier pass of this issue; see the Phase 5 sentinel gate below,
+# which now fails loudly instead of swallowing if the prerequisite is still missing.
+#
+# #756 (round 2): all three blocks below previously guarded on a directory-exists
+# sentinel (`[ ! -d dist/<lang>/<pkg> ]`) — a no-op once the dir had been created even
+# ONCE in a worktree's lifetime, so a subsequently STALE dist/<lang>/<pkg> (its source
+# dist/json/<pkg> changed, but the dir was never re-assembled) was never refreshed; only
+# a wholly MISSING dir triggered assembly. This surfaced concretely for Scala: a stale
+# dist/scala/hydra-scala (old hydra.scala.dsl.syntax wrapper, since-changed function
+# arity) broke the Scala native DSL->JSON driver's sbt compile against the Phase 5
+# sentinel gate above, once that gate stopped silently swallowing the failure (the
+# round-1 fix). Fixed for all three languages by dropping the directory-exists guard and
+# always invoking assemble-distribution.sh for every listed package when that language
+# is in LANG_UNION. Safe and cheap to call unconditionally: every assemble-distribution.sh
+# (java/python/scala) already does its own digest-based freshness check
+# (assemble_check_fresh in bin/lib/assemble-common.sh, backed by pure-bash/jq
+# bin/digest.sh — no host compile) and no-ops when dist/json/<pkg> hasn't changed —
+# mirroring how Phase 5's own native-generator freshness gate (check-phase5-fresh.py)
+# already works for java/python.
 if printf '%s\n' $LANG_UNION | grep -qx java; then
     for pkg in hydra-jvm hydra-java; do
-        if [ ! -d "$HYDRA_ROOT/dist/java/$pkg" ]; then
-            echo ""
-            echo "Cold-start detected (missing dist/java/$pkg); self-assembling from tracked dist/json/..."
-            "$HYDRA_ROOT/heads/java/bin/assemble-distribution.sh" "$pkg"
-        fi
+        echo ""
+        echo "Ensuring dist/java/$pkg is fresh; assemble-distribution.sh self-skips via its own"
+        echo "digest check when dist/json/$pkg hasn't changed..."
+        "$HYDRA_ROOT/heads/java/bin/assemble-distribution.sh" "$pkg"
     done
 fi
-if printf '%s\n' $LANG_UNION | grep -qx python && [ ! -d "$HYDRA_ROOT/dist/python/hydra-python" ]; then
+if printf '%s\n' $LANG_UNION | grep -qx python; then
     echo ""
-    echo "Cold-start detected (missing dist/python/hydra-python); self-assembling from tracked dist/json/..."
+    echo "Ensuring dist/python/hydra-python is fresh; assemble-distribution.sh self-skips via"
+    echo "its own digest check when dist/json/hydra-python hasn't changed..."
     "$HYDRA_ROOT/heads/python/bin/assemble-distribution.sh" hydra-python
 fi
 if printf '%s\n' $LANG_UNION | grep -qx scala; then
     for pkg in hydra-jvm hydra-java hydra-python hydra-scala hydra-haskell hydra-lisp hydra-typescript; do
-        if [ ! -d "$HYDRA_ROOT/dist/scala/$pkg" ]; then
-            echo ""
-            echo "Cold-start detected (missing dist/scala/$pkg); assembling from tracked dist/json/"
-            echo "(heads/scala/Generation.scala imports all seven packages unconditionally)..."
-            "$HYDRA_ROOT/heads/scala/bin/assemble-distribution.sh" "$pkg"
-        fi
+        echo ""
+        echo "Ensuring dist/scala/$pkg is fresh (heads/scala/Generation.scala imports all seven"
+        echo "packages unconditionally); assemble-distribution.sh self-skips via its own"
+        echo "digest check when dist/json/$pkg hasn't changed..."
+        "$HYDRA_ROOT/heads/scala/bin/assemble-distribution.sh" "$pkg"
     done
 fi
 
@@ -1229,11 +1243,14 @@ fi
 # #756: gate on SCALA_HOST_SENTINEL (mirroring JAVA_HOST_SENTINEL/PYTHON_HOST_SENTINEL
 # above) so a missing build-input prerequisite (dist/scala/hydra-typescript not yet
 # assembled) is reported as a clear skip rather than an sbt compile failure swallowed by
-# a bare `||`. The Phase 1.5 cold-start block above should always assemble this sentinel
-# by now, so hitting the skip branch here indicates that block's package list has fallen
-# out of sync with Generation.scala's imports again — not a normal, expected path.
-# With the prerequisite gap closed, a non-zero exit from the driver past this point is a
-# real compile/driver failure (not a missing prerequisite) and is NOT swallowed.
+# a bare `||`. The Phase 1.5 cold-start block above now unconditionally re-assembles
+# (not just creates-if-missing) every dist/scala/<pkg> Generation.scala needs — including
+# this sentinel's package — on every sync where scala is in LANG_UNION, so hitting the
+# skip branch here would mean that block's package list has fallen out of sync with
+# Generation.scala's imports again (e.g. a new sibling-language import added without a
+# matching list update) — not a normal, expected path. With the prerequisite kept fresh,
+# a non-zero exit from the driver past this point is a real compile/driver failure (not a
+# missing or stale prerequisite) and is NOT swallowed.
 if printf '%s\n' $LANG_UNION | grep -qx scala; then
     echo "--- hydra-scala (native Scala DSL → JSON) ---"
     if [ ! -f "$SCALA_HOST_SENTINEL" ]; then
