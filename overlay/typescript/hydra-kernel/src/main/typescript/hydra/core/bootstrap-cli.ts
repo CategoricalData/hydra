@@ -560,35 +560,47 @@ const main = async (): Promise<void> => {
     const generateSourceFiles = (codegen as { generateSourceFiles: (...args: unknown[]) => { tag: "left"; value: unknown } | { tag: "right"; value: ReadonlyArray<readonly [string, string]> } }).generateSourceFiles;
     const targetBase = isTest ? outTest : outMain;
     let count = 0;
-    // Process modules one at a time. Per-module isolation means a
-    // stack overflow on one module (the kernel TS type-checker
-    // recurses through deeply-nested Hydra terms; see analysis.ts
-    // bootstrap patch) doesn't abort the whole codegen — we record
-    // a warning and continue.
-    for (const m of mods) {
-      const modName = (m as { name?: { value?: string } } | null)?.name?.value ?? "<unknown>";
+    const emit = (entries: ReadonlyArray<readonly [string, string]>): void => {
+      for (const [relPath, content] of entries) {
+        const outPath = join(targetBase, relPath);
+        mkdirSync(dirname(outPath), { recursive: true });
+        writeFileSync(outPath, redirect ? redirectLibRefs(content) : content);
+        count++;
+      }
+    };
+    // #820: generate a group of modules in a single call, so the graph and context are
+    // built once from the universe rather than once per module (as every other host does).
+    // If a group fails (a codegen error, or a stack overflow in the kernel TS type-checker,
+    // which recurses through deeply-nested Hydra terms; see analysis.ts bootstrap patch),
+    // bisect it: one bad module costs O(log n) group calls, and the failure stays isolated
+    // to that module, which is recorded as a warning while the rest are still emitted.
+    const generateGroup = (group: unknown[]): void => {
+      let failure: string;
       try {
         const result = generateSourceFiles(
           printDefinitions, language,
           dispatch.doInfer,
-          bsGraph, universe, [m], cx);
-        if (result.tag === "left") {
-          console.error(`  warning: codegen failed for module ${modName}: ${JSON.stringify(result.value).slice(0, 200)}`);
-          continue;
+          bsGraph, universe, group, cx);
+        if (result.tag === "right") {
+          emit(result.value);
+          return;
         }
-        for (const entry of result.value) {
-          const [relPath, content] = entry;
-          const outPath = join(targetBase, relPath);
-          mkdirSync(dirname(outPath), { recursive: true });
-          writeFileSync(outPath, redirect ? redirectLibRefs(content) : content);
-          count++;
-        }
+        failure = JSON.stringify(result.value).slice(0, 200);
       } catch (e) {
         const err = e as Error;
-        console.error(`  warning: ${isTest ? "test" : "main"} codegen exception on module ${modName}: ${err.message}`);
-        console.error(err.stack);
+        failure = `exception: ${err.message}`;
+        if (group.length === 1) console.error(err.stack);
       }
-    }
+      if (group.length === 1) {
+        const modName = (group[0] as { name?: { value?: string } } | null)?.name?.value ?? "<unknown>";
+        console.error(`  warning: ${isTest ? "test" : "main"} codegen failed for module ${modName}: ${failure}`);
+        return;
+      }
+      const mid = group.length >> 1;
+      generateGroup(group.slice(0, mid));
+      generateGroup(group.slice(mid));
+    };
+    generateGroup(mods);
     return count;
   };
 
