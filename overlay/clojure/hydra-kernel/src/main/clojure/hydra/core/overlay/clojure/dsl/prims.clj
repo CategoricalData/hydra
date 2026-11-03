@@ -99,10 +99,35 @@
                                       constraints))]
      (->hydra_core_model_type_scheme vars fun-type constraint-map))))
 
+(defonce kernel-prim-defs
+  ;; Generated hydra.core.lib.* PrimitiveDefinitions by primitive name, recorded by libraries/prim-name (#814).
+  (atom {}))
+
+(defn- kernel-type-variable-order
+  "The kernel's declared type-variable order for `pname` (#814). Type-scheme variable order is
+   significant: applyTypeArgumentsToType peels foralls left-to-right, so auto-detected
+   first-appearance order (e.g. [x z y] for mapList) swaps type arguments relative to the kernel's
+   [x y z]. Returns `variables` when given explicitly, else the kernel definition's type parameters when
+   they name the same variables as those detected from the coders' types, else nil (auto-detect)."
+  [pname variables inputs output]
+  (if (seq variables)
+    variables
+    (when-let [d (get @kernel-prim-defs pname)]
+      (let [kernel-vars (mapv :name (:type_parameters (:signature d)))
+            fun-type (reduce (fn [result-type input-tc]
+                               (list :function (->hydra_core_model_function_type
+                                                (or (:type input-tc) (list :unit)) result-type)))
+                             (or (:type output) (list :unit))
+                             (reverse inputs))
+            detected (filterv #(not (.contains ^String % ".")) (collect-type-vars-ordered fun-type))]
+        (when (= (set kernel-vars) (set detected))
+          kernel-vars)))))
+
 (defn- build-prim-def
   "Build a PrimitiveDefinition (#156 shape) from name + signature."
   [pname variables inputs output constraints]
-  (let [ts (build-type-scheme variables inputs output constraints)
+  (let [ts (build-type-scheme (kernel-type-variable-order pname variables inputs output)
+                              inputs output constraints)
         sig (hydra_core_scoping_type_scheme_to_term_signature ts)]
     (->hydra_core_packaging_primitive_definition pname (list :none) sig true true (list :none))))
 
@@ -495,7 +520,8 @@
    the default term already speaks in Term-space)."
   ([pname variables inputs output] (default-fallback-primitive pname variables inputs output nil))
   ([pname variables inputs output constraints]
-   (let [ts (build-type-scheme variables inputs output constraints)
+   (let [ts (build-type-scheme (kernel-type-variable-order pname variables inputs output)
+                               inputs output constraints)
          sig (hydra_core_scoping_type_scheme_to_term_signature ts)
          default-impl (get @(ns-resolve 'hydra.core.lib.defaults 'hydra_core_lib_defaults_default_implementations) pname)
          _ (when (nil? default-impl)
@@ -508,6 +534,21 @@
                                default-impl args)
               reduce-fn @(ns-resolve 'hydra.core.reduction 'hydra_core_reduction_reduce_term)]
           ((((reduce-fn prim-cx) g) true) applied))))))))
+
+(defn default-fallback-primitive-from-definition
+  "Like default-fallback-primitive, but takes the kernel's generated PrimitiveDefinition (which
+   already carries its signature and a :given default implementation) verbatim, so no
+   hand-written coder types are needed (#814: kernel primitives with portable defaults, e.g.
+   sets.filter, were simply unregistered and the Java coder rejected references to them)."
+  [definition]
+  (let [default-impl (second (:default_implementation definition))]
+    (->hydra_core_graph_primitive
+     definition
+     (fn [g] (fn [args]
+       (let [applied (reduce (fn [fn-term arg] (list :application (->hydra_core_model_application fn-term arg)))
+                              default-impl args)
+             reduce-fn @(ns-resolve 'hydra.core.reduction 'hydra_core_reduction_reduce_term)]
+         ((((reduce-fn prim-cx) g) true) applied)))))))
 
 (defn prim0
   "Create a 0-argument primitive function."

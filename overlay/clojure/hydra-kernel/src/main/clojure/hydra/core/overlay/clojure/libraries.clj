@@ -28,7 +28,9 @@
    loaded lazily on first use — after load-gen-main! has loaded the kernel deps it transitively needs,
    which is the documented precondition for loading this registry."
   [defsym]
-  (:name @(requiring-resolve defsym)))
+  (let [d @(requiring-resolve defsym)]
+    (swap! p/kernel-prim-defs assoc (:name d) d)
+    (:name d)))
 
 (defn fun
   "A TermCoder for function types using beta reduction to bridge
@@ -831,22 +833,40 @@
     (= (first m) :none) (list :optional nil)
     :else (list :optional m)))
 
+(defn- passthrough-coder
+  "A Term passthrough coder declared at TYPE. The annotations primitives below take and return
+   raw Term values at runtime, but their DECLARED types must match the kernel definitions they
+   shadow (hydra.core.annotations.*): a Term-typed placeholder made the Java coder's type checking
+   reject e.g. setTermDescription's optional<string> first argument (#814)."
+  [type]
+  (assoc (p/tc-term) :type type))
+
 (defn register-annotations []
-  (let [t (p/tc-term)]
+  (let [t (p/tc-term)
+        term-t (list :variable "hydra.core.model.Term")
+        opt-string-t (list :optional (list :literal (list :string nil)))
+        name-c (passthrough-coder (list :variable "hydra.core.model.Name"))
+        opt-term-c (passthrough-coder (list :optional term-t))
+        opt-string-c (passthrough-coder opt-string-t)
+        cx-c (passthrough-coder (list :variable "t0"))
+        graph-c (passthrough-coder (list :variable "hydra.core.graph.Graph"))
+        either-desc-c (passthrough-coder
+                       (:type (p/tc-either (passthrough-coder (list :variable "hydra.core.errors.Error"))
+                                           opt-string-c)))]
     {;; setTermAnnotation :: Name -> Maybe Term -> Term -> Term
      "hydra.core.annotations.setTermAnnotation"
      (p/prim3 "hydra.core.annotations.setTermAnnotation"
               (fn [key val term]
                 (let [native-maybe (term-maybe-to-native val)]
                   ((((deref (or (resolve 'hydra_core_annotations_set_term_annotation) (ns-resolve 'hydra.core.annotations 'hydra_core_annotations_set_term_annotation))) key) native-maybe) term)))
-              [] t t t t)
+              [] name-c opt-term-c t t)
      ;; getTermAnnotation :: Name -> Term -> Maybe Term
      "hydra.core.annotations.getTermAnnotation"
      (p/prim2 "hydra.core.annotations.getTermAnnotation"
               (fn [key term]
                 (native-maybe-to-term
                  (((deref (or (resolve 'hydra_core_annotations_get_term_annotation) (ns-resolve 'hydra.core.annotations 'hydra_core_annotations_get_term_annotation))) key) term)))
-              [] t t t)
+              [] name-c t opt-term-c)
      ;; setTermDescription :: Maybe String -> Term -> Term
      "hydra.core.annotations.setTermDescription"
      (p/prim2 "hydra.core.annotations.setTermDescription"
@@ -861,7 +881,7 @@
                                                (list :given (second (second inner)))
                                                native-d)))]
                   (((deref (or (resolve 'hydra_core_annotations_set_term_description) (ns-resolve 'hydra.core.annotations 'hydra_core_annotations_set_term_description))) native-str-d) term)))
-              [] t t t)
+              [] opt-string-c t t)
      ;; getTermDescription :: InferenceContext -> Graph -> Term -> Either (Maybe String)
      "hydra.core.annotations.getTermDescription"
      (p/prim3 "hydra.core.annotations.getTermDescription"
@@ -879,7 +899,7 @@
                                        (list :optional (list :literal (list :string (second maybe-str))))
                                        :else (list :optional maybe-str))]
                       (list :either (list :right term-maybe))))))
-              [] t t t t)}))
+              ["t0"] cx-c graph-c t either-desc-c)}))
 
 ;; Default-implementation fallbacks (#609 Stage 3): primitives with no native Clojure
 ;; implementation, but which declare a portable defaultImplementation term. Spike: only
@@ -890,6 +910,10 @@
 ;; `define` to `defineWithDefault`). Remaining non-Group-A gaps: eithers.{apply,compose,pure},
 ;; optionals.{foldList,mapList,mapSet}, sets.filter.
 ;; ============================================================
+
+(def ^:private lib-subs-for-defaults
+  ["chars" "effects" "eithers" "equality" "files" "functions" "hashing" "lists" "literals" "logic" "maps"
+   "math" "optionals" "ordering" "pairs" "regex" "sets" "strings" "system" "text"])
 
 (defn register-default-fallbacks [already-native]
   (let [a (p/tc-variable "a")
@@ -941,8 +965,22 @@
                     (fn [] (p/default-fallback-primitive
                             (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_map_set)
                             [] [(fun x (p/tc-list y)) (p/tc-set x)] (p/tc-list (p/tc-set y)) ord-xy))}]
-    (into {} (map (fn [[pname build-fn]] [pname (build-fn)])
-                  (remove (fn [[pname _]] (contains? already-native pname)) candidates)))))
+    (let [curated (into {} (map (fn [[pname build-fn]] [pname (build-fn)])
+                                (remove (fn [[pname _]] (contains? already-native pname)) candidates)))
+          ;; #814: every other kernel primitive that declares a portable default implementation and
+          ;; has no native implementation here, taken verbatim from its generated definition.
+          covered (into already-native (keys curated))]
+      (into curated
+            (for [sub lib-subs-for-defaults
+                  :let [ns-sym (symbol (str "hydra.core.lib." sub))
+                        _ (require ns-sym)]
+                  v (vals (ns-interns ns-sym))
+                  :let [d @v]
+                  :when (and (record? d)
+                             (contains? d :default_implementation)
+                             (= :given (first (:default_implementation d)))
+                             (not (covered (:name d))))]
+              [(:name d) (p/default-fallback-primitive-from-definition d)])))))
 
 ;; Standard library: all primitives combined
 ;; ============================================================
