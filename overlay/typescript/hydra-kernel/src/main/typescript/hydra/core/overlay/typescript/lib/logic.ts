@@ -4,8 +4,13 @@
 // and the convention the new analyze-based TypeScript coder emits. Calls
 // look like `ifElse(cond, t, e)` rather than `ifElse(cond)(t)(e)`.
 
-export const and = (a: boolean, b: boolean): boolean => a && b;
-export const or = (a: boolean, b: boolean): boolean => a || b;
+// `and` and `or` are lazy in their second operand (#802), like `ifElse`: the coder
+// wraps it in a nullary arrow function, forced only when the first operand doesn't
+// already decide the result. A plain value is accepted too, as for `ifElse`.
+export const and = (a: boolean, b: boolean | (() => any)): boolean =>
+  a && (typeof b === "function" ? b() : b);
+export const or = (a: boolean, b: boolean | (() => any)): boolean =>
+  a || (typeof b === "function" ? b() : b);
 export const not = (a: boolean): boolean => !a;
 
 // `ifElse` is one of Hydra's lazy primitives (see
