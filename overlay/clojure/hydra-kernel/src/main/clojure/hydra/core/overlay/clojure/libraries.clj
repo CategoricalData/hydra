@@ -787,7 +787,7 @@
                                      (fn [] system/hydra_overlay_clojure_lib_system_get_working_directory)
                                      [] (eff (p/tc-either sysErr filePath)))
      (prim-name 'hydra.core.lib.system/hydra_core_lib_system_read_stdin) (p/prim0 (prim-name 'hydra.core.lib.system/hydra_core_lib_system_read_stdin)
-                                     (fn [] system/hydra_overlay_clojure_lib_system_read_stdin)
+                                     system/hydra_overlay_clojure_lib_system_read_stdin
                                      [] (eff (p/tc-either sysErr bin)))
      (prim-name 'hydra.core.lib.system/hydra_core_lib_system_write_stderr) (p/prim1 (prim-name 'hydra.core.lib.system/hydra_core_lib_system_write_stderr)
                                      system/hydra_overlay_clojure_lib_system_write_stderr

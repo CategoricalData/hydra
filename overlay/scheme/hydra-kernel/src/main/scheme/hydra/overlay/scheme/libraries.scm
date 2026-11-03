@@ -305,7 +305,7 @@
                                                (lambda () hydra_overlay_scheme_lib_system_get_working_directory)
                                                #f (eff (tc-either serr fp))))
             (cons (prim-name def:hydra_core_lib_system_read_stdin) (prim0 (prim-name def:hydra_core_lib_system_read_stdin)
-                                               (lambda () hydra_overlay_scheme_lib_system_read_stdin)
+                                               hydra_overlay_scheme_lib_system_read_stdin
                                                #f (eff (tc-either serr bin))))
             (cons (prim-name def:hydra_core_lib_system_write_stderr) (prim1 (prim-name def:hydra_core_lib_system_write_stderr)
                                                hydra_overlay_scheme_lib_system_write_stderr

@@ -117,14 +117,17 @@
 ;; Batch-mode Emacs has no direct binary-stdin primitive, so this reads the process's own stdin via
 ;; the /dev/stdin special file (as insert-file-contents-literally, to avoid encoding translation),
 ;; producing a unibyte string -- the binary representation used throughout this host.
+;; A thunk, unlike the other bare-value nullary effects above: a bare defvar would block on stdin until EOF
+;; when this file loads (#814). The registry's prim0 calls it only when the effect runs.
 (defvar hydra_overlay_emacs_lisp_lib_system_read_stdin
-  (condition-case e
-      (list :right
-            (with-temp-buffer
-              (set-buffer-multibyte nil)
-              (insert-file-contents-literally "/dev/stdin")
-              (buffer-string)))
-    (error (list :left (list :other (hydra-system-message e))))))
+  (lambda ()
+    (condition-case e
+        (list :right
+              (with-temp-buffer
+                (set-buffer-multibyte nil)
+                (insert-file-contents-literally "/dev/stdin")
+                (buffer-string)))
+      (error (list :left (list :other (hydra-system-message e))))))))
 
 ;; writeStderr :: binary -> effect<Either<SystemError, unit>>
 ;; Writes to the /dev/stderr special file rather than send-string-to-terminal, so output still goes

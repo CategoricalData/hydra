@@ -181,10 +181,13 @@
     (define hydra_overlay_scheme_lib_system_get_working_directory
       (list 'right (getcwd)))
 
-    ;; readStdin :: effect<Either<SystemError, binary>>  (nullary effect: a bare value)
+    ;; readStdin :: effect<Either<SystemError, binary>>  (nullary effect)
+    ;; A thunk, unlike the other bare-value nullary effects above: a bare define would block on stdin until EOF
+    ;; when this library loads (#814). The registry's prim0 calls it only when the effect runs.
     (define hydra_overlay_scheme_lib_system_read_stdin
-      (let ((bv (get-bytevector-all (current-input-port))))
-        (list 'right (if (eof-object? bv) #() (bytevector->binary bv)))))
+      (lambda ()
+        (let ((bv (get-bytevector-all (current-input-port))))
+          (list 'right (if (eof-object? bv) #() (bytevector->binary bv))))))
 
     ;; writeStderr :: binary -> effect<Either<SystemError, unit>>
     (define hydra_overlay_scheme_lib_system_write_stderr

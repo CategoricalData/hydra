@@ -114,12 +114,15 @@
   (list :right (namestring (truename "."))))
 
 ;; readStdin :: effect<Either<SystemError, binary>>  (nullary effect)
+;; A thunk, unlike the other bare-value nullary effects above: a bare defvar would block on stdin until EOF
+;; when this file loads (#814). The registry's prim0 calls it only when the effect runs.
 (defvar hydra_overlay_common_lisp_lib_system_read_stdin
-  #+sbcl
-  (handler-case
-      (list :right (hydra-system-read-bytes sb-sys:*stdin*))
-    (error (e) (list :left (list :other (hydra-system-message e)))))
-  #-sbcl (list :left (list :other "hydra.core.lib.system.readStdin requires SBCL")))
+  (lambda ()
+    #+sbcl
+    (handler-case
+        (list :right (hydra-system-read-bytes sb-sys:*stdin*))
+      (error (e) (list :left (list :other (hydra-system-message e)))))
+    #-sbcl (list :left (list :other "hydra.core.lib.system.readStdin requires SBCL"))))
 
 ;; writeStderr :: binary -> effect<Either<SystemError, unit>>
 (defvar hydra_overlay_common_lisp_lib_system_write_stderr

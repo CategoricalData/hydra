@@ -118,12 +118,15 @@
       (list :left (list :other "user.dir is not set"))
       (list :right cwd))))
 
-;; readStdin :: effect<Either<SystemError, binary>>  (nullary effect: a bare value)
+;; readStdin :: effect<Either<SystemError, binary>>  (nullary effect)
+;; A thunk, unlike the other bare-value nullary effects above: a bare def would block on stdin until EOF when
+;; this namespace loads (#814). The registry's prim0 calls it only when the effect runs.
 (def hydra_overlay_clojure_lib_system_read_stdin
   "Read standard input until end-of-file, returning the complete contents as raw bytes."
-  (try
-    (list :right (bytes->binary (read-all System/in)))
-    (catch IOException e (list :left (list :other (message e))))))
+  (fn []
+    (try
+      (list :right (bytes->binary (read-all System/in)))
+      (catch IOException e (list :left (list :other (message e)))))))
 
 ;; writeStderr :: binary -> effect<Either<SystemError, unit>>
 (def hydra_overlay_clojure_lib_system_write_stderr

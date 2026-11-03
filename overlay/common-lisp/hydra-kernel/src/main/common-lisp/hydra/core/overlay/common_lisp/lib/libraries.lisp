@@ -278,7 +278,7 @@
                                                    (lambda () hydra_overlay_common_lisp_lib_system_get_working_directory)
                                                    nil (funcall eff (tc-either serr fp))))
         (cons (prim-name hydra_core_lib_system_read_stdin)     (prim0 (prim-name hydra_core_lib_system_read_stdin)
-                                                   (lambda () hydra_overlay_common_lisp_lib_system_read_stdin)
+                                                   hydra_overlay_common_lisp_lib_system_read_stdin
                                                    nil (funcall eff (tc-either serr bin))))
         (cons (prim-name hydra_core_lib_system_write_stderr)   (prim1 (prim-name hydra_core_lib_system_write_stderr)
                                                    hydra_overlay_common_lisp_lib_system_write_stderr
