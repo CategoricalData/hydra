@@ -297,18 +297,26 @@ echo ""
 # files reference test_env.* directly with no rewriting needed.
 echo "  (No post-processing needed — all patches eliminated, see #307.)"
 
-# Assemble downstream packages whose MAIN tree the head compiles but step 4 does not
+# Assemble every downstream package's MAIN tree that the head compiles but step 4 does not
 # emit (#823). `bootstrap-from-json --all-packages` regenerates only the baseline, DSL, and
-# test trees; ext packages are normally assembled per-package. hydra-pg's test tree (on the
-# head's source path, see package.yaml) imports hydra-pg main modules, so without this a new
-# main module (e.g. Hydra.Pg.SubtermGraph) leaves the test spec failing with
-# "Could not find module". Runs before the overlay re-apply so the overlay lands last.
+# test trees; ext packages are normally assembled per-package. Two failure shapes otherwise:
+#   * a package gains a new main module that its (regenerated) test spec imports
+#     (hydra-pg: Hydra.Pg.SubtermGraph -> "Could not find module"), and
+#   * a package's JSON changes but its main tree is left stale, so stack test runs OLD code
+#     (hydra-rdf: ShaclRdf.hs after the #751 SHACL fix).
+# assemble-distribution.sh is digest-gated (input JSON digest vs recorded output digest), so
+# packages with unchanged JSON are skipped cheaply. Runs before the overlay re-apply so the
+# overlay lands last.
+DOWNSTREAM_MAIN_PKGS="hydra-pg hydra-rdf hydra-ext hydra-coq hydra-typescript hydra-wasm"
 echo ""
-echo "  Assembling hydra-pg main tree (#823)..."
-GENERATOR_HOST=haskell "$SCRIPT_DIR/assemble-distribution.sh" hydra-pg
+for pkg in $DOWNSTREAM_MAIN_PKGS; do
+    if [ ! -d "$HYDRA_ROOT_DIR/dist/json/$pkg" ]; then continue; fi
+    echo "  Assembling $pkg main tree (#823)..."
+    GENERATOR_HOST=haskell "$SCRIPT_DIR/assemble-distribution.sh" "$pkg"
+done
 
-# Regression guard (#823): fail fast, with a clear message, if any Hydra.Pg.* module imported by the
-# hydra-pg test tree has no file in the main tree, instead of dying later inside stack test.
+# Regression guard (#823): fail fast, with a clear message, if any Hydra.Pg.* module imported by
+# the hydra-pg test tree has no file in the main tree, instead of dying later inside stack test.
 PG_DIST="$HYDRA_ROOT_DIR/dist/haskell/hydra-pg/src"
 PG_MISSING=0
 for mod in $(grep -rhoE '^import +(qualified +)?Hydra\.Pg\.[A-Za-z0-9_.]+' "$PG_DIST/test/haskell" 2>/dev/null \
