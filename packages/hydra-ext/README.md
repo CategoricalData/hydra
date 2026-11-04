@@ -81,6 +81,31 @@ For the broader process, see
 [Adding new primitives](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/adding-primitives.md)
 (for new functions in `hydra.core.lib.*`).
 
+## Testing
+
+Coder tests cannot be written in Hydra's cross-host DSL test framework
+(`Hydra.Sources.Test`): every DSL test case compiles to a pure `unit -> string` thunk compared
+by string equality, but a coder needs a `Graph`/`InferenceContext` and builds `Adapter`/`Coder`
+values that aren't expressible that way. Coder tests are therefore **host-native** — written as
+HSpec specs under
+[`heads/haskell/src/test/haskell/Hydra/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/test/haskell/Hydra),
+one `<Coder>CoderSpec.hs` per coder, run via `stack test`.
+
+[`Avro/CoderSpec.hs`](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/test/haskell/Hydra/Avro/CoderSpec.hs)
+is the fullest example and the pattern to follow for a new or expanded coder test suite: type-level
+forward/reverse/round-trip, term-level forward/reverse/round-trip (JSON↔Term), union encoding,
+name mapping, lossiness (`adapterIsLossy`), schema-JSON serialization, and golden `.avsc` fixture
+round-trips. `ProtobufCoderSpec.hs` and `GraphqlCoderSpec.hs` add golden-output coverage
+(generated `.proto`/GraphQL SDL text compared against expected strings, rendered through the same
+`Serde.definitionToExpr` → `printExpr` pipeline the real `moduleToProtobuf`/`moduleToGraphql`
+entry points use) alongside their existing bug-regression cases. `YamlCoderSpec.hs` covers the
+YAML coder's `Term` ↔ `Hydra.Core.Yaml.Model.Node` mapping (golden `Node` output, plus round-trip)
+— there is no YAML *text* serde in this repo yet, so YAML coverage stops at the `Node` AST level.
+
+**Coverage status** (#699): Avro, Protobuf, GraphQL, and YAML have golden-output and/or
+round-trip tests. The remaining coders (SQL, Parquet, Delta, Kusto, Pegasus/PDL, C++, C#, Rust,
+and the "Other" domain modules) have no tests yet; see #816.
+
 ## See also
 
 - **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** — the
