@@ -655,6 +655,9 @@
      (prim-name 'hydra.core.lib.effects/hydra_core_lib_effects_map_optional) (p/prim2 (prim-name 'hydra.core.lib.effects/hydra_core_lib_effects_map_optional)
                                      (fn [f m] ((effects/hydra_overlay_clojure_lib_effects_map_optional f) m))
                                      ["x" "y"] (p/tc-function x (eff y)) (p/tc-optional x) (eff (p/tc-optional y)))
+     ;; effects/map_set is NOT registered here: not a declared kernel primitive right now (see
+     ;; Hydra.Sources.Kernel.Lib.Effects's definitions list, #775) because its signature trips a
+     ;; pre-existing Java-generator gap. Re-add once the generator is fixed.
      (prim-name 'hydra.core.lib.effects/hydra_core_lib_effects_pure) (p/prim1 (prim-name 'hydra.core.lib.effects/hydra_core_lib_effects_pure)
                                      effects/hydra_overlay_clojure_lib_effects_pure
                                      ["x"] x (eff x))}))

@@ -1,6 +1,7 @@
 ;;; effects.el --- Hydra Emacs Lisp effect primitives -*- lexical-binding: t; -*-
 
 (require 'cl-lib)
+(require 'hydra.core.lib.sets)
 
 ;; Emacs Lisp implementations of hydra.core.lib.effects primitives (#494).
 ;;
@@ -66,6 +67,12 @@
        ;; bare value (term-level maybe)
        (t
         (list :given (funcall f m)))))))
+
+;; mapSet :: (x -> effect<y>) -> Set x -> effect<Set y>
+(defvar hydra_overlay_emacs_lisp_lib_effects_map_set
+  (lambda (f)
+    (lambda (s)
+      (set-from-list (mapcar f (hydra-set-sorted-list s))))))
 
 ;; pure :: x -> effect<x>
 (defvar hydra_overlay_emacs_lisp_lib_effects_pure

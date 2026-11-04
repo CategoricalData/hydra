@@ -1,4 +1,5 @@
-(ns hydra.core.overlay.clojure.lib.effects)
+(ns hydra.core.overlay.clojure.lib.effects
+  (:require [hydra.core.overlay.clojure.lib.ordering :refer [generic-compare]]))
 
 ;; Clojure implementations of hydra.core.lib.effects primitives (#494).
 ;;
@@ -57,6 +58,14 @@
       ;; bare value (term-level maybe)
       :else
       (list :given (f m))))))
+
+;; mapSet :: (x -> effect<y>) -> Set x -> effect<Set y>
+(def hydra_overlay_clojure_lib_effects_map_set
+  "Map an effect-returning function over a set, sequencing the effects in ascending element order
+  (the order is normative, since the effects are observable) and collecting the results as a set,
+  deduplicated by the result type's ordering."
+  (fn [f] (fn [s]
+    (set (map f (sort generic-compare (seq s)))))))
 
 ;; pure :: x -> effect<x>
 (def hydra_overlay_clojure_lib_effects_pure

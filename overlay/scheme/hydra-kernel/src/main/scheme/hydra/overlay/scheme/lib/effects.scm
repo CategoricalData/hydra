@@ -1,5 +1,6 @@
 (define-library (hydra overlay scheme lib effects)
-  (import (scheme base))
+  (import (scheme base)
+          (hydra overlay scheme lib sets))
   (export hydra_overlay_scheme_lib_effects_apply
           hydra_overlay_scheme_lib_effects_bind
           hydra_overlay_scheme_lib_effects_compose
@@ -7,6 +8,7 @@
           hydra_overlay_scheme_lib_effects_map
           hydra_overlay_scheme_lib_effects_map_list
           hydra_overlay_scheme_lib_effects_map_optional
+          hydra_overlay_scheme_lib_effects_map_set
           hydra_overlay_scheme_lib_effects_pure)
   (begin
 
@@ -81,6 +83,16 @@
             ;; bare value (term-level maybe)
             (else
              (list 'given (f m)))))))
+
+    ;; mapSet :: (x -> effect<y>) -> Set x -> effect<Set y>
+    ;; Map an effect-returning function over a set, sequencing the effects in ascending element
+    ;; order (the order is normative, since the effects are observable) and collecting the
+    ;; results as a set, deduplicated by the result type's ordering.
+    (define hydra_overlay_scheme_lib_effects_map_set
+      (lambda (f)
+        (lambda (s)
+          (hydra_overlay_scheme_lib_sets_from_list
+            (map f (hydra_overlay_scheme_lib_sets_to_list s))))))
 
     ;; pure :: x -> effect<x>
     ;; Lift a pure value into an effect. Since effects are transparent, this is the identity.

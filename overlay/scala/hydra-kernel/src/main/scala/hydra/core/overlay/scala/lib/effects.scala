@@ -33,3 +33,11 @@ object effects:
 
   /** Map an effect-returning function over an optional. */
   def mapOptional[A, B](f: A => B)(opt: Option[A]): Option[B] = opt.map(f)
+
+  /**
+   * Map an effect-returning function over a set, sequencing the effects in ascending element
+   * order (the order is normative, since the effects are observable) and collecting the results
+   * as a set, deduplicated by the result type's ordering.
+   */
+  def mapSet[A, B](f: A => B)(s: Set[A]): Set[B] =
+    sets.toList(s).map(f).toSet

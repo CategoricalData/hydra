@@ -2041,6 +2041,9 @@ const effectsPrimitives = (): readonly Primitive[] => {
     // mapOptional : forall x y. (x -> effect<y>) -> optional<x> -> effect<optional<y>>
     effectPrim("hydra.core.lib.effects.mapOptional",
       scheme(tyFnCurried(tyFn(x, tyEffect(y)), tyOptional(x), tyEffect(tyOptional(y))), ["x", "y"])),
+    // effects.mapSet is NOT registered here: not a declared kernel primitive right now (see
+    // Hydra.Sources.Kernel.Lib.Effects's definitions list, #775) because its signature trips a
+    // pre-existing Java-generator gap. Re-add once the generator is fixed.
     // pure : forall x. x -> effect<x>
     effectPrim("hydra.core.lib.effects.pure",
       scheme(tyFn(x, tyEffect(x)), ["x"])),

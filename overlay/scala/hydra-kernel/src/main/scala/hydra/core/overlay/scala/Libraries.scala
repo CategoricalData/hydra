@@ -1514,6 +1514,9 @@ object Libraries:
       // mapOptional: (x -> effect<y>) -> optional<x> -> effect<optional<y>>
       hydra.core.lib.effects.mapOptional.name -> mkPrimEffect(hydra.core.lib.effects.mapOptional.name, tScheme(Seq("x", "y"),
         tFun(tFun(x, tEffect(y)), tFun(tOpt(x), tEffect(tOpt(y)))))),
+      // effects.mapSet is NOT registered here: not a declared kernel primitive right now (see
+      // Hydra.Sources.Kernel.Lib.Effects's definitions list, #775) because its signature trips a
+      // pre-existing Java-generator gap. Re-add once the generator is fixed.
       // pure: x -> effect<x>
       hydra.core.lib.effects.pure.name -> mkPrimEffect(hydra.core.lib.effects.pure.name, tScheme(Seq("x"),
         tFun(x, tEffect(x)))),

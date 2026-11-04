@@ -9,9 +9,10 @@ implementation in Hydra.Haskell.Lib.Effects (where effect<t> = IO t). For #494.
 
 from __future__ import annotations
 from collections.abc import Callable, Sequence
+from collections.abc import Set as AbstractSet
 from typing import TypeVar
 from hydra.core.overlay.python.dsl.python import Optional, Given, None_, NONE_
-from hydra.core.overlay.python.util import ConsList
+from hydra.core.overlay.python.util import ConsList, PersistentSet
 
 A = TypeVar("A")
 B = TypeVar("B")
@@ -58,6 +59,14 @@ def map_optional(f: Callable[[A], B], x: Optional[A]) -> Optional[B]:
             return Given(f(val))
         case _:
             return NONE_
+
+
+def map_set(f: Callable[[A], B], s: AbstractSet[A]) -> AbstractSet[B]:
+    """Map an effect-returning function over a set, sequencing the effects in ascending element
+    order (the order is normative, since the effects are observable) and collecting the results
+    as a set, deduplicated by the result type's ordering."""
+    pset = s if isinstance(s, PersistentSet) else PersistentSet.from_iterable(s)
+    return PersistentSet.from_iterable(f(x) for x in pset.to_list())
 
 
 def pure(a: A) -> A:

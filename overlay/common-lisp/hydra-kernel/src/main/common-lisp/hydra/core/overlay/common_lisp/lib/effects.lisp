@@ -65,6 +65,12 @@
         (t
          (list :given (funcall f m)))))))
 
+;; mapSet :: (x -> effect<y>) -> Set x -> effect<Set y>
+(defvar hydra_overlay_common_lisp_lib_effects_map_set
+  (lambda (f)
+    (lambda (s)
+      (sets-from-list-raw (mapcar f (sets-elements-sorted s))))))
+
 ;; pure :: x -> effect<x>
 (defvar hydra_overlay_common_lisp_lib_effects_pure
   (lambda (x)

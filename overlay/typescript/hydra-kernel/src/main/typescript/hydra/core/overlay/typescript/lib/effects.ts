@@ -13,6 +13,7 @@
 
 import type { Optional } from "../../../runtime.js";
 import { Given, None } from "../../../runtime.js";
+import * as libSets from "./sets.js";
 
 // Applicative apply: since effects are transparent, apply f to a.
 export const apply = (f: (a: any) => any, a: any): any => f(a);
@@ -40,6 +41,12 @@ export const mapList = (f: (a: any) => any, values: readonly any[]): readonly an
 // Map an effect-returning function over an optional.
 export const mapOptional = (f: (a: any) => any, x: any): Optional<any> =>
   x.tag === "given" ? Given(f(x.value)) : None;
+
+// Map an effect-returning function over a set, sequencing the effects in ascending element
+// order (the order is normative, since the effects are observable) and collecting the results
+// as a set, deduplicated by the result type's ordering.
+export const mapSet = (f: (a: any) => any, s: any): any =>
+  libSets.fromList(libSets.toList(s).map(f));
 
 // Lift a pure value into an effect: transparent, so identity.
 export const pure = (a: any): any => a;
