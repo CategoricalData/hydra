@@ -3050,6 +3050,13 @@
                                               "function": {"project": {"typeName": "hydra.core.model.ApplicationType", "fieldName": "argument"}},
                                               "argument": {"variable": "appType"}}}}}}]}}}}}}}},
                   {
+                    "name": "effect",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "elemType",
+                        "domain": {"variable": "hydra.core.model.Type"},
+                        "body": {"application": {"function": {"variable": "hydra.core.encoding.encodeType"}, "argument": {"variable": "elemType"}}}}}},
+                  {
                     "name": "either",
                     "handler": {
                       "lambda": {
@@ -3338,6 +3345,16 @@
                                                         "application": {
                                                           "function": {"project": {"typeName": "hydra.core.model.ApplicationType", "fieldName": "argument"}},
                                                           "argument": {"variable": "appType"}}}}}}]}}}}}}}},
+                              {
+                                "name": "effect",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "elemType",
+                                    "domain": {"variable": "hydra.core.model.Type"},
+                                    "body": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.core.encoding.encodeTypeNamed"}, "argument": {"variable": "ename"}}},
+                                        "argument": {"variable": "elemType"}}}}}},
                               {
                                 "name": "either",
                                 "handler": {
