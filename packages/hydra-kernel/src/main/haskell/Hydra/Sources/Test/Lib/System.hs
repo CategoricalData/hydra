@@ -60,10 +60,10 @@ module_ = Module {
 -- exit: the common test runner does not control what is attached to its own standard input across
 -- hosts, so there is no deterministic content to assert.
 --
--- Note: hydra.core.lib.system.writeStderr/writeStdout tests were deferred (F2/#376, historical: the
--- since-retired Haskell cold-seeder pinned an older published hydra-kernel that predated these
--- primitives, and its build also compiled this file). That constraint no longer applies (#703).
--- Re-add systemWriteStderr/systemWriteStdout (removed below) if still missing. See #526.
+-- Note: hydra.core.lib.system.writeStderr/writeStdout are exercised for their happy-path return
+-- value (right(unit)) only, since asserting the bytes actually reaching the process's own
+-- stdout/stderr would require capturing this test runner's own output streams, which the common
+-- harness does not do. For #526/#755.
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
@@ -73,7 +73,9 @@ allTests = definitionInModule module_ "allTests" $
       systemGetEnvironment,
       systemGetEnvironmentVariable,
       systemGetTime,
-      systemGetWorkingDirectory]
+      systemGetWorkingDirectory,
+      systemWriteStderr,
+      systemWriteStdout]
 
 -- A variable name guaranteed not to be present in any test environment.
 absentVar :: String
@@ -290,3 +292,21 @@ systemGetWorkingDirectory = subgroup "returnsNonEmptyPath" [
               @@ (primitive DefStrings.isEmpty @@ (Phantoms.unwrap File._FilePath @@ var "p"))))
       (primitive DefSystem.getWorkingDirectory))
     (string "true")]
+
+-- writeStderr: writing an empty byte string is a no-op write, asserted only for its happy-path
+-- return value (right(unit)); see the module-level note on why stdio content is not asserted here.
+systemWriteStderr :: TypedTerm TestGroup
+systemWriteStderr = subgroup "writeStderr" [
+  effectfulCase "succeeds when writing an empty byte string"
+    (foldEither (lambda "_u" $ string "OK")
+      (primitive DefSystem.writeStderr @@ (primitive DefText.encodeUtf8 @@ string "")))
+    (string "OK")]
+
+-- writeStdout: writing an empty byte string is a no-op write, asserted only for its happy-path
+-- return value (right(unit)); see the module-level note on why stdio content is not asserted here.
+systemWriteStdout :: TypedTerm TestGroup
+systemWriteStdout = subgroup "writeStdout" [
+  effectfulCase "succeeds when writing an empty byte string"
+    (foldEither (lambda "_u" $ string "OK")
+      (primitive DefSystem.writeStdout @@ (primitive DefText.encodeUtf8 @@ string "")))
+    (string "OK")]
