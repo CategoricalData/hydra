@@ -501,6 +501,10 @@ encodeType = define "encodeType" $
     _Type_application>>: "appType" ~>
       (encodeType @@ Core.applicationTypeFunction (var "appType"))
         @@@ (encodeType @@ Core.applicationTypeArgument (var "appType")),
+    _Type_effect>>: "elemType" ~>
+      -- effect<t> is transparent at the term level (no Term.effect constructor): the encoder for
+      -- the wrapped type IS the encoder for the effect type.
+      encodeType @@ var "elemType",
     _Type_either>>: "et" ~>
       encodeEitherType @@ var "et",
     _Type_forall>>: "ft" ~>
@@ -545,6 +549,10 @@ encodeTypeNamed = define "encodeTypeNamed" $
     _Type_application>>: "appType" ~>
       (encodeType @@ Core.applicationTypeFunction (var "appType"))
         @@@ (encodeType @@ Core.applicationTypeArgument (var "appType")),
+    _Type_effect>>: "elemType" ~>
+      -- effect<t> is transparent at the term level (no Term.effect constructor): the encoder for
+      -- the wrapped type IS the encoder for the effect type.
+      encodeTypeNamed @@ var "ename" @@ var "elemType",
     _Type_either>>: "et" ~>
       encodeEitherType @@ var "et",
     _Type_forall>>: "ft" ~>
