@@ -295,18 +295,19 @@ object BootstrapHelpers:
       }.filterNot(name => name.equalsIgnoreCase("Libraries") || name == "__init__" || name == "PrimitiveType")
       if subs.isEmpty then libSubsFallback else subs
 
+  private def isLibModule(m: hydra.core.packaging.Module): Boolean =
+    m.name.startsWith("hydra.lib.")
+
   /** #473 lib pass: emit the hydra.lib.* PrimitiveDefinition def-modules from their LOWERED form.
-   *  The predicate and lib/universe partition are promoted into hydra.build.* (#788/#416 Phase B):
-   *  `hydra.build.modules.isLibModule`/`partitionLibModules` are generated from one DSL source, so
-   *  every host's lib pass agrees by construction instead of hand-copying the filter (the drift
-   *  that caused #788 — this driver's own copy checked the wrong, post-redirect namespace
-   *  `hydra.lib.` and matched zero real modules). The per-target emission (file I/O, coder
-   *  dispatch) and the per-dialect consumer call-site redirect remain host-native. Mirrors
-   *  genForDirLib in bootstrap-from-json/Main.hs. */
+   *  Mirrors genForDirLib in bootstrap-from-json/Main.hs. The lib modules are filtered from
+   *  modsToGenerate and lowered; the universe lowers ONLY the lib modules so a lib
+   *  default-implementation referencing another primitive resolves to the primitive, not a lowered
+   *  binding. */
   def runLibPass(target: String, langDir: String, allMainMods: Seq[hydra.core.packaging.Module],
       modsToGenerate: Seq[hydra.core.packaging.Module]): Unit =
-    val (libMods, libUniverse) = hydra.build.modules.partitionLibModules(allMainMods)(modsToGenerate)
+    val libMods = modsToGenerate.filter(isLibModule).map(hydra.core.codegen.lowerPrimitiveDefinitions)
     if libMods.isEmpty then return
+    val libUniverse = allMainMods.map(m => if isLibModule(m) then hydra.core.codegen.lowerPrimitiveDefinitions(m) else m)
     println(s"Lib pass: emitting ${libMods.size} hydra.lib.* definition modules to $target...")
     target match
       case "java" => Generation.writeJava(langDir, libUniverse, libMods)

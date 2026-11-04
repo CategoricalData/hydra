@@ -147,30 +147,10 @@ if [ "$OVERRIDE_RAW" = "local" ] && [ "$SOURCE_SET" = "test" ] && [ -z "${HYDRA_
     FORCE_LOCAL=1
 fi
 
-# freshen_heads_extras_deps — the local headsExtras build compiles Bootstrap.java
-# (and friends) against dist/java/hydra-build as plain source input. Gradle has no
-# notion that this source tree can be semantically stale relative to
-# dist/json/hydra-build (it only notices ABSENCE, via checkDistJavaKernelPopulated's
-# analogous hydra-kernel check). Unlike assemble-distribution.sh's own digest-gated
-# regen, nothing here re-checked dist/java/hydra-build freshness, so a warm but
-# outdated tree (predating a hydra.build DSL change) would compile successfully
-# against the OLD symbol set and any caller expecting the new one (e.g.
-# hydra.Bootstrap) failed with "cannot find symbol" rather than a clear staleness
-# error (#788). Re-assemble hydra-build first, through the same digest-checked
-# assembler every other caller uses (a no-op when already fresh), so both
-# compileHeadsExtrasJava fallback branches below compile against a fresh tree.
-# No recursion risk: assemble-distribution.sh hydra-build's Layer 1 call is routed
-# by the #459 circular-seed guard (assemble-common.sh's run_layer1_transform) through
-# generators.bootstrapSeedHost (haskell), never back through this script.
-freshen_heads_extras_deps() {
-    "$HYDRA_JAVA_HEAD/bin/assemble-distribution.sh" hydra-build >&2
-}
-
 JAVA_CP=""
 if [ "$FORCE_LOCAL" = "1" ]; then
     echo "transform-json-to-target.sh: hostOverrides[java]=local;" \
          "using local headsExtras build (published artifact may be stale, not just absent)." >&2
-    freshen_heads_extras_deps
     ./gradlew --quiet :hydra-java:compileHeadsExtrasJava >&2
     JAVA_CP=$(./gradlew --quiet :hydra-java:printHeadsExtrasRuntimeClasspath | tail -1)
 elif ./gradlew --quiet "${GRADLE_HOST_PROP[@]}" -p target-driver classes >/dev/null 2>&1; then
@@ -179,7 +159,6 @@ else
     echo "transform-json-to-target.sh: published-host classpath unresolvable" \
          "(target-driver); falling back to local headsExtras build" \
          "(#417 hostOverrides shim or similar — see #459)." >&2
-    freshen_heads_extras_deps
     ./gradlew --quiet :hydra-java:compileHeadsExtrasJava >&2
     JAVA_CP=$(./gradlew --quiet :hydra-java:printHeadsExtrasRuntimeClasspath | tail -1)
 fi

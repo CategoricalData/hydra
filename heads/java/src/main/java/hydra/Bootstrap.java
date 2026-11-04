@@ -1,5 +1,6 @@
 package hydra;
 
+import hydra.core.Codegen;
 import hydra.build.overlay.java.Generation;
 import hydra.core.packaging.Module;
 import hydra.core.packaging.ModuleName;
@@ -572,15 +573,16 @@ public class Bootstrap {
         return base.resolve(Paths.get(target, "hydra", "core", "overlay", overlayDirSegment(target), "lib"));
     }
 
+    private static boolean isLibModule(Module m) {
+        return m.name.value.startsWith("hydra.core.lib.");
+    }
+
     /**
      * #473 lib pass: emit the hydra.lib.* PrimitiveDefinition def-modules from their LOWERED form.
-     * The predicate and lib/universe partition are promoted into hydra.build.* (#788/#416 Phase B):
-     * {@link hydra.build.Modules#isLibModule} and {@link hydra.build.Modules#partitionLibModules}
-     * are generated from one DSL source, so every host's lib pass agrees by construction instead of
-     * hand-copying the filter (the drift that caused #788 — Scala's copy checked the wrong,
-     * post-redirect namespace and matched zero real modules). The per-target emission (file I/O,
-     * coder dispatch) and the per-dialect consumer call-site redirect remain host-native.
-     * Mirrors genForDirLib in bootstrap-from-json/Main.hs.
+     * The lib modules are filtered from modsToGenerate, lowered via Codegen.lowerPrimitiveDefinitions,
+     * and emitted with a lib-only-lowered universe (consumer modules in the universe stay un-lowered so
+     * a lib default-implementation referencing another primitive resolves to the primitive, not a
+     * lowered binding). Mirrors genForDirLib in bootstrap-from-json/Main.hs.
      */
     // #459 (H1): returns the paths written by the lib pass, RELATIVE to langDir, so the caller
     // can union them into the prune keep-set. The lib pass emits hydra.lib.* def-modules that the
@@ -589,11 +591,16 @@ public class Bootstrap {
     // recordKeep accumulation across the main + lib passes before the prune step.
     static List<String> runLibPass(String repoRoot, String target, String langDir,
                                    List<Module> allMainMods, List<Module> modsToGenerate) {
-        hydra.core.overlay.java.util.Pair<List<Module>, List<Module>> partitioned =
-            hydra.build.Modules.partitionLibModules(allMainMods, modsToGenerate);
-        List<Module> libMods = partitioned.first;
-        List<Module> libUniverse = partitioned.second;
+        List<Module> libMods = new ArrayList<>();
+        for (Module m : modsToGenerate) {
+            if (isLibModule(m)) libMods.add(Codegen.lowerPrimitiveDefinitions(m));
+        }
         if (libMods.isEmpty()) return new ArrayList<>();
+
+        List<Module> libUniverse = new ArrayList<>();
+        for (Module m : allMainMods) {
+            libUniverse.add(isLibModule(m) ? Codegen.lowerPrimitiveDefinitions(m) : m);
+        }
 
         System.out.println("Lib pass: emitting " + libMods.size()
                 + " hydra.lib.* definition modules to " + target + "...");
