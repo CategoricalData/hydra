@@ -8648,7 +8648,31 @@
                                                                             "function": {"project": {"typeName": "hydra.core.model.FieldType", "fieldName": "name"}},
                                                                             "argument": {"variable": "tfield"}}}}}}},
                                                                 "argument": {"variable": "alias"}}}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.PropertyKey"}, "constraints": []}}],
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.PropertyKey"}, "constraints": []}},
+                                                      {
+                                                        "name": "ftyp",
+                                                        "term": {
+                                                          "application": {
+                                                            "function": {"variable": "hydra.core.strip.deannotateType"},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {"project": {"typeName": "hydra.core.model.FieldType", "fieldName": "type"}},
+                                                                "argument": {"variable": "tfield"}}}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.model.Type"}, "constraints": []}},
+                                                      {
+                                                        "name": "isMaybe",
+                                                        "term": {
+                                                          "application": {
+                                                            "function": {
+                                                              "cases": {
+                                                                "typeName": "hydra.core.model.Type",
+                                                                "default": {"literal": {"boolean": false}},
+                                                                "cases": [
+                                                                  {
+                                                                    "name": "optional",
+                                                                    "handler": {"lambda": {"parameter": "_", "domain": {"variable": "hydra.core.model.Type"}, "body": {"literal": {"boolean": true}}}}}]}},
+                                                            "argument": {"variable": "ftyp"}}},
+                                                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {
@@ -8802,7 +8826,9 @@
                                                                                                                     "fields": [
                                                                                                                       {"name": "key", "term": {"variable": "key"}},
                                                                                                                       {"name": "value", "term": {"variable": "pt"}},
-                                                                                                                      {"name": "required", "term": {"literal": {"boolean": true}}}]}},
+                                                                                                                      {
+                                                                                                                        "name": "required",
+                                                                                                                        "term": {"application": {"function": {"variable": "hydra.core.lib.logic.not"}, "argument": {"variable": "isMaybe"}}}}]}},
                                                                                                                 "type": {"variable": "t3"}}}},
                                                                                                           {
                                                                                                             "name": "coder",
@@ -9124,7 +9150,29 @@
                                                                             "type": {"variable": "t3"}}},
                                                                         "type": {"variable": "t4"}}},
                                                                     "argument": {"variable": "a"}}}}}},
-                                                          {"name": "required", "term": {"literal": {"boolean": true}}}]}},
+                                                          {
+                                                            "name": "required",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.PropertyType", "fieldName": "required"}}, "type": {"variable": "t1"}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {"body": {"project": {"typeName": "hydra.core.coders.Adapter", "fieldName": "target"}}, "type": {"variable": "t0"}}},
+                                                                                    "type": {"application": {"function": {"variable": "hydra.pg.model.PropertyType"}, "argument": {"variable": "t1"}}}}},
+                                                                                "type": {"variable": "t2"}}},
+                                                                            "type": {"variable": "t3"}}},
+                                                                        "type": {"variable": "t4"}}},
+                                                                    "argument": {"variable": "a"}}}}}}]}},
                                                     "type": {"variable": "t1"}}}}}}},
                                         "argument": {"variable": "propAdapters"}}}}},
                                 "annotation": {
