@@ -10,11 +10,21 @@ import Hydra.Kernel
 import qualified Hydra.Ext.Protobuf.Coder as ProtobufCoder
 import qualified Hydra.Ext.Protobuf.Environment as ProtobufEnvironment
 import qualified Hydra.Ext.Protobuf.Proto3 as Proto3
+import qualified Hydra.Ext.Protobuf.Serde as ProtobufSerde
+import Hydra.Core.Serialization (parenthesize, printExpr)
 
 import Hydra.TestUtils
 
+import qualified Data.List as L
 import qualified Test.Hspec as H
 
+
+-- | Render a Protobuf definition to its actual `.proto` text, the same pipeline
+-- moduleToProtobuf uses per-definition (Serde.definitionToExpr, then the shared
+-- expression printer). This is #699's golden-output path: assertions compare real
+-- generated .proto syntax, not just the AST shape.
+printDefinition :: Proto3.Definition -> String
+printDefinition = printExpr . parenthesize . ProtobufSerde.definitionToExpr
 
 -- | Byte-parity regression test for #654: the Protobuf coder's fallback wrap-type handling
 -- (any non-record, non-enum-union type) used to be built by a coder-local let-bound helper
@@ -56,6 +66,46 @@ spec = H.describe "Protobuf.Coder.encodeDefinition on wrap-shaped types (#654 by
     H.it "bigint narrows (lossily) to int64" $ do
       mapError (ProtobufCoder.encodeScalarType testEncoderState (LiteralTypeInteger IntegerTypeBigint))
         `H.shouldBe` Right Proto3.ScalarTypeInt64
+
+  -- #699: golden-output coverage for ordinary (non-bug-regression) type shapes, asserting
+  -- against the actual generated .proto text rather than just AST structure.
+  H.describe "Protobuf.Coder.encodeDefinition golden output (#699)" $ do
+
+    H.it "encodes a record with scalar and optional fields as a message" $ do
+      let recordType = TypeRecord [
+            FieldType (Name "name") (TypeLiteral LiteralTypeString),
+            FieldType (Name "age") (TypeLiteral (LiteralTypeInteger IntegerTypeInt32)),
+            FieldType (Name "nickname") (TypeOptional (TypeLiteral LiteralTypeString))]
+      case mapError $ ProtobufCoder.encodeDefinition testEncoderState testGraph testNs (Name "test.Person") recordType of
+        Left e -> H.expectationFailure $ "encodeDefinition failed: " ++ e
+        Right def -> printDefinition def `H.shouldBe` L.intercalate "\n" [
+          "message Person {",
+          "  string name = 1;",
+          "",
+          "  int32 age = 2;",
+          "",
+          -- An optional scalar field has no proto3 "optional" presence tracking for a plain
+          -- scalar here; the coder represents it with the well-known wrapper message instead.
+          "  google.protobuf.StringValue nickname = 3;",
+          "}"]
+
+    H.it "encodes a unit-fields union as a Protobuf enum" $ do
+      let enumType = TypeUnion [
+            FieldType (Name "red") TypeUnit,
+            FieldType (Name "green") TypeUnit,
+            FieldType (Name "blue") TypeUnit]
+      case mapError $ ProtobufCoder.encodeDefinition testEncoderState testGraph testNs (Name "test.Color") enumType of
+        Left e -> H.expectationFailure $ "encodeDefinition failed: " ++ e
+        Right def -> printDefinition def `H.shouldBe` L.intercalate "\n" [
+          "enum Color {",
+          "  COLOR_UNSPECIFIED = 0;",
+          "",
+          "  COLOR_RED = 1;",
+          "",
+          "  COLOR_GREEN = 2;",
+          "",
+          "  COLOR_BLUE = 3;",
+          "}"]
 
   where
     testEncoderState = ProtobufEnvironment.EncoderState testContext 0
