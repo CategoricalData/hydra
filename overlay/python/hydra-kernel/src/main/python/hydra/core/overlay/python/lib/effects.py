@@ -11,6 +11,7 @@ from __future__ import annotations
 from collections.abc import Callable, Sequence
 from typing import TypeVar
 from hydra.core.overlay.python.dsl.python import Optional, Given, None_, NONE_
+from hydra.core.overlay.python.util import ConsList
 
 A = TypeVar("A")
 B = TypeVar("B")
@@ -45,9 +46,9 @@ def map(f: Callable[[A], B], a: A) -> B:
     return f(a)
 
 
-def map_list(f: Callable[[A], B], values: Sequence[A]) -> tuple[B, ...]:
+def map_list(f: Callable[[A], B], values: Sequence[A]) -> Sequence[B]:
     """Map an effect-returning function over a list, collecting the results."""
-    return tuple(f(x) for x in values)
+    return ConsList.from_iterable(f(x) for x in values)
 
 
 def map_optional(f: Callable[[A], B], x: Optional[A]) -> Optional[B]:
