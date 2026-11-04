@@ -564,7 +564,10 @@ propertyAdapter = define "propertyAdapter" $
     "tfield">: Pairs.first $ var "spec",
     "values">: Pairs.first $ Pairs.second $ var "spec",
     "alias">: Pairs.second $ Pairs.second $ var "spec",
-    "key">: wrap PG._PropertyKey $ (Optionals.withDefault (Core.unName $ (Core.fieldTypeName $ var "tfield")) (var "alias"))] $
+    "key">: wrap PG._PropertyKey $ (Optionals.withDefault (Core.unName $ (Core.fieldTypeName $ var "tfield")) (var "alias")),
+    "ftyp">: Strip.deannotateType @@ (Core.fieldTypeType $ var "tfield"),
+    "isMaybe">: match _Type (var "ftyp") (Just false) [
+      _Type_optional>>: constant true]] $
     Eithers.bind (Coders.coderEncode (project PGM._Schema PGM._Schema_propertyTypes @@ var "schema") @@ (Core.fieldTypeType $ var "tfield"))
       ("pt" ~> Eithers.bind (TermsToElements.parseValueSpec @@ var "cx" @@ var "g" @@ var "values")
         ("traversal" ~> right
@@ -572,7 +575,7 @@ propertyAdapter = define "propertyAdapter" $
             (record PG._PropertyType [
               PG._PropertyType_key>>: var "key",
               PG._PropertyType_value>>: var "pt",
-              PG._PropertyType_required>>: true])
+              PG._PropertyType_required>>: Logic.not (var "isMaybe")])
             (Coders.coder
               ("dfield" ~>
                 Eithers.bind (traverseToSingleTerm @@ var "cx" @@ string "property traversal" @@ (var "traversal" @@ var "cx") @@ (Core.fieldTerm $ var "dfield"))
@@ -591,7 +594,7 @@ propertyTypes = define "propertyTypes" $
       ("a" ~> record PG._PropertyType [
         PG._PropertyType_key>>: project PG._PropertyType PG._PropertyType_key @@ (Coders.adapterTarget $ var "a"),
         PG._PropertyType_value>>: project PG._PropertyType PG._PropertyType_value @@ (Coders.adapterTarget $ var "a"),
-        PG._PropertyType_required>>: true])
+        PG._PropertyType_required>>: project PG._PropertyType PG._PropertyType_required @@ (Coders.adapterTarget $ var "a")])
       (var "propAdapters")
 
 -- | Select an edge id from record fields using an id adapter
