@@ -1,7 +1,6 @@
 ;;; effects.el --- Hydra Emacs Lisp effect primitives -*- lexical-binding: t; -*-
 
 (require 'cl-lib)
-(require 'hydra.core.lib.sets)
 
 ;; Emacs Lisp implementations of hydra.core.lib.effects primitives (#494).
 ;;
