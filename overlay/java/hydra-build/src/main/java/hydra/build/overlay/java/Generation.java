@@ -682,7 +682,7 @@ public class Generation {
      * {@code distJsonRoot} to already contain each package's {@code manifest.json},
      * which a fresh downstream output root does not. A project generating code from
      * its own Hydra modules should call {@link hydra.core.Codegen#inferModulesGiven} and
-     * {@link hydra.build.ManifestWriter#packageManifestJson} directly instead — see
+     * {@link hydra.build.Manifests#packageManifestJson} directly instead — see
      * docs/recipes/downstream-codegen.md (#650).</p>
      */
     public static Map<ModuleName, String> buildRoutingMap(String distJsonRoot) throws IOException {
@@ -1092,9 +1092,9 @@ public class Generation {
             List<Module> dsl  = dslByPkg.getOrDefault(pkg, java.util.Collections.emptyList());
             List<Module> enc  = encByPkg.getOrDefault(pkg, java.util.Collections.emptyList());
             // #607: field assembly + serialization delegated to the generated
-            // hydra.build.manifestWriter (packageManifestJson), which reproduces this
+            // hydra.build.manifests (packageManifestJson), which reproduces this
             // driver's alphabetized field order and sorted namespace arrays exactly.
-            Value manifestValue = hydra.build.ManifestWriter.packageManifestJson(
+            Value manifestValue = hydra.build.Manifests.packageManifestJson(
                 pkg, main, dsl, enc, java.util.Collections.emptyList());
             String jsonStr = hydra.core.json.Writer.printJson(manifestValue);
             Path pkgDir = Paths.get(distJsonRoot, pkg, "src", "main", "json");

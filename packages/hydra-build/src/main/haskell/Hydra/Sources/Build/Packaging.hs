@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Build.PackagingProfile where
+module Hydra.Sources.Build.Packaging where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
@@ -72,7 +72,7 @@ import qualified Hydra.Sources.Kernel.Terms.Validate.Packaging as ValidatePackag
 -- 'kernelPackagingProfileWithDocWarnings') are NOT redefined here -- they are the
 -- translingual kernel definitions from @hydra.core.validate.packaging@, referenced as-is.
 ns :: ModuleName
-ns = ModuleName "hydra.build.packagingProfile"
+ns = ModuleName "hydra.build.packaging"
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns

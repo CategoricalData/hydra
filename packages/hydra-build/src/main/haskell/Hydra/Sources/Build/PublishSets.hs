@@ -31,8 +31,8 @@ import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 -- pattern — pure decision logic in Hydra, the I/O in the native caller).
 --
 -- Subsumes #573: 'publishSetForRegistry' derives each per-registry publish set
--- from 'Hydra.Sources.Build.PackagingProfile' rather than a hand-maintained array.
--- (That derivation lives here once PackagingProfile exposes the per-registry
+-- from 'Hydra.Sources.Build.Packaging' rather than a hand-maintained array.
+-- (That derivation lives here once Packaging exposes the per-registry
 -- eligibility predicate; the closure/topo core below is registry-agnostic.)
 ns :: ModuleName
 ns = ModuleName "hydra.build.publishsets"

@@ -951,14 +951,14 @@ def write_package_manifests(dist_json_root, main_mods, dsl_mods, enc_mods):
     """Write each package's manifest.json in the current (#511) schema:
     mainDslModules / mainEncodingModules / mainModules / manifestFormatVersion /
     package / testModules. Field assembly + serialization is delegated to the
-    generated hydra.build.manifest_writer (#607), which mirrors the Java and
+    generated hydra.build.manifests (#607), which mirrors the Java and
     Haskell writers' field order and formatting (alphabetized keys) exactly.
 
     Only packages present in main_mods are visited (mirrors Java): a package
     whose sources feed dsl_mods/enc_mods but not main_mods won't get a
     manifest written here.
     """
-    from hydra.build.manifest_writer import package_manifest_json
+    from hydra.build.manifests import package_manifest_json
     from hydra.core.json.writer import print_json
 
     main_by_pkg = dict(group_by_package(dist_json_root, main_mods))

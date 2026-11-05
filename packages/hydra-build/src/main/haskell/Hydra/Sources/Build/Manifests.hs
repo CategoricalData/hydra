@@ -1,4 +1,4 @@
-module Hydra.Sources.Build.ManifestWriter where
+module Hydra.Sources.Build.Manifests where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
@@ -73,7 +73,7 @@ import qualified Hydra.Sources.Json.Model as JsonModel
 -- field-assembly/serialization is a different concern and does not belong
 -- there.
 ns :: ModuleName
-ns = ModuleName "hydra.build.manifestWriter"
+ns = ModuleName "hydra.build.manifests"
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns

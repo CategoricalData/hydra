@@ -43,7 +43,7 @@ project actually needs, with no routing and no dependency on a pre-existing mani
   function `inferAndWriteByPackage` calls once per package internally. Pass every module in your
   project as both `universeMods` and `targetMods` to type-check them all together; cross-module
   references resolve automatically since every module is in scope at once.
-- **`hydra.build.ManifestWriter.packageManifestJson(pkg, mainMods, dslMods, encMods, testMods)`** —
+- **`hydra.build.Manifests.packageManifestJson(pkg, mainMods, dslMods, encMods, testMods)`** —
   pure manifest field-assembly and serialization, no filesystem access. Produces the same
   `manifest.json` contents `writePackageManifests` would, for one package, without routing.
 
@@ -80,7 +80,7 @@ for (Module m : inferred) {
 }
 
 // Then write a manifest for the whole project:
-Value manifest = ManifestWriter.packageManifestJson(
+Value manifest = Manifests.packageManifestJson(
     "my-project", inferred, List.of(), List.of(), List.of());
 Files.write(manifestPath, Json.printJson(manifest).getBytes(UTF_8));
 ```

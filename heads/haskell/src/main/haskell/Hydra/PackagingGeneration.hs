@@ -3,7 +3,7 @@
 -- #559 Step E: the per-package packaging-validation policy (which packages are
 -- held to the full, fatal-on-everything profile, which are documentation-relaxed,
 -- and which are excluded from structural validation entirely) was promoted into
--- the translingual @hydra.build.packagingProfile@ module. This module is the
+-- the translingual @hydra.build.packaging@ module. This module is the
 -- native-side CONSUMER of that generated policy — a thin delegation, plus the
 -- 'validatePackagesStructural' entry point that applies it.
 --
@@ -12,7 +12,7 @@
 -- the pinned hydra-build version (historical: this module was copied into
 -- the retired Haskell cold-seeder's headmods and compiled against a
 -- PUBLISHED hydra lib; importing the newly-added, not-yet-published
--- @Hydra.Build.PackagingProfile@ from there would have broken the seed — the
+-- @Hydra.Build.Packaging@ from there would have broken the seed — the
 -- #560/#607 revert-main class. The #703 cold-seeder replacement has no such
 -- constraint; see docs/build-system.md). This mirrors the same reason
 -- 'Hydra.ExtGeneration' stays decoupled from "Hydra.Generation". Only
@@ -33,7 +33,7 @@ import Hydra.Kernel
 -- Hydra.Generation does.
 import Hydra.Core.Error.Packaging (InvalidPackageError)
 import Hydra.Generation (ValidationFindings(..), isDerivedModule)
-import qualified Hydra.Build.PackagingProfile as GenPackagingProfile
+import qualified Hydra.Build.Packaging as GenPackagingProfile
 import qualified Hydra.Core.Validate.Packaging as ValidatePackaging
 
 -- | Packages held to the full 'ValidatePackaging.kernelDefaultPackagingProfile'
@@ -41,7 +41,7 @@ import qualified Hydra.Core.Validate.Packaging as ValidatePackaging
 -- package uses 'ValidatePackaging.kernelPackagingProfileWithDocWarnings'
 -- instead (#575).
 --
--- #559 Step E: promoted to the translingual 'hydra.build.packagingProfile'
+-- #559 Step E: promoted to the translingual 'hydra.build.packaging'
 -- module; this is now a thin delegation to the generated
 -- 'GenPackagingProfile.strictPackagingPackages', the single source of truth.
 strictPackagingPackages :: [PackageName]
@@ -53,7 +53,7 @@ strictPackagingPackages = GenPackagingProfile.strictPackagingPackages
 -- the structural-validation point in the pipeline, so they are excluded from
 -- 'validatePackagesStructural' entirely.
 --
--- #559 Step E: promoted to 'hydra.build.packagingProfile'; thin delegation to
+-- #559 Step E: promoted to 'hydra.build.packaging'; thin delegation to
 -- the generated 'GenPackagingProfile.nativeOwnedPackagingPackages'.
 nativeOwnedPackagingPackages :: [PackageName]
 nativeOwnedPackagingPackages = GenPackagingProfile.nativeOwnedPackagingPackages
@@ -62,7 +62,7 @@ nativeOwnedPackagingPackages = GenPackagingProfile.nativeOwnedPackagingPackages
 -- fatal-on-everything profile for packages in 'strictPackagingPackages',
 -- the documentation-relaxed profile for every other package.
 --
--- #559 Step E: promoted to 'hydra.build.packagingProfile'; thin delegation to
+-- #559 Step E: promoted to 'hydra.build.packaging'; thin delegation to
 -- the generated 'GenPackagingProfile.packagingProfileFor'.
 packagingProfileFor :: Package -> ValidationProfile
 packagingProfileFor = GenPackagingProfile.packagingProfileFor

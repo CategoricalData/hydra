@@ -1,5 +1,5 @@
 {
-  "name": "hydra.build.manifestWriter",
+  "name": "hydra.build.manifests",
   "metadata": {
     "description": "Per-package manifest.json field-assembly and serialization logic shared by the code-generation drivers",
     "comments": [],
@@ -42,7 +42,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.build.manifestWriter.packageManifestJson",
+        "name": "hydra.build.manifests.packageManifestJson",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -89,7 +89,7 @@
                                                     "pair": {
                                                       "first": {"literal": {"string": "mainDslModules"}},
                                                       "second": {
-                                                        "application": {"function": {"variable": "hydra.build.manifestWriter.sortedNamespaces"}, "argument": {"variable": "dslMods"}}}}},
+                                                        "application": {"function": {"variable": "hydra.build.manifests.sortedNamespaces"}, "argument": {"variable": "dslMods"}}}}},
                                                   "type": {"literal": "string"}}},
                                               "type": {"variable": "hydra.core.json.model.Value"}}},
                                           {
@@ -100,7 +100,7 @@
                                                     "pair": {
                                                       "first": {"literal": {"string": "mainEncodingModules"}},
                                                       "second": {
-                                                        "application": {"function": {"variable": "hydra.build.manifestWriter.sortedNamespaces"}, "argument": {"variable": "encMods"}}}}},
+                                                        "application": {"function": {"variable": "hydra.build.manifests.sortedNamespaces"}, "argument": {"variable": "encMods"}}}}},
                                                   "type": {"literal": "string"}}},
                                               "type": {"variable": "hydra.core.json.model.Value"}}},
                                           {
@@ -111,7 +111,7 @@
                                                     "pair": {
                                                       "first": {"literal": {"string": "mainModules"}},
                                                       "second": {
-                                                        "application": {"function": {"variable": "hydra.build.manifestWriter.sortedNamespaces"}, "argument": {"variable": "mainMods"}}}}},
+                                                        "application": {"function": {"variable": "hydra.build.manifests.sortedNamespaces"}, "argument": {"variable": "mainMods"}}}}},
                                                   "type": {"literal": "string"}}},
                                               "type": {"variable": "hydra.core.json.model.Value"}}},
                                           {
@@ -150,7 +150,7 @@
                                                     "pair": {
                                                       "first": {"literal": {"string": "testModules"}},
                                                       "second": {
-                                                        "application": {"function": {"variable": "hydra.build.manifestWriter.sortedNamespaces"}, "argument": {"variable": "testMods"}}}}},
+                                                        "application": {"function": {"variable": "hydra.build.manifests.sortedNamespaces"}, "argument": {"variable": "testMods"}}}}},
                                                   "type": {"literal": "string"}}},
                                               "type": {"variable": "hydra.core.json.model.Value"}}}]}}}}}}}}}}}}}},
             "annotation": {
@@ -162,7 +162,7 @@
                       "string": "The manifest.json contents for one package: field assembly + serialization, given the package name and its main/dsl/encoding/test module lists"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.build.manifestWriter.sortedNamespaces",
+        "name": "hydra.build.manifests.sortedNamespaces",
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.core.packaging.Module"}}, "isLazy": false}],

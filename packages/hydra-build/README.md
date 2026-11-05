@@ -20,7 +20,7 @@ express Hydra's own build/sync system as Hydra modules rather than host-native s
   shared by the Java, Scala, and Haskell generation drivers (#788).
 - **`hydra.build.format`** — type-level specifications of the build system's JSON formats
   (`hydra.json`, `package.json`, `digest.json`, `manifest.json`).
-- **`hydra.build.manifestWriter`** — per-package `manifest.json` assembly and serialization.
+- **`hydra.build.manifests`** — per-package `manifest.json` assembly and serialization.
 - **`hydra.build.assembly`** and **`hydra.build.assemblyplan`** — the type-level model of a distribution package's
   assembly plan, and its pure derivation (the overlay-copy entries and keep-paths).
 - **`hydra.build.libraries`** — the expected-libraries registry: every `hydra.core.lib.<sub>` module that each
@@ -28,7 +28,7 @@ express Hydra's own build/sync system as Hydra modules rather than host-native s
 - **`hydra.build.registry`** — the language registry: per-language build identity as `LanguageProfile` records.
 - **`hydra.build.langexpansion`** — language and host list expansion shared by the sync, test, and bench drivers.
 - **`hydra.build.syncmatrix`** — the pure (package, target) planning core of the sync driver.
-- **`hydra.build.packagingProfile`** — per-package packaging-validation policy (strict vs. doc-relaxed profiles).
+- **`hydra.build.packaging`** — per-package packaging-validation policy (strict vs. doc-relaxed profiles).
 - **`hydra.build.publishsets`** — the publish-set dependency-closure guard and leaves-first ordering.
 - **`hydra.build.versionconsistency`** — version-consistency logic shared by the release and bump drivers.
 - **`hydra.build.walk`** — pure directory-traversal decision helpers.

@@ -1,6 +1,6 @@
 -- | Per-package manifest.json generation, split out of 'Hydra.Generation' (#622)
 -- so the cold-seeder's headmods (which never call this) can drop their
--- 'Hydra.Build.ManifestWriter' coupling. Used only by the update-json-manifest
+-- 'Hydra.Build.Manifests' coupling. Used only by the update-json-manifest
 -- driver, which always runs against a local (non-cold-seed) build.
 module Hydra.ManifestGeneration (
   writeCoderBaselineJson,
@@ -12,7 +12,7 @@ module Hydra.ManifestGeneration (
 import Hydra.Kernel
 import Hydra.Generation (currentModuleFormatVersion)
 import Hydra.PackageRouting (RoutingMap, groupByPackageIn)
-import qualified Hydra.Build.ManifestWriter as GenManifestWriter
+import qualified Hydra.Build.Manifests as GenManifestWriter
 import qualified Hydra.Core.Json.Model as Json
 import qualified Hydra.Core.Json.Writer as JsonWriter
 import qualified Hydra.Sources.Build.Libraries as Libraries
@@ -64,7 +64,7 @@ writePerPackageManifestsJson routingMap distJsonRoot dslSourceModules encodingSo
           encForPkg     = M.findWithDefault [] pkg encByPkg
           testForPkg    = M.findWithDefault [] pkg testByPkg
           -- #607: field assembly + serialization delegated to the generated
-          -- hydra.build.manifestWriter (packageManifestJson), which reproduces this
+          -- hydra.build.manifests (packageManifestJson), which reproduces this
           -- driver's alphabetized field order and sorted namespace arrays exactly.
           -- moduleFormatVersion is Haskell-specific, so it is spliced into the
           -- generated fields at its alphabetical position.

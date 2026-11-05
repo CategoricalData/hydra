@@ -1,5 +1,5 @@
 {
-  "name": "hydra.build.packagingProfile",
+  "name": "hydra.build.packaging",
   "metadata": {
     "description": "Per-package packaging-validation policy: strict vs. doc-relaxed profile selection and native-owned exclusion",
     "comments": [],
@@ -42,7 +42,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.build.packagingProfile.isNativeOwned",
+        "name": "hydra.build.packaging.isNativeOwned",
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.packaging.Package"}, "isLazy": false}],
@@ -63,7 +63,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.core.packaging.Package", "fieldName": "name"}},
                             "argument": {"variable": "pkg"}}}}},
-                    "argument": {"variable": "hydra.build.packagingProfile.nativeOwnedPackagingPackages"}}}}},
+                    "argument": {"variable": "hydra.build.packaging.nativeOwnedPackagingPackages"}}}}},
             "annotation": {
               "map": [
                 {
@@ -73,7 +73,7 @@
                       "string": "Whether a package's dist/json is written by a separate native driver, so it is excluded from structural validation"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.build.packagingProfile.nativeOwnedPackagingPackages",
+        "name": "hydra.build.packaging.nativeOwnedPackagingPackages",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"variable": "hydra.core.packaging.PackageName"}}}},
         "body": {
           "annotated": {
@@ -90,7 +90,7 @@
                     "literal": {"string": "Packages whose dist/json is written by a separate native driver, hence excluded from structural validation"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.build.packagingProfile.packagingProfileFor",
+        "name": "hydra.build.packaging.packagingProfileFor",
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.packaging.Package"}, "isLazy": false}],
@@ -119,7 +119,7 @@
                                       "application": {
                                         "function": {"project": {"typeName": "hydra.core.packaging.Package", "fieldName": "name"}},
                                         "argument": {"variable": "pkg"}}}}},
-                                "argument": {"variable": "hydra.build.packagingProfile.strictPackagingPackages"}}}}},
+                                "argument": {"variable": "hydra.build.packaging.strictPackagingPackages"}}}}},
                         "argument": {"variable": "hydra.core.validate.packaging.kernelDefaultPackagingProfile"}}},
                     "argument": {"variable": "hydra.core.validate.packaging.kernelPackagingProfileWithDocWarnings"}}}}},
             "annotation": {
@@ -131,7 +131,7 @@
                       "string": "Select the packaging validation profile for a package: full-fatal for strict packages, doc-relaxed otherwise"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.build.packagingProfile.strictPackagingPackages",
+        "name": "hydra.build.packaging.strictPackagingPackages",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"variable": "hydra.core.packaging.PackageName"}}}},
         "body": {
           "annotated": {

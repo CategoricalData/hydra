@@ -16,7 +16,7 @@ import qualified Hydra.Core.Json.Model as Json
 import qualified Hydra.Core.Json.Writer as JsonWriter
 import qualified Hydra.Core.Decoding as Decoding
 import qualified Hydra.Build.Walk as GenWalk
-import qualified Hydra.Build.PackagingProfile as PackagingProfile
+import qualified Hydra.Build.Packaging as PackagingProfile
 import qualified Hydra.Digest as Digest
 import qualified Hydra.DigestFormat as DigestFormat
 import qualified Hydra.Core.Dsls as Dsls
@@ -369,7 +369,7 @@ validationFindingsNull (ValidationFindings pkgs types terms) =
 -- ('strictPackagingPackages', 'nativeOwnedPackagingPackages',
 -- 'packagingProfileFor') and the 'validatePackagesStructural' entry point that
 -- applies them were MOVED to "Hydra.PackagingGeneration". They delegate to the
--- promoted, translingual @hydra.build.packagingProfile@ module, so keeping them
+-- promoted, translingual @hydra.build.packaging@ module, so keeping them
 -- here would put a dependency on that generated hydra-build module onto this
 -- file (historical: this module was copied into the retired Haskell
 -- cold-seeder's headmods and compiled against a PUBLISHED hydra lib that
@@ -2026,7 +2026,7 @@ writeManifestJson basePath kernelModules kernelTypesModules mainModules testModu
       (L.sort (fmap (unModuleName . moduleName) mods))
 
 -- Per-package manifest.json generation (writePerPackageManifestsJson) moved to
--- Hydra.ManifestGeneration (#622) — it delegates to Hydra.Build.ManifestWriter,
+-- Hydra.ManifestGeneration (#622) — it delegates to Hydra.Build.Manifests,
 -- an unpublished-at-times hydra-build module (historical: this file's copy
 -- into the retired Haskell cold-seeder's headmods must not have depended on
 -- it, #703); the new module is used only by update-json-manifest, which

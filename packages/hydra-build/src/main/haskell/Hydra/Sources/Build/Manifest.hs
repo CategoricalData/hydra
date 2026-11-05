@@ -41,9 +41,9 @@ import qualified Hydra.Sources.Build.CompareReportLogic as BuildCompareReportLog
 import qualified Hydra.Sources.Build.Format as BuildFormat
 import qualified Hydra.Sources.Build.LangExpansion as BuildLangExpansion
 import qualified Hydra.Sources.Build.Libraries as BuildLibraries
-import qualified Hydra.Sources.Build.ManifestWriter as BuildManifestWriter
+import qualified Hydra.Sources.Build.Manifests as BuildManifests
 import qualified Hydra.Sources.Build.Modules as BuildModules
-import qualified Hydra.Sources.Build.PackagingProfile as BuildPackagingProfile
+import qualified Hydra.Sources.Build.Packaging as BuildPackaging
 import qualified Hydra.Sources.Build.PublishSets as BuildPublishSets
 import qualified Hydra.Sources.Build.Reconcile as BuildReconcile
 import qualified Hydra.Sources.Build.Registry as BuildRegistry
@@ -67,9 +67,9 @@ mainModules = [
   BuildFormat.module_,
   BuildLangExpansion.module_,
   BuildLibraries.module_,
-  BuildManifestWriter.module_,
+  BuildManifests.module_,
   BuildModules.module_,
-  BuildPackagingProfile.module_,
+  BuildPackaging.module_,
   BuildPublishSets.module_,
   BuildReconcile.module_,
   BuildRegistry.module_,
