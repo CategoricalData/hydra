@@ -518,12 +518,32 @@ python3 "$HYDRA_ROOT/bin/lib/generate-head-haskell-build.py" --mode "$HASKELL_HO
 # gap; it is idempotent and a no-op once a locally-built, current host regenerates
 # this file for real (see the script's own header for the full invariant).
 HASKELL_DIST_SENTINEL="$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Adapt.hs"
+# #825: absence is not the only trigger. A rebase past a kernel type/definition change leaves an
+# existing dist/haskell/hydra-kernel STALE against dist/json/hydra-kernel, and the head then fails
+# with "Not in scope". The seeder records a content hash of dist/json/hydra-kernel in a stamp file
+# next to the seeded source; a mismatch (or missing stamp) reseeds. The hash covers tracked JSON only
+# (no digest.json dependency, so it works on a cold tree). The reseed ALWAYS goes through the Java
+# host seeder, never the Haskell host being rebuilt (#459 circular-seed guard). Phase 1's own
+# regeneration refreshes the stamp below so it does not trigger a redundant reseed next time.
+HASKELL_SEED_STAMP="$HYDRA_ROOT/dist/haskell/hydra-kernel/build/seed-input.sha256"
+haskell_kernel_json_hash() {
+    (cd "$HYDRA_ROOT/dist/json/hydra-kernel" && find src -type f -name '*.json' -print0 \
+        | LC_ALL=C sort -z | xargs -0 sha256sum | sha256sum | cut -d' ' -f1)
+}
+HASKELL_SEED_REASON=""
 if [ ! -f "$HASKELL_DIST_SENTINEL" ]; then
+    HASKELL_SEED_REASON="missing dist/haskell/hydra-kernel"
+elif [ "$(cat "$HASKELL_SEED_STAMP" 2>/dev/null)" != "$(haskell_kernel_json_hash)" ]; then
+    HASKELL_SEED_REASON="stale dist/haskell/hydra-kernel (differs from dist/json/hydra-kernel)"
+fi
+if [ -n "$HASKELL_SEED_REASON" ]; then
     echo ""
-    echo "Cold-start detected (missing dist/haskell/hydra-kernel); seeding dist/haskell/"
+    echo "Cold-start detected ($HASKELL_SEED_REASON); seeding dist/haskell/"
     echo "from tracked dist/json/ via the Java-host cold seeder (#703)..."
     "$HYDRA_ROOT/heads/java/bin/seed-dist-haskell.sh" --repo-root "$HYDRA_ROOT"
     "$HYDRA_ROOT/heads/java/bin/patch-void-import.sh" --repo-root "$HYDRA_ROOT"
+    mkdir -p "$(dirname "$HASKELL_SEED_STAMP")"
+    haskell_kernel_json_hash > "$HASKELL_SEED_STAMP"
     echo ""
 fi
 
@@ -596,6 +616,9 @@ else
     banner1 "Phase 1: DSL → JSON + Haskell kernel"
     echo ""
     "$HYDRA_HASKELL_DIR/bin/sync-haskell.sh" --"$HASKELL_HOST_MODE"-host $NO_TESTS_FLAG
+    # #825: Phase 1 regenerated dist/haskell/hydra-kernel from the DSL, so it matches the JSON again.
+    mkdir -p "$(dirname "$HASKELL_SEED_STAMP")"
+    haskell_kernel_json_hash > "$HASKELL_SEED_STAMP"
 fi
 
 # ────────────────────────────────────────────────────────────────────
