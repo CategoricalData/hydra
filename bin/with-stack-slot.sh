@@ -22,6 +22,8 @@
 #   bin/with-stack-slot.sh --priority [...] -- <command> [args...]  # go ahead of ordinary waiters
 #   bin/with-stack-slot.sh --boost <worktree>            # coordinator: promote that worktree's waiter
 #   bin/with-stack-slot.sh --unboost <worktree>          # coordinator: withdraw a boost
+#   bin/with-stack-slot.sh --pin <worktree>              # coordinator: boost that persists across acquisitions
+#   bin/with-stack-slot.sh --unpin <worktree>            # coordinator: withdraw a pin
 #   bin/with-stack-slot.sh --assign <worktree> A|B       # coordinator: pin a worktree to a build lane
 #   bin/with-stack-slot.sh --lanes                       # show lane assignments, holders, free memory
 #
@@ -90,6 +92,8 @@ LABEL=""
 PRIORITY="${HYDRA_STACK_SLOT_PRIORITY:-0}"
 BOOST=""
 UNBOOST=""
+PIN=""
+UNPIN=""
 ASSIGN_WT=""
 ASSIGN_LANE=""
 SHOW_LANES=0
@@ -110,6 +114,8 @@ while [ $# -gt 0 ]; do
     --priority) PRIORITY=1; shift ;;
     --boost)   BOOST="${2:?--boost needs a worktree name}"; shift 2 ;;
     --unboost) UNBOOST="${2:?--unboost needs a worktree name}"; shift 2 ;;
+    --pin)     PIN="${2:?--pin needs a worktree name}"; shift 2 ;;
+    --unpin)   UNPIN="${2:?--unpin needs a worktree name}"; shift 2 ;;
     --assign)  ASSIGN_WT="${2:?--assign needs a worktree name}"; ASSIGN_LANE="${3:?--assign needs A or B}"; shift 3 ;;
     --lanes)   SHOW_LANES=1; shift ;;
     --lockfile) LOCKFILE="${2:?--lockfile needs a value}"; LOCK_OVERRIDE=1; shift 2 ;;
@@ -122,11 +128,19 @@ done
 
 # ---- coordinator boost (no command) ----------------------------------------
 # A boost marks a worktree so its next (or current) waiter counts as a priority
-# waiter. The marker is consumed when that worktree acquires the slot.
-if [ -n "$BOOST$UNBOOST" ]; then
-  [ "$LOCK_OVERRIDE" = 1 ] || LOCKFILE="$(lockfile_of_lane "$(lane_of "${BOOST:-$UNBOOST}")")"
+# waiter. The marker is consumed when that worktree acquires the slot. A pin is a boost that is
+# never consumed: every waiter from that worktree is a priority waiter until --unpin (for
+# release-priority work that builds repeatedly).
+if [ -n "$BOOST$UNBOOST$PIN$UNPIN" ]; then
+  [ "$LOCK_OVERRIDE" = 1 ] || LOCKFILE="$(lockfile_of_lane "$(lane_of "${BOOST:-${UNBOOST:-${PIN:-$UNPIN}}}")")"
   mkdir -p "${LOCKFILE}.priority.d"
-  if [ -n "$BOOST" ]; then
+  if [ -n "$PIN" ]; then
+    : > "${LOCKFILE}.priority.d/pin-${PIN//\//_}"
+    echo "with-stack-slot: pinned ${PIN}; its waiters go ahead of ordinary waiters until --unpin." >&2
+  elif [ -n "$UNPIN" ]; then
+    rm -f "${LOCKFILE}.priority.d/pin-${UNPIN//\//_}"
+    echo "with-stack-slot: removed pin for ${UNPIN}." >&2
+  elif [ -n "$BOOST" ]; then
     : > "${LOCKFILE}.priority.d/wt-${BOOST//\//_}"
     echo "with-stack-slot: boosted ${BOOST}; its waiter goes ahead of ordinary waiters (within ~30s)." >&2
   else
@@ -275,7 +289,7 @@ PRIODIR="${LOCKFILE}.priority.d"
 mkdir -p "$PRIODIR"
 
 is_priority_waiter() {
-  [ "$PRIORITY" = "1" ] || [ -e "$PRIODIR/wt-${WORKTREE//\//_}" ]
+  [ "$PRIORITY" = "1" ] || [ -e "$PRIODIR/wt-${WORKTREE//\//_}" ] || [ -e "$PRIODIR/pin-${WORKTREE//\//_}" ]
 }
 
 # True if a live priority waiter other than this process exists. Removes pid
