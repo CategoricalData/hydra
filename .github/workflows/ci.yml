@@ -30,6 +30,10 @@ on:
 #     jobs below can run tests against them without needing to install
 #     Stack + GHC or rebuild the Hydra library themselves.
 #
+#   * The haskell-tests job (#824) runs stack test and the distribution
+#     self-containment check against the haskell job's dist-haskell artifact,
+#     in parallel with the host jobs.
+#
 #   * Every other target job downloads its dist artifact and runs its
 #     native test suite. They do not run Phase 1 (DSL -> JSON) or
 #     Phase 2 (JSON -> target source) themselves; that's the Haskell
@@ -113,8 +117,10 @@ jobs:
     # See #494 CI investigation.
     # 2026-11-03: run 41668202231 hit 300 at 5h01m. Regeneration alone took 3h51m (now
     # including the sbt-backed Scala native pass), and the job was cut off in stack tests.
-    # Raised to 360 (GitHub's ceiling for hosted runners) as a stopgap; splitting a tail out
-    # of this job is still the real fix.
+    # Raised to 360 (GitHub's ceiling for hosted runners) as a stopgap.
+    # #824: Stack tests and the self-containment gate have since moved to the haskell-tests
+    # job (fed by the dist-haskell artifact). Remaining cost is dominated by regeneration;
+    # next step is cutting or parallelizing the host-native DSL -> JSON passes.
     timeout-minutes: 360
     steps:
       # #617: fetch-depth: 0 (full history) so the #617 Check 2 step below can
@@ -285,15 +291,19 @@ jobs:
       # independent from-dist/json seed that must build + stack test), and (c) the
       # committed-dist/json diff. If a broader per-package determinism sweep is
       # wanted later, do it WITHOUT a second all-target sync (see #592 follow-up).
-      - name: Stack tests
-        run: stack test
-        working-directory: heads/haskell
-      # Self-containment gate: stage the per-package distributions into one
-      # stack project and build them as published, so a package that references
-      # something present only in heads/ (not in dist/) fails here — the #473
-      # cold-build class of bug — before it reaches Hackage.
-      - name: Verify Haskell distribution self-containment
-        run: heads/haskell/bin/verify-distribution.sh
+      # #824: Stack tests and the distribution self-containment gate now run in the
+      # downstream haskell-tests job, which consumes this artifact. dist/json is tracked
+      # in git (and verified identical to the regenerated tree above), so only the
+      # untracked dist/haskell needs to travel. Hidden files are included so nothing
+      # under the per-package trees is silently dropped.
+      - name: Upload dist/haskell
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-haskell
+          path: dist/haskell/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
       # Upload dist/<lang>/ trees for downstream target jobs. One
       # artifact per target so each job only pays for its own download.
       - name: Upload dist/java
@@ -348,6 +358,44 @@ jobs:
           name: dist-typescript
           path: dist/typescript/
           retention-days: 1
+  # #824: the tail of the former monolithic haskell job. Stack tests and the
+  # self-containment gate need only the dist-haskell artifact plus the tracked tree, so
+  # they run in parallel with the host jobs instead of extending the haskell job, which
+  # was at GitHub's 360-minute ceiling. Like regression-harnesses (#563) it does not
+  # block the host jobs; a Haskell failure and a host failure surface in the same run
+  # rather than one masking the other.
+  haskell-tests:
+    name: Haskell stack tests + distribution self-containment
+    needs: haskell
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: haskell-actions/setup@v2
+        with:
+          ghc-version: '9.10.2'
+          enable-stack: true
+          stack-version: latest
+      - uses: actions/cache@v4
+        with:
+          path: ~/.stack
+          key: stack-${{ hashFiles('heads/haskell/stack.yaml', 'heads/haskell/package.yaml') }}
+          restore-keys: stack-
+      - name: Download dist/haskell built by Haskell job
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-haskell
+          path: dist/haskell/
+      - name: Stack tests
+        run: stack test
+        working-directory: heads/haskell
+      # Self-containment gate: stage the per-package distributions into one
+      # stack project and build them as published, so a package that references
+      # something present only in heads/ (not in dist/) fails here — the #473
+      # cold-build class of bug — before it reaches Hackage.
+      - name: Verify Haskell distribution self-containment
+        run: heads/haskell/bin/verify-distribution.sh
+
   # #535/#563: standalone regression harnesses guarding specific prune/reconcile
   # bugs (#393, #405, #469, #357, #551). Split out of the haskell job (#563) so
   # this self-contained tail stops accreting toward that job's timeout ceiling
