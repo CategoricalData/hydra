@@ -82,6 +82,34 @@ SYNC_ORIG_ARGS=("$@")
 
 source "$HYDRA_ROOT/bin/lib/common.sh"
 
+# #824: per-phase wall-clock timing, so a CI run's log gives the breakdown of where
+# bin/sync.sh spends its time. Wraps (for this process only) common.sh's banner1: each
+# banner first reports how long the previous section took, then the usual banner. The
+# final banner1_done therefore reports the last phase and the total. timed_echo does
+# the same for the per-package "--- X ---" sub-steps. Grep the log for "[timing]".
+_SYNC_T0=$SECONDS
+_SYNC_TLAST=$SECONDS
+_SYNC_TLABEL=""
+_sync_timing_flush() {
+    if [ -n "$_SYNC_TLABEL" ]; then
+        echo "[timing] END   $_SYNC_TLABEL: $((SECONDS - _SYNC_TLAST))s (total $((SECONDS - _SYNC_T0))s)"
+    fi
+    _SYNC_TLAST=$SECONDS
+}
+eval "_common_banner1() $(declare -f banner1 | tail -n +2)"
+banner1() {
+    _sync_timing_flush
+    _SYNC_TLABEL="$1"
+    _common_banner1 "$1"
+    echo "[timing] START $1 (total $((SECONDS - _SYNC_T0))s)"
+}
+timed_echo() {
+    _sync_timing_flush
+    _SYNC_TLABEL="$1"
+    echo "$1"
+    echo "[timing] START $1 (total $((SECONDS - _SYNC_T0))s)"
+}
+
 raise_open_file_limit 4096
 
 ALL_LANGS="haskell java python scala go typescript clojure scheme common-lisp emacs-lisp"
@@ -770,7 +798,7 @@ for L in $LANG_UNION; do
         *)                  die "Internal: no coder package for $L" ;;
     esac
     echo ""
-    echo "--- $pkg (Haskell) ---"
+    timed_echo "--- $pkg (Haskell) ---"
     "$HYDRA_HASKELL_DIR/bin/assemble-distribution.sh" "$pkg"
 done
 fi  # end: Haskell-free fast path skips Phases 0–2 (#773)
@@ -932,13 +960,13 @@ for L in $LANG_UNION; do
     # Go remains a "head bud" (#289): only hydra-kernel meaningful today.
     if [ "$L" = "go" ]; then
         echo ""
-        echo "--- hydra-kernel -> $L ---"
+        timed_echo "--- hydra-kernel -> $L ---"
         "$HYDRA_ROOT/heads/$L/bin/assemble-distribution.sh" hydra-kernel
         continue
     fi
     for pkg in hydra-kernel hydra-build hydra-rdf hydra-pg; do
         echo ""
-        echo "--- $pkg -> $L ---"
+        timed_echo "--- $pkg -> $L ---"
         case "$L" in
             java|python|scala|typescript)
                 "$HYDRA_ROOT/heads/$L/bin/assemble-distribution.sh" "$pkg"
@@ -1009,7 +1037,7 @@ for H in $HOSTS; do
     esac
     for dep in $STATIC_DEPS; do
         echo ""
-        echo "--- $dep -> $H (host static dep) ---"
+        timed_echo "--- $dep -> $H (host static dep) ---"
         "$HYDRA_ROOT/heads/$H/bin/assemble-distribution.sh" "$dep"
     done
 
@@ -1022,7 +1050,7 @@ for H in $HOSTS; do
             *)                   die "Internal: no coder package for $T" ;;
         esac
         echo ""
-        echo "--- $pkg -> $H ---"
+        timed_echo "--- $pkg -> $H ---"
         # Dispatch to host H's assembler so post-processing patches apply.
         case "$H" in
             java|python|scala|typescript)
@@ -1199,7 +1227,7 @@ export HYDRA_PHASE5_HOST_MODE="$(python_host_mode)"
 # this regen to pick up a native-DSL coder change, or dist/json/hydra-python
 # silently stays stale.
 if printf '%s\n' $LANG_UNION | grep -qx java; then
-    echo "--- hydra-java (native Java DSL → JSON) ---"
+    timed_echo "--- hydra-java (native Java DSL → JSON) ---"
     # Forward the sync's host mode to the Java coder driver, exactly as the Python
     # block does below. Without this, `sync.sh --local-host` would leave Phase 5's
     # Java re-export on the published host, defeating --local-host when the published
@@ -1211,10 +1239,10 @@ if printf '%s\n' $LANG_UNION | grep -qx java; then
         "$JAVA_HOST_SENTINEL" \
         "$JAVA_HOST_MODE_FLAG"
 else
-    echo "--- hydra-java (skipped: java not in hosts ∪ targets) ---"
+    timed_echo "--- hydra-java (skipped: java not in hosts ∪ targets) ---"
 fi
 if printf '%s\n' $LANG_UNION | grep -qx python; then
-    echo "--- hydra-python (native Python DSL → JSON) ---"
+    timed_echo "--- hydra-python (native Python DSL → JSON) ---"
     # Forward the sync's host mode to the Python coder driver. The wrapper
     # defaults to --published-host; without this, `sync.sh --local-host` would
     # silently leave Phase 5's Python re-export on the published host, defeating
@@ -1235,7 +1263,7 @@ if printf '%s\n' $LANG_UNION | grep -qx python; then
             "$PY_HOST_MODE_FLAG"
     fi
 else
-    echo "--- hydra-python (skipped: python not in hosts ∪ targets) ---"
+    timed_echo "--- hydra-python (skipped: python not in hosts ∪ targets) ---"
 fi
 # #509: hydra-scala native DSL → JSON. Writes 4 of 5 source modules byte-identically;
 # Coder.json has simplified bodies (pending full translation).
@@ -1252,7 +1280,7 @@ fi
 # a non-zero exit from the driver past this point is a real compile/driver failure (not a
 # missing or stale prerequisite) and is NOT swallowed.
 if printf '%s\n' $LANG_UNION | grep -qx scala; then
-    echo "--- hydra-scala (native Scala DSL → JSON) ---"
+    timed_echo "--- hydra-scala (native Scala DSL → JSON) ---"
     if [ ! -f "$SCALA_HOST_SENTINEL" ]; then
         echo "  skipping: scala host prerequisite not built (missing $SCALA_HOST_SENTINEL)."
         echo "  hydra-scala JSON remains as written by the last native-generator run (or the Haskell DSL pass)."
@@ -1260,7 +1288,7 @@ if printf '%s\n' $LANG_UNION | grep -qx scala; then
         "$HYDRA_ROOT/bin/generate-hydra-scala-from-scala.sh"
     fi
 else
-    echo "--- hydra-scala (skipped: scala not in hosts ∪ targets) ---"
+    timed_echo "--- hydra-scala (skipped: scala not in hosts ∪ targets) ---"
 fi
 unset HYDRA_IN_SYNC
 
