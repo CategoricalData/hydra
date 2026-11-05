@@ -159,11 +159,34 @@ fi
 # error (#788). Re-assemble hydra-build first, through the same digest-checked
 # assembler every other caller uses (a no-op when already fresh), so both
 # compileHeadsExtrasJava fallback branches below compile against a fresh tree.
-# No recursion risk: assemble-distribution.sh hydra-build's Layer 1 call is routed
-# by the #459 circular-seed guard (assemble-common.sh's run_layer1_transform) through
-# generators.bootstrapSeedHost (haskell), never back through this script.
+#
+# Skip entirely when dist/haskell/hydra-kernel is absent (the #703 cold-seed
+# case): assemble-distribution.sh hydra-build's Layer 1 call is routed by the
+# #459 circular-seed guard (assemble-common.sh's run_layer1_transform) through
+# generators.bootstrapSeedHost (haskell) — heads/haskell/bin/transform-json-to-
+# target.sh — which itself runs `stack build hydra:exe:bootstrap-from-json`
+# against dist/haskell/hydra-kernel. During a cold seed, THIS script is one of
+# the callers currently seeding that very kernel tree (seed-dist-haskell.sh
+# invokes it with --target haskell), so calling the freshener here creates a
+# genuine data-dependency cycle: seed dist/haskell/hydra-kernel -> freshen
+# dist/java/hydra-build -> stack build needs dist/haskell/hydra-kernel (#788
+# regression, reverted from main as 3a1781b2d8 / 36aa572319, caught by CI's
+# cold-clone-haskell + haskell jobs — "Could not find module Hydra.Kernel").
+# Safe to skip: nothing in the cold-seed path consumes dist/java/hydra-build's
+# freshness yet (its only cold-seed reader is this script's OWN classpath
+# build, immediately below, for whichever --target was actually requested);
+# bin/sync.sh's later Phase 1.5 heal_java_python_native unconditionally
+# pre-assembles hydra-build again once the kernel is seeded and a real stack
+# build is possible, so the digest gate still applies before anything that
+# matters (the hydra-java rollup compile) runs.
 freshen_heads_extras_deps() {
-    "$HYDRA_JAVA_HEAD/bin/assemble-distribution.sh" hydra-build >&2
+    if [ -d "$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel" ]; then
+        "$HYDRA_JAVA_HEAD/bin/assemble-distribution.sh" hydra-build >&2
+    else
+        echo "transform-json-to-target.sh: dist/haskell/hydra-kernel absent" \
+             "(cold seed in progress); skipping hydra-build freshen to avoid" \
+             "a circular stack build (#788)." >&2
+    fi
 }
 
 JAVA_CP=""
