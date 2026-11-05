@@ -133,6 +133,8 @@ extraPaths = [
     "../../dist/python/hydra-kernel/src/main/python",
     "../../dist/python/hydra-kernel/src/test/python"
 ]
+reportInvalidTypeVarUse = "none"
+reportUnknownVariableType = "none"
 
 [tool.pytest.ini_options]
 pythonpath = [
