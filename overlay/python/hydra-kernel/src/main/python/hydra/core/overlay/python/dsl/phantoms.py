@@ -130,9 +130,9 @@ def annot(key: Name, mvalue: Optional[Term], term: TypedTerm[A]) -> TypedTerm[A]
     return TypedTerm[A](annotations.annotate_term(key, mvalue, un_tterm(term)))
 
 
-def apply(fun: TypedTerm[A], arg: TypedTerm[B]) -> TypedTerm[C]:
+def apply(fun: TypedTerm[Callable[[A], B]], arg: TypedTerm[A]) -> TypedTerm[B]:
     """Apply a function to an argument."""
-    return TypedTerm[C](terms.apply(un_tterm(fun), un_tterm(arg)))
+    return TypedTerm[B](terms.apply(un_tterm(fun), un_tterm(arg)))
 
 
 def binary_function(f) -> TypedTerm[A]:
@@ -177,14 +177,14 @@ def match_with_default(name, arg: TypedTerm[A], default: TypedTerm[B], *fields: 
     ))
 
 
-def compose(f: TypedTerm[B], g: TypedTerm[A]) -> TypedTerm[C]:
+def compose(f: TypedTerm[Callable[[B], C]], g: TypedTerm[Callable[[A], B]]) -> TypedTerm[Callable[[A], C]]:
     """Compose two functions (g then f)."""
-    return TypedTerm[C](terms.compose(un_tterm(f), un_tterm(g)))
+    return TypedTerm[Callable[[A], C]](terms.compose(un_tterm(f), un_tterm(g)))
 
 
-def constant(term: TypedTerm[A]) -> TypedTerm[B]:
+def constant(term: TypedTerm[A]) -> TypedTerm[Callable[[B], A]]:
     """Create a constant function that always returns the same value."""
-    return TypedTerm[B](terms.constant(un_tterm(term)))
+    return TypedTerm[Callable[[B], A]](terms.constant(un_tterm(term)))
 
 
 def definition_in_module(mod: Module, lname: str, term: TypedTerm[A]) -> TypedBinding[A]:
@@ -318,14 +318,14 @@ def first_class_type(typ: TypedTerm[Type]) -> TypedTerm[Type]:
     )
 
 
-def fold(f: TypedTerm[A]) -> TypedTerm[B]:
+def fold(f: TypedTerm[Callable[[B], Callable[[A], B]]]) -> TypedTerm[Callable[[B], Callable[[list[A]], B]]]:
     """Create a fold function to process lists."""
     return apply(primitive(Name("hydra.core.lib.lists.foldl")), f)
 
 
-def identity() -> TypedTerm[A]:
+def identity() -> TypedTerm[Callable[[A], A]]:
     """Identity function that returns its argument unchanged."""
-    return TypedTerm[A](terms.identity())
+    return TypedTerm[Callable[[A], A]](terms.identity())
 
 
 def inject(name, fname, term: TypedTerm[A]) -> TypedTerm[B]:
@@ -333,7 +333,7 @@ def inject(name, fname, term: TypedTerm[A]) -> TypedTerm[B]:
     return TypedTerm[B](terms.inject(_name(name), _name(fname), un_tterm(term)))
 
 
-def inject_lambda(name, fname) -> TypedTerm[A]:
+def inject_lambda(name, fname) -> TypedTerm[Callable[[A], B]]:
     """Create a function that injects its argument into a union variant."""
     return lam("injected_", inject(name, fname, var("injected_")))
 
@@ -343,14 +343,14 @@ def just(term: TypedTerm[A]) -> TypedTerm[Optional[A]]:
     return TypedTerm[Optional[A]](terms.just(un_tterm(term)))
 
 
-def just_() -> TypedTerm[A]:
+def just_() -> TypedTerm[Callable[[A], Optional[A]]]:
     """Function that wraps a value in 'Given'."""
-    return TypedTerm[A](terms.lambda_("just_", terms.just(terms.var("just_"))))
+    return TypedTerm[Callable[[A], Optional[A]]](terms.lambda_("just_", terms.just(terms.var("just_"))))
 
 
-def lambdas(params: Sequence[str], body: TypedTerm[X]) -> TypedTerm[A]:
+def lambdas(params: Sequence[str], body: TypedTerm[X]) -> TypedTerm[Callable[..., X]]:
     """Create a multi-parameter lambda function."""
-    return TypedTerm[A](terms.lambdas(params, un_tterm(body)))
+    return TypedTerm[Callable[..., X]](terms.lambdas(params, un_tterm(body)))
 
 
 def left(term: TypedTerm[A]) -> TypedTerm[Either[A, B]]:
@@ -383,9 +383,9 @@ def unsafe_cast(t: TypedTerm[A]) -> TypedTerm[B]:
     return TypedTerm[B](un_tterm(t))
 
 
-def lam(v: str, body: TypedTerm[X]) -> TypedTerm[A]:
+def lam(v: str, body: TypedTerm[X]) -> TypedTerm[Callable[[A], X]]:
     """Create a lambda function with one parameter."""
-    return TypedTerm[A](terms.lambda_(v, un_tterm(body)))
+    return TypedTerm[Callable[[A], X]](terms.lambda_(v, un_tterm(body)))
 
 
 def let(name: str, value: TypedTerm[A], env: TypedTerm[B]) -> TypedTerm[B]:
@@ -482,8 +482,11 @@ def map_(m: Mapping[TypedTerm[A], TypedTerm[B]]) -> TypedTerm[dict[A, B]]:
     )
 
 
-def cases(name, dflt: Optional[TypedTerm[B]] = None, fields: Sequence[Field] = ()) -> TypedTerm[A]:
-    """Create a pattern match on a union term. Accepts str or Name."""
+def cases(name, dflt: Optional[TypedTerm[B]] = None, fields: Sequence[Field] = ()) -> TypedTerm[Callable[[A], B]]:
+    """Create an unapplied pattern match on a union term (a function). Accepts str or Name.
+
+    See also: `match`, which applies the match to an argument directly (a value, not a function).
+    """
     if dflt is None:
         dflt_term = None_()
     else:
@@ -493,7 +496,7 @@ def cases(name, dflt: Optional[TypedTerm[B]] = None, fields: Sequence[Field] = (
             case None_():
                 dflt_term = None_()
 
-    return TypedTerm[A](terms.match(_name(name), dflt_term, fields))
+    return TypedTerm[Callable[[A], B]](terms.match(_name(name), dflt_term, fields))
 
 
 def module_name(mod: Module) -> ModuleName:
@@ -563,9 +566,9 @@ def primitive3(prim_name: Name, a: TypedTerm[A], b: TypedTerm[B], c: TypedTerm[C
     )
 
 
-def project(name, fname) -> TypedTerm[A]:
-    """Extract a field from a record. Accepts str or Name."""
-    return TypedTerm[A](terms.project(_name(name), _name(fname)))
+def project(name, fname) -> TypedTerm[Callable[[A], B]]:
+    """Extract a field from a record, as a function. Accepts str or Name."""
+    return TypedTerm[Callable[[A], B]](terms.project(_name(name), _name(fname)))
 
 
 def record(name, fields: Sequence[Field]) -> TypedTerm[A]:
@@ -646,9 +649,9 @@ def unqualify_name(qname: QualifiedName) -> Name:
             return Name(qname.local)
 
 
-def unwrap(name) -> TypedTerm[A]:
+def unwrap(name) -> TypedTerm[Callable[[A], B]]:
     """Create an unwrap function for a wrapped type. Accepts str or Name."""
-    return TypedTerm[A](terms.unwrap(_name(name)))
+    return TypedTerm[Callable[[A], B]](terms.unwrap(_name(name)))
 
 
 def var(v: str) -> TypedTerm[A]:
