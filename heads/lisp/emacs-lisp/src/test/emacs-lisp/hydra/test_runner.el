@@ -555,8 +555,8 @@ skip silently."
   (unless hydra--test-graph
     (let ((base (hydra-build-test-graph)))
       (condition-case err
-          (let* ((bootstrap-types (if (boundp 'hydra_core_json_bootstrap_types_by_name)
-                                      hydra_core_json_bootstrap_types_by_name nil))
+          (let* ((bootstrap-types (if (boundp 'hydra_core_bootstrap_types_by_name)
+                                      hydra_core_bootstrap_types_by_name nil))
                  (test-types (if (boundp 'hydra_core_test_test_graph_test_types)
                                  hydra_core_test_test_graph_test_types nil))
                  (type-to-ts (when (boundp 'hydra_core_scoping_f_type_to_type_scheme)

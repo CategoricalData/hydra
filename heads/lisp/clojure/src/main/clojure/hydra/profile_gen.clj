@@ -52,7 +52,7 @@
     (map (fn [[name typ]]
            (let [ts ((r 'hydra_core_scoping_f_type_to_type_scheme) typ)]
              [name ((r 'hydra_core_strip_deannotate_type_recursive) (:body ts))]))
-         (r 'hydra_core_json_bootstrap_types_by_name))))
+         (r 'hydra_core_bootstrap_types_by_name))))
 
 (defn- load-modules-from-json [base-path namespaces]
   (let [bs-graph (bootstrap-graph)

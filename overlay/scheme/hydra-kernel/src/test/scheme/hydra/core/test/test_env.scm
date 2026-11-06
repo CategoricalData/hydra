@@ -31,7 +31,7 @@
           (hydra core typing)
           (hydra overlay scheme libraries)
           (hydra overlay scheme lib maps)
-          (hydra core json bootstrap)
+          (hydra core bootstrap)
           (hydra core scoping))
   (export hydra_core_test_test_env_test_context
           hydra_core_test_test_env_test_graph)
@@ -293,7 +293,7 @@
              (kernel-schemas
                (map (lambda (entry)
                       (list (car entry) (type-to-ts (cdr entry))))
-                    hydra_core_json_bootstrap_types_by_name))
+                    hydra_core_bootstrap_types_by_name))
              (test-schemas
                (map (lambda (entry)
                       (list (car entry) (type-to-ts (cadr entry))))

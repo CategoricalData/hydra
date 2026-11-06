@@ -112,7 +112,7 @@
 
 (defun bootstrap-schema-map ()
   (let ((result nil))
-    (dolist (pair (symbol-value 'hydra_core_json_bootstrap_types_by_name))
+    (dolist (pair (symbol-value 'hydra_core_bootstrap_types_by_name))
       (let* ((name (car pair))
              (typ (cdr pair))
              (ts (funcall (symbol-value 'hydra_core_scoping_f_type_to_type_scheme) typ))

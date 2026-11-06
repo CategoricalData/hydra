@@ -15,7 +15,7 @@
         (hydra core unification) (hydra core substitution) (hydra core typing)
         (hydra core dependencies) (hydra core strip) (hydra core variables)
         (hydra core validate model)
-        (hydra core json bootstrap) (hydra core json parser) (hydra core json writer)
+        (hydra core bootstrap) (hydra core json parser) (hydra core json writer)
         (hydra core json encode) (hydra core json decode)
         (hydra core json yaml encode) (hydra core json yaml decode)
         (hydra core encode model)

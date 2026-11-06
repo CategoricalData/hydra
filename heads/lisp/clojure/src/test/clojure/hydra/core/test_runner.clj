@@ -402,9 +402,9 @@
       ;; Try to enhance with schema types from test type definitions
       (try
         (require 'hydra.core.test.testGraph)
-        (require 'hydra.core.json.bootstrap)
+        (require 'hydra.core.bootstrap)
         (let [;; Load kernel types from bootstrap (like Python's _load_bootstrap_type_schemes)
-              bootstrap-var (ns-resolve 'hydra.core.json.bootstrap 'hydra_core_json_bootstrap_types_by_name)
+              bootstrap-var (ns-resolve 'hydra.core.bootstrap 'hydra_core_bootstrap_types_by_name)
               bootstrap-types (if (and bootstrap-var (bound? bootstrap-var)) @bootstrap-var {})
               ;; Load test types
               test-types-var (ns-resolve 'hydra.core.test.testGraph 'hydra_core_test_test_graph_test_types)
@@ -1532,7 +1532,7 @@
   (require 'hydra.core.substitution)
   (require 'hydra.core.print.model)
   ;; JSON/bootstrap modules
-  (require 'hydra.core.json.bootstrap)
+  (require 'hydra.core.bootstrap)
   (require 'hydra.core.json.parser)
   (require 'hydra.core.json.writer)
   (require 'hydra.core.json.encode)

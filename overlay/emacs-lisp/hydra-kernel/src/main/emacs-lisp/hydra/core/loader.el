@@ -582,7 +582,7 @@ Signals an error if any form remains unresolved after 10 retry passes."
     "substitution.el" "annotations.el" "unification.el"
     "inference.el" "checking.el" "subterms.el" "serialization.el" "reduction.el"
     "json/parser.el" "json/writer.el"
-    "json/encode.el" "json/decode.el" "json/bootstrap.el"
+    "json/encode.el" "json/decode.el" "bootstrap.el"
     "yaml/model.el" "dsl/yaml/model.el"
     "json/yaml/encode.el" "json/yaml/decode.el"
     ;; Language-specific modules: load utils/syntax/language/serde before coders

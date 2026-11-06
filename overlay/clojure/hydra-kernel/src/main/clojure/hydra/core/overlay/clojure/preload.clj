@@ -74,7 +74,7 @@
    "hydra.core.encode.query" "hydra.core.encode.relational"
    "hydra.core.encode.tabular" "hydra.core.encode.testing" "hydra.core.encode.topology"
    "hydra.core.encode.typed" "hydra.core.encode.typing" "hydra.core.encode.util" "hydra.core.encode.variants"
-   "hydra.core.json.bootstrap" "hydra.core.json.decode" "hydra.core.json.decoding"
+   "hydra.core.bootstrap" "hydra.core.json.decode" "hydra.core.json.decoding"
    "hydra.core.json.encode" "hydra.core.extract.json" "hydra.core.json.parser" "hydra.core.json.writer"
    "hydra.core.test.transform" "hydra.core.test.utils" "hydra.core.yaml.model"
    "hydra.core.json.yaml.decode" "hydra.core.json.yaml.encode"

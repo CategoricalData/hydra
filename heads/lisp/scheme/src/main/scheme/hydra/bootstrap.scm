@@ -343,7 +343,7 @@
     "json/writer.scm"
     "json/encode.scm"
     "json/decode.scm"
-    "json/bootstrap.scm"))
+    "bootstrap.scm"))
 
 ;; Load prims and libraries
 (display "  Loading prims...\n")
@@ -449,7 +449,7 @@
     '() '()))
 
 (define (bootstrap-schema-map)
-  (let loop ((pairs hydra_core_json_bootstrap_types_by_name) (result '()))
+  (let loop ((pairs hydra_core_bootstrap_types_by_name) (result '()))
     (if (null? pairs)
         (reverse result)
         (let* ((pair (car pairs))

@@ -17,7 +17,7 @@
   (:require [hydra.core.overlay.clojure.libraries :refer :all]
             [hydra.core.rewriting :refer :all]
             [hydra.core.scoping :refer :all]
-            [hydra.core.json.bootstrap :refer :all]
+            [hydra.core.bootstrap :refer :all]
             [hydra.annotation-bindings :refer [annotation-bindings]]))
 
 ;; Empty context: alist-style map matching hydra_core_typing_inference_context shape.
@@ -33,7 +33,7 @@
   (fn [test-terms]
     (let [std-prims (standard-library)
           type-to-ts hydra_core_scoping_f_type_to_type_scheme
-          boot-types-raw hydra_core_json_bootstrap_types_by_name
+          boot-types-raw hydra_core_bootstrap_types_by_name
           kernel-schemas (into {} (map (fn [[k v]] [k (type-to-ts v)]) boot-types-raw))
           test-types-list (seq test-types)
           test-schemas (into {} (map (fn [[k v]] [k (type-to-ts v)]) test-types-list))

@@ -231,7 +231,7 @@
   (let* ((std-prims (standard-library))
          (all-prims std-prims)
          ;; Build schema types from bootstrap + test types
-         (bootstrap-types hydra_core_json_bootstrap_types_by_name)
+         (bootstrap-types hydra_core_bootstrap_types_by_name)
          (test-types hydra_core_test_test_graph_test_types)
          ;; Convert types to TypeSchemes using f_type_to_type_scheme
          (type-to-ts hydra_core_scoping_f_type_to_type_scheme)

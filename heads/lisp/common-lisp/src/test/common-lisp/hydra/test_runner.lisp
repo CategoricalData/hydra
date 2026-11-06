@@ -675,8 +675,8 @@
       ;; Enhance with schema types from bootstrap and test types
       (handler-case
         (let* (;; Bootstrap types (kernel type schemes)
-               (bootstrap-types (if (boundp 'hydra_core_json_bootstrap_types_by_name)
-                                    hydra_core_json_bootstrap_types_by_name
+               (bootstrap-types (if (boundp 'hydra_core_bootstrap_types_by_name)
+                                    hydra_core_bootstrap_types_by_name
                                     nil))
                ;; Test types
                (test-types (if (boundp 'hydra_core_test_test_graph_test_types)

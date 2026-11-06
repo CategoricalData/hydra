@@ -698,7 +698,7 @@ forward references."
                      "substitution.lisp" "annotations.lisp" "unification.lisp"
                      "inference.lisp" "checking.lisp" "subterms.lisp" "serialization.lisp" "reduction.lisp"
                      "json/coder.lisp" "json/parser.lisp" "json/writer.lisp"
-                     "json/encode.lisp" "json/decode.lisp" "json/bootstrap.lisp"
+                     "json/encode.lisp" "json/decode.lisp" "bootstrap.lisp"
                      "yaml/model.lisp" "dsl/yaml/model.lisp"
                      "json/yaml/encode.lisp" "json/yaml/decode.lisp"
                      ;; #769: the language-specific coder modules (haskell/*, java/*, python/*,

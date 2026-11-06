@@ -18,7 +18,7 @@
 (require 'hydra.lib.libraries)
 (require 'hydra.core.rewriting)
 (require 'hydra.core.scoping)
-(require 'hydra.core.json.bootstrap)
+(require 'hydra.core.bootstrap)
 (require 'hydra.annotation-bindings)
 
 ;; Empty context: alist-style structure matching hydra_core_typing_inference_context.
@@ -37,7 +37,7 @@
     (let* ((std-prims (standard-library))
            (type-to-ts (lambda (typ)
                          (funcall hydra_core_scoping_f_type_to_type_scheme typ)))
-           (boot-types-raw hydra_core_json_bootstrap_types_by_name)
+           (boot-types-raw hydra_core_bootstrap_types_by_name)
            (kernel-schemas
              (mapcar (lambda (entry)
                        (list (car entry) (funcall type-to-ts (cdr entry))))

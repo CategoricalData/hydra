@@ -291,9 +291,9 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
            nil nil))
 
 (defun bootstrap-schema-map ()
-  "Build the schema map from hydra_core_json_bootstrap_types_by_name."
+  "Build the schema map from hydra_core_bootstrap_types_by_name."
   (let ((result nil))
-    (dolist (pair (symbol-value 'hydra_core_json_bootstrap_types_by_name))
+    (dolist (pair (symbol-value 'hydra_core_bootstrap_types_by_name))
       (let* ((name (car pair))
              (typ (cdr pair))
              (ts (funcall (symbol-value 'hydra_core_scoping_f_type_to_type_scheme) typ))

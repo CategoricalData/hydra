@@ -68,8 +68,8 @@
 ;; with kernel bootstrap schemas + the supplied test-types map.
 (cl:defun build-test-graph-with-types (test-types)
   (cl:let* ((base (build-test-graph))
-            (bootstrap-types (cl:if (cl:boundp 'hydra_core_json_bootstrap_types_by_name)
-                                    hydra_core_json_bootstrap_types_by_name
+            (bootstrap-types (cl:if (cl:boundp 'hydra_core_bootstrap_types_by_name)
+                                    hydra_core_bootstrap_types_by_name
                                     cl:nil))
             (type-to-ts (cl:when (cl:boundp 'hydra_core_scoping_f_type_to_type_scheme)
                           hydra_core_scoping_f_type_to_type_scheme))
