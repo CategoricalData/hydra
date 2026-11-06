@@ -121,6 +121,7 @@ module_ = Module {
      toDefinition primitiveDefinitionParser,
      toDefinition primitiveModifiers,
      toDefinition qualifyLocalName,
+     toDefinition stripSpansInType,
      toDefinition termDefinitionParser,
      toDefinition token,
      toDefinition typeDefinitionParser,
@@ -722,8 +723,37 @@ correctInjectionsInDefinition = define "correctInjectionsInDefinition" $
       (Packaging.primitiveDefinitionIsPure $ var "pd") (Packaging.primitiveDefinitionIsTotal $ var "pd")
       (Optionals.map (var "correct") (Packaging.primitiveDefinitionDefaultImplementation $ var "pd")))]
 
--- | Parse a type definition: 'type name = typeScheme'. No doc-comment ('##') parsing (open
--- design question, not attempted here) -- metadata is always Nothing.
+-- | Remove every span annotation from a type. A type's only TERM-valued position is an
+-- annotation's payload (e.g. a whole-definition or field-level '@{description=...}' map, #711) --
+-- unlike 'Positions.stripSpans' (which walks a 'Term' and recurses into nested terms directly),
+-- this walks the surrounding 'Type' structure via 'Rewriting.rewriteType' (mirroring
+-- 'Strip.removeTypeAnnotations', the proven precedent for a 'Type -> Type' span/annotation
+-- remover) and applies 'Positions.stripSpans' only at each 'Type_annotated' node's own annotation
+-- payload. Needed because the parser attaches source spans to every parsed term (#815),
+-- including the description term embedded in a parsed type's annotation -- a freshly-parsed
+-- type's description otherwise carries a stray 'sourceSpan' entry that a hand-built (unparsed)
+-- type never has, breaking structural comparison between the two. Lives here (rather than in
+-- 'Strip.hs', alongside 'removeTypeAnnotations') because 'Strip.hs' is upstream of 'Positions.hs'
+-- in the module dependency graph (via 'Annotations.hs'), so importing 'Positions' from 'Strip'
+-- would create a cycle; this module already depends on 'Positions' directly.
+stripSpansInType :: TypedTermDefinition (Type -> Type)
+stripSpansInType = define "stripSpansInType" $
+  doc "Remove every span annotation from a type's own annotation payloads" $
+  "typ" ~>
+  "remove" <~ ("recurse" ~> "typ" ~>
+    "rewritten" <~ var "recurse" @@ var "typ" $
+    match _Type (var "rewritten")
+      (Just $ var "rewritten") [
+      _Type_annotated>>: "at" ~> Core.typeAnnotated $ Core.annotatedType
+        (Core.annotatedTypeBody $ var "at")
+        (Positions.stripSpans @@ (Core.annotatedTypeAnnotation $ var "at"))]) $
+  Rewriting.rewriteType @@ var "remove" @@ var "typ"
+
+-- | Parse a type definition: ['##' doc comment] 'type name = typeScheme'. The parsed scheme's
+-- body is run through 'stripSpansInType' to remove the source spans the parser attaches to every
+-- parsed term (#815), including the description term nested in an '@{description=...}'
+-- annotation -- without this, a freshly-parsed type's description carries a stray 'sourceSpan'
+-- entry that a hand-built (unparsed) type never has, breaking structural comparison (#711).
 typeDefinitionParser :: TypedTermDefinition (ModuleName -> Parser Definition)
 typeDefinitionParser = define "typeDefinitionParser" $
   doc "Parse a type definition: ['##' doc comment] 'type name = typeScheme'" $
@@ -733,7 +763,11 @@ typeDefinitionParser = define "typeDefinitionParser" $
       P.bind @@ identifier @@ ("local" ~>
         P.bind @@ (keyword @@ string "=") @@ (constant $
           P.map @@ ("ts" ~> Packaging.definitionType
-              (Packaging.typeDefinition (qualifyLocalName @@ var "modName" @@ var "local") (var "mmeta") (var "ts"))) @@
+              (Packaging.typeDefinition (qualifyLocalName @@ var "modName" @@ var "local")
+                (var "mmeta")
+                (Core.typeScheme (Core.typeSchemeVariables $ var "ts")
+                  (stripSpansInType @@ (Core.typeSchemeBody $ var "ts"))
+                  (Core.typeSchemeConstraints $ var "ts")))) @@
             (token @@ (asTerm ParseCore.typeScheme))))))
 
 -- | Parse a term definition: 'term name [: termSignature] = term'. The optional ': termSignature'

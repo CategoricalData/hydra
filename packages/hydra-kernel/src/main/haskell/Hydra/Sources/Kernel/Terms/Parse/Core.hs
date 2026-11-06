@@ -155,17 +155,40 @@ module_ = Module {
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
--- | Skip zero or more whitespace characters, including '#' line comments (syntax.md #2.2).
+-- | Skip zero or more whitespace characters, including ordinary (non-'##') '#' line comments
+-- (syntax.md #2.2). Must NOT consume a '##' doc-comment line -- that belongs to
+-- 'Parse/Packaging.hs's 'docCommentBlock', parsed separately at the point a module/definition's
+-- leading doc comment belongs. A lexeme's own trailing whitespace is exactly where a FOLLOWING
+-- definition's '##' line first becomes reachable (e.g. after 'type T1 = unit' consumes its
+-- trailing whitespace before the next definition starts), so this function needs the SAME '##'
+-- vs. ordinary-'#' distinction 'Parse/Packaging.hs's 'whitespace' makes -- mirrored here (rather
+-- than shared) because the two modules' 'whitespace' are independent top-level definitions, not
+-- textually identical by coincidence.
 whitespace :: TypedTermDefinition (Parser ())
 whitespace = define "whitespace" $
-  doc "Skip zero or more whitespace characters and '#' line comments" $
+  doc "Skip zero or more whitespace characters and ordinary (non-'##') '#' line comments" $
   P.map @@ ("_" ~> unit) @@ (P.many @@ (P.alt @@ wsChar @@ lineComment))
   where
     wsChar = P.map @@ (constant unit) @@ (P.satisfy @@ ("c" ~> Chars.isSpace (var "c")))
-    lineComment =
+    -- The whole attempt -- consume '#', then require it's NOT followed by a second '#' -- is
+    -- wrapped in 'try' here (not just the inner not-a-second-'#' check), so that on a genuine
+    -- '##' line, the failure rewinds all the way back to BEFORE the leading '#' was consumed.
+    -- Without this outer 'try', the bare leading 'P.char' below succeeds and consumes the first
+    -- '#' unconditionally; when the inner check then fails (it IS a second '#'), 'lineComment'
+    -- as a whole has still consumed one character, so the surrounding 'P.alt @@ wsChar @@
+    -- lineComment' (which only backtracks on a NO-input-consumed failure) cannot recover -- the
+    -- leading '#' of the next '##' line is silently swallowed here, never reaching
+    -- 'docCommentBlock'. Same root cause and fix as 'Parse/Packaging.hs's 'whitespace' (#711);
+    -- this copy was missed by that fix since it's a separate top-level definition, and this
+    -- module's own type-level lexemes ('typeKeyword'/'termKeyword') route through it, not through
+    -- 'Parse/Packaging.hs's version -- only surfaced when a definition with a plain (non-'##'
+    -- -needing-backtrack) trailing lexeme is immediately followed by another definition's '##'
+    -- doc comment.
+    lineComment = P.try @@ (
       P.bind @@ (P.char @@ int32 35) @@ (constant $    -- '#'
-        P.map @@ (constant unit) @@
-          (P.many @@ (P.satisfy @@ ("c" ~> Logic.not (Equality.equal (var "c") (int32 10))))))  -- not '\n'
+        P.bind @@ (P.alt @@ P.eof @@ (P.map @@ (constant unit) @@ (P.satisfy @@ ("c" ~> Logic.not (Equality.equal (var "c") (int32 35)))))) @@ (constant $
+          P.map @@ (constant unit) @@
+            (P.many @@ (P.satisfy @@ ("c" ~> Logic.not (Equality.equal (var "c") (int32 10))))))))  -- not '\n'
 
 -- | Parse a token followed by trailing whitespace/comments (the 'lexeme' convention: whitespace
 -- is consumed AFTER a token, never before one, so that 'alt'/'optional' can still backtrack when
