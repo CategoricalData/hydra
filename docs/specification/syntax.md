@@ -620,31 +620,3 @@ detail of the printer, not part of the grammar.
   module's and every parsed definition's metadata is always `Nothing`, matching the printer's
   intentional omission of doc-comment output when metadata is absent. Doc-comment printing
   (§6.2) is implemented; doc-comment parsing is not yet.
-
-## Appendix: migration deltas (temporary)
-
-This appendix is the implementation checklist for bringing `hydra.core.print.model`
-into conformance with this specification; delete it once the migration lands.
-The current implementation differs as follows:
-
-- Term and type application print with an `@` separator inside full parentheses;
-  this specification uses adjacency.
-- `@` becomes the annotation marker; annotations are currently not printed at all.
-- `Type.forall` currently prints `∀`; this specification gives it the `forall` keyword.
-- `TypeScheme` currently prints `forall` and `=>`; this specification gives it `∀` and `⇒`.
-- Bindings currently print with `=`; this specification uses `:=`.
-- Binary literals currently print as a lossy `[binary]` placeholder;
-  this specification requires the base64 form.
-- The case-statement default handler currently prints as a field named `[default]`;
-  this specification uses the `_` wildcard.
-- Canonical output is currently fully parenthesized;
-  this specification requires minimal parenthesization.
-
-Verified blast radius: one formatting-test expectation
-(`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Generation.hs`),
-the lexicon's type-application signatures,
-all formatting-test expectations that pin annotation-erased output,
-and the primitives-catalog signature renderer (#417).
-One residual specification task lives in the JSON wire format document:
-pinning the shortest-decimal tie and exponent-notation rule explicitly
-(it is implicit today in the shared literal-printing primitives).
