@@ -9,6 +9,7 @@ import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
 import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms hiding ((++))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms         as Terms
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Core.Dsl.Typing       as Typing
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
@@ -46,6 +47,8 @@ module_ = Module {
   where
     definitions = [
       Phantoms.toDefinition allTests,
+      Phantoms.toDefinition annotationRoundtripGroup,
+      Phantoms.toDefinition corpusRoundtripGroup,
       Phantoms.toDefinition doSugarGroup,
       Phantoms.toDefinition lazyParameterRoundtripGroup,
       Phantoms.toDefinition moduleAliasGroup,
@@ -61,7 +64,8 @@ allTests = define "allTests" $
     doc "Test cases for the textual syntax (#497/#710)" $
     Testing.testGroup (string "textual syntax") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
-    subgroups = [doSugarGroup, lazyParameterRoundtripGroup, moduleAliasGroup, nominalSugarGroup, sourceSpanGroup, sourcePositionGroup]
+    subgroups = [annotationRoundtripGroup, corpusRoundtripGroup, doSugarGroup, lazyParameterRoundtripGroup,
+                 moduleAliasGroup, nominalSugarGroup, sourceSpanGroup, sourcePositionGroup]
 
 -- | Print a term signature, then parse the printed text back, and show the round-tripped
 -- signature. Compares against the original signature's own printed form, so the test both
@@ -356,6 +360,18 @@ termPrintTest :: String -> TypedTerm Term -> String -> TypedTerm TestCaseWithMet
 termPrintTest testName t expectedStr = universalCase testName
   (PrintCore.term @@ t)
   (Phantoms.string expectedStr)
+
+-- | Print a type, parse the printed text back, and re-print -- compares to the original printed
+-- form (self-comparing string round-trip, mirroring 'termRoundtripTest'/'signatureRoundtripTest').
+typeRoundtripTest :: String -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
+typeRoundtripTest testName t = universalCase testName actual expected
+  where
+    printed = PrintCore.type_ @@ t
+    actual = Eithers.either
+      (Phantoms.lambda "e" $ Phantoms.var "e")
+      (Phantoms.lambda "t2" $ PrintCore.type_ @@ Phantoms.var "t2")
+      (ParseCore.parseType @@ printed)
+    expected = printed
 
 -- | Parse an input string, re-print the parsed term, and compare to the printed form of an expected
 -- term. Used for the applied 'case' sugar (#809 Wave 2), which is PARSE-ONLY: 'case T x {…}'
@@ -687,3 +703,81 @@ sourcePositionGroup = define "sourcePositionGroup" $
     positionTest "astral codepoint then next line" "\128512\na" 2 "1:0",
     positionTest "offset beyond end is clamped" "ab" 10 "0:2",
     positionTest "empty text" "" 0 "0:0"])
+
+----------------------------------------------------------------------------------------------
+-- #497 close-out: a general print->parse->print sweep over the existing kernel test-fixture
+-- corpus (Hydra.Sources.Test.TestTerms/TestTypes), plus explicit annotation round-trip cases
+-- tied to syntax.md #1's named provisions. Scoped term-level only, per the issue's own narrowing
+-- (module/packaging-level syntax is separate, future work). Uses the same self-comparing
+-- print->parse->print string shape as termRoundtripTest/typeRoundtripTest/signatureRoundtripTest
+-- throughout this file, not raw structural equality (universalCase ultimately compares
+-- String-typed terms; see those helpers' own docs).
+
+corpusRoundtripGroup :: TypedTermDefinition TestGroup
+corpusRoundtripGroup = define "corpusRoundtripGroup" $
+  doc "General print->parse->print round-trip sweep over the kernel test-fixture corpus (#497)" $
+  Testing.testGroup (string "fixture corpus round-trips") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    -- Terms (Hydra.Sources.Test.TestTerms): a nominal record fixture.
+    termRoundtripTest "corpus: testDataArthur (nominal record)" (Phantoms.asTerm TestTerms.testDataArthur),
+
+    -- Types (Hydra.Sources.Test.TestTypes): one representative of each major shape in the
+    -- corpus -- record, monomorphic/polymorphic/recursive union, wrap, multi-variable forall,
+    -- and the built-in container types (optional/list/set/map/either/function).
+    typeRoundtripTest "corpus: testTypePerson (record)" (Phantoms.asTerm TestTypes.testTypePerson),
+    typeRoundtripTest "corpus: testTypeUnionMonomorphic (monomorphic union)" (Phantoms.asTerm TestTypes.testTypeUnionMonomorphic),
+    typeRoundtripTest "corpus: testTypeLatLonPoly (polymorphic record, single forall)" (Phantoms.asTerm TestTypes.testTypeLatLonPoly),
+    typeRoundtripTest "corpus: testTypeTriple (triple forall)" (Phantoms.asTerm TestTypes.testTypeTriple),
+    typeRoundtripTest "corpus: testTypeList (self-recursive polymorphic record)" (Phantoms.asTerm TestTypes.testTypeList),
+    typeRoundtripTest "corpus: testTypeUnionPolymorphicRecursive (self-recursive polymorphic union)"
+      (Phantoms.asTerm TestTypes.testTypeUnionPolymorphicRecursive),
+    typeRoundtripTest "corpus: testTypeUnionPolymorphicRecursiveListWrapped (list-wrapped recursive union)"
+      (Phantoms.asTerm TestTypes.testTypeUnionPolymorphicRecursiveListWrapped),
+    typeRoundtripTest "corpus: testTypeStringAlias (wrap)" (Phantoms.asTerm TestTypes.testTypeStringAlias),
+    typeRoundtripTest "corpus: testTypePolymorphicWrapper (forall + wrap + list)" (Phantoms.asTerm TestTypes.testTypePolymorphicWrapper),
+    typeRoundtripTest "corpus: testTypeSymmetricTriple (two-variable forall + wrap + applied type)"
+      (Phantoms.asTerm TestTypes.testTypeSymmetricTriple),
+    typeRoundtripTest "corpus: optionalStringType" (Phantoms.asTerm TestTypes.optionalStringType),
+    typeRoundtripTest "corpus: listOfSetOfStringsType (nested containers)" (Phantoms.asTerm TestTypes.listOfSetOfStringsType),
+    typeRoundtripTest "corpus: mapOfStringsToIntsType" (Phantoms.asTerm TestTypes.mapOfStringsToIntsType),
+    typeRoundtripTest "corpus: eitherStringOrInt8Type" (Phantoms.asTerm TestTypes.eitherStringOrInt8Type),
+    typeRoundtripTest "corpus: concatType (curried function type)" (Phantoms.asTerm TestTypes.concatType),
+    typeRoundtripTest "corpus: testTypeTimestamp (union with a uint64 variant)" (Phantoms.asTerm TestTypes.testTypeTimestamp)])
+
+-- | An annotation payload matching the spec's own canonical example (syntax.md #3's annot note:
+-- "common case: t @{description = \"...\"}"): a one-entry Name->Term map.
+descriptionAnnotation :: String -> TypedTerm Term
+descriptionAnnotation text = Terms.annotationMapToTerm $ Maps.fromList $ Phantoms.list [
+  Phantoms.pair (nm "description") (strT text)]
+
+annotationRoundtripGroup :: TypedTermDefinition TestGroup
+annotationRoundtripGroup = define "annotationRoundtripGroup" $
+  doc "Annotation round-trip cases tied to syntax.md #1's HYDRA-SYN-ROUND-TRIP / HYDRA-SYN-PRINTER-FAITHFUL provisions (#497)" $
+  Testing.testGroup (string "annotation round-trips") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    -- [HYDRA-SYN-PRINTER-FAITHFUL]: a literal, variable, and application each carrying a single
+    -- annotation -- the printer must emit the annotation and the parser must recover it, not drop
+    -- it. Round-trip only (self-comparing print->parse->print), not an exact-string pin -- see
+    -- termRoundtripTest's own doc for why that is the established, safe comparison shape here.
+    termRoundtripTest "annotated literal round-trips" (Terms.annotatedTerm (i32T 42) (descriptionAnnotation "the answer")),
+
+    termRoundtripTest "annotated variable round-trips" (Terms.annotatedTerm (varT "x") (descriptionAnnotation "a variable")),
+
+    termRoundtripTest "annotated application round-trips"
+      (Terms.annotatedTerm (appT (varT "f") (varT "x")) (descriptionAnnotation "a call")),
+
+    -- [HYDRA-SYN-ROUND-TRIP] "stacked annotations are structure: they print as nested and parse
+    -- back as nested" -- x @m1 @m2 == annotated(annotated(x, m1), m2), chains left.
+    termRoundtripTest "stacked annotations round-trip (chains left)"
+      (Terms.annotatedTerm (Terms.annotatedTerm (varT "x") (descriptionAnnotation "inner")) (descriptionAnnotation "outer")),
+
+    -- An annotation payload that is itself compound (not a bare literal/variable) must print
+    -- parenthesized per the postfix-annotation precedence rule, and still round-trip.
+    termRoundtripTest "annotation with a compound (non-atomic) payload round-trips"
+      (Terms.annotatedTerm (varT "x") (appT (varT "f") (varT "y"))),
+
+    -- The type-level mirror of the same contract: annotated types must round-trip too.
+    typeRoundtripTest "annotated type round-trips"
+      (T.annot (Maps.fromList $ Phantoms.list [Phantoms.pair (nm "description") (strT "a type")]) T.string),
+
+    typeRoundtripTest "stacked type annotations round-trip (chains left)"
+      (T.annot (Maps.fromList $ Phantoms.list [Phantoms.pair (nm "outer") (strT "o")])
+        (T.annot (Maps.fromList $ Phantoms.list [Phantoms.pair (nm "inner") (strT "i")]) T.string))])
