@@ -75,7 +75,7 @@ defaultImplementationsDefinition = TermDefinition {
 -- cannot be inserted directly as TermMap values: inference on a TermMap unifies all
 -- value subterms to a single type, which fails across heterogeneous implementations.
 -- Instead, each implementation is reified as term-level data via EncodeCore.term,
--- exactly as typesByNameTerm (Hydra.Sources.Json.Bootstrap) encodes each Type as a
+-- exactly as typesByNameTerm (Hydra.Sources.Kernel.Terms.Bootstrap) encodes each Type as a
 -- uniformly-typed hydra.core.model.Type term via EncodeCore.type_. This makes every map
 -- value uniformly typed as (encoded) hydra.core.model.Term, sidestepping inference into the
 -- implementations' differing executable types.

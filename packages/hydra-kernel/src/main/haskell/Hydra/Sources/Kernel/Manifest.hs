@@ -26,7 +26,6 @@ import Hydra.Kernel
 import Hydra.Sources.Kernel.Types.All (kernelTypesModules)
 import Hydra.Sources.Kernel.Terms.All (kernelTermsModules, kernelLibModules)
 
-import qualified Hydra.Sources.Json.Bootstrap as JsonBootstrap
 import qualified Hydra.Sources.Json.Decode as JsonDecode
 import qualified Hydra.Sources.Json.Decoding as JsonDecoding
 import qualified Hydra.Sources.Json.Encode as JsonEncode
@@ -64,7 +63,6 @@ import qualified Hydra.Sources.Test.All as Test
 
 jsonModules :: [Module]
 jsonModules = [
-  JsonBootstrap.module_,
   JsonDecode.module_,
   JsonDecoding.module_,
   JsonEncode.module_,

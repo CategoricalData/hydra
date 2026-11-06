@@ -1,4 +1,5 @@
--- | A module which provides a minimal typing environment for decoding other Modules from JSON.
+-- | A module which provides a minimal typing environment for bootstrapping module decoding
+-- (e.g. from JSON) before a full kernel graph with inference-derived schema types is available.
 --
 -- This module contains a single binding, typesByName, which maps type Names to Types
 -- for all types defined in the kernel modules needed to decode the Module type
@@ -9,7 +10,7 @@
 -- individual Source modules for each kernel type module (which can exceed the JVM's
 -- 64KB method size limit for large modules like hydra.core.model).
 
-module Hydra.Sources.Json.Bootstrap where
+module Hydra.Sources.Kernel.Terms.Bootstrap where
 
 -- Note: non-standard imports; this module is constructed dynamically from other modules.
 import Hydra.Kernel
@@ -27,7 +28,7 @@ import qualified Data.Map as M
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.core.json.bootstrap"
+ns = ModuleName "hydra.core.bootstrap"
 
 -- | The kernel type modules whose types are needed to decode Module from JSON
 -- and to provide schema types for inference tests.
@@ -46,12 +47,12 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = [DefinitionTerm typesByNameDefinition],
             moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core.coders", ModuleName "hydra.core.model", ModuleName "hydra.core.error.checking", ModuleName "hydra.core.error.model", ModuleName "hydra.core.errors", ModuleName "hydra.core.graph", ModuleName "hydra.core.packaging", ModuleName "hydra.core.paths", ModuleName "hydra.core.typing", ModuleName "hydra.core.util", ModuleName "hydra.core.variants"],
-            moduleMetadata = descriptionMetadata (Just ("A module which provides a minimal typing environment for decoding other modules from JSON."
+            moduleMetadata = descriptionMetadata (Just ("A module which provides a minimal typing environment for bootstrapping module decoding."
       ++ " This avoids certain problems with generating entire source modules into target languages like Java,"
       ++ " which is subject to method size limits for large modules like hydra.core.model."))}
 typesByNameDefinition :: TermDefinition
 typesByNameDefinition = TermDefinition {
-    termDefinitionName = Name "hydra.core.json.bootstrap.typesByName",
+    termDefinitionName = Name "hydra.core.bootstrap.typesByName",
     termDefinitionMetadata = Nothing,
     termDefinitionBody = typesByNameTerm,
     termDefinitionSignature = Nothing}
