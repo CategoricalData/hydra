@@ -6,37 +6,7 @@
 ## Only range remains int32-typed.
 module hydra.core.lib.math
 
-import hydra.core.paths
-import hydra.core.ast
-import hydra.core.coders
-import hydra.core.model
-import hydra.core.diff
-import hydra.core.docs
-import hydra.core.error.checking
-import hydra.core.error.model
-import hydra.core.error.file
-import hydra.core.error.packaging
-import hydra.core.error.system
-import hydra.core.errors
-import hydra.core.file
-import hydra.core.graph
-import hydra.core.json.model
-import hydra.core.markdown
-import hydra.core.packaging
-import hydra.core.parsing
-import hydra.core.query
-import hydra.core.regex
-import hydra.core.relational
-import hydra.core.system
-import hydra.core.tabular
-import hydra.core.testing
-import hydra.core.time
-import hydra.core.topology
-import hydra.core.typed
-import hydra.core.typing
-import hydra.core.util
-import hydra.core.validation
-import hydra.core.variants
+import hydra.core.lib.logic as logic
 
 ## Numeric absolute value.
 ##
@@ -45,8 +15,8 @@ import hydra.core.variants
 ## Corresponds to Haskell's abs :: Num a => a -> a.
 ##
 ## @availableSince 0.15
-## @requirement preservesMagnitudeAcrossTypes abs returns the non-negative magnitude of the argument, for every numeric type with a 'numeric' instance (signed/unsigned integers of every width, bigint, float32/float64).
-## @requirement boundaryAndSpecialValues abs at the signed-integer minimum value wraps to itself (not representable as its positive magnitude); abs of signed zero preserves sign to +0; abs(NaN) is NaN; abs(-Infinity) is +Infinity.
+## @requirement preservesMagnitudeAcrossTypes: abs returns the non-negative magnitude of the argument, for every numeric type with a 'numeric' instance (signed/unsigned integers of every width, bigint, float32/float64).
+## @requirement boundaryAndSpecialValues: abs at the signed-integer minimum value wraps to itself (not representable as its positive magnitude); abs of signed zero preserves sign to +0; abs(NaN) is NaN; abs(-Infinity) is +Infinity.
 primitive abs : ∀x.(numeric x) ⇒ x → x
 
 ## The arc cosine of a floating-point number.
@@ -56,9 +26,9 @@ primitive abs : ∀x.(numeric x) ⇒ x → x
 ## Corresponds to the IEEE 754 ੹.2 acos operation and to Haskell's acos :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement inverseCosineInPrincipalRange acos returns the principal value of the inverse cosine, in radians, in [0, pi], for arguments in its domain [-1, +1].
-## @requirement outOfDomainIsNanSpecialValuesPropagate acos of an argument outside [-1, +1] (including +-Infinity) is NaN; acos(NaN) is NaN.
-primitive acos : ∀.float64 → float64
+## @requirement inverseCosineInPrincipalRange: acos returns the principal value of the inverse cosine, in radians, in [0, pi], for arguments in its domain [-1, +1].
+## @requirement outOfDomainIsNanSpecialValuesPropagate: acos of an argument outside [-1, +1] (including +-Infinity) is NaN; acos(NaN) is NaN.
+primitive acos : float64 → float64
 
 ## The hyperbolic arc cosine of a floating-point number.
 ##
@@ -67,9 +37,9 @@ primitive acos : ∀.float64 → float64
 ## Corresponds to the IEEE 754 ੹.2 acosh operation and to Haskell's acosh :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement inverseHyperbolicCosineInNonnegativeRange acosh returns the principal value of the inverse hyperbolic cosine, in [0, +Infinity), for arguments in its domain [1, +Infinity).
-## @requirement outOfDomainIsNanAsymmetricAtInfinity acosh of an argument less than 1 (including -Infinity) is NaN; acosh(+Infinity) is +Infinity; acosh(NaN) is NaN.
-primitive acosh : ∀.float64 → float64
+## @requirement inverseHyperbolicCosineInNonnegativeRange: acosh returns the principal value of the inverse hyperbolic cosine, in [0, +Infinity), for arguments in its domain [1, +Infinity).
+## @requirement outOfDomainIsNanAsymmetricAtInfinity: acosh of an argument less than 1 (including -Infinity) is NaN; acosh(+Infinity) is +Infinity; acosh(NaN) is NaN.
+primitive acosh : float64 → float64
 
 ## Numeric addition.
 ##
@@ -79,8 +49,8 @@ primitive acosh : ∀.float64 → float64
 ## Generalized from int32-only; the numeric class is #566.
 ##
 ## @availableSince 0.17.6
-## @requirement wrapsOrRoundsPerType add combines two values of a numeric type per that type's own arithmetic: two's-complement wraparound for fixed-width integers, arbitrary precision for bigint, IEEE 754 round-to-nearest for floating-point -- and dispatches correctly regardless of which numeric type is supplied at the call site.
-## @requirement boundaryWraparoundAndIeeeSpecialValues add wraps silently at every fixed-width integer type's boundary (no overflow exception); add of two bigints beyond int64/uint64 range remains exact; add on float64/float32 follows IEEE 754 special-value rules (opposite-sign infinities and any NaN operand yield NaN, ties round to even, -0 + -0 = -0).
+## @requirement wrapsOrRoundsPerType: add combines two values of a numeric type per that type's own arithmetic: two's-complement wraparound for fixed-width integers, arbitrary precision for bigint, IEEE 754 round-to-nearest for floating-point -- and dispatches correctly regardless of which numeric type is supplied at the call site.
+## @requirement boundaryWraparoundAndIeeeSpecialValues: add wraps silently at every fixed-width integer type's boundary (no overflow exception); add of two bigints beyond int64/uint64 range remains exact; add on float64/float32 follows IEEE 754 special-value rules (opposite-sign infinities and any NaN operand yield NaN, ties round to even, -0 + -0 = -0).
 primitive add : ∀x.(numeric x) ⇒ x → x → x
 
 ## Floating-point addition.
@@ -91,8 +61,8 @@ primitive add : ∀x.(numeric x) ⇒ x → x → x
 ## Deprecated since 0.18. Use: hydra.core.lib.math.add.
 ##
 ## @deprecatedSince 0.18
-## @requirement addsFloat64Values addFloat64 computes the IEEE 754 binary64 sum of its two arguments.
-primitive addFloat64 : ∀.float64 → float64 → float64
+## @requirement addsFloat64Values: addFloat64 computes the IEEE 754 binary64 sum of its two arguments.
+primitive addFloat64 : float64 → float64 → float64
 
 ## The arc sine of a floating-point number.
 ##
@@ -101,9 +71,9 @@ primitive addFloat64 : ∀.float64 → float64 → float64
 ## Corresponds to the IEEE 754 ੹.2 asin operation and to Haskell's asin :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement inverseSineInPrincipalRange asin returns the principal value of the inverse sine, in radians, in [-pi/2, +pi/2], for arguments in its domain [-1, +1].
-## @requirement outOfDomainIsNanSpecialValuesPropagate asin of an argument outside [-1, +1] (including +-Infinity) is NaN; asin(NaN) is NaN.
-primitive asin : ∀.float64 → float64
+## @requirement inverseSineInPrincipalRange: asin returns the principal value of the inverse sine, in radians, in [-pi/2, +pi/2], for arguments in its domain [-1, +1].
+## @requirement outOfDomainIsNanSpecialValuesPropagate: asin of an argument outside [-1, +1] (including +-Infinity) is NaN; asin(NaN) is NaN.
+primitive asin : float64 → float64
 
 ## The hyperbolic arc sine of a floating-point number.
 ##
@@ -111,9 +81,9 @@ primitive asin : ∀.float64 → float64
 ## Corresponds to the IEEE 754 ੹.2 asinh operation and to Haskell's asinh :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement inverseHyperbolicSineDefinedForAllFiniteReals asinh returns the principal value of the inverse hyperbolic sine, defined for every finite real argument.
-## @requirement oddSymmetryAtInfinityNanPropagates asinh(+-Infinity) is +-Infinity respectively (odd symmetry preserved at the boundary); asinh(NaN) is NaN.
-primitive asinh : ∀.float64 → float64
+## @requirement inverseHyperbolicSineDefinedForAllFiniteReals: asinh returns the principal value of the inverse hyperbolic sine, defined for every finite real argument.
+## @requirement oddSymmetryAtInfinityNanPropagates: asinh(+-Infinity) is +-Infinity respectively (odd symmetry preserved at the boundary); asinh(NaN) is NaN.
+primitive asinh : float64 → float64
 
 ## The arc tangent of a floating-point number.
 ##
@@ -121,9 +91,9 @@ primitive asinh : ∀.float64 → float64
 ## Corresponds to the IEEE 754 ੹.2 atan operation and to Haskell's atan :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement inverseTangentInPrincipalRange atan returns the principal value of the inverse tangent, in radians, in (-pi/2, +pi/2), for any finite argument.
-## @requirement saturatesAtInfinityNanPropagates atan of +-Infinity saturates to +-pi/2 respectively (rather than NaN); atan(NaN) is NaN.
-primitive atan : ∀.float64 → float64
+## @requirement inverseTangentInPrincipalRange: atan returns the principal value of the inverse tangent, in radians, in (-pi/2, +pi/2), for any finite argument.
+## @requirement saturatesAtInfinityNanPropagates: atan of +-Infinity saturates to +-pi/2 respectively (rather than NaN); atan(NaN) is NaN.
+primitive atan : float64 → float64
 
 ## The two-argument arc tangent (atan2).
 ##
@@ -132,9 +102,9 @@ primitive atan : ∀.float64 → float64
 ## Corresponds to Haskell's atan2 :: Double -> Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement quadrantAwareArcTangentOfTwoArguments atan2(y, x) returns the angle in radians, in (-pi, +pi], from the positive x-axis to the point (x, y), using the signs of both arguments to determine the quadrant.
-## @requirement ieeeSpecialValueMatrix atan2 follows the IEEE 754 9.2 special-value table for signed-zero, infinite, and NaN arguments in either position, including the cross-infinity combinations where this implementation returns NaN.
-primitive atan2 : ∀.float64 → float64 → float64
+## @requirement quadrantAwareArcTangentOfTwoArguments: atan2(y, x) returns the angle in radians, in (-pi, +pi], from the positive x-axis to the point (x, y), using the signs of both arguments to determine the quadrant.
+## @requirement ieeeSpecialValueMatrix: atan2 follows the IEEE 754 9.2 special-value table for signed-zero, infinite, and NaN arguments in either position, including the cross-infinity combinations where this implementation returns NaN.
+primitive atan2 : float64 → float64 → float64
 
 ## The hyperbolic arc tangent of a floating-point number.
 ##
@@ -142,9 +112,9 @@ primitive atan2 : ∀.float64 → float64 → float64
 ## Corresponds to the IEEE 754 ੹.2 atanh operation and to Haskell's atanh :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement inverseHyperbolicTangentOnOpenInterval atanh returns the principal value of the inverse hyperbolic tangent, defined on the open interval (-1, +1).
-## @requirement boundaryIsInfiniteOutOfDomainIsNan atanh at the boundary (+-1) is +-Infinity respectively; atanh of an argument outside [-1, +1] (including +-Infinity) is NaN; atanh(NaN) is NaN.
-primitive atanh : ∀.float64 → float64
+## @requirement inverseHyperbolicTangentOnOpenInterval: atanh returns the principal value of the inverse hyperbolic tangent, defined on the open interval (-1, +1).
+## @requirement boundaryIsInfiniteOutOfDomainIsNan: atanh at the boundary (+-1) is +-Infinity respectively; atanh of an argument outside [-1, +1] (including +-Infinity) is NaN; atanh(NaN) is NaN.
+primitive atanh : float64 → float64
 
 ## The smallest integer greater than or equal to the argument, as a float.
 ##
@@ -153,9 +123,9 @@ primitive atanh : ∀.float64 → float64
 ## Corresponds to Haskell's fromIntegral . ceiling :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement roundsTowardPositiveInfinityAsFloat ceiling returns the smallest integer value not less than the argument, as a float64.
-## @requirement ieeeSpecialValuesPassThrough ceiling of +-Infinity or NaN passes the value through unchanged.
-primitive ceiling : ∀.float64 → float64
+## @requirement roundsTowardPositiveInfinityAsFloat: ceiling returns the smallest integer value not less than the argument, as a float64.
+## @requirement ieeeSpecialValuesPassThrough: ceiling of +-Infinity or NaN passes the value through unchanged.
+primitive ceiling : float64 → float64
 
 ## The cosine of a floating-point number.
 ##
@@ -163,9 +133,9 @@ primitive ceiling : ∀.float64 → float64
 ## Corresponds to the IEEE 754 ੹.2 cos operation and to Haskell's cos :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement cosineOfAngleInRadians cos returns the cosine of an angle in radians, correctly rounded for finite arguments, in the range [-1, +1].
-## @requirement undefinedAtInfinityNanPropagates cos of +-Infinity is NaN; cos(NaN) is NaN.
-primitive cos : ∀.float64 → float64
+## @requirement cosineOfAngleInRadians: cos returns the cosine of an angle in radians, correctly rounded for finite arguments, in the range [-1, +1].
+## @requirement undefinedAtInfinityNanPropagates: cos of +-Infinity is NaN; cos(NaN) is NaN.
+primitive cos : float64 → float64
 
 ## The hyperbolic cosine of a floating-point number.
 ##
@@ -173,9 +143,9 @@ primitive cos : ∀.float64 → float64
 ## Corresponds to the IEEE 754 ੹.2 cosh operation and to Haskell's cosh :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement hyperbolicCosineInRangeAtLeastOne cosh returns the hyperbolic cosine, in [1, +Infinity), for any finite real argument.
-## @requirement evenSymmetryAtInfinityNanPropagates cosh(+-Infinity) is +Infinity (even symmetry -- both signs saturate to the same value); cosh(NaN) is NaN.
-primitive cosh : ∀.float64 → float64
+## @requirement hyperbolicCosineInRangeAtLeastOne: cosh returns the hyperbolic cosine, in [1, +Infinity), for any finite real argument.
+## @requirement evenSymmetryAtInfinityNanPropagates: cosh(+-Infinity) is +Infinity (even symmetry -- both signs saturate to the same value); cosh(NaN) is NaN.
+primitive cosh : float64 → float64
 
 ## Integral division, or Nothing if dividing by zero.
 ##
@@ -187,8 +157,8 @@ primitive cosh : ∀.float64 → float64
 ## Renamed from hydra.lib.math.maybeDiv.
 ##
 ## @availableSince 0.17.6
-## @requirement flooredQuotientWhenDivisorNonzero div returns the integer quotient of its two arguments rounded toward negative infinity (floor division), wrapped, for every integral type, when the divisor is non-zero.
-## @requirement noneOnZeroDivisorWraparoundAtMinBound div is none when the divisor is zero, for every integral type; at a fixed-width signed integer type's boundary case (minimum value divided by -1), the result wraps to the minimum value rather than overflowing.
+## @requirement flooredQuotientWhenDivisorNonzero: div returns the integer quotient of its two arguments rounded toward negative infinity (floor division), wrapped, for every integral type, when the divisor is non-zero.
+## @requirement noneOnZeroDivisorWraparoundAtMinBound: div is none when the divisor is zero, for every integral type; at a fixed-width signed integer type's boundary case (minimum value divided by -1), the result wraps to the minimum value rather than overflowing.
 primitive div : ∀x.(integral x) ⇒ x → x → optional<x>
 
 ## Floating-point division.
@@ -200,8 +170,8 @@ primitive div : ∀x.(integral x) ⇒ x → x → optional<x>
 ## Generalized from int32-only; the numeric class is #566.
 ##
 ## @availableSince 0.17.6
-## @requirement roundsToNearestPerIeee754 divide computes the IEEE 754 correctly-rounded quotient of its two float32/float64 arguments for finite, non-zero-divisor cases.
-## @requirement ieeeSpecialValuesAndSignedZeroDivision divide is total via IEEE 754 sentinels rather than a partial/optional result: dividing a finite non-zero value by signed zero yields signed infinity (sign = XOR of operand signs); zero divided by zero and infinity divided by infinity are NaN; infinity divided by a finite value is infinity (sign XOR); a finite value divided by infinity is signed zero; NaN propagates unconditionally.
+## @requirement roundsToNearestPerIeee754: divide computes the IEEE 754 correctly-rounded quotient of its two float32/float64 arguments for finite, non-zero-divisor cases.
+## @requirement ieeeSpecialValuesAndSignedZeroDivision: divide is total via IEEE 754 sentinels rather than a partial/optional result: dividing a finite non-zero value by signed zero yields signed infinity (sign = XOR of operand signs); zero divided by zero and infinity divided by infinity are NaN; infinity divided by a finite value is infinity (sign XOR); a finite value divided by infinity is signed zero; NaN propagates unconditionally.
 primitive divide : ∀x.(fractional x) ⇒ x → x → x
 
 ## Euler's constant (the base of the natural logarithm).
@@ -210,8 +180,8 @@ primitive divide : ∀x.(fractional x) ⇒ x → x → x
 ## Corresponds to Haskell's exp 1 :: Double.
 ##
 ## @availableSince 0.15
-## @requirement isEulersConstant e is the float64 value nearest to Euler's number, equal to exp(1).
-primitive e : ∀.float64
+## @requirement isEulersConstant: e is the float64 value nearest to Euler's number, equal to exp(1).
+primitive e : float64
 
 ## Test whether a value is even.
 ##
@@ -221,7 +191,7 @@ primitive e : ∀.float64
 ## Corresponds to Haskell's even :: Integral a => a -> Bool.
 ##
 ## @availableSince 0.15
-## @requirement testsDivisibilityByTwo even returns true exactly when the argument is divisible by 2, for every integral type, including at the signed-integer minimum value and for negative values (parity is preserved under two's-complement wraparound).
+## @requirement testsDivisibilityByTwo: even returns true exactly when the argument is divisible by 2, for every integral type, including at the signed-integer minimum value and for negative values (parity is preserved under two's-complement wraparound).
 primitive even : ∀x.(integral x) ⇒ x → boolean
 
 ## The exponential function.
@@ -230,9 +200,9 @@ primitive even : ∀x.(integral x) ⇒ x → boolean
 ## Corresponds to the IEEE 754 ੹.2 exp operation and to Haskell's exp :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement exponentialFunctionBaseE exp(x) returns e^x, correctly rounded, for finite x.
-## @requirement saturatesAtInfinityNanPropagates exp(-Infinity) underflows to +0; exp(+Infinity) is +Infinity; exp(NaN) is NaN.
-primitive exp : ∀.float64 → float64
+## @requirement exponentialFunctionBaseE: exp(x) returns e^x, correctly rounded, for finite x.
+## @requirement saturatesAtInfinityNanPropagates: exp(-Infinity) underflows to +0; exp(+Infinity) is +Infinity; exp(NaN) is NaN.
+primitive exp : float64 → float64
 
 ## The largest integer less than or equal to the argument, as a float.
 ##
@@ -241,9 +211,9 @@ primitive exp : ∀.float64 → float64
 ## Corresponds to Haskell's fromIntegral . floor :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement roundsTowardNegativeInfinityAsFloat floor returns the largest integer value not greater than the argument, as a float64.
-## @requirement ieeeSpecialValuesPassThrough floor of +-Infinity or NaN passes the value through unchanged.
-primitive floor : ∀.float64 → float64
+## @requirement roundsTowardNegativeInfinityAsFloat: floor returns the largest integer value not greater than the argument, as a float64.
+## @requirement ieeeSpecialValuesPassThrough: floor of +-Infinity or NaN passes the value through unchanged.
+primitive floor : float64 → float64
 
 ## The natural logarithm.
 ##
@@ -251,9 +221,9 @@ primitive floor : ∀.float64 → float64
 ## Corresponds to the IEEE 754 ੹.2 log operation and to Haskell's log :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement naturalLogarithmOnPositiveDomain log returns the natural (base-e) logarithm, correctly rounded, for positive finite arguments.
-## @requirement boundaryIsNegativeInfinityNegativeIsNan log of zero (either sign) is -Infinity; log of a negative argument is NaN; log(+Infinity) is +Infinity; log(NaN) is NaN.
-primitive log : ∀.float64 → float64
+## @requirement naturalLogarithmOnPositiveDomain: log returns the natural (base-e) logarithm, correctly rounded, for positive finite arguments.
+## @requirement boundaryIsNegativeInfinityNegativeIsNan: log of zero (either sign) is -Infinity; log of a negative argument is NaN; log(+Infinity) is +Infinity; log(NaN) is NaN.
+primitive log : float64 → float64
 
 ## Logarithm of the second argument in the base of the first.
 ##
@@ -262,9 +232,9 @@ primitive log : ∀.float64 → float64
 ## Corresponds to Haskell's logBase :: Double -> Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement logarithmInArbitraryBase logBase(b, x) computes the logarithm of x in base b, equivalent to log(x) / log(b), for positive finite b and x.
-## @requirement inheritsLogsSpecialCaseBehaviorInEachArgument logBase inherits the special-case behavior of log independently in each argument position: a zero or negative x yields -Infinity/NaN respectively (per log's own rule), a non-positive base yields NaN, and NaN/+-Infinity in either argument propagate per log's own special-value rules.
-primitive logBase : ∀.float64 → float64 → float64
+## @requirement logarithmInArbitraryBase: logBase(b, x) computes the logarithm of x in base b, equivalent to log(x) / log(b), for positive finite b and x.
+## @requirement inheritsLogsSpecialCaseBehaviorInEachArgument: logBase inherits the special-case behavior of log independently in each argument position: a zero or negative x yields -Infinity/NaN respectively (per log's own rule), a non-positive base yields NaN, and NaN/+-Infinity in either argument propagate per log's own special-value rules.
+primitive logBase : float64 → float64 → float64
 
 ## Integral modulus, or Nothing if dividing by zero.
 ##
@@ -275,8 +245,8 @@ primitive logBase : ∀.float64 → float64 → float64
 ## Renamed from hydra.lib.math.maybeMod.
 ##
 ## @availableSince 0.17.6
-## @requirement flooredRemainderSignFollowsDivisor mod returns the integer remainder of floored division, wrapped, whose sign matches the sign of the divisor (Knuth-style floor division), for every integral type, when the divisor is non-zero.
-## @requirement noneOnZeroDivisor mod is none when the divisor is zero, for every integral type; at a fixed-width signed integer type's boundary case (minimum value divided by -1), the result is zero (no overflow -- the quotient's overflow is absorbed by div, not mod).
+## @requirement flooredRemainderSignFollowsDivisor: mod returns the integer remainder of floored division, wrapped, whose sign matches the sign of the divisor (Knuth-style floor division), for every integral type, when the divisor is non-zero.
+## @requirement noneOnZeroDivisor: mod is none when the divisor is zero, for every integral type; at a fixed-width signed integer type's boundary case (minimum value divided by -1), the result is zero (no overflow -- the quotient's overflow is absorbed by div, not mod).
 primitive mod : ∀x.(integral x) ⇒ x → x → optional<x>
 
 ## Numeric multiplication.
@@ -287,8 +257,8 @@ primitive mod : ∀x.(integral x) ⇒ x → x → optional<x>
 ## Generalized from int32-only; the numeric class is #566.
 ##
 ## @availableSince 0.17.6
-## @requirement wrapsOrRoundsPerType mul computes the product of two values of a numeric type per that type's own arithmetic: two's-complement wraparound for fixed-width integers, arbitrary precision for bigint, IEEE 754 round-to-nearest for floating-point -- and dispatches correctly regardless of which numeric type is supplied at the call site.
-## @requirement boundaryWraparoundAndIeeeSpecialValues mul wraps silently at every fixed-width integer type's boundary; mul on bigint beyond int64/uint64 range remains exact; mul on float64/float32 follows IEEE 754 special-value rules (zero times infinity is NaN, any NaN operand yields NaN, sign of the result is the XOR of operand signs, results underflow to signed zero or overflow to signed infinity when out of representable range).
+## @requirement wrapsOrRoundsPerType: mul computes the product of two values of a numeric type per that type's own arithmetic: two's-complement wraparound for fixed-width integers, arbitrary precision for bigint, IEEE 754 round-to-nearest for floating-point -- and dispatches correctly regardless of which numeric type is supplied at the call site.
+## @requirement boundaryWraparoundAndIeeeSpecialValues: mul wraps silently at every fixed-width integer type's boundary; mul on bigint beyond int64/uint64 range remains exact; mul on float64/float32 follows IEEE 754 special-value rules (zero times infinity is NaN, any NaN operand yields NaN, sign of the result is the XOR of operand signs, results underflow to signed zero or overflow to signed infinity when out of representable range).
 primitive mul : ∀x.(numeric x) ⇒ x → x → x
 
 ## Floating-point multiplication.
@@ -299,8 +269,8 @@ primitive mul : ∀x.(numeric x) ⇒ x → x → x
 ## Deprecated since 0.18. Use: hydra.core.lib.math.mul.
 ##
 ## @deprecatedSince 0.18
-## @requirement multipliesFloat64Values mulFloat64 computes the IEEE 754 binary64 product of its two arguments.
-primitive mulFloat64 : ∀.float64 → float64 → float64
+## @requirement multipliesFloat64Values: mulFloat64 computes the IEEE 754 binary64 product of its two arguments.
+primitive mulFloat64 : float64 → float64 → float64
 
 ## Numeric negation.
 ##
@@ -310,8 +280,8 @@ primitive mulFloat64 : ∀.float64 → float64 → float64
 ## Generalized from int32-only; the numeric class is #566.
 ##
 ## @availableSince 0.17.6
-## @requirement arithmeticNegationPerType negate returns the arithmetic inverse of its argument per the argument's numeric type: two's-complement negation for fixed-width integers, sign-bit flip for floating-point, arbitrary precision for bigint -- and dispatches correctly regardless of which numeric type is supplied at the call site.
-## @requirement boundaryAndIeeeSpecialValues negate at a signed fixed-width integer type's minimum value wraps to itself (not representable as its positive magnitude); negate on bigint beyond int64 range remains exact; negate on float64/float32 flips the sign of zero and of infinity, and preserves NaN.
+## @requirement arithmeticNegationPerType: negate returns the arithmetic inverse of its argument per the argument's numeric type: two's-complement negation for fixed-width integers, sign-bit flip for floating-point, arbitrary precision for bigint -- and dispatches correctly regardless of which numeric type is supplied at the call site.
+## @requirement boundaryAndIeeeSpecialValues: negate at a signed fixed-width integer type's minimum value wraps to itself (not representable as its positive magnitude); negate on bigint beyond int64 range remains exact; negate on float64/float32 flips the sign of zero and of infinity, and preserves NaN.
 primitive negate : ∀x.(numeric x) ⇒ x → x
 
 ## Negate a floating-point number.
@@ -321,8 +291,8 @@ primitive negate : ∀x.(numeric x) ⇒ x → x
 ## Deprecated since 0.18. Use: hydra.core.lib.math.negate.
 ##
 ## @deprecatedSince 0.18
-## @requirement negatesFloat64Values negateFloat64 flips the sign of its float64 argument, including zero.
-primitive negateFloat64 : ∀.float64 → float64
+## @requirement negatesFloat64Values: negateFloat64 flips the sign of its float64 argument, including zero.
+primitive negateFloat64 : float64 → float64
 
 ## Test whether a value is odd.
 ##
@@ -331,8 +301,8 @@ primitive negateFloat64 : ∀.float64 → float64
 ## Corresponds to Haskell's odd :: Integral a => a -> Bool.
 ##
 ## @availableSince 0.15
-## @requirement testsNonDivisibilityByTwo odd returns true exactly when the argument is not divisible by 2, for every integral type, including at the signed-integer minimum value and for negative values.
-primitive odd : ∀x.(integral x) ⇒ x → boolean = λx.hydra.core.lib.logic.not (hydra.core.lib.math.even x)
+## @requirement testsNonDivisibilityByTwo: odd returns true exactly when the argument is not divisible by 2, for every integral type, including at the signed-integer minimum value and for negative values.
+primitive odd : ∀x.(integral x) ⇒ x → boolean = λx.logic.not (hydra.core.lib.math.even x)
 
 ## The mathematical constant pi.
 ##
@@ -340,8 +310,8 @@ primitive odd : ∀x.(integral x) ⇒ x → boolean = λx.hydra.core.lib.logic.n
 ## Corresponds to Haskell's pi :: Double.
 ##
 ## @availableSince 0.15
-## @requirement isPiConstant pi is the float64 value nearest to the mathematical constant pi.
-primitive pi : ∀.float64
+## @requirement isPiConstant: pi is the float64 value nearest to the mathematical constant pi.
+primitive pi : float64
 
 ## Raise the first argument to the power of the second.
 ##
@@ -350,9 +320,9 @@ primitive pi : ∀.float64
 ## Corresponds to Haskell's (**) :: Double -> Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement exponentiationForFiniteArguments pow(x, y) = x^y, correctly rounded, for finite x and y within pow's defined domain.
-## @requirement ieeeSpecialValueMatrix pow follows the IEEE 754 9.2 special-value table: 0^0 = 1; 0 raised to a negative exponent is +Infinity; a negative base raised to a non-integer exponent is NaN; 1 raised to any exponent (including NaN) is 1; any base raised to an exponent of 0 (including NaN) is 1; and NaN/+-Infinity in either argument otherwise follow the documented limit behavior.
-primitive pow : ∀.float64 → float64 → float64
+## @requirement exponentiationForFiniteArguments: pow(x, y) = x^y, correctly rounded, for finite x and y within pow's defined domain.
+## @requirement ieeeSpecialValueMatrix: pow follows the IEEE 754 9.2 special-value table: 0^0 = 1; 0 raised to a negative exponent is +Infinity; a negative base raised to a non-integer exponent is NaN; 1 raised to any exponent (including NaN) is 1; any base raised to an exponent of 0 (including NaN) is 1; and NaN/+-Infinity in either argument otherwise follow the documented limit behavior.
+primitive pow : float64 → float64 → float64
 
 ## Construct the half-open integer range from the first argument up to (but excluding) the second.
 ##
@@ -360,9 +330,9 @@ primitive pow : ∀.float64 → float64 → float64
 ## Does not directly correspond to Haskell's enumFromTo :: Int32 -> Int32 -> [Int32] (which is inclusive of both bounds, i.e. [a..b]); range(a, b) is equivalent to [a .. b-1]. This matches the half-open convention of Python's range, Rust's a..b, Go, and Java's IntStream.range.
 ##
 ## @availableSince 0.15
-## @requirement generatesHalfOpenAscendingSequence range(a, b) returns the list [a, a+1, ..., b-1] -- inclusive of the lower bound and exclusive of the upper bound, with length max(0, b-a).
-## @requirement emptyWhenBoundsEqualOrDescending range(a, b) is the empty list whenever a >= b, including equal bounds and descending bounds -- the range never counts downward.
-primitive range : ∀.int32 → int32 → list<int32>
+## @requirement generatesHalfOpenAscendingSequence: range(a, b) returns the list [a, a+1, ..., b-1] -- inclusive of the lower bound and exclusive of the upper bound, with length max(0, b-a).
+## @requirement emptyWhenBoundsEqualOrDescending: range(a, b) is the empty list whenever a >= b, including equal bounds and descending bounds -- the range never counts downward.
+primitive range : int32 → int32 → list<int32>
 
 ## Integral remainder, or Nothing if dividing by zero.
 ##
@@ -374,8 +344,8 @@ primitive range : ∀.int32 → int32 → list<int32>
 ## Renamed from hydra.lib.math.maybeRem.
 ##
 ## @availableSince 0.17.6
-## @requirement truncatedRemainderSignFollowsDividend rem returns the integer remainder of truncated division (toward zero), wrapped, whose sign matches the sign of the dividend (C-style remainder), for every integral type, when the divisor is non-zero.
-## @requirement noneOnZeroDivisorNoOverflowAtMinBound rem is none when the divisor is zero, for every integral type; at a fixed-width signed integer type's boundary case (minimum value divided by -1), the result is zero (no overflow -- the quotient's overflow is absorbed by div, not rem).
+## @requirement truncatedRemainderSignFollowsDividend: rem returns the integer remainder of truncated division (toward zero), wrapped, whose sign matches the sign of the dividend (C-style remainder), for every integral type, when the divisor is non-zero.
+## @requirement noneOnZeroDivisorNoOverflowAtMinBound: rem is none when the divisor is zero, for every integral type; at a fixed-width signed integer type's boundary case (minimum value divided by -1), the result is zero (no overflow -- the quotient's overflow is absorbed by div, not rem).
 primitive rem : ∀x.(integral x) ⇒ x → x → optional<x>
 
 ## Round a floating-point number to the nearest integer-valued float.
@@ -385,9 +355,9 @@ primitive rem : ∀x.(integral x) ⇒ x → x → optional<x>
 ## Corresponds to Haskell's fromIntegral . round :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement roundsToNearestTiesToEvenAsFloat round returns the nearest integer value as a float64, with ties rounded to the nearest even integer (banker's rounding).
-## @requirement ieeeSpecialValuesPassThrough round of +-Infinity or NaN passes the value through unchanged.
-primitive round : ∀.float64 → float64
+## @requirement roundsToNearestTiesToEvenAsFloat: round returns the nearest integer value as a float64, with ties rounded to the nearest even integer (banker's rounding).
+## @requirement ieeeSpecialValuesPassThrough: round of +-Infinity or NaN passes the value through unchanged.
+primitive round : float64 → float64
 
 ## Round a float32 to the given number of decimal places.
 ##
@@ -396,9 +366,9 @@ primitive round : ∀.float64 → float64
 ## Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n.
 ##
 ## @availableSince 0.15
-## @requirement roundsToGivenDecimalPlacesHalfToEven roundFloat32(n, x) rounds the float32 value x to n decimal places using round-half-to-even, returning the nearest representable float32.
-## @requirement specialValuesPassThroughUnrounded roundFloat32 passes NaN and +-Infinity through unrounded, regardless of the requested decimal-place count.
-primitive roundFloat32 : ∀.int32 → float32 → float32
+## @requirement roundsToGivenDecimalPlacesHalfToEven: roundFloat32(n, x) rounds the float32 value x to n decimal places using round-half-to-even, returning the nearest representable float32.
+## @requirement specialValuesPassThroughUnrounded: roundFloat32 passes NaN and +-Infinity through unrounded, regardless of the requested decimal-place count.
+primitive roundFloat32 : int32 → float32 → float32
 
 ## Round a float64 to the given number of decimal places.
 ##
@@ -407,9 +377,9 @@ primitive roundFloat32 : ∀.int32 → float32 → float32
 ## Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n.
 ##
 ## @availableSince 0.15
-## @requirement roundsToGivenDecimalPlacesHalfToEven roundFloat64(n, x) rounds the float64 value x to n decimal places using round-half-to-even, returning the nearest representable float64.
-## @requirement specialValuesPassThroughUnrounded roundFloat64 passes NaN and +-Infinity through unrounded, regardless of the requested decimal-place count.
-primitive roundFloat64 : ∀.int32 → float64 → float64
+## @requirement roundsToGivenDecimalPlacesHalfToEven: roundFloat64(n, x) rounds the float64 value x to n decimal places using round-half-to-even, returning the nearest representable float64.
+## @requirement specialValuesPassThroughUnrounded: roundFloat64 passes NaN and +-Infinity through unrounded, regardless of the requested decimal-place count.
+primitive roundFloat64 : int32 → float64 → float64
 
 ## Numeric sign.
 ##
@@ -419,8 +389,8 @@ primitive roundFloat64 : ∀.int32 → float64 → float64
 ## Corresponds to Haskell's signum :: Num a => a -> a.
 ##
 ## @availableSince 0.15
-## @requirement signPerType signum returns the sign of its argument per the argument's numeric type: -1/0/1 (same width) for integers, +-1.0 for nonzero finite or infinite floats -- satisfying abs(x) * signum(x) = x for every integer instance except signed minBound.
-## @requirement preservesSignedZeroAndNan signum of signed zero returns that same signed zero (not collapsed to a single zero), and signum(NaN) is NaN -- a naive positive/negative/else-zero branch implementation gets both of these cases wrong and must not be used.
+## @requirement signPerType: signum returns the sign of its argument per the argument's numeric type: -1/0/1 (same width) for integers, +-1.0 for nonzero finite or infinite floats -- satisfying abs(x) * signum(x) = x for every integer instance except signed minBound.
+## @requirement preservesSignedZeroAndNan: signum of signed zero returns that same signed zero (not collapsed to a single zero), and signum(NaN) is NaN -- a naive positive/negative/else-zero branch implementation gets both of these cases wrong and must not be used.
 primitive signum : ∀x.(numeric x) ⇒ x → x
 
 ## The sine of a floating-point number.
@@ -429,9 +399,9 @@ primitive signum : ∀x.(numeric x) ⇒ x → x
 ## Corresponds to the IEEE 754 ੹.2 sin operation and to Haskell's sin :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement sineOfAngleInRadians sin returns the sine of an angle in radians, correctly rounded for finite arguments, in the range [-1, +1].
-## @requirement undefinedAtInfinityNanPropagates sin of +-Infinity is NaN (not a finite oscillation); sin(NaN) is NaN.
-primitive sin : ∀.float64 → float64
+## @requirement sineOfAngleInRadians: sin returns the sine of an angle in radians, correctly rounded for finite arguments, in the range [-1, +1].
+## @requirement undefinedAtInfinityNanPropagates: sin of +-Infinity is NaN (not a finite oscillation); sin(NaN) is NaN.
+primitive sin : float64 → float64
 
 ## The hyperbolic sine of a floating-point number.
 ##
@@ -439,9 +409,9 @@ primitive sin : ∀.float64 → float64
 ## Corresponds to the IEEE 754 ੹.2 sinh operation and to Haskell's sinh :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement hyperbolicSineDefinedForAllFiniteReals sinh returns the hyperbolic sine, defined for every finite real argument.
-## @requirement oddSymmetryAtInfinityNanPropagates sinh(+-Infinity) is +-Infinity respectively; sinh(NaN) is NaN.
-primitive sinh : ∀.float64 → float64
+## @requirement hyperbolicSineDefinedForAllFiniteReals: sinh returns the hyperbolic sine, defined for every finite real argument.
+## @requirement oddSymmetryAtInfinityNanPropagates: sinh(+-Infinity) is +-Infinity respectively; sinh(NaN) is NaN.
+primitive sinh : float64 → float64
 
 ## The non-negative square root of a floating-point number.
 ##
@@ -450,9 +420,9 @@ primitive sinh : ∀.float64 → float64
 ## Corresponds to the IEEE 754 ੵ.4.1 squareRoot operation and to Haskell's sqrt :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement nonnegativeSquareRootOnNonnegativeDomain sqrt returns the non-negative, correctly-rounded square root for non-negative finite arguments.
-## @requirement preservesSignOfZeroNegativeIsNan sqrt(-0) is -0 (sign preserved, distinct from sqrt(+0) = +0); sqrt of a negative argument (including -Infinity) is NaN; sqrt(+Infinity) is +Infinity; sqrt(NaN) is NaN.
-primitive sqrt : ∀.float64 → float64
+## @requirement nonnegativeSquareRootOnNonnegativeDomain: sqrt returns the non-negative, correctly-rounded square root for non-negative finite arguments.
+## @requirement preservesSignOfZeroNegativeIsNan: sqrt(-0) is -0 (sign preserved, distinct from sqrt(+0) = +0); sqrt of a negative argument (including -Infinity) is NaN; sqrt(+Infinity) is +Infinity; sqrt(NaN) is NaN.
+primitive sqrt : float64 → float64
 
 ## Numeric subtraction.
 ##
@@ -462,8 +432,8 @@ primitive sqrt : ∀.float64 → float64
 ## Generalized from int32-only; the numeric class is #566.
 ##
 ## @availableSince 0.17.6
-## @requirement wrapsOrRoundsPerType sub computes the difference of two values of a numeric type per that type's own arithmetic: two's-complement wraparound for fixed-width integers, arbitrary precision for bigint, IEEE 754 round-to-nearest for floating-point -- and dispatches correctly regardless of which numeric type is supplied at the call site.
-## @requirement boundaryWraparoundAndIeeeSpecialValues sub wraps silently at every fixed-width integer type's boundary; sub on bigint beyond int64/uint64 range remains exact; sub on float64/float32 follows IEEE 754 special-value rules (subtracting same-sign infinities or any NaN operand yields NaN, the difference of two equal finite values is +0, ties round to even).
+## @requirement wrapsOrRoundsPerType: sub computes the difference of two values of a numeric type per that type's own arithmetic: two's-complement wraparound for fixed-width integers, arbitrary precision for bigint, IEEE 754 round-to-nearest for floating-point -- and dispatches correctly regardless of which numeric type is supplied at the call site.
+## @requirement boundaryWraparoundAndIeeeSpecialValues: sub wraps silently at every fixed-width integer type's boundary; sub on bigint beyond int64/uint64 range remains exact; sub on float64/float32 follows IEEE 754 special-value rules (subtracting same-sign infinities or any NaN operand yields NaN, the difference of two equal finite values is +0, ties round to even).
 primitive sub : ∀x.(numeric x) ⇒ x → x → x
 
 ## Floating-point subtraction.
@@ -474,8 +444,8 @@ primitive sub : ∀x.(numeric x) ⇒ x → x → x
 ## Deprecated since 0.18. Use: hydra.core.lib.math.sub.
 ##
 ## @deprecatedSince 0.18
-## @requirement subtractsFloat64Values subFloat64 computes the IEEE 754 binary64 difference of its two arguments.
-primitive subFloat64 : ∀.float64 → float64 → float64
+## @requirement subtractsFloat64Values: subFloat64 computes the IEEE 754 binary64 difference of its two arguments.
+primitive subFloat64 : float64 → float64 → float64
 
 ## The tangent of a floating-point number.
 ##
@@ -483,9 +453,9 @@ primitive subFloat64 : ∀.float64 → float64 → float64
 ## Corresponds to the IEEE 754 ੹.2 tan operation and to Haskell's tan :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement tangentOfAngleInRadians tan returns the tangent of an angle in radians, correctly rounded for finite arguments; near odd multiples of pi/2 the result has large magnitude but remains finite (no exception is raised).
-## @requirement undefinedAtInfinityNanPropagates tan of +-Infinity is NaN; tan(NaN) is NaN.
-primitive tan : ∀.float64 → float64
+## @requirement tangentOfAngleInRadians: tan returns the tangent of an angle in radians, correctly rounded for finite arguments; near odd multiples of pi/2 the result has large magnitude but remains finite (no exception is raised).
+## @requirement undefinedAtInfinityNanPropagates: tan of +-Infinity is NaN; tan(NaN) is NaN.
+primitive tan : float64 → float64
 
 ## The hyperbolic tangent of a floating-point number.
 ##
@@ -493,9 +463,9 @@ primitive tan : ∀.float64 → float64
 ## Corresponds to the IEEE 754 ੹.2 tanh operation and to Haskell's tanh :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement hyperbolicTangentInRangeNegOneToOne tanh returns the hyperbolic tangent, in (-1, +1), for any finite real argument.
-## @requirement saturatesAtInfinityNanPropagates tanh(+-Infinity) saturates to +-1 respectively; tanh(NaN) is NaN.
-primitive tanh : ∀.float64 → float64
+## @requirement hyperbolicTangentInRangeNegOneToOne: tanh returns the hyperbolic tangent, in (-1, +1), for any finite real argument.
+## @requirement saturatesAtInfinityNanPropagates: tanh(+-Infinity) saturates to +-1 respectively; tanh(NaN) is NaN.
+primitive tanh : float64 → float64
 
 ## Truncate a floating-point number toward zero, as a float.
 ##
@@ -504,6 +474,6 @@ primitive tanh : ∀.float64 → float64
 ## Corresponds to Haskell's fromIntegral . truncate :: Double -> Double.
 ##
 ## @availableSince 0.15
-## @requirement roundsTowardZeroAsFloat truncate returns the argument with its fractional part discarded (rounded toward zero), as a float64, preserving the sign of the argument.
-## @requirement ieeeSpecialValuesPassThrough truncate of +-Infinity or NaN passes the value through unchanged.
-primitive truncate : ∀.float64 → float64
+## @requirement roundsTowardZeroAsFloat: truncate returns the argument with its fractional part discarded (rounded toward zero), as a float64, preserving the sign of the argument.
+## @requirement ieeeSpecialValuesPassThrough: truncate of +-Infinity or NaN passes the value through unchanged.
+primitive truncate : float64 → float64

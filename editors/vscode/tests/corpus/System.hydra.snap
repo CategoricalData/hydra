@@ -14,46 +14,6 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.paths
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.ast
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.coders
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.model
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.diff
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.docs
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.checking
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.model
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.file
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.packaging
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >import hydra.core.error.system as error.system
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
@@ -62,10 +22,6 @@
 #                               ^^ source.hydra keyword.control.import.hydra
 #                                 ^ source.hydra
 #                                  ^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.errors
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >import hydra.core.file as file
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
@@ -74,38 +30,6 @@
 #                       ^^ source.hydra keyword.control.import.hydra
 #                         ^ source.hydra
 #                          ^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.graph
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.json.model
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.markdown
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.packaging
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.parsing
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.query
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.regex
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.relational
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >import hydra.core.system as system
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
@@ -114,14 +38,6 @@
 #                         ^^ source.hydra keyword.control.import.hydra
 #                           ^ source.hydra
 #                            ^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.tabular
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.testing
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >import hydra.core.time as time
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
@@ -130,30 +46,6 @@
 #                       ^^ source.hydra keyword.control.import.hydra
 #                         ^ source.hydra
 #                          ^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.topology
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.typed
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.typing
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.util
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.validation
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.variants
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
 >## Run a program to completion and capture its result.
 #^^ source.hydra comment.block.documentation.hydra
@@ -170,32 +62,32 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement capturesStdoutByteExactly execute captures the child program's standard output as raw bytes, byte-exactly, with no newline translation, including the full argument vector being passed through to the child in order.
+>## @requirement capturesStdoutByteExactly: execute captures the child program's standard output as raw bytes, byte-exactly, with no newline translation, including the full argument vector being passed through to the child in order.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement capturesStderrSeparately execute captures the child program's standard error separately from standard output, so diagnostics written to stderr do not leak into the captured stdout.
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement capturesStderrSeparately: execute captures the child program's standard error separately from standard output, so diagnostics written to stderr do not leak into the captured stdout.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement reportsExitStatusAsRight execute reports a child's exit status as right(result), for both a zero (successful) and a non-zero exit status -- a non-zero exit is a normal, successful launch outcome, not a SystemError.
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement reportsExitStatusAsRight: execute reports a child's exit status as right(result), for both a zero (successful) and a non-zero exit status -- a non-zero exit is a normal, successful launch outcome, not a SystemError.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement honorsWorkingDirectoryAndEnvironmentFields execute honors the command's workingDirectory field (running the child with that directory as its current directory) and its environment field (replacing the child's environment with exactly the given bindings, not merely augmenting it).
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement honorsWorkingDirectoryAndEnvironmentFields: execute honors the command's workingDirectory field (running the child with that directory as its current directory) and its environment field (replacing the child's environment with exactly the given bindings, not merely augmenting it).
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement leftCommandNotFoundOnMissingProgram execute returns left(commandNotFound) when the program does not exist, distinguishing a launch failure from a program that ran and exited non-zero.
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement leftCommandNotFoundOnMissingProgram: execute returns left(commandNotFound) when the program does not exist, distinguishing a launch failure from a program that ran and exited non-zero.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive execute : ∀.hydra.core.system.Command → effect<either<hydra.core.error.system.SystemError, hydra.core.system.ProcessResult>>
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive execute : system.Command → effect<either<error.system.SystemError, system.ProcessResult>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -204,21 +96,19 @@
 #                        ^ source.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
-#                           ^ source.hydra keyword.operator.forall-scheme.hydra
-#                            ^ source.hydra punctuation.separator.binder.hydra
-#                             ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                      ^ source.hydra
-#                                                       ^ source.hydra keyword.operator.arrow.hydra
-#                                                        ^ source.hydra
-#                                                         ^^^^^^ source.hydra support.type.hydra
-#                                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                ^^^^^^ source.hydra support.type.hydra
-#                                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                          ^^ source.hydra
-#                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                           ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                         ^ source.hydra
+#                                          ^ source.hydra keyword.operator.arrow.hydra
+#                                           ^ source.hydra
+#                                            ^^^^^^ source.hydra support.type.hydra
+#                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                   ^^^^^^ source.hydra support.type.hydra
+#                                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                          ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                  ^^ source.hydra
+#                                                                                    ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                        ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Terminate the current process with a status code.
 #^^ source.hydra comment.block.documentation.hydra
@@ -235,7 +125,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive exit : ∀.hydra.core.system.StatusCode → effect<unit>
+>impure primitive exit : system.StatusCode → effect<unit>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -244,16 +134,14 @@
 #                     ^ source.hydra
 #                      ^ source.hydra punctuation.separator.type.hydra
 #                       ^ source.hydra
-#                        ^ source.hydra keyword.operator.forall-scheme.hydra
-#                         ^ source.hydra punctuation.separator.binder.hydra
-#                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                      ^ source.hydra
-#                                                       ^ source.hydra keyword.operator.arrow.hydra
-#                                                        ^ source.hydra
-#                                                         ^^^^^^ source.hydra support.type.hydra
-#                                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                ^^^^ source.hydra support.type.hydra
-#                                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                        ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                         ^ source.hydra
+#                                          ^ source.hydra keyword.operator.arrow.hydra
+#                                           ^ source.hydra
+#                                            ^^^^^^ source.hydra support.type.hydra
+#                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                   ^^^^ source.hydra support.type.hydra
+#                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Get the full set of environment variables.
 #^^ source.hydra comment.block.documentation.hydra
@@ -270,12 +158,12 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement returnsExactEnvironmentContents getEnvironment returns a map containing exactly the current process's environment, with no entries for variables that are not actually set (observed by the absence of a guaranteed-unset variable name).
+>## @requirement returnsExactEnvironmentContents: getEnvironment returns a map containing exactly the current process's environment, with no entries for variables that are not actually set (observed by the absence of a guaranteed-unset variable name).
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive getEnvironment : ∀.effect<map<hydra.core.system.EnvironmentVariable, string>>
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive getEnvironment : effect<map<system.EnvironmentVariable, string>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -284,17 +172,15 @@
 #                               ^ source.hydra
 #                                ^ source.hydra punctuation.separator.type.hydra
 #                                 ^ source.hydra
-#                                  ^ source.hydra keyword.operator.forall-scheme.hydra
-#                                   ^ source.hydra punctuation.separator.binder.hydra
-#                                    ^^^^^^ source.hydra support.type.hydra
-#                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                           ^^^ source.hydra support.type.hydra
-#                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                    ^^ source.hydra
-#                                                                                      ^^^^^^ source.hydra support.type.hydra
-#                                                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
+#                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                         ^^^ source.hydra support.type.hydra
+#                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                       ^^ source.hydra
+#                                                                         ^^^^^^ source.hydra support.type.hydra
+#                                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Look up a single environment variable by name.
 #^^ source.hydra comment.block.documentation.hydra
@@ -311,12 +197,12 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement noneForAbsentVariable getEnvironmentVariable returns none when the named environment variable is not set.
+>## @requirement noneForAbsentVariable: getEnvironmentVariable returns none when the named environment variable is not set.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive getEnvironmentVariable : ∀.hydra.core.system.EnvironmentVariable → effect<optional<string>>
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive getEnvironmentVariable : system.EnvironmentVariable → effect<optional<string>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -325,19 +211,17 @@
 #                                       ^ source.hydra
 #                                        ^ source.hydra punctuation.separator.type.hydra
 #                                         ^ source.hydra
-#                                          ^ source.hydra keyword.operator.forall-scheme.hydra
-#                                           ^ source.hydra punctuation.separator.binder.hydra
-#                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                 ^ source.hydra
-#                                                                                  ^ source.hydra keyword.operator.arrow.hydra
-#                                                                                   ^ source.hydra
-#                                                                                    ^^^^^^ source.hydra support.type.hydra
-#                                                                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                                           ^^^^^^^^ source.hydra support.type.hydra
-#                                                                                                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                                                    ^^^^^^ source.hydra support.type.hydra
-#                                                                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                    ^ source.hydra
+#                                                                     ^ source.hydra keyword.operator.arrow.hydra
+#                                                                      ^ source.hydra
+#                                                                       ^^^^^^ source.hydra support.type.hydra
+#                                                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                              ^^^^^^^^ source.hydra support.type.hydra
+#                                                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                                       ^^^^^^ source.hydra support.type.hydra
+#                                                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Get the current wall-clock time.
 #^^ source.hydra comment.block.documentation.hydra
@@ -354,17 +238,17 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement returnsPositiveEpochSeconds getTime returns a Timespec whose seconds field is a positive number of seconds since the Unix epoch.
-#^^ source.hydra comment.block.documentation.hydra
-#  ^ source.hydra comment.block.documentation.hydra
-#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement returnsNanosecondsInValidRange getTime returns a Timespec whose nanoseconds field is within the documented range [0, 1000000000).
+>## @requirement returnsPositiveEpochSeconds: getTime returns a Timespec whose seconds field is a positive number of seconds since the Unix epoch.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive getTime : ∀.effect<hydra.core.time.Timespec>
+>## @requirement returnsNanosecondsInValidRange: getTime returns a Timespec whose nanoseconds field is within the documented range [0, 1000000000).
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive getTime : effect<time.Timespec>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -373,12 +257,10 @@
 #                        ^ source.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
-#                           ^ source.hydra keyword.operator.forall-scheme.hydra
-#                            ^ source.hydra punctuation.separator.binder.hydra
-#                             ^^^^^^ source.hydra support.type.hydra
-#                                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                    ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
+#                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                  ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Get the current working directory.
 #^^ source.hydra comment.block.documentation.hydra
@@ -395,12 +277,12 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement returnsNonEmptyPath getWorkingDirectory returns a non-empty absolute path for the current working directory.
+>## @requirement returnsNonEmptyPath: getWorkingDirectory returns a non-empty absolute path for the current working directory.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive getWorkingDirectory : ∀.effect<either<hydra.core.error.system.SystemError, hydra.core.file.FilePath>>
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>impure primitive getWorkingDirectory : effect<either<error.system.SystemError, file.FilePath>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -409,17 +291,15 @@
 #                                    ^ source.hydra
 #                                     ^ source.hydra punctuation.separator.type.hydra
 #                                      ^ source.hydra
-#                                       ^ source.hydra keyword.operator.forall-scheme.hydra
-#                                        ^ source.hydra punctuation.separator.binder.hydra
-#                                         ^^^^^^ source.hydra support.type.hydra
-#                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                ^^^^^^ source.hydra support.type.hydra
-#                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                          ^^ source.hydra
-#                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
+#                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                              ^^^^^^ source.hydra support.type.hydra
+#                                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                             ^^ source.hydra
+#                                                                               ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Read the complete contents of standard input as raw bytes.
 #^^ source.hydra comment.block.documentation.hydra
@@ -436,7 +316,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive readStdin : ∀.effect<either<hydra.core.error.system.SystemError, binary>>
+>impure primitive readStdin : effect<either<error.system.SystemError, binary>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -445,17 +325,15 @@
 #                          ^ source.hydra
 #                           ^ source.hydra punctuation.separator.type.hydra
 #                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.forall-scheme.hydra
-#                              ^ source.hydra punctuation.separator.binder.hydra
-#                               ^^^^^^ source.hydra support.type.hydra
-#                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                      ^^^^^^ source.hydra support.type.hydra
-#                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                ^^ source.hydra
-#                                                                                  ^^^^^^ source.hydra support.type.hydra
-#                                                                                        ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
+#                                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                    ^^^^^^ source.hydra support.type.hydra
+#                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                           ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                   ^^ source.hydra
+#                                                                     ^^^^^^ source.hydra support.type.hydra
+#                                                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Write raw bytes to standard error.
 #^^ source.hydra comment.block.documentation.hydra
@@ -472,7 +350,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive writeStderr : ∀.binary → effect<either<hydra.core.error.system.SystemError, unit>>
+>impure primitive writeStderr : binary → effect<either<error.system.SystemError, unit>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -481,21 +359,19 @@
 #                            ^ source.hydra
 #                             ^ source.hydra punctuation.separator.type.hydra
 #                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.forall-scheme.hydra
-#                                ^ source.hydra punctuation.separator.binder.hydra
-#                                 ^^^^^^ source.hydra support.type.hydra
+#                               ^^^^^^ source.hydra support.type.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra keyword.operator.arrow.hydra
 #                                       ^ source.hydra
-#                                        ^ source.hydra keyword.operator.arrow.hydra
-#                                         ^ source.hydra
-#                                          ^^^^^^ source.hydra support.type.hydra
-#                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                 ^^^^^^ source.hydra support.type.hydra
-#                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                           ^^ source.hydra
-#                                                                                             ^^^^ source.hydra support.type.hydra
-#                                                                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                        ^^^^^^ source.hydra support.type.hydra
+#                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                               ^^^^^^ source.hydra support.type.hydra
+#                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                      ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                              ^^ source.hydra
+#                                                                                ^^^^ source.hydra support.type.hydra
+#                                                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Write raw bytes to standard output.
 #^^ source.hydra comment.block.documentation.hydra
@@ -512,7 +388,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive writeStdout : ∀.binary → effect<either<hydra.core.error.system.SystemError, unit>>
+>impure primitive writeStdout : binary → effect<either<error.system.SystemError, unit>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -521,18 +397,16 @@
 #                            ^ source.hydra
 #                             ^ source.hydra punctuation.separator.type.hydra
 #                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.forall-scheme.hydra
-#                                ^ source.hydra punctuation.separator.binder.hydra
-#                                 ^^^^^^ source.hydra support.type.hydra
+#                               ^^^^^^ source.hydra support.type.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra keyword.operator.arrow.hydra
 #                                       ^ source.hydra
-#                                        ^ source.hydra keyword.operator.arrow.hydra
-#                                         ^ source.hydra
-#                                          ^^^^^^ source.hydra support.type.hydra
-#                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                 ^^^^^^ source.hydra support.type.hydra
-#                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                           ^^ source.hydra
-#                                                                                             ^^^^ source.hydra support.type.hydra
-#                                                                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                        ^^^^^^ source.hydra support.type.hydra
+#                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                               ^^^^^^ source.hydra support.type.hydra
+#                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                      ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                              ^^ source.hydra
+#                                                                                ^^^^ source.hydra support.type.hydra
+#                                                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra

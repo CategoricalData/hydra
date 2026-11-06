@@ -17,130 +17,7 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.paths
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.ast
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.coders
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.model
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.diff
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.docs
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.checking
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.model
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.file
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.packaging
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.system
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.errors
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.file
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.graph
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.json.model
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.markdown
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.packaging
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.parsing
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.query
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.regex
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.relational
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.system
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.tabular
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.testing
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.time
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.topology
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.typed
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.typing
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.util
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.validation
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.variants
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
 >
 >## Decode a sequence of bytes as UTF-8 text.
 #^^ source.hydra comment.block.documentation.hydra
@@ -160,35 +37,33 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement decodesValidUtf8 decodeUtf8 decodes a valid UTF-8 byte sequence to its text, wrapped in right, including the empty byte sequence, ASCII-only text, and multi-byte (non-ASCII) text.
+>## @requirement decodesValidUtf8: decodeUtf8 decodes a valid UTF-8 byte sequence to its text, wrapped in right, including the empty byte sequence, ASCII-only text, and multi-byte (non-ASCII) text.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement leftOnInvalidUtf8 decodeUtf8 returns left(message) when the byte sequence is not valid UTF-8, such as a lone continuation byte.
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @requirement leftOnInvalidUtf8: decodeUtf8 returns left(message) when the byte sequence is not valid UTF-8, such as a lone continuation byte.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive decodeUtf8 : ∀.binary → either<string, string>
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive decodeUtf8 : binary → either<string, string>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^ source.hydra keyword.operator.forall-scheme.hydra
-#                        ^ source.hydra punctuation.separator.binder.hydra
-#                         ^^^^^^ source.hydra support.type.hydra
+#                       ^^^^^^ source.hydra support.type.hydra
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.arrow.hydra
 #                               ^ source.hydra
-#                                ^ source.hydra keyword.operator.arrow.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra support.type.hydra
-#                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                         ^^^^^^ source.hydra support.type.hydra
-#                                               ^^ source.hydra
-#                                                 ^^^^^^ source.hydra support.type.hydra
-#                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
+#                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
+#                                             ^^ source.hydra
+#                                               ^^^^^^ source.hydra support.type.hydra
+#                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Encode text as a sequence of UTF-8 bytes.
 #^^ source.hydra comment.block.documentation.hydra
@@ -208,22 +83,20 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement encodesExactUtf8Bytes encodeUtf8 returns the exact UTF-8 byte sequence for the given text, for the empty string, ASCII-only text, and multi-byte (non-ASCII) text.
+>## @requirement encodesExactUtf8Bytes: encodeUtf8 returns the exact UTF-8 byte sequence for the given text, for the empty string, ASCII-only text, and multi-byte (non-ASCII) text.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive encodeUtf8 : ∀.string → binary
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive encodeUtf8 : string → binary
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^ source.hydra keyword.operator.forall-scheme.hydra
-#                        ^ source.hydra punctuation.separator.binder.hydra
-#                         ^^^^^^ source.hydra support.type.hydra
+#                       ^^^^^^ source.hydra support.type.hydra
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.arrow.hydra
 #                               ^ source.hydra
-#                                ^ source.hydra keyword.operator.arrow.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra support.type.hydra
+#                                ^^^^^^ source.hydra support.type.hydra

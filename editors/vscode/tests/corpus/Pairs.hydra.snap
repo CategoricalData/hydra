@@ -11,130 +11,7 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.paths
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.ast
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.coders
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.model
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.diff
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.docs
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.checking
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.model
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.file
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.packaging
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.system
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.errors
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.file
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.graph
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.json.model
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.markdown
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.packaging
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.parsing
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.query
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.regex
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.relational
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.system
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.tabular
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.testing
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.time
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.topology
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.typed
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.typing
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.util
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.validation
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.variants
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
 >
 >## Map over both elements of a pair.
 #^^ source.hydra comment.block.documentation.hydra
@@ -154,11 +31,11 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement mapsBothElementsIndependently bimap applies the first function to the pair's first element and the second function to the pair's second element, producing a new pair of the two results, for any element and function types.
+>## @requirement mapsBothElementsIndependently: bimap applies the first function to the pair's first element and the second function to the pair's second element, producing a new pair of the two results, for any element and function types.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >primitive bimap : ∀a,b,c,d.(a → c) → (b → d) → (a, b) → (c, d) = λf.λg.λp.(f (hydra.core.lib.pairs.first p), g (hydra.core.lib.pairs.second p))
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
@@ -245,11 +122,11 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement returnsFirstComponent first returns the first component of the pair unchanged, for any element type and value.
+>## @requirement returnsFirstComponent: first returns the first component of the pair unchanged, for any element type and value.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >primitive first : ∀a,b.(a, b) → a
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
@@ -292,11 +169,11 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement constructsFromTwoValues pair x y constructs the pair (x, y), preserving both components exactly as given, for any value.
+>## @requirement constructsFromTwoValues: pair x y constructs the pair (x, y), preserving both components exactly as given, for any value.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >primitive pair : ∀a,b.a → b → (a, b)
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
@@ -340,11 +217,11 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^ source.hydra comment.block.documentation.hydra
->## @requirement returnsSecondComponent second returns the second component of the pair unchanged, for any element type and value.
+>## @requirement returnsSecondComponent: second returns the second component of the pair unchanged, for any element type and value.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >primitive second : ∀a,b.(a, b) → b
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra

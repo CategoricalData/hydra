@@ -5,37 +5,7 @@
 ## Both text primitives are pure: file and other byte-oriented I/O is performed separately (see hydra.lib.files), with encoding and decoding applied before or after.
 module hydra.core.lib.text
 
-import hydra.core.paths
-import hydra.core.ast
-import hydra.core.coders
-import hydra.core.model
-import hydra.core.diff
-import hydra.core.docs
-import hydra.core.error.checking
-import hydra.core.error.model
-import hydra.core.error.file
-import hydra.core.error.packaging
-import hydra.core.error.system
-import hydra.core.errors
-import hydra.core.file
-import hydra.core.graph
-import hydra.core.json.model
-import hydra.core.markdown
-import hydra.core.packaging
-import hydra.core.parsing
-import hydra.core.query
-import hydra.core.regex
-import hydra.core.relational
-import hydra.core.system
-import hydra.core.tabular
-import hydra.core.testing
-import hydra.core.time
-import hydra.core.topology
-import hydra.core.typed
-import hydra.core.typing
-import hydra.core.util
-import hydra.core.validation
-import hydra.core.variants
+
 
 ## Decode a sequence of bytes as UTF-8 text.
 ##
@@ -43,9 +13,9 @@ import hydra.core.variants
 ## Pairs with hydra.core.lib.files.readFile, which returns raw bytes.
 ##
 ## @availableSince 0.17
-## @requirement decodesValidUtf8 decodeUtf8 decodes a valid UTF-8 byte sequence to its text, wrapped in right, including the empty byte sequence, ASCII-only text, and multi-byte (non-ASCII) text.
-## @requirement leftOnInvalidUtf8 decodeUtf8 returns left(message) when the byte sequence is not valid UTF-8, such as a lone continuation byte.
-primitive decodeUtf8 : ∀.binary → either<string, string>
+## @requirement decodesValidUtf8: decodeUtf8 decodes a valid UTF-8 byte sequence to its text, wrapped in right, including the empty byte sequence, ASCII-only text, and multi-byte (non-ASCII) text.
+## @requirement leftOnInvalidUtf8: decodeUtf8 returns left(message) when the byte sequence is not valid UTF-8, such as a lone continuation byte.
+primitive decodeUtf8 : binary → either<string, string>
 
 ## Encode text as a sequence of UTF-8 bytes.
 ##
@@ -53,5 +23,5 @@ primitive decodeUtf8 : ∀.binary → either<string, string>
 ## Pairs with hydra.core.lib.files.writeFile, which expects raw bytes.
 ##
 ## @availableSince 0.17
-## @requirement encodesExactUtf8Bytes encodeUtf8 returns the exact UTF-8 byte sequence for the given text, for the empty string, ASCII-only text, and multi-byte (non-ASCII) text.
-primitive encodeUtf8 : ∀.string → binary
+## @requirement encodesExactUtf8Bytes: encodeUtf8 returns the exact UTF-8 byte sequence for the given text, for the empty string, ASCII-only text, and multi-byte (non-ASCII) text.
+primitive encodeUtf8 : string → binary

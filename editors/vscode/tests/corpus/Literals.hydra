@@ -5,37 +5,7 @@
 ## The parseX primitives are pure conversions from text to values, with an optional codomain wherever parsing can fail; the printX primitives are the pure conversions back from values to text.
 module hydra.core.lib.literals
 
-import hydra.core.paths
-import hydra.core.ast
-import hydra.core.coders
-import hydra.core.model
-import hydra.core.diff
-import hydra.core.docs
-import hydra.core.error.checking
-import hydra.core.error.model
-import hydra.core.error.file
-import hydra.core.error.packaging
-import hydra.core.error.system
-import hydra.core.errors
-import hydra.core.file
-import hydra.core.graph
-import hydra.core.json.model
-import hydra.core.markdown
-import hydra.core.packaging
-import hydra.core.parsing
-import hydra.core.query
-import hydra.core.regex
-import hydra.core.relational
-import hydra.core.system
-import hydra.core.tabular
-import hydra.core.testing
-import hydra.core.time
-import hydra.core.topology
-import hydra.core.typed
-import hydra.core.typing
-import hydra.core.util
-import hydra.core.validation
-import hydra.core.variants
+
 
 ## Decode a base64 ASCII string to binary data.
 ##
@@ -44,8 +14,8 @@ import hydra.core.variants
 ## Renamed from hydra.lib.literals.stringToBinary.
 ##
 ## @availableSince 0.18
-## @requirement decodesStandardBase64 base64ToBinary decodes a standard base64 (RFC 4648) ASCII string to the binary data it represents, including the empty string decoding to empty binary data.
-primitive base64ToBinary : ∀.string → binary
+## @requirement decodesStandardBase64: base64ToBinary decodes a standard base64 (RFC 4648) ASCII string to the binary data it represents, including the empty string decoding to empty binary data.
+primitive base64ToBinary : string → binary
 
 ## Convert a bigint to a decimal.
 ##
@@ -53,8 +23,8 @@ primitive base64ToBinary : ∀.string → binary
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement losslessConversion bigintToDecimal returns the exact decimal representation of a bigint, with no precision loss, for positive, negative, and zero values.
-primitive bigintToDecimal : ∀.bigint → decimal
+## @requirement losslessConversion: bigintToDecimal returns the exact decimal representation of a bigint, with no precision loss, for positive, negative, and zero values.
+primitive bigintToDecimal : bigint → decimal
 
 ## Convert a bigint to an int16 (truncating).
 ##
@@ -62,9 +32,9 @@ primitive bigintToDecimal : ∀.bigint → decimal
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement convertsInRange bigintToInt16 returns the int16 with the same numeric value as the bigint, for positive and negative values within the int16 range.
-## @requirement wrapsTwosComplementOutOfRange bigintToInt16 on a value outside the int16 range ([-2^15, 2^15-1]) wraps silently to the corresponding two's-complement int16, with no exception, at both the positive and negative (all-bits-set) boundary.
-primitive bigintToInt16 : ∀.bigint → int16
+## @requirement convertsInRange: bigintToInt16 returns the int16 with the same numeric value as the bigint, for positive and negative values within the int16 range.
+## @requirement wrapsTwosComplementOutOfRange: bigintToInt16 on a value outside the int16 range ([-2^15, 2^15-1]) wraps silently to the corresponding two's-complement int16, with no exception, at both the positive and negative (all-bits-set) boundary.
+primitive bigintToInt16 : bigint → int16
 
 ## Convert a bigint to an int32 (truncating).
 ##
@@ -72,9 +42,9 @@ primitive bigintToInt16 : ∀.bigint → int16
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement convertsInRange bigintToInt32 returns the int32 with the same numeric value as the bigint, for positive and negative values within the int32 range.
-## @requirement wrapsTwosComplementOutOfRange bigintToInt32 on a value outside the int32 range ([-2^31, 2^31-1]) wraps silently to the corresponding two's-complement int32, with no exception, at both the positive and negative (all-bits-set) boundary; this holds even on hosts where int32 is represented as a wider native integer, which must not skip the narrowing step.
-primitive bigintToInt32 : ∀.bigint → int32
+## @requirement convertsInRange: bigintToInt32 returns the int32 with the same numeric value as the bigint, for positive and negative values within the int32 range.
+## @requirement wrapsTwosComplementOutOfRange: bigintToInt32 on a value outside the int32 range ([-2^31, 2^31-1]) wraps silently to the corresponding two's-complement int32, with no exception, at both the positive and negative (all-bits-set) boundary; this holds even on hosts where int32 is represented as a wider native integer, which must not skip the narrowing step.
+primitive bigintToInt32 : bigint → int32
 
 ## Convert a bigint to an int64 (truncating).
 ##
@@ -82,8 +52,8 @@ primitive bigintToInt32 : ∀.bigint → int32
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement convertsInRange bigintToInt64 returns the int64 with the same numeric value as the bigint, for positive and negative values within the int64 range.
-primitive bigintToInt64 : ∀.bigint → int64
+## @requirement convertsInRange: bigintToInt64 returns the int64 with the same numeric value as the bigint, for positive and negative values within the int64 range.
+primitive bigintToInt64 : bigint → int64
 
 ## Convert a bigint to an int8 (truncating).
 ##
@@ -91,9 +61,9 @@ primitive bigintToInt64 : ∀.bigint → int64
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement convertsInRange bigintToInt8 returns the int8 with the same numeric value as the bigint, for positive and negative values within the int8 range.
-## @requirement wrapsTwosComplementOutOfRange bigintToInt8 on a value outside the int8 range ([-128, 127]) wraps silently to the corresponding two's-complement int8, with no exception, at both the positive and negative (all-bits-set) boundary.
-primitive bigintToInt8 : ∀.bigint → int8
+## @requirement convertsInRange: bigintToInt8 returns the int8 with the same numeric value as the bigint, for positive and negative values within the int8 range.
+## @requirement wrapsTwosComplementOutOfRange: bigintToInt8 on a value outside the int8 range ([-128, 127]) wraps silently to the corresponding two's-complement int8, with no exception, at both the positive and negative (all-bits-set) boundary.
+primitive bigintToInt8 : bigint → int8
 
 ## Convert a bigint to a uint16 (truncating).
 ##
@@ -101,8 +71,8 @@ primitive bigintToInt8 : ∀.bigint → int8
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement convertsInRange bigintToUint16 returns the uint16 with the same numeric value as the bigint, for a zero or typical in-range value.
-primitive bigintToUint16 : ∀.bigint → uint16
+## @requirement convertsInRange: bigintToUint16 returns the uint16 with the same numeric value as the bigint, for a zero or typical in-range value.
+primitive bigintToUint16 : bigint → uint16
 
 ## Convert a bigint to a uint32 (truncating).
 ##
@@ -110,8 +80,8 @@ primitive bigintToUint16 : ∀.bigint → uint16
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement convertsInRange bigintToUint32 returns the uint32 with the same numeric value as the bigint, for a zero or typical in-range value.
-primitive bigintToUint32 : ∀.bigint → uint32
+## @requirement convertsInRange: bigintToUint32 returns the uint32 with the same numeric value as the bigint, for a zero or typical in-range value.
+primitive bigintToUint32 : bigint → uint32
 
 ## Convert a bigint to a uint64 (truncating).
 ##
@@ -119,8 +89,8 @@ primitive bigintToUint32 : ∀.bigint → uint32
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement convertsInRange bigintToUint64 returns the uint64 with the same numeric value as the bigint, for a zero or typical in-range value.
-primitive bigintToUint64 : ∀.bigint → uint64
+## @requirement convertsInRange: bigintToUint64 returns the uint64 with the same numeric value as the bigint, for a zero or typical in-range value.
+primitive bigintToUint64 : bigint → uint64
 
 ## Convert a bigint to a uint8 (truncating).
 ##
@@ -128,8 +98,8 @@ primitive bigintToUint64 : ∀.bigint → uint64
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement convertsInRange bigintToUint8 returns the uint8 with the same numeric value as the bigint, for a zero or typical in-range value.
-primitive bigintToUint8 : ∀.bigint → uint8
+## @requirement convertsInRange: bigintToUint8 returns the uint8 with the same numeric value as the bigint, for a zero or typical in-range value.
+primitive bigintToUint8 : bigint → uint8
 
 ## Encode binary data as a base64 ASCII string.
 ##
@@ -138,8 +108,8 @@ primitive bigintToUint8 : ∀.bigint → uint8
 ## Renamed from hydra.lib.literals.binaryToString.
 ##
 ## @availableSince 0.18
-## @requirement encodesStandardBase64 binaryToBase64 encodes binary data as a standard base64 (RFC 4648) ASCII string, including empty binary data encoding to the empty string.
-primitive binaryToBase64 : ∀.binary → string
+## @requirement encodesStandardBase64: binaryToBase64 encodes binary data as a standard base64 (RFC 4648) ASCII string, including empty binary data encoding to the empty string.
+primitive binaryToBase64 : binary → string
 
 ## Convert binary data to a list of byte values.
 ##
@@ -148,8 +118,8 @@ primitive binaryToBase64 : ∀.binary → string
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement returnsUnsignedByteValues binaryToBytes returns the bytes of the binary data as a list of int32 values in [0, 255], preserving byte order, including byte values above 127 (which remain unsigned, not reinterpreted as negative), and the empty list for empty binary data.
-primitive binaryToBytes : ∀.binary → list<int32>
+## @requirement returnsUnsignedByteValues: binaryToBytes returns the bytes of the binary data as a list of int32 values in [0, 255], preserving byte order, including byte values above 127 (which remain unsigned, not reinterpreted as negative), and the empty list for empty binary data.
+primitive binaryToBytes : binary → list<int32>
 
 ## Convert a decimal to a bigint (truncating).
 ##
@@ -157,9 +127,9 @@ primitive binaryToBytes : ∀.binary → list<int32>
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement convertsWholeNumbers decimalToBigint returns the bigint with the same numeric value as a whole-number decimal, for positive, negative, and zero values.
-## @requirement truncatesFractionTowardZero decimalToBigint on a decimal with a fractional part discards the fraction, truncating toward zero (rounding down for positive values, up for negative values), not rounding to nearest.
-primitive decimalToBigint : ∀.decimal → bigint
+## @requirement convertsWholeNumbers: decimalToBigint returns the bigint with the same numeric value as a whole-number decimal, for positive, negative, and zero values.
+## @requirement truncatesFractionTowardZero: decimalToBigint on a decimal with a fractional part discards the fraction, truncating toward zero (rounding down for positive values, up for negative values), not rounding to nearest.
+primitive decimalToBigint : decimal → bigint
 
 ## Convert a decimal to a float32.
 ##
@@ -167,8 +137,8 @@ primitive decimalToBigint : ∀.decimal → bigint
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement convertsExactlyRepresentableValues decimalToFloat32 returns the float32 value with the same numeric value as a decimal that is exactly representable in binary32, for zero and whole-number values.
-primitive decimalToFloat32 : ∀.decimal → float32
+## @requirement convertsExactlyRepresentableValues: decimalToFloat32 returns the float32 value with the same numeric value as a decimal that is exactly representable in binary32, for zero and whole-number values.
+primitive decimalToFloat32 : decimal → float32
 
 ## Convert a decimal to a float64.
 ##
@@ -176,8 +146,8 @@ primitive decimalToFloat32 : ∀.decimal → float32
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement convertsExactlyRepresentableValues decimalToFloat64 returns the float64 value with the same numeric value as a decimal that is exactly representable in binary64, for zero and whole-number values.
-primitive decimalToFloat64 : ∀.decimal → float64
+## @requirement convertsExactlyRepresentableValues: decimalToFloat64 returns the float64 value with the same numeric value as a decimal that is exactly representable in binary64, for zero and whole-number values.
+primitive decimalToFloat64 : decimal → float64
 
 ## Convert a float32 to a decimal.
 ##
@@ -185,8 +155,8 @@ primitive decimalToFloat64 : ∀.decimal → float64
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement convertsExactlyRepresentableValues float32ToDecimal returns the exact decimal representation of a binary32 value, for zero and whole-number values.
-primitive float32ToDecimal : ∀.float32 → decimal
+## @requirement convertsExactlyRepresentableValues: float32ToDecimal returns the exact decimal representation of a binary32 value, for zero and whole-number values.
+primitive float32ToDecimal : float32 → decimal
 
 ## Convert a float32 to a float64.
 ##
@@ -194,8 +164,8 @@ primitive float32ToDecimal : ∀.float32 → decimal
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement losslessWidening float32ToFloat64 returns the float64 value with the same numeric value as a float32, with no precision loss, for positive, negative, and zero values.
-primitive float32ToFloat64 : ∀.float32 → float64
+## @requirement losslessWidening: float32ToFloat64 returns the float64 value with the same numeric value as a float32, with no precision loss, for positive, negative, and zero values.
+primitive float32ToFloat64 : float32 → float64
 
 ## Convert a float64 to a decimal.
 ##
@@ -203,8 +173,8 @@ primitive float32ToFloat64 : ∀.float32 → float64
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement convertsExactlyRepresentableValues float64ToDecimal returns the exact decimal representation of a binary64 value, for zero and whole-number values.
-primitive float64ToDecimal : ∀.float64 → decimal
+## @requirement convertsExactlyRepresentableValues: float64ToDecimal returns the exact decimal representation of a binary64 value, for zero and whole-number values.
+primitive float64ToDecimal : float64 → decimal
 
 ## Convert a float64 to a float32 (lossy).
 ##
@@ -212,8 +182,8 @@ primitive float64ToDecimal : ∀.float64 → decimal
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement convertsExactlyRepresentableValues float64ToFloat32 returns the float32 value with the same numeric value as a float64 that is exactly representable in binary32, for positive, negative, and zero values.
-primitive float64ToFloat32 : ∀.float64 → float32
+## @requirement convertsExactlyRepresentableValues: float64ToFloat32 returns the float32 value with the same numeric value as a float64 that is exactly representable in binary32, for positive, negative, and zero values.
+primitive float64ToFloat32 : float64 → float32
 
 ## Convert an int16 to a bigint.
 ##
@@ -221,8 +191,8 @@ primitive float64ToFloat32 : ∀.float64 → float32
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement losslessConversion int16ToBigint returns the bigint with the same numeric value as the int16, with no precision loss, for positive and negative values.
-primitive int16ToBigint : ∀.int16 → bigint
+## @requirement losslessConversion: int16ToBigint returns the bigint with the same numeric value as the int16, with no precision loss, for positive and negative values.
+primitive int16ToBigint : int16 → bigint
 
 ## Convert an int32 to a bigint.
 ##
@@ -230,8 +200,8 @@ primitive int16ToBigint : ∀.int16 → bigint
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement losslessConversion int32ToBigint returns the bigint with the same numeric value as the int32, with no precision loss, for positive, negative, and zero values.
-primitive int32ToBigint : ∀.int32 → bigint
+## @requirement losslessConversion: int32ToBigint returns the bigint with the same numeric value as the int32, with no precision loss, for positive, negative, and zero values.
+primitive int32ToBigint : int32 → bigint
 
 ## Convert an int64 to a bigint.
 ##
@@ -239,8 +209,8 @@ primitive int32ToBigint : ∀.int32 → bigint
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement losslessConversion int64ToBigint returns the bigint with the same numeric value as the int64, with no precision loss, for positive and negative values.
-primitive int64ToBigint : ∀.int64 → bigint
+## @requirement losslessConversion: int64ToBigint returns the bigint with the same numeric value as the int64, with no precision loss, for positive and negative values.
+primitive int64ToBigint : int64 → bigint
 
 ## Convert an int8 to a bigint.
 ##
@@ -248,8 +218,8 @@ primitive int64ToBigint : ∀.int64 → bigint
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement losslessConversion int8ToBigint returns the bigint with the same numeric value as the int8, with no precision loss, for positive and negative values including the int8 min/max boundary.
-primitive int8ToBigint : ∀.int8 → bigint
+## @requirement losslessConversion: int8ToBigint returns the bigint with the same numeric value as the int8, with no precision loss, for positive and negative values including the int8 min/max boundary.
+primitive int8ToBigint : int8 → bigint
 
 ## Parse a string as a bigint.
 ##
@@ -259,9 +229,9 @@ primitive int8ToBigint : ∀.int8 → bigint
 ## Renamed from hydra.lib.literals.readBigint.
 ##
 ## @availableSince 0.17.6
-## @requirement parsesValidLiterals parseBigint returns the bigint parsed from a valid bigint literal, wrapped, for positive, negative, zero, and arbitrarily large values.
-## @requirement noneOnInvalidInput parseBigint returns none when the string is not a valid bigint literal.
-primitive parseBigint : ∀.string → optional<bigint>
+## @requirement parsesValidLiterals: parseBigint returns the bigint parsed from a valid bigint literal, wrapped, for positive, negative, zero, and arbitrarily large values.
+## @requirement noneOnInvalidInput: parseBigint returns none when the string is not a valid bigint literal.
+primitive parseBigint : string → optional<bigint>
 
 ## Parse a string as a boolean.
 ##
@@ -270,9 +240,9 @@ primitive parseBigint : ∀.string → optional<bigint>
 ## Renamed from hydra.lib.literals.readBoolean.
 ##
 ## @availableSince 0.17.6
-## @requirement parsesExactLowercaseLiterals parseBoolean returns the wrapped boolean true for the exact string "true" and false for "false".
-## @requirement noneOnInvalidInput parseBoolean returns none for any string other than the exact lowercase literals "true" or "false".
-primitive parseBoolean : ∀.string → optional<boolean>
+## @requirement parsesExactLowercaseLiterals: parseBoolean returns the wrapped boolean true for the exact string "true" and false for "false".
+## @requirement noneOnInvalidInput: parseBoolean returns none for any string other than the exact lowercase literals "true" or "false".
+primitive parseBoolean : string → optional<boolean>
 
 ## Parse a string as a decimal.
 ##
@@ -282,9 +252,9 @@ primitive parseBoolean : ∀.string → optional<boolean>
 ## Renamed from hydra.lib.literals.readDecimal.
 ##
 ## @availableSince 0.17.6
-## @requirement parsesValidLiterals parseDecimal returns the decimal parsed from a valid decimal literal, wrapped, for positive, negative, and zero values.
-## @requirement noneOnInvalidInput parseDecimal returns none when the string is not a valid decimal literal.
-primitive parseDecimal : ∀.string → optional<decimal>
+## @requirement parsesValidLiterals: parseDecimal returns the decimal parsed from a valid decimal literal, wrapped, for positive, negative, and zero values.
+## @requirement noneOnInvalidInput: parseDecimal returns none when the string is not a valid decimal literal.
+primitive parseDecimal : string → optional<decimal>
 
 ## Parse a string as a float32.
 ##
@@ -294,9 +264,9 @@ primitive parseDecimal : ∀.string → optional<decimal>
 ## Renamed from hydra.lib.literals.readFloat32.
 ##
 ## @availableSince 0.17.6
-## @requirement parsesValidLiterals parseFloat32 returns the float32 value closest to the number parsed from a valid literal, wrapped, for positive and negative values.
-## @requirement noneOnInvalidInput parseFloat32 returns none when the string is not a valid float literal.
-primitive parseFloat32 : ∀.string → optional<float32>
+## @requirement parsesValidLiterals: parseFloat32 returns the float32 value closest to the number parsed from a valid literal, wrapped, for positive and negative values.
+## @requirement noneOnInvalidInput: parseFloat32 returns none when the string is not a valid float literal.
+primitive parseFloat32 : string → optional<float32>
 
 ## Parse a string as a float64.
 ##
@@ -306,9 +276,9 @@ primitive parseFloat32 : ∀.string → optional<float32>
 ## Renamed from hydra.lib.literals.readFloat64.
 ##
 ## @availableSince 0.17.6
-## @requirement parsesValidLiterals parseFloat64 returns the float64 value closest to the number parsed from a valid literal, wrapped, for positive and negative values.
-## @requirement noneOnInvalidInput parseFloat64 returns none when the string is not a valid float literal.
-primitive parseFloat64 : ∀.string → optional<float64>
+## @requirement parsesValidLiterals: parseFloat64 returns the float64 value closest to the number parsed from a valid literal, wrapped, for positive and negative values.
+## @requirement noneOnInvalidInput: parseFloat64 returns none when the string is not a valid float literal.
+primitive parseFloat64 : string → optional<float64>
 
 ## Parse a string as an int16.
 ##
@@ -317,9 +287,9 @@ primitive parseFloat64 : ∀.string → optional<float64>
 ## Renamed from hydra.lib.literals.readInt16.
 ##
 ## @availableSince 0.17.6
-## @requirement parsesValidLiterals parseInt16 returns the int16 parsed from a valid integer literal within range, wrapped, for positive and negative values.
-## @requirement noneOnInvalidInput parseInt16 returns none when the string is not a valid integer literal.
-primitive parseInt16 : ∀.string → optional<int16>
+## @requirement parsesValidLiterals: parseInt16 returns the int16 parsed from a valid integer literal within range, wrapped, for positive and negative values.
+## @requirement noneOnInvalidInput: parseInt16 returns none when the string is not a valid integer literal.
+primitive parseInt16 : string → optional<int16>
 
 ## Parse a string as an int32.
 ##
@@ -328,9 +298,9 @@ primitive parseInt16 : ∀.string → optional<int16>
 ## Renamed from hydra.lib.literals.readInt32.
 ##
 ## @availableSince 0.17.6
-## @requirement parsesValidLiterals parseInt32 returns the int32 parsed from a valid integer literal within range, wrapped, for positive and negative values.
-## @requirement noneOnInvalidInput parseInt32 returns none when the string is not a valid integer literal.
-primitive parseInt32 : ∀.string → optional<int32>
+## @requirement parsesValidLiterals: parseInt32 returns the int32 parsed from a valid integer literal within range, wrapped, for positive and negative values.
+## @requirement noneOnInvalidInput: parseInt32 returns none when the string is not a valid integer literal.
+primitive parseInt32 : string → optional<int32>
 
 ## Parse a string as an int64.
 ##
@@ -339,9 +309,9 @@ primitive parseInt32 : ∀.string → optional<int32>
 ## Renamed from hydra.lib.literals.readInt64.
 ##
 ## @availableSince 0.17.6
-## @requirement parsesValidLiterals parseInt64 returns the int64 parsed from a valid integer literal within range, wrapped, for positive and negative values.
-## @requirement noneOnInvalidInput parseInt64 returns none when the string is not a valid integer literal.
-primitive parseInt64 : ∀.string → optional<int64>
+## @requirement parsesValidLiterals: parseInt64 returns the int64 parsed from a valid integer literal within range, wrapped, for positive and negative values.
+## @requirement noneOnInvalidInput: parseInt64 returns none when the string is not a valid integer literal.
+primitive parseInt64 : string → optional<int64>
 
 ## Parse a string as an int8.
 ##
@@ -350,9 +320,9 @@ primitive parseInt64 : ∀.string → optional<int64>
 ## Renamed from hydra.lib.literals.readInt8.
 ##
 ## @availableSince 0.17.6
-## @requirement parsesValidLiterals parseInt8 returns the int8 parsed from a valid integer literal within range, wrapped, for positive and negative values including the int8 min/max boundary.
-## @requirement noneOnOutOfRangeOrInvalidInput parseInt8 returns none when the string is not a valid integer literal, or when the parsed value is outside the int8 range [-128, 127].
-primitive parseInt8 : ∀.string → optional<int8>
+## @requirement parsesValidLiterals: parseInt8 returns the int8 parsed from a valid integer literal within range, wrapped, for positive and negative values including the int8 min/max boundary.
+## @requirement noneOnOutOfRangeOrInvalidInput: parseInt8 returns none when the string is not a valid integer literal, or when the parsed value is outside the int8 range [-128, 127].
+primitive parseInt8 : string → optional<int8>
 
 ## Parse a string-literal token to a plain string (Just) or Nothing on parse failure.
 ##
@@ -361,9 +331,9 @@ primitive parseInt8 : ∀.string → optional<int8>
 ## Renamed from hydra.lib.literals.readString.
 ##
 ## @availableSince 0.17.6
-## @requirement parsesQuotedLiterals parseString returns the decoded payload of a double-quoted string literal, wrapped.
-## @requirement noneOnUnquotedInput parseString returns none when the string is not a well-formed double-quoted string literal (for example, an unquoted bare string).
-primitive parseString : ∀.string → optional<string>
+## @requirement parsesQuotedLiterals: parseString returns the decoded payload of a double-quoted string literal, wrapped.
+## @requirement noneOnUnquotedInput: parseString returns none when the string is not a well-formed double-quoted string literal (for example, an unquoted bare string).
+primitive parseString : string → optional<string>
 
 ## Parse a string as a uint16.
 ##
@@ -372,9 +342,9 @@ primitive parseString : ∀.string → optional<string>
 ## Renamed from hydra.lib.literals.readUint16.
 ##
 ## @availableSince 0.17.6
-## @requirement parsesValidLiterals parseUint16 returns the uint16 parsed from a valid non-negative integer literal within range, wrapped.
-## @requirement noneOnInvalidOrNegativeInput parseUint16 returns none when the string is not a valid integer literal, or when it represents a negative value.
-primitive parseUint16 : ∀.string → optional<uint16>
+## @requirement parsesValidLiterals: parseUint16 returns the uint16 parsed from a valid non-negative integer literal within range, wrapped.
+## @requirement noneOnInvalidOrNegativeInput: parseUint16 returns none when the string is not a valid integer literal, or when it represents a negative value.
+primitive parseUint16 : string → optional<uint16>
 
 ## Parse a string as a uint32.
 ##
@@ -383,10 +353,10 @@ primitive parseUint16 : ∀.string → optional<uint16>
 ## Renamed from hydra.lib.literals.readUint32.
 ##
 ## @availableSince 0.17.6
-## @requirement parsesValidLiterals parseUint32 returns the uint32 parsed from a valid non-negative integer literal within range, wrapped, including at the maximum representable value (2^32-1).
-## @requirement noneOnInvalidOrNegativeInput parseUint32 returns none when the string is not a valid integer literal, or when it represents a negative value.
-## @requirement noneOnOverflow parseUint32 returns none when the parsed value exceeds the uint32 maximum (2^32-1), one past the boundary.
-primitive parseUint32 : ∀.string → optional<uint32>
+## @requirement parsesValidLiterals: parseUint32 returns the uint32 parsed from a valid non-negative integer literal within range, wrapped, including at the maximum representable value (2^32-1).
+## @requirement noneOnInvalidOrNegativeInput: parseUint32 returns none when the string is not a valid integer literal, or when it represents a negative value.
+## @requirement noneOnOverflow: parseUint32 returns none when the parsed value exceeds the uint32 maximum (2^32-1), one past the boundary.
+primitive parseUint32 : string → optional<uint32>
 
 ## Parse a string as a uint64.
 ##
@@ -395,10 +365,10 @@ primitive parseUint32 : ∀.string → optional<uint32>
 ## Renamed from hydra.lib.literals.readUint64.
 ##
 ## @availableSince 0.17.6
-## @requirement parsesValidLiterals parseUint64 returns the uint64 parsed from a valid non-negative integer literal within range, wrapped, including large in-range values.
-## @requirement noneOnInvalidOrNegativeInput parseUint64 returns none when the string is not a valid integer literal, or when it represents a negative value.
-## @requirement noneOnOverflow parseUint64 returns none when the parsed value exceeds the uint64 maximum (2^64-1), one past the boundary.
-primitive parseUint64 : ∀.string → optional<uint64>
+## @requirement parsesValidLiterals: parseUint64 returns the uint64 parsed from a valid non-negative integer literal within range, wrapped, including large in-range values.
+## @requirement noneOnInvalidOrNegativeInput: parseUint64 returns none when the string is not a valid integer literal, or when it represents a negative value.
+## @requirement noneOnOverflow: parseUint64 returns none when the parsed value exceeds the uint64 maximum (2^64-1), one past the boundary.
+primitive parseUint64 : string → optional<uint64>
 
 ## Parse a string as a uint8.
 ##
@@ -407,9 +377,9 @@ primitive parseUint64 : ∀.string → optional<uint64>
 ## Renamed from hydra.lib.literals.readUint8.
 ##
 ## @availableSince 0.17.6
-## @requirement parsesValidLiterals parseUint8 returns the uint8 parsed from a valid non-negative integer literal within range, wrapped, including at the maximum representable value (255).
-## @requirement noneOnInvalidOrNegativeInput parseUint8 returns none when the string is not a valid integer literal, or when it represents a negative value.
-primitive parseUint8 : ∀.string → optional<uint8>
+## @requirement parsesValidLiterals: parseUint8 returns the uint8 parsed from a valid non-negative integer literal within range, wrapped, including at the maximum representable value (255).
+## @requirement noneOnInvalidOrNegativeInput: parseUint8 returns none when the string is not a valid integer literal, or when it represents a negative value.
+primitive parseUint8 : string → optional<uint8>
 
 ## Render a bigint as a string.
 ##
@@ -418,8 +388,8 @@ primitive parseUint8 : ∀.string → optional<uint8>
 ## Renamed from hydra.lib.literals.showBigint.
 ##
 ## @availableSince 0.17.6
-## @requirement rendersCanonicalDecimal printBigint renders a bigint as its canonical decimal string, with a leading minus sign for negative values and no leading sign for positive values or zero.
-primitive printBigint : ∀.bigint → string
+## @requirement rendersCanonicalDecimal: printBigint renders a bigint as its canonical decimal string, with a leading minus sign for negative values and no leading sign for positive values or zero.
+primitive printBigint : bigint → string
 
 ## Render a boolean as a string.
 ##
@@ -428,8 +398,8 @@ primitive printBigint : ∀.bigint → string
 ## Renamed from hydra.lib.literals.showBoolean.
 ##
 ## @availableSince 0.17.6
-## @requirement rendersLowercaseLiterals printBoolean renders true as the exact string "true" and false as "false".
-primitive printBoolean : ∀.boolean → string
+## @requirement rendersLowercaseLiterals: printBoolean renders true as the exact string "true" and false as "false".
+primitive printBoolean : boolean → string
 
 ## Render a decimal as a string.
 ##
@@ -438,8 +408,8 @@ primitive printBoolean : ∀.boolean → string
 ## Renamed from hydra.lib.literals.showDecimal.
 ##
 ## @availableSince 0.17.6
-## @requirement rendersCanonicalDecimal printDecimal renders a decimal as a string, for positive and negative whole and fractional values, that always round-trips through parseDecimal back to the original value.
-primitive printDecimal : ∀.decimal → string
+## @requirement rendersCanonicalDecimal: printDecimal renders a decimal as a string, for positive and negative whole and fractional values, that always round-trips through parseDecimal back to the original value.
+primitive printDecimal : decimal → string
 
 ## Render a float32 as a string.
 ##
@@ -448,8 +418,8 @@ primitive printDecimal : ∀.decimal → string
 ## Renamed from hydra.lib.literals.showFloat32.
 ##
 ## @availableSince 0.17.6
-## @requirement rendersRoundTrippableRepresentation printFloat32 renders a float32 as a string, for positive, negative, zero, and small-magnitude values, that round-trips through parseFloat32 back to the original value.
-primitive printFloat32 : ∀.float32 → string
+## @requirement rendersRoundTrippableRepresentation: printFloat32 renders a float32 as a string, for positive, negative, zero, and small-magnitude values, that round-trips through parseFloat32 back to the original value.
+primitive printFloat32 : float32 → string
 
 ## Render a float64 as a string.
 ##
@@ -458,8 +428,8 @@ primitive printFloat32 : ∀.float32 → string
 ## Renamed from hydra.lib.literals.showFloat64.
 ##
 ## @availableSince 0.17.6
-## @requirement rendersRoundTrippableRepresentation printFloat64 renders a float64 as a string, for positive, zero, and small-magnitude values, that round-trips through parseFloat64 back to the original value.
-primitive printFloat64 : ∀.float64 → string
+## @requirement rendersRoundTrippableRepresentation: printFloat64 renders a float64 as a string, for positive, zero, and small-magnitude values, that round-trips through parseFloat64 back to the original value.
+primitive printFloat64 : float64 → string
 
 ## Render an int16 as a string.
 ##
@@ -468,8 +438,8 @@ primitive printFloat64 : ∀.float64 → string
 ## Renamed from hydra.lib.literals.showInt16.
 ##
 ## @availableSince 0.17.6
-## @requirement rendersCanonicalDecimal printInt16 renders an int16 as its canonical decimal string, with a leading minus sign for negative values.
-primitive printInt16 : ∀.int16 → string
+## @requirement rendersCanonicalDecimal: printInt16 renders an int16 as its canonical decimal string, with a leading minus sign for negative values.
+primitive printInt16 : int16 → string
 
 ## Render an int32 as a string.
 ##
@@ -478,8 +448,8 @@ primitive printInt16 : ∀.int16 → string
 ## Renamed from hydra.lib.literals.showInt32.
 ##
 ## @availableSince 0.17.6
-## @requirement rendersCanonicalDecimal printInt32 renders an int32 as its canonical decimal string, with a leading minus sign for negative values and no sign for zero.
-primitive printInt32 : ∀.int32 → string
+## @requirement rendersCanonicalDecimal: printInt32 renders an int32 as its canonical decimal string, with a leading minus sign for negative values and no sign for zero.
+primitive printInt32 : int32 → string
 
 ## Render an int64 as a string.
 ##
@@ -488,8 +458,8 @@ primitive printInt32 : ∀.int32 → string
 ## Renamed from hydra.lib.literals.showInt64.
 ##
 ## @availableSince 0.17.6
-## @requirement rendersCanonicalDecimal printInt64 renders an int64 as its canonical decimal string, with a leading minus sign for negative values.
-primitive printInt64 : ∀.int64 → string
+## @requirement rendersCanonicalDecimal: printInt64 renders an int64 as its canonical decimal string, with a leading minus sign for negative values.
+primitive printInt64 : int64 → string
 
 ## Render an int8 as a string.
 ##
@@ -498,8 +468,8 @@ primitive printInt64 : ∀.int64 → string
 ## Renamed from hydra.lib.literals.showInt8.
 ##
 ## @availableSince 0.17.6
-## @requirement rendersCanonicalDecimal printInt8 renders an int8 as its canonical decimal string, with a leading minus sign for negative values.
-primitive printInt8 : ∀.int8 → string
+## @requirement rendersCanonicalDecimal: printInt8 renders an int8 as its canonical decimal string, with a leading minus sign for negative values.
+primitive printInt8 : int8 → string
 
 ## Render a string as a string-literal token (escaped and quoted).
 ##
@@ -508,10 +478,10 @@ primitive printInt8 : ∀.int8 → string
 ## Renamed from hydra.lib.literals.showString.
 ##
 ## @availableSince 0.17.6
-## @requirement quotesAndPassesThroughPlainCharacters printString wraps a string in double quotes, passing plain ASCII characters through unescaped, for the empty string and ordinary text.
-## @requirement escapesNonAsciiAsDecimalCodes printString renders every non-ASCII character as a backslash followed by its decimal Unicode code point, whether the character appears alone, mixed with ASCII text, or repeated.
-## @requirement escapesNamedControlCharacters printString renders the characters with standard Haskell-syntax named escapes (tab, newline, carriage return, backslash, double quote, NUL, bell, backspace, form feed, vertical tab, delete) using their named escape form, not a raw or decimal-code representation.
-primitive printString : ∀.string → string
+## @requirement quotesAndPassesThroughPlainCharacters: printString wraps a string in double quotes, passing plain ASCII characters through unescaped, for the empty string and ordinary text.
+## @requirement escapesNonAsciiAsDecimalCodes: printString renders every non-ASCII character as a backslash followed by its decimal Unicode code point, whether the character appears alone, mixed with ASCII text, or repeated.
+## @requirement escapesNamedControlCharacters: printString renders the characters with standard Haskell-syntax named escapes (tab, newline, carriage return, backslash, double quote, NUL, bell, backspace, form feed, vertical tab, delete) using their named escape form, not a raw or decimal-code representation.
+primitive printString : string → string
 
 ## Render a uint16 as a string.
 ##
@@ -520,8 +490,8 @@ primitive printString : ∀.string → string
 ## Renamed from hydra.lib.literals.showUint16.
 ##
 ## @availableSince 0.17.6
-## @requirement rendersCanonicalDecimal printUint16 renders a uint16 as its canonical unsigned decimal string, for zero and typical values.
-primitive printUint16 : ∀.uint16 → string
+## @requirement rendersCanonicalDecimal: printUint16 renders a uint16 as its canonical unsigned decimal string, for zero and typical values.
+primitive printUint16 : uint16 → string
 
 ## Render a uint32 as a string.
 ##
@@ -530,8 +500,8 @@ primitive printUint16 : ∀.uint16 → string
 ## Renamed from hydra.lib.literals.showUint32.
 ##
 ## @availableSince 0.17.6
-## @requirement rendersCanonicalDecimal printUint32 renders a uint32 as its canonical unsigned decimal string, for zero and typical values.
-primitive printUint32 : ∀.uint32 → string
+## @requirement rendersCanonicalDecimal: printUint32 renders a uint32 as its canonical unsigned decimal string, for zero and typical values.
+primitive printUint32 : uint32 → string
 
 ## Render a uint64 as a string.
 ##
@@ -540,8 +510,8 @@ primitive printUint32 : ∀.uint32 → string
 ## Renamed from hydra.lib.literals.showUint64.
 ##
 ## @availableSince 0.17.6
-## @requirement rendersCanonicalDecimal printUint64 renders a uint64 as its canonical unsigned decimal string, for zero and typical values.
-primitive printUint64 : ∀.uint64 → string
+## @requirement rendersCanonicalDecimal: printUint64 renders a uint64 as its canonical unsigned decimal string, for zero and typical values.
+primitive printUint64 : uint64 → string
 
 ## Render a uint8 as a string.
 ##
@@ -550,8 +520,8 @@ primitive printUint64 : ∀.uint64 → string
 ## Renamed from hydra.lib.literals.showUint8.
 ##
 ## @availableSince 0.17.6
-## @requirement rendersCanonicalDecimal printUint8 renders a uint8 as its canonical unsigned decimal string, for zero and the maximum representable value (255).
-primitive printUint8 : ∀.uint8 → string
+## @requirement rendersCanonicalDecimal: printUint8 renders a uint8 as its canonical unsigned decimal string, for zero and the maximum representable value (255).
+primitive printUint8 : uint8 → string
 
 ## Convert a uint16 to a bigint.
 ##
@@ -559,8 +529,8 @@ primitive printUint8 : ∀.uint8 → string
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement losslessConversion uint16ToBigint returns the bigint with the same numeric value as the uint16, with no precision loss, for zero and typical in-range values.
-primitive uint16ToBigint : ∀.uint16 → bigint
+## @requirement losslessConversion: uint16ToBigint returns the bigint with the same numeric value as the uint16, with no precision loss, for zero and typical in-range values.
+primitive uint16ToBigint : uint16 → bigint
 
 ## Convert a uint32 to a bigint.
 ##
@@ -568,8 +538,8 @@ primitive uint16ToBigint : ∀.uint16 → bigint
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement losslessConversion uint32ToBigint returns the bigint with the same numeric value as the uint32, with no precision loss, for zero and typical in-range values.
-primitive uint32ToBigint : ∀.uint32 → bigint
+## @requirement losslessConversion: uint32ToBigint returns the bigint with the same numeric value as the uint32, with no precision loss, for zero and typical in-range values.
+primitive uint32ToBigint : uint32 → bigint
 
 ## Convert a uint64 to a bigint.
 ##
@@ -577,8 +547,8 @@ primitive uint32ToBigint : ∀.uint32 → bigint
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement losslessConversion uint64ToBigint returns the bigint with the same numeric value as the uint64, with no precision loss, for zero and typical in-range values.
-primitive uint64ToBigint : ∀.uint64 → bigint
+## @requirement losslessConversion: uint64ToBigint returns the bigint with the same numeric value as the uint64, with no precision loss, for zero and typical in-range values.
+primitive uint64ToBigint : uint64 → bigint
 
 ## Convert a uint8 to a bigint.
 ##
@@ -586,5 +556,5 @@ primitive uint64ToBigint : ∀.uint64 → bigint
 ## Total.
 ##
 ## @availableSince 0.15
-## @requirement losslessConversion uint8ToBigint returns the bigint with the same numeric value as the uint8, with no precision loss, for zero and the maximum representable value (255).
-primitive uint8ToBigint : ∀.uint8 → bigint
+## @requirement losslessConversion: uint8ToBigint returns the bigint with the same numeric value as the uint8, with no precision loss, for zero and the maximum representable value (255).
+primitive uint8ToBigint : uint8 → bigint
