@@ -1,0 +1,51 @@
+## Parser combinator types for text parsing
+module hydra.core.parsing
+
+
+
+## An error which occurred while parsing
+type ParseError = record{
+  ## An error message
+  message: string,
+  ## The remaining input at the point of failure
+  remainder: ParseInput}
+
+## The input state threaded through a parser: the unconsumed codepoints, together with the number of codepoints already consumed, and where the last token ended. The offset makes the absolute source position of any parse step available in constant time, without rescanning the input.
+type ParseInput = record{
+  ## The number of codepoints consumed so far, i.e. the absolute offset of the first remaining codepoint
+  offset: int32,
+  ## The offset just past the most recently completed token, excluding any whitespace or comments that followed it. Used to give source spans a tight end
+  tokenEnd: int32,
+  ## The remaining unparsed input, as codepoints. Represented as a list rather than a string, so that consuming one character is a constant-time operation
+  codepoints: list<int32>}
+
+## The result of a parse operation
+type ParseResult = forall a. union{
+  ## A successful parse, with a value and the remaining unparsed input
+  success: ParseSuccess a,
+  ## A failed parse, with an error message and the remaining input
+  failure: ParseError}
+
+## A successful parse result
+type ParseSuccess = forall a. record{
+  ## The parsed value
+  value: a,
+  ## The remaining unparsed input
+  remainder: ParseInput}
+
+## A parser which consumes characters from a codepoint list and produces a value. The input is a list, rather than a string, so that consuming one character is a constant-time operation rather than a linear-time string copy.
+type Parser = forall a. wrap(ParseInput → ParseResult a)
+
+## A position in source text, as an editor reports it: zero-based line and zero-based column. The column counts UTF-16 code units, matching the Language Server Protocol's Position.
+type SourcePosition = record{
+  ## The zero-based line number. Lines are terminated by LF, CR, or CR LF
+  line: int32,
+  ## The zero-based column, in UTF-16 code units from the start of the line
+  column: int32}
+
+## A half-open range [start, end) of source text, measured in codepoints from the start of the input. Attached to parsed terms and types as a reserved, round-trip-exempt annotation (see hydra.core.positions).
+type SourceSpan = record{
+  ## The offset of the first codepoint of the span
+  start: int32,
+  ## The offset one past the last codepoint of the span
+  end: int32}

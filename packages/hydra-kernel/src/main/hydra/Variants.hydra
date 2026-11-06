@@ -1,0 +1,58 @@
+## Variant types which describe the structure of Hydra core types and terms.
+module hydra.core.variants
+
+
+
+## The identifier of a literal constructor
+type LiteralVariant = union{
+  `binary`: unit,
+  `boolean`: unit,
+  `decimal`: unit,
+  float: unit,
+  integer: unit,
+  `string`: unit}
+
+## The identifier of a term expression constructor
+type TermVariant = union{
+  annotated: unit,
+  application: unit,
+  `cases`: unit,
+  `either`: unit,
+  `inject`: unit,
+  lambda: unit,
+  `let`: unit,
+  `list`: unit,
+  literal: unit,
+  `map`: unit,
+  `optional`: unit,
+  pair: unit,
+  `project`: unit,
+  `record`: unit,
+  `set`: unit,
+  typeApplication: unit,
+  typeLambda: unit,
+  `unit`: unit,
+  `unwrap`: unit,
+  variable: unit,
+  `wrap`: unit}
+
+## The identifier of a type constructor
+type TypeVariant = union{
+  annotated: unit,
+  application: unit,
+  `effect`: unit,
+  `either`: unit,
+  `forall`: unit,
+  function: unit,
+  `list`: unit,
+  literal: unit,
+  `map`: unit,
+  `optional`: unit,
+  pair: unit,
+  `record`: unit,
+  `set`: unit,
+  `union`: unit,
+  `unit`: unit,
+  variable: unit,
+  `void`: unit,
+  `wrap`: unit}

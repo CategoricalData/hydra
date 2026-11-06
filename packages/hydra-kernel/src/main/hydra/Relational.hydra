@@ -1,0 +1,45 @@
+## An interpretation of Codd's Relational Model, as described in 'A Relational Model of Data for Large Shared Data Banks' (1970). Types ('domains') and values are parameterized so as to allow for application-specific implementations. No special support is provided for 'nonsimple' domains; i.e. relations are assumed to be normalized.
+module hydra.core.relational
+
+
+
+## A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd
+type ColumnName = wrap(string)
+
+## An abstract specification of the domain represented by a column in a relation; a role
+type ColumnSchema = forall t. record{
+  ## A unique name for the column
+  name: ColumnName,
+  ## The domain (type) of the column
+  domain: t}
+
+## A mapping from certain columns of a source relation to primary key columns of a target relation
+type ForeignKey = record{
+  ## The name of the target relation
+  foreignRelation: RelationName,
+  keys: map<ColumnName, ColumnName>@{description="The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation.", minLength=1:int32}}
+
+## A primary key of a relation, specified either as a single column, or as a list of columns
+type PrimaryKey = wrap(list<ColumnName>@{minLength=1:int32})
+
+## A set of distinct n-tuples; a table
+type Relation = forall v. wrap(list<Row v>)
+
+## A unique relation (table) name
+type RelationName = wrap(string)
+
+## An abstract relation; the name and columns of a relation without its actual data
+type RelationSchema = forall t. record{
+  ## A unique name for the relation
+  name: RelationName,
+  columns: list<ColumnSchema t>@{description="A list of column specifications", minLength=1:int32},
+  ## Any number of primary keys for the relation, each of which must be valid for this relation
+  primaryKeys: list<PrimaryKey>,
+  ## Any number of foreign keys, each of which must be valid for both this relation and the target relation
+  foreignKeys: list<ForeignKey>}
+
+## A domain-unordered (string-indexed, rather than position-indexed) relation
+type Relationship = forall v. wrap(set<map<ColumnName, v>>)
+
+## An n-tuple which is an element of a given relation
+type Row = forall v. wrap(list<v>@{minLength=1:int32})

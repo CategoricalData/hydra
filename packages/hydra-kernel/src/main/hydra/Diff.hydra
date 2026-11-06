@@ -1,0 +1,93 @@
+## A generic, domain-agnostic framework for diffs, patches, and migrations over any 'type'/'value' grammar (hydra.core.model.Type/Term, property-graph types, RDF shapes, ...). Fully parameterized: no Type/Term/Name/step type is hardcoded. Type parameters: a = the thing being edited (a type or a value); t = a 'type' type; v = a value/instance type; s = a step into a value; n = a name/key. Fill and Migrator hold host functions and are runtime-only (not serialized).
+module hydra.core.diff
+
+
+
+## A base-relative edit (delta) transforming a value into a new value. Applied forward against a base; a symmetric before/after 'diff' is derived from (base, Edit), not stored here. Canonical by construction: descend carries single-step StepEdits, so there is exactly one encoding of any change.
+type Edit = forall a. forall s. union{
+  ## Leave this position unchanged
+  retain: unit,
+  ## Set this position to the given value (upsert: prior presence is irrelevant)
+  `set`: a,
+  ## Remove this position (valid only at a removable position, e.g. a record field or collection element)
+  delete: unit,
+  ## Edit specific immediate children, one StepEdit per changed step
+  descend: list<StepEdit a s>}
+
+## A user's answer to a hole. RUNTIME-ONLY (holds a host function; not serialized). fillNow supplies the value here (a constant is a function ignoring its input); defer leaves the hole open for an enclosing context to supply.
+type Fill = forall v. union{
+  ## Fill the hole here: a function from the old value (context) to the filled value
+  fillNow: v → v,
+  ## Leave the hole open, to be supplied by an enclosing context where this value is embedded
+  defer: unit}
+
+## A demand the migration cannot satisfy from the old value alone: at a value-path, a value of the given 'type' must be supplied.
+type Hole = forall t. forall s. record{
+  ## The value-path (sequence of steps) to the position needing a value
+  path: list<s>,
+  ## The 'type' a fill must produce at this hole
+  `type`: t}
+
+## A value supplied for a residual (deferred) hole, identified by its path (engine-internal)
+type HoleFiller = forall v. forall s. record{
+  ## The path of the residual hole being supplied
+  path: list<s>,
+  ## The value supplied for that hole
+  value: v}
+
+## A validation-time failure: the user's fills do not correctly answer the plan's holes
+type InvalidFillError = forall t. forall v. forall s. union{
+  ## A fillNow produced a value that does not inhabit the hole's type
+  illTyped: Hole t s,
+  ## A hole received no fill
+  missingFill: Hole t s,
+  ## A surplus fill at this index, with no hole to answer
+  extraFill: int32}
+
+## An application-time failure: a specific instance could not be migrated by a valid Migrator
+type MigrationError = forall t. forall v. forall s. union{
+  ## The input value is not a valid instance of the old type
+  notAnInstance: v,
+  ## A value failed a narrowing conversion (e.g. numeric overflow); fail-fast rather than truncate
+  outOfRange: v,
+  ## An instance of a removed union variant whose handler is reject
+  rejectedVariant: v,
+  ## A fill or resolver produced a value that does not inhabit the hole's type
+  illTypedResult: Mistyped t v,
+  ## A deferred hole reached application time still unanswered
+  unfilledHole: Hole t s}
+
+## The result of diffing two schemas: the per-type edits (which drive the transform) bundled with the ordered holes the user must answer. Supplied once to constructMigrator so the diff is never re-passed.
+type MigrationPlan = forall n. forall t. forall s. record{
+  ## The schema diff: an edit per changed type, keyed by type name
+  edits: map<n, Edit t s>,
+  ## The ordered holes across all changed types, for the user to answer
+  holes: list<SchemaHole n t s>}
+
+## A constructed instance migrator. RUNTIME-ONLY (apply is a host function; not serialized). Carries the residual (deferred) holes an enclosing context must supply, and applies to a value given values for those residual holes.
+type Migrator = forall t. forall v. forall s. record{
+  ## Deferred holes that an enclosing context must supply when composing this migrator
+  residualHoles: list<Hole t s>,
+  ## Migrate a value, given values for the residual holes; fails with a MigrationError per instance
+  apply: list<HoleFiller v s> → v → either<MigrationError t v s, v>}
+
+## A value together with the 'type' it failed to inhabit
+type Mistyped = forall t. forall v. record{
+  ## The offending value
+  value: v,
+  ## The type the value did not inhabit
+  `type`: t}
+
+## A hole located within a named type of a schema. A type with several holes yields several SchemaHoles sharing a typeName.
+type SchemaHole = forall n. forall t. forall s. record{
+  ## The name of the type (a schema entry) containing this hole
+  typeName: n,
+  ## The hole within that type
+  hole: Hole t s}
+
+## An edit applied at a single immediate step of a value
+type StepEdit = forall a. forall s. record{
+  ## The immediate step to descend into
+  step: s,
+  ## The edit to apply at that step
+  edit: Edit a s}
