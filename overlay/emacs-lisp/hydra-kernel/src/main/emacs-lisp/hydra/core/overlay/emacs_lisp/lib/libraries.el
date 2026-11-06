@@ -251,16 +251,16 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
                                                    hydra_overlay_emacs_lisp_lib_system_exit
                                                    nil scode (funcall eff unit)))
         (cons (prim-name hydra_core_lib_system_get_environment) (prim0 (prim-name hydra_core_lib_system_get_environment)
-                                                   (lambda () hydra_overlay_emacs_lisp_lib_system_get_environment)
+                                                   hydra_overlay_emacs_lisp_lib_system_get_environment
                                                    nil (funcall eff (tc-map envvar str))))
         (cons (prim-name hydra_core_lib_system_get_environment_variable) (prim1 (prim-name hydra_core_lib_system_get_environment_variable)
                                                    hydra_overlay_emacs_lisp_lib_system_get_environment_variable
                                                    nil envvar (funcall eff (tc-optional str))))
         (cons (prim-name hydra_core_lib_system_get_time)       (prim0 (prim-name hydra_core_lib_system_get_time)
-                                                   (lambda () hydra_overlay_emacs_lisp_lib_system_get_time)
+                                                   hydra_overlay_emacs_lisp_lib_system_get_time
                                                    nil (funcall eff tspec)))
         (cons (prim-name hydra_core_lib_system_get_working_directory) (prim0 (prim-name hydra_core_lib_system_get_working_directory)
-                                                   (lambda () hydra_overlay_emacs_lisp_lib_system_get_working_directory)
+                                                   hydra_overlay_emacs_lisp_lib_system_get_working_directory
                                                    nil (funcall eff (tc-either serr fp))))
         (cons (prim-name hydra_core_lib_system_read_stdin)     (prim0 (prim-name hydra_core_lib_system_read_stdin)
                                                    hydra_overlay_emacs_lisp_lib_system_read_stdin

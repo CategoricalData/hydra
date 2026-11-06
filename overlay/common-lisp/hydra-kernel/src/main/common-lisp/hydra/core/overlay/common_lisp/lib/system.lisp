@@ -84,19 +84,21 @@
     #+sbcl (sb-ext:exit :code code)
     #-sbcl (cl-user::quit)))
 
-;; getEnvironment / getTime / getWorkingDirectory are NULLARY effects: generated consumer code references
-;; the bare symbol AS the effect's result, so each is a defvar holding the value. This file is loaded
-;; AFTER the generated type defstructs (see run-tests.lisp ordering) so make-hydra_core_time_timespec is bound.
+;; getEnvironment / getTime / getWorkingDirectory / readStdin are NULLARY effects. Each is a thunk, so it runs
+;; when the effect runs rather than once at load; the Lisp coder emits a call for a reference (#826).
+;; This file is loaded AFTER the generated type defstructs (see run-tests.lisp ordering) so
+;; make-hydra_core_time_timespec is bound.
 ;; A map is an alist of (key . value) pairs (accepted by hydra.core.lib.maps).
 (defvar hydra_overlay_common_lisp_lib_system_get_environment
-  #+sbcl
-  (mapcar (lambda (entry)
-            (let ((eq (position #\= entry)))
-              (if eq
-                  (cons (subseq entry 0 eq) (subseq entry (1+ eq)))
-                  (cons entry ""))))
-          (sb-ext:posix-environ))
-  #-sbcl nil)
+  (lambda ()
+    #+sbcl
+    (mapcar (lambda (entry)
+              (let ((eq (position #\= entry)))
+                (if eq
+                    (cons (subseq entry 0 eq) (subseq entry (1+ eq)))
+                    (cons entry ""))))
+            (sb-ext:posix-environ))
+    #-sbcl nil))
 
 ;; getEnvironmentVariable :: EnvironmentVariable -> effect<Optional<string>>
 (defvar hydra_overlay_common_lisp_lib_system_get_environment_variable
@@ -106,16 +108,17 @@
 
 ;; getTime :: effect<Timespec>  (nullary effect)
 (defvar hydra_overlay_common_lisp_lib_system_get_time
-  (multiple-value-bind (sec usec) (sb-ext:get-time-of-day)
-    (make-hydra_core_time_timespec :seconds sec :nanoseconds (* usec 1000))))
+  (lambda ()
+    (multiple-value-bind (sec usec) (sb-ext:get-time-of-day)
+      (make-hydra_core_time_timespec :seconds sec :nanoseconds (* usec 1000)))))
 
 ;; getWorkingDirectory :: effect<Either<SystemError, FilePath>>  (nullary effect)
 (defvar hydra_overlay_common_lisp_lib_system_get_working_directory
-  (list :right (namestring (truename "."))))
+  (lambda () (list :right (namestring (truename ".")))))
 
 ;; readStdin :: effect<Either<SystemError, binary>>  (nullary effect)
-;; A thunk, unlike the other bare-value nullary effects above: a bare defvar would block on stdin until EOF
-;; when this file loads (#814). The registry's prim0 calls it only when the effect runs.
+;; A thunk like the other nullary effects above; a bare defvar would block on stdin until EOF when this file
+;; loads (#814).
 (defvar hydra_overlay_common_lisp_lib_system_read_stdin
   (lambda ()
     #+sbcl

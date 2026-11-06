@@ -293,16 +293,16 @@
                                                hydra_overlay_scheme_lib_system_exit
                                                #f scode (eff unit)))
             (cons (prim-name def:hydra_core_lib_system_get_environment) (prim0 (prim-name def:hydra_core_lib_system_get_environment)
-                                               (lambda () hydra_overlay_scheme_lib_system_get_environment)
+                                               hydra_overlay_scheme_lib_system_get_environment
                                                #f (eff (tc-map envvar str))))
             (cons (prim-name def:hydra_core_lib_system_get_environment_variable) (prim1 (prim-name def:hydra_core_lib_system_get_environment_variable)
                                                hydra_overlay_scheme_lib_system_get_environment_variable
                                                #f envvar (eff (tc-optional str))))
             (cons (prim-name def:hydra_core_lib_system_get_time) (prim0 (prim-name def:hydra_core_lib_system_get_time)
-                                               (lambda () hydra_overlay_scheme_lib_system_get_time)
+                                               hydra_overlay_scheme_lib_system_get_time
                                                #f (eff tspec)))
             (cons (prim-name def:hydra_core_lib_system_get_working_directory) (prim0 (prim-name def:hydra_core_lib_system_get_working_directory)
-                                               (lambda () hydra_overlay_scheme_lib_system_get_working_directory)
+                                               hydra_overlay_scheme_lib_system_get_working_directory
                                                #f (eff (tc-either serr fp))))
             (cons (prim-name def:hydra_core_lib_system_read_stdin) (prim0 (prim-name def:hydra_core_lib_system_read_stdin)
                                                hydra_overlay_scheme_lib_system_read_stdin

@@ -91,11 +91,11 @@
     nil))
 
 ;; getEnvironment :: effect<Map<EnvironmentVariable, string>>
-;; A nullary effect: generated consumer code references this as a bare value (the effect result), so it
-;; is a plain def, not a thunk. (The reducer registry wraps it in a thunk; see register-system.)
+;; Nullary effects (getEnvironment, getTime, getWorkingDirectory, readStdin) are thunks, so each runs when the
+;; effect runs rather than once at load; the Lisp coder emits a call for a reference (#826).
 (def hydra_overlay_clojure_lib_system_get_environment
   "Return the entire environment of the current process as a map from variable name to value."
-  (into {} (System/getenv)))
+  (fn [] (into {} (System/getenv))))
 
 ;; getEnvironmentVariable :: EnvironmentVariable -> effect<Optional<string>>
 (def hydra_overlay_clojure_lib_system_get_environment_variable
@@ -104,23 +104,25 @@
     (let [v (System/getenv ^String name)]
       (if (nil? v) (list :none) (list :given v)))))
 
-;; getTime :: effect<Timespec>  (nullary effect: a bare value, see getEnvironment note)
+;; getTime :: effect<Timespec>  (nullary effect)
 (def hydra_overlay_clojure_lib_system_get_time
   "Return the current wall-clock time as a Timespec (seconds and nanoseconds since the Unix epoch)."
-  (let [now (java.time.Instant/now)]
-    (->hydra_core_time_timespec (.getEpochSecond now) (long (.getNano now)))))
+  (fn []
+    (let [now (java.time.Instant/now)]
+      (->hydra_core_time_timespec (.getEpochSecond now) (long (.getNano now))))))
 
-;; getWorkingDirectory :: effect<Either<SystemError, FilePath>>  (nullary effect: a bare value)
+;; getWorkingDirectory :: effect<Either<SystemError, FilePath>>  (nullary effect)
 (def hydra_overlay_clojure_lib_system_get_working_directory
   "Return the current working directory as a FilePath (string)."
-  (let [cwd (System/getProperty "user.dir")]
-    (if (nil? cwd)
-      (list :left (list :other "user.dir is not set"))
-      (list :right cwd))))
+  (fn []
+    (let [cwd (System/getProperty "user.dir")]
+      (if (nil? cwd)
+        (list :left (list :other "user.dir is not set"))
+        (list :right cwd)))))
 
 ;; readStdin :: effect<Either<SystemError, binary>>  (nullary effect)
-;; A thunk, unlike the other bare-value nullary effects above: a bare def would block on stdin until EOF when
-;; this namespace loads (#814). The registry's prim0 calls it only when the effect runs.
+;; A thunk like the other nullary effects above; a bare def would block on stdin until EOF when this namespace
+;; loads (#814).
 (def hydra_overlay_clojure_lib_system_read_stdin
   "Read standard input until end-of-file, returning the complete contents as raw bytes."
   (fn []

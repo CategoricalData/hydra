@@ -156,15 +156,19 @@
     (define hydra_overlay_scheme_lib_system_exit
       (lambda (code) (primitive-exit code)))
 
-    ;; getEnvironment :: effect<Map<EnvironmentVariable, string>>  (nullary effect: a bare value)
+    ;; Nullary effects (getEnvironment, getTime, getWorkingDirectory, readStdin) are thunks, so each runs when the
+    ;; effect runs rather than once at load; the Lisp coder emits a call for a reference (#826).
+
+    ;; getEnvironment :: effect<Map<EnvironmentVariable, string>>  (nullary effect)
     ;; A map is an alist of (key . value) pairs (accepted by hydra.core.lib.maps).
     (define hydra_overlay_scheme_lib_system_get_environment
-      (map (lambda (entry)
-             (let ((eq (string-index entry #\=)))
-               (if eq
-                   (cons (substring entry 0 eq) (substring entry (+ eq 1) (string-length entry)))
-                   (cons entry ""))))
-           (environ)))
+      (lambda ()
+        (map (lambda (entry)
+               (let ((eq (string-index entry #\=)))
+                 (if eq
+                     (cons (substring entry 0 eq) (substring entry (+ eq 1) (string-length entry)))
+                     (cons entry ""))))
+             (environ))))
 
     ;; getEnvironmentVariable :: EnvironmentVariable -> effect<Optional<string>>
     (define hydra_overlay_scheme_lib_system_get_environment_variable
@@ -172,18 +176,19 @@
         (let ((v (getenv name)))
           (if v (list 'given v) (list 'none)))))
 
-    ;; getTime :: effect<Timespec>  (nullary effect: a bare value)
+    ;; getTime :: effect<Timespec>  (nullary effect)
     (define hydra_overlay_scheme_lib_system_get_time
-      (let ((tv (gettimeofday)))
-        (make-rec '(hydra core time) 'make-hydra_core_time_timespec (car tv) (* (cdr tv) 1000))))
+      (lambda ()
+        (let ((tv (gettimeofday)))
+          (make-rec '(hydra core time) 'make-hydra_core_time_timespec (car tv) (* (cdr tv) 1000)))))
 
-    ;; getWorkingDirectory :: effect<Either<SystemError, FilePath>>  (nullary effect: a bare value)
+    ;; getWorkingDirectory :: effect<Either<SystemError, FilePath>>  (nullary effect)
     (define hydra_overlay_scheme_lib_system_get_working_directory
-      (list 'right (getcwd)))
+      (lambda () (list 'right (getcwd))))
 
     ;; readStdin :: effect<Either<SystemError, binary>>  (nullary effect)
-    ;; A thunk, unlike the other bare-value nullary effects above: a bare define would block on stdin until EOF
-    ;; when this library loads (#814). The registry's prim0 calls it only when the effect runs.
+    ;; A thunk like the other nullary effects above; a bare define would block on stdin until EOF when this
+    ;; library loads (#814).
     (define hydra_overlay_scheme_lib_system_read_stdin
       (lambda ()
         (let ((bv (get-bytevector-all (current-input-port))))

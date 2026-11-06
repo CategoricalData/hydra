@@ -775,16 +775,16 @@
                                      system/hydra_overlay_clojure_lib_system_exit
                                      [] statusCode (eff unit))
      (prim-name 'hydra.core.lib.system/hydra_core_lib_system_get_environment) (p/prim0 (prim-name 'hydra.core.lib.system/hydra_core_lib_system_get_environment)
-                                     (fn [] system/hydra_overlay_clojure_lib_system_get_environment)
+                                     system/hydra_overlay_clojure_lib_system_get_environment
                                      [] (eff (p/tc-map envVar s)))
      (prim-name 'hydra.core.lib.system/hydra_core_lib_system_get_environment_variable) (p/prim1 (prim-name 'hydra.core.lib.system/hydra_core_lib_system_get_environment_variable)
                                      system/hydra_overlay_clojure_lib_system_get_environment_variable
                                      [] envVar (eff (p/tc-optional s)))
      (prim-name 'hydra.core.lib.system/hydra_core_lib_system_get_time) (p/prim0 (prim-name 'hydra.core.lib.system/hydra_core_lib_system_get_time)
-                                     (fn [] system/hydra_overlay_clojure_lib_system_get_time)
+                                     system/hydra_overlay_clojure_lib_system_get_time
                                      [] (eff timespec))
      (prim-name 'hydra.core.lib.system/hydra_core_lib_system_get_working_directory) (p/prim0 (prim-name 'hydra.core.lib.system/hydra_core_lib_system_get_working_directory)
-                                     (fn [] system/hydra_overlay_clojure_lib_system_get_working_directory)
+                                     system/hydra_overlay_clojure_lib_system_get_working_directory
                                      [] (eff (p/tc-either sysErr filePath)))
      (prim-name 'hydra.core.lib.system/hydra_core_lib_system_read_stdin) (p/prim0 (prim-name 'hydra.core.lib.system/hydra_core_lib_system_read_stdin)
                                      system/hydra_overlay_clojure_lib_system_read_stdin
