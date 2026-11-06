@@ -129,7 +129,7 @@ def _load_bootstrap_type_schemes() -> FrozenDict:
     """
     Load bootstrap type schemes for the test schema graph.
 
-    Uses hydra.core.json.bootstrap.types_by_name (the same bootstrap type map
+    Uses hydra.core.bootstrap.types_by_name (the same bootstrap type map
     used for JSON decoding) to build a Map[Name, TypeScheme] suitable for
     the test graph's schema_types. This provides type definitions for
     hydra.core.model, hydra.core.util, hydra.core.typing, hydra.core.error, hydra.core.graph,
@@ -137,7 +137,7 @@ def _load_bootstrap_type_schemes() -> FrozenDict:
 
     This mirrors Java's Generation.bootstrapTypeSchemes().
     """
-    from hydra.core.json.bootstrap import types_by_name
+    from hydra.core.bootstrap import types_by_name
     from hydra.core.scoping import f_type_to_type_scheme
 
     result = {}

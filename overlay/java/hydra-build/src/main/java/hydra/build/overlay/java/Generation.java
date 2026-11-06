@@ -353,7 +353,7 @@ public class Generation {
      * then extracts and recursively deannotates the body type for JSON decoding.
      */
     public static Map<Name, hydra.core.model.Type> bootstrapSchemaMap() {
-        Map<Name, hydra.core.model.Type> raw = hydra.core.json.Bootstrap.typesByName();
+        Map<Name, hydra.core.model.Type> raw = hydra.core.Bootstrap.typesByName();
         Map<Name, hydra.core.model.Type> result = new HashMap<>();
         for (Map.Entry<Name, hydra.core.model.Type> entry : raw.entrySet()) {
             hydra.core.model.TypeScheme ts = hydra.core.Scoping.fTypeToTypeScheme(entry.getValue());
@@ -367,7 +367,7 @@ public class Generation {
      * Converts each System F type (with foralls) to a TypeScheme.
      */
     public static Map<Name, hydra.core.model.TypeScheme> bootstrapTypeSchemes() {
-        Map<Name, hydra.core.model.Type> raw = hydra.core.json.Bootstrap.typesByName();
+        Map<Name, hydra.core.model.Type> raw = hydra.core.Bootstrap.typesByName();
         Map<Name, hydra.core.model.TypeScheme> result = new HashMap<>();
         for (Map.Entry<Name, hydra.core.model.Type> entry : raw.entrySet()) {
             result.put(entry.getKey(), hydra.core.Scoping.fTypeToTypeScheme(entry.getValue()));

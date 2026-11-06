@@ -4,7 +4,7 @@
 // and the Haskell bootstrap-from-json executable.
 //
 // Usage:
-//   tsx hydra/core/bootstrap.ts --target <lang> --json-dir <dist/json> [OPTIONS]
+//   tsx hydra/core/bootstrap-cli.ts --target <lang> --json-dir <dist/json> [OPTIONS]
 //
 // Options:
 //   --output <dir>      Output base directory (default: /tmp/hydra-bootstrapping-demo)
@@ -22,7 +22,7 @@ import { readFileSync, readdirSync, writeFileSync, mkdirSync, existsSync, statSy
 import { dirname, join, resolve } from "node:path";
 
 import * as jsonDecode from "./json/decode.js";
-import * as jsonBootstrap from "./json/bootstrap.js";
+import * as kernelBootstrap from "./bootstrap.js";
 import * as decodePackaging from "./decode/packaging.js";
 import * as lexical from "./lexical.js";
 import * as maps from "./overlay/typescript/lib/maps.js";
@@ -143,7 +143,7 @@ const readJsonTree = (root: string): Array<{ path: string; json: unknown }> => {
 
 // Coder dispatch: map --target lang to (coder, language, codegen flags) loaded
 // from `dist/typescript/hydra-<lang>/src/main/typescript/hydra/<lang>/{coder,language}.js`.
-// importPath is resolved from `dist/typescript/hydra-kernel/src/main/typescript/hydra/core/bootstrap.ts`
+// importPath is resolved from `dist/typescript/hydra-kernel/src/main/typescript/hydra/core/bootstrap-cli.ts`
 // (hydra/core/ since #729), so going up 6 levels lands at `dist/typescript/`, then dispatching into each
 // sibling package.
 // Flags mirror the Haskell bootstrap-from-json switch (Main.hs): doInfer/doExpand/doHoistCase/doHoistPoly.
@@ -437,7 +437,7 @@ const main = async (): Promise<void> => {
 
   // Step 3: decode JSON values into Hydra Module records. Each JSON file
   // contains a serialized hydra.core.packaging.Module. We use the bootstrap
-  // schema map (typesByName from hydra/json/bootstrap.ts) so the decoder
+  // schema map (typesByName from hydra/core/bootstrap.ts) so the decoder
   // knows about hydra.core.packaging.Module without needing a populated graph.
   // Pipeline:
   //   raw JSON → hydra.core.json.model.Value (tagged-union shape) via toHydraJson
@@ -473,7 +473,7 @@ const main = async (): Promise<void> => {
     stdPrims.map((p) => [p.definition.name, p] as const)
   );
   const bsGraph = { ...(lexical.emptyGraph as object), primitives: primMap };
-  const schemaMap = (jsonBootstrap as { typesByName: unknown }).typesByName;
+  const schemaMap = (kernelBootstrap as { typesByName: unknown }).typesByName;
   const modName = { value: "hydra.core.packaging.Module" };
   const modType = { tag: "variable", value: modName };
   const fromJson = (jsonDecode as { fromJson: (s: unknown, c: boolean, n: unknown, t: unknown, v: unknown) => { tag: "left"; value: unknown } | { tag: "right"; value: unknown } }).fromJson;

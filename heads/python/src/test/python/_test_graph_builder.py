@@ -65,7 +65,7 @@ def _load_kernel_term_bindings() -> dict[hydra.core.model.Name, hydra.core.model
 
 
 def _load_bootstrap_type_schemes() -> FrozenDict:
-    from hydra.core.json.bootstrap import types_by_name
+    from hydra.core.bootstrap import types_by_name
     from hydra.core.scoping import f_type_to_type_scheme
 
     result = {}

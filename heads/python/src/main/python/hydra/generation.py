@@ -95,7 +95,7 @@ def bootstrap_schema_map():
     """Build a schema map from the bootstrap type map.
 
     This mirrors Java's Generation.bootstrapSchemaMap(): reads the hard-coded
-    type map from hydra.core.json.bootstrap.types_by_name (generated from the Haskell
+    type map from hydra.core.bootstrap.types_by_name (generated from the Haskell
     DSL), strips forall/annotation wrappers, and returns a Map[Name, Type]
     suitable for the JSON decoder.
 
@@ -103,7 +103,7 @@ def bootstrap_schema_map():
     decode Module from JSON: hydra.core.model, hydra.core.error,
     hydra.core.graph, hydra.module, hydra.core.typing, and hydra.core.util.
     """
-    from hydra.core.json.bootstrap import types_by_name
+    from hydra.core.bootstrap import types_by_name
 
     result = {}
     for name, typ in types_by_name.items():
@@ -234,7 +234,7 @@ def decode_module(bs_graph, schema_map, json_val):
 def load_modules_from_json(base_path, namespaces):
     """Load modules from JSON files using the bootstrap schema map.
 
-    Uses bootstrap_schema_map() (from hydra.core.json.bootstrap.types_by_name)
+    Uses bootstrap_schema_map() (from hydra.core.bootstrap.types_by_name)
     to decode modules, matching Java's Generation.loadModulesFromJson().
     """
     bs_graph = bootstrap_graph()

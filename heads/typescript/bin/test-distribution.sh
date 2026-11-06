@@ -50,7 +50,7 @@ fi
 #   `node:path`, `node:url`, and reference `process` / `Buffer`. Without
 #   `@types/node` in scope, tsc fails with TS2307/TS2580 even though the
 #   code runs fine under node.
-# - `bootstrap.ts` is excluded: it imports from `hydra-lisp` (sibling
+# - `bootstrap-cli.ts` is excluded: it imports from `hydra-lisp` (sibling
 #   package, not present under `hydra-kernel/`) and is intended for
 #   bootstrap-time use only, not part of the standalone kernel check.
 TS_CONFIG="$PKG_ROOT/tsconfig.json"
@@ -68,7 +68,7 @@ cat > "$TS_CONFIG" <<EOF
     "skipLibCheck": true
   },
   "include": ["main/typescript/hydra/**/*.ts", "test/typescript/hydra/**/*.ts"],
-  "exclude": ["main/typescript/hydra/core/bootstrap.ts"]
+  "exclude": ["main/typescript/hydra/core/bootstrap-cli.ts"]
 }
 EOF
 

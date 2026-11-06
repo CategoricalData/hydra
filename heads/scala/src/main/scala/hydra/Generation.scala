@@ -38,7 +38,7 @@ object Generation:
    * Converts System F types (with foralls and annotations) to plain types for JSON decoding.
    */
   def bootstrapSchemaMap(): Map[String, Type] =
-    hydra.core.json.bootstrap.typesByName.map { (name, typ) =>
+    hydra.core.bootstrap.typesByName.map { (name, typ) =>
       val ts = hydra.core.scoping.fTypeToTypeScheme(typ)
       name -> hydra.core.strip.deannotateTypeRecursive(ts.body)
     }

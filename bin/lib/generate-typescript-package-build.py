@@ -145,7 +145,7 @@ def render_tsconfig_build(name: str) -> str:
 // Generated file. Do not edit.
 // Used by publish-npm.sh to compile dist/typescript/{name}/src/main/typescript
 // into dist/typescript/{name}/dist/ (JS + .d.ts) for npm packaging.
-// bootstrap.ts is excluded: it imports from hydra-lisp (sibling pkg, absent here).
+// bootstrap-cli.ts is excluded: it imports from hydra-lisp (sibling pkg, absent here).
 {{
   "compilerOptions": {{
     "target": "ES2022",
@@ -161,7 +161,7 @@ def render_tsconfig_build(name: str) -> str:
   }},
   "include": ["src/main/typescript/**/*.ts"],
   "exclude": [
-    "src/main/typescript/hydra/core/bootstrap.ts",
+    "src/main/typescript/hydra/core/bootstrap-cli.ts",
     "src/test"
   ]
 }}
