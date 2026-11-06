@@ -280,6 +280,30 @@ systemGetTime = supergroup "getTime" [
                     @@ (primitive DefOrdering.lt
                           @@ (Phantoms.project Time._Timespec Time._Timespec_nanoseconds @@ var "t") @@ uint32 1000000000)))
         @@ (primitive DefSystem.getTime))
+      (string "true")],
+  -- A nullary effect must run when the effect runs, not once when the host's library loads (#826): a read
+  -- taken after a real pause (a child process that sleeps) must be later than one taken before it. A host
+  -- that evaluates getTime at load returns the same instant both times.
+  subgroup "readsTheClockWhenRun" [
+    effectfulCaseWithProvisions "a read after a pause is later than a read before it" ["readsTheClockWhenRun"] DefSystem.getTime
+      (primitive DefEffects.bind
+        @@ (primitive DefSystem.getTime)
+        @@ (lambda "t1" $ primitive DefEffects.bind
+              @@ (primitive DefSystem.execute @@ command "/bin/sleep" ["0.05"])
+              @@ (lambda "_r" $ primitive DefEffects.map
+                    @@ (lambda "t2" $ primitive DefLiterals.printBoolean
+                          @@ (primitive DefLogic.or
+                                @@ (primitive DefOrdering.gt
+                                      @@ (Phantoms.project Time._Timespec Time._Timespec_seconds @@ var "t2")
+                                      @@ (Phantoms.project Time._Timespec Time._Timespec_seconds @@ var "t1"))
+                                @@ (primitive DefLogic.and
+                                      @@ (primitive DefEquality.equal
+                                            @@ (Phantoms.project Time._Timespec Time._Timespec_seconds @@ var "t2")
+                                            @@ (Phantoms.project Time._Timespec Time._Timespec_seconds @@ var "t1"))
+                                      @@ (primitive DefOrdering.gt
+                                            @@ (Phantoms.project Time._Timespec Time._Timespec_nanoseconds @@ var "t2")
+                                            @@ (Phantoms.project Time._Timespec Time._Timespec_nanoseconds @@ var "t1")))))
+                    @@ (primitive DefSystem.getTime))))
       (string "true")]]
 
 -- getWorkingDirectory: the current directory as a non-empty FilePath.

@@ -128,7 +128,10 @@ getTime = availableSince "0.17" $ withProvisions [
     \ Unix epoch.",
   requirement "returnsNanosecondsInValidRange"
     "getTime returns a Timespec whose nanoseconds field is within the documented range\
-    \ [0, 1000000000)."]
+    \ [0, 1000000000).",
+  requirement "readsTheClockWhenRun"
+    "getTime reads the clock each time the computation runs, not once when it is defined or loaded: a\
+    \ read taken after a pause is later than a read taken before it."]
   $ define "getTime" "Get the current wall-clock time."
   (sig $ TypeScheme [] (effect timespec) mempty)
   ["getTime describes an effectful computation which returns the current wall-clock time as a\

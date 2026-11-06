@@ -87,6 +87,7 @@ module_ = Module {
       toDefinition encodeTypeDefinition,
       toDefinition encodeUnionElim,
       toDefinition encodeUnwrapElim,
+      toDefinition isNullaryEffectPrimitive,
       toDefinition isPrimitiveRef,
       toDefinition lazyFlagsForPrimitiveTerm,
       toDefinition lispApp,
@@ -662,7 +663,12 @@ encodeTerm = def "encodeTerm" $
            string ".lib.",
            Strings.join (string ".") (Lists.drop (int32 3) (var "parts"))]))
          (var "fullName") $
-       right (lispVar @@ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ var "redirectedName"))),
+       "symbol" <~ (lispVar @@ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ var "redirectedName"))) $
+       -- A nullary effect primitive (e.g. getTime) is a thunk in every overlay, so that it runs when the
+       -- effect runs rather than once at load time; reference it by calling it (#826).
+       right (Logic.ifElse (isNullaryEffectPrimitive @@ var "g" @@ var "name")
+         (lispApp @@ var "symbol" @@ list ([] :: [TypedTerm L.Expression]))
+         (var "symbol")),
 
      _Term_typeApplication>>: lambda "ta" $
        encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Core.typeApplicationTermBody (var "ta"),
@@ -943,6 +949,22 @@ primIsLazyAt = def "primIsLazyAt" $
   doc "Whether the primitive referenced by a head term is lazy in the parameter at the given zero-based position" $
   "g" ~> "headTerm" ~> "i" ~>
     Optionals.withDefault false (Lists.at (var "i") (lazyFlagsForPrimitiveTerm @@ var "g" @@ var "headTerm"))
+
+-- | Whether a name refers to a registered primitive that takes no parameters and returns an effect
+-- (getTime, getWorkingDirectory, getEnvironment, readStdin). The Lisp overlays implement these as
+-- thunks, so a reference must be emitted as a call (#826).
+isNullaryEffectPrimitive :: TypedTermDefinition (Graph -> Name -> Bool)
+isNullaryEffectPrimitive = def "isNullaryEffectPrimitive" $
+  doc "Whether a name refers to a registered primitive with no parameters whose result type is an effect" $
+  "g" ~> "name" ~>
+    Optionals.match (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+      false
+      ("prim" ~>
+        "sig" <~ Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition (var "prim")) $
+        Logic.and
+          (Lists.isEmpty (Typing.termSignatureParameters (var "sig")))
+          (match _Type (Strip.deannotateType @@ Typing.resultType (Typing.termSignatureResult (var "sig"))) (Just false) [
+            _Type_effect>>: constant true]))
 
 -- | Check if a term is a reference to a specific primitive, stripping type
 -- applications, type lambdas, and annotations to find the underlying primitive.

@@ -83,17 +83,18 @@
 (defvar hydra_overlay_emacs_lisp_lib_system_exit
   (lambda (code) (kill-emacs code)))
 
-;; getEnvironment / getTime / getWorkingDirectory are NULLARY effects: generated consumer code references
-;; the bare symbol AS the effect's result, so each is a defvar holding the value.
+;; getEnvironment / getTime / getWorkingDirectory / readStdin are NULLARY effects. Each is a thunk, so it runs
+;; when the effect runs rather than once at load; the Lisp coder emits a call for a reference (#826).
 
 ;; getEnvironment :: effect<Map<EnvironmentVariable, string>>  (alist of (key . value), accepted by hydra.core.lib.maps)
 (defvar hydra_overlay_emacs_lisp_lib_system_get_environment
-  (mapcar (lambda (entry)
-            (let ((eq (string-match "=" entry)))
-              (if eq
-                  (cons (substring entry 0 eq) (substring entry (1+ eq)))
-                (cons entry ""))))
-          process-environment))
+  (lambda ()
+    (mapcar (lambda (entry)
+              (let ((eq (string-match "=" entry)))
+                (if eq
+                    (cons (substring entry 0 eq) (substring entry (1+ eq)))
+                  (cons entry ""))))
+            process-environment)))
 
 ;; getEnvironmentVariable :: EnvironmentVariable -> effect<Optional<string>>
 (defvar hydra_overlay_emacs_lisp_lib_system_get_environment_variable
@@ -103,22 +104,23 @@
 
 ;; getTime :: effect<Timespec>  (nullary effect)
 (defvar hydra_overlay_emacs_lisp_lib_system_get_time
-  (let ((now (current-time)))
-    ;; current-time = (HIGH LOW USEC PSEC); seconds = HIGH*65536 + LOW.
-    (make-hydra_core_time_timespec
-     :seconds (+ (* (nth 0 now) 65536) (nth 1 now))
-     :nanoseconds (* (nth 2 now) 1000))))
+  (lambda ()
+    (let ((now (current-time)))
+      ;; current-time = (HIGH LOW USEC PSEC); seconds = HIGH*65536 + LOW.
+      (make-hydra_core_time_timespec
+       :seconds (+ (* (nth 0 now) 65536) (nth 1 now))
+       :nanoseconds (* (nth 2 now) 1000)))))
 
 ;; getWorkingDirectory :: effect<Either<SystemError, FilePath>>  (nullary effect)
 (defvar hydra_overlay_emacs_lisp_lib_system_get_working_directory
-  (list :right (expand-file-name default-directory)))
+  (lambda () (list :right (expand-file-name default-directory))))
 
 ;; readStdin :: effect<Either<SystemError, binary>>  (nullary effect)
 ;; Batch-mode Emacs has no direct binary-stdin primitive, so this reads the process's own stdin via
 ;; the /dev/stdin special file (as insert-file-contents-literally, to avoid encoding translation),
 ;; producing a unibyte string -- the binary representation used throughout this host.
-;; A thunk, unlike the other bare-value nullary effects above: a bare defvar would block on stdin until EOF
-;; when this file loads (#814). The registry's prim0 calls it only when the effect runs.
+;; A thunk like the other nullary effects above; a bare defvar would block on stdin until EOF when this file
+;; loads (#814).
 (defvar hydra_overlay_emacs_lisp_lib_system_read_stdin
   (lambda ()
     (condition-case e
@@ -127,7 +129,7 @@
                 (set-buffer-multibyte nil)
                 (insert-file-contents-literally "/dev/stdin")
                 (buffer-string)))
-      (error (list :left (list :other (hydra-system-message e))))))))
+      (error (list :left (list :other (hydra-system-message e)))))))
 
 ;; writeStderr :: binary -> effect<Either<SystemError, unit>>
 ;; Writes to the /dev/stderr special file rather than send-string-to-terminal, so output still goes
