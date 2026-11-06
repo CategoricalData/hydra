@@ -48,6 +48,11 @@ if [ -z "$REPO_ROOT" ]; then
 fi
 export HYDRA_ROOT_DIR="$REPO_ROOT"
 
+# Tell child transforms a cold seed is in progress, so the hydra-build freshen is skipped for
+# the whole seed. dist/haskell/hydra-kernel exists (but is incomplete) once the main tree is
+# written, so its existence alone can't signal this (#788).
+export HYDRA_COLD_SEED_IN_PROGRESS=1
+
 # #416: the per-package coder-load decision is promoted data
 # (hydra.build.publishsets.coderBaselineNames -> coder-baseline.json); read it via the
 # shared package_requires_coders helper instead of a hardcoded case "$pkg".

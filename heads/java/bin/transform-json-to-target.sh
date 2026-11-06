@@ -180,10 +180,10 @@ fi
 # build is possible, so the digest gate still applies before anything that
 # matters (the hydra-java rollup compile) runs.
 freshen_heads_extras_deps() {
-    if [ -d "$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel" ]; then
+    if [ "${HYDRA_COLD_SEED_IN_PROGRESS:-}" != "1" ] && [ -d "$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel" ]; then
         "$HYDRA_JAVA_HEAD/bin/assemble-distribution.sh" hydra-build >&2
     else
-        echo "transform-json-to-target.sh: dist/haskell/hydra-kernel absent" \
+        echo "transform-json-to-target.sh: dist/haskell/hydra-kernel absent or incomplete" \
              "(cold seed in progress); skipping hydra-build freshen to avoid" \
              "a circular stack build (#788)." >&2
     fi
