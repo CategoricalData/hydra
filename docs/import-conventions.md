@@ -439,7 +439,7 @@ nearest category.
   definitions + typevar/`TermCoder` helpers); primitive names now derive from the generated
   `PrimitiveDefinition`s (#473). Bespoke.
 - **`Hydra.Sources.Kernel.Manifest`**. Kernel-package manifest.
-- **`Hydra.Sources.Json.Bootstrap`**. Builds a `Module` from kernel-type metadata using
+- **`Hydra.Sources.Kernel.Terms.Bootstrap`**. Builds a `Module` from kernel-type metadata using
   raw `TermDefinition` constructors rather than the DSL. Self-tags with a comment
   explaining why imports differ.
 

@@ -1297,7 +1297,7 @@ one mid-build is much harder than finding it up front.
    Scala `Generation.scala`, the Haskell `Hydra.Generation` (which provides
    `moduleAsBindings` / `definitionAsBinding` for the `Definition → Binding`
    conversion) / `Hydra.Core.Overlay.Haskell.Bootstrap` / `verify-json-kernel/Main.hs`,
-   the auto-generated `Hydra.Sources.Json.Bootstrap` source. Each language
+   the auto-generated `Hydra.Sources.Kernel.Terms.Bootstrap` source. Each language
    uses its native field-name convention (`type_scheme` in Python,
    `typeScheme` in Java/Scala, `:typeScheme` keyword in Common Lisp).
    Cross-host coders fanned out through `dist/<lang>/hydra-<other>/...`
@@ -1327,7 +1327,7 @@ one mid-build is much harder than finding it up front.
      `definitionAsBinding` / `moduleAsBindings` helpers live; previously
      `Hydra.Module.Compat`, retired in 0.16)
    - `heads/haskell/src/exec/verify-json-kernel/Main.hs`
-   - `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Bootstrap.hs`
+   - `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Bootstrap.hs`
    - `demos/src/main/haskell/Hydra/Demos/<Demo>/Modules.hs`
 
 5. **Sweep non-Haskell heads.** Each language has its own field-naming
