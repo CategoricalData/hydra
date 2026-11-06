@@ -176,6 +176,9 @@ bin/sync.sh --hosts all --targets all
 The sync rebuilds it from `dist/json/` via the Java-host cold-seed, which is data-driven and
 therefore unaffected by breaking kernel changes.
 
+A stale `dist/haskell/hydra-kernel` (for example after a rebase past a kernel type change) no longer needs this:
+`bin/sync.sh` compares a stamp against `dist/json/hydra-kernel` and reseeds automatically (#825).
+
 ### "No such field: X" during code generation
 
 **Cause**: Missing entries in the variant enums (`TermVariant`/`TypeVariant`), defined in

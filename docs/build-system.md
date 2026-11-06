@@ -956,6 +956,13 @@ published Hydra type whose shape might have moved on.** The published Java host'
 logic* (which imports to emit, which primitive names to reference) can still be stale relative to
 not-yet-published kernel/coder changes — see the bootstrap patch below for the one such gap known today.
 
+**Staleness, not just absence (#825).** `bin/sync.sh` runs this seed when `dist/haskell/hydra-kernel` is missing *or*
+stale. After seeding it records a hash of `dist/json/hydra-kernel` in
+`dist/haskell/hydra-kernel/build/seed-input.sha256`; a later sync whose hash differs (typically after a rebase past a
+kernel type change) reseeds through the Java host, never through the Haskell host being rebuilt (the #459 circular-seed
+guard). Phase 1 refreshes the stamp after it regenerates the kernel, so no redundant reseed follows. No manual
+`rm -rf dist/haskell/hydra-kernel` is needed.
+
 **Known limitation ([#768](https://github.com/CategoricalData/hydra/issues/768)): the claim above is
 about the *data path* only — the driver itself has its own compiled-type boundary.** The "no
 compiled-type boundary" property holds for how `TransformJsonToTarget` turns a JSON term-AST into
