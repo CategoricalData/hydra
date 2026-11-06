@@ -8,8 +8,8 @@
 //
 // TypeScript unions carry no runtime ordinal (unlike Java's generated
 // `hydraOrdinal()`), so kernel union types get a hand-authored declared-order
-// table below (VARIANT_ORDER), transcribed from the generated
-// hydra/reflect.ts (termVariants, typeVariants, etc.) -- mirroring Python's
+// table below (VARIANT_ORDER), transcribed from the
+// hydra.core.model union declarations -- mirroring Python's
 // _VARIANT_ORDER table (overlay/python/.../util/_compare.py), which is the
 // established precedent: #718 hand-authored variant order for kernel types
 // only. Non-kernel (user-schema) union types fall back to a still-deterministic
@@ -71,9 +71,10 @@ const compareStringsByCodePoint = (a: string, b: string): number => {
 };
 
 // Declared-variant order for each hydra.core.model union family, transcribed from
-// the generated hydra/reflect.ts (termVariants, typeVariants, literalVariants,
-// integerTypes, floatTypes, literalTypes), which in turn come from the
-// hand-authored hydra.core.reflect DSL module (Sources/Kernel/Terms/Reflect.hs).
+// the union declarations in hydra.core.model (NOT hydra/reflect.ts, whose
+// termVariants list is in a different order). heads/typescript's
+// ordering.test.ts checks this table against dist/json/hydra-kernel's
+// hydra/core/model.json, so it cannot drift silently (#827).
 // Keyed by tag string; every family's tags are assumed mutually exclusive
 // enough that a same-position comparison (guaranteed by Hydra's static
 // typing -- see the spec's "comparisons are defined only between values of
@@ -81,9 +82,9 @@ const compareStringsByCodePoint = (a: string, b: string): number => {
 // kernel's core union declarations change.
 const VARIANT_ORDER: Record<string, readonly string[]> = {
   term: [
-    "annotated", "application", "cases", "either", "lambda", "let", "list",
+    "annotated", "application", "cases", "either", "inject", "lambda", "let", "list",
     "literal", "map", "optional", "pair", "project", "record", "set",
-    "typeLambda", "typeApplication", "inject", "unit", "unwrap", "variable", "wrap",
+    "typeApplication", "typeLambda", "unit", "unwrap", "variable", "wrap",
   ],
   type: [
     "annotated", "application", "effect", "either", "forall", "function", "list",
