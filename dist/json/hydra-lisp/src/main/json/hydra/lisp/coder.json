@@ -3838,26 +3838,49 @@
                                                                                 "argument": {"variable": "fullName"}}},
                                                                             "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                                                         "body": {
-                                                                          "typeApplication": {
+                                                                          "let": {
+                                                                            "bindings": [
+                                                                              {
+                                                                                "name": "symbol",
+                                                                                "term": {
+                                                                                  "application": {
+                                                                                    "function": {"variable": "hydra.lisp.coder.lispVar"},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "function": {"variable": "hydra.core.formatting.convertCaseCamelOrUnderscoreToLowerSnake"},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {"variable": "hydra.core.formatting.sanitizeWithUnderscores"},
+                                                                                                "argument": {"variable": "hydra.lisp.language.lispReservedWords"}}},
+                                                                                            "argument": {"variable": "redirectedName"}}}}}}},
+                                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.lisp.syntax.Expression"}, "constraints": []}}],
                                                                             "body": {
                                                                               "typeApplication": {
                                                                                 "body": {
-                                                                                  "either": {
-                                                                                    "right": {
-                                                                                      "application": {
-                                                                                        "function": {"variable": "hydra.lisp.coder.lispVar"},
-                                                                                        "argument": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "either": {
+                                                                                        "right": {
                                                                                           "application": {
-                                                                                            "function": {"variable": "hydra.core.formatting.convertCaseCamelOrUnderscoreToLowerSnake"},
-                                                                                            "argument": {
+                                                                                            "function": {
                                                                                               "application": {
                                                                                                 "function": {
                                                                                                   "application": {
-                                                                                                    "function": {"variable": "hydra.core.formatting.sanitizeWithUnderscores"},
-                                                                                                    "argument": {"variable": "hydra.lisp.language.lispReservedWords"}}},
-                                                                                                "argument": {"variable": "redirectedName"}}}}}}}}},
-                                                                                "type": {"variable": "t1"}}},
-                                                                            "type": {"variable": "hydra.lisp.syntax.Expression"}}}}}}}}}}}}}},
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"variable": "hydra.lisp.syntax.Expression"}}},
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "function": {"application": {"function": {"variable": "hydra.lisp.coder.isNullaryEffectPrimitive"}, "argument": {"variable": "g"}}},
+                                                                                                        "argument": {"variable": "name"}}}}},
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "function": {"application": {"function": {"variable": "hydra.lisp.coder.lispApp"}, "argument": {"variable": "symbol"}}},
+                                                                                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.lisp.syntax.Expression"}}}}}}},
+                                                                                            "argument": {"variable": "symbol"}}}}},
+                                                                                    "type": {"variable": "t1"}}},
+                                                                                "type": {"variable": "hydra.lisp.syntax.Expression"}}}}}}}}}}}}}}}},
                                                   {
                                                     "name": "typeApplication",
                                                     "handler": {
@@ -5616,6 +5639,106 @@
                           "value": {
                             "literal": {
                               "string": "Encode a Hydra wrap elimination (unwrap) as a Lisp expression, with an optional argument for applied unwraps"}}}]}}}}}}}}},
+    {
+      "term": {
+        "name": "hydra.lisp.coder.isNullaryEffectPrimitive",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.core.graph.Graph"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.core.model.Name"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "g",
+                "domain": {"variable": "hydra.core.graph.Graph"},
+                "body": {
+                  "lambda": {
+                    "parameter": "name",
+                    "domain": {"variable": "hydra.core.model.Name"},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.match"}, "type": {"variable": "hydra.core.graph.Primitive"}}},
+                                    "type": {"literal": "boolean"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.maps.lookup"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                            "type": {"variable": "hydra.core.graph.Primitive"}}},
+                                        "argument": {"variable": "name"}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.core.graph.Graph", "fieldName": "primitives"}},
+                                        "argument": {"variable": "g"}}}}}}},
+                            "argument": {"literal": {"boolean": false}}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "prim",
+                            "domain": {"variable": "hydra.core.graph.Primitive"},
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "sig",
+                                    "term": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.core.packaging.PrimitiveDefinition", "fieldName": "signature"}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.graph.Primitive", "fieldName": "definition"}},
+                                            "argument": {"variable": "prim"}}}}},
+                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.typing.TermSignature"}, "constraints": []}}],
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"variable": "hydra.core.lib.logic.and"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {"body": {"variable": "hydra.core.lib.lists.isEmpty"}, "type": {"variable": "hydra.core.typing.Parameter"}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"project": {"typeName": "hydra.core.typing.TermSignature", "fieldName": "parameters"}},
+                                                "argument": {"variable": "sig"}}}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "cases": {
+                                            "typeName": "hydra.core.model.Type",
+                                            "default": {"literal": {"boolean": false}},
+                                            "cases": [
+                                              {
+                                                "name": "effect",
+                                                "handler": {"lambda": {"parameter": "_", "domain": {"variable": "hydra.core.model.Type"}, "body": {"literal": {"boolean": true}}}}}]}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"variable": "hydra.core.strip.deannotateType"},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"project": {"typeName": "hydra.core.typing.Result", "fieldName": "type"}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"project": {"typeName": "hydra.core.typing.TermSignature", "fieldName": "result"}},
+                                                    "argument": {"variable": "sig"}}}}}}}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Whether a name refers to a registered primitive with no parameters whose result type is an effect"}}}]}}}}},
     {
       "term": {
         "name": "hydra.lisp.coder.isPrimitiveRef",

@@ -1596,7 +1596,170 @@
                                                             {
                                                               "wrap": {
                                                                 "typeName": "hydra.core.model.Name",
-                                                                "body": {"literal": {"string": "hydra.core.lib.system.getTime.returnsNanosecondsInValidRange"}}}}]}}]}}]}}]}}]}},
+                                                                "body": {"literal": {"string": "hydra.core.lib.system.getTime.returnsNanosecondsInValidRange"}}}}]}}]}}]}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.core.testing.TestGroup",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "readsTheClockWhenRun"}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {
+                                            "name": "subgroups",
+                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestGroup"}}}},
+                                          {
+                                            "name": "cases",
+                                            "term": {
+                                              "list": [
+                                                {
+                                                  "record": {
+                                                    "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                                                    "fields": [
+                                                      {"name": "name", "term": {"literal": {"string": "a read after a pause is later than a read before it"}}},
+                                                      {
+                                                        "name": "case",
+                                                        "term": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.testing.TestCase",
+                                                            "field": {
+                                                              "name": "effectful",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.testing.EffectfulTestCase",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "actual",
+                                                                      "term": {
+                                                                        "lambda": {
+                                                                          "parameter": "_",
+                                                                          "domain": "unit",
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {"body": {"variable": "hydra.core.lib.effects.bind"}, "type": {"variable": "hydra.core.time.Timespec"}}},
+                                                                                      "type": {"literal": "string"}}},
+                                                                                  "argument": {"variable": "hydra.core.lib.system.getTime"}}},
+                                                                              "argument": {
+                                                                                "lambda": {
+                                                                                  "parameter": "t1",
+                                                                                  "domain": {"variable": "hydra.core.time.Timespec"},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"variable": "hydra.core.lib.effects.bind"},
+                                                                                                  "type": {
+                                                                                                    "either": {"left": {"variable": "hydra.core.error.system.SystemError"}, "right": {"variable": "hydra.core.system.ProcessResult"}}}}},
+                                                                                              "type": {"literal": "string"}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.core.lib.system.execute"},
+                                                                                              "argument": {
+                                                                                                "record": {
+                                                                                                  "typeName": "hydra.core.system.Command",
+                                                                                                  "fields": [
+                                                                                                    {
+                                                                                                      "name": "program",
+                                                                                                      "term": {"wrap": {"typeName": "hydra.core.file.FilePath", "body": {"literal": {"string": "/bin/sleep"}}}}},
+                                                                                                    {"name": "arguments", "term": {"list": [{"literal": {"string": "0.05"}}]}},
+                                                                                                    {
+                                                                                                      "name": "workingDirectory",
+                                                                                                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.file.FilePath"}}}},
+                                                                                                    {
+                                                                                                      "name": "environment",
+                                                                                                      "term": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"optional": null},
+                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.system.EnvironmentVariable"}, "values": {"literal": "string"}}}}}}]}}}}}},
+                                                                                      "argument": {
+                                                                                        "lambda": {
+                                                                                          "parameter": "_r",
+                                                                                          "domain": {
+                                                                                            "either": {"left": {"variable": "hydra.core.error.system.SystemError"}, "right": {"variable": "hydra.core.system.ProcessResult"}}},
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {
+                                                                                                        "typeApplication": {"body": {"variable": "hydra.core.lib.effects.map"}, "type": {"variable": "hydra.core.time.Timespec"}}},
+                                                                                                      "type": {"literal": "string"}}},
+                                                                                                  "argument": {
+                                                                                                    "lambda": {
+                                                                                                      "parameter": "t2",
+                                                                                                      "domain": {"variable": "hydra.core.time.Timespec"},
+                                                                                                      "body": {
+                                                                                                        "application": {
+                                                                                                          "function": {"variable": "hydra.core.lib.literals.printBoolean"},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "application": {
+                                                                                                                  "function": {"variable": "hydra.core.lib.logic.or"},
+                                                                                                                  "argument": {
+                                                                                                                    "application": {
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.gt"}, "type": {"literal": {"integer": "int64"}}}},
+                                                                                                                          "argument": {
+                                                                                                                            "application": {
+                                                                                                                              "function": {"project": {"typeName": "hydra.core.time.Timespec", "fieldName": "seconds"}},
+                                                                                                                              "argument": {"variable": "t2"}}}}},
+                                                                                                                      "argument": {
+                                                                                                                        "application": {
+                                                                                                                          "function": {"project": {"typeName": "hydra.core.time.Timespec", "fieldName": "seconds"}},
+                                                                                                                          "argument": {"variable": "t1"}}}}}}},
+                                                                                                              "argument": {
+                                                                                                                "application": {
+                                                                                                                  "function": {
+                                                                                                                    "application": {
+                                                                                                                      "function": {"variable": "hydra.core.lib.logic.and"},
+                                                                                                                      "argument": {
+                                                                                                                        "application": {
+                                                                                                                          "function": {
+                                                                                                                            "application": {
+                                                                                                                              "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.equality.equal"}, "type": {"literal": {"integer": "int64"}}}},
+                                                                                                                              "argument": {
+                                                                                                                                "application": {
+                                                                                                                                  "function": {"project": {"typeName": "hydra.core.time.Timespec", "fieldName": "seconds"}},
+                                                                                                                                  "argument": {"variable": "t2"}}}}},
+                                                                                                                          "argument": {
+                                                                                                                            "application": {
+                                                                                                                              "function": {"project": {"typeName": "hydra.core.time.Timespec", "fieldName": "seconds"}},
+                                                                                                                              "argument": {"variable": "t1"}}}}}}},
+                                                                                                                  "argument": {
+                                                                                                                    "application": {
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.gt"}, "type": {"literal": {"integer": "uint32"}}}},
+                                                                                                                          "argument": {
+                                                                                                                            "application": {
+                                                                                                                              "function": {"project": {"typeName": "hydra.core.time.Timespec", "fieldName": "nanoseconds"}},
+                                                                                                                              "argument": {"variable": "t2"}}}}},
+                                                                                                                      "argument": {
+                                                                                                                        "application": {
+                                                                                                                          "function": {"project": {"typeName": "hydra.core.time.Timespec", "fieldName": "nanoseconds"}},
+                                                                                                                          "argument": {"variable": "t1"}}}}}}}}}}}}}}},
+                                                                                              "argument": {"variable": "hydra.core.lib.system.getTime"}}}}}}}}}}}}}},
+                                                                    {"name": "expected", "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "true"}}}}}]}}}}}},
+                                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                                                      {
+                                                        "name": "provisions",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "wrap": {
+                                                                "typeName": "hydra.core.model.Name",
+                                                                "body": {"literal": {"string": "hydra.core.lib.system.getTime.readsTheClockWhenRun"}}}}]}}]}}]}}]}}]}},
                               {
                                 "name": "cases",
                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestCaseWithMetadata"}}}}]}},

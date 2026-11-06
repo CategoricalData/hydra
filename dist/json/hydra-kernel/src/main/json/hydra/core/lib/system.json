@@ -168,7 +168,11 @@
             {
               "name": "hydra.core.lib.system.getTime.returnsNanosecondsInValidRange",
               "kind": "requirement",
-              "statement": "getTime returns a Timespec whose nanoseconds field is within the documented range [0, 1000000000)."}]},
+              "statement": "getTime returns a Timespec whose nanoseconds field is within the documented range [0, 1000000000)."},
+            {
+              "name": "hydra.core.lib.system.getTime.readsTheClockWhenRun",
+              "kind": "requirement",
+              "statement": "getTime reads the clock each time the computation runs, not once when it is defined or loaded: a read taken after a pause is later than a read taken before it."}]},
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"effect": {"variable": "hydra.core.time.Timespec"}}}},
         "isPure": false,
         "isTotal": true}},
