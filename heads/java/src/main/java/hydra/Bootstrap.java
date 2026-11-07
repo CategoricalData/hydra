@@ -1,5 +1,6 @@
 package hydra;
 
+import hydra.core.Codegen;
 import hydra.build.overlay.java.Generation;
 import hydra.core.packaging.Module;
 import hydra.core.packaging.ModuleName;
@@ -572,6 +573,14 @@ public class Bootstrap {
         return base.resolve(Paths.get(target, "hydra", "core", "overlay", overlayDirSegment(target), "lib"));
     }
 
+    // Keep this local copy of hydra.build.Modules.isLibModule (#788) until a published Java host
+    // ships hydra.build.Modules: heads/java/target-driver compiles this file against the PUBLISHED
+    // host (cold seed, #703), so calling the new DSL-generated partition here breaks every cold
+    // checkout. Switch to hydra.build.Modules.partitionLibModules after the next host release.
+    private static boolean isLibModule(Module m) {
+        return m.name.value.startsWith("hydra.core.lib.");
+    }
+
     /**
      * #473 lib pass: emit the hydra.lib.* PrimitiveDefinition def-modules from their LOWERED form.
      * The predicate and lib/universe partition are promoted into hydra.build.* (#788/#416 Phase B):
@@ -589,11 +598,16 @@ public class Bootstrap {
     // recordKeep accumulation across the main + lib passes before the prune step.
     static List<String> runLibPass(String repoRoot, String target, String langDir,
                                    List<Module> allMainMods, List<Module> modsToGenerate) {
-        hydra.core.overlay.java.util.Pair<List<Module>, List<Module>> partitioned =
-            hydra.build.Modules.partitionLibModules(allMainMods, modsToGenerate);
-        List<Module> libMods = partitioned.first;
-        List<Module> libUniverse = partitioned.second;
+        List<Module> libMods = new ArrayList<>();
+        for (Module m : modsToGenerate) {
+            if (isLibModule(m)) libMods.add(Codegen.lowerPrimitiveDefinitions(m));
+        }
         if (libMods.isEmpty()) return new ArrayList<>();
+
+        List<Module> libUniverse = new ArrayList<>();
+        for (Module m : allMainMods) {
+            libUniverse.add(isLibModule(m) ? Codegen.lowerPrimitiveDefinitions(m) : m);
+        }
 
         System.out.println("Lib pass: emitting " + libMods.size()
                 + " hydra.lib.* definition modules to " + target + "...");
