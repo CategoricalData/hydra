@@ -9,6 +9,7 @@
     {"module": "hydra.core.parsers"},
     {"module": "hydra.core.positions"},
     {"module": "hydra.core.print.model"},
+    {"module": "hydra.core.rewriting"},
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
     {"module": "hydra.core.coders"},
@@ -6118,11 +6119,14 @@
                                                       "either": {
                                                         "right": {
                                                           "application": {
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
-                                                                "type": {"variable": "hydra.core.model.Type"}}},
-                                                            "argument": {"variable": "s"}}}}},
+                                                            "function": {"variable": "hydra.core.parse.core.stripSpansInType"},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                    "type": {"variable": "hydra.core.model.Type"}}},
+                                                                "argument": {"variable": "s"}}}}}}},
                                                     "type": {"literal": "string"}}},
                                                 "type": {"variable": "hydra.core.model.Type"}}}}},
                                         "argument": {
@@ -7167,6 +7171,99 @@
                                             "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.pure"}, "type": {"literal": "string"}}},
                                             "argument": {"application": {"function": {"variable": "hydra.core.lib.strings.fromList"}, "argument": {"variable": "cs"}}}}}}}}}}}}}}}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parse a JSON-syntax string literal"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.parse.core.stripSpansInType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.model.Type"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.model.Type"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "typ",
+                "domain": {"variable": "hydra.core.model.Type"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "remove",
+                        "term": {
+                          "typeLambda": {
+                            "parameter": "t0",
+                            "body": {
+                              "lambda": {
+                                "parameter": "recurse",
+                                "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.model.Type"}}},
+                                "body": {
+                                  "lambda": {
+                                    "parameter": "typ",
+                                    "domain": {"variable": "t0"},
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "rewritten",
+                                            "term": {"application": {"function": {"variable": "recurse"}, "argument": {"variable": "typ"}}},
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.model.Type"}, "constraints": []}}],
+                                        "body": {
+                                          "application": {
+                                            "function": {
+                                              "cases": {
+                                                "typeName": "hydra.core.model.Type",
+                                                "default": {"variable": "rewritten"},
+                                                "cases": [
+                                                  {
+                                                    "name": "annotated",
+                                                    "handler": {
+                                                      "lambda": {
+                                                        "parameter": "at",
+                                                        "domain": {"variable": "hydra.core.model.AnnotatedType"},
+                                                        "body": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.model.Type",
+                                                            "field": {
+                                                              "name": "annotated",
+                                                              "term": {
+                                                                "record": {
+                                                                  "typeName": "hydra.core.model.AnnotatedType",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "body",
+                                                                      "term": {
+                                                                        "application": {
+                                                                          "function": {"project": {"typeName": "hydra.core.model.AnnotatedType", "fieldName": "body"}},
+                                                                          "argument": {"variable": "at"}}}},
+                                                                    {
+                                                                      "name": "annotation",
+                                                                      "term": {
+                                                                        "application": {
+                                                                          "function": {"variable": "hydra.core.positions.stripSpans"},
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "function": {"project": {"typeName": "hydra.core.model.AnnotatedType", "fieldName": "annotation"}},
+                                                                              "argument": {"variable": "at"}}}}}}]}}}}}}}}]}},
+                                            "argument": {"variable": "rewritten"}}}}}}}}}}},
+                        "typeScheme": {
+                          "variables": ["t0"],
+                          "body": {
+                            "function": {
+                              "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.model.Type"}}},
+                              "codomain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.model.Type"}}}}},
+                          "constraints": []}}],
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"variable": "hydra.core.rewriting.rewriteType"},
+                            "argument": {"typeApplication": {"body": {"variable": "remove"}, "type": {"variable": "hydra.core.model.Type"}}}}},
+                        "argument": {"variable": "typ"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Remove every span annotation from a type's own annotation payloads"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.parse.core.sugarField",
