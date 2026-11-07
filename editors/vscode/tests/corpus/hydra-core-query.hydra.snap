@@ -1,0 +1,717 @@
+>## A model for language-agnostic graph pattern queries
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.query
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>import hydra.core.model as model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                       ^ source.hydra
+#                        ^^ source.hydra keyword.control.import.hydra
+#                          ^ source.hydra
+#                           ^^^^^ source.hydra entity.name.namespace.hydra
+>
+>## One of several comparison operators
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type ComparisonConstraint = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.equals.hydra
+#                           ^ source.hydra
+#                            ^^^^^ source.hydra support.type.hydra
+#                                 ^^ source.hydra
+>  equal: unit,
+#^^ source.hydra
+#  ^^^^^ source.hydra variable.other.hydra
+#       ^ source.hydra punctuation.separator.type.hydra
+#        ^ source.hydra
+#         ^^^^ source.hydra support.type.hydra
+#             ^^ source.hydra
+>  notEqual: unit,
+#^^ source.hydra
+#  ^^^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^ source.hydra support.type.hydra
+#                ^^ source.hydra
+>  lessThan: unit,
+#^^ source.hydra
+#  ^^^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^ source.hydra support.type.hydra
+#                ^^ source.hydra
+>  greaterThan: unit,
+#^^ source.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra punctuation.separator.type.hydra
+#              ^ source.hydra
+#               ^^^^ source.hydra support.type.hydra
+#                   ^^ source.hydra
+>  lessThanOrEqual: unit,
+#^^ source.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^^^^ source.hydra support.type.hydra
+#                       ^^ source.hydra
+>  greaterThanOrEqual: unit}
+#^^ source.hydra
+#  ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra punctuation.separator.type.hydra
+#                     ^ source.hydra
+#                      ^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+>
+>## An abstract edge based on a record type
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Edge = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^ source.hydra entity.name.function.hydra
+#         ^ source.hydra
+#          ^ source.hydra keyword.operator.equals.hydra
+#           ^ source.hydra
+#            ^^^^^^ source.hydra keyword.control.hydra
+#                  ^^ source.hydra
+>  ## The name of a record type, for which the edge also specifies an out- and an in- projection
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  `type`: model.Name,
+#^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^ source.hydra variable.other.escaped.hydra
+#       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                    ^^ source.hydra
+>  ## The field representing the out-projection of the edge. Defaults to 'out'.
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  out: optional<model.Name>,
+#^^ source.hydra
+#  ^^^ source.hydra variable.other.hydra
+#     ^ source.hydra punctuation.separator.type.hydra
+#      ^ source.hydra
+#       ^^^^^^^^ source.hydra support.type.hydra
+#               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                          ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                           ^^ source.hydra
+>  ## The field representing the in-projection of the edge. Defaults to 'in'.
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  `in`: optional<model.Name>}
+#^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^ source.hydra variable.other.escaped.hydra
+#     ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^^^^^ source.hydra support.type.hydra
+#                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                 ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                            ^^ source.hydra
+>
+>## A query pattern which matches within a designated component subgraph
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type GraphPattern = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+#                   ^ source.hydra
+#                    ^^^^^^ source.hydra keyword.control.hydra
+#                          ^^ source.hydra
+>  ## The name of the component graph
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  graph: model.Name,
+#^^ source.hydra
+#  ^^^^^ source.hydra variable.other.hydra
+#       ^ source.hydra punctuation.separator.type.hydra
+#        ^ source.hydra
+#         ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                   ^^ source.hydra
+>  ## The patterns to match within the subgraph
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  patterns: list<Pattern>}
+#^^ source.hydra
+#  ^^^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^ source.hydra support.type.hydra
+#                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                 ^^^^^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                         ^^ source.hydra
+>
+>## A node in a query expression; it may be a term, a variable, or a wildcard
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Node = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^ source.hydra entity.name.function.hydra
+#         ^ source.hydra
+#          ^ source.hydra keyword.operator.equals.hydra
+#           ^ source.hydra
+#            ^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+>  ## A graph term; an expression which is valid in the graph being matched
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  `term`: model.Term,
+#^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^ source.hydra variable.other.escaped.hydra
+#       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                    ^^ source.hydra
+>  ## A query variable, not to be confused with a variable term
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  variable: Variable,
+#^^ source.hydra
+#  ^^^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^ source.hydra
+>  ## An anonymous variable which we do not care to join across patterns
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  wildcard: unit}
+#^^ source.hydra
+#  ^^^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^ source.hydra support.type.hydra
+#                ^^ source.hydra
+>
+>## A query path
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Path = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^ source.hydra entity.name.function.hydra
+#         ^ source.hydra
+#          ^ source.hydra keyword.operator.equals.hydra
+#           ^ source.hydra
+#            ^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+>  ## A path given by a single step
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  step: Step,
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
+>  ## A path given by a regular expression quantifier applied to another path
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  regex: RegexSequence,
+#^^ source.hydra
+#  ^^^^^ source.hydra variable.other.hydra
+#       ^ source.hydra punctuation.separator.type.hydra
+#        ^ source.hydra
+#         ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                      ^^ source.hydra
+>  ## A path given by the inverse of another path
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  inverse: Path}
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^ source.hydra variable.other.hydra
+#               ^^ source.hydra
+>
+>## A declared equivalence between two abstract paths in a graph
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type PathEquation = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+#                   ^ source.hydra
+#                    ^^^^^^ source.hydra keyword.control.hydra
+#                          ^^ source.hydra
+>  ## The left-hand side of the equation
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  `left`: Path,
+#^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^ source.hydra variable.other.escaped.hydra
+#       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
+>  ## The right-hand side of the equation
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  `right`: Path}
+#^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^^ source.hydra variable.other.escaped.hydra
+#        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^ source.hydra variable.other.hydra
+#               ^^ source.hydra
+>
+>## A query pattern
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Pattern = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^ source.hydra entity.name.function.hydra
+#            ^ source.hydra
+#             ^ source.hydra keyword.operator.equals.hydra
+#              ^ source.hydra
+#               ^^^^^ source.hydra support.type.hydra
+#                    ^^ source.hydra
+>  ## A subject/predicate/object pattern
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  triple: TriplePattern,
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                       ^^ source.hydra
+>  ## The negation of another pattern
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  negation: Pattern,
+#^^ source.hydra
+#  ^^^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^^^^ source.hydra variable.other.hydra
+#                   ^^ source.hydra
+>  ## The conjunction ('and') of several other patterns
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  conjunction: list<Pattern>,
+#^^ source.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra punctuation.separator.type.hydra
+#              ^ source.hydra
+#               ^^^^ source.hydra support.type.hydra
+#                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                    ^^^^^^^ source.hydra variable.other.hydra
+#                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                            ^^ source.hydra
+>  ## The disjunction (inclusive 'or') of several other patterns
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  disjunction: list<Pattern>,
+#^^ source.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra punctuation.separator.type.hydra
+#              ^ source.hydra
+#               ^^^^ source.hydra support.type.hydra
+#                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                    ^^^^^^^ source.hydra variable.other.hydra
+#                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                            ^^ source.hydra
+>  ## A pattern which matches within a named subgraph
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  graph: GraphPattern}
+#^^ source.hydra
+#  ^^^^^ source.hydra variable.other.hydra
+#       ^ source.hydra punctuation.separator.type.hydra
+#        ^ source.hydra
+#         ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                     ^^ source.hydra
+>
+>## A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type PatternImplication = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra keyword.operator.equals.hydra
+#                         ^ source.hydra
+#                          ^^^^^^ source.hydra keyword.control.hydra
+#                                ^^ source.hydra
+>  ## The pattern which, if it matches, triggers the constraint
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  antecedent: Pattern,
+#^^ source.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra punctuation.separator.type.hydra
+#             ^ source.hydra
+#              ^^^^^^^ source.hydra variable.other.hydra
+#                     ^^ source.hydra
+>  ## The pattern which must also match when the antecedent matches
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  consequent: Pattern}
+#^^ source.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra punctuation.separator.type.hydra
+#             ^ source.hydra
+#              ^^^^^^^ source.hydra variable.other.hydra
+#                     ^^ source.hydra
+>
+>## A SELECT-style graph pattern matching query
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Query = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^ source.hydra entity.name.function.hydra
+#          ^ source.hydra
+#           ^ source.hydra keyword.operator.equals.hydra
+#            ^ source.hydra
+#             ^^^^^^ source.hydra keyword.control.hydra
+#                   ^^ source.hydra
+>  ## The variables selected by the query
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  variables: list<Variable>,
+#^^ source.hydra
+#  ^^^^^^^^^ source.hydra variable.other.hydra
+#           ^ source.hydra punctuation.separator.type.hydra
+#            ^ source.hydra
+#             ^^^^ source.hydra support.type.hydra
+#                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                           ^^ source.hydra
+>  ## The patterns to be matched
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  patterns: list<Pattern>}
+#^^ source.hydra
+#  ^^^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^ source.hydra support.type.hydra
+#                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                 ^^^^^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                         ^^ source.hydra
+>
+>## A range from min to max, inclusive
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Range = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^ source.hydra entity.name.function.hydra
+#          ^ source.hydra
+#           ^ source.hydra keyword.operator.equals.hydra
+#            ^ source.hydra
+#             ^^^^^^ source.hydra keyword.control.hydra
+#                   ^^ source.hydra
+>  ## The minimum value (inclusive)
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  min: int32,
+#^^ source.hydra
+#  ^^^ source.hydra variable.other.hydra
+#     ^ source.hydra punctuation.separator.type.hydra
+#      ^ source.hydra
+#       ^^^^^ source.hydra support.type.hydra
+#            ^^ source.hydra
+>  ## The maximum value (inclusive)
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  max: int32}
+#^^ source.hydra
+#  ^^^ source.hydra variable.other.hydra
+#     ^ source.hydra punctuation.separator.type.hydra
+#      ^ source.hydra
+#       ^^^^^ source.hydra support.type.hydra
+#            ^^ source.hydra
+>
+>## A regular expression quantifier
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type RegexQuantifier = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.equals.hydra
+#                      ^ source.hydra
+#                       ^^^^^ source.hydra support.type.hydra
+#                            ^^ source.hydra
+>  ## No quantifier; matches a single occurrence
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  one: unit,
+#^^ source.hydra
+#  ^^^ source.hydra variable.other.hydra
+#     ^ source.hydra punctuation.separator.type.hydra
+#      ^ source.hydra
+#       ^^^^ source.hydra support.type.hydra
+#           ^^ source.hydra
+>  ## The ? quanifier; matches zero or one occurrence
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  zeroOrOne: unit,
+#^^ source.hydra
+#  ^^^^^^^^^ source.hydra variable.other.hydra
+#           ^ source.hydra punctuation.separator.type.hydra
+#            ^ source.hydra
+#             ^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+>  ## The * quantifier; matches any number of occurrences
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  zeroOrMore: unit,
+#^^ source.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra punctuation.separator.type.hydra
+#             ^ source.hydra
+#              ^^^^ source.hydra support.type.hydra
+#                  ^^ source.hydra
+>  ## The + quantifier; matches one or more occurrences
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  oneOrMore: unit,
+#^^ source.hydra
+#  ^^^^^^^^^ source.hydra variable.other.hydra
+#           ^ source.hydra punctuation.separator.type.hydra
+#            ^ source.hydra
+#             ^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+>  ## The {n} quantifier; matches exactly n occurrences
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  exactly: int32,
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^^ source.hydra support.type.hydra
+#                ^^ source.hydra
+>  ## The {n,} quantifier; matches at least n occurrences
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  atLeast: int32,
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^^ source.hydra support.type.hydra
+#                ^^ source.hydra
+>  ## The {n, m} quantifier; matches between n and m (inclusive) occurrences
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  range: Range}
+#^^ source.hydra
+#  ^^^^^ source.hydra variable.other.hydra
+#       ^ source.hydra punctuation.separator.type.hydra
+#        ^ source.hydra
+#         ^^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
+>
+>## A path with a regex quantifier
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type RegexSequence = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^^^^^^ source.hydra keyword.control.hydra
+#                           ^^ source.hydra
+>  ## The path to which the quantifier applies
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  path: Path,
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
+>  ## The quantifier
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  quantifier: RegexQuantifier}
+#^^ source.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra punctuation.separator.type.hydra
+#             ^ source.hydra
+#              ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                             ^^ source.hydra
+>
+>## An atomic function as part of a query. When applied to a graph, steps are typed by function types.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Step = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^ source.hydra entity.name.function.hydra
+#         ^ source.hydra
+#          ^ source.hydra keyword.operator.equals.hydra
+#           ^ source.hydra
+#            ^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+>  ## An out-to-in traversal of an abstract edge
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  edge: Edge,
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
+>  ## A projection from a record through one of its fields
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  `project`: model.Projection,
+#^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^^^^ source.hydra variable.other.escaped.hydra
+#          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#           ^ source.hydra punctuation.separator.type.hydra
+#            ^ source.hydra
+#             ^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                             ^^ source.hydra
+>  ## A comparison of two terms
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  compare: ComparisonConstraint}
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                               ^^ source.hydra
+>
+>## A subject/predicate/object pattern
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type TriplePattern = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^^^^^^ source.hydra keyword.control.hydra
+#                           ^^ source.hydra
+>  ## The subject of the pattern
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  subject: Node,
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^ source.hydra variable.other.hydra
+#               ^^ source.hydra
+>  ## The predicate (property) of the pattern
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  predicate: Path,
+#^^ source.hydra
+#  ^^^^^^^^^ source.hydra variable.other.hydra
+#           ^ source.hydra punctuation.separator.type.hydra
+#            ^ source.hydra
+#             ^^^^ source.hydra variable.other.hydra
+#                 ^^ source.hydra
+>  ## The object of the pattern
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  object: Node}
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
+>
+>## A query variable
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Variable = wrap(string)
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+#               ^ source.hydra
+#                ^^^^ source.hydra keyword.control.hydra
+#                    ^ source.hydra
+#                     ^^^^^^ source.hydra support.type.hydra
+#                           ^^ source.hydra

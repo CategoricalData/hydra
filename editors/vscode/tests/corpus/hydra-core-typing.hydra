@@ -1,0 +1,96 @@
+## Types supporting type inference and type reconstruction.
+module hydra.core.typing
+
+import hydra.core.model as model
+import hydra.core.paths as paths
+
+## A structured representation of a function term's components, replacing ad-hoc tuples. This captures all the information extracted from peeling lambdas, type lambdas, lets, and type applications from a term.
+type FunctionStructure = forall env. record{
+  ## Type parameters (from type lambdas)
+  typeParams: list<model.Name>,
+  ## Value parameters (from lambdas)
+  params: list<model.Name>,
+  ## Let bindings accumulated from the term
+  bindings: list<model.Binding>,
+  ## The body term after removing all lambdas, lets, etc.
+  body: model.Term,
+  ## Domain types of the value parameters
+  domains: list<model.Type>,
+  ## The return type of the function (if type inference succeeded)
+  codomain: optional<model.Type>,
+  ## Updated environment after processing all bindings
+  environment: env}
+
+## State threaded through type inference: the fresh type variable counter and the current subterm-path trace.
+type InferenceContext = record{
+  ## Counter used to generate distinct fresh type variables during inference
+  freshTypeVariableCount: int32,
+  ## The current subterm-path trace, accumulated backwards (head = most-recently-pushed step, corresponding to the deepest point in the descent). At the moment an inference error is constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order) and stamped onto the error.
+  trace: list<paths.SubtermStep>}
+
+## The result of applying inference rules to a term.
+type InferenceResult = record{
+  ## The term which was inferred
+  `term`: model.Term,
+  ## The inferred type of the term
+  `type`: model.Type,
+  ## The type substitution resulting from unification
+  subst: TypeSubst,
+  ## Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)
+  classConstraints: map<model.Name, model.TypeVariableConstraints>,
+  ## The updated InferenceContext after inference (carries fresh-variable counter and trace)
+  context: InferenceContext}
+
+## A named, typed parameter of a term, with optional human-readable description and a flag indicating whether the parameter requires lazy evaluation by hosts which support it.
+type Parameter = record{
+  ## The name of the parameter
+  name: model.Name,
+  ## An optional human-readable description of the parameter
+  description: optional<string>,
+  ## The type of the parameter
+  `type`: model.Type,
+  ## Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation
+  isLazy: boolean}
+
+## The result of a term, consisting of a type and an optional human-readable description.
+type Result = record{
+  ## An optional human-readable description of the result
+  description: optional<string>,
+  ## The type of the result
+  `type`: model.Type}
+
+## A structured signature for a term: an ordered list of type parameters (with optional class constraints), an ordered list of value parameters, and a result. TermSignature is a richer view of TypeScheme: every TermSignature can be converted to a TypeScheme by erasing parameter names, descriptions, and laziness flags.
+type TermSignature = record{
+  ## The type parameters of the term, in order
+  typeParameters: list<TypeParameter>,
+  ## The value parameters of the term, in order
+  parameters: list<Parameter>,
+  ## The result of the term
+  result: Result}
+
+## A substitution of term variables for terms
+type TermSubst = wrap(map<model.Name, model.Term>)
+
+## A type class identifier together with a human-readable description. Type classes are referenced as bare names (e.g. the local name "equality") in TypeVariableConstraints.classes; the canonical definitions live as term bindings under hydra.core.classes.
+type TypeClass = record{
+  ## A human-readable description of the type class
+  description: string}
+
+## An assertion that two types can be unified into a single type
+type TypeConstraint = record{
+  ## The left-hand side of the constraint
+  `left`: model.Type,
+  ## The right-hand side of the constraint
+  `right`: model.Type,
+  ## A description of the type constraint which may be used for tracing or debugging
+  comment: string}
+
+## A type parameter of a term, with an optional list of type class constraints
+type TypeParameter = record{
+  ## The name of the type parameter
+  name: model.Name,
+  ## Any type class constraints on the type parameter
+  constraints: list<model.TypeClassConstraint>}
+
+## A substitution of type variables for types
+type TypeSubst = wrap(map<model.Name, model.Type>)

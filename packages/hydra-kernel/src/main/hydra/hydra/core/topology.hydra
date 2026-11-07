@@ -1,0 +1,32 @@
+## A model for simple graphs as adjacency lists
+module hydra.core.topology
+
+
+
+## A directed graph represented as an adjacency list mapping vertices to their outgoing neighbors
+type Graph = map<Vertex, list<Vertex>>
+
+## A pair of inverse permutations on lists, used to relate two orderings of the same elements
+type OrderingIsomorphism = forall a. record{
+  ## Mapping from source ordering to target ordering
+  encode: list<a> → list<a>,
+  ## Mapping from target ordering to source ordering
+  decode: list<a> → list<a>}
+
+## State carried by Tarjan's strongly connected components algorithm during a depth-first traversal
+type TarjanState = record{
+  ## Next available index for vertices in the DFS traversal
+  counter: int32,
+  ## Mapping from vertices to their indices in the DFS traversal
+  indices: map<Vertex, int32>,
+  ## Mapping from vertices to their lowest reachable index in the DFS traversal
+  lowLinks: map<Vertex, int32>,
+  ## Current DFS stack, with vertices in reverse order
+  stack: list<Vertex>,
+  ## Set of vertices currently on the stack, for quick lookup
+  onStack: set<Vertex>,
+  ## Accumulated strongly connected components, each a list of vertices
+  sccs: list<list<Vertex>>}
+
+## A graph vertex, represented as a 32-bit integer identifier
+type Vertex = int32

@@ -1,0 +1,618 @@
+>## A Markdown document model, used as the target representation for generated documentation
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.markdown
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>
+>
+>type Block = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^ source.hydra entity.name.function.hydra
+#          ^ source.hydra
+#           ^ source.hydra keyword.operator.equals.hydra
+#            ^ source.hydra
+#             ^^^^^ source.hydra support.type.hydra
+#                  ^^ source.hydra
+>  ## A fenced code block
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  codeBlock: CodeBlock,
+#^^ source.hydra
+#  ^^^^^^^^^ source.hydra variable.other.hydra
+#           ^ source.hydra punctuation.separator.type.hydra
+#            ^ source.hydra
+#             ^^^^^^^^^ source.hydra variable.other.hydra
+#                      ^^ source.hydra
+>  ## An ordered or unordered list
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  `list`: List,
+#^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^ source.hydra variable.other.escaped.hydra
+#       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
+>  ## A paragraph of inline content
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  paragraph: Paragraph,
+#^^ source.hydra
+#  ^^^^^^^^^ source.hydra variable.other.hydra
+#           ^ source.hydra punctuation.separator.type.hydra
+#            ^ source.hydra
+#             ^^^^^^^^^ source.hydra variable.other.hydra
+#                      ^^ source.hydra
+>  ## Raw, verbatim passthrough content (e.g. an HTML comment), emitted with no escaping or reformatting. Used for constructs the rest of the Block union cannot represent, such as the generated-file notice banner at the top of a generated page.
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  raw: string,
+#^^ source.hydra
+#  ^^^ source.hydra variable.other.hydra
+#     ^ source.hydra punctuation.separator.type.hydra
+#      ^ source.hydra
+#       ^^^^^^ source.hydra support.type.hydra
+#             ^^ source.hydra
+>  ## A heading followed by its own block content, nested to form a document outline
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  section: Section,
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^^^^ source.hydra variable.other.hydra
+#                  ^^ source.hydra
+>  ## A table
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  table: Table}@{description="A block-level Markdown element"}
+#^^ source.hydra
+#  ^^^^^ source.hydra variable.other.hydra
+#       ^ source.hydra punctuation.separator.type.hydra
+#        ^ source.hydra
+#         ^^^^^ source.hydra variable.other.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.annotation.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra keyword.operator.equals.hydra
+#                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                             ^^ source.hydra
+>
+>type CodeBlock = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra
+#                 ^^^^^^ source.hydra keyword.control.hydra
+#                       ^^ source.hydra
+>  ## The optional language tag used for syntax highlighting, e.g. "haskell"
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  language: optional<string>,
+#^^ source.hydra
+#  ^^^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^^^^^ source.hydra support.type.hydra
+#                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                     ^^^^^^ source.hydra support.type.hydra
+#                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                            ^^ source.hydra
+>  ## The literal text content of the code block
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  content: string}@{description="A fenced code block"}
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^^^ source.hydra support.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.annotation.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                               ^ source.hydra keyword.operator.equals.hydra
+#                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                 ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                     ^^ source.hydra
+>
+>type Document = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+#               ^ source.hydra
+#                ^^^^^^ source.hydra keyword.control.hydra
+#                      ^^ source.hydra
+>  ## The document's top-level title, rendered as an H1 heading
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  title: string,
+#^^ source.hydra
+#  ^^^^^ source.hydra variable.other.hydra
+#       ^ source.hydra punctuation.separator.type.hydra
+#        ^ source.hydra
+#         ^^^^^^ source.hydra support.type.hydra
+#               ^^ source.hydra
+>  ## The block-level content of the document, following the title
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  content: list<Block>}@{description="A complete Markdown document"}
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^ source.hydra support.type.hydra
+#               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                ^^^^^ source.hydra variable.other.hydra
+#                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra keyword.operator.annotation.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra keyword.operator.equals.hydra
+#                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                   ^^ source.hydra
+>
+>type Heading = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^ source.hydra entity.name.function.hydra
+#            ^ source.hydra
+#             ^ source.hydra keyword.operator.equals.hydra
+#              ^ source.hydra
+#               ^^^^^^ source.hydra keyword.control.hydra
+#                     ^^ source.hydra
+>  ## The heading level, where 1 corresponds to an H1 heading; levels increase with nesting depth
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  level: int32,
+#^^ source.hydra
+#  ^^^^^ source.hydra variable.other.hydra
+#       ^ source.hydra punctuation.separator.type.hydra
+#        ^ source.hydra
+#         ^^^^^ source.hydra support.type.hydra
+#              ^^ source.hydra
+>  ## The inline content of the heading
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  content: list<Inline>,
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^ source.hydra support.type.hydra
+#               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                ^^^^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                       ^^ source.hydra
+>  ## An optional explicit anchor identifier for linking directly to this heading. Headings can usually derive an anchor from their rendered text, but an explicit anchor is provided for cases (e.g. renderer-specific slug rules) where that derivation is ambiguous or undesired.
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  anchor: optional<string>}@{description="A section heading"}
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^^^^^ source.hydra support.type.hydra
+#                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                   ^^^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.annotation.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                        ^ source.hydra keyword.operator.equals.hydra
+#                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                          ^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                            ^^ source.hydra
+>
+>type Inline = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^ source.hydra entity.name.function.hydra
+#           ^ source.hydra
+#            ^ source.hydra keyword.operator.equals.hydra
+#             ^ source.hydra
+#              ^^^^^ source.hydra support.type.hydra
+#                   ^^ source.hydra
+>  ## An inline code span
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  code: string,
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^^^ source.hydra support.type.hydra
+#              ^^ source.hydra
+>  ## Emphasized (italicized) text
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  emphasis: list<Inline>,
+#^^ source.hydra
+#  ^^^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^ source.hydra support.type.hydra
+#                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                 ^^^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                        ^^ source.hydra
+>  ## A hyperlink
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  link: Link,
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
+>  ## Strongly emphasized (bolded) text
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  strong: list<Inline>,
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra support.type.hydra
+#              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#               ^^^^^^ source.hydra variable.other.hydra
+#                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                      ^^ source.hydra
+>  ## A raw text fragment
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  text: string}@{description="An inline Markdown element"}
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^^^ source.hydra support.type.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.annotation.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra keyword.operator.equals.hydra
+#                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                         ^^ source.hydra
+>
+>type Link = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^ source.hydra entity.name.function.hydra
+#         ^ source.hydra
+#          ^ source.hydra keyword.operator.equals.hydra
+#           ^ source.hydra
+#            ^^^^^^ source.hydra keyword.control.hydra
+#                  ^^ source.hydra
+>  ## The visible link text
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  text: list<Inline>,
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^ source.hydra support.type.hydra
+#            ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#             ^^^^^^ source.hydra variable.other.hydra
+#                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                    ^^ source.hydra
+>  ## The link target, either a URL or a relative path
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  target: string}@{description="A hyperlink"}
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra support.type.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.annotation.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra keyword.operator.equals.hydra
+#                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                            ^^ source.hydra
+>
+>type List = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^ source.hydra entity.name.function.hydra
+#         ^ source.hydra
+#          ^ source.hydra keyword.operator.equals.hydra
+#           ^ source.hydra
+#            ^^^^^^ source.hydra keyword.control.hydra
+#                  ^^ source.hydra
+>  ## Whether the list is numbered (ordered) rather than bulleted (unordered)
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  ordered: boolean,
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^^^^ source.hydra support.type.hydra
+#                  ^^ source.hydra
+>  ## The items of the list
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  items: list<ListItem>}@{description="An ordered or unordered list"}
+#^^ source.hydra
+#  ^^^^^ source.hydra variable.other.hydra
+#       ^ source.hydra punctuation.separator.type.hydra
+#        ^ source.hydra
+#         ^^^^ source.hydra support.type.hydra
+#             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#              ^^^^^^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra keyword.operator.annotation.hydra
+#                         ^ source.hydra
+#                          ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^ source.hydra keyword.operator.equals.hydra
+#                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                    ^^ source.hydra
+>
+>type ListItem = wrap(list<Block>)@{description="A single item of a list"}
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+#               ^ source.hydra
+#                ^^^^ source.hydra keyword.control.hydra
+#                    ^ source.hydra
+#                     ^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                          ^^^^^ source.hydra variable.other.hydra
+#                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra keyword.operator.annotation.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                              ^ source.hydra keyword.operator.equals.hydra
+#                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                        ^^ source.hydra
+>
+>type Paragraph = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra
+#                 ^^^^^^ source.hydra keyword.control.hydra
+#                       ^^ source.hydra
+>  ## The inline content of the paragraph
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  content: list<Inline>,
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^ source.hydra support.type.hydra
+#               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                ^^^^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                       ^^ source.hydra
+>  ## An optional explicit anchor identifier for linking directly to this paragraph. Needed for elements such as rendered provisions, which are bold-led prose within a paragraph rather than a heading, so they carry no heading-derived anchor of their own.
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  anchor: optional<string>}@{description="A paragraph of inline content"}
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^^^^^ source.hydra support.type.hydra
+#                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                   ^^^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.annotation.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                        ^ source.hydra keyword.operator.equals.hydra
+#                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                        ^^ source.hydra
+>
+>type Section = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^ source.hydra entity.name.function.hydra
+#            ^ source.hydra
+#             ^ source.hydra keyword.operator.equals.hydra
+#              ^ source.hydra
+#               ^^^^^^ source.hydra keyword.control.hydra
+#                     ^^ source.hydra
+>  ## The section's heading
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  heading: Heading,
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^^^^ source.hydra variable.other.hydra
+#                  ^^ source.hydra
+>  ## The block-level content of the section, following the heading
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  content: list<Block>,
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^ source.hydra support.type.hydra
+#               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                ^^^^^ source.hydra variable.other.hydra
+#                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                      ^^ source.hydra
+>  ## An optional explicit anchor identifier for linking directly to this section, distinct from the heading's own anchor (a section's anchor identifies the section as a whole; a heading's identifies the heading line specifically).
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  anchor: optional<string>}@{description="A heading followed by its own block content, nested to form a document outline"}
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^^^^^ source.hydra support.type.hydra
+#                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                   ^^^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.annotation.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                        ^ source.hydra keyword.operator.equals.hydra
+#                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                                                         ^^ source.hydra
+>
+>type Table = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^ source.hydra entity.name.function.hydra
+#          ^ source.hydra
+#           ^ source.hydra keyword.operator.equals.hydra
+#            ^ source.hydra
+#             ^^^^^^ source.hydra keyword.control.hydra
+#                   ^^ source.hydra
+>  ## The header row of the table
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  header: TableRow,
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^ source.hydra
+>  ## The data rows of the table
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  rows: list<TableRow>}@{description="A table, consisting of a header row and any number of data rows"}
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^ source.hydra support.type.hydra
+#            ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#             ^^^^^^^^ source.hydra variable.other.hydra
+#                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra keyword.operator.annotation.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra keyword.operator.equals.hydra
+#                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                                      ^^ source.hydra
+>
+>type TableCell = wrap(list<Inline>)@{description="A single cell of a table row"}
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra
+#                 ^^^^ source.hydra keyword.control.hydra
+#                     ^ source.hydra
+#                      ^^^^ source.hydra support.type.hydra
+#                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                           ^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.annotation.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                ^ source.hydra keyword.operator.equals.hydra
+#                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                               ^^ source.hydra
+>
+>type TableRow = wrap(list<TableCell>)@{description="A single row of a table"}
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+#               ^ source.hydra
+#                ^^^^ source.hydra keyword.control.hydra
+#                    ^ source.hydra
+#                     ^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                          ^^^^^^^^^ source.hydra variable.other.hydra
+#                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra keyword.operator.annotation.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^ source.hydra keyword.operator.equals.hydra
+#                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                    ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                            ^^ source.hydra

@@ -1,0 +1,318 @@
+>## An interpretation of Codd's Relational Model, as described in 'A Relational Model of Data for Large Shared Data Banks' (1970). Types ('domains') and values are parameterized so as to allow for application-specific implementations. No special support is provided for 'nonsimple' domains; i.e. relations are assumed to be normalized.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.relational
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>
+>
+>## A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type ColumnName = wrap(string)
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.equals.hydra
+#                 ^ source.hydra
+#                  ^^^^ source.hydra keyword.control.hydra
+#                      ^ source.hydra
+#                       ^^^^^^ source.hydra support.type.hydra
+#                             ^^ source.hydra
+>
+>## An abstract specification of the domain represented by a column in a relation; a role
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type ColumnSchema = forall t. record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+#                   ^ source.hydra
+#                    ^^^^^^ source.hydra support.type.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra variable.parameter.hydra
+#                            ^ source.hydra punctuation.separator.binder.hydra
+#                             ^ source.hydra
+#                              ^^^^^^ source.hydra keyword.control.hydra
+#                                    ^^ source.hydra
+>  ## A unique name for the column
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  name: ColumnName,
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^ source.hydra
+>  ## The domain (type) of the column
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  domain: t}
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^ source.hydra variable.other.hydra
+#           ^^ source.hydra
+>
+>## A mapping from certain columns of a source relation to primary key columns of a target relation
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type ForeignKey = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.equals.hydra
+#                 ^ source.hydra
+#                  ^^^^^^ source.hydra keyword.control.hydra
+#                        ^^ source.hydra
+>  ## The name of the target relation
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  foreignRelation: RelationName,
+#^^ source.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                               ^^ source.hydra
+>  keys: map<ColumnName, ColumnName>@{description="The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation.", minLength=1:int32}}
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^ source.hydra support.type.hydra
+#           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#            ^^^^^^^^^^ source.hydra variable.other.hydra
+#                      ^^ source.hydra
+#                        ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                   ^ source.hydra keyword.operator.annotation.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                ^ source.hydra keyword.operator.equals.hydra
+#                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                                                                                                                                   ^^ source.hydra
+#                                                                                                                                                                                                     ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                              ^ source.hydra keyword.operator.equals.hydra
+#                                                                                                                                                                                                               ^ source.hydra constant.numeric.integer.hydra
+#                                                                                                                                                                                                                ^ source.hydra punctuation.separator.type.hydra
+#                                                                                                                                                                                                                 ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                                                                                                                                                                                      ^^^ source.hydra
+>
+>## A primary key of a relation, specified either as a single column, or as a list of columns
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type PrimaryKey = wrap(list<ColumnName>@{minLength=1:int32})
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.equals.hydra
+#                 ^ source.hydra
+#                  ^^^^ source.hydra keyword.control.hydra
+#                      ^ source.hydra
+#                       ^^^^ source.hydra support.type.hydra
+#                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                            ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                       ^ source.hydra keyword.operator.annotation.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^ source.hydra keyword.operator.equals.hydra
+#                                                   ^ source.hydra constant.numeric.integer.hydra
+#                                                    ^ source.hydra punctuation.separator.type.hydra
+#                                                     ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                          ^^^ source.hydra
+>
+>## A set of distinct n-tuples; a table
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Relation = forall v. wrap(list<Row v>)
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+#               ^ source.hydra
+#                ^^^^^^ source.hydra support.type.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra variable.parameter.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^ source.hydra
+#                          ^^^^ source.hydra keyword.control.hydra
+#                              ^ source.hydra
+#                               ^^^^ source.hydra support.type.hydra
+#                                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                    ^^^ source.hydra variable.other.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra variable.other.hydra
+#                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                          ^^ source.hydra
+>
+>## A unique relation (table) name
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type RelationName = wrap(string)
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+#                   ^ source.hydra
+#                    ^^^^ source.hydra keyword.control.hydra
+#                        ^ source.hydra
+#                         ^^^^^^ source.hydra support.type.hydra
+#                               ^^ source.hydra
+>
+>## An abstract relation; the name and columns of a relation without its actual data
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type RelationSchema = forall t. record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.equals.hydra
+#                     ^ source.hydra
+#                      ^^^^^^ source.hydra support.type.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.parameter.hydra
+#                              ^ source.hydra punctuation.separator.binder.hydra
+#                               ^ source.hydra
+#                                ^^^^^^ source.hydra keyword.control.hydra
+#                                      ^^ source.hydra
+>  ## A unique name for the relation
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  name: RelationName,
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^ source.hydra
+>  columns: list<ColumnSchema t>@{description="A list of column specifications", minLength=1:int32},
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^ source.hydra support.type.hydra
+#               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                               ^ source.hydra keyword.operator.annotation.hydra
+#                                ^ source.hydra
+#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                            ^ source.hydra keyword.operator.equals.hydra
+#                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                              ^^ source.hydra
+#                                                                                ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                         ^ source.hydra keyword.operator.equals.hydra
+#                                                                                          ^ source.hydra constant.numeric.integer.hydra
+#                                                                                           ^ source.hydra punctuation.separator.type.hydra
+#                                                                                            ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                                                                 ^^^ source.hydra
+>  ## Any number of primary keys for the relation, each of which must be valid for this relation
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  primaryKeys: list<PrimaryKey>,
+#^^ source.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra punctuation.separator.type.hydra
+#              ^ source.hydra
+#               ^^^^ source.hydra support.type.hydra
+#                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                    ^^^^^^^^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                               ^^ source.hydra
+>  ## Any number of foreign keys, each of which must be valid for both this relation and the target relation
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  foreignKeys: list<ForeignKey>}
+#^^ source.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra punctuation.separator.type.hydra
+#              ^ source.hydra
+#               ^^^^ source.hydra support.type.hydra
+#                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                    ^^^^^^^^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                               ^^ source.hydra
+>
+>## A domain-unordered (string-indexed, rather than position-indexed) relation
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Relationship = forall v. wrap(set<map<ColumnName, v>>)
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+#                   ^ source.hydra
+#                    ^^^^^^ source.hydra support.type.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra variable.parameter.hydra
+#                            ^ source.hydra punctuation.separator.binder.hydra
+#                             ^ source.hydra
+#                              ^^^^ source.hydra keyword.control.hydra
+#                                  ^ source.hydra
+#                                   ^^^ source.hydra support.type.hydra
+#                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                       ^^^ source.hydra support.type.hydra
+#                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                           ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                     ^^ source.hydra
+#                                                       ^ source.hydra variable.other.hydra
+#                                                        ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                          ^^ source.hydra
+>
+>## An n-tuple which is an element of a given relation
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Row = forall v. wrap(list<v>@{minLength=1:int32})
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^ source.hydra entity.name.function.hydra
+#        ^ source.hydra
+#         ^ source.hydra keyword.operator.equals.hydra
+#          ^ source.hydra
+#           ^^^^^^ source.hydra support.type.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra variable.parameter.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^ source.hydra
+#                     ^^^^ source.hydra keyword.control.hydra
+#                         ^ source.hydra
+#                          ^^^^ source.hydra support.type.hydra
+#                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                               ^ source.hydra variable.other.hydra
+#                                ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                 ^ source.hydra keyword.operator.annotation.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^^^ source.hydra variable.other.hydra
+#                                            ^ source.hydra keyword.operator.equals.hydra
+#                                             ^ source.hydra constant.numeric.integer.hydra
+#                                              ^ source.hydra punctuation.separator.type.hydra
+#                                               ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                    ^^^ source.hydra

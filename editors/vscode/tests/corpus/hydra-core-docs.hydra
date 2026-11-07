@@ -1,0 +1,11 @@
+## A model for Hydra documentation strings, including inline annotations and entity references
+module hydra.core.docs
+
+import hydra.core.packaging as packaging
+
+## A segment of a documentation string, either a raw text fragment or an inline entity reference. Documentation strings are parsed into a sequence of DocSegments for host-specific rendering.
+type DocSegment = union{
+  ## An inline reference to a Hydra entity
+  ref: packaging.EntityReference,
+  ## A raw prose fragment, passed through verbatim
+  text: string}

@@ -1,0 +1,28 @@
+## A simple, untyped tabular data model, suitable for CSVs and TSVs
+module hydra.core.tabular
+
+import hydra.core.model as model
+import hydra.core.relational as relational
+
+## A column type, consisting of a name and a value type
+type ColumnType = record{
+  name: relational.ColumnName,
+  `type`: model.Type}
+
+## A data row, containing optional-valued cells; one per column
+type DataRow = forall v. wrap(list<optional<v>>)
+
+## A header row, containing column names (but no types or data)
+type HeaderRow = wrap(list<string>)
+
+## A simple table as in a CSV file, having an optional header row and any number of data rows
+type Table = forall v. record{
+  ## The optional header row of the table. If present, the header must have the same number of cells as each data row.
+  header: optional<HeaderRow>,
+  ## The data rows of the table. Each row must have the same number of cells.
+  data: list<DataRow v>}
+
+## A type definition for a table, including column names and types
+type TableType = record{
+  name: relational.RelationName,
+  columns: list<ColumnType>}

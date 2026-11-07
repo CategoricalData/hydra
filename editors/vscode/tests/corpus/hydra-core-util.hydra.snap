@@ -1,0 +1,218 @@
+>## General-purpose utility types used across Hydra.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.util
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>import hydra.core.packaging as packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                           ^ source.hydra
+#                            ^^ source.hydra keyword.control.import.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>## A naming convention for symbols, such as camelCase or snake_case
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type CaseConvention = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.equals.hydra
+#                     ^ source.hydra
+#                      ^^^^^ source.hydra support.type.hydra
+#                           ^^ source.hydra
+>  camel: unit,
+#^^ source.hydra
+#  ^^^^^ source.hydra variable.other.hydra
+#       ^ source.hydra punctuation.separator.type.hydra
+#        ^ source.hydra
+#         ^^^^ source.hydra support.type.hydra
+#             ^^ source.hydra
+>  pascal: unit,
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra support.type.hydra
+#              ^^ source.hydra
+>  lowerSnake: unit,
+#^^ source.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra punctuation.separator.type.hydra
+#             ^ source.hydra
+#              ^^^^ source.hydra support.type.hydra
+#                  ^^ source.hydra
+>  upperSnake: unit,
+#^^ source.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra punctuation.separator.type.hydra
+#             ^ source.hydra
+#              ^^^^ source.hydra support.type.hydra
+#                  ^^ source.hydra
+>  upperDashed: unit}
+#^^ source.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra punctuation.separator.type.hydra
+#              ^ source.hydra
+#               ^^^^ source.hydra support.type.hydra
+#                   ^^ source.hydra
+>
+>## An equality judgement: less than, equal to, or greater than
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Comparison = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.equals.hydra
+#                 ^ source.hydra
+#                  ^^^^^ source.hydra support.type.hydra
+#                       ^^ source.hydra
+>  lessThan: unit,
+#^^ source.hydra
+#  ^^^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^ source.hydra support.type.hydra
+#                ^^ source.hydra
+>  equalTo: unit,
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^ source.hydra support.type.hydra
+#               ^^ source.hydra
+>  greaterThan: unit}
+#^^ source.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra punctuation.separator.type.hydra
+#              ^ source.hydra
+#               ^^^^ source.hydra support.type.hydra
+#                   ^^ source.hydra
+>
+>## A mapping from module names to values of type n, with a focus on one module name
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type ModuleNames = forall n. record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.equals.hydra
+#                  ^ source.hydra
+#                   ^^^^^^ source.hydra support.type.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra variable.parameter.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^ source.hydra
+#                             ^^^^^^ source.hydra keyword.control.hydra
+#                                   ^^ source.hydra
+>  ## The module name in focus, together with its associated value
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  focus: (packaging.ModuleName, n),
+#^^ source.hydra
+#  ^^^^^ source.hydra variable.other.hydra
+#       ^ source.hydra punctuation.separator.type.hydra
+#        ^^ source.hydra
+#          ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra variable.other.hydra
+#                                 ^^^ source.hydra
+>  ## A mapping of module names to values
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  mapping: map<packaging.ModuleName, n>}
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^ source.hydra support.type.hydra
+#              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#               ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra variable.other.hydra
+#                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                       ^^ source.hydra
+>
+>## Numeric precision: arbitrary precision, or precision to a specified number of bits
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Precision = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra
+#                 ^^^^^ source.hydra support.type.hydra
+#                      ^^ source.hydra
+>  ## Arbitrary precision
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  arbitrary: unit,
+#^^ source.hydra
+#  ^^^^^^^^^ source.hydra variable.other.hydra
+#           ^ source.hydra punctuation.separator.type.hydra
+#            ^ source.hydra
+#             ^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+>  ## Precision to a specified number of bits
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  bits: int32}
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^^ source.hydra support.type.hydra
+#             ^^ source.hydra
+>
+>## A qualified name consisting of an optional module name together with a mandatory local name
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type QualifiedName = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^^^^^^ source.hydra keyword.control.hydra
+#                           ^^ source.hydra
+>  ## The optional module name
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  moduleName: optional<packaging.ModuleName>,
+#^^ source.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra punctuation.separator.type.hydra
+#             ^ source.hydra
+#              ^^^^^^^^ source.hydra support.type.hydra
+#                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                       ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                            ^^ source.hydra
+>  ## The local name
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  local: string}
+#^^ source.hydra
+#  ^^^^^ source.hydra variable.other.hydra
+#       ^ source.hydra punctuation.separator.type.hydra
+#        ^ source.hydra
+#         ^^^^^^ source.hydra support.type.hydra
+#               ^^ source.hydra

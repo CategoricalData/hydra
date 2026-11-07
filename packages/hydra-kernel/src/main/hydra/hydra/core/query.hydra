@@ -1,0 +1,133 @@
+## A model for language-agnostic graph pattern queries
+module hydra.core.query
+
+import hydra.core.model as model
+
+## One of several comparison operators
+type ComparisonConstraint = union{
+  equal: unit,
+  notEqual: unit,
+  lessThan: unit,
+  greaterThan: unit,
+  lessThanOrEqual: unit,
+  greaterThanOrEqual: unit}
+
+## An abstract edge based on a record type
+type Edge = record{
+  ## The name of a record type, for which the edge also specifies an out- and an in- projection
+  `type`: model.Name,
+  ## The field representing the out-projection of the edge. Defaults to 'out'.
+  out: optional<model.Name>,
+  ## The field representing the in-projection of the edge. Defaults to 'in'.
+  `in`: optional<model.Name>}
+
+## A query pattern which matches within a designated component subgraph
+type GraphPattern = record{
+  ## The name of the component graph
+  graph: model.Name,
+  ## The patterns to match within the subgraph
+  patterns: list<Pattern>}
+
+## A node in a query expression; it may be a term, a variable, or a wildcard
+type Node = union{
+  ## A graph term; an expression which is valid in the graph being matched
+  `term`: model.Term,
+  ## A query variable, not to be confused with a variable term
+  variable: Variable,
+  ## An anonymous variable which we do not care to join across patterns
+  wildcard: unit}
+
+## A query path
+type Path = union{
+  ## A path given by a single step
+  step: Step,
+  ## A path given by a regular expression quantifier applied to another path
+  regex: RegexSequence,
+  ## A path given by the inverse of another path
+  inverse: Path}
+
+## A declared equivalence between two abstract paths in a graph
+type PathEquation = record{
+  ## The left-hand side of the equation
+  `left`: Path,
+  ## The right-hand side of the equation
+  `right`: Path}
+
+## A query pattern
+type Pattern = union{
+  ## A subject/predicate/object pattern
+  triple: TriplePattern,
+  ## The negation of another pattern
+  negation: Pattern,
+  ## The conjunction ('and') of several other patterns
+  conjunction: list<Pattern>,
+  ## The disjunction (inclusive 'or') of several other patterns
+  disjunction: list<Pattern>,
+  ## A pattern which matches within a named subgraph
+  graph: GraphPattern}
+
+## A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns.
+type PatternImplication = record{
+  ## The pattern which, if it matches, triggers the constraint
+  antecedent: Pattern,
+  ## The pattern which must also match when the antecedent matches
+  consequent: Pattern}
+
+## A SELECT-style graph pattern matching query
+type Query = record{
+  ## The variables selected by the query
+  variables: list<Variable>,
+  ## The patterns to be matched
+  patterns: list<Pattern>}
+
+## A range from min to max, inclusive
+type Range = record{
+  ## The minimum value (inclusive)
+  min: int32,
+  ## The maximum value (inclusive)
+  max: int32}
+
+## A regular expression quantifier
+type RegexQuantifier = union{
+  ## No quantifier; matches a single occurrence
+  one: unit,
+  ## The ? quanifier; matches zero or one occurrence
+  zeroOrOne: unit,
+  ## The * quantifier; matches any number of occurrences
+  zeroOrMore: unit,
+  ## The + quantifier; matches one or more occurrences
+  oneOrMore: unit,
+  ## The {n} quantifier; matches exactly n occurrences
+  exactly: int32,
+  ## The {n,} quantifier; matches at least n occurrences
+  atLeast: int32,
+  ## The {n, m} quantifier; matches between n and m (inclusive) occurrences
+  range: Range}
+
+## A path with a regex quantifier
+type RegexSequence = record{
+  ## The path to which the quantifier applies
+  path: Path,
+  ## The quantifier
+  quantifier: RegexQuantifier}
+
+## An atomic function as part of a query. When applied to a graph, steps are typed by function types.
+type Step = union{
+  ## An out-to-in traversal of an abstract edge
+  edge: Edge,
+  ## A projection from a record through one of its fields
+  `project`: model.Projection,
+  ## A comparison of two terms
+  compare: ComparisonConstraint}
+
+## A subject/predicate/object pattern
+type TriplePattern = record{
+  ## The subject of the pattern
+  subject: Node,
+  ## The predicate (property) of the pattern
+  predicate: Path,
+  ## The object of the pattern
+  object: Node}
+
+## A query variable
+type Variable = wrap(string)

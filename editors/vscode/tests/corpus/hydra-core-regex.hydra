@@ -1,0 +1,80 @@
+## A model for Hydra's translingual regular-expression syntax: the abstract syntax tree (AST) into which hydra.core.parse.regex parses a pattern and from which hydra.core.print.regex (and the per-dialect hydra.core.print.<dialect>.regex renderers) emit target syntax. Covers the minimal core defined in docs/specification/regex.md (literals, character classes, ., quantifiers, alternation, anchors, grouping). See issue #567.
+module hydra.core.regex
+
+
+
+## A non-empty list of alternative sequences, joined by the | operator. Matches if any alternative matches.
+type Alternation = list<RegexSequence>
+
+## A single, unquantified regex element: the smallest unit to which a quantifier may apply.
+type Atom = union{
+  ## A literal character, matched exactly. The character is a Unicode scalar value in the range [U+0000, U+10FFFF] (surrogates excluded), held as an int32 code point (the range fits in signed 32-bit, and int32 matches Hydra's string/parser code-point representation). In concrete syntax, a metacharacter is written escaped (e.g. \.); escaping is purely a concrete-syntax concern, so the AST holds the bare code point.
+  literal: int32,
+  ## The . metacharacter; matches any single character, INCLUDING newline (unlike most host engines, whose native . excludes newline). To exclude newline, write [^\n] explicitly.
+  any: unit,
+  ## The ^ anchor; matches the empty string at the start of input.
+  anchorStart: unit,
+  ## The $ anchor; matches the empty string at the end of input.
+  anchorEnd: unit,
+  ## A parenthesized sub-expression, ( ... ); groups an alternation for quantification.
+  group: Alternation,
+  ## A character class, [ ... ]; matches any single character in (or, if negated, not in) the set.
+  class: CharacterClass}
+
+## A bracketed character class, [ ... ] or [^ ... ].
+type CharacterClass = record{
+  ## True for a negated class ([^ ... ]), which matches any character NOT listed.
+  negated: boolean,
+  ## The class members: individual characters and/or character ranges. Must be non-empty; the empty class [] and negated-empty class [^] are excluded from the core (they are not in the POSIX/PCRE/ECMA intersection). hydra.core.parse.regex rejects an empty class.
+  items: list<ClassItem>}
+
+## An inclusive range of characters within a character class, e.g. a-z.
+type CharacterRange = record{
+  ## The first character of the range (inclusive), as an int32 Unicode scalar value.
+  `from`: int32,
+  ## The last character of the range (inclusive), as an int32 Unicode scalar value.
+  to: int32}
+
+## A member of a character class: either a single character or an inclusive character range.
+type ClassItem = union{
+  ## A single character (int32 Unicode scalar value) in the class.
+  character: int32,
+  ## An inclusive range of characters, e.g. a-z.
+  range: CharacterRange}
+
+## An atom together with an optional quantifier applied to it.
+type Quantified = record{
+  ## The atom being quantified.
+  atom: Atom,
+  ## The quantifier; use 'one' for an unquantified atom.
+  quantifier: Quantifier}
+
+## A regular-expression quantifier. Mirrors hydra.core.query.RegexQuantifier, which models the same set of quantifiers for graph-path queries; a future refactor may hoist a shared type (see #567 findings).
+type Quantifier = union{
+  ## No quantifier; matches exactly one occurrence.
+  one: unit,
+  ## The ? quantifier; matches zero or one occurrence.
+  zeroOrOne: unit,
+  ## The * quantifier; matches zero or more occurrences.
+  zeroOrMore: unit,
+  ## The + quantifier; matches one or more occurrences.
+  oneOrMore: unit,
+  ## The {n} quantifier; matches exactly n occurrences.
+  exactly: int32,
+  ## The {n,} quantifier; matches at least n occurrences.
+  atLeast: int32,
+  ## The {n,m} quantifier; matches between n and m (inclusive) occurrences.
+  range: QuantifierRange}
+
+## The bounds of a {n,m} quantifier: between min and max (inclusive) occurrences.
+type QuantifierRange = record{
+  ## The minimum number of occurrences (inclusive).
+  min: int32,
+  ## The maximum number of occurrences (inclusive).
+  max: int32}
+
+## A complete Hydra regular expression: the root of the AST. A regex is an alternation of sequences.
+type Regex = Alternation
+
+## A (possibly empty) sequence of quantified atoms, matched in order. An empty sequence matches the empty string. (Named RegexSequence rather than Sequence to avoid the generated coder binding colliding with the host's built-in sequence.)
+type RegexSequence = list<Quantified>

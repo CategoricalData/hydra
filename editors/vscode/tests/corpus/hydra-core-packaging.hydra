@@ -1,0 +1,183 @@
+## A model for Hydra module names, modules, and packages
+module hydra.core.packaging
+
+import hydra.core.model as model
+import hydra.core.typing as typing
+
+## A definition, which may be either a term, type, or primitive definition
+type Definition = union{
+  ## A primitive definition
+  `primitive`: PrimitiveDefinition,
+  ## A term definition
+  `term`: TermDefinition,
+  ## A type definition
+  `type`: TypeDefinition}
+
+## A typed reference to a definition: a type, a term, or a primitive, identified by name
+type DefinitionReference = union{
+  ## A reference to a primitive definition, by name
+  `primitive`: model.Name,
+  ## A reference to a term definition, by name
+  `term`: model.Name,
+  ## A reference to a type definition, by name
+  `type`: model.Name}
+
+## The scope in which a package dependency is required. Relevant mainly to dependencies on third-party (non-Hydra) artifacts, where build systems distinguish compile-time, runtime, test-only, and build-tool-only dependencies. Hydra inter-package dependencies normally leave the scope unspecified.
+type DependencyScope = union{
+  ## A dependency exported transitively to consumers of this package (e.g. Gradle `api`, Cabal `build-depends`): present at both compile time and runtime, and visible downstream
+  api: unit,
+  ## A dependency required at runtime but not at compile time
+  runtime: unit,
+  ## A dependency required only to compile and run the package's tests
+  test: unit,
+  ## A build-tool-only dependency, used to generate or process sources at build time but not present in the compiled artifact (e.g. an ANTLR tool jar or an annotation processor)
+  tool: unit}
+
+## Documentation, lifecycle, and normative metadata attachable to a packaging entity (package, module, or definition). Bundling these fields in one type lets future metadata be added without changing the field shape of the entities that carry it.
+type EntityMetadata = record{
+  ## An optional, concise one-line human-readable summary of the entity.
+  description: optional<string>,
+  ## Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and references that would otherwise be repeated across the entity's constituents.
+  comments: list<string>,
+  ## Typed cross-references to related entities, for navigation and documentation.
+  seeAlso: list<EntityReference>,
+  ## Optional version-lifecycle milestones for the entity.
+  lifecycle: optional<LifecycleInfo>,
+  ## Named normative provisions (requirements and recommendations) concerning this entity. Empty when the entity states none.
+  provisions: list<Provision>}
+
+## A typed reference to a Hydra entity: a package, a module, a definition (by name), or an inline type or term expression in Hydra textual syntax.
+type EntityReference = union{
+  ## A reference to a definition (type, term, or primitive), by name
+  definition: DefinitionReference,
+  ## A reference to a module, by name
+  `module`: ModuleName,
+  ## A reference to a package, by name
+  package: PackageName,
+  ## An inline term expression in Hydra textual syntax
+  termExpr: string,
+  ## An inline type expression in Hydra textual syntax
+  typeExpr: string}
+
+## Version-lifecycle milestones for a packaging entity. Each milestone is independently optional; further milestones (e.g. stableSince, removedSince) may be added without changing dependent types.
+type LifecycleInfo = record{
+  ## The version in which the entity was introduced, if known.
+  availableSince: optional<Version>,
+  ## The version in which the entity was deprecated, if applicable.
+  deprecatedSince: optional<Version>}
+
+## A logical collection of elements sharing a common module name, having dependencies on zero or more other modules
+type Module = record{
+  ## The name of the module, which is also the common prefix for all element names in the module
+  name: ModuleName,
+  ## Optional documentation and lifecycle metadata for the module
+  metadata: optional<EntityMetadata>,
+  ## Any modules which this module directly depends on
+  dependencies: list<ModuleDependency>,
+  ## The definitions in this module
+  definitions: list<Definition>}
+
+## A dependency on another module, identified by its name and (optionally) the package which provides it. When the package is omitted, the resolver searches all packages in scope; a duplicate module name across packages is a resolution error which can be disambiguated by naming the intended package explicitly.
+type ModuleDependency = record{
+  ## The name of the depended-on module
+  `module`: ModuleName,
+  ## The package providing the depended-on module, if disambiguation is required
+  package: optional<PackageName>}
+
+## The unique name of a module; a prefix for the names of elements defined in the module.
+type ModuleName = wrap(string)
+
+## A package, which is a named collection of modules with metadata and dependencies
+type Package = record{
+  ## The name of the package
+  name: PackageName,
+  ## Optional documentation and lifecycle metadata for the package
+  metadata: optional<EntityMetadata>,
+  ## The packages which this package depends on
+  dependencies: list<PackageDependency>,
+  ## The modules in this package
+  modules: list<Module>}
+
+## A dependency on another package, identified by name and constrained by an optional version specifier
+type PackageDependency = record{
+  ## The name of the depended-on package
+  name: PackageName,
+  ## The version-range constraint on the depended-on package
+  version: VersionSpecifier,
+  ## The scope in which the dependency is required, if specified. Normally absent for Hydra inter-package dependencies; specified for third-party dependencies whose build scope (compile/runtime/test/tool) is significant.
+  scope: optional<DependencyScope>}
+
+## The unique name of a package, e.g. "hydra-kernel" or "hydra-python". For dependencies on third-party artifacts in ecosystems with a group/namespace component (notably Maven), the group and artifact are carried in a single name separated by a colon, e.g. "org.eclipse.rdf4j:rdf4j-rio-ntriples"; the consuming host splits on the colon to recover the group when emitting build configuration. Hydra package names contain no colon.
+type PackageName = wrap(string)
+
+## A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, documentation and lifecycle metadata, totality and purity flags, and an optional default implementation expressed as a Hydra term.
+type PrimitiveDefinition = record{
+  ## The name of the primitive
+  name: model.Name,
+  ## Optional documentation and lifecycle metadata for the primitive.
+  metadata: optional<EntityMetadata>,
+  ## The signature of the primitive. Always explicit, never inferred.
+  signature: typing.TermSignature,
+  ## Whether the primitive is pure (referentially transparent, no observable side effects). Normally true.
+  isPure: boolean,
+  ## Whether the primitive is total (terminates on every input of its declared type). Normally true.
+  isTotal: boolean,
+  ## An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation.
+  defaultImplementation: optional<model.Term>}
+
+## A named normative statement concerning an entity: a single falsifiable condition a conforming implementation is measured against. Tests reference provisions by name.
+type Provision = record{
+  ## The fully-qualified name of the provision: the enclosing entity's name extended by one segment (e.g. hydra.core.lib.lists.concat.emptyLists). Composed at definition time by a helper that prefixes the entity's name, exactly as a definition's name is composed from its module's name -- so the author writes only the final segment, but the stored value is the full name.
+  name: model.Name,
+  ## Whether this provision is a requirement or a recommendation.
+  kind: ProvisionKind,
+  ## The normative statement itself, as markdown prose: the falsifiable claim.
+  statement: string}
+
+## Whether a provision is a requirement (a MUST: no deviation permitted for conformance) or a recommendation (a SHOULD: observed by the Hydra kernel, but a downstream project may opt out).
+type ProvisionKind = union{
+  ## A requirement: no deviation is permitted if conformance is to be claimed (MUST).
+  requirement: unit,
+  ## A recommendation: observed strictly by the Hydra kernel and codebase, but a downstream project may opt out (SHOULD).
+  recommendation: unit}
+
+## A term-level definition, including a name, an optional signature, and a term
+type TermDefinition = record{
+  ## The name of the term
+  name: model.Name,
+  ## Optional documentation and lifecycle metadata for the term definition
+  metadata: optional<EntityMetadata>,
+  ## The optional signature of the term. When absent, the signature has yet to be inferred.
+  signature: optional<typing.TermSignature>,
+  ## The term being defined
+  body: model.Term}
+
+## A type-level definition, including a name and the type scheme
+type TypeDefinition = record{
+  ## The name of the type
+  name: model.Name,
+  ## Optional documentation and lifecycle metadata for the type definition
+  metadata: optional<EntityMetadata>,
+  ## The type scheme being defined
+  body: model.TypeScheme}
+
+## A version string, e.g. "0.15" or "1.0.0".
+type Version = wrap(string)
+
+## A version range with an optional inclusive lower bound and an optional exclusive upper bound.
+type VersionRange = record{
+  ## The inclusive lower bound, if any (the minimum acceptable version).
+  lowerInclusive: optional<Version>,
+  ## The exclusive upper bound, if any (versions strictly below this are acceptable).
+  upperExclusive: optional<Version>}
+
+## A specifier constraining acceptable versions of a dependency. Build systems render each variant into their own syntax (e.g. a range becomes ">=3.7,<4.0" for PyPI or "[3.7,4.0)" for Maven). Further variants such as `caret` may be added without breaking consumers of the existing forms.
+type VersionSpecifier = union{
+  ## Any version satisfies the dependency
+  any: unit,
+  ## Exactly the given version satisfies the dependency; used to pin a specific release
+  exact: Version,
+  ## Any version greater than or equal to the given version (e.g. PyPI ">=7.0")
+  atLeast: Version,
+  ## A version range with an optional inclusive lower bound and optional exclusive upper bound (e.g. ">=3.7,<4.0")
+  range: VersionRange}

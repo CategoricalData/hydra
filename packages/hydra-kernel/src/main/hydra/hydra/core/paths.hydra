@@ -1,0 +1,275 @@
+## Subterm and subtype access, and the term/type graph view of a graph
+module hydra.core.paths
+
+import hydra.core.model as model
+
+## A reference to a lambda-bound variable: the node introducing it is the binding lambda
+type LambdaVariableReference = record{
+  ## The name of the lambda-bound variable
+  variable: model.Name,
+  ## The id of the node at the binding lambda
+  boundByNode: TermNodeId,
+  ## The type of the variable
+  `type`: model.Type}
+
+## A reference to a let-bound variable: the node introducing it is the bound term
+type LetVariableReference = record{
+  ## The name of the let-bound variable
+  variable: model.Name,
+  ## The id of the node at the bound term
+  bindingNode: TermNodeId,
+  ## The type of the variable
+  `type`: model.Type}
+
+## A reference to a named type of the schema (analogous to a let-bound variable)
+type NominalTypeReference = record{
+  ## The name of the referenced schema type
+  name: model.Name}
+
+## A reference to a primitive function
+type PrimitiveReference = record{
+  ## The name of the primitive
+  name: model.Name,
+  ## The type of the primitive
+  `type`: model.Type}
+
+## An outgoing link to an immediate subterm, carried inline as a child node
+type SubtermLink = record{
+  ## The step by which the child subterm is reached
+  step: SubtermStep,
+  ## The child node (inline; the structure is a tree)
+  child: TermNode}
+
+## A sequence of subterm steps forming a path through a term, root first
+type SubtermPath = wrap(list<SubtermStep>)
+
+## A function which maps from a term to a particular immediate subterm
+type SubtermStep = union{
+  ## Access the annotation of an annotated term
+  annotatedAnnotation: unit,
+  ## Access the body of an annotated term
+  annotatedBody: unit,
+  ## Access the argument of an application term
+  applicationArgument: unit,
+  ## Access the function of an application term
+  applicationFunction: unit,
+  ## Access the handler of a specific case of a case statement by field name
+  casesCase: model.Name,
+  ## Access the default case of a case statement
+  casesDefault: unit,
+  ## Access the left term of an either value
+  eitherLeft: unit,
+  ## Access the right term of an either value
+  eitherRight: unit,
+  ## Access the injected term of a union injection by field name
+  injectField: model.Name,
+  ## Access the body of a lambda term
+  lambdaBody: unit,
+  ## Access a specific binding in a let term by variable name
+  letBinding: model.Name,
+  ## Access the body of a let term
+  letBody: unit,
+  ## Access an element of a list by index
+  listElement: int32,
+  ## Access the map entry at the given index as a pair (k, v). Accessing this step constructs the pair; the entry is not itself a subterm occurrence, though its key and value components are, reached via pairFirst/pairSecond. Entry indexes follow the total order on serializable terms.
+  mapEntry: int32,
+  ## Access the term inside a given (present) optional value
+  optionalGiven: unit,
+  ## Access the first term of a pair
+  pairFirst: unit,
+  ## Access the second term of a pair
+  pairSecond: unit,
+  ## Access a field of a record by field name
+  recordField: model.Name,
+  ## Access an element of a set by index
+  setElement: int32,
+  ## Access the body of a type application term
+  typeApplicationBody: unit,
+  ## Access the body of a type lambda term
+  typeLambdaBody: unit,
+  ## Access the body of a wrapped term
+  wrapBody: unit}
+
+## An outgoing link to an immediate subtype, carried inline as a child node
+type SubtypeLink = record{
+  ## The step by which the child subtype is reached
+  step: SubtypeStep,
+  ## The child node (inline; the structure is a tree)
+  child: TypeNode}
+
+## A sequence of subtype steps forming a path through a type, root first
+type SubtypePath = wrap(list<SubtypeStep>)
+
+## A function which maps from a type to a particular immediate subtype
+type SubtypeStep = union{
+  ## Access the body of an annotated type (the annotation is a term; there is no step for it)
+  annotatedBody: unit,
+  ## Access the argument of an application type
+  applicationArgument: unit,
+  ## Access the function of an application type
+  applicationFunction: unit,
+  ## Access the value type of an effect type
+  effectValue: unit,
+  ## Access the left type of an either type
+  eitherLeft: unit,
+  ## Access the right type of an either type
+  eitherRight: unit,
+  ## Access the body of a universally quantified type
+  forallBody: unit,
+  ## Access the codomain type of a function type
+  functionCodomain: unit,
+  ## Access the domain type of a function type
+  functionDomain: unit,
+  ## Access the element type of a list type
+  listElement: unit,
+  ## Access the key type of a map type
+  mapKeys: unit,
+  ## Access the value type of a map type
+  mapValues: unit,
+  ## Access the element type of an optional type
+  optionalElement: unit,
+  ## Access the first type of a pair type
+  pairFirst: unit,
+  ## Access the second type of a pair type
+  pairSecond: unit,
+  ## Access a field type of a record type by field name
+  recordField: model.Name,
+  ## Access the element type of a set type
+  setElement: unit,
+  ## Access a field type of a union type by field name
+  unionField: model.Name,
+  ## Access the body type of a wrapped type
+  wrapBody: unit}
+
+## A non-term constituent of this node's term, with its value
+type TermAttributeLink = union{
+  ## The name of the union type eliminated by a case statement
+  casesTypeName: model.Name,
+  ## The name of the union type of an injection
+  injectTypeName: model.Name,
+  ## The (given) domain type of a lambda
+  lambdaDomainGiven: model.Type,
+  ## The parameter name of a lambda
+  lambdaParameter: model.Name,
+  ## The name of a let binding together with its (given) type scheme
+  letBindingTypeSchemeGiven: (model.Name, model.TypeScheme),
+  ## The literal value of a literal term (a leaf)
+  literal: model.Literal,
+  ## The name of the field projected by a projection
+  projectFieldName: model.Name,
+  ## The name of the record type of a projection
+  projectTypeName: model.Name,
+  ## The name of the record type of a record term
+  recordTypeName: model.Name,
+  ## The type argument of a type application term
+  typeApplicationType: model.Type,
+  ## The type-variable parameter of a type lambda term
+  typeLambdaParameter: model.Name,
+  ## The name of the wrapper type eliminated by an unwrap
+  unwrapTypeName: model.Name,
+  ## The name of the wrapper type of a wrapped term
+  wrapTypeName: model.Name}
+
+## A typed graph as a term graph: one root node per binding of the graph
+type TermGraph = record{
+  ## The root nodes, keyed by binding name
+  roots: map<model.Name, TermNode>}
+
+## An outgoing link of a term node: an inline subterm, a variable occurrence, or a non-term attribute
+type TermLink = union{
+  ## A non-term constituent of this node's term
+  attribute: TermAttributeLink,
+  ## A variable or primitive occurrence
+  reference: TermReferenceLink,
+  ## An immediate subterm, carried inline
+  subterm: SubtermLink}
+
+## A node in a term graph: a subterm as written, its type, and its outgoing links
+type TermNode = record{
+  ## The subterm as written
+  `term`: model.Term,
+  ## The subterm's type (a binding's forall type at roots), via hydra.core.checking
+  `type`: model.Type,
+  ## The outgoing links of the node
+  links: list<TermLink>}
+
+## The id of a term-graph node: a root binding name plus a subterm path from that root. A root node's id has an empty path. A letBinding step appears only for an actual nested let inside a binding's term, never as a leading pseudo-step.
+type TermNodeId = record{
+  ## The name of the root binding
+  root: model.Name,
+  ## The subterm path from the root
+  path: SubtermPath}
+
+## The target of a variable or primitive occurrence
+type TermReference = union{
+  ## A reference to a lambda-bound variable
+  lambda: LambdaVariableReference,
+  ## A reference to a let-bound variable
+  `let`: LetVariableReference,
+  ## A reference to a primitive function
+  `primitive`: PrimitiveReference}
+
+## An outgoing link to a variable or primitive occurrence
+type TermReferenceLink = record{
+  ## The step by which the occurrence is reached
+  step: SubtermStep,
+  ## The referenced binding, lambda parameter, or primitive
+  target: TermReference}
+
+## A non-type constituent of this node's type, with its value
+type TypeAttributeLink = union{
+  ## The annotation of an annotated type (a term; not descended into)
+  annotatedAnnotation: model.Term,
+  ## The type-variable parameter of a universally quantified type
+  forallParameter: model.Name,
+  ## The literal type of a literal type (a leaf)
+  literal: model.LiteralType}
+
+## A schema as a type graph: one root node per named type
+type TypeGraph = record{
+  ## The root nodes, keyed by type name
+  roots: map<model.Name, TypeNode>}
+
+## An outgoing link of a type node: an inline subtype, a type reference, or a non-type attribute
+type TypeLink = union{
+  ## A non-type constituent of this node's type
+  attribute: TypeAttributeLink,
+  ## A named-type or type-variable occurrence
+  reference: TypeReferenceLink,
+  ## An immediate subtype, carried inline
+  subtype: SubtypeLink}
+
+## A node in a type graph: a subtype as written and its outgoing links
+type TypeNode = record{
+  ## The subtype as written (needed for linkless leaves: literal types, unit, void)
+  `type`: model.Type,
+  ## The outgoing links of the node
+  links: list<TypeLink>}
+
+## The id of a type-graph node: a root type name plus a subtype path from that root. A root node's id has an empty path. There is no enclosing-let analog for schemas.
+type TypeNodeId = record{
+  ## The name of the root type
+  root: model.Name,
+  ## The subtype path from the root
+  path: SubtypePath}
+
+## The target of a named-type or type-variable occurrence
+type TypeReference = union{
+  ## A reference to a named type of the schema
+  nominal: NominalTypeReference,
+  ## A reference to a forall-bound type variable
+  variable: TypeVariableReference}
+
+## An outgoing link to a named-type or type-variable occurrence
+type TypeReferenceLink = record{
+  ## The step by which the occurrence is reached
+  step: SubtypeStep,
+  ## The referenced named type or type variable
+  target: TypeReference}
+
+## A reference to a forall-bound type variable: the node introducing it is the binder
+type TypeVariableReference = record{
+  ## The name of the forall-bound type variable
+  variable: model.Name,
+  ## The id of the node at the binding forall
+  boundByNode: TypeNodeId}

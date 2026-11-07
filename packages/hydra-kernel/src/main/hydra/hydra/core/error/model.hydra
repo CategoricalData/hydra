@@ -1,0 +1,437 @@
+## Error types for core type and term validation
+module hydra.core.error.model
+
+import hydra.core.model as model
+import hydra.core.paths as paths
+import hydra.core.variants as variants
+
+## An application of ifElse where the condition is a literal boolean, creating a dead branch (optional)
+type ConstantConditionError = record{
+  ## The path to the constant condition within the term
+  location: paths.SubtermPath,
+  ## The constant boolean value of the condition
+  value: boolean}
+
+## A duplicate binding name in a let expression
+type DuplicateBindingError = record{
+  ## The path to the duplicate binding within the term
+  location: paths.SubtermPath,
+  ## The duplicated binding name
+  name: model.Name}
+
+## A duplicate field name in a record or union type
+type DuplicateFieldError = record{
+  ## The path to the duplicate field within the term
+  location: paths.SubtermPath,
+  ## The duplicated field name
+  name: model.Name}
+
+## A record type with duplicate field names
+type DuplicateRecordTypeFieldNamesError = record{
+  ## The path to the record type with duplicate fields
+  location: paths.SubtermPath,
+  ## The duplicated field name
+  name: model.Name}
+
+## A union type with duplicate field names
+type DuplicateUnionTypeFieldNamesError = record{
+  ## The path to the union type with duplicate fields
+  location: paths.SubtermPath,
+  ## The duplicated field name
+  name: model.Name}
+
+## A case statement with no cases and no default (optional)
+type EmptyCaseStatementError = record{
+  ## The path to the empty case statement within the term
+  location: paths.SubtermPath,
+  ## The name of the union type being matched
+  typeName: model.Name}
+
+## A let expression with an empty list of bindings (optional)
+type EmptyLetBindingsError = record{
+  ## The path to the empty let expression within the term
+  location: paths.SubtermPath}
+
+## A record type with no fields; TypeUnit is preferred for the unit-like case (optional)
+type EmptyRecordTypeError = record{
+  ## The path to the empty record type
+  location: paths.SubtermPath}
+
+## A term annotation with an empty annotation map (optional)
+type EmptyTermAnnotationError = record{
+  ## The path to the empty annotation within the term
+  location: paths.SubtermPath}
+
+## A type annotation with an empty annotation map (optional)
+type EmptyTypeAnnotationError = record{
+  ## The path to the empty annotation
+  location: paths.SubtermPath}
+
+## A record, injection, projection, or case statement with an empty type name (optional)
+type EmptyTypeNameInTermError = record{
+  ## The path to the term with the empty type name
+  location: paths.SubtermPath}
+
+## A union type with no alternatives; TypeVoid is preferred (optional)
+type EmptyUnionTypeError = record{
+  ## The path to the empty union type
+  location: paths.SubtermPath}
+
+## A record term supplying a field that its record type does not declare
+type ExtraRecordFieldsError = record{
+  ## The path to the record term within the term
+  location: paths.SubtermPath,
+  ## The name of the record type
+  typeName: model.Name,
+  ## The names of the undeclared fields supplied by the record term
+  fieldNames: list<model.Name>}
+
+## A forall type parameter name that violates type variable naming conventions (optional)
+type InvalidForallParameterNameError = record{
+  ## The path to the forall type
+  location: paths.SubtermPath,
+  ## The invalid parameter name
+  name: model.Name}
+
+## A lambda parameter name that violates naming conventions (optional)
+type InvalidLambdaParameterNameError = record{
+  ## The path to the lambda within the term
+  location: paths.SubtermPath,
+  ## The invalid parameter name
+  name: model.Name}
+
+## A let binding name that violates naming conventions (optional)
+type InvalidLetBindingNameError = record{
+  ## The path to the binding within the term
+  location: paths.SubtermPath,
+  ## The invalid binding name
+  name: model.Name}
+
+## An error indicating that a literal value is invalid
+type InvalidLiteralError = union{
+  ## The literal's type does not match the expected literal type
+  typeMismatch: LiteralTypeMismatchError}
+
+## An error indicating that a term is invalid
+type InvalidTermError = union{
+  ## An ifElse with a literal boolean condition (optional)
+  constantCondition: ConstantConditionError,
+  ## A duplicate binding name in a let expression
+  duplicateBinding: DuplicateBindingError,
+  ## A duplicate field name in a record or case statement
+  duplicateField: DuplicateFieldError,
+  ## A case statement with no cases and no default (optional)
+  emptyCaseStatement: EmptyCaseStatementError,
+  ## A let expression with no bindings (optional)
+  emptyLetBindings: EmptyLetBindingsError,
+  ## A term annotation with an empty annotation map (optional)
+  emptyTermAnnotation: EmptyTermAnnotationError,
+  ## A term with an empty type name (optional)
+  emptyTypeNameInTerm: EmptyTypeNameInTermError,
+  ## A record term supplying a field not declared by its record type
+  extraRecordFields: ExtraRecordFieldsError,
+  ## A lambda parameter name violating naming conventions (optional)
+  invalidLambdaParameterName: InvalidLambdaParameterNameError,
+  ## A let binding name violating naming conventions (optional)
+  invalidLetBindingName: InvalidLetBindingNameError,
+  ## A type lambda parameter name violating naming conventions (optional)
+  invalidTypeLambdaParameterName: InvalidTypeLambdaParameterNameError,
+  ## A case statement that does not cover every variant of the union it matches
+  missingCaseBranches: MissingCaseBranchesError,
+  ## A record term omitting a field declared by its record type
+  missingRecordFields: MissingRecordFieldsError,
+  ## Nested term annotations that should be merged (optional)
+  nestedTermAnnotation: NestedTermAnnotationError,
+  ## A nominal type reference resolving to a type of the wrong kind (e.g. a record term naming a union type)
+  nominalTypeKindMismatch: NominalTypeKindMismatchError,
+  ## A no-op unwrap-of-wrap round-trip (optional)
+  redundantWrapUnwrap: RedundantWrapUnwrapError,
+  ## A variable applied to itself (optional)
+  selfApplication: SelfApplicationError,
+  ## A binding that shadows a variable already in scope (optional)
+  termVariableShadowing: TermVariableShadowingError,
+  ## A type lambda parameter that shadows a type variable in scope (optional)
+  typeVariableShadowingInTypeLambda: TypeVariableShadowingInTypeLambdaError,
+  ## An injection naming a variant that is not declared by its union type
+  undeclaredVariant: UndeclaredVariantError,
+  ## A variable reference to an unbound term name
+  undefinedTermVariable: UndefinedTermVariableError,
+  ## An unbound type variable in a let binding's type scheme
+  undefinedTypeVariableInBindingType: UndefinedTypeVariableInBindingTypeError,
+  ## An unbound type variable in a lambda domain annotation
+  undefinedTypeVariableInLambdaDomain: UndefinedTypeVariableInLambdaDomainError,
+  ## An unbound type variable in a type application term
+  undefinedTypeVariableInTypeApplication: UndefinedTypeVariableInTypeApplicationError,
+  ## A case statement alternative naming a field that does not exist in the union it matches
+  unknownCaseAlternative: UnknownCaseAlternativeError,
+  ## A reference to an unknown primitive function
+  unknownPrimitiveName: UnknownPrimitiveNameError,
+  ## A projection naming a field that is not declared by its record type
+  unknownProjectedField: UnknownProjectedFieldError,
+  ## An identity lambda applied to an argument (optional)
+  unnecessaryIdentityApplication: UnnecessaryIdentityApplicationError,
+  ## A nominal type reference that does not resolve to any declared type in scope
+  unresolvedNominalType: UnresolvedNominalTypeError,
+  ## A term variable whose type is not known
+  untypedTermVariable: UntypedTermVariableError}
+
+## An error indicating that a type is invalid
+type InvalidTypeError = union{
+  ## A record type with duplicate field names
+  duplicateRecordTypeFieldNames: DuplicateRecordTypeFieldNamesError,
+  ## A union type with duplicate field names
+  duplicateUnionTypeFieldNames: DuplicateUnionTypeFieldNamesError,
+  ## A record type with no fields (optional)
+  emptyRecordType: EmptyRecordTypeError,
+  ## A type annotation with an empty annotation map (optional)
+  emptyTypeAnnotation: EmptyTypeAnnotationError,
+  ## A union type with no alternatives (optional)
+  emptyUnionType: EmptyUnionTypeError,
+  ## A forall parameter name violating naming conventions (optional)
+  invalidForallParameterName: InvalidForallParameterNameError,
+  ## A type scheme variable name violating naming conventions (optional)
+  invalidTypeSchemeVariableName: InvalidTypeSchemeVariableNameError,
+  ## Nested type annotations that should be merged (optional)
+  nestedTypeAnnotation: NestedTypeAnnotationError,
+  ## A map with a non-comparable key type
+  nonComparableMapKeyType: NonComparableMapKeyTypeError,
+  ## A set with a non-comparable element type
+  nonComparableSetElementType: NonComparableSetElementTypeError,
+  ## A union type with only one variant (optional)
+  singleVariantUnion: SingleVariantUnionError,
+  ## A forall parameter that shadows a type variable in scope (optional)
+  typeVariableShadowingInForall: TypeVariableShadowingInForallError,
+  ## A type variable reference to an unbound name
+  undefinedTypeVariable: UndefinedTypeVariableError,
+  ## TypeVoid in a position where no value can be constructed (optional)
+  voidInNonBottomPosition: VoidInNonBottomPositionError}
+
+## A type lambda parameter name that violates naming conventions (optional)
+type InvalidTypeLambdaParameterNameError = record{
+  ## The path to the type lambda within the term
+  location: paths.SubtermPath,
+  ## The invalid type lambda parameter name
+  name: model.Name}
+
+## A type scheme variable name that violates type variable naming conventions (optional)
+type InvalidTypeSchemeVariableNameError = record{
+  ## The path to the type scheme
+  location: paths.SubtermPath,
+  ## The invalid variable name
+  name: model.Name}
+
+## A mismatch between an expected literal type and the type of an actual literal value
+type LiteralTypeMismatchError = record{
+  ## The expected literal type
+  expectedType: model.LiteralType,
+  ## The actual literal type, derived from the value
+  actualType: model.LiteralType}
+
+## A case statement without a default branch that fails to cover every variant of the union it matches
+type MissingCaseBranchesError = record{
+  ## The path to the case statement within the term
+  location: paths.SubtermPath,
+  ## The name of the union type being matched
+  typeName: model.Name,
+  ## The names of the uncovered variants
+  variantNames: list<model.Name>}
+
+## A record term omitting a field declared by its record type
+type MissingRecordFieldsError = record{
+  ## The path to the record term within the term
+  location: paths.SubtermPath,
+  ## The name of the record type
+  typeName: model.Name,
+  ## The names of the missing fields
+  fieldNames: list<model.Name>}
+
+## A term annotation directly wrapping another term annotation; annotations should be merged (optional)
+type NestedTermAnnotationError = record{
+  ## The path to the outer annotation within the term
+  location: paths.SubtermPath}
+
+## A type annotation directly wrapping another type annotation; annotations should be merged (optional)
+type NestedTypeAnnotationError = record{
+  ## The path to the outer annotation
+  location: paths.SubtermPath}
+
+## A nominal type reference in a term (inject, cases, record, project, wrap, or unwrap) resolving to a declared type of the wrong kind, e.g. a record term naming a union type
+type NominalTypeKindMismatchError = record{
+  ## The path to the term with the mismatched nominal type reference
+  location: paths.SubtermPath,
+  ## The name of the referenced type
+  typeName: model.Name,
+  ## The type variant required at this site
+  expectedVariant: variants.TypeVariant,
+  ## The type variant that the name actually resolves to
+  actualVariant: variants.TypeVariant}
+
+## A map type whose key type is or directly contains a function type, which cannot be compared for equality
+type NonComparableMapKeyTypeError = record{
+  ## The path to the map type
+  location: paths.SubtermPath,
+  ## The non-comparable key type
+  keyType: model.Type}
+
+## A set type whose element type is or directly contains a function type, which cannot be compared for equality
+type NonComparableSetElementTypeError = record{
+  ## The path to the set type
+  location: paths.SubtermPath,
+  ## The non-comparable element type
+  elementType: model.Type}
+
+## An unwrap elimination applied to a wrap term of the same type, forming a no-op round-trip (optional)
+type RedundantWrapUnwrapError = record{
+  ## The path to the redundant wrap/unwrap within the term
+  location: paths.SubtermPath,
+  ## The type name of the wrapper
+  typeName: model.Name}
+
+## A variable applied to itself, which is almost always a mistake in Hydra's type system (optional)
+type SelfApplicationError = record{
+  ## The path to the self-application within the term
+  location: paths.SubtermPath,
+  ## The name of the variable applied to itself
+  name: model.Name}
+
+## A union type with exactly one field; could be a wrapped type or record instead (optional)
+type SingleVariantUnionError = record{
+  ## The path to the single-variant union type
+  location: paths.SubtermPath,
+  ## The name of the single field
+  fieldName: model.Name}
+
+## A lambda parameter or let binding name that shadows a variable already in scope (optional)
+type TermVariableShadowingError = record{
+  ## The path to the shadowing binding within the term
+  location: paths.SubtermPath,
+  ## The name of the shadowed variable
+  name: model.Name}
+
+## A forall type parameter that shadows a type variable already in scope (optional)
+type TypeVariableShadowingInForallError = record{
+  ## The path to the shadowing forall type
+  location: paths.SubtermPath,
+  ## The name of the shadowed type variable
+  name: model.Name}
+
+## A type lambda parameter that shadows a type variable already in scope (optional)
+type TypeVariableShadowingInTypeLambdaError = record{
+  ## The path to the type lambda within the term
+  location: paths.SubtermPath,
+  ## The name of the shadowed type variable
+  name: model.Name}
+
+## An injection naming a variant that is not declared by its union type
+type UndeclaredVariantError = record{
+  ## The path to the injection within the term
+  location: paths.SubtermPath,
+  ## The name of the union type
+  typeName: model.Name,
+  ## The undeclared variant name
+  variantName: model.Name}
+
+## A reference to a field that does not exist in the given type
+type UndefinedFieldError = record{
+  ## The name of the undefined field
+  fieldName: model.Name,
+  ## The name of the type in which the field was expected
+  typeName: model.Name}
+
+## A variable reference to a term name that is not bound in scope
+type UndefinedTermVariableError = record{
+  ## The path to the undefined variable within the term
+  location: paths.SubtermPath,
+  ## The name of the undefined variable
+  name: model.Name}
+
+## A type variable reference to a name that is not bound in scope
+type UndefinedTypeVariableError = record{
+  ## The path to the undefined type variable
+  location: paths.SubtermPath,
+  ## The name of the undefined type variable
+  name: model.Name}
+
+## A type variable in a let binding's type scheme that is not bound by the scheme or enclosing scope
+type UndefinedTypeVariableInBindingTypeError = record{
+  ## The path to the binding within the term
+  location: paths.SubtermPath,
+  ## The name of the undefined type variable
+  name: model.Name}
+
+## A type variable in a lambda domain annotation that is not bound in scope
+type UndefinedTypeVariableInLambdaDomainError = record{
+  ## The path to the lambda within the term
+  location: paths.SubtermPath,
+  ## The name of the undefined type variable
+  name: model.Name}
+
+## A type variable in a type application term that is not bound in scope
+type UndefinedTypeVariableInTypeApplicationError = record{
+  ## The path to the type application within the term
+  location: paths.SubtermPath,
+  ## The name of the undefined type variable
+  name: model.Name}
+
+## An unexpected term variant was encountered
+type UnexpectedTermVariantError = record{
+  ## The expected term variant
+  expectedVariant: variants.TermVariant,
+  ## The actual term that was encountered
+  actualTerm: model.Term}
+
+## An unexpected type variant was encountered
+type UnexpectedTypeVariantError = record{
+  ## The expected type variant
+  expectedVariant: variants.TypeVariant,
+  ## The actual type that was encountered
+  actualType: model.Type}
+
+## A case statement alternative naming a field that does not exist in the union it matches
+type UnknownCaseAlternativeError = record{
+  ## The path to the case statement within the term
+  location: paths.SubtermPath,
+  ## The name of the union type being matched
+  typeName: model.Name,
+  ## The unknown alternative name
+  name: model.Name}
+
+## A primitive function reference to a name not in the known primitive registry
+type UnknownPrimitiveNameError = record{
+  ## The path to the primitive reference within the term
+  location: paths.SubtermPath,
+  ## The unknown primitive name
+  name: model.Name}
+
+## A projection naming a field that is not declared by its record type
+type UnknownProjectedFieldError = record{
+  ## The path to the projection within the term
+  location: paths.SubtermPath,
+  ## The name of the record type
+  typeName: model.Name,
+  ## The unknown projected field name
+  fieldName: model.Name}
+
+## An application of an identity lambda to an argument, which simplifies to the argument (optional)
+type UnnecessaryIdentityApplicationError = record{
+  ## The path to the identity application within the term
+  location: paths.SubtermPath}
+
+## A nominal type reference in a term (inject, cases, record, project, wrap, or unwrap) that does not resolve to any declared type in scope
+type UnresolvedNominalTypeError = record{
+  ## The path to the term with the unresolved nominal type reference
+  location: paths.SubtermPath,
+  ## The unresolved type name
+  typeName: model.Name}
+
+## A term variable whose type is not known in the current scope
+type UntypedTermVariableError = record{
+  ## The path to the untyped variable within the term
+  location: paths.SubtermPath,
+  ## The name of the untyped variable
+  name: model.Name}
+
+## TypeVoid appearing in a position where no value can be constructed, such as a record field, list element, map key/value, set element, pair component, or function codomain (optional)
+type VoidInNonBottomPositionError = record{
+  ## The path to the void type in a non-bottom position
+  location: paths.SubtermPath}

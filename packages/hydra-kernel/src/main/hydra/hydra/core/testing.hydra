@@ -1,0 +1,52 @@
+## A model for unit testing
+module hydra.core.testing
+
+import hydra.core.model as model
+
+## An effectful test case: the actual value is a thunk producing an effect, which the test runner interprets (performing host interactions, e.g. file I/O within a per-case empty temporary directory) to obtain a result string; the expected value is a thunk producing a string.
+type EffectfulTestCase = record{
+  ## A thunk producing the effect to be interpreted by the test runner. The thunk defers construction of the effect until the runner forces it.
+  actual: unit → effect<string>,
+  ## A thunk producing the expected result string.
+  expected: unit → string}
+
+## A tag for test cases
+type Tag = wrap(string)
+
+## A test case with an actual and expected string for comparison
+type TestCase = union{
+  ## An effectful test case (interpret an effect, then string comparison)
+  effectful: EffectfulTestCase,
+  ## A universal test case (string comparison)
+  universal: UniversalTestCase}
+
+## A test case together with metadata
+type TestCaseWithMetadata = record{
+  ## A short name for the test case
+  name: string,
+  ## The test case itself
+  case: TestCase,
+  ## An optional longer description of the test case
+  description: optional<string>,
+  ## Zero or more tags for the test case
+  tags: list<Tag>,
+  ## The fully-qualified names of zero or more provisions (hydra.core.packaging.Provision) which this test case confirms. A provision is authoritative with zero, one, or many confirming tests.
+  provisions: list<model.Name>}
+
+## A collection of test cases with a name and optional description
+type TestGroup = record{
+  ## A short name for the test group
+  name: string,
+  ## An optional longer description of the test group
+  description: optional<string>,
+  ## Zero or more subgroups
+  subgroups: list<TestGroup>,
+  ## Zero or more test cases
+  `cases`: list<TestCaseWithMetadata>}
+
+## A universal test case: the actual and expected values are thunks producing strings.
+type UniversalTestCase = record{
+  ## A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time.
+  actual: unit → string,
+  ## A thunk producing the expected result string.
+  expected: unit → string}

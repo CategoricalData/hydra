@@ -1,0 +1,149 @@
+## Top-level error types for the Hydra kernel
+module hydra.core.errors
+
+import hydra.core.error.checking as checking
+import hydra.core.error.model as error.model
+import hydra.core.model as model
+import hydra.core.paths as paths
+
+## An error that occurred during decoding of a term
+type DecodingError = wrap(string)
+
+## An empty list was encountered where a non-empty list was required
+type EmptyListError = unit
+
+## An error of any kind, with kernel errors particularly differentiated
+type Error = union{
+  ## A type checking error
+  checking: checking.CheckingError,
+  ## An error that occurred during decoding of a term
+  decoding: DecodingError,
+  ## A duplicate binding name error
+  duplicateBinding: error.model.DuplicateBindingError,
+  ## A duplicate field name error
+  duplicateField: error.model.DuplicateFieldError,
+  ## An error that occurred while extracting a value from a term
+  extraction: ExtractionError,
+  ## A type inference error
+  inference: InferenceError,
+  ## A literal value validation error
+  invalidLiteral: error.model.InvalidLiteralError,
+  ## Any other error
+  other: OtherError,
+  ## A name-resolution error
+  resolution: ResolutionError,
+  ## A reference to an undefined field
+  undefinedField: error.model.UndefinedFieldError,
+  ## A reference to an undefined term variable
+  undefinedTermVariable: error.model.UndefinedTermVariableError,
+  ## A term variable whose type is not known
+  untypedTermVariable: error.model.UntypedTermVariableError,
+  ## An unexpected term variant
+  unexpectedTermVariant: error.model.UnexpectedTermVariantError,
+  ## An unexpected type variant
+  unexpectedTypeVariant: error.model.UnexpectedTypeVariantError,
+  ## A type unification error
+  unification: UnificationError}
+
+## An error that occurred while extracting a typed value from a term
+type ExtractionError = union{
+  ## An empty list was encountered where a non-empty list was required
+  emptyList: EmptyListError,
+  ## Multiple let bindings were found with the same name
+  multipleBindings: MultipleBindingsError,
+  ## Multiple record fields were found with the same field name
+  multipleFields: MultipleFieldsError,
+  ## No field with the expected name was found in a record
+  noMatchingField: NoMatchingFieldError,
+  ## No let binding with the expected name was found
+  noSuchBinding: NoSuchBindingError,
+  ## A case statement did not contain enough cases to match the target
+  notEnoughCases: NotEnoughCasesError,
+  ## A term, type, literal, or other value had an unexpected shape
+  unexpectedShape: UnexpectedShapeError}
+
+## An error that occurred during type inference
+type InferenceError = union{
+  ## A type checking error encountered during inference
+  checking: checking.CheckingError,
+  ## A generic inference error carrying a message and a subterm path. Placeholder arm; sites should migrate to typed variants.
+  other: OtherInferenceError,
+  ## A unification failure encountered while inferring types
+  unification: UnificationInferenceError}
+
+## Multiple let bindings with the same name were found
+type MultipleBindingsError = record{
+  ## The binding name which was duplicated
+  name: model.Name}
+
+## Multiple fields with the same name were found in a record
+type MultipleFieldsError = record{
+  ## The field name which appeared more than once
+  fieldName: model.Name}
+
+## No field with the expected name was present
+type NoMatchingFieldError = record{
+  ## The field name which was not found
+  fieldName: model.Name}
+
+## No let binding with the expected name was present
+type NoSuchBindingError = record{
+  ## The binding name which was not found
+  name: model.Name}
+
+## No primitive function with the expected name was registered in the graph
+type NoSuchPrimitiveError = record{
+  ## The primitive name which was not found
+  name: model.Name}
+
+## A case statement was missing a case for the requested variant
+type NotEnoughCasesError = unit
+
+## Any other error
+type OtherError = wrap(string)
+
+## A generic inference error: message + subterm path
+type OtherInferenceError = record{
+  ## The subterm path at which the error was observed
+  path: paths.SubtermPath,
+  ## A human-readable error message
+  message: string}
+
+## A generic resolution error: message
+type OtherResolutionError = wrap(string)
+
+## An error that occurred while resolving a name, primitive, or record/union shape in a graph
+type ResolutionError = union{
+  ## No binding with the expected name was found in the graph
+  noSuchBinding: NoSuchBindingError,
+  ## No primitive function with the expected name was found in the graph
+  noSuchPrimitive: NoSuchPrimitiveError,
+  ## No field with the expected name was present in a record or case statement
+  noMatchingField: NoMatchingFieldError,
+  ## A generic resolution error carrying a message
+  other: OtherResolutionError,
+  ## A term had a shape other than the one expected (e.g. a record, an injection)
+  unexpectedShape: UnexpectedShapeError}
+
+## A term, type, literal, or related value had a shape other than the one expected
+type UnexpectedShapeError = record{
+  ## A description of the expected shape
+  expected: string,
+  ## A description of the shape actually encountered
+  actual: string}
+
+## An error that occurred during type unification
+type UnificationError = record{
+  ## The left-hand type in the unification
+  leftType: model.Type,
+  ## The right-hand type in the unification
+  rightType: model.Type,
+  ## A human-readable error message
+  message: string}
+
+## A unification failure at a specific subterm locus during inference
+type UnificationInferenceError = record{
+  ## The subterm path at which the unification failure was observed
+  path: paths.SubtermPath,
+  ## The underlying unification error
+  cause: UnificationError}

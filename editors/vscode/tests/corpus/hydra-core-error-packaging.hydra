@@ -1,0 +1,137 @@
+## Error types for module and package validation
+module hydra.core.error.packaging
+
+import hydra.core.model as model
+import hydra.core.packaging as packaging
+import hydra.core.util as util
+
+## A module name which, when mapped to a target language's directory or package structure, conflicts with another module's mapped name. For example, hydra.foo.bar and hydra.fooBar might both map to the same directory in a case-insensitive filesystem.
+type ConflictingModuleNameError = record{
+  ## The first module name
+  first: packaging.ModuleName,
+  ## The second module name that conflicts with the first
+  second: packaging.ModuleName}
+
+## A union type variant name which, when capitalized and concatenated with its type name, conflicts with another type definition name. For example, a union type Foo with a variant bar produces FooBar, which conflicts with an existing type definition FooBar. This is currently a problem only for the Haskell target.
+type ConflictingVariantNameError = record{
+  ## The name of the module containing the conflict
+  moduleName: packaging.ModuleName,
+  ## The name of the union type
+  typeName: model.Name,
+  ## The name of the variant field causing the conflict
+  variantName: model.Name,
+  ## The name of the other type definition that conflicts with the generated constructor name
+  conflictingName: model.Name}
+
+## A definition whose name does not have the module's name as a prefix. If the module name is foo.bar, all definition names must have the form foo.bar.quux.
+type DefinitionNotInModuleNameError = record{
+  ## The name of the module
+  moduleName: packaging.ModuleName,
+  ## The definition name that does not match the module name
+  name: model.Name}
+
+## Two consecutive definitions in a module's definitions list that are not in alphabetical order by local name. Hydra requires definitions to appear in lexicographic ASCII order of their local names.
+type DefinitionsOutOfOrderError = record{
+  ## The name of the module containing the misordered definitions
+  moduleName: packaging.ModuleName,
+  ## The definition that appears first in the list
+  precedingName: model.Name,
+  ## The definition that appears next, but should sort earlier than precedingName
+  followingName: model.Name}
+
+## Two or more definitions in the same module share the same name
+type DuplicateDefinitionNameError = record{
+  ## The name of the module containing the duplicates
+  moduleName: packaging.ModuleName,
+  ## The duplicated definition name
+  name: model.Name}
+
+## Two or more modules in the same package share the same name
+type DuplicateModuleNameError = record{
+  ## The duplicated module name
+  moduleName: packaging.ModuleName}
+
+## A definition whose local name does not match the expected naming convention. Term-level definitions must be camelCase; type-level definitions must be PascalCase.
+type InvalidDefinitionNameError = record{
+  ## The name of the module containing the definition
+  moduleName: packaging.ModuleName,
+  ## The definition name that violates the naming convention
+  name: model.Name,
+  ## The case convention the name should have followed (camel for term-level, pascal for type-level)
+  expectedConvention: util.CaseConvention}
+
+## An error indicating that a module is invalid
+type InvalidModuleError = union{
+  ## A union variant name that conflicts with another type definition when mapped to a target language
+  conflictingVariantName: ConflictingVariantNameError,
+  ## A definition whose name does not have the module's name as a prefix
+  definitionNotInModuleName: DefinitionNotInModuleNameError,
+  ## Two consecutive definitions in the definitions list that are not in alphabetical order
+  definitionsOutOfOrder: DefinitionsOutOfOrderError,
+  ## Two or more definitions in the same module share the same name
+  duplicateDefinitionName: DuplicateDefinitionNameError,
+  ## A definition whose local name does not match the expected naming convention
+  invalidDefinitionName: InvalidDefinitionNameError,
+  ## A module whose name does not match the module-name naming convention
+  invalidModuleNameConvention: InvalidModuleNameConventionError,
+  ## A top-level definition lacking a description annotation
+  missingDocumentation: MissingDocumentationError}
+
+## A module whose name does not match the dotted-lowercase naming convention. Module names must be dot-separated lowercase segments, each starting with a letter, e.g. hydra.core.model or hydra.core.lib.lists.
+type InvalidModuleNameConventionError = record{
+  ## The module name that violates the convention
+  moduleName: packaging.ModuleName}
+
+## An error indicating that a package is invalid
+type InvalidPackageError = union{
+  ## Two module names that conflict when mapped to a target language
+  conflictingModuleName: ConflictingModuleNameError,
+  ## Two or more modules in the same package share the same name
+  duplicateModuleName: DuplicateModuleNameError,
+  ## A module within the package is invalid
+  invalidModule: InvalidModuleError,
+  ## A package whose name does not match the package-name naming convention
+  invalidPackageName: InvalidPackageNameError,
+  ## A module namespace declared by more than one package
+  moduleInMultiplePackages: ModuleInMultiplePackagesError,
+  ## A module namespace that is a strict dotted-prefix of another module namespace in the same package
+  nestedModuleName: NestedModuleNameError,
+  ## A module references a name owned by another module that is not among its declared dependencies
+  undeclaredDependency: UndeclaredDependencyError}
+
+## A package whose name does not match the hyphen-separated lowercase naming convention. Package names must be hyphen-separated lowercase segments, each starting with a letter, e.g. hydra-kernel or hydra-python.
+type InvalidPackageNameError = record{
+  ## The package name that violates the convention
+  packageName: packaging.PackageName}
+
+## A top-level definition whose term (or type, for type definitions) lacks a description annotation. Every definition in a Hydra module is expected to be wrapped in a doc "..." annotation at its top level.
+type MissingDocumentationError = record{
+  ## The name of the module containing the undocumented definition
+  moduleName: packaging.ModuleName,
+  ## The name of the undocumented definition
+  name: model.Name}
+
+## A module namespace declared by more than one package. Module-to-package routing requires each package's declared module set to partition the module universe; a namespace declared by two packages would otherwise be routed to one of them arbitrarily, with the other declaration silently ignored.
+type ModuleInMultiplePackagesError = record{
+  ## The module namespace declared by more than one package
+  moduleName: packaging.ModuleName,
+  ## The name of the first package declaring the module
+  firstPackage: packaging.PackageName,
+  ## The name of the second package declaring the module
+  secondPackage: packaging.PackageName}
+
+## A module namespace which is a strict dotted-prefix of another module namespace in the same package, e.g. hydra.core.codegen and hydra.core.codegen.docs. When two such namespaces coexist, a definition name that is prefix-valid for both modules cannot be unambiguously assigned to one.
+type NestedModuleNameError = record{
+  ## The shorter namespace, a strict dotted-prefix of the inner namespace
+  outer: packaging.ModuleName,
+  ## The longer namespace, which has the outer namespace as a strict dotted-prefix
+  inner: packaging.ModuleName}
+
+## A module references a name owned by another module which is not among its declared moduleDependencies. Like a missing import: the reference may still resolve today via another module's transitive dependencies, but the declared dependency list no longer reflects what the module actually uses, and inference-time resolution is not guaranteed.
+type UndeclaredDependencyError = record{
+  ## The name of the module containing the undeclared reference
+  moduleName: packaging.ModuleName,
+  ## The free name referenced by the module's definitions
+  referencedName: model.Name,
+  ## The name of the module that actually defines the referenced name
+  owningModuleName: packaging.ModuleName}

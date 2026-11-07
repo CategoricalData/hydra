@@ -1,0 +1,116 @@
+## A model which provides a common syntax tree for Hydra serializers
+module hydra.core.ast
+
+
+
+## Operator associativity
+type Associativity = union{
+  `none`: unit,
+  `left`: unit,
+  `right`: unit,
+  both: unit}
+
+## Formatting option for code blocks
+type BlockStyle = record{
+  ## An optional indentation string
+  indent: optional<string>,
+  ## Whether to place a newline before the content
+  newlineBeforeContent: boolean,
+  ## Whether to place a newline after the content
+  newlineAfterContent: boolean}
+
+## An expression enclosed by brackets
+type BracketExpr = record{
+  ## The bracket pair enclosing the expression
+  brackets: Brackets,
+  ## The expression within the brackets
+  enclosed: Expr,
+  ## The formatting style for the bracketed block
+  style: BlockStyle}
+
+## Matching open and close bracket symbols
+type Brackets = record{
+  ## The opening bracket symbol
+  open: Symbol,
+  ## The closing bracket symbol
+  close: Symbol}
+
+## An abstract expression
+type Expr = union{
+  ## A constant symbol
+  const: Symbol,
+  ## An indented expression
+  indent: IndentedExpression,
+  ## An operator expression
+  op: OpExpr,
+  ## A bracketed expression
+  brackets: BracketExpr,
+  ## A sequence of expressions joined by a separator, treated as structural layout (not subject to parenthesization)
+  seq: SeqExpr}
+
+## Any of several indentation styles
+type IndentStyle = union{
+  ## Indent all lines with the given string
+  allLines: string,
+  ## Indent only lines after the first with the given string
+  subsequentLines: string}
+
+## An expression indented in a certain style
+type IndentedExpression = record{
+  ## The indentation style
+  style: IndentStyle,
+  ## The expression to be indented
+  expr: Expr}
+
+## An operator symbol
+type Op = record{
+  ## The operator symbol
+  symbol: Symbol,
+  ## The padding around the operator
+  padding: Padding,
+  ## The precedence of the operator
+  precedence: Precedence,
+  ## The associativity of the operator
+  associativity: Associativity}
+
+## An operator expression
+type OpExpr = record{
+  ## The operator
+  op: Op,
+  ## The left-hand side operand
+  lhs: Expr,
+  ## The right-hand side operand
+  rhs: Expr}
+
+## Left and right padding for an operator
+type Padding = record{
+  ## Padding to the left of the operator
+  `left`: Ws,
+  ## Padding to the right of the operator
+  `right`: Ws}
+
+## Operator precedence
+type Precedence = wrap(int32)
+
+## A sequence of expressions joined by a separator operator. Unlike OpExpr, parenthesize ignores SeqExpr boundaries.
+type SeqExpr = record{
+  ## The separator operator
+  op: Op,
+  ## The expressions to join
+  elements: list<Expr>}
+
+## Any symbol
+type Symbol = wrap(string)
+
+## One of several classes of whitespace
+type Ws = union{
+  ## No whitespace
+  `none`: unit,
+  ## A single space
+  space: unit,
+  ## A line break
+  break: unit,
+  ## A line break followed by indentation
+  breakAndIndent: string,
+  ## Two line breaks
+  doubleBreak: unit}
