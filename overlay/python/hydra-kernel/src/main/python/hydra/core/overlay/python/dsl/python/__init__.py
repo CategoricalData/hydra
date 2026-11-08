@@ -8,11 +8,14 @@ sys.path entries (e.g. dist/python/hydra-kernel and dist/python/hydra-python).
 from __future__ import annotations
 from pkgutil import extend_path
 __path__ = extend_path(__path__, __name__)
-from collections.abc import Iterator, Mapping
+from collections.abc import Callable, Iterator, Mapping
 from dataclasses import dataclass, field
-from typing import Any, Generic, TypeVar, cast, final, TypeAlias
+from typing import Any, Generic, TypeVar, cast, final, overload, TypeAlias
 
 
+A = TypeVar("A")
+B = TypeVar("B")
+C = TypeVar("C")
 K = TypeVar("K")
 L = TypeVar("L")
 R = TypeVar("R")
@@ -90,13 +93,38 @@ class Node(Generic[T]):
 
     value: T
 
-    def __matmul__(self, other: Node) -> Node:
-        """Apply this term to an argument (left-associative function application).
 
-        Mirrors Haskell's @@ operator: f @@ a @@ b  becomes  f @ a @ b in Python.
-        """
+_S = TypeVar("_S", bound="TermSugar[Any]")
+
+
+class TermSugar(Generic[A]):
+    """Mixin for wrap types over a Term with a phantom type parameter (hydra.core.typed.TypedTerm).
+
+    Provides `f @ x` and `f(x)` for term application with statically-visible, phantom-aware signatures.
+    Attached to generated classes by the Python coder (see wrappedTypeArgs), not monkey-patched, so
+    that type checkers see the methods.
+    """
+
+    value: Any
+
+    def __matmul__(self: TermSugar[Callable[[B], C]], other: TermSugar[B]) -> TermSugar[C]:
+        """Apply this term to an argument (left-associative): f @ a @ b, mirroring Haskell's `@@`."""
         from hydra.core.model import Application, TermApplication
-        return type(self)(TermApplication(Application(self.value, other.value)))
+        return type(self)(TermApplication(Application(self.value, other.value)))  # type: ignore[call-arg]
+
+    @overload
+    def __call__(self: _S) -> _S: ...
+
+    @overload
+    def __call__(self: TermSugar[Callable[[B], C]], arg: TermSugar[B]) -> TermSugar[C]: ...
+
+    def __call__(self, *args: Any) -> Any:
+        """Apply this term to an argument: f(x) is f @ x. Called with no arguments, return the term itself,
+        so that nullary definitions remain callable with zero args."""
+        out: Any = self
+        for a in args:
+            out = out.__matmul__(a)
+        return out
 
 
 def freeze(obj: Any) -> Any:

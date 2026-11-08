@@ -6052,7 +6052,7 @@ def _encode_wrapped_type():
                                                 _local("findTypeParams")(var("env"), var("typ")),
                                             ),
                                             just(
-                                                _local("variantArgs")(var("ptypeQuoted"), var("tparamList"))
+                                                _local("wrappedTypeArgs")(var("name"), var("ptypeQuoted"), var("tparamList"))
                                             ),
                                             var("body"),
                                         )),
@@ -7319,6 +7319,9 @@ def _module_standard_imports():
                     cond("None_", "usesNothing"),
                     cond("Optional", "usesMaybe"),
                     cond("Right", "usesRight"),
+                    # TermSugar is imported wherever Node is: wrap types listed in
+                    # wrappedTypeArgs' extra-bases table inherit from it.
+                    cond("TermSugar", "usesNode"),
                 ]
             ),
         ),
@@ -8147,6 +8150,43 @@ def _wrap_in_nullary_lambda():
         .to(body))
 
 
+def _wrapped_type_args():
+    # Host-specific members on kernel wrap types are supplied by extra base classes from
+    # the hand-written overlay (cf. Node). Currently a single entry: TypedTerm inherits
+    # TermSugar so that `f @ x` / `f(x)` are statically visible (#818).
+    body = lambdas(
+        ["name", "ptype", "tparams"],
+        _kref.utils_py_expressions_to_py_args(Optionals.givens(
+                list_(
+                    [
+                        just(
+                            _kref.utils_py_primary_to_py_expression(_kref.utils_primary_with_expression_slices(PySyn.primary_simple(PySyn.atom_name(_py_name("Node"))), list_([var("ptype")])))
+                        ),
+                        Logic.if_else(
+                            Equality.equal(Core.un_name(var("name")), string("hydra.core.typed.TypedTerm")),
+                            just(
+                                _kref.utils_py_primary_to_py_expression(_kref.utils_primary_with_expression_slices(PySyn.primary_simple(PySyn.atom_name(_py_name("TermSugar"))), Lists.map(
+                                            lam(
+                                                "n",
+                                                PyDsl.py_name_to_py_expression(
+                                                    _kref.names_encode_type_variable(var("n"))
+                                                ),
+                                            ),
+                                            var("tparams"),
+                                        )))
+                            ),
+                            nothing(),
+                        ),
+                        _local("genericArg")(var("tparams")),
+                    ]
+                )
+            )),
+    )
+    return (_def("wrappedTypeArgs")
+        .doc("Create args for a wrap type (Node[type], any extra host-specific bases, Generic[tparams])")
+        .to(body))
+
+
 # ----------------------------------------------------------------------
 # Module assembly (incremental; defs added as ported)
 # ----------------------------------------------------------------------
@@ -8294,6 +8334,7 @@ def _build_module() -> Module:
             to_definition(_with_type_lambda()),
             to_definition(_wrap_in_nullary_lambda()),
             to_definition(_wrap_lazy_arguments()),
+            to_definition(_wrapped_type_args()),
         ),
     )
 

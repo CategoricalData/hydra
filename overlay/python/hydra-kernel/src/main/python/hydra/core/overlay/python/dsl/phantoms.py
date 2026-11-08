@@ -27,38 +27,6 @@ def _tbinding_matmul(self, other):
 TypedBinding.__matmul__ = _tbinding_matmul
 
 
-def _tterm_matmul(self, other):
-    """Apply a TypedTerm function-term to a TypedTerm argument: `f @ x` ≡ `apply(f, x)`.
-
-    Enables the `@@` Haskell idiom in Python:
-        var("f") @ var("x")           # apply(f, x)
-        var("f") @ var("x") @ var("y") # apply(apply(f, x), y)
-    """
-    if not isinstance(other, TypedTerm):
-        return NotImplemented
-    return TypedTerm(terms.apply(self.value, other.value))
-
-TypedTerm.__matmul__ = _tterm_matmul
-
-
-def _tterm_call(self, *args):
-    """Treat a TypedTerm function-term as callable: `f(x, y, z)` ≡ `apply(apply(apply(f, x), y), z)`.
-
-    This is the natural Python idiom for term application — equivalent to Haskell's
-    `f @@ x @@ y @@ z`. All args must themselves be TypedTerm.
-    """
-    out = self
-    for a in args:
-        if not isinstance(a, TypedTerm):
-            raise TypeError(
-                f"TypedTerm() called with non-TypedTerm argument of type {type(a).__name__}"
-            )
-        out = TypedTerm(terms.apply(out.value, a.value))
-    return out
-
-TypedTerm.__call__ = _tterm_call
-
-
 def _name_rshift(self, val):
     """Create a Field from a Name and a TypedTerm: name >> term."""
     return Field(self, un_tterm(val))
