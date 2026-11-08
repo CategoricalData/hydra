@@ -35,7 +35,7 @@ kernel="$(cd "$vscode/../../packages/hydra-kernel/src/main/hydra" && pwd)"
 
 EXCLUDE=("defaults.hydra")
 
-rm -f "$here/corpus"/*.hydra
+rm -f "$here/corpus"/*.hydra "$here/corpus"/*.hydra.snap
 while IFS= read -r f; do
   rel="${f#"$kernel"/}"
   base="$(basename "$rel")"
