@@ -74,6 +74,7 @@ module_ = Module {
      toDefinition caseStatement,
      toDefinition either_,
      toDefinition escapeBacktickChar,
+     toDefinition escapeStringChar,
      toDefinition field,
      toDefinition fieldTermIsUnit,
      toDefinition fieldType,
@@ -103,6 +104,7 @@ module_ = Module {
      toDefinition printBinderName,
      toDefinition printName,
      toDefinition printNameAliased,
+     toDefinition printStringLit,
      toDefinition projection,
      toDefinition (set_ :: TypedTermDefinition ((Int -> String) -> S.Set Int -> String)),
      toDefinition sugarField,
@@ -480,6 +482,40 @@ escapeBacktickChar = define "escapeBacktickChar" $
     (Strings.concat $ list [string "\\u00", toHex2 @@ var "c"])
     (Strings.fromList $ list [var "c"])
 
+-- | Escape a single character for double-quoted string content, per #2.5's escape set: the
+-- delimiter character (double quote) and backslash are always escaped, the five shortcut escapes
+-- are used for the corresponding control characters, and any other control character uses
+-- \u00xx (lowercase hex); every other code point (including all non-ASCII) is emitted as-is, per
+-- the JSON wire format's documented contract (docs/specification/json-format.md#string-escapes) --
+-- NOT 'hydra.lib.literals.printString', whose own documented contract (Haskell-syntax decimal
+-- escapes for non-ASCII) is for general host-side display, not for the textual syntax.
+escapeStringChar :: TypedTermDefinition (Int -> String)
+escapeStringChar = define "escapeStringChar" $
+  doc "Escape a single code point for double-quoted string content." $
+  "c" ~>
+  "isChar" <~ ("code" ~> Equality.equal (var "c") (var "code")) $
+  Logic.ifElse (var "isChar" @@ int32 34) (string "\\\"") $     -- "
+  Logic.ifElse (var "isChar" @@ int32 92) (string "\\\\") $     -- backslash
+  Logic.ifElse (var "isChar" @@ int32 8)  (string "\\b") $      -- backspace
+  Logic.ifElse (var "isChar" @@ int32 12) (string "\\f") $      -- form feed
+  Logic.ifElse (var "isChar" @@ int32 10) (string "\\n") $      -- line feed
+  Logic.ifElse (var "isChar" @@ int32 13) (string "\\r") $      -- carriage return
+  Logic.ifElse (var "isChar" @@ int32 9)  (string "\\t") $      -- tab
+  Logic.ifElse (Ordering.lt (var "c") (int32 32))
+    (Strings.concat $ list [string "\\u00", toHex2 @@ var "c"])
+    (Strings.fromList $ list [var "c"])
+
+-- | Double-quote-escape a string per #2.5 and wrap in double quotes, for printing a string
+-- literal in the textual syntax (NOT 'hydra.lib.literals.printString', see 'escapeStringChar').
+printStringLit :: TypedTermDefinition (String -> String)
+printStringLit = define "printStringLit" $
+  doc "Render a string as a double-quoted string-literal token, escaping its content per #2.5." $
+  "s" ~>
+  Strings.concat $ list [
+    string "\"",
+    Strings.concat (Lists.map (asTerm escapeStringChar) (Strings.toList $ var "s")),
+    string "\""]
+
 -- | Backtick-escape the content of a name and wrap in backticks (#2.4's backtick form). The
 -- backticked form must admit any name, so the delimiter itself (backtick) is part of the escape
 -- set, unlike #2.5's own double-quote-delimited strings.
@@ -598,7 +634,7 @@ literal = define "literal" $
     _Literal_decimal>>: "d" ~> Literals.printDecimal $ var "d",
     _Literal_float>>: "fv" ~> floatValue @@ var "fv",
     _Literal_integer>>: "iv" ~> integerValue @@ var "iv",
-    _Literal_string>>: "s" ~> Literals.printString $ var "s"]
+    _Literal_string>>: "s" ~> printStringLit @@ var "s"]
 
 literalType :: TypedTermDefinition (LiteralType -> String)
 literalType = define "literalType" $
