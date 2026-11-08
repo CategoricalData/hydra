@@ -396,7 +396,10 @@
                                         "function": {
                                           "application": {
                                             "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.alt"}, "type": {"literal": {"integer": "int32"}}}},
-                                            "argument": {"variable": "hydra.core.parse.core.escapedChar"}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "argument": {"variable": "hydra.core.parse.core.escapedChar"}}}}},
                                         "argument": {
                                           "application": {
                                             "function": {"variable": "hydra.core.parsers.satisfy"},
@@ -6840,7 +6843,10 @@
                                             "function": {
                                               "application": {
                                                 "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.alt"}, "type": {"literal": {"integer": "int32"}}}},
-                                                "argument": {"variable": "hydra.core.parse.core.escapedChar"}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "argument": {"variable": "hydra.core.parse.core.escapedChar"}}}}},
                                             "argument": {
                                               "application": {
                                                 "function": {"variable": "hydra.core.parsers.satisfy"},
@@ -7119,7 +7125,10 @@
                                         "function": {
                                           "application": {
                                             "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.alt"}, "type": {"literal": {"integer": "int32"}}}},
-                                            "argument": {"variable": "hydra.core.parse.core.escapedChar"}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "argument": {"variable": "hydra.core.parse.core.escapedChar"}}}}},
                                         "argument": {
                                           "application": {
                                             "function": {"variable": "hydra.core.parsers.satisfy"},

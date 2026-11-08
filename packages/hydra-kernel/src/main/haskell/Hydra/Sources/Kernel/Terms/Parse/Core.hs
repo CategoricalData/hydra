@@ -316,7 +316,7 @@ backtickedName = define "backtickedName" $
           P.pure @@ (Strings.fromList $ var "cs")))))
   where
     backtickChar = P.alt
-      @@ asTerm escapedChar
+      @@ (P.try @@ (asTerm escapedChar))
       @@ (P.satisfy @@ ("c" ~> Logic.and
             (Logic.not (Equality.equal (var "c") (int32 96)))     -- not '`'
             (Logic.not (Equality.equal (var "c") (int32 92)))))   -- not '\\'
@@ -367,7 +367,7 @@ rawName = define "rawName" $
           P.bind @@ (P.char @@ int32 96) @@ (constant $
             P.pure @@ (Strings.fromList $ var "cs"))))
     backtickChar = P.alt
-      @@ asTerm escapedChar
+      @@ (P.try @@ (asTerm escapedChar))
       @@ (P.satisfy @@ ("c" ~> Logic.and
             (Logic.not (Equality.equal (var "c") (int32 96)))
             (Logic.not (Equality.equal (var "c") (int32 92)))))
@@ -517,7 +517,7 @@ stringLit = define "stringLit" $
           P.pure @@ (Strings.fromList $ var "cs")))))
   where
     strChar = P.alt
-      @@ asTerm escapedChar
+      @@ (P.try @@ (asTerm escapedChar))
       @@ (P.satisfy @@ ("c" ~> Logic.and
             (Logic.not (Equality.equal (var "c") (int32 34)))    -- not '"'
             (Logic.not (Equality.equal (var "c") (int32 92)))))  -- not '\\'
