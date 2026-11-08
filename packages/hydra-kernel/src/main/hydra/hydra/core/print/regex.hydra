@@ -1,0 +1,31 @@
+## Canonical printer for Hydra's translingual regular-expression syntax (docs/specification/regex.md): hydra.core.regex AST -> canonical text. Escapes minimally (a character is escaped only where it is special in its context), so that print.regex . parse.regex is idempotent on well-formed input. Per-dialect renderers (hydra.core.print.<dialect>.regex) build on this. See issue #567.
+module hydra.core.print.regex
+
+import hydra.core.lib.equality as equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.literals as literals
+import hydra.core.lib.logic as logic
+import hydra.core.lib.strings as strings
+import hydra.core.regex as regex
+
+term alternation = (λalt.strings.join "|" (lists.map regexSequence alt))@{description="Render an alternation, joining its branches with the | operator."}
+
+term atom = (λa.cases(regex.Atom){literal=λc.escapeLiteral c, any=λ`_`.".", anchorStart=λ`_`."^", anchorEnd=λ`_`."$", group=λg.strings.concat ["(", alternation g, ")"], class=λcc.characterClass cc} a)@{description="Render a single atom (literal, ., anchor, group, or class) to canonical text."}
+
+term characterClass = (λcc.strings.concat ["[", logic.ifElse (regex.CharacterClass[negated] cc) "^" "", strings.concat (lists.map classItem (regex.CharacterClass[items] cc)), "]"])@{description="Render a character class, including the leading ^ for a negated class."}
+
+term classItem = (λitem.cases(regex.ClassItem){character=λc.escapeClassChar c, range=λr.strings.concat [escapeClassChar (regex.CharacterRange[`from`] r), "-", escapeClassChar (regex.CharacterRange[to] r)]} item)@{description="Render one character-class member (a single character or an inclusive range) to canonical text."}
+
+term escapeClassChar = (λc.let isMeta := lists.foldl (λacc.λm.logic.or acc (equality.equal c m)) false [92:int32, 93:int32, 94:int32, 45:int32] in logic.ifElse isMeta (strings.concat2 "\\" (printCodePoint c)) (printCodePoint c))@{description="Render a code point inside a character class, backslash-escaping it iff it is one of the class metacharacters \\ ] ^ -. Escaping is uniform, with no positional exceptions (a literal '-' always prints as \\-)."}
+
+term escapeLiteral = (λc.let isMeta := lists.foldl (λacc.λm.logic.or acc (equality.equal c m)) false [46:int32, 94:int32, 36:int32, 42:int32, 43:int32, 63:int32, 40:int32, 41:int32, 91:int32, 93:int32, 123:int32, 125:int32, 124:int32, 92:int32] in logic.ifElse isMeta (strings.concat2 "\\" (printCodePoint c)) (printCodePoint c))@{description="Render a literal code point in top-level context, backslash-escaping it iff it is one of the top-level metacharacters . ^ $ * + ? ( ) [ ] { } | \\. A '-' is not special at top level and prints bare."}
+
+term printCodePoint = (λc.strings.fromList [c])@{description="Render a single Unicode code point as a one-character string."}
+
+term printRegex = (λr.alternation r)@{description="Render a hydra.core.regex AST to canonical Hydra regex text. Escapes minimally, so that printRegex . parseRegex is the identity on well-formed patterns."}
+
+term quantified = (λqa.strings.concat2 (atom (regex.Quantified[atom] qa)) (quantifier (regex.Quantified[quantifier] qa)))@{description="Render an atom followed by its quantifier suffix."}
+
+term quantifier = (λq.cases(regex.Quantifier){one=λ`_`."", zeroOrOne=λ`_`."?", zeroOrMore=λ`_`."*", oneOrMore=λ`_`."+", exactly=λn.strings.concat ["{", literals.printInt32 n, "}"], atLeast=λn.strings.concat ["{", literals.printInt32 n, ",}"], range=λr.strings.concat ["{", literals.printInt32 (regex.QuantifierRange[min] r), ",", literals.printInt32 (regex.QuantifierRange[max] r), "}"]} q)@{description="Render a quantifier suffix; the 'one' quantifier renders as the empty string."}
+
+term regexSequence = (λs.strings.concat (lists.map quantified s))@{description="Render a sequence of quantified atoms by concatenation."}

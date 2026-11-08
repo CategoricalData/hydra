@@ -1,0 +1,34 @@
+## Per-dialect printer rendering the hydra.core.regex AST into POSIX ERE syntax (Haskell Text.Regex.TDFA, Scheme Guile (ice-9 regex)). Differs from the canonical hydra.core.print.regex in three places, each probe-verified against BOTH TDFA and Guile (docs/specification/regex.md and issue #567/#603/#729-land): (1) Hydra's . (any character INCLUDING newline) renders as (.|<newline>), a grouped alternation, because POSIX ERE's native . excludes newline, does not support the \s / \S shorthands, and (on Guile specifically) rejects a literal NUL byte inside a bracket expression, ruling out an explicit [<U+0000>-<U+10FFFF>] range class; (2) anchors ^ and $ (whole-STRING boundaries in Hydra) render as the GNU/glibc whole-buffer anchors \` and \', because TDFA's native ^ and $ are line-oriented; (3) character-class metacharacters ] ^ - are disambiguated POSITIONALLY (] first, - last, ^ never first) rather than by backslash-escaping, because POSIX ERE bracket expressions have no escape mechanism at all (a backslash inside [...] is an ordinary character on TDFA). All other productions are native POSIX ERE.
+module hydra.core.print.posix.regex
+
+import hydra.core.lib.equality as equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.literals as literals
+import hydra.core.lib.logic as logic
+import hydra.core.lib.pairs as pairs
+import hydra.core.lib.strings as strings
+import hydra.core.regex as regex
+
+term alternation = (λalt.strings.join "|" (lists.map regexSequence alt))@{description="Render an alternation, joining its branches with the | operator."}
+
+term anyClass = (strings.concat ["(.|", printCodePoint 10:int32, ")"])@{description="The POSIX ERE rendering of Hydra's . (any character incl. newline): '.' alternated with an explicit newline, grouped — portable across POSIX ERE engines including Guile, which rejects a literal NUL byte in a bracket expression."}
+
+term atom = (λa.cases(regex.Atom){literal=λc.escapeLiteral c, any=λ`_`.anyClass, anchorStart=λ`_`."\\`", anchorEnd=λ`_`."\\'", group=λg.strings.concat ["(", alternation g, ")"], class=λcc.characterClass cc} a)@{description="Render a single atom; . renders as (.|<newline>), portable across POSIX ERE engines."}
+
+term characterClass = (λcc.let items := regex.CharacterClass[items] cc, bracketAndRest := lists.partition (classItemIsLiteral 93:int32) items, bracketItems := pairs.first bracketAndRest, afterBracket := pairs.second bracketAndRest, dashAndRest := lists.partition (classItemIsLiteral 45:int32) afterBracket, dashItems := pairs.first dashAndRest, rest := pairs.second dashAndRest, caretAndNonCaret := lists.partition (classItemIsLiteral 94:int32) rest, caretItems := pairs.first caretAndNonCaret, nonCaretItems := pairs.second caretAndNonCaret, safeRest := logic.ifElse (logic.or (logic.not (lists.isEmpty bracketItems)) (lists.isEmpty nonCaretItems)) rest (lists.concat2 nonCaretItems caretItems), ordered := lists.concat [bracketItems, safeRest, dashItems] in strings.concat ["[", logic.ifElse (regex.CharacterClass[negated] cc) "^" "", strings.concat (lists.map classItem ordered), "]"])@{description="Render a character class, including the leading ^ for a negated class. Reorders items positionally for POSIX ERE (which has no bracket-expression escaping): a literal ] is moved to the front (immediately after the optional negating ^), a literal - is moved to the back, and (only when there is no literal ] item to occupy the first slot) a literal ^ is moved after the first non-^ item -- POSIX treats a leading ^ as the negation marker regardless of Hydra's negated flag. The one residual gap: a class whose only member is a literal ^ has no safe position on POSIX ERE; this is an extreme corner case (single-item classes are otherwise unremarkable) and is left unhandled here."}
+
+term classItem = (λitem.cases(regex.ClassItem){character=λc.printCodePoint c, range=λr.strings.concat [printCodePoint (regex.CharacterRange[`from`] r), "-", printCodePoint (regex.CharacterRange[to] r)]} item)@{description="Render one character-class member (a single character or an inclusive range). POSIX ERE bracket expressions do NOT support backslash escaping (confirmed by TDFA probe: \\- and \\] inside [...] are two literal characters, not an escape); the metacharacters ] ^ - are instead disambiguated positionally by characterClass (] first, - last, ^ never first), so a plain character or range here never needs an escape."}
+
+term classItemIsLiteral = (λc.λitem.cases(regex.ClassItem){character=λic.equality.equal ic c, `_`=false} item)@{description="True if a ClassItem is the single literal character code point c (not a range)."}
+
+term escapeLiteral = (λc.let isMeta := lists.foldl (λacc.λm.logic.or acc (equality.equal c m)) false [46:int32, 94:int32, 36:int32, 42:int32, 43:int32, 63:int32, 40:int32, 41:int32, 91:int32, 93:int32, 123:int32, 125:int32, 124:int32, 92:int32] in logic.ifElse isMeta (strings.concat2 "\\" (printCodePoint c)) (printCodePoint c))@{description="Render a literal code point in top-level context, backslash-escaping POSIX ERE metacharacters."}
+
+term printCodePoint = (λc.strings.fromList [c])@{description="Render a single Unicode code point as a one-character string."}
+
+term printRegex = (λr.alternation r)@{description="Render a hydra.core.regex AST into POSIX ERE syntax. Identical to the canonical printer except that . (any incl. newline) becomes the grouped alternation (.|<newline>)."}
+
+term quantified = (λqa.strings.concat2 (atom (regex.Quantified[atom] qa)) (quantifier (regex.Quantified[quantifier] qa)))@{description="Render an atom followed by its quantifier suffix."}
+
+term quantifier = (λq.cases(regex.Quantifier){one=λ`_`."", zeroOrOne=λ`_`."?", zeroOrMore=λ`_`."*", oneOrMore=λ`_`."+", exactly=λn.strings.concat ["{", literals.printInt32 n, "}"], atLeast=λn.strings.concat ["{", literals.printInt32 n, ",}"], range=λr.strings.concat ["{", literals.printInt32 (regex.QuantifierRange[min] r), ",", literals.printInt32 (regex.QuantifierRange[max] r), "}"]} q)@{description="Render a quantifier suffix; the 'one' quantifier renders as the empty string."}
+
+term regexSequence = (λs.strings.concat (lists.map quantified s))@{description="Render a sequence of quantified atoms by concatenation."}
