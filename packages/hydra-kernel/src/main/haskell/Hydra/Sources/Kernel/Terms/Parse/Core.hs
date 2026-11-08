@@ -785,7 +785,7 @@ binding :: TypedTermDefinition (Parser Binding)
 binding = define "binding" $
   doc "Parse a binding: name [':' '(' typeScheme ')'] ':=' term" $
   P.bind @@ (asTerm name) @@ ("n" ~>
-    P.bind @@ (P.optional @@ ascribedScheme) @@ ("mts" ~>
+    P.bind @@ (P.optional @@ (P.try @@ ascribedScheme)) @@ ("mts" ~>
       P.bind @@ (termKeyword @@ string ":=") @@ (constant $
         P.map @@ ("t" ~> Core.binding (var "n") (asTerm (var "t")) (var "mts")) @@
           (P.lazy @@ (constant $ asTerm term)))))
