@@ -23,7 +23,7 @@ primitive absurd : ∀t1.void → t1
 ## Total. Corresponds to Haskell's (.) :: (b -> c) -> (a -> b) -> a -> c.
 ##
 ## @availableSince 0.17.6
-primitive compose : ∀t1,t2,t3.(t2 → t3) → (t1 → t2) → t1 → t3 = λg.λf.λx.g (f x)
+primitive compose : ∀t1,t2,t3.(t2 → t3) → (t1 → t2) → t1 → t3 = λg,f,x.g (f x)
 
 ## Return the first argument, ignoring the second.
 ##
@@ -33,7 +33,7 @@ primitive compose : ∀t1,t2,t3.(t2 → t3) → (t1 → t2) → t1 → t3 = λg.
 ##
 ## @availableSince 0.17.6
 ## @requirement returnsFirstArgumentIgnoringSecond: const returns its first argument unchanged and ignores its second argument entirely, regardless of the second argument's type or value.
-primitive const : ∀t1,t2.t1 → t2 → t1 = λx.λy.x
+primitive const : ∀t1,t2.t1 → t2 → t1 = λx,y.x
 
 ## Swap the argument order of a binary function.
 ##
@@ -42,7 +42,7 @@ primitive const : ∀t1,t2.t1 → t2 → t1 = λx.λy.x
 ##
 ## @availableSince 0.17.6
 ## @requirement swapsArgumentOrder: flip(f, x, y) applies f with its two arguments in reversed order, i.e. flip(f, x, y) = f(y, x).
-primitive flip : ∀t1,t2,t3.(t1 → t2 → t3) → t2 → t1 → t3 = λf.λx.λy.f y x
+primitive flip : ∀t1,t2,t3.(t1 → t2 → t3) → t2 → t1 → t3 = λf,x,y.f y x
 
 ## Return the argument unchanged.
 ##

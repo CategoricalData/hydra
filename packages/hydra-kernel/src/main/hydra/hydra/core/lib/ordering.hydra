@@ -4,7 +4,6 @@
 ## For floating-point values the order is the extended total order, under which compare(x, y) is equalTo exactly when hydra.lib.equality.equal(x, y) is true.
 module hydra.core.lib.ordering
 
-import hydra.core.lib.logic as logic
 import hydra.core.util as util
 
 ## Compare two values and return a Comparison.
@@ -79,7 +78,7 @@ primitive lte : ∀x.(ordering x) ⇒ x → x → boolean
 ##
 ## @availableSince 0.17.6
 ## @requirement returnsLargerOperand: max(x, y) returns whichever of x and y is larger under the type's ordering; when x and y are equal, max returns y (matching Haskell's tie-breaking convention) -- holds for integers, strings, floats, and decimals.
-primitive max : ∀x.(ordering x) ⇒ x → x → x = λx.λy.logic.ifElse (hydra.core.lib.ordering.gte x y) x y
+primitive max : ∀x.(ordering x) ⇒ x → x → x = λx,y.hydra.core.lib.logic.ifElse (gte x y) x y
 
 ## Return the minimum of two values.
 ##
@@ -91,4 +90,4 @@ primitive max : ∀x.(ordering x) ⇒ x → x → x = λx.λy.logic.ifElse (hydr
 ##
 ## @availableSince 0.17.6
 ## @requirement returnsSmallerOperand: min(x, y) returns whichever of x and y is smaller under the type's ordering; when x and y are equal, min returns x (matching Haskell's tie-breaking convention) -- holds for integers, strings, floats, and decimals.
-primitive min : ∀x.(ordering x) ⇒ x → x → x = λx.λy.logic.ifElse (hydra.core.lib.ordering.lte x y) x y
+primitive min : ∀x.(ordering x) ⇒ x → x → x = λx,y.hydra.core.lib.logic.ifElse (lte x y) x y

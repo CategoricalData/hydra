@@ -6,7 +6,7 @@
 ## Only range remains int32-typed.
 module hydra.core.lib.math
 
-import hydra.core.lib.logic as logic
+
 
 ## Numeric absolute value.
 ##
@@ -302,7 +302,7 @@ primitive negateFloat64 : float64 → float64
 ##
 ## @availableSince 0.15
 ## @requirement testsNonDivisibilityByTwo: odd returns true exactly when the argument is not divisible by 2, for every integral type, including at the signed-integer minimum value and for negative values.
-primitive odd : ∀x.(integral x) ⇒ x → boolean = λx.logic.not (hydra.core.lib.math.even x)
+primitive odd : ∀x.(integral x) ⇒ x → boolean = λx.hydra.core.lib.logic.not (even x)
 
 ## The mathematical constant pi.
 ##
