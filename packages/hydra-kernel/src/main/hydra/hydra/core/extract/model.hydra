@@ -1,0 +1,244 @@
+## Extraction and validation for hydra.core.model types
+module hydra.core.extract.model
+
+import hydra.core.errors as errors
+import hydra.core.lexical as lexical
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.equality as equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.literals as literals
+import hydra.core.lib.logic as logic
+import hydra.core.lib.maps as maps
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.pairs as pairs
+import hydra.core.lib.sets as sets
+import hydra.core.lib.strings as strings
+import hydra.core.model as model
+import hydra.core.print.errors as print.errors
+import hydra.core.print.model as print.model
+import hydra.core.strip as strip
+
+## Extract an arbitrary-precision integer value from a term
+term bigint = λgraph,t.eithers.bind (literal graph t) (λl.eithers.bind (integerLiteral l) (λi.bigintValue i))
+
+## Extract a bigint value from an IntegerValue
+term bigintValue = λv.cases(model.IntegerValue){`bigint`=λi.right(i), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "bigint", actual = print.model.integer v}}})} v
+
+## Extract a binary data value from a term
+term binary = λgraph,t.eithers.bind (literal graph t) (λl.binaryLiteral l)
+
+## Extract a binary literal from a Literal value
+term binaryLiteral = λv.cases(model.Literal){`binary`=λb.right(b), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "binary", actual = print.model.literal v}}})} v
+
+## Extract a boolean value from a term
+term boolean = λgraph,t.eithers.bind (literal graph t) (λl.booleanLiteral l)
+
+## Extract a boolean literal from a Literal value
+term booleanLiteral = λv.cases(model.Literal){`boolean`=λb.right(b), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "boolean", actual = print.model.literal v}}})} v
+
+## Extract case statement from a term
+term cases = λname,graph,term0.eithers.bind (lexical.stripAndDereferenceTerm graph term0) (λ`term`.cases(model.Term){`cases`=λcs.logic.ifElse (equality.equal (model.Name[] (model.CaseStatement[typeName] cs)) (model.Name[] name)) right(cs) left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = strings.concat2 "case statement for type " (model.Name[] name), actual = print.model.term `term`}}}), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "case statement", actual = print.model.term `term`}}})} `term`)
+
+## Extract an arbitrary-precision decimal value from a term
+term decimal = λgraph,t.eithers.bind (literal graph t) (λl.decimalLiteral l)
+
+## Extract a decimal literal from a Literal value
+term decimalLiteral = λv.cases(model.Literal){`decimal`=λd.right(d), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "decimal", actual = print.model.literal v}}})} v
+
+## Decode an Either value using the provided left and right decoders
+term decodeEither = λleftDecoder,rightDecoder,g,`term`.eithers.bind (stripWithDecodingError g `term`) (λstripped.cases(model.Term){`either`=λe.eithers.either (λlv.eithers.map (λx.left(x)) (leftDecoder g lv)) (λrv.eithers.map (λx.right(x)) (rightDecoder g rv)) e, `_`=left(errors.DecodingError{"expected either value"})} stripped)
+
+## Decode a list of elements using the provided element decoder
+term decodeList = λelemDecoder,g,`term`.eithers.bind (stripWithDecodingError g `term`) (λstripped.cases(model.Term){`list`=λels.eithers.mapList (elemDecoder g) els, `_`=left(errors.DecodingError{"expected list"})} stripped)
+
+## Decode a Map using the provided key and value decoders
+term decodeMap = λkeyDecoder,valDecoder,g,`term`.eithers.bind (stripWithDecodingError g `term`) (λstripped.cases(model.Term){`map`=λm.eithers.map maps.fromList (eithers.mapList (λkv.eithers.bind (keyDecoder g (pairs.first kv)) (λk.eithers.map (λv.(k, v)) (valDecoder g (pairs.second kv)))) (maps.toList m)), `_`=left(errors.DecodingError{"expected map"})} stripped)
+
+## Decode a Maybe value using the provided element decoder
+term decodeMaybe = λelemDecoder,g,`term`.eithers.bind (stripWithDecodingError g `term`) (λstripped.cases(model.Term){`optional`=λopt.eithers.mapOptional (elemDecoder g) opt, `_`=left(errors.DecodingError{"expected optional value"})} stripped)
+
+## Decode a Pair using the provided first and second decoders
+term decodePair = λfirstDecoder,secondDecoder,g,`term`.eithers.bind (stripWithDecodingError g `term`) (λstripped.cases(model.Term){pair=λp.eithers.bind (firstDecoder g (pairs.first p)) (λf.eithers.map (λs.(f, s)) (secondDecoder g (pairs.second p))), `_`=left(errors.DecodingError{"expected pair"})} stripped)
+
+## Decode a Set using the provided element decoder
+term decodeSet = λelemDecoder,g,`term`.eithers.bind (stripWithDecodingError g `term`) (λstripped.cases(model.Term){`set`=λs.eithers.map sets.fromList (eithers.mapList (elemDecoder g) (sets.toList s)), `_`=left(errors.DecodingError{"expected set"})} stripped)
+
+## Decode a unit value
+term decodeUnit = λg,`term`.eithers.bind (stripWithDecodingError g `term`) (λstripped.cases(model.Term){`unit`=λ`_`.right(unit), `_`=left(errors.DecodingError{"expected a unit value"})} stripped)
+
+## Extract an either value from a term, applying functions to the left and right values
+term eitherTerm = λleftFun,rightFun,graph,term0.eithers.bind (lexical.stripAndDereferenceTerm graph term0) (λ`term`.cases(model.Term){`either`=λet.eithers.either (λl.eithers.map (λx.left(x)) (leftFun l)) (λr.eithers.map (λx.right(x)) (rightFun r)) et, `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "either value", actual = print.model.term `term`}}})} `term`)
+
+## Extract the left and right types from an either type
+term eitherType = λtyp.let stripped := strip.deannotateType typ in cases(model.Type){`either`=λet.right(et), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "either type", actual = print.model.type typ}}})} stripped
+
+## Extract a field value from a list of fields
+term field = λfname,mapping,graph,fields.let matchingFields := lists.filter (λf.equality.equal (model.Name[] (model.Field[name] f)) (model.Name[] fname)) fields in let noMatchErr := left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = strings.concat2 "field " (model.Name[] fname), actual = "no matching field"}}}) in logic.ifElse (lists.isEmpty matchingFields) noMatchErr (logic.ifElse (equality.equal (lists.length matchingFields) 1:int32) (optionals.match (lists.head matchingFields) noMatchErr (λmf.eithers.bind (lexical.stripAndDereferenceTerm graph (model.Field[`term`] mf)) (λstripped.mapping stripped))) left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "single field", actual = strings.concat2 "multiple fields named " (model.Name[] fname)}}}))
+
+## Extract a 32-bit floating-point value from a term
+term float32 = λgraph,t.eithers.bind (literal graph t) (λl.eithers.bind (floatLiteral l) (λf.float32Value f))
+
+## Extract a float32 value from a FloatValue
+term float32Value = λv.cases(model.FloatValue){`float32`=λf.right(f), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "float32", actual = print.model.float v}}})} v
+
+## Extract a 64-bit floating-point value from a term
+term float64 = λgraph,t.eithers.bind (literal graph t) (λl.eithers.bind (floatLiteral l) (λf.float64Value f))
+
+## Extract a float64 value from a FloatValue
+term float64Value = λv.cases(model.FloatValue){`float64`=λf.right(f), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "float64", actual = print.model.float v}}})} v
+
+## Extract a floating-point literal from a Literal value
+term floatLiteral = λlit.cases(model.Literal){float=λv.right(v), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "floating-point value", actual = print.model.literal lit}}})} lit
+
+## Extract a float value from a term
+term floatValue = λgraph,t.eithers.bind (literal graph t) (λl.floatLiteral l)
+
+## Extract a function type from a type
+term functionType = λtyp.let stripped := strip.deannotateType typ in cases(model.Type){function=λft.right(ft), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "function type", actual = print.model.type typ}}})} stripped
+
+## Extract a field from a union term
+term injection = λexpected,graph,term0.eithers.bind (lexical.stripAndDereferenceTerm graph term0) (λ`term`.cases(model.Term){`inject`=λinjection.logic.ifElse (equality.equal (model.Name[] (model.Injection[typeName] injection)) (model.Name[] expected)) right(model.Injection[field] injection) left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = strings.concat2 "injection of type " (model.Name[] expected), actual = model.Name[] (model.Injection[typeName] injection)}}}), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "injection", actual = print.model.term `term`}}})} `term`)
+
+## Extract a 16-bit signed integer value from a term
+term int16 = λgraph,t.eithers.bind (literal graph t) (λl.eithers.bind (integerLiteral l) (λi.int16Value i))
+
+## Extract an int16 value from an IntegerValue
+term int16Value = λv.cases(model.IntegerValue){`int16`=λi.right(i), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "int16", actual = print.model.integer v}}})} v
+
+## Extract a 32-bit signed integer value from a term
+term int32 = λgraph,t.eithers.bind (literal graph t) (λl.eithers.bind (integerLiteral l) (λi.int32Value i))
+
+## Extract an int32 value from an IntegerValue
+term int32Value = λv.cases(model.IntegerValue){`int32`=λi.right(i), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "int32", actual = print.model.integer v}}})} v
+
+## Extract a 64-bit signed integer value from a term
+term int64 = λgraph,t.eithers.bind (literal graph t) (λl.eithers.bind (integerLiteral l) (λi.int64Value i))
+
+## Extract an int64 value from an IntegerValue
+term int64Value = λv.cases(model.IntegerValue){`int64`=λi.right(i), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "int64", actual = print.model.integer v}}})} v
+
+## Extract an 8-bit signed integer value from a term
+term int8 = λgraph,t.eithers.bind (literal graph t) (λl.eithers.bind (integerLiteral l) (λi.int8Value i))
+
+## Extract an int8 value from an IntegerValue
+term int8Value = λv.cases(model.IntegerValue){`int8`=λi.right(i), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "int8", actual = print.model.integer v}}})} v
+
+## Extract an integer literal from a Literal value
+term integerLiteral = λlit.cases(model.Literal){integer=λv.right(v), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "integer value", actual = print.model.literal lit}}})} lit
+
+## Extract an integer value from a term
+term integerValue = λgraph,t.eithers.bind (literal graph t) (λl.integerLiteral l)
+
+## Extract a lambda from a term
+term lambda = λgraph,term0.eithers.bind (lexical.stripAndDereferenceTerm graph term0) (λ`term`.cases(model.Term){lambda=λl.right(l), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "lambda", actual = print.model.term `term`}}})} `term`)
+
+## Extract the body of a lambda term
+term lambdaBody = λgraph,`term`.eithers.map model.Lambda[body] (lambda graph `term`)
+
+## Extract a let expression from a term
+term let = λgraph,term0.eithers.bind (lexical.stripAndDereferenceTerm graph term0) (λ`term`.cases(model.Term){`let`=λlt.right(lt), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "let term", actual = print.model.term `term`}}})} `term`)
+
+## Extract a binding with the given name from a let term
+term letBinding = λn,graph,`term`.let name := wrap(model.Name){n} in eithers.bind (`let` graph `term`) (λletExpr.let matchingBindings := lists.filter (λb.equality.equal (model.Name[] (model.Binding[name] b)) (model.Name[] name)) (model.Let[bindings] letExpr) in let noBindingErr := left(errors.Error{extraction = errors.ExtractionError{noSuchBinding = errors.NoSuchBindingError{name = name}}}) in logic.ifElse (lists.isEmpty matchingBindings) noBindingErr (logic.ifElse (equality.equal (lists.length matchingBindings) 1:int32) (optionals.match (lists.head matchingBindings) noBindingErr (λb.right(model.Binding[`term`] b))) left(errors.Error{extraction = errors.ExtractionError{multipleBindings = errors.MultipleBindingsError{name = name}}})))
+
+## Extract a list of terms from a term
+term list = λgraph,`term`.eithers.bind (lexical.stripAndDereferenceTerm graph `term`) (λstripped.cases(model.Term){`list`=λl.right(l), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "list", actual = print.model.term stripped}}})} stripped)
+
+## Extract a list of values from a term, mapping a function over each element
+term listOf = λf,graph,`term`.eithers.bind (`list` graph `term`) (λels.eithers.mapList f els)
+
+## Extract the element type from a list type
+term listType = λtyp.let stripped := strip.deannotateType typ in cases(model.Type){`list`=λt.right(t), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "list type", actual = print.model.type typ}}})} stripped
+
+## Extract a literal value from a term
+term literal = λgraph,term0.eithers.bind (lexical.stripAndDereferenceTerm graph term0) (λ`term`.cases(model.Term){literal=λlit.right(lit), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "literal", actual = print.model.term `term`}}})} `term`)
+
+## Extract a map of key-value pairs from a term, mapping functions over each key and value
+term map = λfk,fv,graph,term0.let pair := λkvPair.let kterm := pairs.first kvPair in let vterm := pairs.second kvPair in eithers.bind (fk kterm) (λkval.eithers.bind (fv vterm) (λvval.right((kval, vval)))) in eithers.bind (lexical.stripAndDereferenceTerm graph term0) (λ`term`.cases(model.Term){`map`=λm.eithers.map maps.fromList (eithers.mapList pair (maps.toList m)), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "map", actual = print.model.term `term`}}})} `term`)
+
+## Extract the key and value types from a map type
+term mapType = λtyp.let stripped := strip.deannotateType typ in cases(model.Type){`map`=λmt.right(mt), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "map type", actual = print.model.type typ}}})} stripped
+
+## Ensure a function has the expected number of arguments
+term nArgs = λname,n,args.logic.ifElse (equality.equal (lists.length args) n) right(unit) left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = strings.concat [literals.printInt32 n, " arguments to primitive ", literals.printString (model.Name[] name)], actual = literals.printInt32 (lists.length args)}}})
+
+## Extract an optional value from a term, applying a function to the value if present
+term optionalTerm = λf,graph,term0.eithers.bind (lexical.stripAndDereferenceTerm graph term0) (λ`term`.cases(model.Term){`optional`=λmt.optionals.match mt right(none) (λt.eithers.map optionals.given (f t)), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "optional value", actual = print.model.term `term`}}})} `term`)
+
+## Extract the base type from an optional type
+term optionalType = λtyp.let stripped := strip.deannotateType typ in cases(model.Type){`optional`=λt.right(t), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "optional type", actual = print.model.type typ}}})} stripped
+
+## Extract a pair of values from a term, applying functions to each component
+term pair = λkf,vf,graph,term0.eithers.bind (lexical.stripAndDereferenceTerm graph term0) (λ`term`.cases(model.Term){pair=λp.eithers.bind (kf (pairs.first p)) (λkVal.eithers.bind (vf (pairs.second p)) (λvVal.right((kVal, vVal)))), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "pair", actual = print.model.term `term`}}})} `term`)
+
+## Extract a record's fields from a term
+term record = λexpected,graph,term0.eithers.bind (termRecord graph term0) (λ`record`.logic.ifElse (equality.equal (model.Record[typeName] `record`) expected) right(model.Record[fields] `record`) left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = strings.concat2 "record of type " (model.Name[] expected), actual = model.Name[] (model.Record[typeName] `record`)}}}))
+
+## Extract the field types from a record type
+term recordType = λename,typ.let stripped := strip.deannotateType typ in cases(model.Type){`record`=λfields.right(fields), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "record type", actual = print.model.type typ}}})} stripped
+
+## Require a field from a record's field map and decode it
+term requireField = λfieldName,decoder,fieldMap,g.optionals.match (maps.lookup wrap(model.Name){fieldName} fieldMap) left(errors.DecodingError{strings.concat ["missing field ", fieldName, " in record"]}) (λfieldTerm.decoder g fieldTerm)
+
+## Extract a set of terms from a term
+term set = λgraph,`term`.eithers.bind (lexical.stripAndDereferenceTerm graph `term`) (λstripped.cases(model.Term){`set`=λs.right(s), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "set", actual = print.model.term stripped}}})} stripped)
+
+## Extract a set of values from a term, mapping a function over each element
+term setOf = λf,graph,`term`.eithers.bind (`set` graph `term`) (λels.eithers.mapSet f els)
+
+## Extract the element type from a set type
+term setType = λtyp.let stripped := strip.deannotateType typ in cases(model.Type){`set`=λt.right(t), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "set type", actual = print.model.type typ}}})} stripped
+
+## Extract a string value from a term
+term string = λgraph,t.eithers.bind (literal graph t) (λl.stringLiteral l)
+
+## Extract a string literal from a Literal value
+term stringLiteral = λv.cases(model.Literal){`string`=λs.right(s), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "string", actual = print.model.literal v}}})} v
+
+## Strip annotations and dereference variables, returning Either DecodingError Term
+term stripWithDecodingError = λg,`term`.eithers.bimap (λ`_e`.errors.DecodingError{print.errors.error `_e`}) (λx.x) (lexical.stripAndDereferenceTermEither g `term`)
+
+## Extract a record from a term
+term termRecord = λgraph,term0.eithers.bind (lexical.stripAndDereferenceTerm graph term0) (λ`term`.cases(model.Term){`record`=λ`record`.right(`record`), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "record", actual = print.model.term `term`}}})} `term`)
+
+## Convert a Record's fields to a Map from Name to Term
+term toFieldMap = λ`record`.maps.fromList (lists.map (λf.(model.Field[name] f, model.Field[`term`] f)) (model.Record[fields] `record`))
+
+## Extract a 16-bit unsigned integer value from a term
+term uint16 = λgraph,t.eithers.bind (literal graph t) (λl.eithers.bind (integerLiteral l) (λi.uint16Value i))
+
+## Extract a uint16 value from an IntegerValue
+term uint16Value = λv.cases(model.IntegerValue){`uint16`=λi.right(i), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "uint16", actual = print.model.integer v}}})} v
+
+## Extract a 32-bit unsigned integer value from a term
+term uint32 = λgraph,t.eithers.bind (literal graph t) (λl.eithers.bind (integerLiteral l) (λi.uint32Value i))
+
+## Extract a uint32 value from an IntegerValue
+term uint32Value = λv.cases(model.IntegerValue){`uint32`=λi.right(i), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "uint32", actual = print.model.integer v}}})} v
+
+## Extract a 64-bit unsigned integer value from a term
+term uint64 = λgraph,t.eithers.bind (literal graph t) (λl.eithers.bind (integerLiteral l) (λi.uint64Value i))
+
+## Extract a uint64 value from an IntegerValue
+term uint64Value = λv.cases(model.IntegerValue){`uint64`=λi.right(i), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "uint64", actual = print.model.integer v}}})} v
+
+## Extract an 8-bit unsigned integer value from a term
+term uint8 = λgraph,t.eithers.bind (literal graph t) (λl.eithers.bind (integerLiteral l) (λi.uint8Value i))
+
+## Extract a uint8 value from an IntegerValue
+term uint8Value = λv.cases(model.IntegerValue){`uint8`=λi.right(i), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "uint8", actual = print.model.integer v}}})} v
+
+## Extract the field types from a union type
+term unionType = λename,typ.let stripped := strip.deannotateType typ in cases(model.Type){`union`=λfields.right(fields), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "union type", actual = print.model.type typ}}})} stripped
+
+## Extract a unit value from a term
+term unit = λ`term`.cases(model.Term){`unit`=λ`_`.right(unit), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "unit", actual = print.model.term `term`}}})} `term`
+
+## Extract a unit variant (a variant with an empty record value) from a union term
+term unitVariant = λtname,graph,`term`.eithers.bind (injection tname graph `term`) (λfield.eithers.bind (`unit` (model.Field[`term`] field)) (λignored.right(model.Field[name] field)))
+
+## Extract the wrapped value from a wrapped term
+term wrap = λexpected,graph,term0.eithers.bind (lexical.stripAndDereferenceTerm graph term0) (λ`term`.cases(model.Term){`wrap`=λwrappedTerm.logic.ifElse (equality.equal (model.Name[] (model.WrappedTerm[typeName] wrappedTerm)) (model.Name[] expected)) right(model.WrappedTerm[body] wrappedTerm) left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = strings.concat2 "wrapper of type " (model.Name[] expected), actual = model.Name[] (model.WrappedTerm[typeName] wrappedTerm)}}}), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = strings.concat2 (strings.concat2 "wrap(" (model.Name[] expected)) ")", actual = print.model.term `term`}}})} `term`)
+
+## Extract the wrapped type from a wrapper type
+term wrappedType = λename,typ.let stripped := strip.deannotateType typ in cases(model.Type){`wrap`=λinnerType.right(innerType), `_`=left(errors.Error{extraction = errors.ExtractionError{unexpectedShape = errors.UnexpectedShapeError{expected = "wrapped type", actual = print.model.type typ}}})} stripped
