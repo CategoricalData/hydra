@@ -489,10 +489,10 @@ numericLit :: TypedTermDefinition (Parser Literal)
 numericLit = define "numericLit" $
   doc "Parse a numeric literal: integer, float, or (unsuffixed) decimal" $
   P.alt
-    @@ (P.bind @@ sentinelOrDigits @@ ("digits" ~>
+    @@ (P.try @@ (P.bind @@ sentinelOrDigits @@ ("digits" ~>
           P.alt
-            @@ (P.map @@ ("iv" ~> Core.literalInteger (var "iv")) @@ (integerSuffix @@ var "digits"))
-            @@ (P.map @@ ("fv" ~> Core.literalFloat (var "fv")) @@ (floatSuffix @@ var "digits"))))
+            @@ (P.try @@ (P.map @@ ("iv" ~> Core.literalInteger (var "iv")) @@ (integerSuffix @@ var "digits")))
+            @@ (P.map @@ ("fv" ~> Core.literalFloat (var "fv")) @@ (floatSuffix @@ var "digits")))))
     @@ decimalOnly
   where
     sentinelOrDigits = P.choice @@ list [
