@@ -967,27 +967,40 @@ braceContent = define "braceContent" $
 atomicTerm :: TypedTermDefinition (Parser Term)
 atomicTerm = define "atomicTerm" $
   doc "Parse a tightest-level term: any construct other than application, annotation, or type application" $
+  -- Every alternative below that begins with a reserved-word keyword is wrapped in 'P.try': the
+  -- keyword itself is only a strict PREFIX check (termKeyword has no word-boundary test), so a
+  -- longer bare name that happens to start with that keyword's letters (e.g. 'casesensitive',
+  -- 'docs.DocSegment', 'leftLen', 'injectable', 'letter', 'recorder', 'projectName', 'unwrapped',
+  -- 'wrapper', 'unitTest', 'givenName', 'nonexistent') must rewind cleanly to the bare-variable
+  -- fallback once the keyword's own required continuation (a specific punctuation mark or a
+  -- fixed sub-keyword) fails to follow. Without 'P.try', 'alt'/'choice's PEG-style backtracking
+  -- (which only recovers from a ZERO-consumption failure) can't move on to the next alternative,
+  -- since the keyword match itself already consumed input. Punctuation-led alternatives
+  -- ('λ', '[', '{', '(') need no such guard, since there is no multi-character keyword to
+  -- partially match. The trailing 'braceConstruct'/'bracketEliminate'/bare-'name' alternatives
+  -- are exempt for the same reason they always were (#809): 'name' is the final, always-available
+  -- catch-all, so there is nothing left to rewind to if it too were wrapped.
   P.choice @@ list [
-    asTerm caseTerm,
+    P.try @@ (asTerm caseTerm),
     -- #809 Wave 2: applied 'case' sugar. Tried AFTER caseTerm (whose 'cases' keyword fails cleanly,
     -- zero-consumption, on 'case ...'), and under 'P.try' so a variable merely starting with 'case'
     -- (e.g. 'caseload', or a bare 'case' — 'case' is unreserved) rewinds to the name fallback below.
     P.try @@ (asTerm caseSugarTerm),
-    asTerm doTerm,
-    asTerm eitherTerm,
-    asTerm injectTerm,
+    P.try @@ (asTerm doTerm),
+    P.try @@ (asTerm eitherTerm),
+    P.try @@ (asTerm injectTerm),
     asTerm lambdaTerm,
-    asTerm letTerm,
+    P.try @@ (asTerm letTerm),
     asTerm listTerm,
     P.map @@ ("l" ~> Core.termLiteral (var "l")) @@ (asTerm literalLit),
     asTerm braceContent,
-    asTerm optionalTerm,
-    asTerm projectTerm,
-    asTerm recordTerm,
+    P.try @@ (asTerm optionalTerm),
+    P.try @@ (asTerm projectTerm),
+    P.try @@ (asTerm recordTerm),
     typeLambdaTermParser,
-    P.bind @@ (termKeyword @@ string "unit") @@ (constant $ P.pure @@ Core.termUnit),
-    asTerm unwrapTerm,
-    asTerm wrapTerm,
+    P.try @@ (P.bind @@ (termKeyword @@ string "unit") @@ (constant $ P.pure @@ Core.termUnit)),
+    P.try @@ (asTerm unwrapTerm),
+    P.try @@ (asTerm wrapTerm),
     parenOrPair,
     -- #809 nominal sugar: 'Name{...}' construction / 'Name[...]' elimination. Each begins by
     -- parsing a raw (no-trailing-whitespace) name, then REQUIRES the delimiter to abut; wrapped in

@@ -92,16 +92,31 @@
                 "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.choice"}, "type": {"variable": "hydra.core.model.Term"}}},
                 "argument": {
                   "list": [
-                    {"variable": "hydra.core.parse.core.caseTerm"},
+                    {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"variable": "hydra.core.model.Term"}}},
+                        "argument": {"variable": "hydra.core.parse.core.caseTerm"}}},
                     {
                       "application": {
                         "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"variable": "hydra.core.model.Term"}}},
                         "argument": {"variable": "hydra.core.parse.core.caseSugarTerm"}}},
-                    {"variable": "hydra.core.parse.core.doTerm"},
-                    {"variable": "hydra.core.parse.core.eitherTerm"},
-                    {"variable": "hydra.core.parse.core.injectTerm"},
+                    {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"variable": "hydra.core.model.Term"}}},
+                        "argument": {"variable": "hydra.core.parse.core.doTerm"}}},
+                    {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"variable": "hydra.core.model.Term"}}},
+                        "argument": {"variable": "hydra.core.parse.core.eitherTerm"}}},
+                    {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"variable": "hydra.core.model.Term"}}},
+                        "argument": {"variable": "hydra.core.parse.core.injectTerm"}}},
                     {"variable": "hydra.core.parse.core.lambdaTerm"},
-                    {"variable": "hydra.core.parse.core.letTerm"},
+                    {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"variable": "hydra.core.model.Term"}}},
+                        "argument": {"variable": "hydra.core.parse.core.letTerm"}}},
                     {"variable": "hydra.core.parse.core.listTerm"},
                     {
                       "application": {
@@ -118,9 +133,18 @@
                                 "body": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "literal", "term": {"variable": "l"}}}}}}}},
                         "argument": {"variable": "hydra.core.parse.core.literalLit"}}},
                     {"variable": "hydra.core.parse.core.braceContent"},
-                    {"variable": "hydra.core.parse.core.optionalTerm"},
-                    {"variable": "hydra.core.parse.core.projectTerm"},
-                    {"variable": "hydra.core.parse.core.recordTerm"},
+                    {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"variable": "hydra.core.model.Term"}}},
+                        "argument": {"variable": "hydra.core.parse.core.optionalTerm"}}},
+                    {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"variable": "hydra.core.model.Term"}}},
+                        "argument": {"variable": "hydra.core.parse.core.projectTerm"}}},
+                    {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"variable": "hydra.core.model.Term"}}},
+                        "argument": {"variable": "hydra.core.parse.core.recordTerm"}}},
                     {
                       "application": {
                         "function": {
@@ -195,24 +219,33 @@
                                                     "argument": {"lambda": {"parameter": "_", "domain": "unit", "body": {"variable": "hydra.core.parse.core.term"}}}}}}}}}}}}}}}}}}},
                     {
                       "application": {
-                        "function": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"variable": "hydra.core.model.Term"}}},
+                        "argument": {
                           "application": {
                             "function": {
-                              "typeApplication": {
-                                "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": "string"}}},
-                                "type": {"variable": "hydra.core.model.Term"}}},
-                            "argument": {
-                              "application": {"function": {"variable": "hydra.core.parse.core.termKeyword"}, "argument": {"literal": {"string": "unit"}}}}}},
-                        "argument": {
-                          "lambda": {
-                            "parameter": "_",
-                            "domain": {"literal": "string"},
-                            "body": {
                               "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.pure"}, "type": {"variable": "hydra.core.model.Term"}}},
-                                "argument": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}}}}}},
-                    {"variable": "hydra.core.parse.core.unwrapTerm"},
-                    {"variable": "hydra.core.parse.core.wrapTerm"},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.bind"}, "type": {"literal": "string"}}},
+                                    "type": {"variable": "hydra.core.model.Term"}}},
+                                "argument": {
+                                  "application": {"function": {"variable": "hydra.core.parse.core.termKeyword"}, "argument": {"literal": {"string": "unit"}}}}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"literal": "string"},
+                                "body": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.pure"}, "type": {"variable": "hydra.core.model.Term"}}},
+                                    "argument": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}}}}}}}},
+                    {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"variable": "hydra.core.model.Term"}}},
+                        "argument": {"variable": "hydra.core.parse.core.unwrapTerm"}}},
+                    {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"variable": "hydra.core.model.Term"}}},
+                        "argument": {"variable": "hydra.core.parse.core.wrapTerm"}}},
                     {
                       "application": {
                         "function": {
