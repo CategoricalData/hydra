@@ -1,0 +1,19 @@
+## Functions dealing with arguments and arity.
+module hydra.core.arity
+
+import hydra.core.graph as graph
+import hydra.core.lib.lists as lists
+import hydra.core.lib.math as math
+import hydra.core.model as model
+import hydra.core.packaging as packaging
+import hydra.core.typing as typing
+
+term primitiveArity = (λprim.lists.length (typing.TermSignature[parameters] (packaging.PrimitiveDefinition[signature] (graph.Primitive[definition] prim))))@{description="Find the arity (expected number of arguments) of a primitive constant or function"}
+
+term termArity = cases(model.Term){application=λ`arg_`.(λ`arg_`.(λxapp.math.sub xapp 1:int32) (termArity `arg_`)) (model.Application[function] `arg_`), `cases`=λ`_`.1:int32, lambda=λ`arg_`.(λi.math.add 1:int32 i) ((λ`arg_`.termArity (model.Lambda[body] `arg_`)) `arg_`), `project`=λ`_`.1:int32, `unwrap`=λ`_`.1:int32, `_`=0:int32}@{description="Find the arity (expected number of arguments) of a term"}
+
+term typeArity = cases(model.Type){annotated=λ`arg_`.typeArity (model.AnnotatedType[body] `arg_`), application=λ`arg_`.typeArity (model.ApplicationType[function] `arg_`), `forall`=λ`arg_`.typeArity (model.ForallType[body] `arg_`), function=λf.math.add 1:int32 ((λ`arg_`.typeArity (model.FunctionType[codomain] `arg_`)) f), `_`=0:int32}@{description="Find the arity (expected number of arguments) of a type"}
+
+term typeSchemeArity = (λ`arg_`.typeArity (model.TypeScheme[body] `arg_`))@{description="Find the arity (expected number of arguments) of a type scheme"}
+
+term uncurryType = (λt.cases(model.Type){annotated=λ`arg_`.uncurryType (model.AnnotatedType[body] `arg_`), application=λ`arg_`.uncurryType (model.ApplicationType[function] `arg_`), `forall`=λ`arg_`.uncurryType (model.ForallType[body] `arg_`), function=λft.lists.cons (model.FunctionType[domain] ft) ((λ`arg_`.uncurryType (model.FunctionType[codomain] `arg_`)) ft), `_`=[t]} t)@{description="Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)"}

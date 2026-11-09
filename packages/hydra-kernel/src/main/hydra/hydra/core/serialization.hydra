@@ -1,0 +1,135 @@
+## Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.
+module hydra.core.serialization
+
+import hydra.core.ast as ast
+import hydra.core.formatting as formatting
+import hydra.core.lib.equality as equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.literals as literals
+import hydra.core.lib.logic as logic
+import hydra.core.lib.math as math
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.ordering as ordering
+import hydra.core.lib.pairs as pairs
+import hydra.core.lib.strings as strings
+import hydra.core.util as util
+
+term angleBraces = ast.Brackets{open = ast.Symbol{"<"}, close = ast.Symbol{">"}}@{description="Angle bracket pair `<` `>` for use with `brackets`"}
+
+term angleBracesList = (λstyle.λels.logic.ifElse (lists.isEmpty els) (cst "<>") (brackets angleBraces style (commaSep style els)))@{description="Comma-separate the elements inside angle brackets in the given block style; renders as `<>` when empty"}
+
+term bracesListAdaptive = (λels.chooseLayout maxLineWidth (curlyBracesList none inlineStyle els) (curlyBracesList none halfBlockStyle els))@{description="Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."}
+
+term bracketList = (λstyle.λels.logic.ifElse (lists.isEmpty els) (cst "[]") (brackets squareBrackets style (commaSep style els)))@{description="Comma-separate the elements inside square brackets in the given block style; renders as `[]` when empty"}
+
+term bracketListAdaptive = (λels.chooseLayout maxLineWidth (bracketList inlineStyle els) (bracketList halfBlockStyle els))@{description="Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."}
+
+term brackets = (λbr.λstyle.λe.ast.Expr{brackets = ast.BracketExpr{brackets = br, enclosed = e, style = style}})@{description="Wrap an expression in the given bracket pair using the given block style"}
+
+term chooseLayout = (λthreshold.λinlineExpr.λblockExpr.logic.ifElse (ordering.gt (expressionLength inlineExpr) threshold) blockExpr inlineExpr)@{description="Pick between an inline and a multi-line layout for the same logical expression. Returns the inline form if its estimated width does not exceed the threshold, otherwise the block form. Note: the threshold is measured against the inline expression in isolation; surrounding indentation may push content beyond the threshold at print time. Callers that know they are nested can pass a smaller threshold to compensate."}
+
+term commaSep = (symbolSep ",")@{description="Separate elements with a comma, using the given block style"}
+
+term commaSepAdaptive = (λels.chooseLayout maxLineWidth (commaSep inlineStyle els) (commaSep halfBlockStyle els))@{description="Comma-separate elements inline if the joined width fits, otherwise break onto separate lines."}
+
+term cst = (λs.ast.Expr{const = sym s})@{description="Construct a constant expression from a literal string"}
+
+term curlyBlock = (λstyle.λe.curlyBracesList none style [e])@{description="Wrap a single expression in curly braces using the given block style"}
+
+term curlyBraces = ast.Brackets{open = ast.Symbol{"{"}, close = ast.Symbol{"}"}}@{description="Curly brace pair `{` `}` for use with `brackets`"}
+
+term curlyBracesList = (λmsymb.λstyle.λels.logic.ifElse (lists.isEmpty els) (cst "{}") (brackets curlyBraces style (symbolSep (optionals.withDefault "," msymb) style els)))@{description="Separate the elements inside curly braces using the given symbol (default `,`) in the given block style; renders as `{}` when empty"}
+
+term customIndent = (λidt.λs.strings.concat (lists.intersperse "\n" (lists.map (λline.logic.ifElse (equality.equal line "") line (strings.concat2 idt line)) (formatting.lines s))))@{description="Indent every non-empty line of `s` by `idt`. Empty lines stay empty (no trailing whitespace) so downstream byte-identity checks don't care about indent depth."}
+
+term customIndentBlock = (λidt.λels.let idtOp := ast.Op{symbol = sym "", padding = ast.Padding{`left` = ast.Ws{space}, `right` = ast.Ws{breakAndIndent = idt}}, precedence = ast.Precedence{0:int32}, associativity = ast.Associativity{`none`}} in optionals.match (lists.head els) (cst "") (λhead.logic.ifElse (equality.equal (lists.length els) 1:int32) head (ifx idtOp head (newlineSep (lists.drop 1:int32 els)))))@{description="Render a list of expressions as a block whose first element starts where the surrounding context placed it and subsequent elements break onto fresh lines indented by the given prefix"}
+
+term dotSep = (sep ast.Op{symbol = sym ".", padding = ast.Padding{`left` = ast.Ws{`none`}, `right` = ast.Ws{`none`}}, precedence = ast.Precedence{0:int32}, associativity = ast.Associativity{`none`}})@{description="Separate elements with a dot and no surrounding whitespace"}
+
+term doubleNewlineSep = (sep ast.Op{symbol = sym "", padding = ast.Padding{`left` = ast.Ws{break}, `right` = ast.Ws{break}}, precedence = ast.Precedence{0:int32}, associativity = ast.Associativity{`none`}})@{description="Separate elements with a blank line between them"}
+
+term doubleSpace = "  "@{description="The two-space string used as the canonical indent unit"}
+
+term expressionLength = (λe.let symbolLength := λs.strings.length (ast.Symbol[] s) in let wsLength := λws.cases(ast.Ws){`none`=λ`_`.0:int32, space=λ`_`.1:int32, break=λ`_`.10000:int32, breakAndIndent=λs.10000:int32, doubleBreak=λ`_`.10000:int32} ws in let blockStyleLength := λstyle.let mindentLen := optionals.match (ast.BlockStyle[indent] style) 0:int32 strings.length in let nlBeforeLen := logic.ifElse (ast.BlockStyle[newlineBeforeContent] style) 1:int32 0:int32 in let nlAfterLen := logic.ifElse (ast.BlockStyle[newlineAfterContent] style) 1:int32 0:int32 in math.add mindentLen (math.add nlBeforeLen nlAfterLen) in let bracketsLength := λbrackets.math.add (symbolLength (ast.Brackets[open] brackets)) (symbolLength (ast.Brackets[close] brackets)) in let bracketExprLength := λbe.math.add (bracketsLength (ast.BracketExpr[brackets] be)) (math.add (expressionLength (ast.BracketExpr[enclosed] be)) (blockStyleLength (ast.BracketExpr[style] be))) in let indentedExpressionLength := λie.let baseLen := expressionLength (ast.IndentedExpression[expr] ie) in let indentLen := cases(ast.IndentStyle){allLines=λs.strings.length s, subsequentLines=λs.strings.length s} (ast.IndentedExpression[style] ie) in math.add baseLen indentLen in let opLength := λop.let symLen := symbolLength (ast.Op[symbol] op) in let padding := ast.Op[padding] op in let leftLen := wsLength (ast.Padding[`left`] padding) in let rightLen := wsLength (ast.Padding[`right`] padding) in math.add symLen (math.add leftLen rightLen) in let opExprLength := λoe.let opLen := opLength (ast.OpExpr[op] oe) in let leftLen := expressionLength (ast.OpExpr[lhs] oe) in let rightLen := expressionLength (ast.OpExpr[rhs] oe) in math.add opLen (math.add leftLen rightLen) in let seqExprLength := λse.let sopLen := opLength (ast.SeqExpr[op] se) in let elementLens := lists.map expressionLength (ast.SeqExpr[elements] se) in let totalElLen := lists.foldl math.add 0:int32 elementLens in let numSeps := math.sub (lists.length (ast.SeqExpr[elements] se)) 1:int32 in math.add totalElLen (math.mul sopLen (logic.ifElse (ordering.gt numSeps 0:int32) numSeps 0:int32)) in cases(ast.Expr){const=λs.symbolLength s, indent=λie.indentedExpressionLength ie, op=λoe.opExprLength oe, brackets=λbe.bracketExprLength be, seq=λse.seqExprLength se} e)@{description="Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it."}
+
+term fullBlockStyle = ast.BlockStyle{indent = given(doubleSpace), newlineBeforeContent = true, newlineAfterContent = true}@{description="Block style with double-space indent and newlines both before and after the bracketed content"}
+
+term halfBlockStyle = ast.BlockStyle{indent = given(doubleSpace), newlineBeforeContent = true, newlineAfterContent = false}@{description="Block style with double-space indent, a newline before the content but not after"}
+
+term ifx = (λop.λlhs.λrhs.ast.Expr{op = ast.OpExpr{op = op, lhs = lhs, rhs = rhs}})@{description="Build an infix expression with the given operator and two operands"}
+
+term indent = (customIndent doubleSpace)@{description="Indent every non-empty line of a string by `doubleSpace`"}
+
+term indentBlock = (customIndentBlock doubleSpace)@{description="Like `customIndentBlock`, but using `doubleSpace` as the indent prefix"}
+
+term indentSubsequentLines = (λidt.λe.ast.Expr{indent = ast.IndentedExpression{style = ast.IndentStyle{subsequentLines = idt}, expr = e}})@{description="Indent every line of an expression except the first by the given prefix"}
+
+term infixWs = (λop.λl.λr.spaceSep [l, cst op, r])@{description="Space-separate three elements: left operand, operator string, right operand"}
+
+term infixWsList = (λop.λopers.let opExpr := cst op in let foldFun := λe.λr.logic.ifElse (lists.isEmpty e) [r] (lists.cons r (lists.cons opExpr e)) in spaceSep (lists.foldl foldFun [] (lists.reverse opers)))@{description="Space-separate operands interleaved with the given operator string"}
+
+term inlineStyle = ast.BlockStyle{indent = none, newlineBeforeContent = false, newlineAfterContent = false}@{description="Block style with no indent and no surrounding newlines: contents stay on a single line"}
+
+term maxLineWidth = 120:int32@{description="The canonical maximum line width used by Hydra writers. Adaptive helpers compare estimated expression widths against this threshold to decide whether to render inline or break across lines. Set to 120 to match the project-wide line-length convention."}
+
+term newlineSep = (sep ast.Op{symbol = sym "", padding = ast.Padding{`left` = ast.Ws{`none`}, `right` = ast.Ws{break}}, precedence = ast.Precedence{0:int32}, associativity = ast.Associativity{`none`}})@{description="Separate elements by a newline (no leading whitespace)"}
+
+term noPadding = ast.Padding{`left` = ast.Ws{`none`}, `right` = ast.Ws{`none`}}@{description="Operator padding with no whitespace on either side"}
+
+term noSep = (sep ast.Op{symbol = sym "", padding = ast.Padding{`left` = ast.Ws{`none`}, `right` = ast.Ws{`none`}}, precedence = ast.Precedence{0:int32}, associativity = ast.Associativity{`none`}})@{description="Concatenate elements with no separator and no whitespace"}
+
+term num = (λi.cst (literals.printInt32 i))@{description="Construct a constant expression from an int32"}
+
+term op = (λs.λp.λassoc.ast.Op{symbol = sym s, padding = ast.Padding{`left` = ast.Ws{space}, `right` = ast.Ws{space}}, precedence = wrap(ast.Precedence){p}, associativity = assoc})@{description="Build an op with single-space padding from a symbol, precedence, and associativity"}
+
+term orOp = (λnewlines.ast.Op{symbol = sym "|", padding = ast.Padding{`left` = ast.Ws{space}, `right` = logic.ifElse newlines ast.Ws{break} ast.Ws{space}}, precedence = ast.Precedence{0:int32}, associativity = ast.Associativity{`none`}})@{description="Build the `|` alternative-separator operator. The flag selects whether the right side breaks onto a new line."}
+
+term orSep = (λstyle.λl.let newlines := ast.BlockStyle[newlineBeforeContent] style in optionals.match (lists.head l) (cst "") (λh.lists.foldl (λacc.λel.ifx (orOp newlines) acc el) h (lists.drop 1:int32 l)))@{description="Separate alternatives with `|`, breaking onto separate lines when the block style requests a newline before content"}
+
+term parenList = (λnewlines.λels.let style := logic.ifElse (logic.and newlines (ordering.gt (lists.length els) 1:int32)) halfBlockStyle inlineStyle in logic.ifElse (lists.isEmpty els) (cst "()") (brackets parentheses style (commaSep style els)))@{description="Comma-separate the elements inside parentheses; switches to a half-block style when newlines are requested and there is more than one element. Renders as `()` when empty."}
+
+term parenListAdaptive = (λels.chooseLayout maxLineWidth (parenList false els) (parenList true els))@{description="Produce a parenthesized list which separates elements by spaces or newlines depending on the estimated width of the expression."}
+
+term parens = (brackets parentheses inlineStyle)@{description="Wrap an expression in inline parentheses"}
+
+term parentheses = ast.Brackets{open = ast.Symbol{"("}, close = ast.Symbol{")"}}@{description="Round parenthesis pair `(` `)` for use with `brackets`"}
+
+term parenthesize = (λexp.let assocLeft := λa.cases(ast.Associativity){`right`=λ`_`.false, `_`=true} a in let assocRight := λa.cases(ast.Associativity){`left`=λ`_`.false, `_`=true} a in cases(ast.Expr){brackets=λbracketExpr.ast.Expr{brackets = ast.BracketExpr{brackets = ast.BracketExpr[brackets] bracketExpr, enclosed = parenthesize (ast.BracketExpr[enclosed] bracketExpr), style = ast.BracketExpr[style] bracketExpr}}, const=λignored.exp, indent=λindentExpr.ast.Expr{indent = ast.IndentedExpression{style = ast.IndentedExpression[style] indentExpr, expr = parenthesize (ast.IndentedExpression[expr] indentExpr)}}, seq=λseqExpr.ast.Expr{seq = ast.SeqExpr{op = ast.SeqExpr[op] seqExpr, elements = lists.map parenthesize (ast.SeqExpr[elements] seqExpr)}}, op=λopExpr.let op := ast.OpExpr[op] opExpr in let prec := ast.Precedence[] (ast.Op[precedence] op) in let assoc := ast.Op[associativity] op in let lhs := ast.OpExpr[lhs] opExpr in let rhs := ast.OpExpr[rhs] opExpr in let `lhs'` := parenthesize lhs in let `rhs'` := parenthesize rhs in let lhs2 := cases(ast.Expr){op=λlopExpr.let lop := ast.OpExpr[op] lopExpr in let lprec := ast.Precedence[] (ast.Op[precedence] lop) in let lassoc := ast.Op[associativity] lop in let comparison := ordering.compare prec lprec in cases(util.Comparison){lessThan=λ`_`.`lhs'`, greaterThan=λ`_`.parens `lhs'`, equalTo=λ`_`.logic.ifElse (logic.and (assocLeft assoc) (assocLeft lassoc)) `lhs'` (parens `lhs'`)} comparison, `_`=`lhs'`} `lhs'` in let rhs2 := cases(ast.Expr){op=λropExpr.let rop := ast.OpExpr[op] ropExpr in let rprec := ast.Precedence[] (ast.Op[precedence] rop) in let rassoc := ast.Op[associativity] rop in let comparison := ordering.compare prec rprec in cases(util.Comparison){lessThan=λ`_`.`rhs'`, greaterThan=λ`_`.parens `rhs'`, equalTo=λ`_`.logic.ifElse (logic.and (assocRight assoc) (assocRight rassoc)) `rhs'` (parens `rhs'`)} comparison, `_`=`rhs'`} `rhs'` in ast.Expr{op = ast.OpExpr{op = op, lhs = lhs2, rhs = rhs2}}} exp)@{description="Recursively insert parentheses around subexpressions where required by operator precedence and associativity. The traversal descends into bracket, indent, sequence, and operator expressions and parenthesizes left or right operands whose binding is weaker than the surrounding operator."}
+
+term prefix = (λp.λexpr.let preOp := ast.Op{symbol = sym p, padding = ast.Padding{`left` = ast.Ws{`none`}, `right` = ast.Ws{`none`}}, precedence = ast.Precedence{0:int32}, associativity = ast.Associativity{`none`}} in ifx preOp (cst "") expr)@{description="Prepend a prefix string to an expression with no surrounding whitespace"}
+
+term printExpr = (λe.let pad := λws.cases(ast.Ws){`none`=λ`_`."", space=λ`_`." ", break=λ`_`."\n", breakAndIndent=λignored."\n", doubleBreak=λ`_`."\n\n"} ws in let idt := λws.λs.cases(ast.Ws){breakAndIndent=λindentStr.customIndent indentStr s, `_`=s} ws in cases(ast.Expr){const=λsymbol.ast.Symbol[] symbol, indent=λindentExpr.let style := ast.IndentedExpression[style] indentExpr in let expr := ast.IndentedExpression[expr] indentExpr in let lns := formatting.lines (printExpr expr) in let indentLine := λpre.λline.logic.ifElse (equality.equal line "") line (strings.concat2 pre line) in let ilns := cases(ast.IndentStyle){allLines=λpre.lists.map (indentLine pre) lns, subsequentLines=λpre.logic.ifElse (equality.equal (lists.length lns) 1:int32) lns (optionals.withDefault lns (optionals.map (λuc.lists.cons (pairs.first uc) (lists.map (indentLine pre) (pairs.second uc))) (lists.uncons lns)))} style in strings.join "\n" ilns, seq=λseqExpr.let sop := ast.SeqExpr[op] seqExpr in let ssym := ast.Symbol[] (ast.Op[symbol] sop) in let spadding := ast.Op[padding] sop in let spadl := ast.Padding[`left`] spadding in let spadr := ast.Padding[`right`] spadding in let selements := ast.SeqExpr[elements] seqExpr in let printedElements := lists.map (λel.idt spadr (printExpr el)) selements in let isNewlineWs := λws.cases(ast.Ws){break=λ`_`.true, breakAndIndent=λ`_`.true, doubleBreak=λ`_`.true, `_`=false} ws in let spadlIsNewline := isNewlineWs spadl in let spadrIsNewline := isNewlineWs spadr in let joinElements := λacc.λel.let elStartsWithNewline := optionals.match (strings.charAt 0:int32 el) false (λc.equality.equal c 10:int32) in let elIsEmpty := equality.equal el "" in let padlEff := logic.ifElse (logic.or (logic.and elStartsWithNewline (logic.not spadlIsNewline)) (logic.and elIsEmpty (equality.equal ssym ""))) "" (pad spadl) in let padrEff := logic.ifElse (logic.or (logic.and elStartsWithNewline (logic.not spadrIsNewline)) (logic.and elIsEmpty (equality.equal ssym ""))) "" (pad spadr) in strings.concat [acc, padlEff, ssym, padrEff, el] in optionals.match (lists.head printedElements) "" (λh.lists.foldl joinElements h (lists.drop 1:int32 printedElements)), op=λopExpr.let op := ast.OpExpr[op] opExpr in let sym := ast.Symbol[] (ast.Op[symbol] op) in let padding := ast.Op[padding] op in let padl := ast.Padding[`left`] padding in let padr := ast.Padding[`right`] padding in let l := ast.OpExpr[lhs] opExpr in let r := ast.OpExpr[rhs] opExpr in let lhs := idt padl (printExpr l) in let rhs := idt padr (printExpr r) in let padrIsNewline := cases(ast.Ws){break=λ`_`.true, breakAndIndent=λ`_`.true, doubleBreak=λ`_`.true, `_`=false} padr in let padlIsNewline := cases(ast.Ws){break=λ`_`.true, doubleBreak=λ`_`.true, `_`=false} padl in let padlEffective := logic.ifElse (logic.and (logic.not padlIsNewline) (logic.and (equality.equal sym "") (logic.or padrIsNewline (equality.equal rhs "")))) "" (pad padl) in let padrPad := pad padr in let rhsStartsWithNewline := optionals.match (strings.charAt 0:int32 rhs) false (λc.equality.equal c 10:int32) in let padrEffective := logic.ifElse (logic.and rhsStartsWithNewline (logic.not padrIsNewline)) "" padrPad in strings.concat2 (strings.concat2 (strings.concat2 (strings.concat2 lhs padlEffective) sym) padrEffective) rhs, brackets=λbracketExpr.let brs := ast.BracketExpr[brackets] bracketExpr in let l := ast.Symbol[] (ast.Brackets[open] brs) in let r := ast.Symbol[] (ast.Brackets[close] brs) in let e := ast.BracketExpr[enclosed] bracketExpr in let style := ast.BracketExpr[style] bracketExpr in let body := printExpr e in let doIndent := ast.BlockStyle[indent] style in let nlBefore := ast.BlockStyle[newlineBeforeContent] style in let nlAfter := ast.BlockStyle[newlineAfterContent] style in let ibody := optionals.match doIndent body (λpre.customIndent pre body) in let pre := logic.ifElse nlBefore "\n" "" in let suf := logic.ifElse nlAfter "\n" "" in strings.concat2 (strings.concat2 (strings.concat2 (strings.concat2 l pre) ibody) suf) r} e)@{description="Render an expression to a string, expanding bracket pairs, block styles, indents, and operator chains"}
+
+term semicolonSep = (symbolSep ";" inlineStyle)@{description="Separate elements with `;` inline"}
+
+term sep = (λop.λels.optionals.match (lists.head els) (cst "") (λh.lists.foldl (λacc.λel.ifx op acc el) h (lists.drop 1:int32 els)))@{description="Combine a list of expressions into a single OpExpr chain using the given operator. Returns the empty constant for an empty list."}
+
+term spaceSep = (sep ast.Op{symbol = sym "", padding = ast.Padding{`left` = ast.Ws{space}, `right` = ast.Ws{`none`}}, precedence = ast.Precedence{0:int32}, associativity = ast.Associativity{`none`}})@{description="Space-separate elements (no break between them)"}
+
+term spaceSepAdaptive = (λels.chooseLayout maxLineWidth (spaceSep els) (newlineSep els))@{description="Space-separate elements inline if the joined width fits, otherwise newline-separate them. Useful for long signatures, type chains, and other space-joined sequences."}
+
+term squareBrackets = ast.Brackets{open = ast.Symbol{"["}, close = ast.Symbol{"]"}}@{description="Square bracket pair `[` `]` for use with `brackets`"}
+
+term structuralSep = (λop.λels.logic.ifElse (lists.isEmpty els) (cst "") (logic.ifElse (equality.equal (lists.length els) 1:int32) (optionals.withDefault (cst "") (lists.head els)) ast.Expr{seq = ast.SeqExpr{op = op, elements = els}}))@{description="Like sep, but produces a SeqExpr instead of an OpExpr chain. SeqExpr is treated as structural layout and is not subject to parenthesization."}
+
+term structuralSpaceSep = (structuralSep ast.Op{symbol = sym "", padding = ast.Padding{`left` = ast.Ws{space}, `right` = ast.Ws{`none`}}, precedence = ast.Precedence{0:int32}, associativity = ast.Associativity{`none`}})@{description="Like spaceSep, but produces a SeqExpr. Use for structural layout that should not trigger parenthesization of children."}
+
+term suffix = (λs.λexpr.let sufOp := ast.Op{symbol = sym s, padding = ast.Padding{`left` = ast.Ws{`none`}, `right` = ast.Ws{`none`}}, precedence = ast.Precedence{0:int32}, associativity = ast.Associativity{`none`}} in ifx sufOp expr (cst ""))@{description="Append a suffix string to an expression"}
+
+term sym = (λs.wrap(ast.Symbol){s})@{description="Construct a Symbol from a string"}
+
+term symbolSep = (λsymb.λstyle.λl.let breakCount := lists.length (lists.filter (λ`x_`.`x_`) [ast.BlockStyle[newlineBeforeContent] style, ast.BlockStyle[newlineAfterContent] style]) in let break := logic.ifElse (equality.equal breakCount 0:int32) ast.Ws{space} (logic.ifElse (equality.equal breakCount 1:int32) ast.Ws{break} ast.Ws{doubleBreak}) in let commaOp := ast.Op{symbol = sym symb, padding = ast.Padding{`left` = ast.Ws{`none`}, `right` = break}, precedence = ast.Precedence{0:int32}, associativity = ast.Associativity{`none`}} in optionals.match (lists.head l) (cst "") (λh.lists.foldl (λacc.λel.ifx commaOp acc el) h (lists.drop 1:int32 l)))@{description="Separate elements with the given symbol; trailing whitespace per element is determined by the block style's newline-before/after flags (space, single break, or double break)"}
+
+term tabIndent = (λe.ast.Expr{indent = ast.IndentedExpression{style = ast.IndentStyle{allLines = "    "}, expr = e}})@{description="Indent every line of an expression by four spaces"}
+
+term tabIndentDoubleSpace = (λexprs.tabIndent (doubleNewlineSep exprs))@{description="Tab-indent a list of expressions, separated by blank lines"}
+
+term tabIndentSingleSpace = (λexprs.tabIndent (newlineSep exprs))@{description="Tab-indent a list of expressions, separated by single newlines"}
+
+term unsupportedType = (λlabel.cst (strings.concat2 (strings.concat2 "[" label) "]"))@{description="Render a placeholder for a type the writer does not yet handle, e.g. `[bigint]`"}
+
+term unsupportedVariant = (λlabel.λobj.cst (strings.concat2 (strings.concat2 (strings.concat2 (strings.concat2 "[unsupported " label) ": ") (literals.printString obj)) "]"))@{description="Render a placeholder for an unsupported variant, including a string representation of the offending value"}
+
+term withComma = (λe.noSep [e, cst ","])@{description="Append a trailing comma to an expression"}
+
+term withSemi = (λe.noSep [e, cst ";"])@{description="Append a trailing semicolon to an expression"}

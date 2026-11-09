@@ -1,0 +1,162 @@
+>## A JSON syntax model. See the BNF at https://www.json.org
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.json.model
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>
+>
+>## Layout options for hydra.core.json.writer.printJsonWith
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type JsonWriterOptions = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra keyword.operator.equals.hydra
+#                        ^ source.hydra
+#                         ^^^^^^ source.hydra keyword.control.hydra
+#                               ^^ source.hydra
+>  ## Whether to omit all insignificant whitespace. When true, the value is rendered on a single line with no space after ':' or ',' and the indent, maxLineWidth, and maxIndentDepth fields are ignored.
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  compact: boolean,
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^^^^ source.hydra support.type.hydra
+#                  ^^ source.hydra
+>  ## The string used to indent each level of nesting when pretty-printing
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  indent: string,
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra support.type.hydra
+#                ^^ source.hydra
+>  ## The maximum estimated line width before an object or array breaks onto multiple lines. Ignored when compact is true.
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  maxLineWidth: int32,
+#^^ source.hydra
+#  ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^^^^^ source.hydra support.type.hydra
+#                     ^^ source.hydra
+>  ## The nesting depth at or beyond which objects and arrays are always rendered inline, regardless of estimated width. Depth 0 is the top-level value, so maxIndentDepth = 0 renders the entire value on one line. None means no depth-based limit. Ignored when compact is true.
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  maxIndentDepth: optional<int32>}
+#^^ source.hydra
+#  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^^ source.hydra support.type.hydra
+#                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                           ^^^^^ source.hydra support.type.hydra
+#                                ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                 ^^ source.hydra
+>
+>## A JSON value
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Value = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^ source.hydra entity.name.function.hydra
+#          ^ source.hydra
+#           ^ source.hydra keyword.operator.equals.hydra
+#            ^ source.hydra
+#             ^^^^^ source.hydra support.type.hydra
+#                  ^^ source.hydra
+>  ## A JSON array
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  array: list<Value>,
+#^^ source.hydra
+#  ^^^^^ source.hydra variable.other.hydra
+#       ^ source.hydra punctuation.separator.type.hydra
+#        ^ source.hydra
+#         ^^^^ source.hydra support.type.hydra
+#             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#              ^^^^^ source.hydra variable.other.hydra
+#                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                    ^^ source.hydra
+>  ## A boolean value
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  `boolean`: boolean,
+#^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^^^^ source.hydra variable.other.escaped.hydra
+#          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#           ^ source.hydra punctuation.separator.type.hydra
+#            ^ source.hydra
+#             ^^^^^^^ source.hydra support.type.hydra
+#                    ^^ source.hydra
+>  ## JSON's null value
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  null: unit,
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^ source.hydra support.type.hydra
+#            ^^ source.hydra
+>  ## A numeric value
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  number: decimal,
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+>  ## A JSON object as an ordered list of key/value pairs. The ordering preserves the declaration order of the record from which the object was encoded, rather than alphabetizing keys. As a consequence, equality of Value objects is order-sensitive: two objects with the same pairs in a different order are equal as JSON, but not as Hydra Values.
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  object: list<(string, Value)>,
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra support.type.hydra
+#              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#               ^ source.hydra
+#                ^^^^^^ source.hydra support.type.hydra
+#                      ^^ source.hydra
+#                        ^^^^^ source.hydra variable.other.hydra
+#                             ^ source.hydra
+#                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                               ^^ source.hydra
+>  ## A string value
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  `string`: string}
+#^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^^^ source.hydra variable.other.escaped.hydra
+#         ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^^^ source.hydra support.type.hydra
+#                  ^^ source.hydra

@@ -21,19 +21,21 @@
 # named regex.hydra) -- a plain basename copy would silently drop one of the
 # two to a last-writer-wins collision.
 #
-# EXCLUSIONS: defaults.hydra (hydra.core.lib.defaults) is skipped. It is a
-# generated data blob (a single ~100KB `defaults` map literal on one line),
-# not representative syntax, and the vscode-tmgrammar-snap renderer throws
-# `RangeError: Invalid string length` trying to render per-token scope
-# annotations for a line that long. The grammar itself tokenizes it fine;
-# only the snapshot tool cannot serialize it. Any new file with a
-# pathologically long single line should be added to EXCLUDE below.
+# EXCLUSIONS: defaults.hydra (hydra.core.lib.defaults) and bootstrap.hydra
+# (hydra.core.bootstrap) are skipped. Both are generated/consolidated data
+# blobs with a single multi-KB line (a `defaults` map literal; a bootstrap
+# typing-environment map), not representative syntax, and the
+# vscode-tmgrammar-snap renderer throws `RangeError: Invalid string length`
+# trying to render per-token scope annotations for a line that long. The
+# grammar itself tokenizes it fine; only the snapshot tool cannot serialize
+# it. Any new file with a pathologically long single line should be added
+# to EXCLUDE below.
 set -euo pipefail
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 vscode="$(cd "$here/.." && pwd)"
 kernel="$(cd "$vscode/../../packages/hydra-kernel/src/main/hydra" && pwd)"
 
-EXCLUDE=("defaults.hydra")
+EXCLUDE=("defaults.hydra" "bootstrap.hydra")
 
 rm -f "$here/corpus"/*.hydra "$here/corpus"/*.hydra.snap
 while IFS= read -r f; do
