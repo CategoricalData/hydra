@@ -9,7 +9,7 @@ import hydra.core.util as util
 import hydra.core.variants as variants
 
 ## A two-level bidirectional encoder which adapts types to types and terms to terms
-type Adapter = forall t1. forall t2. forall v1. forall v2. forall e. record{
+type Adapter = forall t1, t2, v1, v2, e. record{
   ## Whether information may be lost in the course of this adaptation
   isLossy: boolean,
   ## The source type
@@ -29,7 +29,7 @@ type AdapterContext = record{
   adapters: map<model.Name, Adapter model.Type model.Type model.Term model.Term errors.Error>}
 
 ## A two-level encoder and decoder, operating both at a type level and an instance (data) level
-type Bicoder = forall t1. forall t2. forall v1. forall v2. forall e. record{
+type Bicoder = forall t1, t2, v1, v2, e. record{
   ## A function from source types to adapters
   encode: t1 → Adapter t1 t2 v1 v2 e,
   ## A function from target types to adapters
@@ -59,7 +59,7 @@ type CaseConventions = record{
   typeVariable: util.CaseConvention}
 
 ## An encoder and decoder; a pair of partial functions between two types
-type Coder = forall v1. forall v2. forall e. record{
+type Coder = forall v1, v2, e. record{
   ## A function which encodes a domain value to a codomain value, with the possibility of failure
   encode: v1 → either<e, v2>,
   ## A function which decodes a codomain value to a domain value, with the possibility of failure
@@ -111,7 +111,7 @@ type LanguageFeature = union{
 type LanguageName = wrap(string)
 
 ## A bidirectional encoder which maps between the same type and term languages on either side
-type SymmetricAdapter = forall t. forall v. forall e. Adapter t t v v e
+type SymmetricAdapter = forall t, v, e. Adapter t t v v e
 
 ## Specifies either a pre-order or post-order traversal
 type TraversalOrder = union{

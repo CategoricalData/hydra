@@ -5,10 +5,7 @@
 ## The bare foldl and foldr are the plain, non-monadic folds.
 module hydra.core.lib.lists
 
-import hydra.core.lib.logic as logic
-import hydra.core.lib.optionals as optionals
-import hydra.core.lib.pairs as pairs
-import hydra.core.lib.sets as sets
+
 
 ## Apply a list of functions to a list of values (applicative style).
 ##
@@ -40,7 +37,7 @@ primitive at : ∀x.int32 → list<x> → optional<x>
 ## @availableSince 0.15
 ## @requirement flatMapsOverElements: bind applies a list-producing function to each element and concatenates the results, in order, including when the function returns duplicate or negative values.
 ## @requirement emptyInput: bind over an empty list is the empty list, regardless of the function supplied.
-primitive bind : ∀x,y.list<x> → (x → list<y>) → list<y> = λxs.λf.hydra.core.lib.lists.foldr (λx.λacc.hydra.core.lib.lists.concat2 (f x) acc) [] xs
+primitive bind : ∀x,y.list<x> → (x → list<y>) → list<y> = λxs,f.foldr (λx,acc.concat2 (f x) acc) [] xs
 
 ## Compose two functions that return lists (Kleisli composition in the list monad).
 ##
@@ -48,7 +45,7 @@ primitive bind : ∀x,y.list<x> → (x → list<y>) → list<y> = λxs.λf.hydra
 ## Total. Corresponds to Kleisli composition (>=>) in the list monad.
 ##
 ## @availableSince 0.17.6
-primitive compose : ∀x,y,z.(x → list<y>) → (y → list<z>) → x → list<z> = λf.λg.λx.hydra.core.lib.lists.bind (f x) g
+primitive compose : ∀x,y,z.(x → list<y>) → (y → list<z>) → x → list<z> = λf,g,x.bind (f x) g
 
 ## Concatenate a list of lists.
 ##
@@ -108,7 +105,7 @@ primitive drop : ∀x.int32 → list<x> → list<x>
 ##
 ## @availableSince 0.15
 ## @requirement dropsLeadingMatches: dropWhile removes elements from the front of the list for as long as the predicate holds, stopping at (and keeping) the first element for which it does not; an empty list, a predicate matching no elements, or a predicate matching every element are each handled correctly as boundary cases.
-primitive dropWhile : ∀x.(x → boolean) → list<x> → list<x> = λp.λxs.pairs.second (hydra.core.lib.lists.span p xs)
+primitive dropWhile : ∀x.(x → boolean) → list<x> → list<x> = λp,xs.hydra.core.lib.pairs.second (span p xs)
 
 ## Filter a list by a predicate.
 ##
@@ -118,7 +115,7 @@ primitive dropWhile : ∀x.(x → boolean) → list<x> → list<x> = λp.λxs.pa
 ## @availableSince 0.15
 ## @requirement keepsMatchingElements: filter returns the sublist of elements satisfying the predicate, preserving their relative order, whether the predicate matches some, all, or none of the elements.
 ## @requirement emptyInput: filter over an empty list is the empty list, regardless of the predicate.
-primitive filter : ∀x.(x → boolean) → list<x> → list<x> = λp.λxs.hydra.core.lib.lists.foldr (λx.λacc.logic.ifElse (p x) (hydra.core.lib.lists.cons x acc) acc) [] xs
+primitive filter : ∀x.(x → boolean) → list<x> → list<x> = λp,xs.foldr (λx,acc.hydra.core.lib.logic.ifElse (p x) (cons x acc) acc) [] xs
 
 ## Find the first element matching a predicate.
 ##
@@ -128,7 +125,7 @@ primitive filter : ∀x.(x → boolean) → list<x> → list<x> = λp.λxs.hydra
 ## @availableSince 0.15
 ## @requirement returnsFirstMatch: find returns the first element (wrapped) satisfying the predicate, scanning in list order.
 ## @requirement noneWhenNoMatchOrEmpty: find returns none when no element satisfies the predicate, including when the list is empty.
-primitive find : ∀x.(x → boolean) → list<x> → optional<x> = λp.λxs.hydra.core.lib.lists.foldr (λx.λacc.logic.ifElse (p x) given(x) acc) none xs
+primitive find : ∀x.(x → boolean) → list<x> → optional<x> = λp,xs.foldr (λx,acc.hydra.core.lib.logic.ifElse (p x) given(x) acc) none xs
 
 ## Left-fold a list in the list monad (a nondeterministic fold).
 ##
@@ -138,7 +135,7 @@ primitive find : ∀x.(x → boolean) → list<x> → optional<x> = λp.λxs.hyd
 ## For example, if f(acc, x) returns the two-element list containing acc and the sum of acc and x, then foldList(f, 0, xs) computes the sums of all subsets of xs.
 ##
 ## @availableSince 0.17.6
-primitive foldList : ∀x,y.(x → y → list<x>) → x → list<y> → list<x> = λf.λacc0.λxs.hydra.core.lib.lists.foldl (λmacc.λel.hydra.core.lib.lists.bind macc (λacc.f acc el)) [acc0] xs
+primitive foldList : ∀x,y.(x → y → list<x>) → x → list<y> → list<x> = λf,acc0,xs.foldl (λmacc,el.bind macc (λacc.f acc el)) [acc0] xs
 
 ## Left-fold a list with an accumulator.
 ##
@@ -259,7 +256,7 @@ primitive map : ∀x,y.(x → y) → list<x> → list<y>
 ##
 ## mapGivens(f, xs) applies f to each element of xs and returns the list of contained values from given results in original order; none results are discarded.
 ## Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b].
-primitive mapGivens : ∀x,y.(x → optional<y>) → list<x> → list<y> = λf.λxs.optionals.givens (hydra.core.lib.lists.map f xs)
+primitive mapGivens : ∀x,y.(x → optional<y>) → list<x> → list<y> = λf,xs.hydra.core.lib.optionals.givens (`map` f xs)
 
 ## Traverse a list in the list monad.
 ##
@@ -268,7 +265,7 @@ primitive mapGivens : ∀x,y.(x → optional<y>) → list<x> → list<y> = λf.�
 ## Total on finite inputs. The list-monad instance of the traversal family.
 ##
 ## @availableSince 0.17.6
-primitive mapList : ∀x,y.(x → list<y>) → list<x> → list<list<y>> = λf.λxs.hydra.core.lib.lists.foldr (λx.λacc.hydra.core.lib.lists.bind (f x) (λy.hydra.core.lib.lists.bind acc (λys.[hydra.core.lib.lists.cons y ys]))) [[]] xs
+primitive mapList : ∀x,y.(x → list<y>) → list<x> → list<list<y>> = λf,xs.foldr (λx,acc.bind (f x) (λy.bind acc (λys.[cons y ys]))) [[]] xs
 
 ## Traverse an optional value in the list monad.
 ##
@@ -276,7 +273,7 @@ primitive mapList : ∀x,y.(x → list<y>) → list<x> → list<list<y>> = λf.�
 ## Total on finite inputs. The list-monad instance of the traversal family, applied to the optional container.
 ##
 ## @availableSince 0.17.6
-primitive mapOptional : ∀x,y.(x → list<y>) → optional<x> → list<optional<y>> = λf.λm.optionals.match m [none] (λx.hydra.core.lib.lists.bind (f x) (λy.[given(y)]))
+primitive mapOptional : ∀x,y.(x → list<y>) → optional<x> → list<optional<y>> = λf,m.hydra.core.lib.optionals.match m [none] (λx.bind (f x) (λy.[given(y)]))
 
 ## Traverse a set in the list monad.
 ##
@@ -285,7 +282,7 @@ primitive mapOptional : ∀x,y.(x → list<y>) → optional<x> → list<optional
 ## Requires 'ordering' constraints on both element types (the set type contract).
 ##
 ## @availableSince 0.17.6
-primitive mapSet : ∀x,y.(ordering x, ordering y) ⇒ (x → list<y>) → set<x> → list<set<y>> = λf.λs.hydra.core.lib.lists.map (λys.sets.fromList ys) (hydra.core.lib.lists.foldr (λx.λacc.hydra.core.lib.lists.bind (f x) (λy.hydra.core.lib.lists.bind acc (λys.[hydra.core.lib.lists.cons y ys]))) [[]] (sets.toList s))
+primitive mapSet : ∀x,y.(ordering x, ordering y) ⇒ (x → list<y>) → set<x> → list<set<y>> = λf,s.`map` (λys.hydra.core.lib.sets.fromList ys) (foldr (λx,acc.bind (f x) (λy.bind acc (λys.[cons y ys]))) [[]] (hydra.core.lib.sets.toList s))
 
 ## Test whether an element is in a list.
 ##
@@ -307,7 +304,7 @@ primitive member : ∀x.(equality x) ⇒ x → list<x> → boolean
 ## @availableSince 0.15
 ## @requirement splitsBySatisfaction: partition returns a pair of (elements satisfying the predicate, elements not satisfying it), each sublist preserving the original relative order of its members.
 ## @requirement boundaryCases: partition degrades correctly at the boundaries: a predicate matching every element yields (whole list, empty); matching none yields (empty, whole list); an empty input list yields (empty, empty).
-primitive partition : ∀x.(x → boolean) → list<x> → (list<x>, list<x>) = λp.λxs.hydra.core.lib.lists.foldr (λx.λacc.logic.ifElse (p x) (hydra.core.lib.lists.cons x (pairs.first acc), pairs.second acc) (pairs.first acc, hydra.core.lib.lists.cons x (pairs.second acc))) ([], []) xs
+primitive partition : ∀x.(x → boolean) → list<x> → (list<x>, list<x>) = λp,xs.foldr (λx,acc.hydra.core.lib.logic.ifElse (p x) (cons x (hydra.core.lib.pairs.first acc), hydra.core.lib.pairs.second acc) (hydra.core.lib.pairs.first acc, cons x (hydra.core.lib.pairs.second acc))) ([], []) xs
 
 ## Build a list of n copies of a value.
 ##
@@ -366,7 +363,7 @@ primitive sortBy : ∀x,y.(ordering y) ⇒ (x → y) → list<x> → list<x>
 ##
 ## @availableSince 0.15
 ## @requirement splitsAtFirstNonMatch: span returns a pair of (longest prefix for which the predicate holds, the remaining suffix), degrading correctly when the predicate matches every element (whole list, empty), no elements (empty, whole list), or the input is empty (empty, empty).
-primitive span : ∀x.(x → boolean) → list<x> → (list<x>, list<x>) = λp.λxs.hydra.core.lib.lists.foldl (λacc.λx.logic.ifElse (logic.and (hydra.core.lib.lists.isEmpty (pairs.second acc)) (p x)) (hydra.core.lib.lists.concat2 (pairs.first acc) [x], pairs.second acc) (pairs.first acc, hydra.core.lib.lists.concat2 (pairs.second acc) [x])) ([], []) xs
+primitive span : ∀x.(x → boolean) → list<x> → (list<x>, list<x>) = λp,xs.foldl (λacc,x.hydra.core.lib.logic.ifElse (hydra.core.lib.logic.and (isEmpty (hydra.core.lib.pairs.second acc)) (p x)) (concat2 (hydra.core.lib.pairs.first acc) [x], hydra.core.lib.pairs.second acc) (hydra.core.lib.pairs.first acc, concat2 (hydra.core.lib.pairs.second acc) [x])) ([], []) xs
 
 ## Return all elements except the first, or Nothing if the list is empty.
 ##
@@ -396,7 +393,7 @@ primitive take : ∀x.int32 → list<x> → list<x>
 ## Total. Corresponds to Haskell's takeWhile :: (a -> Bool) -> [a] -> [a].
 ##
 ## @availableSince 0.17.6
-primitive takeWhile : ∀x.(x → boolean) → list<x> → list<x> = λp.λxs.pairs.first (hydra.core.lib.lists.span p xs)
+primitive takeWhile : ∀x.(x → boolean) → list<x> → list<x> = λp,xs.hydra.core.lib.pairs.first (span p xs)
 
 ## Transpose a list of lists.
 ##

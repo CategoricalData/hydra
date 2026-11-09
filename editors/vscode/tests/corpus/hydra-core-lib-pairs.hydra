@@ -12,7 +12,7 @@ module hydra.core.lib.pairs
 ##
 ## @availableSince 0.15
 ## @requirement mapsBothElementsIndependently: bimap applies the first function to the pair's first element and the second function to the pair's second element, producing a new pair of the two results, for any element and function types.
-primitive bimap : ∀a,b,c,d.(a → c) → (b → d) → (a, b) → (c, d) = λf.λg.λp.(f (hydra.core.lib.pairs.first p), g (hydra.core.lib.pairs.second p))
+primitive bimap : ∀a,b,c,d.(a → c) → (b → d) → (a, b) → (c, d) = λf,g,p.(f (first p), g (second p))
 
 ## Get the first element of a pair.
 ##

@@ -51,6 +51,7 @@ impure primitive getEnvironmentVariable : system.EnvironmentVariable → effect<
 ## @availableSince 0.17
 ## @requirement returnsPositiveEpochSeconds: getTime returns a Timespec whose seconds field is a positive number of seconds since the Unix epoch.
 ## @requirement returnsNanosecondsInValidRange: getTime returns a Timespec whose nanoseconds field is within the documented range [0, 1000000000).
+## @requirement readsTheClockWhenRun: getTime reads the clock each time the computation runs, not once when it is defined or loaded: a read taken after a pause is later than a read taken before it.
 impure primitive getTime : effect<time.Timespec>
 
 ## Get the current working directory.

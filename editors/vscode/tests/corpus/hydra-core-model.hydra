@@ -3,100 +3,116 @@ module hydra.core.model
 
 
 
+## A term together with an annotation
 type AnnotatedTerm = record{
   ## The term being annotated
   body: Term,
   ## The annotation as a single term. By convention this is a map term (Name -> Term) so that multiple independent annotations can coexist, but applications are free to use any term shape.
-  annotation: Term}@{description="A term together with an annotation"}
+  annotation: Term}
 
+## A type together with an annotation
 type AnnotatedType = record{
   ## The type being annotated
   body: Type,
   ## The annotation as a single term. By convention this is a map term (Name -> Term) so that multiple independent annotations can coexist, but applications are free to use any term shape.
-  annotation: Term}@{description="A type together with an annotation"}
+  annotation: Term}
 
+## A term which applies a function to an argument
 type Application = record{
   ## The left-hand side of the application
   function: Term,
   ## The right-hand side of the application
-  argument: Term}@{description="A term which applies a function to an argument"}
+  argument: Term}
 
+## The type-level analog of an application term
 type ApplicationType = record{
   ## The left-hand side of the application
   function: Type,
   ## The right-hand side of the application
-  argument: Type}@{description="The type-level analog of an application term"}
+  argument: Type}
 
+## A field with an optional type scheme, used to bind variables to terms in a 'let' expression
 type Binding = record{
   ## The name of the bound variable
   name: Name,
   ## The term to which the variable is bound
   `term`: Term,
   ## The optional type scheme of the bound term
-  typeScheme: optional<TypeScheme>}@{description="A field with an optional type scheme, used to bind variables to terms in a 'let' expression"}
+  typeScheme: optional<TypeScheme>}
 
+## A single alternative of a case statement (union elimination): the variant being matched, together with the term that handles it.
 type CaseAlternative = record{
   ## The name of the union variant matched by this alternative
   name: Name,
   ## The handler applied to the matched variant's payload
-  handler: Term}@{description="A single alternative of a case statement (union elimination): the variant being matched, together with the term that handles it."}
+  handler: Term}
 
+## A union elimination; a case statement
 type CaseStatement = record{
   ## The name of the union type
   typeName: Name,
   ## An optional default case, used if none of the explicit cases match
   default: optional<Term>,
   ## A list of case alternatives, one per union variant being handled
-  cases: list<CaseAlternative>}@{description="A union elimination; a case statement"}
+  `cases`: list<CaseAlternative>}
 
+## A type which provides a choice between a 'left' type and a 'right' type
 type EitherType = record{
   ## The 'left' alternative
   `left`: Type,
   ## The 'right' alternative
-  `right`: Type}@{description="A type which provides a choice between a 'left' type and a 'right' type"}
+  `right`: Type}
 
+## A name/term pair
 type Field = record{
   ## The name of the field
   name: Name,
   ## The value of the field
-  `term`: Term}@{description="A name/term pair"}
+  `term`: Term}
 
+## A name/type pair
 type FieldType = record{
   ## The name of the field
   name: Name,
   ## The type of the field
-  `type`: Type}@{description="A name/type pair"}
+  `type`: Type}
 
+## A floating-point type
 type FloatType = union{
   ## A 32-bit floating-point type
   `float32`: unit,
   ## A 64-bit floating-point type
-  `float64`: unit}@{description="A floating-point type"}
+  `float64`: unit}
 
+## A floating-point literal value
 type FloatValue = union{
   ## A 32-bit floating-point value
   `float32`: float32,
   ## A 64-bit floating-point value
-  `float64`: float64}@{description="A floating-point literal value"}
+  `float64`: float64}
 
+## A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term.
 type ForallType = record{
   ## The variable which is bound by the lambda
   parameter: Name,
   ## The body of the lambda
-  body: Type}@{description="A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term."}
+  body: Type}
 
+## A function type, also known as an arrow type
 type FunctionType = record{
   ## The domain (input) type of the function
   domain: Type,
   ## The codomain (output) type of the function
-  codomain: Type}@{description="A function type, also known as an arrow type"}
+  codomain: Type}
 
+## An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
 type Injection = record{
   ## The name of the union type
   typeName: Name,
   ## The field being injected, including its name and value
-  field: Field}@{description="An instance of a union type; i.e. a string-indexed generalization of inl() or inr()"}
+  field: Field}
 
+## An integer type
 type IntegerType = union{
   ## An arbitrary-precision integer type
   `bigint`: unit,
@@ -115,8 +131,9 @@ type IntegerType = union{
   ## A 32-bit unsigned integer type
   `uint32`: unit,
   ## A 64-bit unsigned integer type
-  `uint64`: unit}@{description="An integer type"}
+  `uint64`: unit}
 
+## An integer literal value
 type IntegerValue = union{
   ## An arbitrary-precision integer value
   `bigint`: bigint,
@@ -135,22 +152,25 @@ type IntegerValue = union{
   ## A 32-bit unsigned integer value (unsigned int)
   `uint32`: uint32,
   ## A 64-bit unsigned integer value (unsigned long)
-  `uint64`: uint64}@{description="An integer literal value"}
+  `uint64`: uint64}
 
+## A function abstraction (lambda)
 type Lambda = record{
   ## The parameter of the lambda
   parameter: Name,
   ## An optional domain type for the lambda
   domain: optional<Type>,
   ## The body of the lambda
-  body: Term}@{description="A function abstraction (lambda)"}
+  body: Term}
 
+## A set of (possibly recursive) 'let' bindings together with a body in which they are bound
 type Let = record{
   ## The list of variable bindings
   bindings: list<Binding>,
   ## The body term in which the variables are bound
-  body: Term}@{description="A set of (possibly recursive) 'let' bindings together with a body in which they are bound"}
+  body: Term}
 
+## A term constant; an instance of a literal type
 type Literal = union{
   ## A binary literal
   `binary`: binary,
@@ -163,8 +183,9 @@ type Literal = union{
   ## An integer literal
   integer: IntegerValue,
   ## A string literal
-  `string`: string}@{description="A term constant; an instance of a literal type"}
+  `string`: string}
 
+## Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants
 type LiteralType = union{
   ## The type of a binary (byte string) value
   `binary`: unit,
@@ -177,41 +198,47 @@ type LiteralType = union{
   ## The type of an integer value
   integer: IntegerType,
   ## The type of a string value
-  `string`: unit}@{description="Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants"}
+  `string`: unit}
 
+## A map type
 type MapType = record{
   ## The type of keys in the map
   keys: Type,
   ## The type of values in the map
-  values: Type}@{description="A map type"}
+  values: Type}
 
-type Name = wrap(string)@{description="A unique identifier in some context; a string-valued key"}
+## A unique identifier in some context; a string-valued key
+type Name = wrap(string)
 
+## A type which pairs a 'first' type and a 'second' type
 type PairType = record{
   ## The first component of the pair
   first: Type,
   ## The second component of the pair
-  second: Type}@{description="A type which pairs a 'first' type and a 'second' type"}
+  second: Type}
 
+## A record elimination; a projection
 type Projection = record{
   ## The name of the record type
   typeName: Name,
   ## The name of the projected field
-  fieldName: Name}@{description="A record elimination; a projection"}
+  fieldName: Name}
 
+## A record, or labeled tuple; a map of field names to terms
 type Record = record{
   ## The name of the record type
   typeName: Name,
   ## The fields of the record, as a list of name/term pairs
-  fields: list<Field>}@{description="A record, or labeled tuple; a map of field names to terms"}
+  fields: list<Field>}
 
+## A data term
 type Term = union{
   ## A term annotated with metadata
   annotated: AnnotatedTerm,
   ## A function application
   application: Application,
   ## A union elimination; a case statement
-  cases: CaseStatement,
+  `cases`: CaseStatement,
   ## An either value
   `either`: either<Term, Term>,
   ## An injection; an instance of a union type
@@ -247,8 +274,9 @@ type Term = union{
   ## A variable reference
   variable: Name,
   ## A wrapped term; an instance of a wrapper type (newtype)
-  `wrap`: WrappedTerm}@{description="A data term"}
+  `wrap`: WrappedTerm}
 
+## A data type
 type Type = union{
   ## An annotated type
   annotated: AnnotatedType,
@@ -285,38 +313,44 @@ type Type = union{
   ## The void (uninhabited, or bottom) type — the nullary disjunction; zero inhabitants. Dual to `unit`.
   `void`: unit,
   ## A wrapped type (newtype). There is no corresponding `unwrap` variant at the type level: wrap is the introduction form, and a wrapper type's underlying body type is given by the `wrap` variant's argument.
-  `wrap`: Type}@{description="A data type"}
+  `wrap`: Type}
 
+## A term applied to a type; a type application.
 type TypeApplicationTerm = record{
   ## The term being applied to a type
   body: Term,
   ## The type argument
-  `type`: Type}@{description="A term applied to a type; a type application."}
+  `type`: Type}
 
+## A type class constraint on a type variable. Currently has only one variant, but designed to be forward-compatible with multi-parameter type classes and constraints on type expressions.
 type TypeClassConstraint = union{
   ## A simple type class constraint, naming a single type class
-  simple: Name}@{description="A type class constraint on a type variable. Currently has only one variant, but designed to be forward-compatible with multi-parameter type classes and constraints on type expressions."}
+  simple: Name}
 
+## A System F type abstraction term
 type TypeLambda = record{
   ## The type variable introduced by the abstraction
   parameter: Name,
   ## The body of the abstraction
-  body: Term}@{description="A System F type abstraction term"}
+  body: Term}
 
+## A type expression together with free type variables occurring in the expression
 type TypeScheme = record{
   ## The free type variables
   variables: list<Name>,
   ## The type expression
   body: Type,
   ## Constraints on type variables, including typeclass constraints. The map keys are type variable names; an empty map means no constraints.
-  constraints: map<Name, TypeVariableConstraints>}@{description="A type expression together with free type variables occurring in the expression"}
+  constraints: map<Name, TypeVariableConstraints>}
 
+## Constraints associated with a type variable, including typeclass constraints
 type TypeVariableConstraints = record{
   ## The typeclass constraints on this type variable
-  classes: set<TypeClassConstraint>}@{description="Constraints associated with a type variable, including typeclass constraints"}
+  classes: set<TypeClassConstraint>}
 
+## A term wrapped in a type name
 type WrappedTerm = record{
   ## The name of the wrapper type
   typeName: Name,
   ## The wrapped term
-  body: Term}@{description="A term wrapped in a type name"}
+  body: Term}

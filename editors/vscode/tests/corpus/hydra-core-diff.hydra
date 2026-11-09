@@ -4,7 +4,7 @@ module hydra.core.diff
 
 
 ## A base-relative edit (delta) transforming a value into a new value. Applied forward against a base; a symmetric before/after 'diff' is derived from (base, Edit), not stored here. Canonical by construction: descend carries single-step StepEdits, so there is exactly one encoding of any change.
-type Edit = forall a. forall s. union{
+type Edit = forall a, s. union{
   ## Leave this position unchanged
   retain: unit,
   ## Set this position to the given value (upsert: prior presence is irrelevant)
@@ -22,21 +22,21 @@ type Fill = forall v. union{
   defer: unit}
 
 ## A demand the migration cannot satisfy from the old value alone: at a value-path, a value of the given 'type' must be supplied.
-type Hole = forall t. forall s. record{
+type Hole = forall t, s. record{
   ## The value-path (sequence of steps) to the position needing a value
   path: list<s>,
   ## The 'type' a fill must produce at this hole
   `type`: t}
 
 ## A value supplied for a residual (deferred) hole, identified by its path (engine-internal)
-type HoleFiller = forall v. forall s. record{
+type HoleFiller = forall v, s. record{
   ## The path of the residual hole being supplied
   path: list<s>,
   ## The value supplied for that hole
   value: v}
 
 ## A validation-time failure: the user's fills do not correctly answer the plan's holes
-type InvalidFillError = forall t. forall v. forall s. union{
+type InvalidFillError = forall t, v, s. union{
   ## A fillNow produced a value that does not inhabit the hole's type
   illTyped: Hole t s,
   ## A hole received no fill
@@ -45,7 +45,7 @@ type InvalidFillError = forall t. forall v. forall s. union{
   extraFill: int32}
 
 ## An application-time failure: a specific instance could not be migrated by a valid Migrator
-type MigrationError = forall t. forall v. forall s. union{
+type MigrationError = forall t, v, s. union{
   ## The input value is not a valid instance of the old type
   notAnInstance: v,
   ## A value failed a narrowing conversion (e.g. numeric overflow); fail-fast rather than truncate
@@ -58,35 +58,35 @@ type MigrationError = forall t. forall v. forall s. union{
   unfilledHole: Hole t s}
 
 ## The result of diffing two schemas: the per-type edits (which drive the transform) bundled with the ordered holes the user must answer. Supplied once to constructMigrator so the diff is never re-passed.
-type MigrationPlan = forall n. forall t. forall s. record{
+type MigrationPlan = forall n, t, s. record{
   ## The schema diff: an edit per changed type, keyed by type name
   edits: map<n, Edit t s>,
   ## The ordered holes across all changed types, for the user to answer
   holes: list<SchemaHole n t s>}
 
 ## A constructed instance migrator. RUNTIME-ONLY (apply is a host function; not serialized). Carries the residual (deferred) holes an enclosing context must supply, and applies to a value given values for those residual holes.
-type Migrator = forall t. forall v. forall s. record{
+type Migrator = forall t, v, s. record{
   ## Deferred holes that an enclosing context must supply when composing this migrator
   residualHoles: list<Hole t s>,
   ## Migrate a value, given values for the residual holes; fails with a MigrationError per instance
   apply: list<HoleFiller v s> → v → either<MigrationError t v s, v>}
 
 ## A value together with the 'type' it failed to inhabit
-type Mistyped = forall t. forall v. record{
+type Mistyped = forall t, v. record{
   ## The offending value
   value: v,
   ## The type the value did not inhabit
   `type`: t}
 
 ## A hole located within a named type of a schema. A type with several holes yields several SchemaHoles sharing a typeName.
-type SchemaHole = forall n. forall t. forall s. record{
+type SchemaHole = forall n, t, s. record{
   ## The name of the type (a schema entry) containing this hole
   typeName: n,
   ## The hole within that type
   hole: Hole t s}
 
 ## An edit applied at a single immediate step of a value
-type StepEdit = forall a. forall s. record{
+type StepEdit = forall a, s. record{
   ## The immediate step to descend into
   step: s,
   ## The edit to apply at that step

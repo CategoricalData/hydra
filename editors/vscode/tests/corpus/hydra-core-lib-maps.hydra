@@ -5,9 +5,7 @@
 ## Because key ordering is part of the map type's contract, every map-typed variable in this module's signatures carries the ordering constraint on its key type, including in primitives that perform no comparison themselves.
 module hydra.core.lib.maps
 
-import hydra.core.lib.lists as lists
-import hydra.core.lib.optionals as optionals
-import hydra.core.lib.pairs as pairs
+
 
 ## Alter a value at a key using a function which sees the optional current value.
 ##
@@ -18,7 +16,7 @@ import hydra.core.lib.pairs as pairs
 ##
 ## @availableSince 0.15
 ## @requirement insertsUpdatesOrDeletes: alter applies the given function to the optional current value at the key: if the function returns given(v'), that binding is set (inserting if absent, overwriting if present); if it returns none, the key is removed.
-primitive alter : ∀v,k.(ordering k) ⇒ (optional<v> → optional<v>) → k → map<k, v> → map<k, v> = λf.λk.λm.optionals.match (f (hydra.core.lib.maps.lookup k m)) (hydra.core.lib.maps.delete k m) (λvNew.hydra.core.lib.maps.insert k vNew m)
+primitive alter : ∀v,k.(ordering k) ⇒ (optional<v> → optional<v>) → k → map<k, v> → map<k, v> = λf,k,m.hydra.core.lib.optionals.match (f (lookup k m)) (delete k m) (λvNew.insert k vNew m)
 
 ## Map functions over both the keys and values of a map.
 ##
@@ -30,7 +28,7 @@ primitive alter : ∀v,k.(ordering k) ⇒ (optional<v> → optional<v>) → k �
 ## @availableSince 0.15
 ## @requirement transformsKeysAndValues: bimap returns a new map where each binding (k, v) becomes (fk(k), fv(v)), applying the key function and value function independently to every binding.
 ## @requirement emptyInput: bimap of the empty map is the empty map, regardless of the key and value functions.
-primitive bimap : ∀k1,k2,v1,v2.(ordering k1, ordering k2) ⇒ (k1 → k2) → (v1 → v2) → map<k1, v1> → map<k2, v2> = λfk.λfv.λm.hydra.core.lib.maps.fromList (lists.map (λp.(fk (pairs.first p), fv (pairs.second p))) (hydra.core.lib.maps.toList m))
+primitive bimap : ∀k1,k2,v1,v2.(ordering k1, ordering k2) ⇒ (k1 → k2) → (v1 → v2) → map<k1, v1> → map<k2, v2> = λfk,fv,m.fromList (hydra.core.lib.lists.map (λp.(fk (hydra.core.lib.pairs.first p), fv (hydra.core.lib.pairs.second p))) (toList m))
 
 ## Remove a key from a map.
 ##
@@ -85,7 +83,7 @@ primitive empty : ∀k,v.(ordering k) ⇒ map<k, v>
 ## @availableSince 0.15
 ## @requirement keepsMatchingValues: filter returns the submap containing exactly the bindings whose value satisfies the predicate, preserving all matching keys.
 ## @requirement boundaryCases: filter degrades correctly at the boundaries: a predicate matching no value yields the empty map; filtering the empty map yields the empty map.
-primitive filter : ∀v,k.(ordering k) ⇒ (v → boolean) → map<k, v> → map<k, v> = λp.λm.hydra.core.lib.maps.fromList (lists.filter (λpr.p (pairs.second pr)) (hydra.core.lib.maps.toList m))
+primitive filter : ∀v,k.(ordering k) ⇒ (v → boolean) → map<k, v> → map<k, v> = λp,m.fromList (hydra.core.lib.lists.filter (λpr.p (hydra.core.lib.pairs.second pr)) (toList m))
 
 ## Filter a map by key and value.
 ##
@@ -96,7 +94,7 @@ primitive filter : ∀v,k.(ordering k) ⇒ (v → boolean) → map<k, v> → map
 ## @availableSince 0.15
 ## @requirement keepsMatchingBindings: filterWithKey returns the submap containing exactly the bindings for which the predicate, given both key and value, is true.
 ## @requirement boundaryCases: filterWithKey degrades correctly at the boundaries: a predicate matching no binding yields the empty map; filtering the empty map yields the empty map.
-primitive filterWithKey : ∀k,v.(ordering k) ⇒ (k → v → boolean) → map<k, v> → map<k, v> = λp.λm.hydra.core.lib.maps.fromList (lists.filter (λpr.p (pairs.first pr) (pairs.second pr)) (hydra.core.lib.maps.toList m))
+primitive filterWithKey : ∀k,v.(ordering k) ⇒ (k → v → boolean) → map<k, v> → map<k, v> = λp,m.fromList (hydra.core.lib.lists.filter (λpr.p (hydra.core.lib.pairs.first pr) (hydra.core.lib.pairs.second pr)) (toList m))
 
 ## Look up a value with a default if the key is absent.
 ##
@@ -106,7 +104,7 @@ primitive filterWithKey : ∀k,v.(ordering k) ⇒ (k → v → boolean) → map<
 ##
 ## @availableSince 0.15
 ## @requirement returnsBoundValueOrDefault: findWithDefault returns the value bound to the key when present, or the supplied default value when the key is absent.
-primitive findWithDefault : ∀v,k.(ordering k) ⇒ lazy v → k → map<k, v> → v = λdef.λk.λm.optionals.withDefault def (hydra.core.lib.maps.lookup k m)
+primitive findWithDefault : ∀v,k.(ordering k) ⇒ lazy v → k → map<k, v> → v = λdef,k,m.hydra.core.lib.optionals.withDefault def (lookup k m)
 
 ## Build a map from a list of key-value pairs.
 ##
@@ -183,7 +181,7 @@ primitive lookup : ∀k,v.(ordering k) ⇒ k → map<k, v> → optional<v>
 ## @availableSince 0.15
 ## @requirement appliesFunctionToValues: map applies the given function to every value in the map, leaving keys unchanged.
 ## @requirement emptyInput: map over the empty map is the empty map, regardless of the function.
-primitive map : ∀v1,v2,k.(ordering k) ⇒ (v1 → v2) → map<k, v1> → map<k, v2> = λf.λm.hydra.core.lib.maps.fromList (lists.map (λp.(pairs.first p, f (pairs.second p))) (hydra.core.lib.maps.toList m))
+primitive map : ∀v1,v2,k.(ordering k) ⇒ (v1 → v2) → map<k, v1> → map<k, v2> = λf,m.fromList (hydra.core.lib.lists.map (λp.(hydra.core.lib.pairs.first p, f (hydra.core.lib.pairs.second p))) (toList m))
 
 ## Map a function over the keys of a map.
 ##
@@ -194,7 +192,7 @@ primitive map : ∀v1,v2,k.(ordering k) ⇒ (v1 → v2) → map<k, v1> → map<k
 ## @availableSince 0.15
 ## @requirement appliesFunctionToKeys: mapKeys applies the given function to every key in the map, leaving the bound values unchanged.
 ## @requirement emptyInput: mapKeys over the empty map is the empty map, regardless of the function.
-primitive mapKeys : ∀k1,k2,v.(ordering k1, ordering k2) ⇒ (k1 → k2) → map<k1, v> → map<k2, v> = λf.λm.hydra.core.lib.maps.fromList (lists.map (λp.(f (pairs.first p), pairs.second p)) (hydra.core.lib.maps.toList m))
+primitive mapKeys : ∀k1,k2,v.(ordering k1, ordering k2) ⇒ (k1 → k2) → map<k1, v> → map<k2, v> = λf,m.fromList (hydra.core.lib.lists.map (λp.(f (hydra.core.lib.pairs.first p), hydra.core.lib.pairs.second p)) (toList m))
 
 ## Test whether a key is present in a map.
 ##

@@ -6,12 +6,12 @@ module hydra.core.lib.logic
 ## Compute the logical AND of two boolean values.
 ##
 ## and(p, q) returns true iff both p and q are true.
-## Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.
-## Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation).
+## The second operand is not necessarily evaluated: and is short-circuiting, and returns false as soon as the first operand is false without evaluating the second.
+## Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool.
 ##
 ## @availableSince 0.15
 ## @requirement trueOnlyWhenBothTrue: and(p, q) returns true exactly when both p and q are true; any false operand makes the result false.
-primitive and : boolean → boolean → boolean = λa.λb.hydra.core.lib.logic.ifElse a b false
+primitive and : boolean → lazy boolean → boolean = λa,b.ifElse a b false
 
 ## Compute a conditional expression.
 ##
@@ -30,14 +30,14 @@ primitive ifElse : ∀x.boolean → lazy x → lazy x → x
 ##
 ## @availableSince 0.15
 ## @requirement negatesBoolean: not(p) returns false when p is true and true when p is false.
-primitive not : boolean → boolean = λa.hydra.core.lib.logic.ifElse a false true
+primitive not : boolean → boolean = λa.ifElse a false true
 
 ## Compute the logical OR of two boolean values.
 ##
 ## or(p, q) returns true iff at least one of p and q is true.
-## Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.
-## Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation).
+## The second operand is not necessarily evaluated: or is short-circuiting, and returns true as soon as the first operand is true without evaluating the second.
+## Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool.
 ##
 ## @availableSince 0.15
 ## @requirement trueWhenEitherTrue: or(p, q) returns true when at least one of p and q is true; it returns false only when both are false.
-primitive or : boolean → boolean → boolean = λa.λb.hydra.core.lib.logic.ifElse a true b
+primitive or : boolean → lazy boolean → boolean = λa,b.ifElse a true b

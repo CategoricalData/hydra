@@ -17,22 +17,7 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.lib.lists as lists
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                           ^ source.hydra
-#                            ^^ source.hydra keyword.control.import.hydra
-#                              ^ source.hydra
-#                               ^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.lib.logic as logic
-#^^^^^^ source.hydra keyword.control.import.hydra
-#      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                           ^ source.hydra
-#                            ^^ source.hydra keyword.control.import.hydra
-#                              ^ source.hydra
-#                               ^^^^^ source.hydra entity.name.namespace.hydra
+>
 >
 >## Remove an element from a set.
 #^^ source.hydra comment.block.documentation.hydra
@@ -129,7 +114,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive difference : ∀x.(ordering x) ⇒ set<x> → set<x> → set<x> = λs1.λs2.lists.foldl (λacc.λel.logic.ifElse (hydra.core.lib.sets.member el s2) acc (hydra.core.lib.sets.insert el acc)) hydra.core.lib.sets.empty (hydra.core.lib.sets.toList s1)
+>primitive difference : ∀x.(ordering x) ⇒ set<x> → set<x> → set<x> = λs1,s2.hydra.core.lib.lists.foldl (λacc,el.hydra.core.lib.logic.ifElse (member el s2) acc (insert el acc)) empty (toList s1)
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -170,39 +155,37 @@
 #                                                                    ^ source.hydra keyword.operator.lambda.hydra
 #                                                                     ^^ source.hydra variable.parameter.hydra
 #                                                                       ^ source.hydra punctuation.separator.binder.hydra
-#                                                                        ^ source.hydra keyword.operator.lambda.hydra
-#                                                                         ^^ source.hydra variable.parameter.hydra
-#                                                                           ^ source.hydra punctuation.separator.binder.hydra
-#                                                                            ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                       ^^ source.hydra
-#                                                                                         ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                          ^^^ source.hydra variable.parameter.hydra
-#                                                                                             ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                              ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                               ^^ source.hydra variable.parameter.hydra
-#                                                                                                 ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                                  ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                              ^^ source.hydra
-#                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                          ^ source.hydra
-#                                                                                                                                           ^^ source.hydra variable.other.hydra
-#                                                                                                                                             ^ source.hydra
-#                                                                                                                                              ^^ source.hydra variable.other.hydra
-#                                                                                                                                                ^^ source.hydra
-#                                                                                                                                                  ^^^ source.hydra variable.other.hydra
-#                                                                                                                                                     ^^ source.hydra
-#                                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                 ^ source.hydra
-#                                                                                                                                                                                  ^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                    ^ source.hydra
-#                                                                                                                                                                                     ^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                        ^^^ source.hydra
-#                                                                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                    ^^ source.hydra
-#                                                                                                                                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                                                ^ source.hydra
-#                                                                                                                                                                                                                                                 ^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                   ^^ source.hydra
+#                                                                        ^^ source.hydra variable.parameter.hydra
+#                                                                          ^ source.hydra punctuation.separator.binder.hydra
+#                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                     ^^ source.hydra
+#                                                                                                       ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                        ^^^ source.hydra variable.parameter.hydra
+#                                                                                                           ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                            ^^ source.hydra variable.parameter.hydra
+#                                                                                                              ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                          ^^ source.hydra
+#                                                                                                                                            ^^^^^^ source.hydra variable.other.hydra
+#                                                                                                                                                  ^ source.hydra
+#                                                                                                                                                   ^^ source.hydra variable.other.hydra
+#                                                                                                                                                     ^ source.hydra
+#                                                                                                                                                      ^^ source.hydra variable.other.hydra
+#                                                                                                                                                        ^^ source.hydra
+#                                                                                                                                                          ^^^ source.hydra variable.other.hydra
+#                                                                                                                                                             ^^ source.hydra
+#                                                                                                                                                               ^^^^^^ source.hydra variable.other.hydra
+#                                                                                                                                                                     ^ source.hydra
+#                                                                                                                                                                      ^^ source.hydra variable.other.hydra
+#                                                                                                                                                                        ^ source.hydra
+#                                                                                                                                                                         ^^^ source.hydra variable.other.hydra
+#                                                                                                                                                                            ^^^ source.hydra
+#                                                                                                                                                                               ^^^^^ source.hydra variable.other.hydra
+#                                                                                                                                                                                    ^^ source.hydra
+#                                                                                                                                                                                      ^^^^^^ source.hydra variable.other.hydra
+#                                                                                                                                                                                            ^ source.hydra
+#                                                                                                                                                                                             ^^ source.hydra variable.other.hydra
+#                                                                                                                                                                                               ^^ source.hydra
 >
 >## The empty set.
 #^^ source.hydra comment.block.documentation.hydra
@@ -273,7 +256,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive filter : ∀x.(ordering x) ⇒ (x → boolean) → set<x> → set<x> = λp.λs.hydra.core.lib.sets.fromList (lists.filter p (hydra.core.lib.sets.toList s))
+>primitive filter : ∀x.(ordering x) ⇒ (x → boolean) → set<x> → set<x> = λp,s.fromList (hydra.core.lib.lists.filter p (toList s))
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^ source.hydra entity.name.function.hydra
@@ -315,19 +298,18 @@
 #                                                                       ^ source.hydra keyword.operator.lambda.hydra
 #                                                                        ^ source.hydra variable.parameter.hydra
 #                                                                         ^ source.hydra punctuation.separator.binder.hydra
-#                                                                          ^ source.hydra keyword.operator.lambda.hydra
-#                                                                           ^ source.hydra variable.parameter.hydra
-#                                                                            ^ source.hydra punctuation.separator.binder.hydra
-#                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                         ^^ source.hydra
-#                                                                                                           ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                       ^ source.hydra
-#                                                                                                                        ^ source.hydra variable.other.hydra
-#                                                                                                                         ^^ source.hydra
-#                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                     ^ source.hydra
-#                                                                                                                                                      ^ source.hydra variable.other.hydra
-#                                                                                                                                                       ^^^ source.hydra
+#                                                                          ^ source.hydra variable.parameter.hydra
+#                                                                           ^ source.hydra punctuation.separator.binder.hydra
+#                                                                            ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                    ^^ source.hydra
+#                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                 ^ source.hydra
+#                                                                                                                  ^ source.hydra variable.other.hydra
+#                                                                                                                   ^^ source.hydra
+#                                                                                                                     ^^^^^^ source.hydra variable.other.hydra
+#                                                                                                                           ^ source.hydra
+#                                                                                                                            ^ source.hydra variable.other.hydra
+#                                                                                                                             ^^^ source.hydra
 >
 >## Construct a set from a list of elements (duplicates removed).
 #^^ source.hydra comment.block.documentation.hydra
@@ -484,7 +466,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive intersection : ∀x.(ordering x) ⇒ set<x> → set<x> → set<x> = λs1.λs2.lists.foldl (λacc.λel.logic.ifElse (hydra.core.lib.sets.member el s2) (hydra.core.lib.sets.insert el acc) acc) hydra.core.lib.sets.empty (hydra.core.lib.sets.toList s1)
+>primitive intersection : ∀x.(ordering x) ⇒ set<x> → set<x> → set<x> = λs1,s2.hydra.core.lib.lists.foldl (λacc,el.hydra.core.lib.logic.ifElse (member el s2) (insert el acc) acc) empty (toList s1)
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -525,39 +507,37 @@
 #                                                                      ^ source.hydra keyword.operator.lambda.hydra
 #                                                                       ^^ source.hydra variable.parameter.hydra
 #                                                                         ^ source.hydra punctuation.separator.binder.hydra
-#                                                                          ^ source.hydra keyword.operator.lambda.hydra
-#                                                                           ^^ source.hydra variable.parameter.hydra
-#                                                                             ^ source.hydra punctuation.separator.binder.hydra
-#                                                                              ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                         ^^ source.hydra
-#                                                                                           ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                            ^^^ source.hydra variable.parameter.hydra
-#                                                                                               ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                                ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                                 ^^ source.hydra variable.parameter.hydra
-#                                                                                                   ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                                    ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                ^^ source.hydra
-#                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                            ^ source.hydra
-#                                                                                                                                             ^^ source.hydra variable.other.hydra
-#                                                                                                                                               ^ source.hydra
-#                                                                                                                                                ^^ source.hydra variable.other.hydra
-#                                                                                                                                                  ^^^ source.hydra
-#                                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                               ^ source.hydra
-#                                                                                                                                                                                ^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                  ^ source.hydra
-#                                                                                                                                                                                   ^^^ source.hydra variable.other.hydra
+#                                                                          ^^ source.hydra variable.parameter.hydra
+#                                                                            ^ source.hydra punctuation.separator.binder.hydra
+#                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                       ^^ source.hydra
+#                                                                                                         ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                          ^^^ source.hydra variable.parameter.hydra
+#                                                                                                             ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                              ^^ source.hydra variable.parameter.hydra
+#                                                                                                                ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                                            ^^ source.hydra
+#                                                                                                                                              ^^^^^^ source.hydra variable.other.hydra
+#                                                                                                                                                    ^ source.hydra
+#                                                                                                                                                     ^^ source.hydra variable.other.hydra
+#                                                                                                                                                       ^ source.hydra
+#                                                                                                                                                        ^^ source.hydra variable.other.hydra
+#                                                                                                                                                          ^^^ source.hydra
+#                                                                                                                                                             ^^^^^^ source.hydra variable.other.hydra
+#                                                                                                                                                                   ^ source.hydra
+#                                                                                                                                                                    ^^ source.hydra variable.other.hydra
+#                                                                                                                                                                      ^ source.hydra
+#                                                                                                                                                                       ^^^ source.hydra variable.other.hydra
+#                                                                                                                                                                          ^^ source.hydra
+#                                                                                                                                                                            ^^^ source.hydra variable.other.hydra
+#                                                                                                                                                                               ^^ source.hydra
+#                                                                                                                                                                                 ^^^^^ source.hydra variable.other.hydra
 #                                                                                                                                                                                      ^^ source.hydra
-#                                                                                                                                                                                        ^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                           ^^ source.hydra
-#                                                                                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                      ^^ source.hydra
-#                                                                                                                                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                                                  ^ source.hydra
-#                                                                                                                                                                                                                                                   ^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                     ^^ source.hydra
+#                                                                                                                                                                                        ^^^^^^ source.hydra variable.other.hydra
+#                                                                                                                                                                                              ^ source.hydra
+#                                                                                                                                                                                               ^^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                 ^^ source.hydra
 >
 >## Test whether a set is empty.
 #^^ source.hydra comment.block.documentation.hydra
@@ -642,7 +622,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive map : ∀x,y.(ordering x, ordering y) ⇒ (x → y) → set<x> → set<y> = λf.λs.hydra.core.lib.sets.fromList (lists.map f (hydra.core.lib.sets.toList s))
+>primitive map : ∀x,y.(ordering x, ordering y) ⇒ (x → y) → set<x> → set<y> = λf,s.fromList (hydra.core.lib.lists.map f (toList s))
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
@@ -690,19 +670,18 @@
 #                                                                            ^ source.hydra keyword.operator.lambda.hydra
 #                                                                             ^ source.hydra variable.parameter.hydra
 #                                                                              ^ source.hydra punctuation.separator.binder.hydra
-#                                                                               ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                ^ source.hydra variable.parameter.hydra
-#                                                                                 ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                              ^^ source.hydra
-#                                                                                                                ^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                         ^ source.hydra
-#                                                                                                                          ^ source.hydra variable.other.hydra
-#                                                                                                                           ^^ source.hydra
-#                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                       ^ source.hydra
-#                                                                                                                                                        ^ source.hydra variable.other.hydra
-#                                                                                                                                                         ^^^ source.hydra
+#                                                                               ^ source.hydra variable.parameter.hydra
+#                                                                                ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                 ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                         ^^ source.hydra
+#                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                                   ^ source.hydra
+#                                                                                                                    ^ source.hydra variable.other.hydra
+#                                                                                                                     ^^ source.hydra
+#                                                                                                                       ^^^^^^ source.hydra variable.other.hydra
+#                                                                                                                             ^ source.hydra
+#                                                                                                                              ^ source.hydra variable.other.hydra
+#                                                                                                                               ^^^ source.hydra
 >
 >## Test whether an element is in a set.
 #^^ source.hydra comment.block.documentation.hydra
@@ -960,7 +939,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive union : ∀x.(ordering x) ⇒ set<x> → set<x> → set<x> = λs1.λs2.lists.foldl (λacc.λel.hydra.core.lib.sets.insert el acc) s2 (hydra.core.lib.sets.toList s1)
+>primitive union : ∀x.(ordering x) ⇒ set<x> → set<x> → set<x> = λs1,s2.hydra.core.lib.lists.foldl (λacc,el.insert el acc) s2 (toList s1)
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^ source.hydra entity.name.function.hydra
@@ -1001,29 +980,27 @@
 #                                                               ^ source.hydra keyword.operator.lambda.hydra
 #                                                                ^^ source.hydra variable.parameter.hydra
 #                                                                  ^ source.hydra punctuation.separator.binder.hydra
-#                                                                   ^ source.hydra keyword.operator.lambda.hydra
-#                                                                    ^^ source.hydra variable.parameter.hydra
-#                                                                      ^ source.hydra punctuation.separator.binder.hydra
-#                                                                       ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                  ^^ source.hydra
-#                                                                                    ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                     ^^^ source.hydra variable.parameter.hydra
-#                                                                                        ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                         ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                          ^^ source.hydra variable.parameter.hydra
-#                                                                                            ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                       ^ source.hydra
-#                                                                                                                        ^^ source.hydra variable.other.hydra
-#                                                                                                                          ^ source.hydra
-#                                                                                                                           ^^^ source.hydra variable.other.hydra
-#                                                                                                                              ^^ source.hydra
-#                                                                                                                                ^^ source.hydra variable.other.hydra
-#                                                                                                                                  ^^ source.hydra
-#                                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                              ^ source.hydra
-#                                                                                                                                                               ^^ source.hydra variable.other.hydra
-#                                                                                                                                                                 ^^ source.hydra
+#                                                                   ^^ source.hydra variable.parameter.hydra
+#                                                                     ^ source.hydra punctuation.separator.binder.hydra
+#                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                ^^ source.hydra
+#                                                                                                  ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                                   ^^^ source.hydra variable.parameter.hydra
+#                                                                                                      ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                       ^^ source.hydra variable.parameter.hydra
+#                                                                                                         ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                          ^^^^^^ source.hydra variable.other.hydra
+#                                                                                                                ^ source.hydra
+#                                                                                                                 ^^ source.hydra variable.other.hydra
+#                                                                                                                   ^ source.hydra
+#                                                                                                                    ^^^ source.hydra variable.other.hydra
+#                                                                                                                       ^^ source.hydra
+#                                                                                                                         ^^ source.hydra variable.other.hydra
+#                                                                                                                           ^^ source.hydra
+#                                                                                                                             ^^^^^^ source.hydra variable.other.hydra
+#                                                                                                                                   ^ source.hydra
+#                                                                                                                                    ^^ source.hydra variable.other.hydra
+#                                                                                                                                      ^^ source.hydra
 >
 >## Compute the union of a list of sets.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1056,7 +1033,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive unions : ∀x.(ordering x) ⇒ list<set<x>> → set<x> = λss.lists.foldl (λacc.λs.hydra.core.lib.sets.union acc s) hydra.core.lib.sets.empty ss
+>primitive unions : ∀x.(ordering x) ⇒ list<set<x>> → set<x> = λss.hydra.core.lib.lists.foldl (λacc,s.`union` acc s) empty ss
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^ source.hydra entity.name.function.hydra
@@ -1093,20 +1070,21 @@
 #                                                             ^ source.hydra keyword.operator.lambda.hydra
 #                                                              ^^ source.hydra variable.parameter.hydra
 #                                                                ^ source.hydra punctuation.separator.binder.hydra
-#                                                                 ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                            ^^ source.hydra
-#                                                                              ^ source.hydra keyword.operator.lambda.hydra
-#                                                                               ^^^ source.hydra variable.parameter.hydra
-#                                                                                  ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                   ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                    ^ source.hydra variable.parameter.hydra
-#                                                                                     ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                           ^^ source.hydra
+#                                                                                             ^ source.hydra keyword.operator.lambda.hydra
+#                                                                                              ^^^ source.hydra variable.parameter.hydra
+#                                                                                                 ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                  ^ source.hydra variable.parameter.hydra
+#                                                                                                   ^ source.hydra punctuation.separator.binder.hydra
+#                                                                                                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                                                                                     ^^^^^ source.hydra variable.other.escaped.hydra
+#                                                                                                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                                                                           ^ source.hydra
+#                                                                                                            ^^^ source.hydra variable.other.hydra
 #                                                                                                               ^ source.hydra
-#                                                                                                                ^^^ source.hydra variable.other.hydra
-#                                                                                                                   ^ source.hydra
-#                                                                                                                    ^ source.hydra variable.other.hydra
-#                                                                                                                     ^^ source.hydra
-#                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                ^ source.hydra
-#                                                                                                                                                 ^^ source.hydra variable.other.hydra
+#                                                                                                                ^ source.hydra variable.other.hydra
+#                                                                                                                 ^^ source.hydra
+#                                                                                                                   ^^^^^ source.hydra variable.other.hydra
+#                                                                                                                        ^ source.hydra
+#                                                                                                                         ^^ source.hydra variable.other.hydra

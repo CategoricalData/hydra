@@ -58,7 +58,7 @@
 >## A two-level bidirectional encoder which adapts types to types and terms to terms
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->type Adapter = forall t1. forall t2. forall v1. forall v2. forall e. record{
+>type Adapter = forall t1, t2, v1, v2, e. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^ source.hydra entity.name.function.hydra
@@ -70,28 +70,20 @@
 #                      ^^ source.hydra variable.parameter.hydra
 #                        ^ source.hydra punctuation.separator.binder.hydra
 #                         ^ source.hydra
-#                          ^^^^^^ source.hydra support.type.hydra
-#                                ^ source.hydra
-#                                 ^^ source.hydra variable.parameter.hydra
-#                                   ^ source.hydra punctuation.separator.binder.hydra
-#                                    ^ source.hydra
-#                                     ^^^^^^ source.hydra support.type.hydra
-#                                           ^ source.hydra
-#                                            ^^ source.hydra variable.parameter.hydra
-#                                              ^ source.hydra punctuation.separator.binder.hydra
-#                                               ^ source.hydra
-#                                                ^^^^^^ source.hydra support.type.hydra
-#                                                      ^ source.hydra
-#                                                       ^^ source.hydra variable.parameter.hydra
-#                                                         ^ source.hydra punctuation.separator.binder.hydra
-#                                                          ^ source.hydra
-#                                                           ^^^^^^ source.hydra support.type.hydra
-#                                                                 ^ source.hydra
-#                                                                  ^ source.hydra variable.parameter.hydra
-#                                                                   ^ source.hydra punctuation.separator.binder.hydra
-#                                                                    ^ source.hydra
-#                                                                     ^^^^^^ source.hydra keyword.control.hydra
-#                                                                           ^^ source.hydra
+#                          ^^ source.hydra variable.parameter.hydra
+#                            ^ source.hydra punctuation.separator.binder.hydra
+#                             ^ source.hydra
+#                              ^^ source.hydra variable.parameter.hydra
+#                                ^ source.hydra punctuation.separator.binder.hydra
+#                                 ^ source.hydra
+#                                  ^^ source.hydra variable.parameter.hydra
+#                                    ^ source.hydra punctuation.separator.binder.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.parameter.hydra
+#                                       ^ source.hydra punctuation.separator.binder.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^ source.hydra keyword.control.hydra
+#                                               ^^ source.hydra
 >  ## Whether information may be lost in the course of this adaptation
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -207,7 +199,7 @@
 >## A two-level encoder and decoder, operating both at a type level and an instance (data) level
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->type Bicoder = forall t1. forall t2. forall v1. forall v2. forall e. record{
+>type Bicoder = forall t1, t2, v1, v2, e. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^ source.hydra entity.name.function.hydra
@@ -219,28 +211,20 @@
 #                      ^^ source.hydra variable.parameter.hydra
 #                        ^ source.hydra punctuation.separator.binder.hydra
 #                         ^ source.hydra
-#                          ^^^^^^ source.hydra support.type.hydra
-#                                ^ source.hydra
-#                                 ^^ source.hydra variable.parameter.hydra
-#                                   ^ source.hydra punctuation.separator.binder.hydra
-#                                    ^ source.hydra
-#                                     ^^^^^^ source.hydra support.type.hydra
-#                                           ^ source.hydra
-#                                            ^^ source.hydra variable.parameter.hydra
-#                                              ^ source.hydra punctuation.separator.binder.hydra
-#                                               ^ source.hydra
-#                                                ^^^^^^ source.hydra support.type.hydra
-#                                                      ^ source.hydra
-#                                                       ^^ source.hydra variable.parameter.hydra
-#                                                         ^ source.hydra punctuation.separator.binder.hydra
-#                                                          ^ source.hydra
-#                                                           ^^^^^^ source.hydra support.type.hydra
-#                                                                 ^ source.hydra
-#                                                                  ^ source.hydra variable.parameter.hydra
-#                                                                   ^ source.hydra punctuation.separator.binder.hydra
-#                                                                    ^ source.hydra
-#                                                                     ^^^^^^ source.hydra keyword.control.hydra
-#                                                                           ^^ source.hydra
+#                          ^^ source.hydra variable.parameter.hydra
+#                            ^ source.hydra punctuation.separator.binder.hydra
+#                             ^ source.hydra
+#                              ^^ source.hydra variable.parameter.hydra
+#                                ^ source.hydra punctuation.separator.binder.hydra
+#                                 ^ source.hydra
+#                                  ^^ source.hydra variable.parameter.hydra
+#                                    ^ source.hydra punctuation.separator.binder.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.parameter.hydra
+#                                       ^ source.hydra punctuation.separator.binder.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^ source.hydra keyword.control.hydra
+#                                               ^^ source.hydra
 >  ## A function from source types to adapters
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -424,7 +408,7 @@
 >## An encoder and decoder; a pair of partial functions between two types
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->type Coder = forall v1. forall v2. forall e. record{
+>type Coder = forall v1, v2, e. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^ source.hydra entity.name.function.hydra
@@ -436,18 +420,14 @@
 #                    ^^ source.hydra variable.parameter.hydra
 #                      ^ source.hydra punctuation.separator.binder.hydra
 #                       ^ source.hydra
-#                        ^^^^^^ source.hydra support.type.hydra
+#                        ^^ source.hydra variable.parameter.hydra
+#                          ^ source.hydra punctuation.separator.binder.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra variable.parameter.hydra
+#                             ^ source.hydra punctuation.separator.binder.hydra
 #                              ^ source.hydra
-#                               ^^ source.hydra variable.parameter.hydra
-#                                 ^ source.hydra punctuation.separator.binder.hydra
-#                                  ^ source.hydra
-#                                   ^^^^^^ source.hydra support.type.hydra
-#                                         ^ source.hydra
-#                                          ^ source.hydra variable.parameter.hydra
-#                                           ^ source.hydra punctuation.separator.binder.hydra
-#                                            ^ source.hydra
-#                                             ^^^^^^ source.hydra keyword.control.hydra
-#                                                   ^^ source.hydra
+#                               ^^^^^^ source.hydra keyword.control.hydra
+#                                     ^^ source.hydra
 >  ## A function which encodes a domain value to a codomain value, with the possibility of failure
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -749,7 +729,7 @@
 >## A bidirectional encoder which maps between the same type and term languages on either side
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->type SymmetricAdapter = forall t. forall v. forall e. Adapter t t v v e
+>type SymmetricAdapter = forall t, v, e. Adapter t t v v e
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -761,27 +741,23 @@
 #                               ^ source.hydra variable.parameter.hydra
 #                                ^ source.hydra punctuation.separator.binder.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra support.type.hydra
-#                                        ^ source.hydra
-#                                         ^ source.hydra variable.parameter.hydra
-#                                          ^ source.hydra punctuation.separator.binder.hydra
-#                                           ^ source.hydra
-#                                            ^^^^^^ source.hydra support.type.hydra
-#                                                  ^ source.hydra
-#                                                   ^ source.hydra variable.parameter.hydra
-#                                                    ^ source.hydra punctuation.separator.binder.hydra
+#                                  ^ source.hydra variable.parameter.hydra
+#                                   ^ source.hydra punctuation.separator.binder.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra variable.parameter.hydra
+#                                      ^ source.hydra punctuation.separator.binder.hydra
+#                                       ^ source.hydra
+#                                        ^^^^^^^ source.hydra variable.other.hydra
+#                                               ^ source.hydra
+#                                                ^ source.hydra variable.other.hydra
+#                                                 ^ source.hydra
+#                                                  ^ source.hydra variable.other.hydra
+#                                                   ^ source.hydra
+#                                                    ^ source.hydra variable.other.hydra
 #                                                     ^ source.hydra
-#                                                      ^^^^^^^ source.hydra variable.other.hydra
-#                                                             ^ source.hydra
-#                                                              ^ source.hydra variable.other.hydra
-#                                                               ^ source.hydra
-#                                                                ^ source.hydra variable.other.hydra
-#                                                                 ^ source.hydra
-#                                                                  ^ source.hydra variable.other.hydra
-#                                                                   ^ source.hydra
-#                                                                    ^ source.hydra variable.other.hydra
-#                                                                     ^ source.hydra
-#                                                                      ^ source.hydra variable.other.hydra
+#                                                      ^ source.hydra variable.other.hydra
+#                                                       ^ source.hydra
+#                                                        ^ source.hydra variable.other.hydra
 >
 >## Specifies either a pre-order or post-order traversal
 #^^ source.hydra comment.block.documentation.hydra

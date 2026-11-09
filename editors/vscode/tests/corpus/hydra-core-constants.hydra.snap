@@ -15,7 +15,10 @@
 #                          ^ source.hydra
 #                           ^^^^^ source.hydra entity.name.namespace.hydra
 >
->term fieldNameValue = "value"@{description="The conventional field name used when normalizing a wrapped (newtype) value to a single-field record"}
+>## The conventional field name used when normalizing a wrapped (newtype) value to a single-field record
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term fieldNameValue = "value"
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -25,16 +28,11 @@
 #                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                       ^^^^^ source.hydra string.quoted.double.hydra
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                             ^ source.hydra keyword.operator.annotation.hydra
-#                              ^ source.hydra
-#                               ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                          ^ source.hydra keyword.operator.equals.hydra
-#                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                 ^^ source.hydra
 >
->term ignoredVariable = "_"@{description="The name used for ignored variables"}
+>## The name used for ignored variables
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term ignoredVariable = "_"
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -44,16 +42,11 @@
 #                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                        ^ source.hydra string.quoted.double.hydra
 #                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                          ^ source.hydra keyword.operator.annotation.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                       ^ source.hydra keyword.operator.equals.hydra
-#                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                             ^^ source.hydra
 >
->term keyClasses = model.Name{"classes"}@{description="Annotation key for type classes"}
+>## Annotation key for type classes
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term keyClasses = model.Name{"classes"}
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -65,17 +58,12 @@
 #                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                              ^^^^^^^ source.hydra string.quoted.double.hydra
 #                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                      ^ source.hydra
-#                                       ^ source.hydra keyword.operator.annotation.hydra
-#                                        ^ source.hydra
-#                                         ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^ source.hydra keyword.operator.equals.hydra
-#                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                      ^^ source.hydra
+#                                      ^^ source.hydra
 >
->term keyDebugId = model.Name{"debugId"}@{description="Annotation key for debug identifiers"}
+>## Annotation key for debug identifiers
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term keyDebugId = model.Name{"debugId"}
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -87,17 +75,12 @@
 #                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                              ^^^^^^^ source.hydra string.quoted.double.hydra
 #                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                      ^ source.hydra
-#                                       ^ source.hydra keyword.operator.annotation.hydra
-#                                        ^ source.hydra
-#                                         ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^ source.hydra keyword.operator.equals.hydra
-#                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                           ^^ source.hydra
+#                                      ^^ source.hydra
 >
->term keyDeprecated = model.Name{"deprecated"}@{description="Annotation key for deprecated markers"}
+>## Annotation key for deprecated markers
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term keyDeprecated = model.Name{"deprecated"}
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -109,17 +92,12 @@
 #                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                 ^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                            ^ source.hydra
-#                                             ^ source.hydra keyword.operator.annotation.hydra
-#                                              ^ source.hydra
-#                                               ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                          ^ source.hydra keyword.operator.equals.hydra
-#                                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                  ^^ source.hydra
+#                                            ^^ source.hydra
 >
->term keyDescription = model.Name{"description"}@{description="Annotation key for descriptions"}
+>## Annotation key for descriptions
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term keyDescription = model.Name{"description"}
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -131,17 +109,12 @@
 #                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                  ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                              ^ source.hydra
-#                                               ^ source.hydra keyword.operator.annotation.hydra
-#                                                ^ source.hydra
-#                                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                            ^ source.hydra keyword.operator.equals.hydra
-#                                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                              ^^ source.hydra
+#                                              ^^ source.hydra
 >
->term keyExclude = model.Name{"exclude"}@{description="Annotation key for exclusions"}
+>## Annotation key for exclusions
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term keyExclude = model.Name{"exclude"}
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -153,17 +126,12 @@
 #                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                              ^^^^^^^ source.hydra string.quoted.double.hydra
 #                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                      ^ source.hydra
-#                                       ^ source.hydra keyword.operator.annotation.hydra
-#                                        ^ source.hydra
-#                                         ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^ source.hydra keyword.operator.equals.hydra
-#                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                    ^^ source.hydra
+#                                      ^^ source.hydra
 >
->term keyFirstClassType = model.Name{"firstClassType"}@{description="A flag which tells the language coders to encode a given encoded type as a term rather than a native type"}
+>## A flag which tells the language coders to encode a given encoded type as a term rather than a native type
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term keyFirstClassType = model.Name{"firstClassType"}
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -175,17 +143,12 @@
 #                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                     ^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                    ^ source.hydra
-#                                                     ^ source.hydra keyword.operator.annotation.hydra
-#                                                      ^ source.hydra
-#                                                       ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                  ^ source.hydra keyword.operator.equals.hydra
-#                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                                              ^^ source.hydra
+#                                                    ^^ source.hydra
 >
->term keyFreshTypeVariableCount = model.Name{"freshTypeVariableCount"}@{description="A counter for generating fresh type variable names"}
+>## A counter for generating fresh type variable names
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term keyFreshTypeVariableCount = model.Name{"freshTypeVariableCount"}
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -197,17 +160,12 @@
 #                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                             ^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                    ^ source.hydra
-#                                                                     ^ source.hydra keyword.operator.annotation.hydra
-#                                                                      ^ source.hydra
-#                                                                       ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                  ^ source.hydra keyword.operator.equals.hydra
-#                                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                       ^^ source.hydra
+#                                                                    ^^ source.hydra
 >
->term keyMaxLength = model.Name{"maxLength"}@{description="Annotation key for maximum length constraints"}
+>## Annotation key for maximum length constraints
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term keyMaxLength = model.Name{"maxLength"}
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -219,17 +177,12 @@
 #                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                ^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                          ^ source.hydra
-#                                           ^ source.hydra keyword.operator.annotation.hydra
-#                                            ^ source.hydra
-#                                             ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^ source.hydra keyword.operator.equals.hydra
-#                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                        ^^ source.hydra
+#                                          ^^ source.hydra
 >
->term keyMinLength = model.Name{"minLength"}@{description="Annotation key for minimum length constraints"}
+>## Annotation key for minimum length constraints
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term keyMinLength = model.Name{"minLength"}
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -241,17 +194,12 @@
 #                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                ^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                          ^ source.hydra
-#                                           ^ source.hydra keyword.operator.annotation.hydra
-#                                            ^ source.hydra
-#                                             ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^ source.hydra keyword.operator.equals.hydra
-#                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                        ^^ source.hydra
+#                                          ^^ source.hydra
 >
->term keyPreserveFieldName = model.Name{"preserveFieldName"}@{description="Annotation key for preserving field names during code generation"}
+>## Annotation key for preserving field names during code generation
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term keyPreserveFieldName = model.Name{"preserveFieldName"}
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -263,17 +211,12 @@
 #                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                        ^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                          ^ source.hydra
-#                                                           ^ source.hydra keyword.operator.annotation.hydra
-#                                                            ^ source.hydra
-#                                                             ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                        ^ source.hydra keyword.operator.equals.hydra
-#                                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                           ^^ source.hydra
+#                                                          ^^ source.hydra
 >
->term keyType = model.Name{"type"}@{description="Annotation key for type information"}
+>## Annotation key for type information
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term keyType = model.Name{"type"}
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^ source.hydra entity.name.function.hydra
@@ -285,17 +228,12 @@
 #                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                           ^^^^ source.hydra string.quoted.double.hydra
 #                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.annotation.hydra
-#                                  ^ source.hydra
-#                                   ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                              ^ source.hydra keyword.operator.equals.hydra
-#                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                    ^^ source.hydra
+#                                ^^ source.hydra
 >
->term maxInt32 = 2147483647:int32@{description="The maximum value of a 32-bit integer"}
+>## The maximum value of a 32-bit integer
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term maxInt32 = 2147483647:int32
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^ source.hydra entity.name.function.hydra
@@ -305,16 +243,11 @@
 #                ^^^^^^^^^^ source.hydra constant.numeric.integer.hydra
 #                          ^ source.hydra punctuation.separator.type.hydra
 #                           ^^^^^ source.hydra support.type.literal.integer.hydra
-#                                ^ source.hydra keyword.operator.annotation.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                             ^ source.hydra keyword.operator.equals.hydra
-#                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                     ^^ source.hydra
 >
->term maxTraceDepth = 5000:int32@{description="A maximum depth for nested computations. Currently, this is set very high because deep recursion is common in type inference over the Hydra kernel."}
+>## A maximum depth for nested computations. Currently, this is set very high because deep recursion is common in type inference over the Hydra kernel.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term maxTraceDepth = 5000:int32
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -324,16 +257,11 @@
 #                     ^^^^ source.hydra constant.numeric.integer.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^^^^^ source.hydra support.type.literal.integer.hydra
-#                               ^ source.hydra keyword.operator.annotation.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                            ^ source.hydra keyword.operator.equals.hydra
-#                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                                                                  ^^ source.hydra
 >
->term regexCamelCase = "^[a-z][a-zA-Z0-9]*$"@{description="Regex matching a camelCase identifier: starts with a lowercase letter, then any letters or digits."}
+>## Regex matching a camelCase identifier: starts with a lowercase letter, then any letters or digits.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term regexCamelCase = "^[a-z][a-zA-Z0-9]*$"
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -343,16 +271,11 @@
 #                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                       ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                           ^ source.hydra keyword.operator.annotation.hydra
-#                                            ^ source.hydra
-#                                             ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^ source.hydra keyword.operator.equals.hydra
-#                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                             ^^ source.hydra
 >
->term regexNamespace = "^[a-z][a-zA-Z0-9]*(\\.[a-z][a-zA-Z0-9]*)*$"@{description="Regex matching a Hydra namespace: dot-separated camelCase segments, each starting with a lowercase letter."}
+>## Regex matching a Hydra namespace: dot-separated camelCase segments, each starting with a lowercase letter.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term regexNamespace = "^[a-z][a-zA-Z0-9]*(\\.[a-z][a-zA-Z0-9]*)*$"
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -364,16 +287,11 @@
 #                                          ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
 #                                            ^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                  ^ source.hydra keyword.operator.annotation.hydra
-#                                                                   ^ source.hydra
-#                                                                    ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                               ^ source.hydra keyword.operator.equals.hydra
-#                                                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                                                            ^^ source.hydra
 >
->term regexPackageName = "^[a-z][a-z0-9]*(-[a-z][a-z0-9]*)*$"@{description="Regex matching a Hydra package name: hyphen-separated lowercase segments, each starting with a letter."}
+>## Regex matching a Hydra package name: hyphen-separated lowercase segments, each starting with a letter.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term regexPackageName = "^[a-z][a-z0-9]*(-[a-z][a-z0-9]*)*$"
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -383,16 +301,11 @@
 #                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                            ^ source.hydra keyword.operator.annotation.hydra
-#                                                             ^ source.hydra
-#                                                              ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                         ^ source.hydra keyword.operator.equals.hydra
-#                                                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                                                  ^^ source.hydra
 >
->term regexPascalCase = "^[A-Z][a-zA-Z0-9]*$"@{description="Regex matching a PascalCase identifier: starts with an uppercase letter, then any letters or digits."}
+>## Regex matching a PascalCase identifier: starts with an uppercase letter, then any letters or digits.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term regexPascalCase = "^[A-Z][a-zA-Z0-9]*$"
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -402,16 +315,11 @@
 #                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                        ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                            ^ source.hydra keyword.operator.annotation.hydra
-#                                             ^ source.hydra
-#                                              ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                         ^ source.hydra keyword.operator.equals.hydra
-#                                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                                ^^ source.hydra
 >
->term warningAutoGeneratedFile = "Note: this is an automatically generated file. Do not edit."@{description="A standard warning message for auto-generated files"}
+>## A standard warning message for auto-generated files
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term warningAutoGeneratedFile = "Note: this is an automatically generated file. Do not edit."
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -421,11 +329,3 @@
 #                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                             ^ source.hydra keyword.operator.annotation.hydra
-#                                                                                              ^ source.hydra
-#                                                                                               ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                          ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                                ^^ source.hydra

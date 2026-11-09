@@ -8,6 +8,9 @@
 >
 >
 >
+>## A term together with an annotation
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type AnnotatedTerm = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -32,22 +35,17 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  annotation: Term}@{description="A term together with an annotation"}
+>  annotation: Term}
 #^^ source.hydra
 #  ^^^^^^^^^^ source.hydra variable.other.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra variable.other.hydra
-#                  ^ source.hydra
-#                   ^ source.hydra keyword.operator.annotation.hydra
-#                    ^ source.hydra
-#                     ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                ^ source.hydra keyword.operator.equals.hydra
-#                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                     ^^ source.hydra
+#                  ^^ source.hydra
 >
+>## A type together with an annotation
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type AnnotatedType = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -72,22 +70,17 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  annotation: Term}@{description="A type together with an annotation"}
+>  annotation: Term}
 #^^ source.hydra
 #  ^^^^^^^^^^ source.hydra variable.other.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra variable.other.hydra
-#                  ^ source.hydra
-#                   ^ source.hydra keyword.operator.annotation.hydra
-#                    ^ source.hydra
-#                     ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                ^ source.hydra keyword.operator.equals.hydra
-#                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                     ^^ source.hydra
+#                  ^^ source.hydra
 >
+>## A term which applies a function to an argument
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type Application = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -112,22 +105,17 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  argument: Term}@{description="A term which applies a function to an argument"}
+>  argument: Term}
 #^^ source.hydra
 #  ^^^^^^^^ source.hydra variable.other.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
-#                ^ source.hydra
-#                 ^ source.hydra keyword.operator.annotation.hydra
-#                  ^ source.hydra
-#                   ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                              ^ source.hydra keyword.operator.equals.hydra
-#                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                               ^^ source.hydra
+#                ^^ source.hydra
 >
+>## The type-level analog of an application term
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type ApplicationType = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -152,22 +140,17 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  argument: Type}@{description="The type-level analog of an application term"}
+>  argument: Type}
 #^^ source.hydra
 #  ^^^^^^^^ source.hydra variable.other.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
-#                ^ source.hydra
-#                 ^ source.hydra keyword.operator.annotation.hydra
-#                  ^ source.hydra
-#                   ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                              ^ source.hydra keyword.operator.equals.hydra
-#                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                             ^^ source.hydra
+#                ^^ source.hydra
 >
+>## A field with an optional type scheme, used to bind variables to terms in a 'let' expression
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type Binding = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -205,7 +188,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  typeScheme: optional<TypeScheme>}@{description="A field with an optional type scheme, used to bind variables to terms in a 'let' expression"}
+>  typeScheme: optional<TypeScheme>}
 #^^ source.hydra
 #  ^^^^^^^^^^ source.hydra variable.other.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
@@ -214,16 +197,11 @@
 #                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
 #                       ^^^^^^^^^^ source.hydra variable.other.hydra
 #                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                  ^ source.hydra
-#                                   ^ source.hydra keyword.operator.annotation.hydra
-#                                    ^ source.hydra
-#                                     ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                ^ source.hydra keyword.operator.equals.hydra
-#                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                              ^^ source.hydra
+#                                  ^^ source.hydra
 >
+>## A single alternative of a case statement (union elimination): the variant being matched, together with the term that handles it.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type CaseAlternative = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -248,22 +226,17 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  handler: Term}@{description="A single alternative of a case statement (union elimination): the variant being matched, together with the term that handles it."}
+>  handler: Term}
 #^^ source.hydra
 #  ^^^^^^^ source.hydra variable.other.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^^ source.hydra variable.other.hydra
-#               ^ source.hydra
-#                ^ source.hydra keyword.operator.annotation.hydra
-#                 ^ source.hydra
-#                  ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra keyword.operator.equals.hydra
-#                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                                ^^ source.hydra
+#               ^^ source.hydra
 >
+>## A union elimination; a case statement
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type CaseStatement = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -302,25 +275,22 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  cases: list<CaseAlternative>}@{description="A union elimination; a case statement"}
+>  `cases`: list<CaseAlternative>}
 #^^ source.hydra
-#  ^^^^^ source.hydra keyword.control.hydra
-#       ^ source.hydra punctuation.separator.type.hydra
-#        ^ source.hydra
-#         ^^^^ source.hydra support.type.hydra
-#             ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#              ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.annotation.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                            ^ source.hydra keyword.operator.equals.hydra
-#                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                    ^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^^ source.hydra variable.other.escaped.hydra
+#        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^ source.hydra support.type.hydra
+#               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                ^^ source.hydra
 >
+>## A type which provides a choice between a 'left' type and a 'right' type
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type EitherType = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -347,7 +317,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `right`: Type}@{description="A type which provides a choice between a 'left' type and a 'right' type"}
+>  `right`: Type}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^^ source.hydra variable.other.escaped.hydra
@@ -355,16 +325,11 @@
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^^ source.hydra variable.other.hydra
-#               ^ source.hydra
-#                ^ source.hydra keyword.operator.annotation.hydra
-#                 ^ source.hydra
-#                  ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra keyword.operator.equals.hydra
-#                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                       ^^ source.hydra
+#               ^^ source.hydra
 >
+>## A name/term pair
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type Field = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -389,7 +354,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `term`: Term}@{description="A name/term pair"}
+>  `term`: Term}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
@@ -397,16 +362,11 @@
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
-#              ^ source.hydra
-#               ^ source.hydra keyword.operator.annotation.hydra
-#                ^ source.hydra
-#                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra keyword.operator.equals.hydra
-#                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                              ^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                               ^^ source.hydra
+#              ^^ source.hydra
 >
+>## A name/type pair
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type FieldType = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -431,7 +391,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `type`: Type}@{description="A name/type pair"}
+>  `type`: Type}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
@@ -439,16 +399,11 @@
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
-#              ^ source.hydra
-#               ^ source.hydra keyword.operator.annotation.hydra
-#                ^ source.hydra
-#                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra keyword.operator.equals.hydra
-#                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                              ^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                               ^^ source.hydra
+#              ^^ source.hydra
 >
+>## A floating-point type
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type FloatType = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -475,7 +430,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `float64`: unit}@{description="A floating-point type"}
+>  `float64`: unit}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^^^^ source.hydra variable.other.escaped.hydra
@@ -483,16 +438,11 @@
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra keyword.operator.annotation.hydra
-#                   ^ source.hydra
-#                    ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                               ^ source.hydra keyword.operator.equals.hydra
-#                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                 ^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                       ^^ source.hydra
+#                 ^^ source.hydra
 >
+>## A floating-point literal value
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type FloatValue = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -519,7 +469,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `float64`: float64}@{description="A floating-point literal value"}
+>  `float64`: float64}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^^^^ source.hydra variable.other.escaped.hydra
@@ -527,16 +477,11 @@
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
 #             ^^^^^^^ source.hydra support.type.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra keyword.operator.annotation.hydra
-#                      ^ source.hydra
-#                       ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                  ^ source.hydra keyword.operator.equals.hydra
-#                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                   ^^ source.hydra
+#                    ^^ source.hydra
 >
+>## A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type ForallType = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -561,22 +506,17 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  body: Type}@{description="A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term."}
+>  body: Type}
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
-#            ^ source.hydra
-#             ^ source.hydra keyword.operator.annotation.hydra
-#              ^ source.hydra
-#               ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                          ^ source.hydra keyword.operator.equals.hydra
-#                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                     ^^ source.hydra
+#            ^^ source.hydra
 >
+>## A function type, also known as an arrow type
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type FunctionType = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -601,22 +541,17 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  codomain: Type}@{description="A function type, also known as an arrow type"}
+>  codomain: Type}
 #^^ source.hydra
 #  ^^^^^^^^ source.hydra variable.other.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
-#                ^ source.hydra
-#                 ^ source.hydra keyword.operator.annotation.hydra
-#                  ^ source.hydra
-#                   ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                              ^ source.hydra keyword.operator.equals.hydra
-#                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                             ^^ source.hydra
+#                ^^ source.hydra
 >
+>## An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type Injection = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -641,22 +576,17 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  field: Field}@{description="An instance of a union type; i.e. a string-indexed generalization of inl() or inr()"}
+>  field: Field}
 #^^ source.hydra
 #  ^^^^^ source.hydra variable.other.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^^^ source.hydra variable.other.hydra
-#              ^ source.hydra
-#               ^ source.hydra keyword.operator.annotation.hydra
-#                ^ source.hydra
-#                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra keyword.operator.equals.hydra
-#                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                  ^^ source.hydra
+#              ^^ source.hydra
 >
+>## An integer type
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type IntegerType = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -774,7 +704,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `uint64`: unit}@{description="An integer type"}
+>  `uint64`: unit}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^^^ source.hydra variable.other.escaped.hydra
@@ -782,16 +712,11 @@
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
-#                ^ source.hydra
-#                 ^ source.hydra keyword.operator.annotation.hydra
-#                  ^ source.hydra
-#                   ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                              ^ source.hydra keyword.operator.equals.hydra
-#                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                ^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                ^^ source.hydra
+#                ^^ source.hydra
 >
+>## An integer literal value
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type IntegerValue = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -909,7 +834,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `uint64`: uint64}@{description="An integer literal value"}
+>  `uint64`: uint64}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^^^ source.hydra variable.other.escaped.hydra
@@ -917,16 +842,11 @@
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^^^ source.hydra support.type.hydra
-#                  ^ source.hydra
-#                   ^ source.hydra keyword.operator.annotation.hydra
-#                    ^ source.hydra
-#                     ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                ^ source.hydra keyword.operator.equals.hydra
-#                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                  ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                           ^^ source.hydra
+#                  ^^ source.hydra
 >
+>## A function abstraction (lambda)
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type Lambda = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -965,22 +885,17 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  body: Term}@{description="A function abstraction (lambda)"}
+>  body: Term}
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
-#            ^ source.hydra
-#             ^ source.hydra keyword.operator.annotation.hydra
-#              ^ source.hydra
-#               ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                          ^ source.hydra keyword.operator.equals.hydra
-#                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                            ^^ source.hydra
+#            ^^ source.hydra
 >
+>## A set of (possibly recursive) 'let' bindings together with a body in which they are bound
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type Let = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -1008,22 +923,17 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  body: Term}@{description="A set of (possibly recursive) 'let' bindings together with a body in which they are bound"}
+>  body: Term}
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
-#            ^ source.hydra
-#             ^ source.hydra keyword.operator.annotation.hydra
-#              ^ source.hydra
-#               ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                          ^ source.hydra keyword.operator.equals.hydra
-#                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                      ^^ source.hydra
+#            ^^ source.hydra
 >
+>## A term constant; an instance of a literal type
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type Literal = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -1098,7 +1008,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `string`: string}@{description="A term constant; an instance of a literal type"}
+>  `string`: string}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^^^ source.hydra variable.other.escaped.hydra
@@ -1106,16 +1016,11 @@
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^^^ source.hydra support.type.hydra
-#                  ^ source.hydra
-#                   ^ source.hydra keyword.operator.annotation.hydra
-#                    ^ source.hydra
-#                     ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                ^ source.hydra keyword.operator.equals.hydra
-#                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                 ^^ source.hydra
+#                  ^^ source.hydra
 >
+>## Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type LiteralType = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -1190,7 +1095,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `string`: unit}@{description="Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants"}
+>  `string`: unit}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^^^ source.hydra variable.other.escaped.hydra
@@ -1198,16 +1103,11 @@
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
-#                ^ source.hydra
-#                 ^ source.hydra keyword.operator.annotation.hydra
-#                  ^ source.hydra
-#                   ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                              ^ source.hydra keyword.operator.equals.hydra
-#                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                              ^^ source.hydra
+#                ^^ source.hydra
 >
+>## A map type
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type MapType = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -1232,23 +1132,18 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  values: Type}@{description="A map type"}
+>  values: Type}
 #^^ source.hydra
 #  ^^^^^^ source.hydra variable.other.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
-#              ^ source.hydra
-#               ^ source.hydra keyword.operator.annotation.hydra
-#                ^ source.hydra
-#                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra keyword.operator.equals.hydra
-#                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                              ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                         ^^ source.hydra
+#              ^^ source.hydra
 >
->type Name = wrap(string)@{description="A unique identifier in some context; a string-valued key"}
+>## A unique identifier in some context; a string-valued key
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Name = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^ source.hydra entity.name.function.hydra
@@ -1258,16 +1153,11 @@
 #            ^^^^ source.hydra keyword.control.hydra
 #                ^ source.hydra
 #                 ^^^^^^ source.hydra support.type.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra keyword.operator.annotation.hydra
-#                         ^ source.hydra
-#                          ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                     ^ source.hydra keyword.operator.equals.hydra
-#                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                ^^ source.hydra
+#                       ^^ source.hydra
 >
+>## A type which pairs a 'first' type and a 'second' type
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type PairType = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -1292,22 +1182,17 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  second: Type}@{description="A type which pairs a 'first' type and a 'second' type"}
+>  second: Type}
 #^^ source.hydra
 #  ^^^^^^ source.hydra variable.other.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
-#              ^ source.hydra
-#               ^ source.hydra keyword.operator.annotation.hydra
-#                ^ source.hydra
-#                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra keyword.operator.equals.hydra
-#                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                    ^^ source.hydra
+#              ^^ source.hydra
 >
+>## A record elimination; a projection
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type Projection = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -1332,22 +1217,17 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  fieldName: Name}@{description="A record elimination; a projection"}
+>  fieldName: Name}
 #^^ source.hydra
 #  ^^^^^^^^^ source.hydra variable.other.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
 #             ^^^^ source.hydra variable.other.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra keyword.operator.annotation.hydra
-#                   ^ source.hydra
-#                    ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                               ^ source.hydra keyword.operator.equals.hydra
-#                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                    ^^ source.hydra
+#                 ^^ source.hydra
 >
+>## A record, or labeled tuple; a map of field names to terms
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type Record = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -1372,7 +1252,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  fields: list<Field>}@{description="A record, or labeled tuple; a map of field names to terms"}
+>  fields: list<Field>}
 #^^ source.hydra
 #  ^^^^^^ source.hydra variable.other.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
@@ -1381,16 +1261,11 @@
 #              ^ source.hydra punctuation.definition.typeargs.begin.hydra
 #               ^^^^^ source.hydra variable.other.hydra
 #                    ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                     ^ source.hydra
-#                      ^ source.hydra keyword.operator.annotation.hydra
-#                       ^ source.hydra
-#                        ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                   ^ source.hydra keyword.operator.equals.hydra
-#                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                               ^^ source.hydra
+#                     ^^ source.hydra
 >
+>## A data term
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type Term = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -1426,13 +1301,15 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  cases: CaseStatement,
+>  `cases`: CaseStatement,
 #^^ source.hydra
-#  ^^^^^ source.hydra keyword.control.hydra
-#       ^ source.hydra punctuation.separator.type.hydra
-#        ^ source.hydra
-#         ^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                      ^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^^ source.hydra variable.other.escaped.hydra
+#        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                        ^^ source.hydra
 >  ## An either value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1667,7 +1544,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `wrap`: WrappedTerm}@{description="A data term"}
+>  `wrap`: WrappedTerm}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
@@ -1675,16 +1552,11 @@
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                     ^ source.hydra
-#                      ^ source.hydra keyword.operator.annotation.hydra
-#                       ^ source.hydra
-#                        ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                   ^ source.hydra keyword.operator.equals.hydra
-#                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                     ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                 ^^ source.hydra
+#                     ^^ source.hydra
 >
+>## A data type
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type Type = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -1913,7 +1785,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `wrap`: Type}@{description="A data type"}
+>  `wrap`: Type}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
@@ -1921,16 +1793,11 @@
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
-#              ^ source.hydra
-#               ^ source.hydra keyword.operator.annotation.hydra
-#                ^ source.hydra
-#                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra keyword.operator.equals.hydra
-#                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                              ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                          ^^ source.hydra
+#              ^^ source.hydra
 >
+>## A term applied to a type; a type application.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type TypeApplicationTerm = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -1955,7 +1822,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `type`: Type}@{description="A term applied to a type; a type application."}
+>  `type`: Type}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
@@ -1963,16 +1830,11 @@
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
-#              ^ source.hydra
-#               ^ source.hydra keyword.operator.annotation.hydra
-#                ^ source.hydra
-#                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra keyword.operator.equals.hydra
-#                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                            ^^ source.hydra
+#              ^^ source.hydra
 >
+>## A type class constraint on a type variable. Currently has only one variant, but designed to be forward-compatible with multi-parameter type classes and constraints on type expressions.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type TypeClassConstraint = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -1986,22 +1848,17 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  simple: Name}@{description="A type class constraint on a type variable. Currently has only one variant, but designed to be forward-compatible with multi-parameter type classes and constraints on type expressions."}
+>  simple: Name}
 #^^ source.hydra
 #  ^^^^^^ source.hydra variable.other.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
-#              ^ source.hydra
-#               ^ source.hydra keyword.operator.annotation.hydra
-#                ^ source.hydra
-#                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra keyword.operator.equals.hydra
-#                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                                                                                       ^^ source.hydra
+#              ^^ source.hydra
 >
+>## A System F type abstraction term
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type TypeLambda = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -2026,22 +1883,17 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  body: Term}@{description="A System F type abstraction term"}
+>  body: Term}
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
-#            ^ source.hydra
-#             ^ source.hydra keyword.operator.annotation.hydra
-#              ^ source.hydra
-#               ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                          ^ source.hydra keyword.operator.equals.hydra
-#                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                             ^^ source.hydra
+#            ^^ source.hydra
 >
+>## A type expression together with free type variables occurring in the expression
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type TypeScheme = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -2080,7 +1932,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  constraints: map<Name, TypeVariableConstraints>}@{description="A type expression together with free type variables occurring in the expression"}
+>  constraints: map<Name, TypeVariableConstraints>}
 #^^ source.hydra
 #  ^^^^^^^^^^^ source.hydra variable.other.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
@@ -2091,16 +1943,11 @@
 #                       ^^ source.hydra
 #                         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                 ^ source.hydra
-#                                                  ^ source.hydra keyword.operator.annotation.hydra
-#                                                   ^ source.hydra
-#                                                    ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                               ^ source.hydra keyword.operator.equals.hydra
-#                                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                 ^^ source.hydra
+#                                                 ^^ source.hydra
 >
+>## Constraints associated with a type variable, including typeclass constraints
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type TypeVariableConstraints = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -2114,7 +1961,7 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  classes: set<TypeClassConstraint>}@{description="Constraints associated with a type variable, including typeclass constraints"}
+>  classes: set<TypeClassConstraint>}
 #^^ source.hydra
 #  ^^^^^^^ source.hydra variable.other.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
@@ -2123,16 +1970,11 @@
 #              ^ source.hydra punctuation.definition.typeargs.begin.hydra
 #               ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                   ^ source.hydra
-#                                    ^ source.hydra keyword.operator.annotation.hydra
-#                                     ^ source.hydra
-#                                      ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                 ^ source.hydra keyword.operator.equals.hydra
-#                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                ^^ source.hydra
+#                                   ^^ source.hydra
 >
+>## A term wrapped in a type name
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type WrappedTerm = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -2157,18 +1999,10 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  body: Term}@{description="A term wrapped in a type name"}
+>  body: Term}
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
-#            ^ source.hydra
-#             ^ source.hydra keyword.operator.annotation.hydra
-#              ^ source.hydra
-#               ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                          ^ source.hydra keyword.operator.equals.hydra
-#                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                          ^^ source.hydra
+#            ^^ source.hydra

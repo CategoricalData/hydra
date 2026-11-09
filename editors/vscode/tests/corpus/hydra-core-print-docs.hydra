@@ -8,18 +8,26 @@ import hydra.core.model as model
 import hydra.core.packaging as packaging
 import hydra.core.parse.docs as parse.docs
 
-term definitionReference = cases(packaging.DefinitionReference){`primitive`=λn.model.Name[] n, `term`=λn.model.Name[] n, `type`=λn.model.Name[] n}@{description="Render a DefinitionReference as its fully-qualified name"}
+## Render a DefinitionReference as its fully-qualified name
+term definitionReference = cases(packaging.DefinitionReference){`primitive`=λn.model.Name[] n, `term`=λn.model.Name[] n, `type`=λn.model.Name[] n}
 
-term docSegment = (λseg.docSegmentWith entityReference seg)@{description="Render a single DocSegment back to its source string form"}
+## Render a single DocSegment back to its source string form
+term docSegment = λseg.docSegmentWith entityReference seg
 
-term docSegmentWith = (λrender.cases(docs.DocSegment){ref=λr.render r, text=λs.s})@{description="Render a single DocSegment using a custom {@type hydra.core.packaging.EntityReference} renderer"}
+## Render a single DocSegment using a custom {@type hydra.core.packaging.EntityReference} renderer
+term docSegmentWith = λrender.cases(docs.DocSegment){ref=λr.render r, text=λs.s}
 
-term docSegments = (λsegs.strings.concat (lists.map docSegment segs))@{description="Render a list of DocSegments back to a plain documentation string"}
+## Render a list of DocSegments back to a plain documentation string
+term docSegments = λsegs.strings.concat (lists.map docSegment segs)
 
-term docSegmentsWith = (λrender.λsegs.strings.concat (lists.map (docSegmentWith render) segs))@{description="Render a list of DocSegments using a custom {@type hydra.core.packaging.EntityReference} renderer"}
+## Render a list of DocSegments using a custom {@type hydra.core.packaging.EntityReference} renderer
+term docSegmentsWith = λrender,segs.strings.concat (lists.map (docSegmentWith render) segs)
 
-term entityReference = cases(packaging.EntityReference){definition=λd.strings.concat2 (cases(packaging.DefinitionReference){`primitive`=λ`_`."primitive", `term`=λ`_`."term", `type`=λ`_`."type"} d) (strings.concat2 " " (definitionReference d)), `module`=λm.strings.concat2 "module " (packaging.ModuleName[] m), package=λp.strings.concat2 "package " (packaging.PackageName[] p), termExpr=λs.strings.concat2 "term-expr " s, typeExpr=λs.strings.concat2 "type-expr " s}@{description="Render a {@type hydra.core.packaging.EntityReference} as its doc-escape tag string (without the surrounding braces)"}
+## Render a {@type hydra.core.packaging.EntityReference} as its doc-escape tag string (without the surrounding braces)
+term entityReference = cases(packaging.EntityReference){definition=λd.strings.concat2 (cases(packaging.DefinitionReference){`primitive`=λ`_`."primitive", `term`=λ`_`."term", `type`=λ`_`."type"} d) (strings.concat2 " " (definitionReference d)), `module`=λm.strings.concat2 "module " (packaging.ModuleName[] m), package=λp.strings.concat2 "package " (packaging.PackageName[] p), termExpr=λs.strings.concat2 "term-expr " s, typeExpr=λs.strings.concat2 "type-expr " s}
 
-term renderDocString = (λs.renderDocStringWith entityReference s)@{description="Parse a documentation string and re-render it, converting doc-escape tags through their canonical form"}
+## Parse a documentation string and re-render it, converting doc-escape tags through their canonical form
+term renderDocString = λs.renderDocStringWith entityReference s
 
-term renderDocStringWith = (λrender.λs.docSegmentsWith render (parse.docs.parseDocString s))@{description="Parse a documentation string and render it using a custom {@type hydra.core.packaging.EntityReference} renderer. Text segments are passed through; ref segments are rendered by the provided function. Unrecognized doc-escape blocks are passed through as text."}
+## Parse a documentation string and render it using a custom {@type hydra.core.packaging.EntityReference} renderer. Text segments are passed through; ref segments are rendered by the provided function. Unrecognized doc-escape blocks are passed through as text.
+term renderDocStringWith = λrender,s.docSegmentsWith render (parse.docs.parseDocString s)

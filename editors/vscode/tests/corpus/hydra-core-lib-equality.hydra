@@ -5,7 +5,7 @@
 ## For floating-point values equality is value identity.
 module hydra.core.lib.equality
 
-import hydra.core.lib.logic as logic
+
 
 ## Check whether two values are equal.
 ##
@@ -30,4 +30,4 @@ primitive equal : ∀x.(equality x) ⇒ x → x → boolean
 ## @availableSince 0.17.6
 ## @requirement negatesEqual: notEqual(x, y) = not(equal(x, y)) for scalar values of any type -- integers, strings, and floats.
 ## @requirement negatesEqualOnCollections: notEqual on collection values (lists, sets, maps) is likewise the negation of equal: order-sensitivity for lists and order-independence for sets/maps carry through unchanged.
-primitive notEqual : ∀x.(equality x) ⇒ x → x → boolean = λx.λy.logic.not (hydra.core.lib.equality.equal x y)
+primitive notEqual : ∀x.(equality x) ⇒ x → x → boolean = λx,y.hydra.core.lib.logic.not (equal x y)
