@@ -1,0 +1,38 @@
+## String representations of hydra.core.error.packaging types
+module hydra.core.print.error.packaging
+
+import hydra.core.error.packaging as error.packaging
+import hydra.core.lib.strings as strings
+import hydra.core.model as model
+import hydra.core.packaging as packaging
+import hydra.core.print.util as util
+
+term conflictingModuleNameError = (λe.strings.concat ["module namespaces conflict when mapped to target language path: ", packaging.ModuleName[] (error.packaging.ConflictingModuleNameError[first] e), " vs ", packaging.ModuleName[] (error.packaging.ConflictingModuleNameError[second] e)])@{description="Show a conflicting module namespace error as a string"}
+
+term conflictingVariantNameError = (λe.strings.concat ["in module ", packaging.ModuleName[] (error.packaging.ConflictingVariantNameError[moduleName] e), ": variant ", model.Name[] (error.packaging.ConflictingVariantNameError[variantName] e), " of type ", model.Name[] (error.packaging.ConflictingVariantNameError[typeName] e), " produces constructor name ", model.Name[] (error.packaging.ConflictingVariantNameError[conflictingName] e), " which conflicts with another type definition"])@{description="Show a conflicting variant name error as a string"}
+
+term definitionNotInModuleNameError = (λe.strings.concat ["definition ", model.Name[] (error.packaging.DefinitionNotInModuleNameError[name] e), " is not in module namespace ", packaging.ModuleName[] (error.packaging.DefinitionNotInModuleNameError[moduleName] e)])@{description="Show a definition-not-in-module-namespace error as a string"}
+
+term definitionsOutOfOrderError = (λe.strings.concat ["in module ", packaging.ModuleName[] (error.packaging.DefinitionsOutOfOrderError[moduleName] e), ": definitions out of order: ", model.Name[] (error.packaging.DefinitionsOutOfOrderError[precedingName] e), " precedes ", model.Name[] (error.packaging.DefinitionsOutOfOrderError[followingName] e)])@{description="Show a definitions-out-of-order error as a string"}
+
+term duplicateDefinitionNameError = (λe.strings.concat ["in module ", packaging.ModuleName[] (error.packaging.DuplicateDefinitionNameError[moduleName] e), ": duplicate definition name ", model.Name[] (error.packaging.DuplicateDefinitionNameError[name] e)])@{description="Show a duplicate definition name error as a string"}
+
+term duplicateModuleNameError = (λe.strings.concat ["duplicate module namespace ", packaging.ModuleName[] (error.packaging.DuplicateModuleNameError[moduleName] e)])@{description="Show a duplicate module namespace error as a string"}
+
+term invalidDefinitionNameError = (λe.strings.concat ["in module ", packaging.ModuleName[] (error.packaging.InvalidDefinitionNameError[moduleName] e), ": definition ", model.Name[] (error.packaging.InvalidDefinitionNameError[name] e), " does not match expected ", util.caseConvention (error.packaging.InvalidDefinitionNameError[expectedConvention] e)])@{description="Show an invalid definition name error as a string"}
+
+term invalidModuleError = (λe.strings.concat2 "invalid module: " (cases(error.packaging.InvalidModuleError){conflictingVariantName=conflictingVariantNameError, definitionNotInModuleName=definitionNotInModuleNameError, definitionsOutOfOrder=definitionsOutOfOrderError, duplicateDefinitionName=duplicateDefinitionNameError, invalidDefinitionName=invalidDefinitionNameError, invalidModuleNameConvention=invalidModuleNameConventionError, missingDocumentation=missingDocumentationError} e))@{description="Show an invalid module error as a string"}
+
+term invalidModuleNameConventionError = (λe.strings.concat ["namespace ", packaging.ModuleName[] (error.packaging.InvalidModuleNameConventionError[moduleName] e), " does not match the dotted-camelCase naming convention"])@{description="Show an invalid namespace convention error as a string"}
+
+term invalidPackageError = (λe.strings.concat2 "invalid package: " (cases(error.packaging.InvalidPackageError){conflictingModuleName=conflictingModuleNameError, duplicateModuleName=duplicateModuleNameError, invalidModule=invalidModuleError, invalidPackageName=invalidPackageNameError, moduleInMultiplePackages=moduleInMultiplePackagesError, nestedModuleName=nestedModuleNameError, undeclaredDependency=undeclaredDependencyError} e))@{description="Show an invalid package error as a string"}
+
+term invalidPackageNameError = (λe.strings.concat ["package name ", packaging.PackageName[] (error.packaging.InvalidPackageNameError[packageName] e), " does not match the hyphen-separated lowercase naming convention"])@{description="Show an invalid package name error as a string"}
+
+term missingDocumentationError = (λe.strings.concat ["in module ", packaging.ModuleName[] (error.packaging.MissingDocumentationError[moduleName] e), ": definition ", model.Name[] (error.packaging.MissingDocumentationError[name] e), " lacks a description annotation"])@{description="Show a missing documentation error as a string"}
+
+term moduleInMultiplePackagesError = (λe.strings.concat ["module namespace ", packaging.ModuleName[] (error.packaging.ModuleInMultiplePackagesError[moduleName] e), " is declared by more than one package: ", packaging.PackageName[] (error.packaging.ModuleInMultiplePackagesError[firstPackage] e), " vs ", packaging.PackageName[] (error.packaging.ModuleInMultiplePackagesError[secondPackage] e)])@{description="Show a module-in-multiple-packages error as a string"}
+
+term nestedModuleNameError = (λe.strings.concat ["module namespace ", packaging.ModuleName[] (error.packaging.NestedModuleNameError[outer] e), " is a strict dotted-prefix of module namespace ", packaging.ModuleName[] (error.packaging.NestedModuleNameError[inner] e)])@{description="Show a nested module name error as a string"}
+
+term undeclaredDependencyError = (λe.strings.concat ["module ", packaging.ModuleName[] (error.packaging.UndeclaredDependencyError[moduleName] e), " references ", model.Name[] (error.packaging.UndeclaredDependencyError[referencedName] e), ", whose owning module ", packaging.ModuleName[] (error.packaging.UndeclaredDependencyError[owningModuleName] e), " is not among its declared dependencies; add it to moduleDependencies"])@{description="Show an undeclared dependency error as a string"}
