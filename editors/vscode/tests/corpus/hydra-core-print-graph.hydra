@@ -1,0 +1,9 @@
+## String representations of hydra.core.graph types
+module hydra.core.print.graph
+
+import hydra.core.lib.lists as lists
+import hydra.core.lib.strings as strings
+import hydra.core.print.model as model
+
+## Show a list of bindings as a string
+term graph = λelements.let elementStrs := lists.map model.binding elements in strings.concat ["{", strings.join ", " elementStrs, "}"]
