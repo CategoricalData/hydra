@@ -407,6 +407,14 @@ typeDefinition = define "typeDefinition" $
 -- | Show a term definition: 'term name [: <typeScheme>] = <term>', with its doc-comment block
 -- (if any) prepended. Signature is printed only when present -- conventionally omitted per #710
 -- design (left for inference).
+--
+-- A term definition's own description never lives in 'termDefinitionMetadata' -- the DSL's
+-- 'doc' helper always wraps the BODY term in a trailing '@{description=...}' annotation, the
+-- same way it wraps a type's body (#711 second readability pass). So the whole-definition
+-- description is peeled off the body here (via 'PrintCore.peelTermDescriptionAnnotation') and
+-- printed as a leading '##' comment, instead of letting it ride through as a trailing
+-- '@{description=...}' suffix after the printed term. Unlike the type-level peel, the term-level
+-- one keeps any OTHER annotation keys inline in a (possibly still-present) trailing '@{...}'.
 termDefinition :: TypedTermDefinition (M.Map ModuleName String -> TermDefinition -> String)
 termDefinition = define "termDefinition" $
   doc "Show a term definition as a string, shortening nominal references via the given import-alias map (#803)" $
@@ -417,9 +425,14 @@ termDefinition = define "termDefinition" $
   "sigStr" <~ Optionals.match (Packaging.termDefinitionSignature $ var "td")
     (string " ")
     ("sig" ~> Strings.concat $ list [string " : ", PrintCore.termSignatureAliased @@ var "aliases" @@ var "sig", string " "]) $
-  "bodyStr" <~ (PrintCore.termAliased @@ var "aliases" @@ (Packaging.termDefinitionBody $ var "td")) $
-  withDefinitionDoc @@ (Packaging.termDefinitionMetadata $ var "td") @@
-    (Strings.concat $ list [string "term ", var "localName", var "sigStr", string "= ", var "bodyStr"])
+  "peeled" <~ PrintCore.peelTermDescriptionAnnotation @@ (Packaging.termDefinitionBody $ var "td") $
+  "mdesc" <~ Pairs.first (var "peeled") $
+  "bodyStr" <~ (PrintCore.termAliased @@ var "aliases" @@ (Pairs.second $ var "peeled")) $
+  "declStr" <~ (Strings.concat $ list [string "term ", var "localName", var "sigStr", string "= ", var "bodyStr"]) $
+  "withDescDoc" <~ Optionals.match (var "mdesc")
+    (var "declStr")
+    ("d" ~> Strings.concat $ list [string "## ", var "d", string "\n", var "declStr"]) $
+  withDefinitionDoc @@ (Packaging.termDefinitionMetadata $ var "td") @@ var "withDescDoc"
 
 -- | Show a primitive definition: '[impure] [partial] primitive name : <typeScheme> [= <term>]',
 -- with its doc-comment block (if any) prepended. isPure/isTotal surface as prefix keywords

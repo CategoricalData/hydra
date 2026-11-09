@@ -246,9 +246,22 @@ injectTerm    ::= 'inject' '(' name ')' termFields   -- exactly one field
                 | name sugarFields                   -- SUGAR (#809): one field;
                                                      -- disambiguated from a record
                                                      -- by the schema (union type)
-lambdaTerm    ::= 'λ' binderName [':' type] '.' term   -- domain type optional
+lambdaTerm    ::= 'λ' lamBinder (',' lamBinder)* '.' term
+                                               -- 'λa,b. T' desugars to 'λa.λb. T' (same nested
+                                               -- Term.lambda chain); mirrors forall/∀'s
+                                               -- multi-binder form. A comma inside a binder's own
+                                               -- domain type ('λx:map<k, v>, y.') is consumed by
+                                               -- that type, not mistaken for the next binder's
+                                               -- separator -- the binder list only splits on
+                                               -- commas the domain-type parser itself didn't
+                                               -- consume. The canonical printer collapses a
+                                               -- directly nested lambda chain back into one
+                                               -- multi-binder form (not across an annotation or
+                                               -- other wrapper, so the round-trip stays an
+                                               -- identity).
                 | 'λ' pattern '.' term          -- SUGAR, RESERVED (#811): destructuring
                                                 -- lambda; λ(x,y).body = λp.let (x,y):=p in body
+lamBinder     ::= binderName [':' type]        -- domain type optional
 letTerm       ::= 'let' binding (',' binding)* 'in' term
 listTerm      ::= '[' [term (',' term)*] ']'
 literalTerm   ::= literal
@@ -264,7 +277,9 @@ recordTerm    ::= 'record' '(' name ')' termFields
 setTerm       ::= '{' [term (',' term)*] '}'   -- '{}' is the empty set; nonempty
                                                -- braces: '=' in entries means map
 typeApplicationTerm ::= term '⟨' type '⟩'      -- postfix
-typeLambdaTerm ::= 'Λ' binderName '.' term
+typeLambdaTerm ::= 'Λ' binderName (',' binderName)* '.' term
+                                               -- 'Λa,b. T' desugars to 'Λa.Λb. T', same
+                                               -- multi-binder treatment as λ above.
 unitTerm      ::= 'unit'
 unwrapTerm    ::= 'unwrap' '(' name ')'
                 | name '[' ']'                 -- SUGAR (#809): Meters[]
@@ -344,7 +359,13 @@ applicationType ::= type type                  -- adjacency; left-associative:
                                                -- hydra.core.coders.Adapter t1 t2 v1 v2 e
 effectType    ::= 'effect' '<' type '>'
 eitherType    ::= 'either' '<' type ',' type '>'
-forallType    ::= 'forall' binder '.' type
+forallType    ::= 'forall' binder (',' binder)* '.' type
+                                               -- 'forall a, b. T' desugars to 'forall a. forall
+                                               -- b. T' (same nested Type.forall chain); mirrors
+                                               -- typeScheme's '∀x,y.' multi-binder form below.
+                                               -- The canonical printer collapses a directly
+                                               -- nested forall chain back into one multi-binder
+                                               -- form (not across an annotation or other wrapper).
 binder        ::= binderName
                 | '(' binderName ':' kind ')'  -- kinded form RESERVED (#226)
 kind          ::= '*' | kind '→' kind          -- RESERVED, not yet emitted
@@ -392,7 +413,9 @@ Notes:
 
 - `forall` belongs to `Type.forall` (the type has "for all" in its name);
   `∀` belongs to `TypeScheme`.
-  The two notations are deliberately distinct.
+  The two notations are deliberately distinct, but `forall`/`∀`/`λ`/`Λ` all admit a
+  comma-separated multi-binder list (`forall a, b. T`, `∀a, b. T`, `λa, b. t`, `Λa, b. t`)
+  desugaring to the same nested single-binder structure one binder at a time.
 - Sets and maps share brace syntax.
   Nonempty braces are a map exactly when entries contain a top-level `=`;
   `{}` is the empty set and `{=}` is the empty map.
@@ -616,7 +639,19 @@ detail of the printer, not part of the grammar.
   tracked, open gap, not a design decision to leave unfixed; Josh is deciding between accepting
   the gap (adjusting the affected round-trip test's expectation) and committing to one of the two
   fixes above (2026-10-31, Decision Desk card `711-bare-import-roundtrip`).
-- The parser does not yet reconstruct `EntityMetadata` from `##` comments (§6.2): a parsed
-  module's and every parsed definition's metadata is always `Nothing`, matching the printer's
-  intentional omission of doc-comment output when metadata is absent. Doc-comment printing
-  (§6.2) is implemented; doc-comment parsing is not yet.
+- **Doc-comment description placement, by definition kind (#711).** A `type` definition's
+  description is carried as a trailing `@{description=...}` annotation on the type scheme's
+  BODY in the DSL source; a `term` definition's is carried the same way, as a trailing
+  `@{description=...}` annotation on the term BODY. In both cases the printer peels that one
+  annotation entry off the body and emits it as a leading `## ...` line instead, so the printed
+  form never shows the trailing suffix for a definition-level description (a `type`'s or
+  `term`'s own `##`, as opposed to a record/union *field*'s inline `##`, which is not peeled from
+  anything — fields have no separate annotation path). For a `term`, any OTHER annotation keys
+  alongside `description` are left in a (still-present) trailing `@{...}` suffix; only
+  `description` is hoisted. The parser reconstructs `EntityMetadata` from a leading `##` block
+  (§6.2) for the module header and every `type`/`term`/`primitive` definition, storing it on the
+  definition's own `EntityMetadata` field rather than re-attaching it to the body as an
+  annotation — a parsed-then-reprinted module therefore reproduces the identical `##` text via a
+  different internal path (metadata field, not body annotation) than an original, hand-authored
+  module does; this is intentional and does not affect the round-trip contract (§1), which
+  compares printed text, not internal representation.

@@ -50,11 +50,14 @@ module_ = Module {
       Phantoms.toDefinition annotationRoundtripGroup,
       Phantoms.toDefinition corpusRoundtripGroup,
       Phantoms.toDefinition doSugarGroup,
+      Phantoms.toDefinition forallMultiBinderGroup,
+      Phantoms.toDefinition lambdaMultiBinderGroup,
       Phantoms.toDefinition lazyParameterRoundtripGroup,
       Phantoms.toDefinition moduleAliasGroup,
       Phantoms.toDefinition nominalSugarGroup,
       Phantoms.toDefinition sourcePositionGroup,
-      Phantoms.toDefinition sourceSpanGroup]
+      Phantoms.toDefinition sourceSpanGroup,
+      Phantoms.toDefinition termDocCommentGroup]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -64,8 +67,9 @@ allTests = define "allTests" $
     doc "Test cases for the textual syntax (#497/#710)" $
     Testing.testGroup (string "textual syntax") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
-    subgroups = [annotationRoundtripGroup, corpusRoundtripGroup, doSugarGroup, lazyParameterRoundtripGroup,
-                 moduleAliasGroup, nominalSugarGroup, sourceSpanGroup, sourcePositionGroup]
+    subgroups = [annotationRoundtripGroup, corpusRoundtripGroup, doSugarGroup, forallMultiBinderGroup,
+                 lambdaMultiBinderGroup, lazyParameterRoundtripGroup, moduleAliasGroup, nominalSugarGroup,
+                 sourceSpanGroup, sourcePositionGroup, termDocCommentGroup]
 
 -- | Print a term signature, then parse the printed text back, and show the round-tripped
 -- signature. Compares against the original signature's own printed form, so the test both
@@ -161,6 +165,161 @@ lazyParameterRoundtripGroup = define "lazyParameterRoundtripGroup" $
       "\8704x.boolean \8594 x \8594 x",
 
     signatureRoundtripTest "no lazy parameters: round-trips cleanly" noLazyParamsSignature])
+
+-- | Fixture: 'forall a. a' -- a single-binder forall, unaffected by the multi-binder collapsing
+-- (#711); the printer still emits exactly one binder before '.'.
+forallSingleBinderType :: TypedTerm Type
+forallSingleBinderType = Core.typeForall $ Core.forallType (nm "a") (T.variable "a")
+
+-- | Fixture: 'forall a. forall b. forall c. a' -- three DIRECTLY nested Type.forall
+-- constructors, built by hand (not via the parser) to isolate the printer's collapsing logic
+-- from its own desugaring.
+forallTripleNestedType :: TypedTerm Type
+forallTripleNestedType =
+  Core.typeForall $ Core.forallType (nm "a")
+    (Core.typeForall $ Core.forallType (nm "b")
+      (Core.typeForall $ Core.forallType (nm "c")
+        (T.variable "a")))
+
+-- | Fixture: 'forall a. (forall b. b)@{...}' -- the inner forall is nested under an annotation,
+-- not directly under the outer forall, so collapsing must stop at the outer binder: the printer
+-- emits 'forall a. (forall b. b)@{...}', NOT 'forall a, b. b'. The annotation value is an
+-- arbitrary unit-valued term map entry; its exact content doesn't matter, only its presence as
+-- an intervening non-forall wrapper.
+forallNestedUnderAnnotationType :: TypedTerm Type
+forallNestedUnderAnnotationType =
+  Core.typeForall $ Core.forallType (nm "a")
+    (Core.typeAnnotated $ Core.annotatedType
+      (Core.typeForall $ Core.forallType (nm "b") (T.variable "b"))
+      (Core.termMap $ Maps.fromList $ Phantoms.list [
+        Phantoms.pair (Core.termVariable $ nm "tag") (Core.termLiteral $ Core.literalString $ Phantoms.string "x")]))
+
+-- | Multi-binder 'forall' collapsing (#711): a directly-nested Type.forall chain prints as one
+-- comma-separated binder list, consistent with typeScheme's existing '∀x,y,z.' notation.
+forallMultiBinderGroup :: TypedTermDefinition TestGroup
+forallMultiBinderGroup = define "forallMultiBinderGroup" $
+  doc "Print/parse/round-trip cases for the multi-binder 'forall a, b.' syntax (#711)" $
+  Testing.testGroup (string "forall multi-binder syntax") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    typePrintTest "single binder: prints as 'forall a.' (unaffected by collapsing)"
+      forallSingleBinderType
+      "forall a. a",
+
+    typeRoundtripTest "single binder: round-trips" forallSingleBinderType,
+
+    typePrintTest "three directly-nested foralls collapse into one 'forall a, b, c.'"
+      forallTripleNestedType
+      "forall a, b, c. a",
+
+    typeRoundtripTest "three directly-nested foralls round-trip" forallTripleNestedType,
+
+    typePrintTest "forall nested under an annotation does NOT collapse across the annotation"
+      forallNestedUnderAnnotationType
+      "forall a. (forall b. b)@{tag=\"x\"}",
+
+    typeRoundtripTest "forall nested under an annotation round-trips" forallNestedUnderAnnotationType])
+
+-- | Build a bare (no signature, no pre-existing metadata) TermDefinition for the given body
+-- term, for exercising 'PrintPackaging.termDefinition's description-hoisting directly (#711
+-- second readability pass) without needing a whole module fixture.
+termDefOf :: String -> TypedTerm Term -> TypedTerm TermDefinition
+termDefOf localName body = Packaging.termDefinition (nm localName) nothing nothing body
+
+-- | Print a bare TermDefinition (no module context, empty alias map) and compare against an
+-- exact expected string.
+termDefinitionPrintTest :: String -> TypedTerm TermDefinition -> String -> TypedTerm TestCaseWithMetadata
+termDefinitionPrintTest testName td expectedStr = universalCase testName
+  (PrintPackaging.termDefinition @@ (Maps.empty :: TypedTerm (M.Map ModuleName String)) @@ td)
+  (Phantoms.string expectedStr)
+
+-- | A single-key description annotation: '<body>@{description="<d>"}'.
+withDescriptionAnn :: String -> TypedTerm Term -> TypedTerm Term
+withDescriptionAnn d body = Core.termAnnotated $ Core.annotatedTerm body
+  (Core.termMap $ Maps.fromList $ Phantoms.list [
+    Phantoms.pair (Core.termVariable $ nm "description") (strT d)])
+
+-- | A two-key annotation: description plus one other key, to check that only 'description' is
+-- hoisted and the other key stays in a trailing '@{...}' (#711).
+withDescriptionAndOtherAnn :: String -> String -> TypedTerm Term -> TypedTerm Term
+withDescriptionAndOtherAnn d otherVal body = Core.termAnnotated $ Core.annotatedTerm body
+  (Core.termMap $ Maps.fromList $ Phantoms.list [
+    Phantoms.pair (Core.termVariable $ nm "description") (strT d),
+    Phantoms.pair (Core.termVariable $ nm "availableSince") (strT otherVal)])
+
+-- | Term-definition description hoisting (#711, second readability pass): a term definition's
+-- trailing '@{description=...}' annotation prints as a leading '## ...' comment instead, the
+-- same treatment type definitions already receive. Any OTHER annotation keys alongside
+-- 'description' stay in a trailing '@{...}' suffix; only 'description' is hoisted. An inner
+-- (non-outermost) description annotation is left untouched.
+termDocCommentGroup :: TypedTermDefinition TestGroup
+termDocCommentGroup = define "termDocCommentGroup" $
+  doc "Print/parse/round-trip cases for term-definition '##' doc comments (#711)" $
+  Testing.testGroup (string "term doc comments") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    termDefinitionPrintTest "single-line description hoists to a leading '##'"
+      (termDefOf "capitalize" (withDescriptionAnn "Capitalize the first letter of a string" (varT "mapFirstLetter")))
+      "## Capitalize the first letter of a string\nterm capitalize = mapFirstLetter",
+
+    termDefinitionPrintTest "no description: no leading '##', body prints unchanged"
+      (termDefOf "identity" (varT "x"))
+      "term identity = x",
+
+    termDefinitionPrintTest "description plus another key: description hoists, other key stays trailing"
+      (termDefOf "charAt" (withDescriptionAndOtherAnn "Get a character by index" "0.17.6" (varT "impl")))
+      "## Get a character by index\nterm charAt = impl@{availableSince=\"0.17.6\"}",
+
+    termDefinitionPrintTest "inner (non-outermost) description is NOT hoisted"
+      (termDefOf "wrapped" (Core.termApplication $ Core.application (varT "f") (withDescriptionAnn "inner desc" (varT "x"))))
+      "term wrapped = f x@{description=\"inner desc\"}"])
+
+-- | Fixture: 'λa.λb.λc.a' -- three directly-nested Term.lambda constructors, no domain types.
+lambdaTripleNestedTerm :: TypedTerm Term
+lambdaTripleNestedTerm = lamT "a" (lamT "b" (lamT "c" (varT "a")))
+
+-- | Fixture: 'λa:int32.λb:string.a' -- two directly-nested lambdas, each with its own domain
+-- type, to check the printer emits 'λa:int32,b:string.' (not dropping either type).
+lambdaTypedNestedTerm :: TypedTerm Term
+lambdaTypedNestedTerm = Core.termLambda (Core.lambda (nm "a") (just T.int32)
+  (Core.termLambda (Core.lambda (nm "b") (just T.string) (varT "a"))))
+
+-- | Fixture: 'λa.(λb.b)@{...}' -- the inner lambda is nested under an annotation, not directly
+-- under the outer lambda, so collapsing must stop at the outer binder.
+lambdaNestedUnderAnnotationTerm :: TypedTerm Term
+lambdaNestedUnderAnnotationTerm = lamT "a" (withDescriptionAnn "inner" (lamT "b" (varT "b")))
+
+-- | Fixture: 'Λa.Λb.Λc.a' -- three directly-nested Term.typeLambda constructors.
+typeLambdaTripleNestedTerm :: TypedTerm Term
+typeLambdaTripleNestedTerm = Core.termTypeLambda $ Core.typeLambda (nm "a")
+  (Core.termTypeLambda $ Core.typeLambda (nm "b")
+    (Core.termTypeLambda $ Core.typeLambda (nm "c") (varT "a")))
+
+-- | Multi-binder λ/Λ collapsing (#711, third readability pass): a directly-nested lambda or
+-- type-lambda chain prints as one comma-separated binder list, consistent with forall/∀.
+lambdaMultiBinderGroup :: TypedTermDefinition TestGroup
+lambdaMultiBinderGroup = define "lambdaMultiBinderGroup" $
+  doc "Print/parse/round-trip cases for multi-binder 'λa,b.'/'Λa,b.' syntax (#711)" $
+  Testing.testGroup (string "lambda/type-lambda multi-binder syntax") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    termPrintTest "three directly-nested λ's collapse into one 'λa,b,c.'"
+      lambdaTripleNestedTerm
+      "λa,b,c.a",
+
+    termRoundtripTest "three directly-nested λ's round-trip" lambdaTripleNestedTerm,
+
+    termPrintTest "typed binders collapse with each binder keeping its own domain type"
+      lambdaTypedNestedTerm
+      "λa:int32,b:string.a",
+
+    termRoundtripTest "typed binders round-trip" lambdaTypedNestedTerm,
+
+    termPrintTest "λ nested under an annotation does NOT collapse across the annotation"
+      lambdaNestedUnderAnnotationTerm
+      "λa.(λb.b)@{description=\"inner\"}",
+
+    termRoundtripTest "λ nested under an annotation round-trips" lambdaNestedUnderAnnotationTerm,
+
+    termPrintTest "three directly-nested Λ's collapse into one 'Λa,b,c.'"
+      typeLambdaTripleNestedTerm
+      "Λa,b,c.a",
+
+    termRoundtripTest "three directly-nested Λ's round-trip" typeLambdaTripleNestedTerm])
 
 -- #804 introduced bare (unqualified) cross-module imports, gated by actual LOCAL-NAME collisions
 -- rather than module-name-suffix collisions: a dependency module was imported BARE (no 'as') iff
@@ -359,6 +518,16 @@ termRoundtripTest testName t = universalCase testName actual expected
 termPrintTest :: String -> TypedTerm Term -> String -> TypedTerm TestCaseWithMetadata
 termPrintTest testName t expectedStr = universalCase testName
   (PrintCore.term @@ t)
+  (Phantoms.string expectedStr)
+
+-- | Print a type and compare against an exact expected string -- pins the canonical sugar form
+-- (mirrors 'termPrintTest'). Used for the multi-binder 'forall a, b.' collapsing (#711): a plain
+-- round-trip test alone would not catch a regression that collapses too eagerly or not at all,
+-- since the self-comparing round-trip only checks print-parse-print stability, not which
+-- surface form the printer actually chose.
+typePrintTest :: String -> TypedTerm Type -> String -> TypedTerm TestCaseWithMetadata
+typePrintTest testName t expectedStr = universalCase testName
+  (PrintCore.type_ @@ t)
   (Phantoms.string expectedStr)
 
 -- | Print a type, parse the printed text back, and re-print -- compares to the original printed

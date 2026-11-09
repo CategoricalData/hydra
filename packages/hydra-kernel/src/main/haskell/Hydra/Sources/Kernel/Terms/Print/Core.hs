@@ -82,6 +82,8 @@ module_ = Module {
      toDefinition fields,
      toDefinition floatValue,
      toDefinition floatType,
+     toDefinition gatherLambdaBinders,
+     toDefinition gatherTypeLambdaBinders,
      toDefinition hexDigit,
      toDefinition injection,
      toDefinition integerValue,
@@ -100,6 +102,7 @@ module_ = Module {
      toDefinition optional_,
      toDefinition pair_,
      toDefinition peelDescriptionAnnotation,
+     toDefinition peelTermDescriptionAnnotation,
      toDefinition printBacktickedName,
      toDefinition printBinderName,
      toDefinition printName,
@@ -243,6 +246,39 @@ peelDescriptionAnnotation = define "peelDescriptionAnnotation" $
                        _Literal_string>>: "s" ~> pair (just $ var "s") (var "body")]])
                    (pair nothing (var "typ"))])
             (pair nothing (var "typ"))]]
+
+-- | Peel a single 'description' entry off a term's OUTERMOST '@{...}' annotation map, if
+-- present, returning (description, remaining term). Unlike 'peelDescriptionAnnotation' (types),
+-- a term-level annotation map may carry OTHER keys alongside 'description' (#711 term
+-- doc-comment pass, second readability request): only the 'description' entry is removed, and
+-- the rest are kept in a trailing '@{...}' suffix on the returned term, so a term definition's
+-- description always moves to a leading '## ...' comment while any other metadata stays inline.
+-- An inner (non-outermost) description annotation is untouched, since this only inspects the
+-- term's own top-level constructor.
+peelTermDescriptionAnnotation :: TypedTermDefinition (Term -> (Maybe String, Term))
+peelTermDescriptionAnnotation = define "peelTermDescriptionAnnotation" $
+  doc "Peel a 'description' entry off a term's outermost '@{...}' annotation map, if present" $
+  "t" ~> match _Term (var "t") (Just $ pair nothing (var "t")) [
+    _Term_annotated>>: "at" ~>
+      "body" <~ Core.annotatedTermBody (var "at") $
+      "ann" <~ Core.annotatedTermAnnotation (var "at") $
+      match _Term (var "ann") (Just $ pair nothing (var "t")) [
+        _Term_map>>: "m" ~>
+          "descKey" <~ Core.termVariable (Core.name $ string "description") $
+          "mdescVal" <~ Maps.lookup (var "descKey") (var "m" :: TypedTerm (M.Map Term Term)) $
+          "descStr" <~ Optionals.match (var "mdescVal")
+            nothing
+            ("v" ~> match _Term (var "v") (Just nothing) [
+              _Term_literal>>: "l" ~> match _Literal (var "l") (Just nothing) [
+                _Literal_string>>: "s" ~> just (var "s")]]) $
+          Optionals.match (var "descStr")
+            (pair nothing (var "t"))
+            ("s" ~>
+              "rest" <~ Maps.delete (var "descKey") (var "m" :: TypedTerm (M.Map Term Term)) $
+              "remainingTerm" <~ Logic.ifElse (Maps.isEmpty (var "rest" :: TypedTerm (M.Map Term Term)))
+                (var "body")
+                (Core.termAnnotated $ Core.annotatedTerm (var "body") (Core.termMap $ var "rest")) $
+              pair (just $ var "s") (var "remainingTerm"))]]
 
 fieldType :: TypedTermDefinition (M.Map ModuleName String -> FieldType -> String)
 fieldType = define "fieldType" $
@@ -581,18 +617,48 @@ printNameAliased = define "printNameAliased" $
          (printName @@ (Core.name $ var "localName"))
          (printName @@ (Core.name $ Strings.concat $ list [var "alias", string ".", var "localName"]))))
 
+-- | Collapse a chain of DIRECTLY nested Term.lambda constructors (not across an annotation or
+-- other wrapper, so the round-trip stays an identity) into one multi-binder 'λa,b,c.' list
+-- (#711, same treatment as forall/∀'s multi-binder collapsing). Each gathered binder keeps its
+-- own (name, domain) pair, since each may carry an independent optional domain type.
+gatherLambdaBinders :: TypedTermDefinition ([(Name, Maybe Type)] -> Term -> ([(Name, Maybe Type)], Term))
+gatherLambdaBinders = define "gatherLambdaBinders" $
+  doc "Gather a chain of directly-nested Term.lambda binders, returning (binders, innermost body)" $
+  "prev" ~> "t" ~> match _Term (var "t")
+    (Just $ pair (Lists.reverse $ var "prev") (var "t")) [
+    _Term_lambda>>: "l" ~>
+      "v" <~ Core.lambdaParameter (var "l") $
+      "mt" <~ Core.lambdaDomain (var "l") $
+      "body" <~ Core.lambdaBody (var "l") $
+      gatherLambdaBinders @@ (Lists.cons (pair (var "v") (var "mt")) (var "prev")) @@ var "body"]
+
+-- | Collapse a chain of DIRECTLY nested Term.typeLambda constructors into one multi-binder
+-- 'Λa,b,c.' list (#711), mirroring 'gatherLambdaBinders' for the ordinary (value-level) lambda.
+gatherTypeLambdaBinders :: TypedTermDefinition ([Name] -> Term -> ([Name], Term))
+gatherTypeLambdaBinders = define "gatherTypeLambdaBinders" $
+  doc "Gather a chain of directly-nested Term.typeLambda binders, returning (binders, innermost body)" $
+  "prev" ~> "t" ~> match _Term (var "t")
+    (Just $ pair (Lists.reverse $ var "prev") (var "t")) [
+    _Term_typeLambda>>: "ta" ~>
+      "v" <~ Core.typeLambdaParameter (var "ta") $
+      "body" <~ Core.typeLambdaBody (var "ta") $
+      gatherTypeLambdaBinders @@ (Lists.cons (var "v") (var "prev")) @@ var "body"]
+
 lambda :: TypedTermDefinition (M.Map ModuleName String -> Lambda -> String)
 lambda = define "lambda" $
   doc "Show a lambda as a string, shortening nominal references in its domain/body via the given alias map (#803)" $
   "aliases" ~> "l" ~>
-  "v" <~ printBinderName @@ (Core.lambdaParameter $ var "l") $
-  "mt" <~ Core.lambdaDomain (var "l") $
-  "body" <~ Core.lambdaBody (var "l") $
-  "typeStr" <~ Optionals.match (var "mt") (string "") ("t" ~> Strings.concat2 (string ":") (typeAliased @@ var "aliases" @@ var "t")) $
+  "gathered" <~ gatherLambdaBinders @@ (list ([] :: [TypedTerm (Name, Maybe Type)])) @@ (Core.termLambda $ var "l") $
+  "binders" <~ Pairs.first (var "gathered") $
+  "body" <~ Pairs.second (var "gathered") $
+  "binderStr" <~ ("b" ~>
+    "v" <~ printBinderName @@ (Pairs.first $ var "b") $
+    "mt" <~ Pairs.second (var "b") $
+    Optionals.match (var "mt") (var "v")
+      ("t" ~> Strings.concat $ list [var "v", string ":", typeAliased @@ var "aliases" @@ var "t"])) $
   Strings.concat $ list [
     string "λ",
-    var "v",
-    var "typeStr",
+    Strings.join (string ",") (Lists.map (var "binderStr") (var "binders")),
     string ".",
     termAliased @@ var "aliases" @@ var "body"]
 
@@ -805,12 +871,14 @@ termAtPrec = define "termAtPrec" $
         Strings.join (string ", ") (Lists.map (termAliased @@ var "aliases") $ Lists.sort $ Sets.toList $ var "s"),
         string "}"],
     _Term_typeLambda>>: "ta" ~>
-      "param" <~ printBinderName @@ (Core.typeLambdaParameter $ var "ta") $
-      "body" <~ Core.typeLambdaBody (var "ta") $
+      "gathered" <~ gatherTypeLambdaBinders @@ (list ([] :: [TypedTerm Name])) @@ (Core.termTypeLambda $ var "ta") $
+      "vs" <~ Pairs.first (var "gathered") $
+      "body" <~ Pairs.second (var "gathered") $
+      "vNames" <~ Lists.map (asTerm printBinderName) (var "vs") $
       parenthesizeIfNeeded precMin (var "ctx") $
         Strings.concat $ list [
           string "Λ",
-          var "param",
+          Strings.join (string ",") (var "vNames"),
           string ".",
           termAliased @@ var "aliases" @@ var "body"],
     _Term_typeApplication>>: "tt" ~>
@@ -896,6 +964,17 @@ typeAtPrec = define "typeAtPrec" $
           "dom" <~ Core.functionTypeDomain (var "ft") $
           "cod" <~ Core.functionTypeCodomain (var "ft") $
           var "gatherFunctionTypes" @@ (Lists.cons (var "dom") (var "prev")) @@ var "cod"]) $
+  -- Collapse a chain of DIRECTLY nested Type.forall constructors (not across an annotation or
+  -- other wrapper, so the round-trip stays an identity -- the parser's own desugaring only ever
+  -- produces directly-nested chains, never nested-under-something-else) into one multi-binder
+  -- 'forall a, b, c.' form (#711, mirrors '∀x,y,z.'s typeScheme printing).
+  "gatherForallBinders" <~ ("prev" ~> "t" ~>
+    match _Type (var "t")
+      (Just $ pair (Lists.reverse $ var "prev") (var "t")) [
+        _Type_forall>>: "ft" ~>
+          "v" <~ Core.forallTypeParameter (var "ft") $
+          "body" <~ Core.forallTypeBody (var "ft") $
+          var "gatherForallBinders" @@ (Lists.cons (var "v") (var "prev")) @@ var "body"]) $
   match _Type (var "typ") Nothing [
     _Type_annotated>>: "at" ~>
       "bodyStr" <~ typeAtPrec @@ var "aliases" @@ int32 precPostfix @@ (Core.annotatedTypeBody $ var "at") $
@@ -921,12 +1000,14 @@ typeAtPrec = define "typeAtPrec" $
         typeAliased @@ var "aliases" @@ var "rightTyp",
         string ">"],
     _Type_forall>>: "ft" ~>
-      "v" <~ printBinderName @@ (Core.forallTypeParameter $ var "ft") $
-      "body" <~ Core.forallTypeBody (var "ft") $
+      "binderVars" <~ var "gatherForallBinders" @@ (list ([] :: [TypedTerm Name])) @@ var "typ" $
+      "vs" <~ Pairs.first (var "binderVars") $
+      "body" <~ Pairs.second (var "binderVars") $
+      "vNames" <~ Lists.map (asTerm printBinderName) (var "vs") $
       parenthesizeIfNeeded precMin (var "ctx") $
         Strings.concat $ list [
           string "forall ",
-          var "v",
+          Strings.join (string ", ") (var "vNames"),
           string ". ",
           typeAliased @@ var "aliases" @@ var "body"],
     _Type_function>>: "ft" ~>

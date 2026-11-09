@@ -816,13 +816,19 @@ primitiveDefinitionParser = define "primitiveDefinitionParser" $
 -- so they are tried via 'primitiveDefinitionParser' itself, which consumes them unconditionally
 -- before deciding; 'type'/'term'/'primitive' otherwise disambiguate directly, so no backtracking
 -- is required beyond the three-way 'P.choice').
+-- | Parse a single definition: type, term, or primitive. Each alternative starts with its own
+-- independent 'docCommentBlock' call (so a leading '##' is consumed before the keyword that
+-- actually decides which kind of definition this is), so a definition kind mismatch (e.g. a
+-- '##' block followed by 'term', tried first against 'typeDefinitionParser') fails only AFTER
+-- consuming the doc comment -- non-zero consumption, so 'P.choice'/'alt's PEG-style
+-- backtracking can't fall through to the next alternative without 'P.try' wrapping each one.
 definitionParser :: TypedTermDefinition (ModuleName -> Parser Definition)
 definitionParser = define "definitionParser" $
   doc "Parse a single definition: type, term, or primitive" $
   "modName" ~>
   P.choice @@ list [
-    typeDefinitionParser @@ var "modName",
-    termDefinitionParser @@ var "modName",
+    P.try @@ (typeDefinitionParser @@ var "modName"),
+    P.try @@ (termDefinitionParser @@ var "modName"),
     primitiveDefinitionParser @@ var "modName"]
 
 -- | Parse a complete module: moduleHeader importDecl* definition* (per #710's grammar, §6.2).

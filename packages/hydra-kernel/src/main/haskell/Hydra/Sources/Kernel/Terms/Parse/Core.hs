@@ -767,18 +767,34 @@ injectTerm = define "injectTerm" $
   P.bind @@ (parenName (string "inject")) @@ ("tname" ~>
     P.map @@ ("f" ~> Core.termInject (Core.injection (var "tname") (var "f"))) @@ oneFieldBlock)
 
--- | Parse a lambdaTerm: 'λ' binderName [':' type] '.' term (domain type optional).
-lambdaTerm :: TypedTermDefinition (Parser Term)
-lambdaTerm = define "lambdaTerm" $
-  doc "Parse a lambda term: 'λ' binderName [':' type] '.' term" $
-  P.bind @@ (lexeme @@ (P.char @@ int32 955)) @@ (constant $    -- 'λ'
-    P.bind @@ (asTerm binderName) @@ ("v" ~>
-      P.bind @@ (P.optional @@ domainType) @@ ("mt" ~>
-        P.bind @@ (lexeme @@ (P.char @@ int32 46)) @@ (constant $    -- '.'
-          P.map @@ ("body" ~> Core.termLambda (Core.lambda (var "v") (var "mt") (var "body"))) @@
-            (P.lazy @@ (constant $ asTerm term))))))
+-- | Parse a lamBinder: binderName [':' type], one element of a lambda's comma-separated binder
+-- list (#711). The domain type (if present) is parsed at the SAME precedence level 'type_'
+-- always uses, so a comma inside a domain type's own angle brackets ('λx:map<k, v>, y.') is
+-- consumed as part of that type (angle-bracket contents are never top-level with respect to the
+-- OUTER binder-list comma), not mistaken for the next binder's separator -- 'sepBy1' only ever
+-- sees the comma this parser did NOT itself consume.
+lamBinder :: TypedTerm (Parser (Name, Maybe Type))
+lamBinder =
+  P.bind @@ (asTerm binderName) @@ ("v" ~>
+    P.map @@ ("mt" ~> pair (var "v") (var "mt")) @@ (P.optional @@ domainType))
   where
     domainType = P.bind @@ (lexeme @@ (P.char @@ int32 58)) @@ (constant $ asTerm type_)    -- ':'
+
+-- | Parse a lambdaTerm: 'λ' lamBinder (',' lamBinder)* '.' term. 'λp1,p2.body' desugars to the
+-- same nested-lambda chain as 'λp1.λp2.body' (#711, consistent with forall/∀'s multi-binder
+-- form); the AST is unchanged, only the surface syntax gains a comma-separated binder list.
+lambdaTerm :: TypedTermDefinition (Parser Term)
+lambdaTerm = define "lambdaTerm" $
+  doc "Parse a lambda term: 'λ' lamBinder (',' lamBinder)* '.' term" $
+  P.bind @@ (lexeme @@ (P.char @@ int32 955)) @@ (constant $    -- 'λ'
+    P.bind @@ (P.sepBy1 @@ (asTerm lamBinder) @@ (lexeme @@ (P.char @@ int32 44))) @@ ("binders" ~>    -- ','
+      P.bind @@ (lexeme @@ (P.char @@ int32 46)) @@ (constant $    -- '.'
+        P.map @@ ("body" ~>
+            Lists.foldl
+              ("t" ~> "b" ~> Core.termLambda $ Core.lambda (Pairs.first (var "b")) (Pairs.second (var "b")) (var "t"))
+              (var "body")
+              (Lists.reverse $ var "binders")) @@
+          (P.lazy @@ (constant $ asTerm term)))))
 
 -- | Parse a binding: name [':' '(' typeScheme ')'] ':=' term.
 binding :: TypedTermDefinition (Parser Binding)
@@ -1012,11 +1028,17 @@ atomicTerm = define "atomicTerm" $
     P.try @@ (asTerm bracketEliminate),
     P.map @@ ("n" ~> Core.termVariable (var "n")) @@ (asTerm name)]
   where
+    -- 'Λa,b.body' desugars to the same nested-type-lambda chain as 'Λa.Λb.body' (#711, same
+    -- multi-binder treatment as λ/forall/∀).
     typeLambdaTermParser =
       P.bind @@ (lexeme @@ (P.char @@ int32 923)) @@ (constant $    -- 'Λ'
-        P.bind @@ (asTerm binderName) @@ ("v" ~>
+        P.bind @@ (P.sepBy1 @@ (asTerm binderName) @@ (lexeme @@ (P.char @@ int32 44))) @@ ("vs" ~>    -- ','
           P.bind @@ (lexeme @@ (P.char @@ int32 46)) @@ (constant $    -- '.'
-            P.map @@ ("body" ~> Core.termTypeLambda (Core.typeLambda (var "v") (var "body"))) @@
+            P.map @@ ("body" ~>
+                Lists.foldl
+                  ("t" ~> "v" ~> Core.termTypeLambda $ Core.typeLambda (var "v") (var "t"))
+                  (var "body")
+                  (Lists.reverse $ var "vs")) @@
               (P.lazy @@ (constant $ asTerm term)))))
     parenOrPair =
       P.bind @@ (termKeyword @@ string "(") @@ (constant $
@@ -1200,10 +1222,19 @@ typeAtom = define "typeAtom" $
             P.bind @@ (P.lazy @@ (constant $ asTerm type_)) @@ ("v" ~>
               P.bind @@ (typeKeyword @@ string ">") @@ (constant $
                 P.pure @@ Core.typeMap (Core.mapType (var "k") (var "v"))))))))
+    -- 'forall a, b, c. T' desugars to the same nested Type.forall chain as 'forall a. forall b.
+    -- forall c. T' (#711, consistent with typeScheme's '∀x,y,z.' multi-binder form); the AST is
+    -- unchanged, only the surface syntax gains a comma-separated binder list. The left-fold over
+    -- REVERSED binders mirrors 'typeSchemeToFType's identical nested-forall construction
+    -- (Scoping.hs), so the leftmost binder ends up outermost.
     forallT = P.bind @@ (typeKeyword @@ string "forall") @@ (constant $
-      P.bind @@ (asTerm binderName) @@ ("v" ~>
+      P.bind @@ (P.sepBy1 @@ (asTerm binderName) @@ (typeKeyword @@ string ",")) @@ ("vs" ~>
         P.bind @@ (typeKeyword @@ string ".") @@ (constant $
-          P.map @@ ("body" ~> Core.typeForall (Core.forallType (var "v") (var "body"))) @@
+          P.map @@ ("body" ~>
+              Lists.foldl
+                ("t" ~> "v" ~> Core.typeForall $ Core.forallType (var "v") (var "t"))
+                (var "body")
+                (Lists.reverse $ var "vs")) @@
             (P.lazy @@ (constant $ asTerm type_)))))
     recordT = P.bind @@ (typeKeyword @@ string "record") @@ (constant $ P.map @@ ("flds" ~> Core.typeRecord (var "flds")) @@ typeFieldsBlock)
     unionT = P.bind @@ (typeKeyword @@ string "union") @@ (constant $ P.map @@ ("flds" ~> Core.typeUnion (var "flds")) @@ typeFieldsBlock)
