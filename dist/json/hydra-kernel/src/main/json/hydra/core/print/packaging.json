@@ -2590,34 +2590,99 @@
                               "let": {
                                 "bindings": [
                                   {
-                                    "name": "bodyStr",
+                                    "name": "peeled",
                                     "term": {
                                       "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.core.print.model.termAliased"}, "argument": {"variable": "aliases"}}},
+                                        "function": {"variable": "hydra.core.print.model.peelTermDescriptionAnnotation"},
                                         "argument": {
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.core.packaging.TermDefinition", "fieldName": "body"}},
                                             "argument": {"variable": "td"}}}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                                    "typeScheme": {
+                                      "variables": [],
+                                      "body": {"pair": {"first": {"optional": {"literal": "string"}}, "second": {"variable": "hydra.core.model.Term"}}},
+                                      "constraints": []}}],
                                 "body": {
-                                  "application": {
-                                    "function": {
-                                      "application": {
-                                        "function": {"variable": "hydra.core.print.packaging.withDefinitionDoc"},
-                                        "argument": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "mdesc",
+                                        "term": {
                                           "application": {
-                                            "function": {"project": {"typeName": "hydra.core.packaging.TermDefinition", "fieldName": "metadata"}},
-                                            "argument": {"variable": "td"}}}}},
-                                    "argument": {
-                                      "application": {
-                                        "function": {"variable": "hydra.core.lib.strings.concat"},
-                                        "argument": {
-                                          "list": [
-                                            {"literal": {"string": "term "}},
-                                            {"variable": "localName"},
-                                            {"variable": "sigStr"},
-                                            {"literal": {"string": "= "}},
-                                            {"variable": "bodyStr"}]}}}}}}}}}}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.pairs.first"}, "type": {"optional": {"literal": "string"}}}},
+                                                "type": {"variable": "hydra.core.model.Term"}}},
+                                            "argument": {"variable": "peeled"}}},
+                                        "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}, "constraints": []}}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "bodyStr",
+                                            "term": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.core.print.model.termAliased"}, "argument": {"variable": "aliases"}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.pairs.second"}, "type": {"optional": {"literal": "string"}}}},
+                                                        "type": {"variable": "hydra.core.model.Term"}}},
+                                                    "argument": {"variable": "peeled"}}}}},
+                                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "declStr",
+                                                "term": {
+                                                  "application": {
+                                                    "function": {"variable": "hydra.core.lib.strings.concat"},
+                                                    "argument": {
+                                                      "list": [
+                                                        {"literal": {"string": "term "}},
+                                                        {"variable": "localName"},
+                                                        {"variable": "sigStr"},
+                                                        {"literal": {"string": "= "}},
+                                                        {"variable": "bodyStr"}]}}},
+                                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                                            "body": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "withDescDoc",
+                                                    "term": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.optionals.match"}, "type": {"literal": "string"}}},
+                                                                    "type": {"literal": "string"}}},
+                                                                "argument": {"variable": "mdesc"}}},
+                                                            "argument": {"variable": "declStr"}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "d",
+                                                            "domain": {"literal": "string"},
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {"variable": "hydra.core.lib.strings.concat"},
+                                                                "argument": {"list": [{"literal": {"string": "## "}}, {"variable": "d"}, {"literal": {"string": "\n"}}, {"variable": "declStr"}]}}}}}}},
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                                                "body": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"variable": "hydra.core.print.packaging.withDefinitionDoc"},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"project": {"typeName": "hydra.core.packaging.TermDefinition", "fieldName": "metadata"}},
+                                                            "argument": {"variable": "td"}}}}},
+                                                    "argument": {"variable": "withDescDoc"}}}}}}}}}}}}}}}}}}}}},
             "annotation": {
               "map": [
                 {

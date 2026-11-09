@@ -387,9 +387,17 @@
                     "argument": {
                       "list": [
                         {
-                          "application": {"function": {"variable": "hydra.core.parse.packaging.typeDefinitionParser"}, "argument": {"variable": "modName"}}},
+                          "application": {
+                            "function": {
+                              "typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"variable": "hydra.core.packaging.Definition"}}},
+                            "argument": {
+                              "application": {"function": {"variable": "hydra.core.parse.packaging.typeDefinitionParser"}, "argument": {"variable": "modName"}}}}},
                         {
-                          "application": {"function": {"variable": "hydra.core.parse.packaging.termDefinitionParser"}, "argument": {"variable": "modName"}}},
+                          "application": {
+                            "function": {
+                              "typeApplication": {"body": {"variable": "hydra.core.parsers.try"}, "type": {"variable": "hydra.core.packaging.Definition"}}},
+                            "argument": {
+                              "application": {"function": {"variable": "hydra.core.parse.packaging.termDefinitionParser"}, "argument": {"variable": "modName"}}}}},
                         {
                           "application": {"function": {"variable": "hydra.core.parse.packaging.primitiveDefinitionParser"}, "argument": {"variable": "modName"}}}]}}}}},
             "annotation": {
