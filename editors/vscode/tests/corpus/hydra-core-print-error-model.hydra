@@ -1,0 +1,108 @@
+## String representations of hydra.core.error.model types
+module hydra.core.print.error.model
+
+import hydra.core.error.model as error.model
+import hydra.core.lib.lists as lists
+import hydra.core.lib.literals as literals
+import hydra.core.lib.strings as strings
+import hydra.core.model as model
+import hydra.core.print.model as print.model
+import hydra.core.print.variants as variants
+
+term constantConditionError = (λe.strings.concat ["constant condition: ifElse with literal ", literals.printBoolean (error.model.ConstantConditionError[value] e)])@{description="Show a constant condition error as a string"}
+
+term duplicateBindingError = (λe.strings.concat ["duplicate binding: ", model.Name[] (error.model.DuplicateBindingError[name] e)])@{description="Show a duplicate binding error as a string"}
+
+term duplicateFieldError = (λe.strings.concat ["duplicate field: ", model.Name[] (error.model.DuplicateFieldError[name] e)])@{description="Show a duplicate field error as a string"}
+
+term duplicateRecordTypeFieldNamesError = (λe.strings.concat ["duplicate field in record type: ", model.Name[] (error.model.DuplicateRecordTypeFieldNamesError[name] e)])@{description="Show a duplicate record type field names error as a string"}
+
+term duplicateUnionTypeFieldNamesError = (λe.strings.concat ["duplicate field in union type: ", model.Name[] (error.model.DuplicateUnionTypeFieldNamesError[name] e)])@{description="Show a duplicate union type field names error as a string"}
+
+term emptyCaseStatementError = (λe.strings.concat ["empty case statement for type: ", model.Name[] (error.model.EmptyCaseStatementError[typeName] e)])@{description="Show an empty case statement error as a string"}
+
+term emptyLetBindingsError = (λe."let expression with no bindings")@{description="Show an empty let bindings error as a string"}
+
+term emptyRecordTypeError = (λe."record type with no fields (use TypeUnit instead)")@{description="Show an empty record type error as a string"}
+
+term emptyTermAnnotationError = (λe."term annotation with empty annotation map")@{description="Show an empty term annotation error as a string"}
+
+term emptyTypeAnnotationError = (λe."type annotation with empty annotation map")@{description="Show an empty type annotation error as a string"}
+
+term emptyTypeNameInTermError = (λe."term with empty type name")@{description="Show an empty type name in term error as a string"}
+
+term emptyUnionTypeError = (λe."union type with no alternatives (use TypeVoid instead)")@{description="Show an empty union type error as a string"}
+
+term extraRecordFieldsError = (λe.let tname := error.model.ExtraRecordFieldsError[typeName] e in let fieldNames := error.model.ExtraRecordFieldsError[fieldNames] e in strings.concat ["record term for type ", model.Name[] tname, " supplies undeclared field(s): ", strings.join ", " (lists.map model.Name[] fieldNames)])@{description="Show an extra record fields error as a string"}
+
+term invalidForallParameterNameError = (λe.strings.concat ["invalid forall parameter name: ", model.Name[] (error.model.InvalidForallParameterNameError[name] e)])@{description="Show an invalid forall parameter name error as a string"}
+
+term invalidLambdaParameterNameError = (λe.strings.concat ["invalid lambda parameter name: ", model.Name[] (error.model.InvalidLambdaParameterNameError[name] e)])@{description="Show an invalid lambda parameter name error as a string"}
+
+term invalidLetBindingNameError = (λe.strings.concat ["invalid let binding name: ", model.Name[] (error.model.InvalidLetBindingNameError[name] e)])@{description="Show an invalid let binding name error as a string"}
+
+term invalidTermError = (λe.strings.concat2 "invalid term: " (cases(error.model.InvalidTermError){constantCondition=constantConditionError, duplicateBinding=duplicateBindingError, duplicateField=duplicateFieldError, emptyCaseStatement=emptyCaseStatementError, emptyLetBindings=emptyLetBindingsError, emptyTermAnnotation=emptyTermAnnotationError, emptyTypeNameInTerm=emptyTypeNameInTermError, extraRecordFields=extraRecordFieldsError, invalidLambdaParameterName=invalidLambdaParameterNameError, invalidLetBindingName=invalidLetBindingNameError, invalidTypeLambdaParameterName=invalidTypeLambdaParameterNameError, missingCaseBranches=missingCaseBranchesError, missingRecordFields=missingRecordFieldsError, nestedTermAnnotation=nestedTermAnnotationError, nominalTypeKindMismatch=nominalTypeKindMismatchError, redundantWrapUnwrap=redundantWrapUnwrapError, selfApplication=selfApplicationError, termVariableShadowing=termVariableShadowingError, typeVariableShadowingInTypeLambda=typeVariableShadowingInTypeLambdaError, undeclaredVariant=undeclaredVariantError, undefinedTermVariable=undefinedTermVariableError, undefinedTypeVariableInBindingType=undefinedTypeVariableInBindingTypeError, undefinedTypeVariableInLambdaDomain=undefinedTypeVariableInLambdaDomainError, undefinedTypeVariableInTypeApplication=undefinedTypeVariableInTypeApplicationError, unknownCaseAlternative=unknownCaseAlternativeError, unknownPrimitiveName=unknownPrimitiveNameError, unknownProjectedField=unknownProjectedFieldError, unnecessaryIdentityApplication=unnecessaryIdentityApplicationError, unresolvedNominalType=unresolvedNominalTypeError, untypedTermVariable=untypedTermVariableError} e))@{description="Show an invalid term error as a string"}
+
+term invalidTypeError = (λe.strings.concat2 "invalid type: " (cases(error.model.InvalidTypeError){duplicateRecordTypeFieldNames=duplicateRecordTypeFieldNamesError, duplicateUnionTypeFieldNames=duplicateUnionTypeFieldNamesError, emptyRecordType=emptyRecordTypeError, emptyTypeAnnotation=emptyTypeAnnotationError, emptyUnionType=emptyUnionTypeError, invalidForallParameterName=invalidForallParameterNameError, invalidTypeSchemeVariableName=invalidTypeSchemeVariableNameError, nestedTypeAnnotation=nestedTypeAnnotationError, nonComparableMapKeyType=nonComparableMapKeyTypeError, nonComparableSetElementType=nonComparableSetElementTypeError, singleVariantUnion=singleVariantUnionError, typeVariableShadowingInForall=typeVariableShadowingInForallError, undefinedTypeVariable=undefinedTypeVariableError, voidInNonBottomPosition=voidInNonBottomPositionError} e))@{description="Show an invalid type error as a string"}
+
+term invalidTypeLambdaParameterNameError = (λe.strings.concat ["invalid type lambda parameter name: ", model.Name[] (error.model.InvalidTypeLambdaParameterNameError[name] e)])@{description="Show an invalid type lambda parameter name error as a string"}
+
+term invalidTypeSchemeVariableNameError = (λe.strings.concat ["invalid type scheme variable name: ", model.Name[] (error.model.InvalidTypeSchemeVariableNameError[name] e)])@{description="Show an invalid type scheme variable name error as a string"}
+
+term missingCaseBranchesError = (λe.let tname := error.model.MissingCaseBranchesError[typeName] e in let variantNames := error.model.MissingCaseBranchesError[variantNames] e in strings.concat ["case statement for type ", model.Name[] tname, " does not cover variant(s): ", strings.join ", " (lists.map model.Name[] variantNames)])@{description="Show a missing case branches error as a string"}
+
+term missingRecordFieldsError = (λe.let tname := error.model.MissingRecordFieldsError[typeName] e in let fieldNames := error.model.MissingRecordFieldsError[fieldNames] e in strings.concat ["record term for type ", model.Name[] tname, " is missing declared field(s): ", strings.join ", " (lists.map model.Name[] fieldNames)])@{description="Show a missing record fields error as a string"}
+
+term nestedTermAnnotationError = (λe."nested term annotations should be merged")@{description="Show a nested term annotation error as a string"}
+
+term nestedTypeAnnotationError = (λe."nested type annotations should be merged")@{description="Show a nested type annotation error as a string"}
+
+term nominalTypeKindMismatchError = (λe.let tname := error.model.NominalTypeKindMismatchError[typeName] e in let expected := error.model.NominalTypeKindMismatchError[expectedVariant] e in let actual := error.model.NominalTypeKindMismatchError[actualVariant] e in strings.concat ["type name ", model.Name[] tname, " is expected to be a ", variants.typeVariant expected, " type, but resolves to a ", variants.typeVariant actual, " type"])@{description="Show a nominal type kind mismatch error as a string"}
+
+term nonComparableMapKeyTypeError = (λe.strings.concat ["map key type contains a function type: ", print.model.type (error.model.NonComparableMapKeyTypeError[keyType] e)])@{description="Show a non-comparable map key type error as a string"}
+
+term nonComparableSetElementTypeError = (λe.strings.concat ["set element type contains a function type: ", print.model.type (error.model.NonComparableSetElementTypeError[elementType] e)])@{description="Show a non-comparable set element type error as a string"}
+
+term redundantWrapUnwrapError = (λe.strings.concat ["redundant wrap/unwrap for type: ", model.Name[] (error.model.RedundantWrapUnwrapError[typeName] e)])@{description="Show a redundant wrap/unwrap error as a string"}
+
+term selfApplicationError = (λe.strings.concat ["self-application of variable: ", model.Name[] (error.model.SelfApplicationError[name] e)])@{description="Show a self-application error as a string"}
+
+term singleVariantUnionError = (λe.strings.concat ["union type with single variant: ", model.Name[] (error.model.SingleVariantUnionError[fieldName] e)])@{description="Show a single variant union error as a string"}
+
+term termVariableShadowingError = (λe.strings.concat ["variable shadowing: ", model.Name[] (error.model.TermVariableShadowingError[name] e)])@{description="Show a term variable shadowing error as a string"}
+
+term typeVariableShadowingInForallError = (λe.strings.concat ["type variable shadowing in forall: ", model.Name[] (error.model.TypeVariableShadowingInForallError[name] e)])@{description="Show a type variable shadowing in forall error as a string"}
+
+term typeVariableShadowingInTypeLambdaError = (λe.strings.concat ["type variable shadowing in type lambda: ", model.Name[] (error.model.TypeVariableShadowingInTypeLambdaError[name] e)])@{description="Show a type variable shadowing in type lambda error as a string"}
+
+term undeclaredVariantError = (λe.let tname := error.model.UndeclaredVariantError[typeName] e in let vname := error.model.UndeclaredVariantError[variantName] e in strings.concat ["injected variant ", model.Name[] vname, " is not declared by union type ", model.Name[] tname])@{description="Show an undeclared variant error as a string"}
+
+term undefinedFieldError = (λe.let fname := error.model.UndefinedFieldError[fieldName] e in let tname := error.model.UndefinedFieldError[typeName] e in strings.concat ["no such field \"", model.Name[] fname, "\" in type \"", model.Name[] tname, "\""])@{description="Show an undefined field error as a string"}
+
+term undefinedTermVariableError = (λe.strings.concat ["undefined term variable: ", model.Name[] (error.model.UndefinedTermVariableError[name] e)])@{description="Show an undefined term variable error as a string"}
+
+term undefinedTypeVariableError = (λe.strings.concat ["undefined type variable: ", model.Name[] (error.model.UndefinedTypeVariableError[name] e)])@{description="Show an undefined type variable error as a string"}
+
+term undefinedTypeVariableInBindingTypeError = (λe.strings.concat ["undefined type variable in binding type: ", model.Name[] (error.model.UndefinedTypeVariableInBindingTypeError[name] e)])@{description="Show an undefined type variable in binding type error as a string"}
+
+term undefinedTypeVariableInLambdaDomainError = (λe.strings.concat ["undefined type variable in lambda domain: ", model.Name[] (error.model.UndefinedTypeVariableInLambdaDomainError[name] e)])@{description="Show an undefined type variable in lambda domain error as a string"}
+
+term undefinedTypeVariableInTypeApplicationError = (λe.strings.concat ["undefined type variable in type application: ", model.Name[] (error.model.UndefinedTypeVariableInTypeApplicationError[name] e)])@{description="Show an undefined type variable in type application error as a string"}
+
+term unexpectedTermVariantError = (λe.let expected := error.model.UnexpectedTermVariantError[expectedVariant] e in let actual := error.model.UnexpectedTermVariantError[actualTerm] e in strings.concat ["expected ", variants.termVariant expected, " term but found ", print.model.term actual])@{description="Show an unexpected term variant error as a string"}
+
+term unexpectedTypeVariantError = (λe.let expected := error.model.UnexpectedTypeVariantError[expectedVariant] e in let actual := error.model.UnexpectedTypeVariantError[actualType] e in strings.concat ["expected ", variants.typeVariant expected, " type but found ", print.model.type actual])@{description="Show an unexpected type variant error as a string"}
+
+term unknownCaseAlternativeError = (λe.let tname := error.model.UnknownCaseAlternativeError[typeName] e in let name := error.model.UnknownCaseAlternativeError[name] e in strings.concat ["case alternative ", model.Name[] name, " is not a variant of type ", model.Name[] tname])@{description="Show an unknown case alternative error as a string"}
+
+term unknownPrimitiveNameError = (λe.strings.concat ["unknown primitive: ", model.Name[] (error.model.UnknownPrimitiveNameError[name] e)])@{description="Show an unknown primitive name error as a string"}
+
+term unknownProjectedFieldError = (λe.let tname := error.model.UnknownProjectedFieldError[typeName] e in let fname := error.model.UnknownProjectedFieldError[fieldName] e in strings.concat ["projected field ", model.Name[] fname, " is not declared by record type ", model.Name[] tname])@{description="Show an unknown projected field error as a string"}
+
+term unnecessaryIdentityApplicationError = (λe."unnecessary application of identity lambda")@{description="Show an unnecessary identity application error as a string"}
+
+term unresolvedNominalTypeError = (λe.strings.concat ["type name does not resolve to any declared type: ", model.Name[] (error.model.UnresolvedNominalTypeError[typeName] e)])@{description="Show an unresolved nominal type error as a string"}
+
+term untypedTermVariableError = (λe.strings.concat ["untyped term variable: ", model.Name[] (error.model.UntypedTermVariableError[name] e)])@{description="Show an untyped term variable error as a string"}
+
+term voidInNonBottomPositionError = (λe."TypeVoid in a position where no value can be constructed")@{description="Show a void in non-bottom position error as a string"}
