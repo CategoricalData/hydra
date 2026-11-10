@@ -1,0 +1,222 @@
+## Serialization (printing and parsing) of subterm and subtype steps and paths.
+module hydra.core.print.paths
+
+import hydra.core.lib.equality as equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.literals as literals
+import hydra.core.lib.logic as logic
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.strings as strings
+import hydra.core.model as model
+import hydra.core.paths as paths
+
+## Parse a printed subterm path (steps joined by '/') back into a SubtermPath
+term parseSubtermPath =
+  λs.optionals.map
+      (λx.wrap(paths.SubtermPath){x})
+      (lists.foldl
+        (λmacc,tok.optionals.bind macc (λacc.optionals.map (λst.lists.concat2 acc [st]) (parseSubtermStep tok)))
+        given([])
+        (strings.splitOn "/" s))
+
+## Parse a printed subterm step token back into a SubtermStep
+term parseSubtermStep =
+  λtok.
+    let segs := strings.splitOn ":" tok in
+    let tag := optionals.withDefault tok (lists.at 0:int32 segs) in
+    let mpayload := lists.at 1:int32 segs in
+    let name := optionals.map (λx.wrap(model.Name){x}) mpayload in
+    let idx := optionals.bind mpayload literals.parseInt32 in
+    logic.ifElse
+      (equality.equal tag "annotatedAnnotation")
+      given(paths.SubtermStep{annotatedAnnotation})
+      (logic.ifElse
+        (equality.equal tag "annotatedBody")
+        given(paths.SubtermStep{annotatedBody})
+        (logic.ifElse
+          (equality.equal tag "applicationArgument")
+          given(paths.SubtermStep{applicationArgument})
+          (logic.ifElse
+            (equality.equal tag "applicationFunction")
+            given(paths.SubtermStep{applicationFunction})
+            (logic.ifElse
+              (equality.equal tag "casesCase")
+              (optionals.map (λx.paths.SubtermStep{casesCase = x}) name)
+              (logic.ifElse
+                (equality.equal tag "casesDefault")
+                given(paths.SubtermStep{casesDefault})
+                (logic.ifElse
+                  (equality.equal tag "eitherLeft")
+                  given(paths.SubtermStep{eitherLeft})
+                  (logic.ifElse
+                    (equality.equal tag "eitherRight")
+                    given(paths.SubtermStep{eitherRight})
+                    (logic.ifElse
+                      (equality.equal tag "injectField")
+                      (optionals.map (λx.paths.SubtermStep{injectField = x}) name)
+                      (logic.ifElse
+                        (equality.equal tag "lambdaBody")
+                        given(paths.SubtermStep{lambdaBody})
+                        (logic.ifElse
+                          (equality.equal tag "letBinding")
+                          (optionals.map (λx.paths.SubtermStep{letBinding = x}) name)
+                          (logic.ifElse
+                            (equality.equal tag "letBody")
+                            given(paths.SubtermStep{letBody})
+                            (logic.ifElse
+                              (equality.equal tag "listElement")
+                              (optionals.map (λx.paths.SubtermStep{listElement = x}) idx)
+                              (logic.ifElse
+                                (equality.equal tag "mapEntry")
+                                (optionals.map (λx.paths.SubtermStep{mapEntry = x}) idx)
+                                (logic.ifElse
+                                  (equality.equal tag "optionalGiven")
+                                  given(paths.SubtermStep{optionalGiven})
+                                  (logic.ifElse
+                                    (equality.equal tag "pairFirst")
+                                    given(paths.SubtermStep{pairFirst})
+                                    (logic.ifElse
+                                      (equality.equal tag "pairSecond")
+                                      given(paths.SubtermStep{pairSecond})
+                                      (logic.ifElse
+                                        (equality.equal tag "recordField")
+                                        (optionals.map (λx.paths.SubtermStep{recordField = x}) name)
+                                        (logic.ifElse
+                                          (equality.equal tag "setElement")
+                                          (optionals.map (λx.paths.SubtermStep{setElement = x}) idx)
+                                          (logic.ifElse
+                                            (equality.equal tag "typeApplicationBody")
+                                            given(paths.SubtermStep{typeApplicationBody})
+                                            (logic.ifElse
+                                              (equality.equal tag "typeLambdaBody")
+                                              given(paths.SubtermStep{typeLambdaBody})
+                                              (logic.ifElse (equality.equal tag "wrapBody") given(paths.SubtermStep{wrapBody}) none)))))))))))))))))))))
+
+## Parse a printed subtype path (steps joined by '/') back into a SubtypePath
+term parseSubtypePath =
+  λs.optionals.map
+      (λx.wrap(paths.SubtypePath){x})
+      (lists.foldl
+        (λmacc,tok.optionals.bind macc (λacc.optionals.map (λst.lists.concat2 acc [st]) (parseSubtypeStep tok)))
+        given([])
+        (strings.splitOn "/" s))
+
+## Parse a printed subtype step token back into a SubtypeStep
+term parseSubtypeStep =
+  λtok.
+    let segs := strings.splitOn ":" tok in
+    let tag := optionals.withDefault tok (lists.at 0:int32 segs) in
+    let mpayload := lists.at 1:int32 segs in
+    let name := optionals.map (λx.wrap(model.Name){x}) mpayload in
+    logic.ifElse
+      (equality.equal tag "annotatedBody")
+      given(paths.SubtypeStep{annotatedBody})
+      (logic.ifElse
+        (equality.equal tag "applicationArgument")
+        given(paths.SubtypeStep{applicationArgument})
+        (logic.ifElse
+          (equality.equal tag "applicationFunction")
+          given(paths.SubtypeStep{applicationFunction})
+          (logic.ifElse
+            (equality.equal tag "effectValue")
+            given(paths.SubtypeStep{effectValue})
+            (logic.ifElse
+              (equality.equal tag "eitherLeft")
+              given(paths.SubtypeStep{eitherLeft})
+              (logic.ifElse
+                (equality.equal tag "eitherRight")
+                given(paths.SubtypeStep{eitherRight})
+                (logic.ifElse
+                  (equality.equal tag "forallBody")
+                  given(paths.SubtypeStep{forallBody})
+                  (logic.ifElse
+                    (equality.equal tag "functionCodomain")
+                    given(paths.SubtypeStep{functionCodomain})
+                    (logic.ifElse
+                      (equality.equal tag "functionDomain")
+                      given(paths.SubtypeStep{functionDomain})
+                      (logic.ifElse
+                        (equality.equal tag "listElement")
+                        given(paths.SubtypeStep{listElement})
+                        (logic.ifElse
+                          (equality.equal tag "mapKeys")
+                          given(paths.SubtypeStep{mapKeys})
+                          (logic.ifElse
+                            (equality.equal tag "mapValues")
+                            given(paths.SubtypeStep{mapValues})
+                            (logic.ifElse
+                              (equality.equal tag "optionalElement")
+                              given(paths.SubtypeStep{optionalElement})
+                              (logic.ifElse
+                                (equality.equal tag "pairFirst")
+                                given(paths.SubtypeStep{pairFirst})
+                                (logic.ifElse
+                                  (equality.equal tag "pairSecond")
+                                  given(paths.SubtypeStep{pairSecond})
+                                  (logic.ifElse
+                                    (equality.equal tag "recordField")
+                                    (optionals.map (λx.paths.SubtypeStep{recordField = x}) name)
+                                    (logic.ifElse
+                                      (equality.equal tag "setElement")
+                                      given(paths.SubtypeStep{setElement})
+                                      (logic.ifElse
+                                        (equality.equal tag "unionField")
+                                        (optionals.map (λx.paths.SubtypeStep{unionField = x}) name)
+                                        (logic.ifElse (equality.equal tag "wrapBody") given(paths.SubtypeStep{wrapBody}) none))))))))))))))))))
+
+## Print a subterm path as its steps joined by '/'
+term subtermPath = λpath.strings.join "/" (lists.map subtermStep (paths.SubtermPath[] path))
+
+## Print a subterm step in its round-trippable notation
+term subtermStep =
+  λstep.cases(paths.SubtermStep){
+      annotatedAnnotation=λ`_`."annotatedAnnotation",
+      annotatedBody=λ`_`."annotatedBody",
+      applicationArgument=λ`_`."applicationArgument",
+      applicationFunction=λ`_`."applicationFunction",
+      casesCase=λname.strings.concat2 "casesCase:" (model.Name[] name),
+      casesDefault=λ`_`."casesDefault",
+      eitherLeft=λ`_`."eitherLeft",
+      eitherRight=λ`_`."eitherRight",
+      injectField=λname.strings.concat2 "injectField:" (model.Name[] name),
+      lambdaBody=λ`_`."lambdaBody",
+      letBinding=λname.strings.concat2 "letBinding:" (model.Name[] name),
+      letBody=λ`_`."letBody",
+      listElement=λi.strings.concat2 "listElement:" (literals.printInt32 i),
+      mapEntry=λi.strings.concat2 "mapEntry:" (literals.printInt32 i),
+      optionalGiven=λ`_`."optionalGiven",
+      pairFirst=λ`_`."pairFirst",
+      pairSecond=λ`_`."pairSecond",
+      recordField=λname.strings.concat2 "recordField:" (model.Name[] name),
+      setElement=λi.strings.concat2 "setElement:" (literals.printInt32 i),
+      typeApplicationBody=λ`_`."typeApplicationBody",
+      typeLambdaBody=λ`_`."typeLambdaBody",
+      wrapBody=λ`_`."wrapBody"}
+      step
+
+## Print a subtype path as its steps joined by '/'
+term subtypePath = λpath.strings.join "/" (lists.map subtypeStep (paths.SubtypePath[] path))
+
+## Print a subtype step in its round-trippable notation
+term subtypeStep =
+  λstep.cases(paths.SubtypeStep){
+      annotatedBody=λ`_`."annotatedBody",
+      applicationArgument=λ`_`."applicationArgument",
+      applicationFunction=λ`_`."applicationFunction",
+      effectValue=λ`_`."effectValue",
+      eitherLeft=λ`_`."eitherLeft",
+      eitherRight=λ`_`."eitherRight",
+      forallBody=λ`_`."forallBody",
+      functionCodomain=λ`_`."functionCodomain",
+      functionDomain=λ`_`."functionDomain",
+      listElement=λ`_`."listElement",
+      mapKeys=λ`_`."mapKeys",
+      mapValues=λ`_`."mapValues",
+      optionalElement=λ`_`."optionalElement",
+      pairFirst=λ`_`."pairFirst",
+      pairSecond=λ`_`."pairSecond",
+      recordField=λname.strings.concat2 "recordField:" (model.Name[] name),
+      setElement=λ`_`."setElement",
+      unionField=λname.strings.concat2 "unionField:" (model.Name[] name),
+      wrapBody=λ`_`."wrapBody"}
+      step

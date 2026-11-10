@@ -1,0 +1,1085 @@
+## Functions for generating domain-specific DSL modules from type modules
+module hydra.core.dsls
+
+import hydra.core.annotations as annotations
+import hydra.core.coders as coders
+import hydra.core.constants as constants
+import hydra.core.decode.model as decode.model
+import hydra.core.encode.model as encode.model
+import hydra.core.errors as errors
+import hydra.core.formatting as formatting
+import hydra.core.lexical as lexical
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.equality as equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.logic as logic
+import hydra.core.lib.maps as maps
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.pairs as pairs
+import hydra.core.lib.sets as sets
+import hydra.core.lib.strings as strings
+import hydra.core.model as model
+import hydra.core.names as names
+import hydra.core.packaging as packaging
+import hydra.core.reflect as reflect
+import hydra.core.rewriting as rewriting
+import hydra.core.scoping as scoping
+import hydra.core.strip as strip
+import hydra.core.typing as typing
+import hydra.core.variants as variants
+
+## Collect forall type variable names from a type
+term collectForallVars =
+  λtyp.cases(model.Type){
+      annotated=λat.collectForallVars (model.AnnotatedType[body] at),
+      `forall`=λft.lists.cons
+            (model.ForallType[parameter] ft)
+            (collectForallVars (model.ForallType[body] ft)),
+      `_`=[]}
+      typ
+
+## Deduplicate bindings by appending numeric suffixes to duplicate names
+term deduplicateBindings =
+  λbindings.lists.foldl
+      (λacc,b.
+        let usedNames := sets.fromList (lists.map (λa.model.Binding[name] a) acc) in
+        let uniqueName := lexical.chooseUniqueName usedNames (model.Binding[name] b) in
+        lists.concat2
+          acc
+          [model.Binding{name = uniqueName, `term` = model.Binding[`term`] b, typeScheme = model.Binding[typeScheme] b}])
+      []
+      bindings
+
+## Generate a binding name for a DSL function from a type name
+term dslBindingName = names.derivedBindingName ["dsl"] false
+
+## Generate a qualified DSL element name from a type name and local element name
+term dslDefinitionName = names.derivedDefinitionName ["dsl"] false true
+
+## Transform a source module into a DSL module
+term dslModule =
+  λcx,graph,mod.eithers.bind
+      (filterTypeBindings
+        cx
+        graph
+        (optionals.givens
+          (lists.map
+            (λd.cases(packaging.Definition){
+                `type`=λtd.given((λname,typ.
+                      let schemaTerm := model.Term{
+                        variable = model.Name{"hydra.core.model.Type"}} in
+                      let dataTerm := annotations.normalizeTermAnnotations
+                          model.Term{
+                            annotated = model.AnnotatedTerm{
+                              body = encode.model.type typ,
+                              annotation = annotations.wrapAnnotationMap
+                                  (maps.fromList
+                                    [(constants.keyType, schemaTerm)])}} in
+                      model.Binding{
+                        name = name,
+                        `term` = dataTerm,
+                        typeScheme = given(model.TypeScheme{
+                            variables = [],
+                            body = model.Type{
+                              variable = model.Name{"hydra.core.model.Type"}},
+                            constraints = maps.empty})})
+                      (packaging.TypeDefinition[name] td)
+                      (model.TypeScheme[body]
+                        (packaging.TypeDefinition[body] td))),
+                `_`=none}
+                d)
+            (packaging.Module[definitions] mod))))
+      (λtypeBindings.eithers.bind
+          (eithers.mapList
+            (λb.eithers.bimap
+                (λ`_e`.errors.Error{decoding = `_e`})
+                (λx.x)
+                (generateBindingsForType cx graph b))
+            typeBindings)
+          (λtypeDslBindings.eithers.bind
+              (eithers.mapList
+                (λd.generateRefBindings d)
+                (packaging.Module[definitions] mod))
+              (λrefDslBindings.
+                let allBindings := deduplicateBindings
+                    (lists.concat2
+                      (lists.concat typeDslBindings)
+                      (lists.concat refDslBindings))
+                in logic.ifElse
+                  (lists.isEmpty allBindings)
+                  right(none)
+                  right(given(packaging.Module{
+                    name = dslModuleName
+                        (packaging.Module[name] mod),
+                    metadata = given(packaging.EntityMetadata{
+                        description = given(strings.concat
+                            ["DSL functions for ", packaging.ModuleName[] (packaging.Module[name] mod)]),
+                        comments = [],
+                        seeAlso = [],
+                        lifecycle = none,
+                        provisions = []}),
+                    dependencies = lists.map
+                        (λns.packaging.ModuleDependency{
+                            `module` = ns,
+                            package = none})
+                        (lists.distinct
+                          (lists.concat2
+                            [
+                              packaging.Module[name] mod,
+                              packaging.ModuleName{"hydra.core.typed"},
+                              names.derivedModuleName ["encode"] true (packaging.Module[name] mod),
+                              names.derivedModuleName ["decode"] true (packaging.Module[name] mod)]
+                            (lists.concat2
+                              (lists.map
+                                (λdep.packaging.ModuleDependency[`module`] dep)
+                                (packaging.Module[dependencies] mod))
+                              (lists.map
+                                dslModuleName
+                                (lists.map
+                                  (λdep.packaging.ModuleDependency[`module`] dep)
+                                  (packaging.Module[dependencies] mod)))))),
+                    definitions = lists.map
+                        (λb.packaging.Definition{
+                            `term` = packaging.TermDefinition{
+                              name = model.Binding[name] b,
+                              metadata = none,
+                              signature = optionals.map
+                                  scoping.typeSchemeToTermSignature
+                                  (model.Binding[typeScheme] b),
+                              body = model.Binding[`term`] b}})
+                        allBindings})))))
+
+## Generate a DSL module name from a source module name
+term dslModuleName = names.derivedModuleName ["dsl"] false
+
+## Build a TypedTerm-wrapped TypeScheme (functions of phantom terms) from a TermSignature
+term dslSignatureTypeScheme =
+  λsig.
+    let typeVars := lists.map (λtp.typing.TypeParameter[name] tp) (typing.TermSignature[typeParameters] sig) in
+    let paramTypes := lists.map (λp.typing.Parameter[`type`] p) (typing.TermSignature[parameters] sig) in
+    let resultType := typing.Result[`type`] (typing.TermSignature[result] sig) in
+    let wrappedResult := model.Type{
+      application = model.ApplicationType{
+        function = model.Type{
+          variable = model.Name{"hydra.core.typed.TypedTerm"}},
+        argument = resultType}} in
+    let funType := lists.foldr
+        (λparamType,acc.model.Type{
+            function = model.FunctionType{
+              domain = logic.ifElse
+                  ((λt.cases(model.Type){
+                      application=λa.cases(model.Type){
+                            variable=λv.equality.equal
+                                  v
+                                  model.Name{"hydra.core.typed.TypedName"},
+                            `_`=false}
+                            (strip.deannotateType
+                              (model.ApplicationType[function] a)),
+                      `_`=false}
+                      (strip.deannotateType t))
+                    (strip.deannotateType paramType))
+                  paramType
+                  model.Type{
+                    application = model.ApplicationType{
+                      function = model.Type{
+                        variable = model.Name{"hydra.core.typed.TypedTerm"}},
+                      argument = paramType}},
+              codomain = acc}})
+        wrappedResult
+        paramTypes in
+    model.TypeScheme{variables = typeVars, body = funType, constraints = maps.empty}
+
+## Build a TypeScheme with TypedTerm-wrapped parameter and result types
+term dslTypeScheme =
+  λorigType,paramTypes,resultType.
+    let typeVars := collectForallVars origType in
+    let wrappedResult := model.Type{
+      application = model.ApplicationType{
+        function = model.Type{
+          variable = model.Name{"hydra.core.typed.TypedTerm"}},
+        argument = resultType}} in
+    let funType := lists.foldr
+        (λparamType,acc.model.Type{
+            function = model.FunctionType{
+              domain = model.Type{
+                application = model.ApplicationType{
+                  function = model.Type{
+                    variable = model.Name{"hydra.core.typed.TypedTerm"}},
+                  argument = paramType}},
+              codomain = acc}})
+        wrappedResult
+        paramTypes in
+    model.TypeScheme{variables = typeVars, body = funType, constraints = maps.empty}
+
+## Filter bindings to only DSL-eligible type definitions
+term filterTypeBindings =
+  λcx,graph,bindings.eithers.map
+      optionals.givens
+      (eithers.mapList (isDslEligibleBinding cx graph) (lists.filter annotations.isNativeType bindings))
+
+## Generate all DSL bindings for a type binding
+term generateBindingsForType =
+  λcx,graph,b.
+    let typeName := model.Binding[name] b
+    in eithers.bind
+      (decode.model.type graph (model.Binding[`term`] b))
+      (λrawType.
+        let typ := strip.deannotateTypeParameters (strip.deannotateType rawType)
+        in right(cases(model.Type){
+          `record`=λfts.lists.concat
+                [
+                  [generateTypeNameToken rawType typeName],
+                  generateParametricRefBuilders rawType typeName,
+                  generateRecordConstructor rawType typeName fts,
+                  lists.map (generateRecordAccessor rawType typeName) fts,
+                  lists.map (generateRecordWithUpdater rawType typeName fts) fts],
+          `union`=λfts.lists.concat
+                [
+                  [generateTypeNameToken rawType typeName],
+                  generateParametricRefBuilders rawType typeName,
+                  lists.map (generateUnionInjector rawType typeName) fts],
+          `wrap`=λinnerType.lists.concat
+                [
+                  [generateTypeNameToken rawType typeName],
+                  generateParametricRefBuilders rawType typeName,
+                  generateWrappedTypeAccessors rawType typeName innerType],
+          `_`=[]}
+          typ))
+
+## Generate encode/decode composition builders for a parametric type definition
+term generateParametricRefBuilders =
+  λorigType,typeName.
+    let vars := collectForallVars origType
+    in logic.ifElse
+      (lists.isEmpty vars)
+      []
+      [
+        let vars := collectForallVars origType in
+        let localName := names.localNameOf typeName in
+        let builderLocalName := strings.concat ["encode", localName] in
+        let builderName := dslDefinitionName typeName builderLocalName in
+        let refName := names.derivedBindingName ["encode"] true typeName in
+        let paramPairs := lists.map
+            (λv.(
+                model.Name[] v,
+                model.Type{
+                  application = model.ApplicationType{
+                    function = model.Type{
+                      variable = model.Name{"hydra.core.typed.TypedTerm"}},
+                    argument = model.Type{
+                      function = model.FunctionType{
+                        domain = model.Type{
+                          variable = v},
+                        codomain = model.Type{
+                          variable = model.Name{"hydra.core.model.Term"}}}}}}))
+            vars in
+        let appBody := lists.foldl
+            (λacc,pp.model.Term{
+                `inject` = model.Injection{
+                  typeName = model.Name{"hydra.core.model.Term"},
+                  field = model.Field{
+                    name = model.Name{"application"},
+                    `term` = model.Term{
+                      `record` = model.Record{
+                        typeName = model.Name{"hydra.core.model.Application"},
+                        fields = [
+                          model.Field{name = model.Name{"function"}, `term` = acc},
+                          model.Field{
+                            name = model.Name{"argument"},
+                            `term` = model.Term{
+                              application = model.Application{
+                                function = model.Term{
+                                  `unwrap` = model.Name{"hydra.core.typed.TypedTerm"}},
+                                argument = model.Term{
+                                  variable = model.Name{pairs.first pp}}}}}]}}}}})
+            model.Term{
+              `inject` = model.Injection{
+                typeName = model.Name{"hydra.core.model.Term"},
+                field = model.Field{
+                  name = model.Name{"variable"},
+                  `term` = model.Term{
+                    `wrap` = model.WrappedTerm{
+                      typeName = model.Name{"hydra.core.model.Name"},
+                      body = model.Term{
+                        literal = model.Literal{
+                          `string` = model.Name[] refName}}}}}}}
+            paramPairs in
+        let builderTerm := model.Term{
+          `wrap` = model.WrappedTerm{
+            typeName = model.Name{"hydra.core.typed.TypedTerm"},
+            body = appBody}} in
+        let rawBody := lists.foldl
+            (λacc,pp.model.Term{
+                lambda = model.Lambda{
+                  parameter = model.Name{pairs.first pp},
+                  domain = given(pairs.second pp),
+                  body = acc}})
+            builderTerm
+            (lists.reverse paramPairs) in
+        let description := strings.concat ["DSL composition builder for the ", "encode", "r of ", model.Name[] typeName] in
+        let body := annotations.setTermDescription given(description) rawBody in
+        let resultType := nominalResultType typeName origType in
+        let paramTypes := lists.map
+            (λv.model.Type{
+                function = model.FunctionType{
+                  domain = model.Type{variable = v},
+                  codomain = model.Type{
+                    variable = model.Name{"hydra.core.model.Term"}}}})
+            vars in
+        let ts := dslTypeScheme
+            origType
+            paramTypes
+            model.Type{
+              function = model.FunctionType{
+                domain = resultType,
+                codomain = model.Type{
+                  variable = model.Name{"hydra.core.model.Term"}}}} in
+        model.Binding{name = builderName, `term` = body, typeScheme = given(ts)},
+        let vars := collectForallVars origType in
+        let localName := names.localNameOf typeName in
+        let builderLocalName := strings.concat ["decode", localName] in
+        let builderName := dslDefinitionName typeName builderLocalName in
+        let refName := names.derivedBindingName ["decode"] true typeName in
+        let paramPairs := lists.map
+            (λv.(
+                model.Name[] v,
+                model.Type{
+                  application = model.ApplicationType{
+                    function = model.Type{
+                      variable = model.Name{"hydra.core.typed.TypedTerm"}},
+                    argument = model.Type{
+                      function = model.FunctionType{
+                        domain = model.Type{
+                          variable = model.Name{"hydra.core.graph.Graph"}},
+                        codomain = model.Type{
+                          function = model.FunctionType{
+                            domain = model.Type{
+                              variable = model.Name{"hydra.core.model.Term"}},
+                            codomain = model.Type{
+                              `either` = model.EitherType{
+                                `left` = model.Type{
+                                  variable = model.Name{"hydra.core.errors.DecodingError"}},
+                                `right` = model.Type{
+                                  variable = v}}}}}}}}}))
+            vars in
+        let appBody := lists.foldl
+            (λacc,pp.model.Term{
+                `inject` = model.Injection{
+                  typeName = model.Name{"hydra.core.model.Term"},
+                  field = model.Field{
+                    name = model.Name{"application"},
+                    `term` = model.Term{
+                      `record` = model.Record{
+                        typeName = model.Name{"hydra.core.model.Application"},
+                        fields = [
+                          model.Field{name = model.Name{"function"}, `term` = acc},
+                          model.Field{
+                            name = model.Name{"argument"},
+                            `term` = model.Term{
+                              application = model.Application{
+                                function = model.Term{
+                                  `unwrap` = model.Name{"hydra.core.typed.TypedTerm"}},
+                                argument = model.Term{
+                                  variable = model.Name{pairs.first pp}}}}}]}}}}})
+            model.Term{
+              `inject` = model.Injection{
+                typeName = model.Name{"hydra.core.model.Term"},
+                field = model.Field{
+                  name = model.Name{"variable"},
+                  `term` = model.Term{
+                    `wrap` = model.WrappedTerm{
+                      typeName = model.Name{"hydra.core.model.Name"},
+                      body = model.Term{
+                        literal = model.Literal{
+                          `string` = model.Name[] refName}}}}}}}
+            paramPairs in
+        let builderTerm := model.Term{
+          `wrap` = model.WrappedTerm{
+            typeName = model.Name{"hydra.core.typed.TypedTerm"},
+            body = appBody}} in
+        let rawBody := lists.foldl
+            (λacc,pp.model.Term{
+                lambda = model.Lambda{
+                  parameter = model.Name{pairs.first pp},
+                  domain = given(pairs.second pp),
+                  body = acc}})
+            builderTerm
+            (lists.reverse paramPairs) in
+        let description := strings.concat ["DSL composition builder for the ", "decode", "r of ", model.Name[] typeName] in
+        let body := annotations.setTermDescription given(description) rawBody in
+        let resultType := nominalResultType typeName origType in
+        let paramTypes := lists.map
+            (λv.model.Type{
+                function = model.FunctionType{
+                  domain = model.Type{
+                    variable = model.Name{"hydra.core.graph.Graph"}},
+                  codomain = model.Type{
+                    function = model.FunctionType{
+                      domain = model.Type{
+                        variable = model.Name{"hydra.core.model.Term"}},
+                      codomain = model.Type{
+                        `either` = model.EitherType{
+                          `left` = model.Type{
+                            variable = model.Name{"hydra.core.errors.DecodingError"}},
+                          `right` = model.Type{
+                            variable = v}}}}}}})
+            vars in
+        let ts := dslTypeScheme
+            origType
+            paramTypes
+            model.Type{
+              function = model.FunctionType{
+                domain = model.Type{
+                  variable = model.Name{"hydra.core.graph.Graph"}},
+                codomain = model.Type{
+                  function = model.FunctionType{
+                    domain = model.Type{
+                      variable = model.Name{"hydra.core.model.Term"}},
+                    codomain = model.Type{
+                      `either` = model.EitherType{
+                        `left` = model.Type{
+                          variable = model.Name{"hydra.core.errors.DecodingError"}},
+                        `right` = resultType}}}}}} in
+        model.Binding{name = builderName, `term` = body, typeScheme = given(ts)}]
+
+## Generate a record field accessor function
+term generateRecordAccessor =
+  λorigType,typeName,ft.
+    let fieldName := model.FieldType[name] ft in
+    let accessorLocalName := strings.concat
+        [
+          formatting.decapitalize (names.localNameOf typeName),
+          strings.join "" (lists.map (λs.formatting.capitalize s) (strings.splitOn "." (model.Name[] fieldName)))] in
+    let accessorName := dslDefinitionName typeName accessorLocalName in
+    let paramDomain := model.Type{
+      application = model.ApplicationType{
+        function = model.Type{
+          variable = model.Name{"hydra.core.typed.TypedTerm"}},
+        argument = nominalResultType typeName origType}} in
+    let rawBody := model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"x"},
+        domain = given(paramDomain),
+        body = model.Term{
+          `wrap` = model.WrappedTerm{
+            typeName = model.Name{"hydra.core.typed.TypedTerm"},
+            body = model.Term{
+              `inject` = model.Injection{
+                typeName = model.Name{"hydra.core.model.Term"},
+                field = model.Field{
+                  name = model.Name{"application"},
+                  `term` = model.Term{
+                    `record` = model.Record{
+                      typeName = model.Name{"hydra.core.model.Application"},
+                      fields = [
+                        model.Field{
+                          name = model.Name{"function"},
+                          `term` = model.Term{
+                            `inject` = model.Injection{
+                              typeName = model.Name{"hydra.core.model.Term"},
+                              field = model.Field{
+                                name = model.Name{"project"},
+                                `term` = model.Term{
+                                  `record` = model.Record{
+                                    typeName = model.Name{"hydra.core.model.Projection"},
+                                    fields = [
+                                      model.Field{
+                                        name = model.Name{"typeName"},
+                                        `term` = model.Term{
+                                          `wrap` = model.WrappedTerm{
+                                            typeName = model.Name{"hydra.core.model.Name"},
+                                            body = model.Term{
+                                              literal = model.Literal{
+                                                `string` = model.Name[] typeName}}}}},
+                                      model.Field{
+                                        name = model.Name{"fieldName"},
+                                        `term` = model.Term{
+                                          `wrap` = model.WrappedTerm{
+                                            typeName = model.Name{"hydra.core.model.Name"},
+                                            body = model.Term{
+                                              literal = model.Literal{
+                                                `string` = model.Name[] fieldName}}}}}]}}}}}},
+                        model.Field{
+                          name = model.Name{"argument"},
+                          `term` = model.Term{
+                            application = model.Application{
+                              function = model.Term{
+                                `unwrap` = model.Name{"hydra.core.typed.TypedTerm"}},
+                              argument = model.Term{variable = model.Name{"x"}}}}}]}}}}}}}}} in
+    let description := strings.concat
+        ["DSL accessor for the ", model.Name[] fieldName, " field of ", model.Name[] typeName] in
+    let body := annotations.setTermDescription given(description) rawBody in
+    let ts := dslTypeScheme
+        origType
+        [nominalResultType typeName origType]
+        (model.FieldType[`type`] ft) in
+    model.Binding{name = accessorName, `term` = body, typeScheme = given(ts)}
+
+## Generate a record constructor function
+term generateRecordConstructor =
+  λorigType,typeName,fieldTypes.
+    let dFields := lists.map
+        (λft.model.Term{
+            `record` = model.Record{
+              typeName = model.Name{"hydra.core.model.Field"},
+              fields = [
+                model.Field{
+                  name = model.Name{"name"},
+                  `term` = model.Term{
+                    `wrap` = model.WrappedTerm{
+                      typeName = model.Name{"hydra.core.model.Name"},
+                      body = model.Term{
+                        literal = model.Literal{
+                          `string` = model.Name[] (model.FieldType[name] ft)}}}}},
+                model.Field{
+                  name = model.Name{"term"},
+                  `term` = model.Term{
+                    application = model.Application{
+                      function = model.Term{
+                        `unwrap` = model.Name{"hydra.core.typed.TypedTerm"}},
+                      argument = model.Term{
+                        variable = model.Name{formatting.decapitalize
+                          (names.localNameOf
+                            (model.FieldType[name] ft))}}}}}]}})
+        fieldTypes in
+    let recordTerm := model.Term{
+      `wrap` = model.WrappedTerm{
+        typeName = model.Name{"hydra.core.typed.TypedTerm"},
+        body = model.Term{
+          `inject` = model.Injection{
+            typeName = model.Name{"hydra.core.model.Term"},
+            field = model.Field{
+              name = model.Name{"record"},
+              `term` = model.Term{
+                `record` = model.Record{
+                  typeName = model.Name{"hydra.core.model.Record"},
+                  fields = [
+                    model.Field{
+                      name = model.Name{"typeName"},
+                      `term` = model.Term{
+                        `wrap` = model.WrappedTerm{
+                          typeName = model.Name{"hydra.core.model.Name"},
+                          body = model.Term{
+                            literal = model.Literal{
+                              `string` = model.Name[] typeName}}}}},
+                    model.Field{name = model.Name{"fields"}, `term` = model.Term{`list` = dFields}}]}}}}}}} in
+    let paramPairs := lists.map
+        (λft.(
+            formatting.decapitalize (names.localNameOf (model.FieldType[name] ft)),
+            model.Type{
+              application = model.ApplicationType{
+                function = model.Type{
+                  variable = model.Name{"hydra.core.typed.TypedTerm"}},
+                argument = model.FieldType[`type`] ft}}))
+        fieldTypes in
+    let rawBody := lists.foldl
+        (λacc,pp.model.Term{
+            lambda = model.Lambda{
+              parameter = model.Name{pairs.first pp},
+              domain = given(pairs.second pp),
+              body = acc}})
+        recordTerm
+        (lists.reverse paramPairs) in
+    let description := strings.concat ["DSL constructor for ", model.Name[] typeName] in
+    let body := annotations.setTermDescription given(description) rawBody in
+    let paramTypes := lists.map (λft.model.FieldType[`type`] ft) fieldTypes in
+    let resultType := nominalResultType typeName origType in
+    let ts := dslTypeScheme origType paramTypes resultType in
+    [model.Binding{name = dslBindingName typeName, `term` = body, typeScheme = given(ts)}]
+
+## Generate a withXxx record field updater function
+term generateRecordWithUpdater =
+  λorigType,typeName,allFields,targetField.
+    let targetFieldName := model.FieldType[name] targetField in
+    let updaterLocalName := strings.concat
+        [
+          formatting.decapitalize (names.localNameOf typeName),
+          "With",
+          strings.join "" (lists.map (λs.formatting.capitalize s) (strings.splitOn "." (model.Name[] targetFieldName)))] in
+    let updaterName := dslDefinitionName typeName updaterLocalName in
+    let dFields := lists.map
+        (λft.model.Term{
+            `record` = model.Record{
+              typeName = model.Name{"hydra.core.model.Field"},
+              fields = [
+                model.Field{
+                  name = model.Name{"name"},
+                  `term` = model.Term{
+                    `wrap` = model.WrappedTerm{
+                      typeName = model.Name{"hydra.core.model.Name"},
+                      body = model.Term{
+                        literal = model.Literal{
+                          `string` = model.Name[] (model.FieldType[name] ft)}}}}},
+                model.Field{
+                  name = model.Name{"term"},
+                  `term` = logic.ifElse
+                      (equality.equal (model.Name[] (model.FieldType[name] ft)) (model.Name[] targetFieldName))
+                      model.Term{
+                        application = model.Application{
+                          function = model.Term{
+                            `unwrap` = model.Name{"hydra.core.typed.TypedTerm"}},
+                          argument = model.Term{
+                            variable = model.Name{"newVal"}}}}
+                      model.Term{
+                        `inject` = model.Injection{
+                          typeName = model.Name{"hydra.core.model.Term"},
+                          field = model.Field{
+                            name = model.Name{"application"},
+                            `term` = model.Term{
+                              `record` = model.Record{
+                                typeName = model.Name{"hydra.core.model.Application"},
+                                fields = [
+                                  model.Field{
+                                    name = model.Name{"function"},
+                                    `term` = model.Term{
+                                      `inject` = model.Injection{
+                                        typeName = model.Name{"hydra.core.model.Term"},
+                                        field = model.Field{
+                                          name = model.Name{"project"},
+                                          `term` = model.Term{
+                                            `record` = model.Record{
+                                              typeName = model.Name{"hydra.core.model.Projection"},
+                                              fields = [
+                                                model.Field{
+                                                  name = model.Name{"typeName"},
+                                                  `term` = model.Term{
+                                                    `wrap` = model.WrappedTerm{
+                                                      typeName = model.Name{"hydra.core.model.Name"},
+                                                      body = model.Term{
+                                                        literal = model.Literal{
+                                                          `string` = model.Name[] typeName}}}}},
+                                                model.Field{
+                                                  name = model.Name{"fieldName"},
+                                                  `term` = model.Term{
+                                                    `wrap` = model.WrappedTerm{
+                                                      typeName = model.Name{"hydra.core.model.Name"},
+                                                      body = model.Term{
+                                                        literal = model.Literal{
+                                                          `string` = model.Name[] (model.FieldType[name] ft)}}}}}]}}}}}},
+                                  model.Field{
+                                    name = model.Name{"argument"},
+                                    `term` = model.Term{
+                                      application = model.Application{
+                                        function = model.Term{
+                                          `unwrap` = model.Name{"hydra.core.typed.TypedTerm"}},
+                                        argument = model.Term{
+                                          variable = model.Name{"original"}}}}}]}}}}}}]}})
+        allFields in
+    let recDomain := model.Type{
+      application = model.ApplicationType{
+        function = model.Type{
+          variable = model.Name{"hydra.core.typed.TypedTerm"}},
+        argument = nominalResultType typeName origType}} in
+    let fieldDomain := model.Type{
+      application = model.ApplicationType{
+        function = model.Type{
+          variable = model.Name{"hydra.core.typed.TypedTerm"}},
+        argument = model.FieldType[`type`] targetField}} in
+    let rawBody := model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"original"},
+        domain = given(recDomain),
+        body = model.Term{
+          lambda = model.Lambda{
+            parameter = model.Name{"newVal"},
+            domain = given(fieldDomain),
+            body = model.Term{
+              `wrap` = model.WrappedTerm{
+                typeName = model.Name{"hydra.core.typed.TypedTerm"},
+                body = model.Term{
+                  `inject` = model.Injection{
+                    typeName = model.Name{"hydra.core.model.Term"},
+                    field = model.Field{
+                      name = model.Name{"record"},
+                      `term` = model.Term{
+                        `record` = model.Record{
+                          typeName = model.Name{"hydra.core.model.Record"},
+                          fields = [
+                            model.Field{
+                              name = model.Name{"typeName"},
+                              `term` = model.Term{
+                                `wrap` = model.WrappedTerm{
+                                  typeName = model.Name{"hydra.core.model.Name"},
+                                  body = model.Term{
+                                    literal = model.Literal{
+                                      `string` = model.Name[] typeName}}}}},
+                            model.Field{name = model.Name{"fields"}, `term` = model.Term{`list` = dFields}}]}}}}}}}}}}} in
+    let description := strings.concat
+        ["DSL updater for the ", model.Name[] targetFieldName, " field of ", model.Name[] typeName] in
+    let body := annotations.setTermDescription given(description) rawBody in
+    let recType := nominalResultType typeName origType in
+    let ts := dslTypeScheme
+        origType
+        [recType, model.FieldType[`type`] targetField]
+        recType in
+    model.Binding{name = updaterName, `term` = body, typeScheme = given(ts)}
+
+## Generate typed reference DSL bindings for a primitive (or signature-carrying term) definition
+term generateRefBindings =
+  λd.cases(packaging.Definition){
+      `type`=λ`_`.right([]),
+      `term`=λtd.optionals.match
+            (packaging.TermDefinition[signature] td)
+            right([])
+            (λsig.logic.ifElse
+                (signatureIsVoidFree sig)
+                right([generateSignatureRef (packaging.TermDefinition[name] td) sig])
+                right([])),
+      `primitive`=λpd.logic.ifElse
+            (signatureIsVoidFree (packaging.PrimitiveDefinition[signature] pd))
+            right([generateSignatureRef (packaging.PrimitiveDefinition[name] pd) (packaging.PrimitiveDefinition[signature] pd)])
+            right([]),
+      `_`=right([])}
+      d
+
+## Generate a typed-reference DSL wrapper from a term/primitive name and signature
+term generateSignatureRef =
+  λrefName,sig.
+    let params := typing.TermSignature[parameters] sig in
+    let paramFlags := lists.map
+        (λp.(
+            model.Name[] (typing.Parameter[name] p),
+            (λt.cases(model.Type){
+                application=λa.cases(model.Type){
+                      variable=λv.equality.equal
+                            v
+                            model.Name{"hydra.core.typed.TypedName"},
+                      `_`=false}
+                      (strip.deannotateType (model.ApplicationType[function] a)),
+                `_`=false}
+                (strip.deannotateType t))
+              (strip.deannotateType (typing.Parameter[`type`] p))))
+        params in
+    let paramPairs := lists.map
+        (λp.
+          let pt := typing.Parameter[`type`] p
+          in (
+            model.Name[] (typing.Parameter[name] p),
+            logic.ifElse
+              ((λt.cases(model.Type){
+                  application=λa.cases(model.Type){
+                        variable=λv.equality.equal
+                              v
+                              model.Name{"hydra.core.typed.TypedName"},
+                        `_`=false}
+                        (strip.deannotateType (model.ApplicationType[function] a)),
+                  `_`=false}
+                  (strip.deannotateType t))
+                (strip.deannotateType pt))
+              pt
+              model.Type{
+                application = model.ApplicationType{
+                  function = model.Type{
+                    variable = model.Name{"hydra.core.typed.TypedTerm"}},
+                  argument = pt}}))
+        params in
+    let appBody := lists.foldl
+        (λacc,pf.model.Term{
+            `inject` = model.Injection{
+              typeName = model.Name{"hydra.core.model.Term"},
+              field = model.Field{
+                name = model.Name{"application"},
+                `term` = model.Term{
+                  `record` = model.Record{
+                    typeName = model.Name{"hydra.core.model.Application"},
+                    fields = [
+                      model.Field{name = model.Name{"function"}, `term` = acc},
+                      model.Field{
+                        name = model.Name{"argument"},
+                        `term` = logic.ifElse
+                            (pairs.second pf)
+                            model.Term{
+                              `inject` = model.Injection{
+                                typeName = model.Name{"hydra.core.model.Term"},
+                                field = model.Field{
+                                  name = model.Name{"variable"},
+                                  `term` = model.Term{
+                                    application = model.Application{
+                                      function = model.Term{
+                                        `unwrap` = model.Name{"hydra.core.typed.TypedName"}},
+                                      argument = model.Term{
+                                        variable = model.Name{pairs.first pf}}}}}}}
+                            model.Term{
+                              application = model.Application{
+                                function = model.Term{
+                                  `unwrap` = model.Name{"hydra.core.typed.TypedTerm"}},
+                                argument = model.Term{
+                                  variable = model.Name{pairs.first pf}}}}}]}}}}})
+        model.Term{
+          `inject` = model.Injection{
+            typeName = model.Name{"hydra.core.model.Term"},
+            field = model.Field{
+              name = model.Name{"variable"},
+              `term` = model.Term{
+                `wrap` = model.WrappedTerm{
+                  typeName = model.Name{"hydra.core.model.Name"},
+                  body = model.Term{
+                    literal = model.Literal{
+                      `string` = model.Name[] refName}}}}}}}
+        paramFlags in
+    let refTerm := model.Term{
+      `wrap` = model.WrappedTerm{
+        typeName = model.Name{"hydra.core.typed.TypedTerm"},
+        body = appBody}} in
+    let rawBody := lists.foldl
+        (λacc,pp.model.Term{
+            lambda = model.Lambda{
+              parameter = model.Name{pairs.first pp},
+              domain = given(pairs.second pp),
+              body = acc}})
+        refTerm
+        (lists.reverse paramPairs) in
+    let description := strings.concat ["DSL reference to ", model.Name[] refName] in
+    let body := annotations.setTermDescription given(description) rawBody in
+    let ts := dslSignatureTypeScheme sig in
+    model.Binding{
+      name = dslDefinitionName refName (names.localNameOf refName),
+      `term` = body,
+      typeScheme = given(ts)}
+
+## Generate a TypedName token constant for a type definition
+term generateTypeNameToken =
+  λorigType,typeName.
+    let localName := names.localNameOf typeName in
+    let tokenLocalName := strings.concat [formatting.decapitalize localName, localName] in
+    let tokenName := dslDefinitionName typeName tokenLocalName in
+    let description := strings.concat ["DSL name token for ", model.Name[] typeName] in
+    let body := annotations.setTermDescription
+        given(description)
+        model.Term{
+          `wrap` = model.WrappedTerm{
+            typeName = model.Name{"hydra.core.typed.TypedName"},
+            body = model.Term{
+              `wrap` = model.WrappedTerm{
+                typeName = model.Name{"hydra.core.model.Name"},
+                body = model.Term{
+                  literal = model.Literal{
+                    `string` = model.Name[] typeName}}}}}} in
+    let ts := model.TypeScheme{
+      variables = collectForallVars origType,
+      body = model.Type{
+        application = model.ApplicationType{
+          function = model.Type{
+            variable = model.Name{"hydra.core.typed.TypedName"}},
+          argument = nominalResultType typeName origType}},
+      constraints = maps.empty} in
+    model.Binding{name = tokenName, `term` = body, typeScheme = given(ts)}
+
+## Generate a union injection helper
+term generateUnionInjector =
+  λorigType,typeName,ft.
+    let fieldName := model.FieldType[name] ft in
+    let fieldType := model.FieldType[`type`] ft in
+    let injectorLocalName := strings.concat
+        [
+          formatting.decapitalize (names.localNameOf typeName),
+          strings.join "" (lists.map (λs.formatting.capitalize s) (strings.splitOn "." (model.Name[] fieldName)))] in
+    let injectorName := dslDefinitionName typeName injectorLocalName in
+    let isUnit := (λt.cases(model.Type){`unit`=λ`_`.true, `_`=false} (strip.deannotateType t))
+        fieldType in
+    let dFieldValue := logic.ifElse
+        isUnit
+        model.Term{
+          `inject` = model.Injection{
+            typeName = model.Name{"hydra.core.model.Term"},
+            field = model.Field{
+              name = model.Name{"unit"},
+              `term` = model.Term{
+                `unit`}}}}
+        model.Term{
+          application = model.Application{
+            function = model.Term{
+              `unwrap` = model.Name{"hydra.core.typed.TypedTerm"}},
+            argument = model.Term{
+              variable = model.Name{"x"}}}} in
+    let injectionTerm := model.Term{
+      `wrap` = model.WrappedTerm{
+        typeName = model.Name{"hydra.core.typed.TypedTerm"},
+        body = model.Term{
+          `inject` = model.Injection{
+            typeName = model.Name{"hydra.core.model.Term"},
+            field = model.Field{
+              name = model.Name{"inject"},
+              `term` = model.Term{
+                `record` = model.Record{
+                  typeName = model.Name{"hydra.core.model.Injection"},
+                  fields = [
+                    model.Field{
+                      name = model.Name{"typeName"},
+                      `term` = model.Term{
+                        `wrap` = model.WrappedTerm{
+                          typeName = model.Name{"hydra.core.model.Name"},
+                          body = model.Term{
+                            literal = model.Literal{
+                              `string` = model.Name[] typeName}}}}},
+                    model.Field{
+                      name = model.Name{"field"},
+                      `term` = model.Term{
+                        `record` = model.Record{
+                          typeName = model.Name{"hydra.core.model.Field"},
+                          fields = [
+                            model.Field{
+                              name = model.Name{"name"},
+                              `term` = model.Term{
+                                `wrap` = model.WrappedTerm{
+                                  typeName = model.Name{"hydra.core.model.Name"},
+                                  body = model.Term{
+                                    literal = model.Literal{
+                                      `string` = model.Name[] fieldName}}}}},
+                            model.Field{name = model.Name{"term"}, `term` = dFieldValue}]}}}]}}}}}}} in
+    let variantDomain := model.Type{
+      application = model.ApplicationType{
+        function = model.Type{
+          variable = model.Name{"hydra.core.typed.TypedTerm"}},
+        argument = model.FieldType[`type`] ft}} in
+    let rawBody := logic.ifElse
+        isUnit
+        injectionTerm
+        model.Term{
+          lambda = model.Lambda{
+            parameter = model.Name{"x"},
+            domain = given(variantDomain),
+            body = injectionTerm}} in
+    let description := strings.concat
+        ["DSL injection for the ", model.Name[] fieldName, " variant of ", model.Name[] typeName] in
+    let body := annotations.setTermDescription given(description) rawBody in
+    let unionType := nominalResultType typeName origType in
+    let ts := logic.ifElse
+        isUnit
+        (dslTypeScheme origType [] unionType)
+        (dslTypeScheme origType [model.FieldType[`type`] ft] unionType) in
+    model.Binding{name = injectorName, `term` = body, typeScheme = given(ts)}
+
+## Generate wrap/unwrap accessors for a wrapped type
+term generateWrappedTypeAccessors =
+  λorigType,typeName,innerType.
+    let localName := names.localNameOf typeName in
+    let wrapName := dslDefinitionName typeName (formatting.decapitalize localName) in
+    let unwrapLocalName := strings.concat ["un", localName] in
+    let unwrapName := dslDefinitionName typeName unwrapLocalName in
+    let wrapperType := nominalResultType typeName origType in
+    let wrapDomain := model.Type{
+      application = model.ApplicationType{
+        function = model.Type{
+          variable = model.Name{"hydra.core.typed.TypedTerm"}},
+        argument = innerType}} in
+    let rawWrapBody := model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"x"},
+        domain = given(wrapDomain),
+        body = model.Term{
+          `wrap` = model.WrappedTerm{
+            typeName = model.Name{"hydra.core.typed.TypedTerm"},
+            body = model.Term{
+              `inject` = model.Injection{
+                typeName = model.Name{"hydra.core.model.Term"},
+                field = model.Field{
+                  name = model.Name{"wrap"},
+                  `term` = model.Term{
+                    `record` = model.Record{
+                      typeName = model.Name{"hydra.core.model.WrappedTerm"},
+                      fields = [
+                        model.Field{
+                          name = model.Name{"typeName"},
+                          `term` = model.Term{
+                            `wrap` = model.WrappedTerm{
+                              typeName = model.Name{"hydra.core.model.Name"},
+                              body = model.Term{
+                                literal = model.Literal{
+                                  `string` = model.Name[] typeName}}}}},
+                        model.Field{
+                          name = model.Name{"body"},
+                          `term` = model.Term{
+                            application = model.Application{
+                              function = model.Term{
+                                `unwrap` = model.Name{"hydra.core.typed.TypedTerm"}},
+                              argument = model.Term{variable = model.Name{"x"}}}}}]}}}}}}}}} in
+    let wrapDescription := strings.concat
+        ["DSL constructor for the ", model.Name[] typeName, " wrapper"] in
+    let wrapBody := annotations.setTermDescription given(wrapDescription) rawWrapBody in
+    let unwrapDomain := model.Type{
+      application = model.ApplicationType{
+        function = model.Type{
+          variable = model.Name{"hydra.core.typed.TypedTerm"}},
+        argument = wrapperType}} in
+    let rawUnwrapBody := model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"x"},
+        domain = given(unwrapDomain),
+        body = model.Term{
+          `wrap` = model.WrappedTerm{
+            typeName = model.Name{"hydra.core.typed.TypedTerm"},
+            body = model.Term{
+              `inject` = model.Injection{
+                typeName = model.Name{"hydra.core.model.Term"},
+                field = model.Field{
+                  name = model.Name{"application"},
+                  `term` = model.Term{
+                    `record` = model.Record{
+                      typeName = model.Name{"hydra.core.model.Application"},
+                      fields = [
+                        model.Field{
+                          name = model.Name{"function"},
+                          `term` = model.Term{
+                            `inject` = model.Injection{
+                              typeName = model.Name{"hydra.core.model.Term"},
+                              field = model.Field{
+                                name = model.Name{"unwrap"},
+                                `term` = model.Term{
+                                  `wrap` = model.WrappedTerm{
+                                    typeName = model.Name{"hydra.core.model.Name"},
+                                    body = model.Term{
+                                      literal = model.Literal{
+                                        `string` = model.Name[] typeName}}}}}}}},
+                        model.Field{
+                          name = model.Name{"argument"},
+                          `term` = model.Term{
+                            application = model.Application{
+                              function = model.Term{
+                                `unwrap` = model.Name{"hydra.core.typed.TypedTerm"}},
+                              argument = model.Term{variable = model.Name{"x"}}}}}]}}}}}}}}} in
+    let unwrapDescription := strings.concat
+        ["DSL accessor for the body of ", model.Name[] typeName] in
+    let unwrapBody := annotations.setTermDescription given(unwrapDescription) rawUnwrapBody in
+    let wrapTs := dslTypeScheme origType [innerType] wrapperType in
+    let unwrapTs := dslTypeScheme origType [wrapperType] innerType in
+    [
+      model.Binding{name = wrapName, `term` = wrapBody, typeScheme = given(wrapTs)},
+      model.Binding{name = unwrapName, `term` = unwrapBody, typeScheme = given(unwrapTs)}]
+
+## Check if a binding is eligible for DSL generation
+term isDslEligibleBinding =
+  λcx,graph,b.
+    let ns := names.moduleNameOf (model.Binding[name] b)
+    in logic.ifElse
+      (equality.equal (optionals.match ns "" packaging.ModuleName[]) "hydra.core.typed")
+      right(none)
+      right(given(b))
+
+## Build the nominal result type with type applications for forall variables
+term nominalResultType =
+  λtypeName,origType.
+    let vars := collectForallVars origType
+    in lists.foldl
+      (λacc,v.model.Type{
+          application = model.ApplicationType{
+            function = acc,
+            argument = model.Type{variable = v}}})
+      model.Type{variable = typeName}
+      vars
+
+## Check whether a term signature's parameter and result types are all void-free
+term signatureIsVoidFree =
+  λsig.
+    let paramTypes := lists.map (λp.typing.Parameter[`type`] p) (typing.TermSignature[parameters] sig) in
+    let resultType := typing.Result[`type`] (typing.TermSignature[result] sig) in
+    lists.foldl (λacc,t.logic.and acc (typeIsVoidFree t)) (typeIsVoidFree resultType) paramTypes
+
+## Check whether a type contains no occurrence of the void type at any depth
+term typeIsVoidFree =
+  λtyp.
+    let allVariants := sets.fromList
+        (lists.map
+          reflect.typeVariant
+          (rewriting.foldOverType coders.TraversalOrder{pre} (λm,t.lists.cons t m) [] typ))
+    in logic.not (sets.member variants.TypeVariant{`void`} allVariants)
