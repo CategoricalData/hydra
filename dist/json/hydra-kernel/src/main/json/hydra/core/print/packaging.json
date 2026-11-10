@@ -157,6 +157,46 @@
                     "literal": {"string": "Show a definition as a string, shortening nominal references via the given import-alias map (#803)"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.core.print.packaging.docCommentLinesOf",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"list": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "s",
+                "domain": {"literal": "string"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "typeApplication": {
+                            "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"literal": "string"}}},
+                            "type": {"literal": "string"}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "ln",
+                            "domain": {"literal": "string"},
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "## "}}}},
+                                "argument": {"variable": "ln"}}}}}}},
+                    "argument": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.core.lib.strings.splitOn"}, "argument": {"literal": {"string": "\n"}}}},
+                        "argument": {"variable": "s"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Split a (possibly multi-line) string into '## '-prefixed doc-comment lines, one per embedded newline"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.core.print.packaging.entityMetadataDoc",
         "signature": {
           "typeParameters": [],
@@ -193,12 +233,7 @@
                                 "parameter": "d",
                                 "domain": {"literal": "string"},
                                 "body": {
-                                  "list": [
-                                    {
-                                      "application": {
-                                        "function": {
-                                          "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "## "}}}},
-                                        "argument": {"variable": "d"}}}]}}}}},
+                                  "application": {"function": {"variable": "hydra.core.print.packaging.docCommentLinesOf"}, "argument": {"variable": "d"}}}}}}},
                         "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                     "body": {
                       "let": {
@@ -207,25 +242,20 @@
                             "name": "commentBlocks",
                             "term": {
                               "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"literal": "string"}}},
-                                        "type": {"literal": "string"}}},
-                                    "argument": {
-                                      "lambda": {
-                                        "parameter": "c",
-                                        "domain": {"literal": "string"},
-                                        "body": {
-                                          "application": {
-                                            "function": {
-                                              "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "## "}}}},
-                                            "argument": {"variable": "c"}}}}}}},
+                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"literal": "string"}}},
                                 "argument": {
                                   "application": {
-                                    "function": {"project": {"typeName": "hydra.core.packaging.EntityMetadata", "fieldName": "comments"}},
-                                    "argument": {"variable": "em"}}}}},
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"literal": "string"}}},
+                                            "type": {"list": {"literal": "string"}}}},
+                                        "argument": {"variable": "hydra.core.print.packaging.docCommentLinesOf"}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.core.packaging.EntityMetadata", "fieldName": "comments"}},
+                                        "argument": {"variable": "em"}}}}}}},
                             "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                         "body": {
                           "let": {
@@ -2671,7 +2701,15 @@
                                                             "body": {
                                                               "application": {
                                                                 "function": {"variable": "hydra.core.lib.strings.concat"},
-                                                                "argument": {"list": [{"literal": {"string": "## "}}, {"variable": "d"}, {"literal": {"string": "\n"}}, {"variable": "declStr"}]}}}}}}},
+                                                                "argument": {
+                                                                  "list": [
+                                                                    {
+                                                                      "application": {
+                                                                        "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "\n"}}}},
+                                                                        "argument": {
+                                                                          "application": {"function": {"variable": "hydra.core.print.packaging.docCommentLinesOf"}, "argument": {"variable": "d"}}}}},
+                                                                    {"literal": {"string": "\n"}},
+                                                                    {"variable": "declStr"}]}}}}}}},
                                                     "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                                 "body": {
                                                   "application": {
@@ -2845,7 +2883,15 @@
                                                                     "body": {
                                                                       "application": {
                                                                         "function": {"variable": "hydra.core.lib.strings.concat"},
-                                                                        "argument": {"list": [{"literal": {"string": "## "}}, {"variable": "d"}, {"literal": {"string": "\n"}}, {"variable": "declStr"}]}}}}}}},
+                                                                        "argument": {
+                                                                          "list": [
+                                                                            {
+                                                                              "application": {
+                                                                                "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "\n"}}}},
+                                                                                "argument": {
+                                                                                  "application": {"function": {"variable": "hydra.core.print.packaging.docCommentLinesOf"}, "argument": {"variable": "d"}}}}},
+                                                                            {"literal": {"string": "\n"}},
+                                                                            {"variable": "declStr"}]}}}}}}},
                                                             "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                                         "body": {
                                                           "application": {
