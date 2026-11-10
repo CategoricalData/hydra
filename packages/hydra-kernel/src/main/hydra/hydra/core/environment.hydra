@@ -1,0 +1,184 @@
+## Graph to type environment conversions
+module hydra.core.environment
+
+import hydra.core.decode.model as decode.model
+import hydra.core.encode.model as encode.model
+import hydra.core.errors as errors
+import hydra.core.lexical as lexical
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.equality as equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.logic as logic
+import hydra.core.lib.maps as maps
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.pairs as pairs
+import hydra.core.lib.sets as sets
+import hydra.core.model as model
+import hydra.core.packaging as packaging
+import hydra.core.scoping as scoping
+import hydra.core.sorting as sorting
+import hydra.core.strip as strip
+import hydra.core.variables as variables
+
+## Convert a definition to a typed term
+term definitionAsTypeApplicationTerm =
+  λel.optionals.match
+      (model.Binding[typeScheme] el)
+      left(errors.Error{
+        extraction = errors.ExtractionError{
+          unexpectedShape = errors.UnexpectedShapeError{
+            expected = "typed binding",
+            actual = "untyped binding"}}})
+      (λts.right(model.TypeApplicationTerm{body = model.Binding[`term`] el, `type` = model.TypeScheme[body] ts}))
+
+## Convert bindings and a body to a let expression
+term graphAsLet = λbindings,body.model.Let{bindings = bindings, body = body}
+
+## Convert bindings and a body to a term, using let-term duality
+term graphAsTerm = λbindings,body.model.Term{`let` = graphAsLet bindings body}
+
+## Decode a list of type-encoding bindings into a map of named types
+term graphAsTypes =
+  λgraph,els.
+    let toPair := λel.eithers.map
+          (λtyp.(model.Binding[name] el, typ))
+          (decode.model.type graph (model.Binding[`term`] el))
+    in eithers.map maps.fromList (eithers.mapList toPair els)
+
+## Partition a list of definitions into type definitions and term definitions
+term partitionDefinitions =
+  λdefs.
+    let getType := λdef.cases(packaging.Definition){`type`=λtd.given(td), `term`=λ`_`.none, `primitive`=λ`_`.none}
+          def in
+    let getTerm := λdef.cases(packaging.Definition){`type`=λ`_`.none, `term`=λtd.given(td), `primitive`=λ`_`.none}
+          def in
+    (optionals.givens (lists.map getType defs), optionals.givens (lists.map getTerm defs))
+
+## Reorder definitions: types first (with hydra.core.model.Name first among types), then topologically sorted terms
+term reorderDefs =
+  λdefs.
+    let partitioned := partitionDefinitions defs in
+    let typeDefsRaw := pairs.first partitioned in
+    let nameFirst := lists.filter
+        (λtd.equality.equal (packaging.TypeDefinition[name] td) model.Name{"hydra.core.model.Name"})
+        typeDefsRaw in
+    let nameRest := lists.filter
+        (λtd.logic.not
+            (equality.equal (packaging.TypeDefinition[name] td) model.Name{"hydra.core.model.Name"}))
+        typeDefsRaw in
+    let typeDefs := lists.concat
+        [
+          lists.map (λtd.packaging.Definition{`type` = td}) nameFirst,
+          lists.map (λtd.packaging.Definition{`type` = td}) nameRest] in
+    let termDefsWrapped := lists.map (λtd.packaging.Definition{`term` = td}) (pairs.second partitioned) in
+    let sortedTermDefs := lists.concat
+        (sorting.topologicalSortNodes
+          (λd.cases(packaging.Definition){`term`=λtd.packaging.TermDefinition[name] td} d)
+          (λd.cases(packaging.Definition){
+              `term`=λtd.sets.toList
+                    (variables.eagerFreeVariablesInTerm
+                      (packaging.TermDefinition[body] td)),
+              `_`=[]}
+              d)
+          termDefsWrapped) in
+    lists.concat [typeDefs, sortedTermDefs]
+
+## Convert a schema graph to a typing environment (Either version)
+term schemaGraphToTypingEnvironment =
+  λg.
+    let toTypeScheme := λvars,typ.cases(model.Type){
+          `forall`=λft.toTypeScheme
+                (lists.cons (model.ForallType[parameter] ft) vars)
+                (model.ForallType[body] ft),
+          `_`=model.TypeScheme{
+            variables = lists.reverse vars,
+            body = typ,
+            constraints = maps.empty}}
+          (strip.deannotateType typ) in
+    let decodeType := λ`term`.eithers.bimap
+          (λ`_e`.errors.Error{decoding = `_e`})
+          (λ`_a`.`_a`)
+          (decode.model.type g `term`) in
+    let decodeTypeScheme := λ`term`.eithers.bimap
+          (λ`_e`.errors.Error{decoding = `_e`})
+          (λ`_a`.`_a`)
+          (decode.model.typeScheme g `term`) in
+    let toPair := λel.
+        let forTerm := λ`term`.cases(model.Term){
+              `record`=λr.logic.ifElse
+                    (equality.equal
+                      (model.Record[typeName] r)
+                      model.Name{"hydra.core.model.TypeScheme"})
+                    (eithers.map
+                      optionals.given
+                      (decodeTypeScheme (model.Binding[`term`] el)))
+                    right(none),
+              `inject`=λi.logic.ifElse
+                    (equality.equal
+                      (model.Injection[typeName] i)
+                      model.Name{"hydra.core.model.Type"})
+                    (eithers.map
+                      (λdecoded.given(toTypeScheme [] decoded))
+                      (decodeType (model.Binding[`term`] el)))
+                    right(none),
+              `_`=right(none)}
+              `term`
+        in eithers.bind
+          (optionals.match
+            (model.Binding[typeScheme] el)
+            (eithers.map (λtyp.given(scoping.fTypeToTypeScheme typ)) (decodeType (model.Binding[`term`] el)))
+            (λts.logic.ifElse
+                (equality.equal
+                  ts
+                  model.TypeScheme{
+                    variables = [],
+                    body = model.Type{variable = model.Name{"hydra.core.model.TypeScheme"}},
+                    constraints = maps.empty})
+                (eithers.map optionals.given (decodeTypeScheme (model.Binding[`term`] el)))
+                (logic.ifElse
+                  (equality.equal
+                    ts
+                    model.TypeScheme{
+                      variables = [],
+                      body = model.Type{variable = model.Name{"hydra.core.model.Type"}},
+                      constraints = maps.empty})
+                  (eithers.map (λdecoded.given(toTypeScheme [] decoded)) (decodeType (model.Binding[`term`] el)))
+                  (forTerm (strip.deannotateTerm (model.Binding[`term`] el))))))
+          (λmts.right(optionals.map (λts.(model.Binding[name] el, ts)) mts)) in
+    eithers.map (λmpairs.maps.fromList (optionals.givens mpairs)) (eithers.mapList toPair (lexical.graphToBindings g))
+
+## Extract the bindings from a let term, or return an empty list for other terms
+term termAsBindings =
+  λ`term`.cases(model.Term){`let`=λlt.model.Let[bindings] lt, `_`=[]} (strip.deannotateTerm `term`)
+
+## Encode a map of named types to a list of bindings
+term typesToDefinitions =
+  λtypeMap.
+    let toElement := λpair.
+        let name := pairs.first pair
+        in model.Binding{
+          name = name,
+          `term` = encode.model.type (pairs.second pair),
+          typeScheme = none}
+    in lists.map toElement (maps.toList typeMap)
+
+## Execute a computation in the context of a lambda body, extending the type context with the lambda parameter
+term withLambdaContext =
+  λgetContext,setContext,env,lam,body.
+    let newContext := scoping.extendGraphForLambda (getContext env) lam
+    in body (setContext newContext env)
+
+## Execute a computation in the context of a let body, extending the type context with the let bindings
+term withLetContext =
+  λgetContext,setContext,forBinding,env,letrec,body.
+    let newContext := scoping.extendGraphForLet
+        forBinding
+        (getContext env)
+        letrec
+    in body (setContext newContext env)
+
+## Execute a computation in the context of a type lambda body, extending the type context with the type parameter
+term withTypeLambdaContext =
+  λgetContext,setContext,env,tlam,body.
+    let newContext := scoping.extendGraphForTypeLambda (getContext env) tlam
+    in body (setContext newContext env)

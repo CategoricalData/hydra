@@ -1,0 +1,909 @@
+## Source-to-source automatic differentiation for Float64 terms.
+module hydra.core.differentiation
+
+import hydra.core.lib.equality as equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.logic as logic
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.pairs as pairs
+import hydra.core.model as model
+
+## Differentiate a binary primitive application given both arguments and their derivatives
+term differentiateBinary =
+  λbfname,a,b,da,db.logic.ifElse
+      (logic.or
+        (equality.equal bfname model.Name{"hydra.core.lib.math.add"})
+        (equality.equal bfname model.Name{"hydra.core.lib.math.addFloat64"}))
+      model.Term{
+        application = model.Application{
+          function = model.Term{
+            application = model.Application{
+              function = model.Term{
+                variable = model.Name{"hydra.core.lib.math.addFloat64"}},
+              argument = da}},
+          argument = db}}
+      (logic.ifElse
+        (logic.or
+          (equality.equal bfname model.Name{"hydra.core.lib.math.sub"})
+          (equality.equal bfname model.Name{"hydra.core.lib.math.subFloat64"}))
+        model.Term{
+          application = model.Application{
+            function = model.Term{
+              application = model.Application{
+                function = model.Term{
+                  variable = model.Name{"hydra.core.lib.math.subFloat64"}},
+                argument = da}},
+            argument = db}}
+        (logic.ifElse
+          (logic.or
+            (equality.equal bfname model.Name{"hydra.core.lib.math.mul"})
+            (equality.equal bfname model.Name{"hydra.core.lib.math.mulFloat64"}))
+          model.Term{
+            application = model.Application{
+              function = model.Term{
+                application = model.Application{
+                  function = model.Term{
+                    variable = model.Name{"hydra.core.lib.math.addFloat64"}},
+                  argument = model.Term{
+                    application = model.Application{
+                      function = model.Term{
+                        application = model.Application{
+                          function = model.Term{
+                            variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                          argument = a}},
+                      argument = db}}}},
+              argument = model.Term{
+                application = model.Application{
+                  function = model.Term{
+                    application = model.Application{
+                      function = model.Term{
+                        variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                      argument = b}},
+                  argument = da}}}}
+          (logic.ifElse
+            (equality.equal bfname model.Name{"hydra.core.lib.math.pow"})
+            model.Term{
+              application = model.Application{
+                function = model.Term{
+                  application = model.Application{
+                    function = model.Term{
+                      variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                    argument = model.Term{
+                      application = model.Application{
+                        function = model.Term{
+                          application = model.Application{
+                            function = model.Term{
+                              variable = model.Name{"hydra.core.lib.math.pow"}},
+                            argument = a}},
+                        argument = b}}}},
+                argument = model.Term{
+                  application = model.Application{
+                    function = model.Term{
+                      application = model.Application{
+                        function = model.Term{
+                          variable = model.Name{"hydra.core.lib.math.addFloat64"}},
+                        argument = model.Term{
+                          application = model.Application{
+                            function = model.Term{
+                              application = model.Application{
+                                function = model.Term{
+                                  variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                argument = db}},
+                            argument = model.Term{
+                              application = model.Application{
+                                function = model.Term{
+                                  variable = model.Name{"hydra.core.lib.math.log"}},
+                                argument = a}}}}}},
+                    argument = model.Term{
+                      application = model.Application{
+                        function = model.Term{
+                          application = model.Application{
+                            function = model.Term{
+                              variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                            argument = model.Term{
+                              application = model.Application{
+                                function = model.Term{
+                                  application = model.Application{
+                                    function = model.Term{
+                                      variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                    argument = b}},
+                                argument = da}}}},
+                        argument = model.Term{
+                          application = model.Application{
+                            function = model.Term{
+                              application = model.Application{
+                                function = model.Term{
+                                  variable = model.Name{"hydra.core.lib.math.pow"}},
+                                argument = a}},
+                            argument = model.Term{
+                              literal = model.Literal{
+                                float = model.FloatValue{
+                                  `float64` = -1.0:float64}}}}}}}}}}}
+            (logic.ifElse
+              (equality.equal bfname model.Name{"hydra.core.lib.math.atan2"})
+              model.Term{
+                application = model.Application{
+                  function = model.Term{
+                    application = model.Application{
+                      function = model.Term{
+                        variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                      argument = model.Term{
+                        application = model.Application{
+                          function = model.Term{
+                            application = model.Application{
+                              function = model.Term{
+                                variable = model.Name{"hydra.core.lib.math.subFloat64"}},
+                              argument = model.Term{
+                                application = model.Application{
+                                  function = model.Term{
+                                    application = model.Application{
+                                      function = model.Term{
+                                        variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                      argument = b}},
+                                  argument = da}}}},
+                          argument = model.Term{
+                            application = model.Application{
+                              function = model.Term{
+                                application = model.Application{
+                                  function = model.Term{
+                                    variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                  argument = a}},
+                              argument = db}}}}}},
+                  argument = model.Term{
+                    application = model.Application{
+                      function = model.Term{
+                        application = model.Application{
+                          function = model.Term{
+                            variable = model.Name{"hydra.core.lib.math.pow"}},
+                          argument = model.Term{
+                            application = model.Application{
+                              function = model.Term{
+                                application = model.Application{
+                                  function = model.Term{
+                                    variable = model.Name{"hydra.core.lib.math.addFloat64"}},
+                                  argument = model.Term{
+                                    application = model.Application{
+                                      function = model.Term{
+                                        application = model.Application{
+                                          function = model.Term{
+                                            variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                          argument = a}},
+                                      argument = a}}}},
+                              argument = model.Term{
+                                application = model.Application{
+                                  function = model.Term{
+                                    application = model.Application{
+                                      function = model.Term{
+                                        variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                      argument = b}},
+                                  argument = b}}}}}},
+                      argument = model.Term{
+                        literal = model.Literal{
+                          float = model.FloatValue{
+                            `float64` = -1.0:float64}}}}}}}
+              (logic.ifElse
+                (equality.equal bfname model.Name{"hydra.core.lib.math.logBase"})
+                model.Term{
+                  application = model.Application{
+                    function = model.Term{
+                      application = model.Application{
+                        function = model.Term{
+                          variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                        argument = model.Term{
+                          application = model.Application{
+                            function = model.Term{
+                              application = model.Application{
+                                function = model.Term{
+                                  variable = model.Name{"hydra.core.lib.math.subFloat64"}},
+                                argument = model.Term{
+                                  application = model.Application{
+                                    function = model.Term{
+                                      application = model.Application{
+                                        function = model.Term{
+                                          variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                        argument = model.Term{
+                                          application = model.Application{
+                                            function = model.Term{
+                                              variable = model.Name{"hydra.core.lib.math.log"}},
+                                            argument = a}}}},
+                                    argument = model.Term{
+                                      application = model.Application{
+                                        function = model.Term{
+                                          application = model.Application{
+                                            function = model.Term{
+                                              variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                            argument = db}},
+                                        argument = model.Term{
+                                          application = model.Application{
+                                            function = model.Term{
+                                              application = model.Application{
+                                                function = model.Term{
+                                                  variable = model.Name{"hydra.core.lib.math.pow"}},
+                                                argument = b}},
+                                            argument = model.Term{
+                                              literal = model.Literal{
+                                                float = model.FloatValue{
+                                                  `float64` = -1.0:float64}}}}}}}}}}},
+                            argument = model.Term{
+                              application = model.Application{
+                                function = model.Term{
+                                  application = model.Application{
+                                    function = model.Term{
+                                      variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                    argument = model.Term{
+                                      application = model.Application{
+                                        function = model.Term{
+                                          variable = model.Name{"hydra.core.lib.math.log"}},
+                                        argument = b}}}},
+                                argument = model.Term{
+                                  application = model.Application{
+                                    function = model.Term{
+                                      application = model.Application{
+                                        function = model.Term{
+                                          variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                        argument = da}},
+                                    argument = model.Term{
+                                      application = model.Application{
+                                        function = model.Term{
+                                          application = model.Application{
+                                            function = model.Term{
+                                              variable = model.Name{"hydra.core.lib.math.pow"}},
+                                            argument = a}},
+                                        argument = model.Term{
+                                          literal = model.Literal{
+                                            float = model.FloatValue{
+                                              `float64` = -1.0:float64}}}}}}}}}}}}},
+                    argument = model.Term{
+                      application = model.Application{
+                        function = model.Term{
+                          application = model.Application{
+                            function = model.Term{
+                              variable = model.Name{"hydra.core.lib.math.pow"}},
+                            argument = model.Term{
+                              application = model.Application{
+                                function = model.Term{
+                                  application = model.Application{
+                                    function = model.Term{
+                                      variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                    argument = model.Term{
+                                      application = model.Application{
+                                        function = model.Term{
+                                          variable = model.Name{"hydra.core.lib.math.log"}},
+                                        argument = a}}}},
+                                argument = model.Term{
+                                  application = model.Application{
+                                    function = model.Term{
+                                      variable = model.Name{"hydra.core.lib.math.log"}},
+                                    argument = a}}}}}},
+                        argument = model.Term{
+                          literal = model.Literal{
+                            float = model.FloatValue{
+                              `float64` = -1.0:float64}}}}}}}
+                model.Term{literal = model.Literal{float = model.FloatValue{`float64` = 0.0:float64}}})))))
+
+## Differentiate a function term (Float64 -> Float64) with respect to its parameter
+term differentiateFunction =
+  λ`term`.cases(model.Term){
+      annotated=λat.differentiateFunction (model.AnnotatedTerm[body] at),
+      lambda=λl.
+          let paramName := model.Lambda[parameter] l in
+          let body := model.Lambda[body] l in
+          model.Term{
+            lambda = model.Lambda{
+              parameter = paramName,
+              domain = model.Lambda[domain] l,
+              body = differentiateTerm paramName body}},
+      `_`=`term`}
+      `term`
+
+## Differentiate a term with respect to a named variable
+term differentiateTerm =
+  λdx,`term`.cases(model.Term){
+      variable=λv.logic.ifElse
+            (equality.equal v dx)
+            model.Term{
+              literal = model.Literal{
+                float = model.FloatValue{
+                  `float64` = 1.0:float64}}}
+            model.Term{
+              literal = model.Literal{
+                float = model.FloatValue{
+                  `float64` = 0.0:float64}}},
+      literal=λ`_`.model.Term{
+            literal = model.Literal{
+              float = model.FloatValue{
+                `float64` = 0.0:float64}}},
+      application=λapp.
+          let func := model.Application[function] app in
+          let arg := model.Application[argument] app in
+          cases(model.Term){
+            variable=λfname.optionals.match
+                  (primitiveDerivative fname)
+                  (differentiateTerm
+                    dx
+                    model.Term{
+                      application = model.Application{
+                        function = func,
+                        argument = arg}})
+                  (λderivTerm.model.Term{
+                      application = model.Application{
+                        function = model.Term{
+                          application = model.Application{
+                            function = model.Term{
+                              variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                            argument = model.Term{
+                              application = model.Application{
+                                function = derivTerm,
+                                argument = arg}}}},
+                        argument = differentiateTerm dx arg}}),
+            application=λinnerApp.
+                let innerFunc := model.Application[function] innerApp in
+                let innerArg := model.Application[argument] innerApp in
+                cases(model.Term){
+                  variable=λbfname.differentiateBinary
+                        bfname
+                        innerArg
+                        arg
+                        (differentiateTerm dx innerArg)
+                        (differentiateTerm dx arg),
+                  `_`=model.Term{
+                    application = model.Application{
+                      function = model.Term{
+                        application = model.Application{
+                          function = model.Term{
+                            variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                          argument = differentiateTerm
+                              dx
+                              model.Term{
+                                application = model.Application{
+                                  function = func,
+                                  argument = arg}}}},
+                      argument = differentiateTerm dx arg}}}
+                  innerFunc,
+            `_`=model.Term{
+              application = model.Application{
+                function = model.Term{
+                  application = model.Application{
+                    function = model.Term{
+                      variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                    argument = differentiateTerm
+                        dx
+                        model.Term{
+                          application = model.Application{
+                            function = func,
+                            argument = arg}}}},
+                argument = differentiateTerm dx arg}}}
+            func,
+      lambda=λl.logic.ifElse
+            (equality.equal (model.Lambda[parameter] l) dx)
+            model.Term{
+              lambda = model.Lambda{
+                parameter = model.Lambda[parameter] l,
+                domain = model.Lambda[domain] l,
+                body = model.Term{
+                  literal = model.Literal{
+                    float = model.FloatValue{
+                      `float64` = 0.0:float64}}}}}
+            model.Term{
+              lambda = model.Lambda{
+                parameter = model.Lambda[parameter] l,
+                domain = model.Lambda[domain] l,
+                body = differentiateTerm
+                    dx
+                    (model.Lambda[body] l)}},
+      `cases`=λ`_`.model.Term{
+            literal = model.Literal{
+              float = model.FloatValue{
+                `float64` = 0.0:float64}}},
+      `project`=λ`_`.model.Term{
+            literal = model.Literal{
+              float = model.FloatValue{
+                `float64` = 0.0:float64}}},
+      `unwrap`=λ`_`.model.Term{
+            literal = model.Literal{
+              float = model.FloatValue{
+                `float64` = 0.0:float64}}},
+      `let`=λl.model.Term{
+            `let` = model.Let{
+              bindings = lists.map
+                  (λb.model.Binding{
+                      name = model.Binding[name] b,
+                      `term` = differentiateTerm
+                          dx
+                          (model.Binding[`term`] b),
+                      typeScheme = none})
+                  (model.Let[bindings] l),
+              body = differentiateTerm dx (model.Let[body] l)}},
+      annotated=λat.differentiateTerm dx (model.AnnotatedTerm[body] at),
+      `list`=λelems.model.Term{`list` = lists.map (differentiateTerm dx) elems},
+      pair=λp.model.Term{
+            pair = (differentiateTerm dx (pairs.first p), differentiateTerm dx (pairs.second p))},
+      `record`=λr.model.Term{
+            `record` = model.Record{
+              typeName = model.Record[typeName] r,
+              fields = lists.map
+                  (λfld.model.Field{
+                      name = model.Field[name] fld,
+                      `term` = differentiateTerm
+                          dx
+                          (model.Field[`term`] fld)})
+                  (model.Record[fields] r)}},
+      typeApplication=λta.differentiateTerm dx (model.TypeApplicationTerm[body] ta),
+      typeLambda=λtl.differentiateTerm dx (model.TypeLambda[body] tl),
+      `unit`=λ`_`.model.Term{
+            literal = model.Literal{
+              float = model.FloatValue{
+                `float64` = 0.0:float64}}},
+      `set`=λ`_`.model.Term{
+            literal = model.Literal{
+              float = model.FloatValue{
+                `float64` = 0.0:float64}}},
+      `map`=λ`_`.model.Term{
+            literal = model.Literal{
+              float = model.FloatValue{
+                `float64` = 0.0:float64}}},
+      `either`=λ`_`.model.Term{
+            literal = model.Literal{
+              float = model.FloatValue{
+                `float64` = 0.0:float64}}},
+      `optional`=λ`_`.model.Term{
+            literal = model.Literal{
+              float = model.FloatValue{
+                `float64` = 0.0:float64}}},
+      `inject`=λ`_`.model.Term{
+            literal = model.Literal{
+              float = model.FloatValue{
+                `float64` = 0.0:float64}}},
+      `wrap`=λ`_`.model.Term{
+            literal = model.Literal{
+              float = model.FloatValue{
+                `float64` = 0.0:float64}}}}
+      `term`
+
+## Compute the gradient of a term as a record of partial derivatives
+term gradient =
+  λtypeName,vars,`term`.model.Term{
+      `record` = model.Record{
+        typeName = typeName,
+        fields = lists.map
+            (λv.model.Field{
+                name = v,
+                `term` = differentiateTerm v `term`})
+            vars}}
+
+## Look up the derivative of a unary Float64 primitive
+term primitiveDerivative =
+  λname.logic.ifElse
+      (equality.equal name model.Name{"hydra.core.lib.math.sin"})
+      given(model.Term{variable = model.Name{"hydra.core.lib.math.cos"}})
+      (logic.ifElse
+        (equality.equal name model.Name{"hydra.core.lib.math.cos"})
+        given(model.Term{
+          lambda = model.Lambda{
+            parameter = model.Name{"_x"},
+            domain = none,
+            body = model.Term{
+              application = model.Application{
+                function = model.Term{
+                  variable = model.Name{"hydra.core.lib.math.negateFloat64"}},
+                argument = model.Term{
+                  application = model.Application{
+                    function = model.Term{
+                      variable = model.Name{"hydra.core.lib.math.sin"}},
+                    argument = model.Term{
+                      variable = model.Name{"_x"}}}}}}}})
+        (logic.ifElse
+          (equality.equal name model.Name{"hydra.core.lib.math.tan"})
+          given(model.Term{
+            lambda = model.Lambda{
+              parameter = model.Name{"_x"},
+              domain = none,
+              body = model.Term{
+                application = model.Application{
+                  function = model.Term{
+                    application = model.Application{
+                      function = model.Term{
+                        variable = model.Name{"hydra.core.lib.math.pow"}},
+                      argument = model.Term{
+                        application = model.Application{
+                          function = model.Term{
+                            variable = model.Name{"hydra.core.lib.math.cos"}},
+                          argument = model.Term{
+                            variable = model.Name{"_x"}}}}}},
+                  argument = model.Term{
+                    literal = model.Literal{
+                      float = model.FloatValue{
+                        `float64` = -2.0:float64}}}}}}})
+          (logic.ifElse
+            (equality.equal name model.Name{"hydra.core.lib.math.exp"})
+            given(model.Term{variable = model.Name{"hydra.core.lib.math.exp"}})
+            (logic.ifElse
+              (equality.equal name model.Name{"hydra.core.lib.math.log"})
+              given(model.Term{
+                lambda = model.Lambda{
+                  parameter = model.Name{"_x"},
+                  domain = none,
+                  body = model.Term{
+                    application = model.Application{
+                      function = model.Term{
+                        application = model.Application{
+                          function = model.Term{
+                            variable = model.Name{"hydra.core.lib.math.pow"}},
+                          argument = model.Term{
+                            variable = model.Name{"_x"}}}},
+                      argument = model.Term{
+                        literal = model.Literal{
+                          float = model.FloatValue{
+                            `float64` = -1.0:float64}}}}}}})
+              (logic.ifElse
+                (equality.equal name model.Name{"hydra.core.lib.math.sqrt"})
+                given(model.Term{
+                  lambda = model.Lambda{
+                    parameter = model.Name{"_x"},
+                    domain = none,
+                    body = model.Term{
+                      application = model.Application{
+                        function = model.Term{
+                          application = model.Application{
+                            function = model.Term{
+                              variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                            argument = model.Term{
+                              literal = model.Literal{
+                                float = model.FloatValue{
+                                  `float64` = 0.5:float64}}}}},
+                        argument = model.Term{
+                          application = model.Application{
+                            function = model.Term{
+                              application = model.Application{
+                                function = model.Term{
+                                  variable = model.Name{"hydra.core.lib.math.pow"}},
+                                argument = model.Term{
+                                  application = model.Application{
+                                    function = model.Term{
+                                      variable = model.Name{"hydra.core.lib.math.sqrt"}},
+                                    argument = model.Term{
+                                      variable = model.Name{"_x"}}}}}},
+                            argument = model.Term{
+                              literal = model.Literal{
+                                float = model.FloatValue{
+                                  `float64` = -1.0:float64}}}}}}}}})
+                (logic.ifElse
+                  (equality.equal name model.Name{"hydra.core.lib.math.asin"})
+                  given(model.Term{
+                    lambda = model.Lambda{
+                      parameter = model.Name{"_x"},
+                      domain = none,
+                      body = model.Term{
+                        application = model.Application{
+                          function = model.Term{
+                            application = model.Application{
+                              function = model.Term{
+                                variable = model.Name{"hydra.core.lib.math.pow"}},
+                              argument = model.Term{
+                                application = model.Application{
+                                  function = model.Term{
+                                    variable = model.Name{"hydra.core.lib.math.sqrt"}},
+                                  argument = model.Term{
+                                    application = model.Application{
+                                      function = model.Term{
+                                        application = model.Application{
+                                          function = model.Term{
+                                            variable = model.Name{"hydra.core.lib.math.subFloat64"}},
+                                          argument = model.Term{
+                                            literal = model.Literal{
+                                              float = model.FloatValue{
+                                                `float64` = 1.0:float64}}}}},
+                                      argument = model.Term{
+                                        application = model.Application{
+                                          function = model.Term{
+                                            application = model.Application{
+                                              function = model.Term{
+                                                variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                              argument = model.Term{
+                                                variable = model.Name{"_x"}}}},
+                                          argument = model.Term{
+                                            variable = model.Name{"_x"}}}}}}}}}},
+                          argument = model.Term{
+                            literal = model.Literal{
+                              float = model.FloatValue{
+                                `float64` = -1.0:float64}}}}}}})
+                  (logic.ifElse
+                    (equality.equal name model.Name{"hydra.core.lib.math.acos"})
+                    given(model.Term{
+                      lambda = model.Lambda{
+                        parameter = model.Name{"_x"},
+                        domain = none,
+                        body = model.Term{
+                          application = model.Application{
+                            function = model.Term{
+                              variable = model.Name{"hydra.core.lib.math.negateFloat64"}},
+                            argument = model.Term{
+                              application = model.Application{
+                                function = model.Term{
+                                  application = model.Application{
+                                    function = model.Term{
+                                      variable = model.Name{"hydra.core.lib.math.pow"}},
+                                    argument = model.Term{
+                                      application = model.Application{
+                                        function = model.Term{
+                                          variable = model.Name{"hydra.core.lib.math.sqrt"}},
+                                        argument = model.Term{
+                                          application = model.Application{
+                                            function = model.Term{
+                                              application = model.Application{
+                                                function = model.Term{
+                                                  variable = model.Name{"hydra.core.lib.math.subFloat64"}},
+                                                argument = model.Term{
+                                                  literal = model.Literal{
+                                                    float = model.FloatValue{
+                                                      `float64` = 1.0:float64}}}}},
+                                            argument = model.Term{
+                                              application = model.Application{
+                                                function = model.Term{
+                                                  application = model.Application{
+                                                    function = model.Term{
+                                                      variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                                    argument = model.Term{
+                                                      variable = model.Name{"_x"}}}},
+                                                argument = model.Term{
+                                                  variable = model.Name{"_x"}}}}}}}}}},
+                                argument = model.Term{
+                                  literal = model.Literal{
+                                    float = model.FloatValue{
+                                      `float64` = -1.0:float64}}}}}}}}})
+                    (logic.ifElse
+                      (equality.equal name model.Name{"hydra.core.lib.math.atan"})
+                      given(model.Term{
+                        lambda = model.Lambda{
+                          parameter = model.Name{"_x"},
+                          domain = none,
+                          body = model.Term{
+                            application = model.Application{
+                              function = model.Term{
+                                application = model.Application{
+                                  function = model.Term{
+                                    variable = model.Name{"hydra.core.lib.math.pow"}},
+                                  argument = model.Term{
+                                    application = model.Application{
+                                      function = model.Term{
+                                        application = model.Application{
+                                          function = model.Term{
+                                            variable = model.Name{"hydra.core.lib.math.addFloat64"}},
+                                          argument = model.Term{
+                                            literal = model.Literal{
+                                              float = model.FloatValue{
+                                                `float64` = 1.0:float64}}}}},
+                                      argument = model.Term{
+                                        application = model.Application{
+                                          function = model.Term{
+                                            application = model.Application{
+                                              function = model.Term{
+                                                variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                              argument = model.Term{
+                                                variable = model.Name{"_x"}}}},
+                                          argument = model.Term{
+                                            variable = model.Name{"_x"}}}}}}}},
+                              argument = model.Term{
+                                literal = model.Literal{
+                                  float = model.FloatValue{
+                                    `float64` = -1.0:float64}}}}}}})
+                      (logic.ifElse
+                        (equality.equal name model.Name{"hydra.core.lib.math.sinh"})
+                        given(model.Term{variable = model.Name{"hydra.core.lib.math.cosh"}})
+                        (logic.ifElse
+                          (equality.equal name model.Name{"hydra.core.lib.math.cosh"})
+                          given(model.Term{variable = model.Name{"hydra.core.lib.math.sinh"}})
+                          (logic.ifElse
+                            (equality.equal name model.Name{"hydra.core.lib.math.tanh"})
+                            given(model.Term{
+                              lambda = model.Lambda{
+                                parameter = model.Name{"_x"},
+                                domain = none,
+                                body = model.Term{
+                                  application = model.Application{
+                                    function = model.Term{
+                                      application = model.Application{
+                                        function = model.Term{
+                                          variable = model.Name{"hydra.core.lib.math.subFloat64"}},
+                                        argument = model.Term{
+                                          literal = model.Literal{
+                                            float = model.FloatValue{
+                                              `float64` = 1.0:float64}}}}},
+                                    argument = model.Term{
+                                      application = model.Application{
+                                        function = model.Term{
+                                          application = model.Application{
+                                            function = model.Term{
+                                              variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                            argument = model.Term{
+                                              application = model.Application{
+                                                function = model.Term{
+                                                  variable = model.Name{"hydra.core.lib.math.tanh"}},
+                                                argument = model.Term{
+                                                  variable = model.Name{"_x"}}}}}},
+                                        argument = model.Term{
+                                          application = model.Application{
+                                            function = model.Term{
+                                              variable = model.Name{"hydra.core.lib.math.tanh"}},
+                                            argument = model.Term{
+                                              variable = model.Name{"_x"}}}}}}}}}})
+                            (logic.ifElse
+                              (equality.equal name model.Name{"hydra.core.lib.math.asinh"})
+                              given(model.Term{
+                                lambda = model.Lambda{
+                                  parameter = model.Name{"_x"},
+                                  domain = none,
+                                  body = model.Term{
+                                    application = model.Application{
+                                      function = model.Term{
+                                        application = model.Application{
+                                          function = model.Term{
+                                            variable = model.Name{"hydra.core.lib.math.pow"}},
+                                          argument = model.Term{
+                                            application = model.Application{
+                                              function = model.Term{
+                                                variable = model.Name{"hydra.core.lib.math.sqrt"}},
+                                              argument = model.Term{
+                                                application = model.Application{
+                                                  function = model.Term{
+                                                    application = model.Application{
+                                                      function = model.Term{
+                                                        variable = model.Name{"hydra.core.lib.math.addFloat64"}},
+                                                      argument = model.Term{
+                                                        application = model.Application{
+                                                          function = model.Term{
+                                                            application = model.Application{
+                                                              function = model.Term{
+                                                                variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                                              argument = model.Term{
+                                                                variable = model.Name{"_x"}}}},
+                                                          argument = model.Term{
+                                                            variable = model.Name{"_x"}}}}}},
+                                                  argument = model.Term{
+                                                    literal = model.Literal{
+                                                      float = model.FloatValue{
+                                                        `float64` = 1.0:float64}}}}}}}}},
+                                      argument = model.Term{
+                                        literal = model.Literal{
+                                          float = model.FloatValue{
+                                            `float64` = -1.0:float64}}}}}}})
+                              (logic.ifElse
+                                (equality.equal name model.Name{"hydra.core.lib.math.acosh"})
+                                given(model.Term{
+                                  lambda = model.Lambda{
+                                    parameter = model.Name{"_x"},
+                                    domain = none,
+                                    body = model.Term{
+                                      application = model.Application{
+                                        function = model.Term{
+                                          application = model.Application{
+                                            function = model.Term{
+                                              variable = model.Name{"hydra.core.lib.math.pow"}},
+                                            argument = model.Term{
+                                              application = model.Application{
+                                                function = model.Term{
+                                                  variable = model.Name{"hydra.core.lib.math.sqrt"}},
+                                                argument = model.Term{
+                                                  application = model.Application{
+                                                    function = model.Term{
+                                                      application = model.Application{
+                                                        function = model.Term{
+                                                          variable = model.Name{"hydra.core.lib.math.subFloat64"}},
+                                                        argument = model.Term{
+                                                          application = model.Application{
+                                                            function = model.Term{
+                                                              application = model.Application{
+                                                                function = model.Term{
+                                                                  variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                                                argument = model.Term{
+                                                                  variable = model.Name{"_x"}}}},
+                                                            argument = model.Term{
+                                                              variable = model.Name{"_x"}}}}}},
+                                                    argument = model.Term{
+                                                      literal = model.Literal{
+                                                        float = model.FloatValue{
+                                                          `float64` = 1.0:float64}}}}}}}}},
+                                        argument = model.Term{
+                                          literal = model.Literal{
+                                            float = model.FloatValue{
+                                              `float64` = -1.0:float64}}}}}}})
+                                (logic.ifElse
+                                  (equality.equal name model.Name{"hydra.core.lib.math.atanh"})
+                                  given(model.Term{
+                                    lambda = model.Lambda{
+                                      parameter = model.Name{"_x"},
+                                      domain = none,
+                                      body = model.Term{
+                                        application = model.Application{
+                                          function = model.Term{
+                                            application = model.Application{
+                                              function = model.Term{
+                                                variable = model.Name{"hydra.core.lib.math.pow"}},
+                                              argument = model.Term{
+                                                application = model.Application{
+                                                  function = model.Term{
+                                                    application = model.Application{
+                                                      function = model.Term{
+                                                        variable = model.Name{"hydra.core.lib.math.subFloat64"}},
+                                                      argument = model.Term{
+                                                        literal = model.Literal{
+                                                          float = model.FloatValue{
+                                                            `float64` = 1.0:float64}}}}},
+                                                  argument = model.Term{
+                                                    application = model.Application{
+                                                      function = model.Term{
+                                                        application = model.Application{
+                                                          function = model.Term{
+                                                            variable = model.Name{"hydra.core.lib.math.mulFloat64"}},
+                                                          argument = model.Term{
+                                                            variable = model.Name{"_x"}}}},
+                                                      argument = model.Term{
+                                                        variable = model.Name{"_x"}}}}}}}},
+                                          argument = model.Term{
+                                            literal = model.Literal{
+                                              float = model.FloatValue{
+                                                `float64` = -1.0:float64}}}}}}})
+                                  (logic.ifElse
+                                    (equality.equal name model.Name{"hydra.core.lib.math.negate"})
+                                    given(model.Term{
+                                      lambda = model.Lambda{
+                                        parameter = model.Name{"_x"},
+                                        domain = none,
+                                        body = model.Term{
+                                          literal = model.Literal{
+                                            float = model.FloatValue{
+                                              `float64` = -1.0:float64}}}}})
+                                    (logic.ifElse
+                                      (equality.equal name model.Name{"hydra.core.lib.math.abs"})
+                                      given(model.Term{variable = model.Name{"hydra.core.lib.math.signum"}})
+                                      (logic.ifElse
+                                        (equality.equal name model.Name{"hydra.core.lib.math.ceiling"})
+                                        given(model.Term{
+                                          lambda = model.Lambda{
+                                            parameter = model.Name{"_x"},
+                                            domain = none,
+                                            body = model.Term{
+                                              literal = model.Literal{
+                                                float = model.FloatValue{
+                                                  `float64` = 0.0:float64}}}}})
+                                        (logic.ifElse
+                                          (equality.equal name model.Name{"hydra.core.lib.math.floor"})
+                                          given(model.Term{
+                                            lambda = model.Lambda{
+                                              parameter = model.Name{"_x"},
+                                              domain = none,
+                                              body = model.Term{
+                                                literal = model.Literal{
+                                                  float = model.FloatValue{
+                                                    `float64` = 0.0:float64}}}}})
+                                          (logic.ifElse
+                                            (equality.equal name model.Name{"hydra.core.lib.math.round"})
+                                            given(model.Term{
+                                              lambda = model.Lambda{
+                                                parameter = model.Name{"_x"},
+                                                domain = none,
+                                                body = model.Term{
+                                                  literal = model.Literal{
+                                                    float = model.FloatValue{
+                                                      `float64` = 0.0:float64}}}}})
+                                            (logic.ifElse
+                                              (equality.equal name model.Name{"hydra.core.lib.math.truncate"})
+                                              given(model.Term{
+                                                lambda = model.Lambda{
+                                                  parameter = model.Name{"_x"},
+                                                  domain = none,
+                                                  body = model.Term{
+                                                    literal = model.Literal{
+                                                      float = model.FloatValue{
+                                                        `float64` = 0.0:float64}}}}})
+                                              (logic.ifElse
+                                                (equality.equal name model.Name{"hydra.core.lib.math.signum"})
+                                                given(model.Term{
+                                                  lambda = model.Lambda{
+                                                    parameter = model.Name{"_x"},
+                                                    domain = none,
+                                                    body = model.Term{
+                                                      literal = model.Literal{
+                                                        float = model.FloatValue{
+                                                          `float64` = 0.0:float64}}}}})
+                                                none)))))))))))))))))))))
