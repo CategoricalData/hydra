@@ -531,6 +531,7 @@ module' = define "moduleDefinition" $
     (Lists.filter ("nm" ~> Logic.not (Equality.equal (var "nm") (var "ownNs"))) (Maps.keys (var "aliases" :: TypedTerm (M.Map ModuleName String)))) $
   "importStrs" <~ Lists.map (importDecl @@ (var "aliases" :: TypedTerm (M.Map ModuleName String))) (var "usedDeps") $
   "defStrs" <~ Lists.map (definition @@ (var "aliases" :: TypedTerm (M.Map ModuleName String))) (Packaging.moduleDefinitions $ var "mod") $
-  Strings.join (string "\n\n") (Lists.cons (var "headerStr")
-    (Lists.cons (Strings.join (string "\n") (var "importStrs"))
-      (var "defStrs")))
+  "sections" <~ Logic.ifElse (Lists.isEmpty $ var "importStrs")
+    (var "defStrs")
+    (Lists.cons (Strings.join (string "\n") (var "importStrs")) (var "defStrs")) $
+  Strings.join (string "\n\n") (Lists.cons (var "headerStr") (var "sections"))

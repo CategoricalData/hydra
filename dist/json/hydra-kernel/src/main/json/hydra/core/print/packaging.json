@@ -2358,24 +2358,43 @@
                                                         "argument": {"variable": "mod"}}}}},
                                                 "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                                             "body": {
-                                              "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "\n\n"}}}},
-                                                "argument": {
-                                                  "application": {
-                                                    "function": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "sections",
+                                                    "term": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.cons"}, "type": {"literal": "string"}}},
-                                                        "argument": {"variable": "headerStr"}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"list": {"literal": "string"}}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.isEmpty"}, "type": {"literal": "string"}}},
+                                                                    "argument": {"variable": "importStrs"}}}}},
+                                                            "argument": {"variable": "defStrs"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.cons"}, "type": {"literal": "string"}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "\n"}}}},
+                                                                    "argument": {"variable": "importStrs"}}}}},
+                                                            "argument": {"variable": "defStrs"}}}}},
+                                                    "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
+                                                "body": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "\n\n"}}}},
                                                     "argument": {
                                                       "application": {
                                                         "function": {
                                                           "application": {
                                                             "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.cons"}, "type": {"literal": "string"}}},
-                                                            "argument": {
-                                                              "application": {
-                                                                "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "\n"}}}},
-                                                                "argument": {"variable": "importStrs"}}}}},
-                                                        "argument": {"variable": "defStrs"}}}}}}}}}}}}}}}}}}}}}}},
+                                                            "argument": {"variable": "headerStr"}}},
+                                                        "argument": {"variable": "sections"}}}}}}}}}}}}}}}}}}}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a module as a string"}}}]}}}}},
     {
       "term": {
