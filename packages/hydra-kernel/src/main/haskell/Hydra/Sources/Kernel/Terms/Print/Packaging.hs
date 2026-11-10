@@ -81,6 +81,7 @@ module_ = Module {
    definitions = [
      toDefinition aliasFromSuffix,
      toDefinition definition,
+     toDefinition docCommentLinesOf,
      toDefinition entityMetadataDoc,
      toDefinition entityReferenceDoc,
      toDefinition growAliasesStep,
@@ -117,16 +118,28 @@ moduleNameString = define "moduleNameString" $
 -- seeAlso, no lifecycle, no provisions) -- callers must handle whether/how to separate this
 -- (empty) block from the following declaration themselves; see 'definitionDoc' usage in
 -- typeDefinition/termDefinition/primitiveDefinition below.
+-- | Split a (possibly multi-line, '\n'-separated) doc-comment string into its '## '-prefixed
+-- lines, one per embedded line -- the inverse of 'docCommentLinesToMetadata's own
+-- 'Strings.join "\n"' (#711): a description or comment that itself contains a newline (a
+-- multi-line DSL-authored 'doc' string, e.g. unifyTypeConstraints's Robinson's-algorithm note)
+-- must print as ONE '##' line per source line, not as a single '## ' line with a raw embedded
+-- newline -- the latter produces a bare (non-'##') continuation line that the parser's
+-- 'docCommentLines' cannot recognize as part of the comment block, breaking the round-trip.
+docCommentLinesOf :: TypedTermDefinition (String -> [String])
+docCommentLinesOf = define "docCommentLinesOf" $
+  doc "Split a (possibly multi-line) string into '## '-prefixed doc-comment lines, one per embedded newline" $
+  "s" ~> Lists.map ("ln" ~> Strings.concat2 (string "## ") (var "ln")) (Strings.splitOn (string "\n") (var "s"))
+
 entityMetadataDoc :: TypedTermDefinition (EntityMetadata -> String)
 entityMetadataDoc = define "entityMetadataDoc" $
   doc "Show an EntityMetadata as a block of '##' doc-comment lines" $
   "em" ~>
   "descLine" <~ Optionals.match (Packaging.entityMetadataDescription $ var "em")
     (list ([] :: [TypedTerm String]))
-    ("d" ~> list [Strings.concat2 (string "## ") (var "d")]) $
-  "commentBlocks" <~ Lists.map
-    ("c" ~> Strings.concat2 (string "## ") (var "c"))
-    (Packaging.entityMetadataComments $ var "em") $
+    ("d" ~> docCommentLinesOf @@ var "d") $
+  "commentBlocks" <~ Lists.concat (Lists.map
+    (asTerm docCommentLinesOf)
+    (Packaging.entityMetadataComments $ var "em")) $
   "seeAlsoLines" <~ Lists.map
     ("ref" ~> Strings.concat $ list [string "## @seeAlso ", entityReferenceDoc @@ var "ref"])
     (Packaging.entityMetadataSeeAlso $ var "em") $
@@ -401,7 +414,7 @@ typeDefinition = define "typeDefinition" $
   "declStr" <~ (Strings.concat $ list [string "type ", var "localName", string " = ", var "typeStr"]) $
   "withDescDoc" <~ Optionals.match (var "mdesc")
     (var "declStr")
-    ("d" ~> Strings.concat $ list [string "## ", var "d", string "\n", var "declStr"]) $
+    ("d" ~> Strings.concat $ list [Strings.join (string "\n") (docCommentLinesOf @@ var "d"), string "\n", var "declStr"]) $
   withDefinitionDoc @@ (Packaging.typeDefinitionMetadata $ var "td") @@ var "withDescDoc"
 
 -- | Show a term definition: 'term name [: <typeScheme>] = <term>', with its doc-comment block
@@ -431,7 +444,7 @@ termDefinition = define "termDefinition" $
   "declStr" <~ (Strings.concat $ list [string "term ", var "localName", var "sigStr", string "= ", var "bodyStr"]) $
   "withDescDoc" <~ Optionals.match (var "mdesc")
     (var "declStr")
-    ("d" ~> Strings.concat $ list [string "## ", var "d", string "\n", var "declStr"]) $
+    ("d" ~> Strings.concat $ list [Strings.join (string "\n") (docCommentLinesOf @@ var "d"), string "\n", var "declStr"]) $
   withDefinitionDoc @@ (Packaging.termDefinitionMetadata $ var "td") @@ var "withDescDoc"
 
 -- | Show a primitive definition: '[impure] [partial] primitive name : <typeScheme> [= <term>]',
