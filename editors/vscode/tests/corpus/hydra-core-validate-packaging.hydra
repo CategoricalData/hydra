@@ -1,0 +1,666 @@
+## Validation functions for modules and packages
+module hydra.core.validate.packaging
+
+import hydra.core.annotations as annotations
+import hydra.core.constants as constants
+import hydra.core.dependencies as dependencies
+import hydra.core.error.packaging as error.packaging
+import hydra.core.formatting as formatting
+import hydra.core.lib.equality as equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.logic as logic
+import hydra.core.lib.maps as maps
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.ordering as ordering
+import hydra.core.lib.pairs as pairs
+import hydra.core.lib.regex as regex
+import hydra.core.lib.sets as sets
+import hydra.core.lib.strings as strings
+import hydra.core.model as model
+import hydra.core.names as names
+import hydra.core.packaging as packaging
+import hydra.core.util as util
+import hydra.core.validation as validation
+import hydra.core.variables as variables
+
+## Append a rule-tagged InvalidModuleError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
+term appendFindingModule =
+  λp,acc,finding.optionals.match
+      finding
+      acc
+      (λrp.
+        let ruleName := pairs.first rp in
+        let payload := pairs.second rp in
+        let errs := validation.ValidationResult[errors] acc in
+        let wrns := validation.ValidationResult[warnings] acc in
+        logic.ifElse
+          (sets.member ruleName (validation.ValidationProfile[errorRules] p))
+          (logic.ifElse
+            (ordering.lt (lists.length errs) (validation.ValidationProfile[maxErrors] p))
+            validation.ValidationResult{
+              errors = lists.concat2 errs (lists.singleton payload),
+              warnings = wrns}
+            acc)
+          (logic.ifElse
+            (sets.member ruleName (validation.ValidationProfile[warningRules] p))
+            (logic.ifElse
+              (ordering.lt (lists.length wrns) (validation.ValidationProfile[maxWarnings] p))
+              validation.ValidationResult{
+                errors = errs,
+                warnings = lists.concat2 wrns (lists.singleton payload)}
+              acc)
+            acc))
+
+## Append a rule-tagged InvalidPackageError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
+term appendFindingPackage =
+  λp,acc,finding.optionals.match
+      finding
+      acc
+      (λrp.
+        let ruleName := pairs.first rp in
+        let payload := pairs.second rp in
+        let errs := validation.ValidationResult[errors] acc in
+        let wrns := validation.ValidationResult[warnings] acc in
+        logic.ifElse
+          (sets.member ruleName (validation.ValidationProfile[errorRules] p))
+          (logic.ifElse
+            (ordering.lt (lists.length errs) (validation.ValidationProfile[maxErrors] p))
+            validation.ValidationResult{
+              errors = lists.concat2 errs (lists.singleton payload),
+              warnings = wrns}
+            acc)
+          (logic.ifElse
+            (sets.member ruleName (validation.ValidationProfile[warningRules] p))
+            (logic.ifElse
+              (ordering.lt (lists.length wrns) (validation.ValidationProfile[maxWarnings] p))
+              validation.ValidationResult{
+                errors = errs,
+                warnings = lists.concat2 wrns (lists.singleton payload)}
+              acc)
+            acc))
+
+## Check for module namespaces that conflict when mapped to target language paths
+term checkConflictingModuleNames =
+  λpkg.
+    let result := lists.foldl
+        (λacc,mod.
+          let seen := pairs.first acc in
+          let err := pairs.second acc in
+          optionals.match
+            err
+            (let ns := packaging.Module[name] mod in
+            let key := strings.toLower (packaging.ModuleName[] ns) in
+            let existing := maps.lookup key seen in
+            optionals.match
+              existing
+              (maps.insert key ns seen, none)
+              (λfirst.(
+                  seen,
+                  given(error.packaging.InvalidPackageError{
+                    conflictingModuleName = error.packaging.ConflictingModuleNameError{
+                      first = first,
+                      second = ns}}))))
+            (λ`_`.acc))
+        (maps.empty, none)
+        (packaging.Package[modules] pkg)
+    in pairs.second result
+
+## Check for union variant names that, when mapped to constructor names, conflict with other type definitions
+term checkConflictingVariantNames =
+  λmod.
+    let ns := packaging.Module[name] mod in
+    let defs := packaging.Module[definitions] mod in
+    let defNames := lists.foldl (λacc,def.sets.insert (names.localNameOf (definitionName def)) acc) sets.empty defs in
+    lists.foldl
+      (λacc,def.optionals.match
+          acc
+          (cases(packaging.Definition){
+            `type`=λtd.
+                let typeName := packaging.TypeDefinition[name] td in
+                let localTypeName := names.localNameOf typeName in
+                let typ := model.TypeScheme[body]
+                    (packaging.TypeDefinition[body] td) in
+                cases(model.Type){
+                  `union`=λfields.lists.foldl
+                        (λinnerAcc,field.optionals.match
+                            innerAcc
+                            (let fieldName := model.FieldType[name] field in
+                            let localFieldName := names.localNameOf fieldName in
+                            let constructorName := strings.concat2
+                                (formatting.capitalize localTypeName)
+                                (formatting.capitalize localFieldName) in
+                            logic.ifElse
+                              (sets.member constructorName defNames)
+                              given(error.packaging.InvalidModuleError{
+                                conflictingVariantName = error.packaging.ConflictingVariantNameError{
+                                  moduleName = ns,
+                                  typeName = typeName,
+                                  variantName = fieldName,
+                                  conflictingName = wrap(model.Name){constructorName}}})
+                              none)
+                            (λ`_`.innerAcc))
+                        none
+                        fields,
+                  `_`=none}
+                  typ,
+            `_`=none}
+            def)
+          (λ`_`.acc))
+      none
+      defs
+
+## Check that every top-level definition is wrapped in a description annotation
+term checkDefinitionDocumentation =
+  λmod.
+    let ns := packaging.Module[name] mod
+    in lists.foldl
+      (λacc,def.optionals.match
+          acc
+          (let name := definitionName def in
+          let documented := cases(packaging.Definition){
+              `term`=λtd.
+                  let `term` := packaging.TermDefinition[body] td
+                  in cases(model.Term){
+                    annotated=λat.annotations.hasDescription
+                          (annotations.getAnnotationMap
+                            (model.AnnotatedTerm[annotation] at)),
+                    `_`=false}
+                    `term`,
+              `type`=λtd.
+                  let typ := model.TypeScheme[body]
+                      (packaging.TypeDefinition[body] td)
+                  in cases(model.Type){
+                    annotated=λat.annotations.hasDescription
+                          (annotations.getAnnotationMap
+                            (model.AnnotatedType[annotation] at)),
+                    `_`=false}
+                    typ,
+              `primitive`=λpd.optionals.match
+                    (packaging.PrimitiveDefinition[metadata] pd)
+                    false
+                    (λem.logic.not
+                        (equality.equal
+                          (optionals.withDefault
+                            ""
+                            (packaging.EntityMetadata[description] em))
+                          "")),
+              `_`=false}
+              def in
+          logic.ifElse
+            documented
+            none
+            given(error.packaging.InvalidModuleError{
+              missingDocumentation = error.packaging.MissingDocumentationError{
+                moduleName = ns,
+                name = name}}))
+          (λ`_`.acc))
+      none
+      (packaging.Module[definitions] mod)
+
+## Check that all definition names in a module have the module's name as a prefix
+term checkDefinitionModuleNames =
+  λmod.
+    let ns := packaging.Module[name] mod in
+    let prefix := strings.concat2 (packaging.ModuleName[] ns) "." in
+    let prefixLen := strings.length prefix in
+    lists.foldl
+      (λacc,def.optionals.match
+          acc
+          (let name := definitionName def in
+          let nameStr := model.Name[] name in
+          let namePrefix := lists.take prefixLen (strings.toList nameStr) in
+          logic.ifElse
+            (equality.equal (strings.fromList namePrefix) prefix)
+            none
+            given(error.packaging.InvalidModuleError{
+              definitionNotInModuleName = error.packaging.DefinitionNotInModuleNameError{
+                moduleName = ns,
+                name = name}}))
+          (λ`_`.acc))
+      none
+      (packaging.Module[definitions] mod)
+
+## Check that term definitions have camelCase local names and type definitions have PascalCase local names
+term checkDefinitionNameConvention =
+  λmod.
+    let ns := packaging.Module[name] mod
+    in lists.foldl
+      (λacc,def.optionals.match
+          acc
+          (let name := definitionName def in
+          let local := names.localNameOf name in
+          let expected := cases(packaging.Definition){
+              `term`=λ`_`.util.CaseConvention{camel},
+              `type`=λ`_`.util.CaseConvention{pascal},
+              `primitive`=λ`_`.util.CaseConvention{camel},
+              `_`=util.CaseConvention{camel}}
+              def in
+          let pattern := cases(packaging.Definition){
+              `term`=λ`_`.constants.regexCamelCase,
+              `type`=λ`_`.constants.regexPascalCase,
+              `primitive`=λ`_`.constants.regexCamelCase,
+              `_`=constants.regexCamelCase}
+              def in
+          logic.ifElse
+            (regex.matches pattern local)
+            none
+            given(error.packaging.InvalidModuleError{
+              invalidDefinitionName = error.packaging.InvalidDefinitionNameError{
+                moduleName = ns,
+                name = name,
+                expectedConvention = expected}}))
+          (λ`_`.acc))
+      none
+      (packaging.Module[definitions] mod)
+
+## Check that a module's definitions list is sorted in ascending lexicographic order by local name
+term checkDefinitionOrdering =
+  λmod.
+    let ns := packaging.Module[name] mod in
+    let result := lists.foldl
+        (λacc,def.
+          let prev := pairs.first acc in
+          let err := pairs.second acc in
+          optionals.match
+            err
+            (let currName := definitionName def in
+            let currLocal := names.localNameOf currName in
+            optionals.match
+              prev
+              (given(currName), none)
+              (λprevName.
+                let prevLocal := names.localNameOf prevName
+                in logic.ifElse
+                  (ordering.lt prevLocal currLocal)
+                  (given(currName), none)
+                  (
+                    given(currName),
+                    given(error.packaging.InvalidModuleError{
+                      definitionsOutOfOrder = error.packaging.DefinitionsOutOfOrderError{
+                        moduleName = ns,
+                        precedingName = prevName,
+                        followingName = currName}}))))
+            (λ`_`.acc))
+        (none, none)
+        (packaging.Module[definitions] mod) in
+    pairs.second result
+
+## Check for duplicate definition names in a module
+term checkDuplicateDefinitionNames =
+  λmod.
+    let ns := packaging.Module[name] mod in
+    let result := lists.foldl
+        (λacc,def.
+          let seen := pairs.first acc in
+          let err := pairs.second acc in
+          optionals.match
+            err
+            (let name := definitionName def
+            in logic.ifElse
+              (sets.member name seen)
+              (
+                seen,
+                given(error.packaging.InvalidModuleError{
+                  duplicateDefinitionName = error.packaging.DuplicateDefinitionNameError{
+                    moduleName = ns,
+                    name = name}}))
+              (sets.insert name seen, none))
+            (λ`_`.acc))
+        (sets.empty, none)
+        (packaging.Module[definitions] mod) in
+    pairs.second result
+
+## Check for duplicate module namespaces in a package
+term checkDuplicateModuleNames =
+  λpkg.
+    let result := lists.foldl
+        (λacc,mod.
+          let seen := pairs.first acc in
+          let err := pairs.second acc in
+          optionals.match
+            err
+            (let ns := packaging.Module[name] mod
+            in logic.ifElse
+              (sets.member ns seen)
+              (
+                seen,
+                given(error.packaging.InvalidPackageError{
+                  duplicateModuleName = error.packaging.DuplicateModuleNameError{
+                    moduleName = ns}}))
+              (sets.insert ns seen, none))
+            (λ`_`.acc))
+        (sets.empty, none)
+        (packaging.Package[modules] pkg)
+    in pairs.second result
+
+## Check that the module's namespace matches the dotted-lowercase naming convention
+term checkModuleNameConvention =
+  λmod.
+    let ns := packaging.Module[name] mod
+    in logic.ifElse
+      (regex.matches constants.regexNamespace (packaging.ModuleName[] ns))
+      none
+      given(error.packaging.InvalidModuleError{
+        invalidModuleNameConvention = error.packaging.InvalidModuleNameConventionError{
+          moduleName = ns}})
+
+## Check that no module namespace is declared by more than one package, across the whole universe of packages.
+term checkModulePartition =
+  λpkgs.
+    let declaredPairs := lists.concat (lists.map (λp.lists.map (λm.(m, pairs.first p)) (pairs.second p)) pkgs) in
+    let result := lists.foldl
+        (λacc,`pair_`.
+          let seen := pairs.first acc in
+          let findings := pairs.second acc in
+          let ns := pairs.first `pair_` in
+          let pkg := pairs.second `pair_` in
+          let existing := maps.lookup ns seen in
+          optionals.match
+            existing
+            (maps.insert ns pkg seen, findings)
+            (λfirstPkg.logic.ifElse
+                (equality.equal firstPkg pkg)
+                acc
+                (
+                  seen,
+                  lists.concat2
+                    findings
+                    (lists.singleton
+                      error.packaging.InvalidPackageError{
+                        moduleInMultiplePackages = error.packaging.ModuleInMultiplePackagesError{
+                          moduleName = ns,
+                          firstPackage = wrap(packaging.PackageName){firstPkg},
+                          secondPackage = wrap(packaging.PackageName){pkg}}}))))
+        (maps.empty, [])
+        declaredPairs in
+    pairs.second result
+
+## Check for module namespaces that are a strict dotted-prefix of another module namespace in the same package
+term checkNestedModuleNames =
+  λpkg.
+    let isDottedPrefixOf := λa,b.
+        let prefix := strings.concat2 a "." in
+        let prefixLen := strings.length prefix in
+        logic.and
+          (ordering.lte prefixLen (strings.length b))
+          (equality.equal (strings.fromList (lists.take prefixLen (strings.toList b))) prefix) in
+    let findNesting := λcandidate,seen.lists.foldl
+          (λacc,other.optionals.match
+              acc
+              (logic.ifElse
+                (isDottedPrefixOf other candidate)
+                given((other, candidate))
+                (logic.ifElse
+                  (isDottedPrefixOf candidate other)
+                  given((candidate, other))
+                  none))
+              (λ`_`.acc))
+          none
+          seen in
+    let result := lists.foldl
+        (λacc,mod.
+          let seen := pairs.first acc in
+          let err := pairs.second acc in
+          optionals.match
+            err
+            (let nsStr := packaging.ModuleName[] (packaging.Module[name] mod) in
+            let nesting := findNesting nsStr seen in
+            optionals.match
+              nesting
+              (lists.concat2 seen (lists.singleton nsStr), none)
+              (λop.(
+                  seen,
+                  given(error.packaging.InvalidPackageError{
+                    nestedModuleName = error.packaging.NestedModuleNameError{
+                      outer = packaging.ModuleName{pairs.first op},
+                      inner = packaging.ModuleName{pairs.second op}}}))))
+            (λ`_`.acc))
+        ([], none)
+        (packaging.Package[modules] pkg) in
+    pairs.second result
+
+## Check that the package's name matches the hyphen-separated lowercase naming convention
+term checkPackageNameConvention =
+  λpkg.
+    let pname := packaging.Package[name] pkg
+    in logic.ifElse
+      (regex.matches constants.regexPackageName (packaging.PackageName[] pname))
+      none
+      given(error.packaging.InvalidPackageError{
+        invalidPackageName = error.packaging.InvalidPackageNameError{
+          packageName = pname}})
+
+## Check a module's definitions for free names whose owning module is not among its declared dependencies
+term checkUndeclaredDependencies =
+  λowners,primNames,mod.
+    let ns := packaging.Module[name] mod in
+    let visible := sets.insert
+        ns
+        (sets.fromList
+          (lists.map
+            (λdep.packaging.ModuleDependency[`module`] dep)
+            (packaging.Module[dependencies] mod))) in
+    let referencedNames := λdef.cases(packaging.Definition){
+          `term`=λtd.sets.union
+                (variables.freeVariablesInTerm
+                  (packaging.TermDefinition[body] td))
+                (dependencies.termDependencyNames
+                  false
+                  false
+                  true
+                  (packaging.TermDefinition[body] td)),
+          `type`=λtyd.dependencies.typeDependencyNames
+                false
+                (model.TypeScheme[body]
+                  (packaging.TypeDefinition[body] tyd)),
+          `_`=sets.empty}
+          def in
+    let findingForRef := λrefName.logic.ifElse
+          (sets.member refName primNames)
+          none
+          (optionals.bind
+            (maps.lookup refName owners)
+            (λowner.logic.ifElse
+                (sets.member owner visible)
+                none
+                given(error.packaging.InvalidPackageError{
+                  undeclaredDependency = error.packaging.UndeclaredDependencyError{
+                    moduleName = ns,
+                    referencedName = refName,
+                    owningModuleName = owner}}))) in
+    let findingsForDef := λdef.optionals.mapOptional findingForRef (sets.toList (referencedNames def)) in
+    lists.concat (lists.map findingsForDef (packaging.Module[definitions] mod))
+
+## Extract the name from a definition
+term definitionName =
+  λdef.cases(packaging.Definition){
+      `term`=λtd.packaging.TermDefinition[name] td,
+      `type`=λtd.packaging.TypeDefinition[name] td,
+      `primitive`=λpd.packaging.PrimitiveDefinition[name] pd}
+      def
+
+## True iff the given rule name appears in the profile's errorRules or warningRules.
+term enabledPackaging =
+  λp,ruleName.logic.or
+      (sets.member ruleName (validation.ValidationProfile[errorRules] p))
+      (sets.member ruleName (validation.ValidationProfile[warningRules] p))
+
+## The default validation profile for module/package validation. Every kernel-shipped check classified as an error; no warnings; maxErrors=1, maxWarnings=20.
+term kernelDefaultPackagingProfile =
+  validation.ValidationProfile{
+    errorRules = sets.fromList
+        [
+          model.Name{"hydra.core.error.packaging.InvalidModuleError.conflictingVariantName"},
+          model.Name{"hydra.core.error.packaging.InvalidModuleError.definitionNotInModuleName"},
+          model.Name{"hydra.core.error.packaging.InvalidModuleError.definitionsOutOfOrder"},
+          model.Name{"hydra.core.error.packaging.InvalidModuleError.duplicateDefinitionName"},
+          model.Name{"hydra.core.error.packaging.InvalidModuleError.invalidDefinitionName"},
+          model.Name{"hydra.core.error.packaging.InvalidModuleError.invalidModuleNameConvention"},
+          model.Name{"hydra.core.error.packaging.InvalidModuleError.missingDocumentation"},
+          model.Name{"hydra.core.error.packaging.InvalidPackageError.conflictingModuleName"},
+          model.Name{"hydra.core.error.packaging.InvalidPackageError.duplicateModuleName"},
+          model.Name{"hydra.core.error.packaging.InvalidPackageError.invalidPackageName"},
+          model.Name{"hydra.core.error.packaging.InvalidPackageError.nestedModuleName"}],
+    warningRules = sets.empty,
+    maxErrors = 1:int32,
+    maxWarnings = 20:int32}
+
+## Validate a kernel module against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'module'' with 'kernelDefaultPackagingProfile'.
+term kernelModule =
+  λmod.lists.head
+      (validation.ValidationResult[errors]
+        (`module` kernelDefaultPackagingProfile validation.ValidationResult{errors = [], warnings = []} mod))
+
+## Validate a kernel package against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'package' with 'kernelDefaultPackagingProfile'.
+term kernelPackage =
+  λpkg.lists.head
+      (validation.ValidationResult[errors]
+        (package kernelDefaultPackagingProfile validation.ValidationResult{errors = [], warnings = []} pkg))
+
+## Non-kernel packaging profile (#575): identical to kernelDefaultPackagingProfile except the rules in kernelPackagingWarningRuleNamesForNonKernel (documentation, ordering, naming convention) are warnings, not errors, so each package's pre-existing backlog does not block sync until that package is promoted to the fully-fatal profile.
+term kernelPackagingProfileWithDocWarnings =
+  validation.ValidationProfile{
+    errorRules = sets.fromList
+        [
+          model.Name{"hydra.core.error.packaging.InvalidModuleError.conflictingVariantName"},
+          model.Name{"hydra.core.error.packaging.InvalidModuleError.definitionNotInModuleName"},
+          model.Name{"hydra.core.error.packaging.InvalidModuleError.duplicateDefinitionName"},
+          model.Name{"hydra.core.error.packaging.InvalidModuleError.invalidModuleNameConvention"},
+          model.Name{"hydra.core.error.packaging.InvalidPackageError.conflictingModuleName"},
+          model.Name{"hydra.core.error.packaging.InvalidPackageError.duplicateModuleName"},
+          model.Name{"hydra.core.error.packaging.InvalidPackageError.invalidPackageName"},
+          model.Name{"hydra.core.error.packaging.InvalidPackageError.nestedModuleName"}],
+    warningRules = sets.fromList
+        [
+          model.Name{"hydra.core.error.packaging.InvalidModuleError.missingDocumentation"},
+          model.Name{"hydra.core.error.packaging.InvalidModuleError.definitionsOutOfOrder"},
+          model.Name{"hydra.core.error.packaging.InvalidModuleError.invalidDefinitionName"}],
+    maxErrors = 1:int32,
+    maxWarnings = 10000:int32}
+
+## Check every module in the given universe for undeclared cross-module dependencies, returning every finding.
+term kernelUniverseUndeclaredDependencies =
+  λuniverse,primNames.
+    let owners := undeclaredDependencyOwners universe
+    in lists.concat (lists.map (λmod.checkUndeclaredDependencies owners primNames mod) universe)
+
+## Validate a module against the given ValidationProfile, accumulating findings into a ValidationResult. Errors hard-stop the rule sequence once maxErrors is reached.
+term module =
+  λp,acc0,mod.lists.foldl
+      (λacc,guarded.logic.ifElse
+          (ordering.gte
+            (lists.length (validation.ValidationResult[errors] acc))
+            (validation.ValidationProfile[maxErrors] p))
+          acc
+          (appendFindingModule p acc guarded))
+      acc0
+      [
+        logic.ifElse
+          (enabledPackaging p model.Name{"hydra.core.error.packaging.InvalidModuleError.conflictingVariantName"})
+          (optionals.map
+            (λf.(model.Name{"hydra.core.error.packaging.InvalidModuleError.conflictingVariantName"}, f))
+            (checkConflictingVariantNames mod))
+          none,
+        logic.ifElse
+          (enabledPackaging p model.Name{"hydra.core.error.packaging.InvalidModuleError.missingDocumentation"})
+          (optionals.map
+            (λf.(model.Name{"hydra.core.error.packaging.InvalidModuleError.missingDocumentation"}, f))
+            (checkDefinitionDocumentation mod))
+          none,
+        logic.ifElse
+          (enabledPackaging p model.Name{"hydra.core.error.packaging.InvalidModuleError.invalidDefinitionName"})
+          (optionals.map
+            (λf.(model.Name{"hydra.core.error.packaging.InvalidModuleError.invalidDefinitionName"}, f))
+            (checkDefinitionNameConvention mod))
+          none,
+        logic.ifElse
+          (enabledPackaging p model.Name{"hydra.core.error.packaging.InvalidModuleError.definitionNotInModuleName"})
+          (optionals.map
+            (λf.(model.Name{"hydra.core.error.packaging.InvalidModuleError.definitionNotInModuleName"}, f))
+            (checkDefinitionModuleNames mod))
+          none,
+        logic.ifElse
+          (enabledPackaging p model.Name{"hydra.core.error.packaging.InvalidModuleError.definitionsOutOfOrder"})
+          (optionals.map
+            (λf.(model.Name{"hydra.core.error.packaging.InvalidModuleError.definitionsOutOfOrder"}, f))
+            (checkDefinitionOrdering mod))
+          none,
+        logic.ifElse
+          (enabledPackaging p model.Name{"hydra.core.error.packaging.InvalidModuleError.duplicateDefinitionName"})
+          (optionals.map
+            (λf.(model.Name{"hydra.core.error.packaging.InvalidModuleError.duplicateDefinitionName"}, f))
+            (checkDuplicateDefinitionNames mod))
+          none,
+        logic.ifElse
+          (enabledPackaging p model.Name{"hydra.core.error.packaging.InvalidModuleError.invalidModuleNameConvention"})
+          (optionals.map
+            (λf.(model.Name{"hydra.core.error.packaging.InvalidModuleError.invalidModuleNameConvention"}, f))
+            (checkModuleNameConvention mod))
+          none]
+
+## Validate a package against the given ValidationProfile, accumulating findings into a ValidationResult. Errors hard-stop traversal once maxErrors is reached.
+term package =
+  λp,acc0,pkg.
+    let accPkg := lists.foldl
+        (λacc,guarded.logic.ifElse
+            (ordering.gte
+              (lists.length (validation.ValidationResult[errors] acc))
+              (validation.ValidationProfile[maxErrors] p))
+            acc
+            (appendFindingPackage p acc guarded))
+        acc0
+        [
+          logic.ifElse
+            (enabledPackaging p model.Name{"hydra.core.error.packaging.InvalidPackageError.conflictingModuleName"})
+            (optionals.map
+              (λf.(model.Name{"hydra.core.error.packaging.InvalidPackageError.conflictingModuleName"}, f))
+              (checkConflictingModuleNames pkg))
+            none,
+          logic.ifElse
+            (enabledPackaging p model.Name{"hydra.core.error.packaging.InvalidPackageError.duplicateModuleName"})
+            (optionals.map
+              (λf.(model.Name{"hydra.core.error.packaging.InvalidPackageError.duplicateModuleName"}, f))
+              (checkDuplicateModuleNames pkg))
+            none,
+          logic.ifElse
+            (enabledPackaging p model.Name{"hydra.core.error.packaging.InvalidPackageError.invalidPackageName"})
+            (optionals.map
+              (λf.(model.Name{"hydra.core.error.packaging.InvalidPackageError.invalidPackageName"}, f))
+              (checkPackageNameConvention pkg))
+            none,
+          logic.ifElse
+            (enabledPackaging p model.Name{"hydra.core.error.packaging.InvalidPackageError.nestedModuleName"})
+            (optionals.map
+              (λf.(model.Name{"hydra.core.error.packaging.InvalidPackageError.nestedModuleName"}, f))
+              (checkNestedModuleNames pkg))
+            none]
+    in lists.foldl
+      (λacc,mod.logic.ifElse
+          (ordering.gte
+            (lists.length (validation.ValidationResult[errors] acc))
+            (validation.ValidationProfile[maxErrors] p))
+          acc
+          (let mr := `module` p validation.ValidationResult{errors = [], warnings = []} mod in
+          let liftedErrs := lists.map
+              (λe.error.packaging.InvalidPackageError{invalidModule = e})
+              (validation.ValidationResult[errors] mr) in
+          let liftedWrns := lists.map
+              (λw.error.packaging.InvalidPackageError{invalidModule = w})
+              (validation.ValidationResult[warnings] mr) in
+          let newErrs := lists.take
+              (validation.ValidationProfile[maxErrors] p)
+              (lists.concat2 (validation.ValidationResult[errors] acc) liftedErrs) in
+          let newWrns := lists.take
+              (validation.ValidationProfile[maxWarnings] p)
+              (lists.concat2 (validation.ValidationResult[warnings] acc) liftedWrns) in
+          validation.ValidationResult{errors = newErrs, warnings = newWrns}))
+      accPkg
+      (packaging.Package[modules] pkg)
+
+## Build a map from every name defined in the universe to its owning module
+term undeclaredDependencyOwners =
+  λuniverse.maps.fromList
+      (lists.concat
+        (lists.map
+          (λm.lists.map (λdef.(definitionName def, packaging.Module[name] m)) (packaging.Module[definitions] m))
+          universe))
