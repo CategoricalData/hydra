@@ -1,0 +1,214 @@
+## Utilities for reading and writing type and term annotations
+module hydra.core.annotations
+
+import hydra.core.constants as constants
+import hydra.core.decode.model as decode.model
+import hydra.core.encode.model as encode.model
+import hydra.core.errors as errors
+import hydra.core.extract.model as extract.model
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.equality as equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.logic as logic
+import hydra.core.lib.maps as maps
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.pairs as pairs
+import hydra.core.lib.sets as sets
+import hydra.core.model as model
+import hydra.core.strip as strip
+
+## Aggregate annotations from nested structures
+term aggregateAnnotations =
+  λgetValue,getX,getAnns,t.let toPairs := λrest,t.optionals.match
+          (getValue t)
+          rest
+          (λyy.toPairs (lists.cons (maps.toList (getAnns yy)) rest) (getX yy))
+    in maps.fromList (lists.concat (toPairs [] t))
+
+## Extract comments/description from a Binding
+term commentsFromBinding = λcx,g,b.getTermDescription cx g (model.Binding[`term`] b)
+
+## Extract comments/description from a FieldType
+term commentsFromFieldType = λcx,g,ft.getTypeDescription cx g (model.FieldType[`type`] ft)
+
+## Project a Map<Name, Term> out of an annotation Term. For a TermMap with TermVariable-shaped keys (or, transitionally, TermWrap-encoded Name keys), returns those (Name, value) entries; for any other shape, returns the empty map.
+term getAnnotationMap =
+  λt.let extractName := λk.cases(model.Term){
+          variable=λn.given(n),
+          `wrap`=λw.cases(model.Term){
+                literal=λl.cases(model.Literal){
+                      `string`=λs.given(wrap(model.Name){s}),
+                      `_`=none}
+                      l,
+                `_`=none}
+                (model.WrappedTerm[body] w),
+          `_`=none}
+          k in
+    let fromEntry := λp.let k := pairs.first p in
+        let v := pairs.second p in
+        optionals.map (λn.(n, v)) (extractName k) in
+    cases(model.Term){`map`=λm.maps.fromList (optionals.givens (lists.map fromEntry (maps.toList m))), `_`=maps.empty}
+      t
+
+## Get description from annotations map (Either version)
+term getDescription =
+  λcx,graph,anns.optionals.match
+      (maps.lookup model.Name{"description"} anns)
+      right(none)
+      (λ`term`.eithers.map optionals.given (extract.model.string graph `term`))
+
+## Get a term annotation
+term getTermAnnotation = λkey,`term`.maps.lookup key (termAnnotationInternal `term`)
+
+## Get term description (Either version)
+term getTermDescription =
+  λcx,graph,`term`.let peel := λt.cases(model.Term){
+          typeLambda=λtl.peel (model.TypeLambda[body] tl),
+          typeApplication=λta.peel (model.TypeApplicationTerm[body] ta),
+          `_`=t}
+          t
+    in getDescription cx graph (termAnnotationInternal (peel `term`))
+
+## Get type from annotations
+term getType =
+  λgraph,anns.optionals.match
+      (maps.lookup constants.keyType anns)
+      right(none)
+      (λdat.eithers.map optionals.given (decode.model.type graph dat))
+
+## Get a type annotation
+term getTypeAnnotation = λkey,typ.maps.lookup key (typeAnnotationInternal typ)
+
+## Get type classes from term. Each Set Name contains bare class identifiers (#275).
+term getTypeClasses =
+  λcx,graph,`term`.let decodeName := λ`term`.eithers.bimap
+          (λde.errors.Error{decoding = de})
+          (λx.x)
+          (decode.model.name graph `term`)
+    in optionals.match
+      (getTermAnnotation constants.keyClasses `term`)
+      right(maps.empty)
+      (λ`term`.extract.model.map decodeName (extract.model.setOf decodeName graph) graph `term`)
+
+## Get type description (Either version)
+term getTypeDescription = λcx,graph,typ.getDescription cx graph (typeAnnotationInternal typ)
+
+## Check if annotations contain description
+term hasDescription = λanns.optionals.isGiven (maps.lookup constants.keyDescription anns)
+
+## Check if type has description
+term hasTypeDescription = λtyp.hasDescription (typeAnnotationInternal typ)
+
+## For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression.
+term isNativeType =
+  λel.let isFlaggedAsFirstClassType := optionals.withDefault
+        false
+        (optionals.map
+          (λ`_`.true)
+          (getTermAnnotation constants.keyFirstClassType (model.Binding[`term`] el)))
+    in optionals.match
+      (model.Binding[typeScheme] el)
+      false
+      (λts.logic.and
+          (equality.equal
+            ts
+            model.TypeScheme{
+              variables = [],
+              body = model.Type{variable = model.Name{"hydra.core.model.Type"}},
+              constraints = maps.empty})
+          (logic.not isFlaggedAsFirstClassType))
+
+## Normalize term annotations
+term normalizeTermAnnotations =
+  λ`term`.let anns := termAnnotationInternal `term` in
+    let stripped := strip.deannotateTerm `term` in
+    logic.ifElse
+      (maps.isEmpty anns)
+      stripped
+      model.Term{annotated = model.AnnotatedTerm{body = stripped, annotation = wrapAnnotationMap anns}}
+
+## Normalize type annotations
+term normalizeTypeAnnotations =
+  λtyp.let anns := typeAnnotationInternal typ in
+    let stripped := strip.deannotateType typ in
+    logic.ifElse
+      (maps.isEmpty anns)
+      stripped
+      model.Type{annotated = model.AnnotatedType{body = stripped, annotation = wrapAnnotationMap anns}}
+
+## Set annotation in map
+term setAnnotation = λkey,val,m.maps.alter (λ`_`.val) key m
+
+## Set description in annotations
+term setDescription =
+  λd.setAnnotation
+      constants.keyDescription
+      (optionals.map (λ`arg_`.(λx.model.Term{literal = x}) ((λx.model.Literal{`string` = x}) `arg_`)) d)
+
+## Set term annotation
+term setTermAnnotation =
+  λkey,val,`term`.let `term'` := strip.deannotateTerm `term` in
+    let anns := setAnnotation key val (termAnnotationInternal `term`) in
+    logic.ifElse
+      (maps.isEmpty anns)
+      `term'`
+      model.Term{annotated = model.AnnotatedTerm{body = `term'`, annotation = wrapAnnotationMap anns}}
+
+## Set term description
+term setTermDescription =
+  λd.setTermAnnotation
+      constants.keyDescription
+      (optionals.map (λs.model.Term{literal = model.Literal{`string` = s}}) d)
+
+## Set type in annotations
+term setType = λmt.setAnnotation constants.keyType (optionals.map encode.model.type mt)
+
+## Set type annotation
+term setTypeAnnotation =
+  λkey,val,typ.let `typ'` := strip.deannotateType typ in
+    let anns := setAnnotation key val (typeAnnotationInternal typ) in
+    logic.ifElse
+      (maps.isEmpty anns)
+      `typ'`
+      model.Type{annotated = model.AnnotatedType{body = `typ'`, annotation = wrapAnnotationMap anns}}
+
+## Set type classes on term. The Set Name carries bare class identifiers (#275).
+term setTypeClasses =
+  λm,`term`.let encodePair := λnameClasses.let name := pairs.first nameClasses in
+        let classes := pairs.second nameClasses in
+        (encode.model.name name, model.Term{`set` = sets.fromList (lists.map encode.model.name (sets.toList classes))}) in
+    let encoded := logic.ifElse
+        (maps.isEmpty m)
+        none
+        given(model.Term{`map` = maps.fromList (lists.map encodePair (maps.toList m))}) in
+    setTermAnnotation constants.keyClasses encoded `term`
+
+## Set type description
+term setTypeDescription =
+  λd.setTypeAnnotation
+      constants.keyDescription
+      (optionals.map (λ`arg_`.(λx.model.Term{literal = x}) ((λx.model.Literal{`string` = x}) `arg_`)) d)
+
+## Get internal term annotations
+term termAnnotationInternal =
+  λ`term`.let getAnn := λt.cases(model.Term){annotated=λa.given(a), `_`=none} t
+    in aggregateAnnotations
+      getAnn
+      (λat.model.AnnotatedTerm[body] at)
+      (λat.getAnnotationMap (model.AnnotatedTerm[annotation] at))
+      `term`
+
+## Get internal type annotations
+term typeAnnotationInternal =
+  λtyp.let getAnn := λt.cases(model.Type){annotated=λa.given(a), `_`=none} t
+    in aggregateAnnotations
+      getAnn
+      (λat.model.AnnotatedType[body] at)
+      (λat.getAnnotationMap (model.AnnotatedType[annotation] at))
+      typ
+
+## Wrap a Map<Name, Term> as a TermMap annotation. Each Name key becomes a TermVariable.
+term wrapAnnotationMap =
+  λm.model.Term{
+      `map` = maps.fromList
+          (lists.map (λp.(model.Term{variable = pairs.first p}, pairs.second p)) (maps.toList m))}
