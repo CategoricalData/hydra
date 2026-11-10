@@ -1,0 +1,1348 @@
+## Parsers for hydra.core.model types, per docs/specification/syntax.md. The counterpart to hydra.core.print.model.
+module hydra.core.parse.core
+
+import hydra.core.lib.chars as chars
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.equality as equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.literals as literals
+import hydra.core.lib.logic as logic
+import hydra.core.lib.maps as maps
+import hydra.core.lib.math as math
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.ordering as ordering
+import hydra.core.lib.pairs as pairs
+import hydra.core.lib.sets as sets
+import hydra.core.lib.strings as strings
+import hydra.core.model as model
+import hydra.core.parsers as parsers
+import hydra.core.parsing as parsing
+import hydra.core.positions as positions
+import hydra.core.print.model as print.model
+import hydra.core.rewriting as rewriting
+import hydra.core.typing as typing
+
+## Parse a term-level or type-level '@' annotation suffix
+term annot = parsers.bind (lexeme (parsers.char 64:int32)) (λ`_`.postfixTerm)
+
+## Parse a tightest-level term: any construct other than application, annotation, or type application
+term atomicTerm =
+  parsers.choice
+    [
+      parsers.try caseTerm,
+      parsers.try caseSugarTerm,
+      parsers.try doTerm,
+      parsers.try eitherTerm,
+      parsers.try injectTerm,
+      lambdaTerm,
+      parsers.try letTerm,
+      listTerm,
+      parsers.map (λl.model.Term{literal = l}) literalLit,
+      braceContent,
+      parsers.try optionalTerm,
+      parsers.try projectTerm,
+      parsers.try recordTerm,
+      parsers.bind
+        (lexeme (parsers.char 923:int32))
+        (λ`_`.parsers.bind
+            (parsers.sepBy1 binderName (lexeme (parsers.char 44:int32)))
+            (λvs.parsers.bind
+                (lexeme (parsers.char 46:int32))
+                (λ`_`.parsers.map
+                    (λbody.lists.foldl
+                        (λt,v.model.Term{typeLambda = model.TypeLambda{parameter = v, body = t}})
+                        body
+                        (lists.reverse vs))
+                    (parsers.lazy (λ`_`.`term`))))),
+      parsers.try (parsers.bind (termKeyword "unit") (λ`_`.parsers.pure model.Term{`unit`})),
+      parsers.try unwrapTerm,
+      parsers.try wrapTerm,
+      parsers.bind
+        (termKeyword "(")
+        (λ`_`.parsers.bind
+            (parsers.lazy (λ`_`.`term`))
+            (λt1.parsers.alt
+                (parsers.bind
+                  (termKeyword ",")
+                  (λ`_`.parsers.bind
+                      (parsers.lazy (λ`_`.`term`))
+                      (λt2.parsers.bind (termKeyword ")") (λ`_`.parsers.pure model.Term{pair = (t1, t2)}))))
+                (parsers.bind (termKeyword ")") (λ`_`.parsers.pure t1)))),
+      parsers.try braceConstruct,
+      parsers.try bracketEliminate,
+      parsers.map (λn.model.Term{variable = n}) name]
+
+## Parse a backtick-escaped name, applying the string-escape rules to its content
+term backtickedName =
+  lexeme
+    (parsers.bind
+      (parsers.char 96:int32)
+      (λ`_`.parsers.bind
+          (parsers.many
+            (parsers.alt
+              (parsers.try escapedChar)
+              (parsers.satisfy (λc.logic.and (logic.not (equality.equal c 96:int32)) (logic.not (equality.equal c 92:int32))))))
+          (λcs.parsers.bind (parsers.char 96:int32) (λ`_`.parsers.pure (strings.fromList cs)))))
+
+## True iff the codepoint may appear in a bare name segment (alphanumeric, per syntax.md #2.4)
+term bareNameSegmentChar = λc.chars.isAlphaNum c
+
+## Parse a binder-head name: a single dot-free bare segment, or a backtick-escaped name
+term binderName =
+  parsers.map
+    (λs.wrap(model.Name){s})
+    (parsers.alt
+      (lexeme
+        (parsers.bind
+          (parsers.map (λcs.strings.fromList cs) (parsers.some (parsers.satisfy bareNameSegmentChar)))
+          (λs.logic.ifElse
+              (print.model.isReservedWord s)
+              (parsers.fail (strings.concat2 "reserved word used bare: " s))
+              (parsers.pure s))))
+      backtickedName)
+
+## Parse a binding: name [':' '(' typeScheme ')'] ':=' term
+term binding =
+  parsers.bind
+    name
+    (λn.parsers.bind
+        (parsers.optional
+          (parsers.try
+            (parsers.bind
+              (lexeme (parsers.char 58:int32))
+              (λ`_`.parsers.bind
+                  (termKeyword "(")
+                  (λ`_`.parsers.bind typeScheme (λts.parsers.bind (termKeyword ")") (λ`_`.parsers.pure ts)))))))
+        (λmts.parsers.bind
+            (termKeyword ":=")
+            (λ`_`.parsers.map
+                (λt.model.Binding{name = n, `term` = t, typeScheme = mts})
+                (parsers.lazy (λ`_`.`term`)))))
+
+## Parse nominal construction sugar: 'Name{...}' (record/injection fields, or a single wrapped term) (#809)
+term braceConstruct =
+  parsers.bind
+    rawName
+    (λtname.parsers.bind
+        (parsers.char 123:int32)
+        (λ`_`.parsers.bind
+            whitespace
+            (λ`_`.parsers.choice
+                [
+                  parsers.try
+                    (parsers.bind
+                      (parsers.sepBy sugarField (termKeyword ","))
+                      (λflds.parsers.bind
+                          (termKeyword "}")
+                          (λ`_`.parsers.pure model.Term{`record` = model.Record{typeName = tname, fields = flds}}))),
+                  parsers.bind
+                    (parsers.lazy (λ`_`.`term`))
+                    (λt.parsers.bind
+                        (termKeyword "}")
+                        (λ`_`.parsers.pure model.Term{`wrap` = model.WrappedTerm{typeName = tname, body = t}}))])))
+
+## Parse '{' ... '}' as a set or map term, disambiguating by a top-level '=' after the first element
+term braceContent =
+  parsers.bind
+    (termKeyword "{")
+    (λ`_`.parsers.choice
+        [
+          parsers.bind
+            (termKeyword "=")
+            (λ`_`.parsers.bind (termKeyword "}") (λ`_`.parsers.pure model.Term{`map` = maps.fromList []})),
+          parsers.bind (termKeyword "}") (λ`_`.parsers.pure model.Term{`set` = sets.fromList []}),
+          parsers.bind
+            (parsers.lazy (λ`_`.`term`))
+            (λt1.parsers.alt
+                (parsers.bind
+                  (termKeyword "=")
+                  (λ`_`.parsers.bind
+                      (parsers.lazy (λ`_`.`term`))
+                      (λv1.parsers.bind
+                          (parsers.many
+                            (parsers.bind
+                              (termKeyword ",")
+                              (λ`_`.parsers.bind
+                                  (parsers.lazy (λ`_`.`term`))
+                                  (λk.parsers.bind (termKeyword "=") (λ`_`.parsers.map (λv.(k, v)) (parsers.lazy (λ`_`.`term`)))))))
+                          (λrest.parsers.bind
+                              (termKeyword "}")
+                              (λ`_`.parsers.pure model.Term{`map` = maps.fromList (lists.cons (t1, v1) rest)})))))
+                (parsers.bind
+                  (parsers.many (parsers.bind (termKeyword ",") (λ`_`.parsers.lazy (λ`_`.`term`))))
+                  (λrest.parsers.bind (termKeyword "}") (λ`_`.parsers.pure model.Term{`set` = sets.fromList (lists.cons t1 rest)}))))])
+
+## Parse nominal elimination sugar: 'Name[field]' (projection) or 'Name[]' (unwrap) (#809)
+term bracketEliminate =
+  parsers.bind
+    rawName
+    (λtname.parsers.bind
+        (parsers.char 91:int32)
+        (λ`_`.parsers.bind
+            whitespace
+            (λ`_`.parsers.choice
+                [
+                  parsers.bind (termKeyword "]") (λ`_`.parsers.pure model.Term{`unwrap` = tname}),
+                  parsers.bind
+                    name
+                    (λfname.parsers.bind
+                        (termKeyword "]")
+                        (λ`_`.parsers.pure model.Term{`project` = model.Projection{typeName = tname, fieldName = fname}}))])))
+
+## Parse an applied-case branch: 'name [binder] = body' (binder ⇒ λ-handler), or '_ = body' (#809)
+term caseSugarField =
+  parsers.choice
+    [
+      parsers.bind
+        (termKeyword "_")
+        (λ`_`.parsers.bind
+            (termKeyword "=")
+            (λ`_`.parsers.map (λbody.model.Field{name = model.Name{"_"}, `term` = body}) (parsers.lazy (λ`_`.`term`)))),
+      parsers.bind
+        name
+        (λvname.parsers.bind
+            (parsers.optional binderName)
+            (λmbinder.parsers.bind
+                (termKeyword "=")
+                (λ`_`.parsers.map
+                    (λbody.let handler := optionals.match
+                          mbinder
+                          body
+                          (λb.model.Term{
+                              lambda = model.Lambda{
+                                  parameter = b,
+                                  domain = none,
+                                  body = body}})
+                      in model.Field{name = vname, `term` = handler})
+                    (parsers.lazy (λ`_`.`term`)))))]
+
+## Parse applied case sugar: 'case' TypeName scrutinee '{' branches '}', desugaring to an applied cases (#809)
+term caseSugarTerm =
+  parsers.bind
+    (termKeyword "case")
+    (λ`_`.parsers.bind
+        name
+        (λtname.parsers.bind
+            postfixTerm
+            (λscrutinee.parsers.bind
+                (termKeyword "{")
+                (λ`_`.parsers.bind
+                    (parsers.sepBy caseSugarField (termKeyword ","))
+                    (λflds.parsers.bind
+                        (termKeyword "}")
+                        (λ`_`.let isDefault := λf.equality.equal (model.Name[] (model.Field[name] f)) "_" in
+                          let defFields := lists.filter isDefault flds in
+                          let caseFields := lists.filter (λf.logic.not (isDefault f)) flds in
+                          let mdef := optionals.match
+                              (lists.head defFields)
+                              none
+                              (λf.given(model.Field[`term`] f)) in
+                          let alts := lists.map
+                              (λf.model.CaseAlternative{
+                                  name = model.Field[name] f,
+                                  handler = model.Field[`term`] f})
+                              caseFields in
+                          let matcher := model.Term{
+                              `cases` = model.CaseStatement{
+                                  typeName = tname,
+                                  default = mdef,
+                                  `cases` = alts}} in
+                          parsers.pure
+                            model.Term{
+                              application = model.Application{
+                                  function = matcher,
+                                  argument = scrutinee}}))))))
+
+## Parse a case term: 'cases' '(' name ')' termFields, splitting off a trailing '_' default field
+term caseTerm =
+  parsers.bind
+    (parsers.bind
+      (termKeyword "cases")
+      (λ`_`.parsers.bind
+          (termKeyword "(")
+          (λ`_`.parsers.bind name (λn.parsers.bind (termKeyword ")") (λ`_`.parsers.pure n)))))
+    (λtname.parsers.map
+        (λflds.let isDefault := λf.equality.equal (model.Name[] (model.Field[name] f)) "_" in
+          let defFields := lists.filter isDefault flds in
+          let caseFields := lists.filter (λf.logic.not (isDefault f)) flds in
+          let mdef := optionals.match (lists.head defFields) none (λf.given(model.Field[`term`] f)) in
+          let alts := lists.map
+              (λf.model.CaseAlternative{name = model.Field[name] f, handler = model.Field[`term`] f})
+              caseFields in
+          model.Term{`cases` = model.CaseStatement{typeName = tname, default = mdef, `cases` = alts}})
+        (parsers.bind
+          (termKeyword "{")
+          (λ`_`.parsers.bind
+              (parsers.sepBy caseTermField (termKeyword ","))
+              (λflds.parsers.bind (termKeyword "}") (λ`_`.parsers.pure flds)))))
+
+## Parse a raw cases field: '_' '=' term (default handler) or an ordinary term field (#822)
+term caseTermField =
+  parsers.choice
+    [
+      parsers.bind
+        (termKeyword "_")
+        (λ`_`.parsers.bind
+            (termKeyword "=")
+            (λ`_`.parsers.map (λbody.model.Field{name = model.Name{"_"}, `term` = body}) (parsers.lazy (λ`_`.`term`)))),
+      termField]
+
+## Parse a type-class constraint: className typeVariable
+term constraint = parsers.bind name (λcls.parsers.map (λv.(cls, v)) name)
+
+## Parse the digit string of a JSON-grammar number: sign, integer, optional fraction, optional exponent
+term decimalDigits =
+  parsers.bind
+    signedDigits
+    (λintPart.parsers.bind
+        (parsers.optional
+          (parsers.bind (parsers.char 46:int32) (λ`_`.parsers.map (λds.strings.concat2 "." ds) unsignedDigits)))
+        (λmfrac.parsers.bind
+            (parsers.optional
+              (parsers.bind
+                (parsers.satisfy (λc.logic.or (equality.equal c 101:int32) (equality.equal c 69:int32)))
+                (λ`_`.parsers.bind
+                    (parsers.optional
+                      (parsers.satisfy (λc.logic.or (equality.equal c 43:int32) (equality.equal c 45:int32))))
+                    (λmsign.let signStr := optionals.match msign "" (λc.strings.fromList [c])
+                      in parsers.map (λds.strings.concat ["e", signStr, ds]) unsignedDigits))))
+            (λmexp.parsers.pure
+                (strings.concat [intPart, optionals.withDefault "" mfrac, optionals.withDefault "" mexp]))))
+
+## Parse a 'do' clause: 'name := term' (bind) or a bare term (sequence); bare uses binder '_'
+term doClause =
+  parsers.alt
+    (parsers.try
+      (parsers.bind
+        name
+        (λn.parsers.bind (termKeyword ":=") (λ`_`.parsers.map (λe.(n, e)) (parsers.lazy (λ`_`.`term`))))))
+    (parsers.map (λe.(model.Name{"_"}, e)) (parsers.lazy (λ`_`.`term`)))
+
+## Parse a monadic do-block: 'do' tag '{' clause (',' clause)* '}', desugaring to <tag>s.bind chains
+term doTerm =
+  parsers.bind
+    (termKeyword "do")
+    (λ`_`.parsers.bind
+        (parsers.choice
+          [
+            parsers.bind (termKeyword "either") (λ`_`.parsers.pure "hydra.core.lib.eithers.bind"),
+            parsers.bind (termKeyword "list") (λ`_`.parsers.pure "hydra.core.lib.lists.bind"),
+            parsers.bind (termKeyword "optional") (λ`_`.parsers.pure "hydra.core.lib.optionals.bind"),
+            parsers.bind (termKeyword "effect") (λ`_`.parsers.pure "hydra.core.lib.effects.bind")])
+        (λbindName.parsers.bind
+            (termKeyword "{")
+            (λ`_`.parsers.bind
+                (parsers.sepBy1 doClause (termKeyword ","))
+                (λclauses.parsers.bind
+                    (termKeyword "}")
+                    (λ`_`.parsers.pure
+                        (let bindRef := model.Term{variable = wrap(model.Name){bindName}} in
+                        let step := λclause,acc.optionals.match
+                              acc
+                              given(pairs.second clause)
+                              (λk.given(model.Term{
+                                  application = model.Application{
+                                      function = model.Term{
+                                          application = model.Application{
+                                              function = bindRef,
+                                              argument = pairs.second
+                                                  clause}},
+                                      argument = model.Term{
+                                          lambda = model.Lambda{
+                                              parameter = pairs.first
+                                                  clause,
+                                              domain = none,
+                                              body = k}}}})) in
+                        optionals.withDefault model.Term{`unit`} (lists.foldr step none clauses)))))))
+
+## Parse an either term: 'left' '(' term ')' or 'right' '(' term ')'
+term eitherTerm =
+  parsers.choice
+    [
+      parsers.map
+        (λt.model.Term{`either` = left(t)})
+        (parsers.bind
+          (termKeyword "left")
+          (λ`_`.parsers.bind
+              (termKeyword "(")
+              (λ`_`.parsers.bind (parsers.lazy (λ`_`.`term`)) (λt.parsers.bind (termKeyword ")") (λ`_`.parsers.pure t))))),
+      parsers.map
+        (λt.model.Term{`either` = right(t)})
+        (parsers.bind
+          (termKeyword "right")
+          (λ`_`.parsers.bind
+              (termKeyword "(")
+              (λ`_`.parsers.bind (parsers.lazy (λ`_`.`term`)) (λt.parsers.bind (termKeyword ")") (λ`_`.parsers.pure t)))))]
+
+## Parse exactly four hex digits as a 16-bit code unit
+term escapeHex4 =
+  parsers.bind
+    escapeHexDigit
+    (λd1.parsers.bind
+        escapeHexDigit
+        (λd2.parsers.bind
+            escapeHexDigit
+            (λd3.parsers.bind
+                escapeHexDigit
+                (λd4.parsers.pure
+                    (math.add
+                      (math.mul d1 4096:int32)
+                      (math.add (math.mul d2 256:int32) (math.add (math.mul d3 16:int32) d4)))))))
+
+## Parse a single hex digit character, yielding its numeric value (0-15)
+term escapeHexDigit =
+  parsers.bind
+    parsers.anyChar
+    (λc.optionals.match (escapeHexDigitValue c) (parsers.fail "expected a hex digit") (λv.parsers.pure v))
+
+## Compute the numeric value of a hex digit character code (0-15), or Nothing if not a hex digit
+term escapeHexDigitValue =
+  λc.logic.ifElse
+      (logic.and (ordering.gte c 48:int32) (ordering.lte c 57:int32))
+      given(math.sub c 48:int32)
+      (logic.ifElse
+        (logic.and (ordering.gte c 97:int32) (ordering.lte c 102:int32))
+        given(math.add 10:int32 (math.sub c 97:int32))
+        (logic.ifElse
+          (logic.and (ordering.gte c 65:int32) (ordering.lte c 70:int32))
+          given(math.add 10:int32 (math.sub c 65:int32))
+          none))
+
+## Parse a string-escape sequence after the backslash, combining surrogate pairs
+term escapedChar =
+  parsers.bind
+    (parsers.char 92:int32)
+    (λ`_`.parsers.bind
+        (parsers.choice
+          [
+            parsers.map (λ`_`.34:int32) (parsers.char 34:int32),
+            parsers.map (λ`_`.92:int32) (parsers.char 92:int32),
+            parsers.map (λ`_`.47:int32) (parsers.char 47:int32),
+            parsers.map (λ`_`.8:int32) (parsers.char 98:int32),
+            parsers.map (λ`_`.12:int32) (parsers.char 102:int32),
+            parsers.map (λ`_`.10:int32) (parsers.char 110:int32),
+            parsers.map (λ`_`.13:int32) (parsers.char 114:int32),
+            parsers.map (λ`_`.9:int32) (parsers.char 116:int32),
+            parsers.bind (parsers.char 117:int32) (λ`_`.escapeHex4)])
+        (λu1.logic.ifElse
+            ((λc.logic.and (ordering.gte c 55296:int32) (ordering.lte c 56319:int32)) u1)
+            (parsers.bind
+              (parsers.char 92:int32)
+              (λ`_`.parsers.bind
+                  (parsers.char 117:int32)
+                  (λ`_`.parsers.bind
+                      escapeHex4
+                      (λu2.logic.ifElse
+                          ((λc.logic.and (ordering.gte c 56320:int32) (ordering.lte c 57343:int32)) u2)
+                          (parsers.pure
+                            (math.add
+                              65536:int32
+                              (math.add (math.mul (math.sub u1 55296:int32) 1024:int32) (math.sub u2 56320:int32))))
+                          (parsers.fail "invalid low surrogate in escaped surrogate pair")))))
+            (logic.ifElse
+              ((λc.logic.and (ordering.gte c 56320:int32) (ordering.lte c 57343:int32)) u1)
+              (parsers.fail "lone low surrogate in escape sequence")
+              (parsers.pure u1))))
+
+## Parse the ':width' suffix of a float literal and build its FloatValue from the preceding digits/sentinel
+term floatSuffix =
+  λdigits.parsers.bind
+      (parsers.char 58:int32)
+      (λ`_`.parsers.choice
+          [
+            parsers.bind
+              (lexeme (parsers.string "float32"))
+              (λ`_`.optionals.match
+                  (literals.parseFloat32 digits)
+                  (parsers.fail (strings.concat ["invalid ", "float32", " literal: ", digits]))
+                  (λv.parsers.pure model.FloatValue{`float32` = v})),
+            parsers.bind
+              (lexeme (parsers.string "float64"))
+              (λ`_`.optionals.match
+                  (literals.parseFloat64 digits)
+                  (parsers.fail (strings.concat ["invalid ", "float64", " literal: ", digits]))
+                  (λv.parsers.pure model.FloatValue{`float64` = v}))])
+
+## Parse an inject term: 'inject' '(' name ')' '{' name '=' term '}'
+term injectTerm =
+  parsers.bind
+    (parsers.bind
+      (termKeyword "inject")
+      (λ`_`.parsers.bind
+          (termKeyword "(")
+          (λ`_`.parsers.bind name (λn.parsers.bind (termKeyword ")") (λ`_`.parsers.pure n)))))
+    (λtname.parsers.map
+        (λf.model.Term{`inject` = model.Injection{typeName = tname, field = f}})
+        (parsers.bind
+          (termKeyword "{")
+          (λ`_`.parsers.bind
+              name
+              (λfname.parsers.bind
+                  (termKeyword "=")
+                  (λ`_`.parsers.bind
+                      (parsers.lazy (λ`_`.`term`))
+                      (λt.parsers.bind
+                          (termKeyword "}")
+                          (λ`_`.parsers.pure model.Field{name = fname, `term` = t})))))))
+
+## Parse the ':width' suffix of an integer literal and build its IntegerValue from the preceding digits
+term integerSuffix =
+  λdigits.parsers.bind
+      (parsers.char 58:int32)
+      (λ`_`.parsers.choice
+          [
+            parsers.bind
+              (lexeme (parsers.string "bigint"))
+              (λ`_`.optionals.match
+                  (literals.parseBigint digits)
+                  (parsers.fail (strings.concat ["invalid ", "bigint", " literal: ", digits]))
+                  (λv.parsers.pure model.IntegerValue{`bigint` = v})),
+            parsers.bind
+              (lexeme (parsers.string "int8"))
+              (λ`_`.optionals.match
+                  (literals.parseInt8 digits)
+                  (parsers.fail (strings.concat ["invalid ", "int8", " literal: ", digits]))
+                  (λv.parsers.pure model.IntegerValue{`int8` = v})),
+            parsers.bind
+              (lexeme (parsers.string "int16"))
+              (λ`_`.optionals.match
+                  (literals.parseInt16 digits)
+                  (parsers.fail (strings.concat ["invalid ", "int16", " literal: ", digits]))
+                  (λv.parsers.pure model.IntegerValue{`int16` = v})),
+            parsers.bind
+              (lexeme (parsers.string "int32"))
+              (λ`_`.optionals.match
+                  (literals.parseInt32 digits)
+                  (parsers.fail (strings.concat ["invalid ", "int32", " literal: ", digits]))
+                  (λv.parsers.pure model.IntegerValue{`int32` = v})),
+            parsers.bind
+              (lexeme (parsers.string "int64"))
+              (λ`_`.optionals.match
+                  (literals.parseInt64 digits)
+                  (parsers.fail (strings.concat ["invalid ", "int64", " literal: ", digits]))
+                  (λv.parsers.pure model.IntegerValue{`int64` = v})),
+            parsers.bind
+              (lexeme (parsers.string "uint8"))
+              (λ`_`.optionals.match
+                  (literals.parseUint8 digits)
+                  (parsers.fail (strings.concat ["invalid ", "uint8", " literal: ", digits]))
+                  (λv.parsers.pure model.IntegerValue{`uint8` = v})),
+            parsers.bind
+              (lexeme (parsers.string "uint16"))
+              (λ`_`.optionals.match
+                  (literals.parseUint16 digits)
+                  (parsers.fail (strings.concat ["invalid ", "uint16", " literal: ", digits]))
+                  (λv.parsers.pure model.IntegerValue{`uint16` = v})),
+            parsers.bind
+              (lexeme (parsers.string "uint32"))
+              (λ`_`.optionals.match
+                  (literals.parseUint32 digits)
+                  (parsers.fail (strings.concat ["invalid ", "uint32", " literal: ", digits]))
+                  (λv.parsers.pure model.IntegerValue{`uint32` = v})),
+            parsers.bind
+              (lexeme (parsers.string "uint64"))
+              (λ`_`.optionals.match
+                  (literals.parseUint64 digits)
+                  (parsers.fail (strings.concat ["invalid ", "uint64", " literal: ", digits]))
+                  (λv.parsers.pure model.IntegerValue{`uint64` = v}))])
+
+## Parse a lambda term: 'λ' lamBinder (',' lamBinder)* '.' term
+term lambdaTerm =
+  parsers.bind
+    (lexeme (parsers.char 955:int32))
+    (λ`_`.parsers.bind
+        (parsers.sepBy1
+          (parsers.bind
+            binderName
+            (λv.parsers.map (λmt.(v, mt)) (parsers.optional (parsers.bind (lexeme (parsers.char 58:int32)) (λ`_`.`type`)))))
+          (lexeme (parsers.char 44:int32)))
+        (λbinders.parsers.bind
+            (lexeme (parsers.char 46:int32))
+            (λ`_`.parsers.map
+                (λbody.lists.foldl
+                    (λt,b.model.Term{
+                        lambda = model.Lambda{
+                            parameter = pairs.first b,
+                            domain = pairs.second b,
+                            body = t}})
+                    body
+                    (lists.reverse binders))
+                (parsers.lazy (λ`_`.`term`)))))
+
+## Parse a let term: 'let' binding (',' binding)* 'in' term
+term letTerm =
+  parsers.bind
+    (termKeyword "let")
+    (λ`_`.parsers.bind
+        (parsers.sepBy1 binding (termKeyword ","))
+        (λbs.parsers.bind
+            (termKeyword "in")
+            (λ`_`.parsers.map
+                (λbody.model.Term{`let` = model.Let{bindings = bs, body = body}})
+                (parsers.lazy (λ`_`.`term`)))))
+
+## Parse a token followed by optional trailing whitespace/comments, recording where the token itself ended so that source spans exclude the trailing trivia
+term lexeme =
+  λp.parsers.bind p (λx.parsers.bind parsers.markTokenEnd (λ`_`.parsers.bind whitespace (λ`_`.parsers.pure x)))
+
+## Parse a list term: '[' [term (',' term)*] ']'
+term listTerm =
+  parsers.bind
+    (termKeyword "[")
+    (λ`_`.parsers.bind
+        (parsers.sepBy (parsers.lazy (λ`_`.`term`)) (termKeyword ","))
+        (λels.parsers.bind (termKeyword "]") (λ`_`.parsers.pure model.Term{`list` = els})))
+
+## Parse a literal: boolean, numeric, string, or binary
+term literalLit =
+  parsers.choice
+    [
+      parsers.bind (termKeyword "true") (λ`_`.parsers.pure model.Literal{`boolean` = true}),
+      parsers.bind (termKeyword "false") (λ`_`.parsers.pure model.Literal{`boolean` = false}),
+      numericLit,
+      parsers.bind
+        stringLit
+        (λs.parsers.alt
+            (parsers.bind
+              (parsers.char 58:int32)
+              (λ`_`.parsers.bind
+                  (lexeme (parsers.string "binary"))
+                  (λ`_`.parsers.pure model.Literal{`binary` = literals.base64ToBinary s})))
+            (parsers.pure model.Literal{`string` = s}))]
+
+## Parse a literal-type keyword: binary, boolean, decimal, string, an integer width, or a float width
+term literalTypeLit =
+  parsers.choice
+    [
+      parsers.bind (typeKeyword "binary") (λ`_`.parsers.pure model.LiteralType{`binary`}),
+      parsers.bind (typeKeyword "boolean") (λ`_`.parsers.pure model.LiteralType{`boolean`}),
+      parsers.bind (typeKeyword "decimal") (λ`_`.parsers.pure model.LiteralType{`decimal`}),
+      parsers.bind (typeKeyword "string") (λ`_`.parsers.pure model.LiteralType{`string`}),
+      parsers.bind (typeKeyword "bigint") (λ`_`.parsers.pure model.LiteralType{integer = model.IntegerType{`bigint`}}),
+      parsers.bind (typeKeyword "int8") (λ`_`.parsers.pure model.LiteralType{integer = model.IntegerType{`int8`}}),
+      parsers.bind (typeKeyword "int16") (λ`_`.parsers.pure model.LiteralType{integer = model.IntegerType{`int16`}}),
+      parsers.bind (typeKeyword "int32") (λ`_`.parsers.pure model.LiteralType{integer = model.IntegerType{`int32`}}),
+      parsers.bind (typeKeyword "int64") (λ`_`.parsers.pure model.LiteralType{integer = model.IntegerType{`int64`}}),
+      parsers.bind (typeKeyword "uint8") (λ`_`.parsers.pure model.LiteralType{integer = model.IntegerType{`uint8`}}),
+      parsers.bind (typeKeyword "uint16") (λ`_`.parsers.pure model.LiteralType{integer = model.IntegerType{`uint16`}}),
+      parsers.bind (typeKeyword "uint32") (λ`_`.parsers.pure model.LiteralType{integer = model.IntegerType{`uint32`}}),
+      parsers.bind (typeKeyword "uint64") (λ`_`.parsers.pure model.LiteralType{integer = model.IntegerType{`uint64`}}),
+      parsers.bind (typeKeyword "float32") (λ`_`.parsers.pure model.LiteralType{float = model.FloatType{`float32`}}),
+      parsers.bind (typeKeyword "float64") (λ`_`.parsers.pure model.LiteralType{float = model.FloatType{`float64`}})]
+
+## Parse a name: a greedily-read bare dotted name, or a backtick-escaped name
+term name =
+  parsers.map
+    (λs.wrap(model.Name){s})
+    (parsers.alt
+      (lexeme
+        (parsers.bind
+          (parsers.sepBy1
+            (parsers.map (λcs.strings.fromList cs) (parsers.some (parsers.satisfy bareNameSegmentChar)))
+            (parsers.char 46:int32))
+          (λsegs.let s := strings.join "." segs
+            in logic.ifElse
+              (print.model.isReservedWord s)
+              (parsers.fail (strings.concat2 "reserved word used bare: " s))
+              (parsers.pure s))))
+      backtickedName)
+
+## Parse a numeric literal: integer, float, or (unsuffixed) decimal
+term numericLit =
+  parsers.alt
+    (parsers.try
+      (parsers.bind
+        (parsers.choice
+          [lexeme (parsers.string "-Infinity"), lexeme (parsers.string "Infinity"), lexeme (parsers.string "NaN"), decimalDigits])
+        (λdigits.parsers.alt
+            (parsers.try (parsers.map (λiv.model.Literal{integer = iv}) (integerSuffix digits)))
+            (parsers.map (λfv.model.Literal{float = fv}) (floatSuffix digits)))))
+    (lexeme
+      (parsers.bind
+        decimalDigits
+        (λds.optionals.match
+            (literals.parseDecimal ds)
+            (parsers.fail (strings.concat2 "invalid decimal literal: " ds))
+            (λv.parsers.pure model.Literal{`decimal` = v}))))
+
+## Parse an optional term: 'given' '(' term ')' or 'none'
+term optionalTerm =
+  parsers.choice
+    [
+      parsers.bind (termKeyword "none") (λ`_`.parsers.pure model.Term{`optional` = none}),
+      parsers.bind
+        (termKeyword "given")
+        (λ`_`.parsers.bind
+            (termKeyword "(")
+            (λ`_`.parsers.bind
+                (parsers.lazy (λ`_`.`term`))
+                (λt.parsers.bind (termKeyword ")") (λ`_`.parsers.pure model.Term{`optional` = given(t)}))))]
+
+## Parse a complete term from a string, requiring the parse to consume all input
+term parseTerm =
+  λinput.cases(parsing.ParseResult){
+      success=λs.logic.ifElse
+            (lists.isEmpty
+              (parsing.ParseInput[codepoints] (parsing.ParseSuccess[remainder] s)))
+            right(positions.stripSpans (parsing.ParseSuccess[value] s))
+            left("trailing input after term"),
+      failure=λe.left(parsing.ParseError[message] e)}
+      (parsers.runParser (parsers.bind whitespace (λ`_`.`term`)) input)
+
+## Parse a complete term signature from a string, requiring the parse to consume all input
+term parseTermSignature =
+  λinput.cases(parsing.ParseResult){
+      success=λs.logic.ifElse
+            (lists.isEmpty
+              (parsing.ParseInput[codepoints] (parsing.ParseSuccess[remainder] s)))
+            right(parsing.ParseSuccess[value] s)
+            left("trailing input after term signature"),
+      failure=λe.left(parsing.ParseError[message] e)}
+      (parsers.runParser (parsers.bind whitespace (λ`_`.termSignature)) input)
+
+## Parse a complete term from a string, keeping source spans as reserved annotations. Use hydra.core.positions.spanAtPath to resolve a SubtermPath to a span, and hydra.core.positions.stripSpans to recover the span-free term.
+term parseTermWithSpans =
+  λinput.cases(parsing.ParseResult){
+      success=λs.logic.ifElse
+            (lists.isEmpty
+              (parsing.ParseInput[codepoints] (parsing.ParseSuccess[remainder] s)))
+            right(parsing.ParseSuccess[value] s)
+            left("trailing input after term"),
+      failure=λe.left(parsing.ParseError[message] e)}
+      (parsers.runParser (parsers.bind whitespace (λ`_`.`term`)) input)
+
+## Parse a complete type from a string, requiring the parse to consume all input
+term parseType =
+  λinput.cases(parsing.ParseResult){
+      success=λs.logic.ifElse
+            (lists.isEmpty
+              (parsing.ParseInput[codepoints] (parsing.ParseSuccess[remainder] s)))
+            right(stripSpansInType (parsing.ParseSuccess[value] s))
+            left("trailing input after type"),
+      failure=λe.left(parsing.ParseError[message] e)}
+      (parsers.runParser (parsers.bind whitespace (λ`_`.`type`)) input)
+
+## Parse a complete type scheme from a string, requiring the parse to consume all input
+term parseTypeScheme =
+  λinput.cases(parsing.ParseResult){
+      success=λs.logic.ifElse
+            (lists.isEmpty
+              (parsing.ParseInput[codepoints] (parsing.ParseSuccess[remainder] s)))
+            right(parsing.ParseSuccess[value] s)
+            left("trailing input after type scheme"),
+      failure=λe.left(parsing.ParseError[message] e)}
+      (parsers.runParser (parsers.bind whitespace (λ`_`.typeScheme)) input)
+
+## Parse an atomic term followed by zero or more postfix '@annotation'/'⟨type⟩' suffixes, left-chaining
+term postfixTerm =
+  parsers.map
+    (λspanned.positions.annotateSpan (pairs.second spanned) (pairs.first spanned))
+    (parsers.spanned
+      (parsers.bind
+        atomicTerm
+        (λt0.parsers.map
+            (λsufs.lists.foldl
+                (λt,suf.eithers.either
+                    (λann.model.Term{annotated = model.AnnotatedTerm{body = t, annotation = ann}})
+                    (λtyp.model.Term{typeApplication = model.TypeApplicationTerm{body = t, `type` = typ}})
+                    suf)
+                t0
+                sufs)
+            (parsers.many
+              (parsers.alt
+                (parsers.map (λ`left_`.left(`left_`)) annot)
+                (parsers.map (λ`right_`.right(`right_`)) typeApplicationSuffix))))))
+
+## Parse an atomic type followed by zero or more trailing '@annotation' suffixes
+term postfixType =
+  parsers.bind
+    typeAtom
+    (λt0.parsers.map
+        (λanns.lists.foldl (λt,ann.model.Type{annotated = model.AnnotatedType{body = t, annotation = ann}}) t0 anns)
+        (parsers.many annot))
+
+## Parse a project term: 'project' '(' name ')' '{' name '}'
+term projectTerm =
+  parsers.bind
+    (parsers.bind
+      (termKeyword "project")
+      (λ`_`.parsers.bind
+          (termKeyword "(")
+          (λ`_`.parsers.bind name (λn.parsers.bind (termKeyword ")") (λ`_`.parsers.pure n)))))
+    (λtname.parsers.bind
+        (termKeyword "{")
+        (λ`_`.parsers.bind
+            name
+            (λfname.parsers.bind
+                (termKeyword "}")
+                (λ`_`.parsers.pure model.Term{`project` = model.Projection{typeName = tname, fieldName = fname}}))))
+
+## Parse a name without consuming trailing whitespace, for nominal-sugar delimiter adjacency (#809)
+term rawName =
+  parsers.map
+    (λs.wrap(model.Name){s})
+    (parsers.alt
+      (parsers.bind
+        (parsers.sepBy1
+          (parsers.map (λcs.strings.fromList cs) (parsers.some (parsers.satisfy bareNameSegmentChar)))
+          (parsers.char 46:int32))
+        (λsegs.let s := strings.join "." segs
+          in logic.ifElse
+            (print.model.isReservedWord s)
+            (parsers.fail (strings.concat2 "reserved word used bare: " s))
+            (parsers.pure s)))
+      (parsers.bind
+        (parsers.char 96:int32)
+        (λ`_`.parsers.bind
+            (parsers.many
+              (parsers.alt
+                (parsers.try escapedChar)
+                (parsers.satisfy (λc.logic.and (logic.not (equality.equal c 96:int32)) (logic.not (equality.equal c 92:int32))))))
+            (λcs.parsers.bind (parsers.char 96:int32) (λ`_`.parsers.pure (strings.fromList cs))))))
+
+## Parse a record term: 'record' '(' name ')' '{' [termField (',' termField)*] '}'
+term recordTerm =
+  parsers.bind
+    (parsers.bind
+      (termKeyword "record")
+      (λ`_`.parsers.bind
+          (termKeyword "(")
+          (λ`_`.parsers.bind name (λn.parsers.bind (termKeyword ")") (λ`_`.parsers.pure n)))))
+    (λtname.parsers.map (λflds.model.Term{`record` = model.Record{typeName = tname, fields = flds}}) termFields)
+
+## Parse an optional leading '-' followed by one or more decimal digits
+term signedDigits =
+  parsers.bind
+    (parsers.optional (parsers.char 45:int32))
+    (λmsign.parsers.map (λds.optionals.match msign ds (λ`_`.strings.concat2 "-" ds)) unsignedDigits)
+
+## Parse a JSON-syntax string literal
+term stringLit =
+  lexeme
+    (parsers.bind
+      (parsers.char 34:int32)
+      (λ`_`.parsers.bind
+          (parsers.many
+            (parsers.alt
+              (parsers.try escapedChar)
+              (parsers.satisfy (λc.logic.and (logic.not (equality.equal c 34:int32)) (logic.not (equality.equal c 92:int32))))))
+          (λcs.parsers.bind (parsers.char 34:int32) (λ`_`.parsers.pure (strings.fromList cs)))))
+
+## Remove every span annotation from a type's own annotation payloads
+term stripSpansInType =
+  λtyp.let remove := λrecurse,typ.let rewritten := recurse typ
+        in cases(model.Type){
+          annotated=λat.model.Type{
+                annotated = model.AnnotatedType{
+                    body = model.AnnotatedType[body]
+                        at,
+                    annotation = positions.stripSpans
+                        (model.AnnotatedType[annotation]
+                          at)}},
+          `_`=rewritten}
+          rewritten
+    in rewriting.rewriteType remove typ
+
+## Parse a sugar field: 'name = term', or a bare 'name' abbreviating 'name = unit' (#809)
+term sugarField =
+  parsers.bind
+    name
+    (λfname.parsers.alt
+        (parsers.bind
+          (termKeyword "=")
+          (λ`_`.parsers.map (λt.model.Field{name = fname, `term` = t}) (parsers.lazy (λ`_`.`term`))))
+        (parsers.pure model.Field{name = fname, `term` = model.Term{`unit`}}))
+
+## Parse a full term: application of postfix-level terms
+term term =
+  parsers.bind
+    postfixTerm
+    (λt0.parsers.map
+        (λrest.lists.foldl
+            (λf,a.positions.annotateApplicationSpan
+                f
+                a
+                model.Term{application = model.Application{function = f, argument = a}})
+            t0
+            rest)
+        (parsers.many postfixTerm))
+
+## Parse a single term field: name '=' term
+term termField =
+  parsers.bind
+    name
+    (λfname.parsers.bind
+        (termKeyword "=")
+        (λ`_`.parsers.map (λt.model.Field{name = fname, `term` = t}) (parsers.lazy (λ`_`.`term`))))
+
+## Parse a brace-delimited, comma-separated list of term fields (possibly empty)
+term termFields =
+  parsers.bind
+    (termKeyword "{")
+    (λ`_`.parsers.bind
+        (parsers.sepBy termField (termKeyword ","))
+        (λflds.parsers.bind (termKeyword "}") (λ`_`.parsers.pure flds)))
+
+## Parse a specific keyword, followed by optional trailing whitespace/comments
+term termKeyword = λkw.lexeme (parsers.string kw)
+
+## Parse a term signature: either '∀' [binderName (',' binderName)*] '.' [constraints '⇒'] arrow chain, or (when there are no type variables) a bare arrow chain with no '∀.' header at all
+term termSignature =
+  parsers.alt
+    (parsers.bind
+      (lexeme (parsers.char 8704:int32))
+      (λ`_`.parsers.bind
+          (parsers.sepBy binderName (lexeme (parsers.char 44:int32)))
+          (λvars.parsers.bind
+              (lexeme (parsers.char 46:int32))
+              (λ`_`.parsers.bind
+                  (parsers.optional
+                    (parsers.try
+                      (parsers.bind
+                        (termKeyword "(")
+                        (λ`_`.parsers.bind
+                            (parsers.sepBy1 constraint (termKeyword ","))
+                            (λcs.parsers.bind
+                                (termKeyword ")")
+                                (λ`_`.parsers.bind (lexeme (parsers.char 8658:int32)) (λ`_`.parsers.pure cs)))))))
+                  (λmcs.(λvars,mcs.let typeParams := lists.map
+                          (λv.typing.TypeParameter{
+                              name = v,
+                              constraints = optionals.withDefault
+                                  []
+                                  (maps.lookup
+                                    v
+                                    (maps.fromList
+                                      (lists.map
+                                        (λp.(pairs.second p, [model.TypeClassConstraint{simple = pairs.first p}]))
+                                        (optionals.withDefault [] mcs))))})
+                          vars
+                      in parsers.map
+                        (λchain.let fwdParams := pairs.first chain in
+                          let resultType := pairs.second chain in
+                          let params := lists.reverse
+                              (pairs.first
+                                (lists.foldl
+                                  (λacc,item.let pairAcc := pairs.first acc in
+                                    let i := pairs.second acc in
+                                    (
+                                      lists.cons
+                                        typing.Parameter{
+                                          name = model.Name{strings.concat ["arg", literals.printInt32 i]},
+                                          description = none,
+                                          `type` = pairs.second item,
+                                          isLazy = pairs.first item}
+                                        pairAcc,
+                                      math.add i 1:int32))
+                                  ([], 0:int32)
+                                  fwdParams)) in
+                          let result := typing.Result{description = none, `type` = resultType} in
+                          typing.TermSignature{
+                            typeParameters = typeParams,
+                            parameters = params,
+                            result = result})
+                        termSignatureArrowChain)
+                      vars
+                      mcs)))))
+    ((λvars,mcs.let typeParams := lists.map
+          (λv.typing.TypeParameter{
+              name = v,
+              constraints = optionals.withDefault
+                  []
+                  (maps.lookup
+                    v
+                    (maps.fromList
+                      (lists.map
+                        (λp.(pairs.second p, [model.TypeClassConstraint{simple = pairs.first p}]))
+                        (optionals.withDefault [] mcs))))})
+          vars
+      in parsers.map
+        (λchain.let fwdParams := pairs.first chain in
+          let resultType := pairs.second chain in
+          let params := lists.reverse
+              (pairs.first
+                (lists.foldl
+                  (λacc,item.let pairAcc := pairs.first acc in
+                    let i := pairs.second acc in
+                    (
+                      lists.cons
+                        typing.Parameter{
+                          name = model.Name{strings.concat ["arg", literals.printInt32 i]},
+                          description = none,
+                          `type` = pairs.second item,
+                          isLazy = pairs.first item}
+                        pairAcc,
+                      math.add i 1:int32))
+                  ([], 0:int32)
+                  fwdParams)) in
+          let result := typing.Result{description = none, `type` = resultType} in
+          typing.TermSignature{typeParameters = typeParams, parameters = params, result = result})
+        termSignatureArrowChain)
+      []
+      none)
+
+## Parse the arrow chain of a term signature, gathering (isLazy, type) parameter pairs alongside the final result type
+term termSignatureArrowChain =
+  parsers.bind
+    (parsers.bind
+      (parsers.optional (typeKeyword "lazy"))
+      (λmlazy.parsers.map
+          (λt.(optionals.isGiven mlazy, t))
+          (parsers.bind
+            postfixType
+            (λt0.parsers.map
+                (λrest.lists.foldl
+                    (λf,a.model.Type{application = model.ApplicationType{function = f, argument = a}})
+                    t0
+                    rest)
+                (parsers.many postfixType)))))
+    (λdom.parsers.alt
+        (parsers.bind
+          (lexeme (parsers.char 8594:int32))
+          (λ`_`.parsers.map
+              (λrest.(lists.cons dom (pairs.first rest), pairs.second rest))
+              (parsers.lazy (λ`_`.termSignatureArrowChain))))
+        (parsers.pure ([], pairs.second dom)))
+
+## Parse a term at postfix precedence (an atomic term plus its postfix suffixes)
+term topTerm = postfixTerm
+
+## Parse a type at function-arrow precedence (the full type grammar)
+term topType = typeFunction
+
+## Parse a full type
+term type = typeFunction
+
+## Parse a term-level type-application suffix: '⟨' type '⟩'
+term typeApplicationSuffix =
+  parsers.bind
+    (lexeme (parsers.char 10216:int32))
+    (λ`_`.parsers.bind
+        (parsers.lazy (λ`_`.`type`))
+        (λt.parsers.bind (lexeme (parsers.char 10217:int32)) (λ`_`.parsers.pure t)))
+
+## Parse a tightest-level type: any construct other than application, annotation, or function
+term typeAtom =
+  parsers.choice
+    [
+      parsers.map (λlt.model.Type{literal = lt}) literalTypeLit,
+      parsers.bind
+        (typeKeyword "effect")
+        (λ`_`.parsers.map
+            (λt.model.Type{`effect` = t})
+            (parsers.bind
+              (typeKeyword "<")
+              (λ`_`.parsers.bind (parsers.lazy (λ`_`.`type`)) (λt.parsers.bind (typeKeyword ">") (λ`_`.parsers.pure t))))),
+      parsers.bind
+        (typeKeyword "either")
+        (λ`_`.parsers.bind
+            (typeKeyword "<")
+            (λ`_`.parsers.bind
+                (parsers.lazy (λ`_`.`type`))
+                (λl.parsers.bind
+                    (typeKeyword ",")
+                    (λ`_`.parsers.bind
+                        (parsers.lazy (λ`_`.`type`))
+                        (λr.parsers.bind
+                            (typeKeyword ">")
+                            (λ`_`.parsers.pure model.Type{`either` = model.EitherType{`left` = l, `right` = r}})))))),
+      parsers.bind
+        (typeKeyword "forall")
+        (λ`_`.parsers.bind
+            (parsers.sepBy1 binderName (typeKeyword ","))
+            (λvs.parsers.bind
+                (typeKeyword ".")
+                (λ`_`.parsers.map
+                    (λbody.lists.foldl
+                        (λt,v.model.Type{`forall` = model.ForallType{parameter = v, body = t}})
+                        body
+                        (lists.reverse vs))
+                    (parsers.lazy (λ`_`.`type`))))),
+      parsers.bind
+        (typeKeyword "list")
+        (λ`_`.parsers.map
+            (λt.model.Type{`list` = t})
+            (parsers.bind
+              (typeKeyword "<")
+              (λ`_`.parsers.bind (parsers.lazy (λ`_`.`type`)) (λt.parsers.bind (typeKeyword ">") (λ`_`.parsers.pure t))))),
+      parsers.bind
+        (typeKeyword "map")
+        (λ`_`.parsers.bind
+            (typeKeyword "<")
+            (λ`_`.parsers.bind
+                (parsers.lazy (λ`_`.`type`))
+                (λk.parsers.bind
+                    (typeKeyword ",")
+                    (λ`_`.parsers.bind
+                        (parsers.lazy (λ`_`.`type`))
+                        (λv.parsers.bind
+                            (typeKeyword ">")
+                            (λ`_`.parsers.pure model.Type{`map` = model.MapType{keys = k, values = v}})))))),
+      parsers.bind
+        (typeKeyword "optional")
+        (λ`_`.parsers.map
+            (λt.model.Type{`optional` = t})
+            (parsers.bind
+              (typeKeyword "<")
+              (λ`_`.parsers.bind (parsers.lazy (λ`_`.`type`)) (λt.parsers.bind (typeKeyword ">") (λ`_`.parsers.pure t))))),
+      parsers.bind
+        (typeKeyword "record")
+        (λ`_`.parsers.map
+            (λflds.model.Type{`record` = flds})
+            (parsers.bind
+              ((λkw.parsers.bind
+                  (parsers.string kw)
+                  (λ`_`.parsers.bind
+                      (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.chars.isSpace c))))
+                      (λ`_`.parsers.pure kw)))
+                "{")
+              (λ`_`.parsers.bind
+                  (parsers.sepBy
+                    (parsers.bind
+                      (parsers.optional
+                        (parsers.bind
+                          (parsers.char 35:int32)
+                          (λ`_`.parsers.bind
+                              (parsers.char 35:int32)
+                              (λ`_`.parsers.bind
+                                  (parsers.optional (parsers.char 32:int32))
+                                  (λ`_`.parsers.bind
+                                      (parsers.map
+                                        (λcs.strings.fromList cs)
+                                        (parsers.many (parsers.satisfy (λc.logic.not (equality.equal c 10:int32)))))
+                                      (λs.parsers.bind
+                                          (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.chars.isSpace c))))
+                                          (λ`_`.parsers.pure s)))))))
+                      (λmdesc.parsers.bind
+                          name
+                          (λfname.parsers.bind
+                              ((λkw.parsers.bind
+                                  (parsers.string kw)
+                                  (λ`_`.parsers.bind
+                                      (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.chars.isSpace c))))
+                                      (λ`_`.parsers.pure kw)))
+                                ":")
+                              (λ`_`.parsers.map
+                                  (λt.model.FieldType{
+                                      name = fname,
+                                      `type` = (λmdesc,t.optionals.match
+                                            mdesc
+                                            t
+                                            (λd.model.Type{
+                                                annotated = model.AnnotatedType{
+                                                    body = t,
+                                                    annotation = model.Term{
+                                                        `map` = maps.fromList
+                                                            [(model.Term{variable = model.Name{"description"}}, model.Term{literal = model.Literal{`string` = d}})]}}}))
+                                          mdesc
+                                          t})
+                                  (parsers.lazy (λ`_`.`type`))))))
+                    ((λkw.parsers.bind
+                        (parsers.string kw)
+                        (λ`_`.parsers.bind
+                            (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.chars.isSpace c))))
+                            (λ`_`.parsers.pure kw)))
+                      ","))
+                  (λflds.parsers.bind
+                      ((λkw.parsers.bind
+                          (parsers.string kw)
+                          (λ`_`.parsers.bind
+                              (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.chars.isSpace c))))
+                              (λ`_`.parsers.pure kw)))
+                        "}")
+                      (λ`_`.parsers.pure flds))))),
+      parsers.bind
+        (typeKeyword "set")
+        (λ`_`.parsers.map
+            (λt.model.Type{`set` = t})
+            (parsers.bind
+              (typeKeyword "<")
+              (λ`_`.parsers.bind (parsers.lazy (λ`_`.`type`)) (λt.parsers.bind (typeKeyword ">") (λ`_`.parsers.pure t))))),
+      parsers.bind
+        (typeKeyword "union")
+        (λ`_`.parsers.map
+            (λflds.model.Type{`union` = flds})
+            (parsers.bind
+              ((λkw.parsers.bind
+                  (parsers.string kw)
+                  (λ`_`.parsers.bind
+                      (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.chars.isSpace c))))
+                      (λ`_`.parsers.pure kw)))
+                "{")
+              (λ`_`.parsers.bind
+                  (parsers.sepBy
+                    (parsers.bind
+                      (parsers.optional
+                        (parsers.bind
+                          (parsers.char 35:int32)
+                          (λ`_`.parsers.bind
+                              (parsers.char 35:int32)
+                              (λ`_`.parsers.bind
+                                  (parsers.optional (parsers.char 32:int32))
+                                  (λ`_`.parsers.bind
+                                      (parsers.map
+                                        (λcs.strings.fromList cs)
+                                        (parsers.many (parsers.satisfy (λc.logic.not (equality.equal c 10:int32)))))
+                                      (λs.parsers.bind
+                                          (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.chars.isSpace c))))
+                                          (λ`_`.parsers.pure s)))))))
+                      (λmdesc.parsers.bind
+                          name
+                          (λfname.parsers.bind
+                              ((λkw.parsers.bind
+                                  (parsers.string kw)
+                                  (λ`_`.parsers.bind
+                                      (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.chars.isSpace c))))
+                                      (λ`_`.parsers.pure kw)))
+                                ":")
+                              (λ`_`.parsers.map
+                                  (λt.model.FieldType{
+                                      name = fname,
+                                      `type` = (λmdesc,t.optionals.match
+                                            mdesc
+                                            t
+                                            (λd.model.Type{
+                                                annotated = model.AnnotatedType{
+                                                    body = t,
+                                                    annotation = model.Term{
+                                                        `map` = maps.fromList
+                                                            [(model.Term{variable = model.Name{"description"}}, model.Term{literal = model.Literal{`string` = d}})]}}}))
+                                          mdesc
+                                          t})
+                                  (parsers.lazy (λ`_`.`type`))))))
+                    ((λkw.parsers.bind
+                        (parsers.string kw)
+                        (λ`_`.parsers.bind
+                            (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.chars.isSpace c))))
+                            (λ`_`.parsers.pure kw)))
+                      ","))
+                  (λflds.parsers.bind
+                      ((λkw.parsers.bind
+                          (parsers.string kw)
+                          (λ`_`.parsers.bind
+                              (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.chars.isSpace c))))
+                              (λ`_`.parsers.pure kw)))
+                        "}")
+                      (λ`_`.parsers.pure flds))))),
+      parsers.bind (typeKeyword "unit") (λ`_`.parsers.pure model.Type{`unit`}),
+      parsers.bind (typeKeyword "void") (λ`_`.parsers.pure model.Type{`void`}),
+      parsers.bind
+        (typeKeyword "wrap")
+        (λ`_`.parsers.bind
+            (typeKeyword "(")
+            (λ`_`.parsers.bind
+                (parsers.lazy (λ`_`.`type`))
+                (λt.parsers.bind (typeKeyword ")") (λ`_`.parsers.pure model.Type{`wrap` = t})))),
+      parsers.bind
+        (typeKeyword "(")
+        (λ`_`.parsers.bind
+            (parsers.lazy (λ`_`.`type`))
+            (λt1.parsers.alt
+                (parsers.bind
+                  (typeKeyword ",")
+                  (λ`_`.parsers.bind
+                      (parsers.lazy (λ`_`.`type`))
+                      (λt2.parsers.bind
+                          (typeKeyword ")")
+                          (λ`_`.parsers.pure model.Type{pair = model.PairType{first = t1, second = t2}}))))
+                (parsers.bind (typeKeyword ")") (λ`_`.parsers.pure t1)))),
+      parsers.map (λn.model.Type{variable = n}) name]
+
+## Parse a function type: application-level type, optionally followed by '→' and a recursive right side
+term typeFunction =
+  parsers.bind
+    (parsers.bind
+      postfixType
+      (λt0.parsers.map
+          (λrest.lists.foldl (λf,a.model.Type{application = model.ApplicationType{function = f, argument = a}}) t0 rest)
+          (parsers.many postfixType)))
+    (λdom.parsers.alt
+        (parsers.bind
+          (lexeme (parsers.char 8594:int32))
+          (λ`_`.parsers.map
+              (λcod.(λd,c.model.Type{function = model.FunctionType{domain = d, codomain = c}}) dom cod)
+              (parsers.lazy (λ`_`.typeFunction))))
+        (parsers.pure dom))
+
+## Parse a specific keyword, followed by optional trailing whitespace/comments (type-grammar alias of termKeyword)
+term typeKeyword = λkw.termKeyword kw
+
+## Parse a type scheme: '∀' [binderName (',' binderName)*] '.' [constraints '⇒'] type, or a bare type with no '∀.' header when there are no type variables
+term typeScheme =
+  parsers.alt
+    (parsers.bind
+      (lexeme (parsers.char 8704:int32))
+      (λ`_`.parsers.bind
+          (parsers.sepBy binderName (lexeme (parsers.char 44:int32)))
+          (λvars.parsers.bind
+              (lexeme (parsers.char 46:int32))
+              (λ`_`.parsers.bind
+                  (parsers.optional
+                    (parsers.try
+                      (parsers.bind
+                        (termKeyword "(")
+                        (λ`_`.parsers.bind
+                            (parsers.sepBy1 constraint (termKeyword ","))
+                            (λcs.parsers.bind
+                                (termKeyword ")")
+                                (λ`_`.parsers.bind (lexeme (parsers.char 8658:int32)) (λ`_`.parsers.pure cs)))))))
+                  (λmcs.parsers.map
+                      (λbody.model.TypeScheme{
+                          variables = vars,
+                          body = body,
+                          constraints = maps.fromList
+                              (lists.map
+                                (λp.(
+                                    pairs.second p,
+                                    model.TypeVariableConstraints{classes = sets.fromList [model.TypeClassConstraint{simple = pairs.first p}]}))
+                                (optionals.withDefault [] mcs))})
+                      (parsers.lazy (λ`_`.`type`)))))))
+    (parsers.map
+      (λbody.model.TypeScheme{variables = [], body = body, constraints = maps.empty})
+      (parsers.lazy (λ`_`.`type`)))
+
+## Parse one or more decimal digits
+term unsignedDigits =
+  parsers.map
+    (λcs.strings.fromList cs)
+    (parsers.some (parsers.satisfy (λc.logic.and (ordering.gte c 48:int32) (ordering.lte c 57:int32))))
+
+## Parse an unwrap term: 'unwrap' '(' name ')'
+term unwrapTerm =
+  parsers.map
+    (λn.model.Term{`unwrap` = n})
+    (parsers.bind
+      (termKeyword "unwrap")
+      (λ`_`.parsers.bind
+          (termKeyword "(")
+          (λ`_`.parsers.bind name (λn.parsers.bind (termKeyword ")") (λ`_`.parsers.pure n)))))
+
+## Skip zero or more whitespace characters and ordinary (non-'##') '#' line comments
+term whitespace =
+  parsers.map
+    (λ`_`.unit)
+    (parsers.many
+      (parsers.alt
+        (parsers.map (λ`_`.unit) (parsers.satisfy (λc.chars.isSpace c)))
+        (parsers.try
+          (parsers.bind
+            (parsers.char 35:int32)
+            (λ`_`.parsers.bind
+                (parsers.alt parsers.eof (parsers.map (λ`_`.unit) (parsers.satisfy (λc.logic.not (equality.equal c 35:int32)))))
+                (λ`_`.parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.logic.not (equality.equal c 10:int32))))))))))
+
+## Parse a wrap term: 'wrap' '(' name ')' '{' term '}'
+term wrapTerm =
+  parsers.bind
+    (parsers.bind
+      (termKeyword "wrap")
+      (λ`_`.parsers.bind
+          (termKeyword "(")
+          (λ`_`.parsers.bind name (λn.parsers.bind (termKeyword ")") (λ`_`.parsers.pure n)))))
+    (λtname.parsers.bind
+        (termKeyword "{")
+        (λ`_`.parsers.bind
+            (parsers.lazy (λ`_`.`term`))
+            (λt.parsers.bind
+                (termKeyword "}")
+                (λ`_`.parsers.pure model.Term{`wrap` = model.WrappedTerm{typeName = tname, body = t}}))))

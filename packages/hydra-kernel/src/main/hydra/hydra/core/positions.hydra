@@ -1,0 +1,241 @@
+## Source positions: reserved span annotations on parsed terms, resolution of a SubtermPath to a span, and conversion of codepoint offsets to (line, column) positions.
+module hydra.core.positions
+
+import hydra.core.annotations as annotations
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.equality as equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.logic as logic
+import hydra.core.lib.maps as maps
+import hydra.core.lib.math as math
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.ordering as ordering
+import hydra.core.lib.pairs as pairs
+import hydra.core.lib.strings as strings
+import hydra.core.model as model
+import hydra.core.parsing as parsing
+import hydra.core.paths as paths
+import hydra.core.rewriting as rewriting
+
+## Annotate an application term with the span running from the start of its function to the end of its argument, when both have spans; otherwise leave it unannotated
+term annotateApplicationSpan =
+  λfunction,argument,application.optionals.match
+      (termSpan function)
+      application
+      (λfs.optionals.match
+          (termSpan argument)
+          application
+          (λ`as`.annotateSpan
+              parsing.SourceSpan{
+                start = parsing.SourceSpan[start] fs,
+                end = parsing.SourceSpan[end] `as`}
+              application))
+
+## Wrap a term in a layer whose only annotation is the reserved span key. This is surface trivia, like comments: it is exempt from the round-trip contract and is removed by stripSpans.
+term annotateSpan =
+  λspan,`term`.model.Term{
+      annotated = model.AnnotatedTerm{
+          body = `term`,
+          annotation = annotations.wrapAnnotationMap
+              (maps.singleton keySourceSpan (spanToTerm span))}}
+
+## Reserved annotation key for source spans recorded by the textual parser
+term keySourceSpan = model.Name{"sourceSpan"}
+
+## Convert a codepoint offset within a text into a zero-based line and a zero-based column counted in UTF-16 code units (the Language Server Protocol's convention). Lines end at LF, CR, or CR LF; an offset beyond the end of the text is clamped to the end.
+term offsetToPosition =
+  λtext,offset.let all := strings.toList text in
+    let cps := lists.take offset all in
+    let nexts := lists.concat2 (lists.drop 1:int32 all) [0:int32] in
+    let step := λacc,cn.let c := pairs.first cn in
+        let next := pairs.second cn in
+        let line := pairs.first acc in
+        let col := pairs.second acc in
+        let newline := logic.or
+            (equality.equal c 10:int32)
+            (logic.and
+              (equality.equal c 13:int32)
+              (logic.not (equality.equal next 10:int32))) in
+        let width := logic.ifElse (ordering.gte c 65536:int32) 2:int32 1:int32 in
+        logic.ifElse newline (math.add line 1:int32, 0:int32) (line, math.add col width) in
+    let end := lists.foldl step (0:int32, 0:int32) (lists.zip cps nexts) in
+    parsing.SourcePosition{line = pairs.first end, column = pairs.second end}
+
+## Remove span-only annotation layers from the top of a term, leaving the term itself
+term peelSpans = λ`term`.optionals.match (spanLayer `term`) `term` (λlayer.peelSpans (pairs.second layer))
+
+## Resolve a subterm path (as carried by type-checking errors, computed on the span-free term) against a span-annotated term, returning the span of the node it reaches. If the node itself has no span, the span of its nearest enclosing node that has one is returned; if the path cannot be followed, the span of the last node reached.
+term spanAtPath = λpath,`term`.spanAtSteps (paths.SubtermPath[] path) `term`
+
+## Resolve a list of subterm steps against a span-annotated term; see spanAtPath
+term spanAtSteps =
+  λsteps,`term`.let outer := termSpan `term`
+    in optionals.match
+      (lists.uncons steps)
+      outer
+      (λuc.optionals.match
+          (subtermAtStep (pairs.first uc) (peelSpans `term`))
+          outer
+          (λchild.optionals.match (spanAtSteps (pairs.second uc) child) outer (λfound.given(found))))
+
+## Decode a span from its annotation value, a pair of int32 literals (start, end)
+term spanFromTerm =
+  λ`term`.let int32Of := λt.cases(model.Term){
+          literal=λl.cases(model.Literal){
+                integer=λi.cases(model.IntegerValue){
+                      `int32`=λn.given(n),
+                      `_`=none}
+                      i,
+                `_`=none}
+                l,
+          `_`=none}
+          t
+    in cases(model.Term){
+      pair=λp.optionals.bind
+            (int32Of (pairs.first p))
+            (λs.optionals.map
+                (λe.parsing.SourceSpan{start = s, end = e})
+                (int32Of (pairs.second p))),
+      `_`=none}
+      `term`
+
+## If a term is a span-only annotation layer (see annotateSpan), return its span and the term it wraps
+term spanLayer =
+  λ`term`.cases(model.Term){
+      annotated=λat.let anns := annotations.getAnnotationMap (model.AnnotatedTerm[annotation] at)
+          in logic.ifElse
+            (equality.equal (maps.size anns) 1:int32)
+            (optionals.bind
+              (maps.lookup keySourceSpan anns)
+              (λv.optionals.map (λsp.(sp, model.AnnotatedTerm[body] at)) (spanFromTerm v)))
+            none,
+      `_`=none}
+      `term`
+
+## Encode a span as an annotation value: a pair of int32 literals (start, end)
+term spanToTerm =
+  λspan.let int32Term := λn.model.Term{literal = model.Literal{integer = model.IntegerValue{`int32` = n}}}
+    in model.Term{pair = (int32Term (parsing.SourceSpan[start] span), int32Term (parsing.SourceSpan[end] span))}
+
+## Remove every span-only annotation layer from a term, including those inside user annotation payloads. Applied to a freshly parsed term, this yields exactly the term that parsing without spans produces.
+term stripSpans =
+  λ`term`.rewriting.rewriteTerm
+      (λrecurse,t.optionals.match
+          (spanLayer t)
+          (cases(model.Term){
+            annotated=λat.model.Term{
+                  annotated = model.AnnotatedTerm{
+                      body = stripSpans
+                          (model.AnnotatedTerm[body]
+                            at),
+                      annotation = stripSpans
+                          (model.AnnotatedTerm[annotation]
+                            at)}},
+            `_`=recurse t}
+            t)
+          (λlayer.stripSpans (pairs.second layer)))
+      `term`
+
+## Follow a single subterm step from a (span-free) term to the immediate subterm it names, if the term has that shape. Map-entry and set-element steps depend on a term ordering and are not resolved.
+term subtermAtStep =
+  λstep,`term`.let fieldTerm := λfname,fields.optionals.map
+          (λf.model.Field[`term`] f)
+          (lists.find (λf.equality.equal (model.Field[name] f) fname) fields)
+    in cases(paths.SubtermStep){
+      annotatedAnnotation=λ`_`.cases(model.Term){
+            annotated=λa.given(model.AnnotatedTerm[annotation]
+                  a),
+            `_`=none}
+            `term`,
+      annotatedBody=λ`_`.cases(model.Term){
+            annotated=λa.given(model.AnnotatedTerm[body]
+                  a),
+            `_`=none}
+            `term`,
+      applicationArgument=λ`_`.cases(model.Term){
+            application=λa.given(model.Application[argument]
+                  a),
+            `_`=none}
+            `term`,
+      applicationFunction=λ`_`.cases(model.Term){
+            application=λa.given(model.Application[function]
+                  a),
+            `_`=none}
+            `term`,
+      casesCase=λcname.cases(model.Term){
+            `cases`=λcs.optionals.map
+                  (λa.model.CaseAlternative[handler]
+                      a)
+                  (lists.find
+                    (λa.equality.equal
+                        (model.CaseAlternative[name] a)
+                        cname)
+                    (model.CaseStatement[`cases`] cs)),
+            `_`=none}
+            `term`,
+      casesDefault=λ`_`.cases(model.Term){`cases`=λcs.model.CaseStatement[default] cs, `_`=none}
+            `term`,
+      eitherLeft=λ`_`.cases(model.Term){
+            `either`=λe.eithers.either
+                  (λl.given(l))
+                  (λr.none)
+                  e,
+            `_`=none}
+            `term`,
+      eitherRight=λ`_`.cases(model.Term){
+            `either`=λe.eithers.either
+                  (λl.none)
+                  (λr.given(r))
+                  e,
+            `_`=none}
+            `term`,
+      injectField=λfname.cases(model.Term){
+            `inject`=λi.fieldTerm
+                  fname
+                  [model.Injection[field] i],
+            `_`=none}
+            `term`,
+      lambdaBody=λ`_`.cases(model.Term){lambda=λl.given(model.Lambda[body] l), `_`=none}
+            `term`,
+      letBinding=λbname.cases(model.Term){
+            `let`=λlt.optionals.map
+                  (λb.model.Binding[`term`] b)
+                  (lists.find
+                    (λb.equality.equal
+                        (model.Binding[name] b)
+                        bname)
+                    (model.Let[bindings] lt)),
+            `_`=none}
+            `term`,
+      letBody=λ`_`.cases(model.Term){`let`=λlt.given(model.Let[body] lt), `_`=none}
+            `term`,
+      listElement=λi.cases(model.Term){`list`=λels.lists.at i els, `_`=none}
+            `term`,
+      optionalGiven=λ`_`.cases(model.Term){`optional`=λm.m, `_`=none} `term`,
+      pairFirst=λ`_`.cases(model.Term){pair=λp.given(pairs.first p), `_`=none}
+            `term`,
+      pairSecond=λ`_`.cases(model.Term){pair=λp.given(pairs.second p), `_`=none}
+            `term`,
+      recordField=λfname.cases(model.Term){
+            `record`=λr.fieldTerm
+                  fname
+                  (model.Record[fields] r),
+            `_`=none}
+            `term`,
+      typeApplicationBody=λ`_`.cases(model.Term){
+            typeApplication=λta.given(model.TypeApplicationTerm[body]
+                  ta),
+            `_`=none}
+            `term`,
+      typeLambdaBody=λ`_`.cases(model.Term){
+            typeLambda=λtl.given(model.TypeLambda[body]
+                  tl),
+            `_`=none}
+            `term`,
+      wrapBody=λ`_`.cases(model.Term){`wrap`=λw.given(model.WrappedTerm[body] w), `_`=none}
+            `term`,
+      `_`=none}
+      step
+
+## The source span recorded on a term by the parser, if the term's outermost layer is a span annotation
+term termSpan = λ`term`.optionals.map (λlayer.pairs.first layer) (spanLayer `term`)

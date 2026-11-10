@@ -1,0 +1,30 @@
+## Extraction and validation for hydra.core.util types
+module hydra.core.extract.util
+
+import hydra.core.errors as errors
+import hydra.core.extract.model as extract.model
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.equality as equality
+import hydra.core.lib.logic as logic
+import hydra.core.model as model
+import hydra.core.util as util
+
+## Extract a comparison from a term
+term comparison =
+  λcx,graph,`term`.eithers.bind
+      (extract.model.unitVariant model.Name{"hydra.core.util.Comparison"} graph `term`)
+      (λfname.logic.ifElse
+          (equality.equal (model.Name[] fname) "equalTo")
+          right(util.Comparison{equalTo})
+          (logic.ifElse
+            (equality.equal (model.Name[] fname) "lessThan")
+            right(util.Comparison{lessThan})
+            (logic.ifElse
+              (equality.equal (model.Name[] fname) "greaterThan")
+              right(util.Comparison{greaterThan})
+              left(errors.Error{
+                extraction = errors.ExtractionError{
+                    unexpectedShape = errors.UnexpectedShapeError{
+                        expected = "comparison",
+                        actual = model.Name[]
+                            fname}}}))))
