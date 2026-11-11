@@ -54,6 +54,7 @@ module_ = Module {
       Phantoms.toDefinition lambdaMultiBinderGroup,
       Phantoms.toDefinition lazyParameterRoundtripGroup,
       Phantoms.toDefinition moduleAliasGroup,
+      Phantoms.toDefinition multiLineDocCommentGroup,
       Phantoms.toDefinition nominalSugarGroup,
       Phantoms.toDefinition sourcePositionGroup,
       Phantoms.toDefinition sourceSpanGroup,
@@ -68,8 +69,8 @@ allTests = define "allTests" $
     Testing.testGroup (string "textual syntax") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
     subgroups = [annotationRoundtripGroup, corpusRoundtripGroup, doSugarGroup, forallMultiBinderGroup,
-                 lambdaMultiBinderGroup, lazyParameterRoundtripGroup, moduleAliasGroup, nominalSugarGroup,
-                 sourceSpanGroup, sourcePositionGroup, termDocCommentGroup]
+                 lambdaMultiBinderGroup, lazyParameterRoundtripGroup, moduleAliasGroup, multiLineDocCommentGroup,
+                 nominalSugarGroup, sourceSpanGroup, sourcePositionGroup, termDocCommentGroup]
 
 -- | Print a term signature, then parse the printed text back, and show the round-tripped
 -- signature. Compares against the original signature's own printed form, so the test both
@@ -269,6 +270,117 @@ termDocCommentGroup = define "termDocCommentGroup" $
     termDefinitionPrintTest "inner (non-outermost) description is NOT hoisted"
       (termDefOf "wrapped" (Core.termApplication $ Core.application (varT "f") (withDescriptionAnn "inner desc" (varT "x"))))
       "term wrapped = f x@{description=\"inner desc\"}"])
+
+-- | Build a bare (no pre-existing metadata) TypeDefinition for the given type scheme body, for
+-- exercising 'PrintPackaging.typeDefinition's description-hoisting directly (#711).
+typeDefOf :: String -> TypedTerm Type -> TypedTerm TypeDefinition
+typeDefOf localName body = Packaging.typeDefinition (nm localName) nothing (monoScheme body)
+
+-- | Print a bare TypeDefinition (no module context, empty alias map) and compare against an
+-- exact expected string.
+typeDefinitionPrintTest :: String -> TypedTerm TypeDefinition -> String -> TypedTerm TestCaseWithMetadata
+typeDefinitionPrintTest testName td expectedStr = universalCase testName
+  (PrintPackaging.typeDefinition @@ (Maps.empty :: TypedTerm (M.Map ModuleName String)) @@ td)
+  (Phantoms.string expectedStr)
+
+-- | A single-key description annotation on a TYPE: '<body>@{description="<d>"}' (the type-level
+-- analog of 'withDescriptionAnn').
+withTypeDescriptionAnn :: String -> TypedTerm Type -> TypedTerm Type
+withTypeDescriptionAnn d body = Core.typeAnnotated $ Core.annotatedType body
+  (Core.termMap $ Maps.fromList $ Phantoms.list [
+    Phantoms.pair (Core.termVariable $ nm "description") (strT d)])
+
+-- | Build a ModuleName from a String literal.
+nsLit :: String -> TypedTerm ModuleName
+nsLit s = Packaging.moduleName2 $ Phantoms.string s
+
+-- | Build a minimal single-definition module with the given module-level description, for
+-- exercising 'PrintPackaging.module''s multi-line '##' doc-comment printing directly (#711).
+moduleWithDescription :: String -> String -> TypedTerm Module
+moduleWithDescription nsStr d = Packaging.module_
+  (nsLit nsStr)
+  (Phantoms.just (Packaging.entityMetadata
+    (Phantoms.just $ Phantoms.string d)
+    (Phantoms.list ([] :: [TypedTerm String])) (Phantoms.list ([] :: [TypedTerm EntityReference])) Phantoms.nothing
+    (Phantoms.list ([] :: [TypedTerm Provision]))))
+  (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
+  (Phantoms.list [Packaging.definitionTerm (termDefOf "x" (varT "y"))])
+
+-- | Build a minimal, no-module-metadata module whose sole term definition carries the given
+-- multi-line description (hoisted to leading '##' lines by 'termDefinition'), for round-tripping
+-- the whole module (#711).
+moduleWithTermDescription :: String -> String -> TypedTerm Module
+moduleWithTermDescription nsStr d = Packaging.module_
+  (nsLit nsStr) Phantoms.nothing
+  (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
+  (Phantoms.list [Packaging.definitionTerm (termDefOf "impl" (withDescriptionAnn d (varT "y")))])
+
+-- | Build a minimal, no-module-metadata module whose sole type definition carries the given
+-- multi-line description (hoisted to leading '##' lines by 'typeDefinition'), for round-tripping
+-- the whole module (#711).
+moduleWithTypeDescription :: String -> String -> TypedTerm Module
+moduleWithTypeDescription nsStr d = Packaging.module_
+  (nsLit nsStr) Phantoms.nothing
+  (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
+  (Phantoms.list [Packaging.definitionType (typeDefOf "Config" (withTypeDescriptionAnn d T.string))])
+
+-- | Print a module and compare against an exact expected string.
+modulePrintTest :: String -> TypedTerm Module -> String -> TypedTerm TestCaseWithMetadata
+modulePrintTest testName m expectedStr = universalCase testName
+  (PrintPackaging.module' @@ m)
+  (Phantoms.string expectedStr)
+
+-- | print -> parse -> re-print a module, comparing the RE-PRINTED text against the ORIGINAL
+-- printed text (a fixpoint test, like 'typeRoundtripTest' but at the whole-module level and
+-- comparing full text rather than a fingerprint -- unlike 'roundtripFingerprint', which
+-- deliberately excludes metadata/doc-comment text, this test is specifically about the '##'
+-- comment TEXT surviving the round-trip, so the fingerprint approach would not catch a
+-- regression here).
+moduleRoundtripTest :: String -> TypedTerm Module -> TypedTerm TestCaseWithMetadata
+moduleRoundtripTest testName m = universalCase testName actual expected
+  where
+    printed = PrintPackaging.module' @@ m
+    actual = Eithers.either
+      (Phantoms.lambda "e" $ Phantoms.var "e")
+      (Phantoms.lambda "m2" $ PrintPackaging.module' @@ Phantoms.var "m2")
+      (ParsePackaging.parseModule @@ printed)
+    expected = printed
+
+-- | Multi-line doc-comment descriptions (#711): a DSL-authored 'doc' string containing embedded
+-- '\n's (e.g. a multi-paragraph or bulleted-list description, as in
+-- hydra.core.unification's unifyTypeConstraints) must print as one '##'-prefixed line PER source
+-- line, not as a single '## ' line with a raw embedded newline -- the latter produces a bare,
+-- non-'##' continuation line that the parser's 'docCommentLines' cannot recognize as part of the
+-- comment block, breaking the round-trip. Covers all three places a description can appear: a
+-- term definition's hoisted '##' (termDefinition), a type definition's hoisted '##'
+-- (typeDefinition), and a module's own leading '##' block (entityMetadataDoc). Each case prints
+-- as a bare definition/module (an exact-string check against the expected '##' lines) and also
+-- round-trips the WHOLE containing module (print -> parse -> re-print, comparing full text), so
+-- a regression that only breaks the parser (not the printer) is caught too.
+multiLineDocCommentGroup :: TypedTermDefinition TestGroup
+multiLineDocCommentGroup = define "multiLineDocCommentGroup" $
+  doc "Print/parse/round-trip cases for multi-line '##' doc-comment descriptions (#711)" $
+  Testing.testGroup (string "multi-line doc comments") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    termDefinitionPrintTest "multi-line term description hoists to one '##' line per source line"
+      (termDefOf "unifyTypeConstraints" (withDescriptionAnn "Robinson's algorithm.\nSee the reference." (varT "impl")))
+      "## Robinson's algorithm.\n## See the reference.\nterm unifyTypeConstraints = impl",
+
+    moduleRoundtripTest "multi-line term description round-trips (whole module)"
+      (moduleWithTermDescription "test.multiline.term" "Robinson's algorithm.\nSee the reference."),
+
+    typeDefinitionPrintTest "multi-line type description hoists to one '##' line per source line"
+      (typeDefOf "Config" (withTypeDescriptionAnn "Configuration options.\nSee the manual." T.string))
+      "## Configuration options.\n## See the manual.\ntype Config = string",
+
+    moduleRoundtripTest "multi-line type description round-trips (whole module)"
+      (moduleWithTypeDescription "test.multiline.type" "Configuration options.\nSee the manual."),
+
+    modulePrintTest "multi-line module description hoists to one '##' line per source line"
+      (moduleWithDescription "test.multiline" "Utilities for X.\nSee the reference.")
+      "## Utilities for X.\n## See the reference.\nmodule test.multiline\n\nterm x = y",
+
+    moduleRoundtripTest "multi-line module description round-trips (whole module)"
+      (moduleWithDescription "test.multiline.module" "Utilities for X.\nSee the reference.")])
 
 -- | Fixture: 'λa.λb.λc.a' -- three directly-nested Term.lambda constructors, no domain types.
 lambdaTripleNestedTerm :: TypedTerm Term
