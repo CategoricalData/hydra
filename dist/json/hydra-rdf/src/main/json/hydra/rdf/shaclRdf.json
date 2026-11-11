@@ -1560,85 +1560,21 @@
                         "body": {
                           "application": {
                             "function": {
-                              "typeApplication": {
-                                "body": {
-                                  "cases": {
-                                    "typeName": "hydra.rdf.shacl.model.Reference",
-                                    "default": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
                                       "application": {
                                         "function": {
                                           "application": {
                                             "function": {
-                                              "application": {
-                                                "function": {
-                                                  "application": {
-                                                    "function": {
-                                                      "application": {
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.rdf.shaclRdf.referenceToTriples"},
-                                                            "type": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}},
-                                                        "argument": {"variable": "subj"}}},
-                                                    "argument": {"literal": {"string": "property"}}}},
-                                                "argument": {"variable": "hydra.rdf.shaclRdf.propertyShapeToTriples"}}},
-                                            "argument": {"variable": "k"}}},
-                                        "argument": {"variable": "ref"}}},
-                                    "cases": [
-                                      {
-                                        "name": "definition",
-                                        "handler": {
-                                          "lambda": {
-                                            "parameter": "def",
-                                            "domain": {
-                                              "application": {
-                                                "function": {"variable": "hydra.rdf.shacl.model.Definition"},
-                                                "argument": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}},
-                                            "body": {
-                                              "let": {
-                                                "bindings": [
-                                                  {
-                                                    "name": "iri_",
-                                                    "term": {
-                                                      "application": {
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"project": {"typeName": "hydra.rdf.shacl.model.Definition", "fieldName": "iri"}},
-                                                            "type": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}},
-                                                        "argument": {"variable": "def"}}},
-                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.rdf.syntax.Iri"}, "constraints": []}},
-                                                  {
-                                                    "name": "ps",
-                                                    "term": {
-                                                      "application": {
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"project": {"typeName": "hydra.rdf.shacl.model.Definition", "fieldName": "target"}},
-                                                            "type": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}},
-                                                        "argument": {"variable": "def"}}},
-                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.rdf.shacl.model.PropertyShape"}, "constraints": []}}],
-                                                "body": {
-                                                  "application": {
-                                                    "function": {
-                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
-                                                    "argument": {
-                                                      "list": [
-                                                        {
-                                                          "list": [
-                                                            {
-                                                              "application": {
-                                                                "function": {
-                                                                  "application": {
-                                                                    "function": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.tripleRII"}, "argument": {"variable": "subj"}}},
-                                                                    "argument": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.sh"}, "argument": {"literal": {"string": "property"}}}}}},
-                                                                "argument": {"variable": "iri_"}}}]},
-                                                        {
-                                                          "application": {
-                                                            "function": {
-                                                              "application": {
-                                                                "function": {"variable": "hydra.rdf.shaclRdf.propertyShapeToTriples"},
-                                                                "argument": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.iriResource"}, "argument": {"variable": "iri_"}}}}},
-                                                            "argument": {"variable": "ps"}}}]}}}}}}}}]}},
-                                "type": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}},
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.rdf.shaclRdf.referenceToTriples"},
+                                                "type": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}},
+                                            "argument": {"variable": "subj"}}},
+                                        "argument": {"literal": {"string": "property"}}}},
+                                    "argument": {"variable": "hydra.rdf.shaclRdf.propertyShapeToTriples"}}},
+                                "argument": {"variable": "k"}}},
                             "argument": {"variable": "ref"}}}}}}}}},
             "annotation": {
               "map": [
@@ -2324,10 +2260,6 @@
                                                 "body": {
                                                   "cases": {
                                                     "typeName": "hydra.rdf.shacl.model.Reference",
-                                                    "default": {
-                                                      "typeApplication": {
-                                                        "body": {"optional": null},
-                                                        "type": {"pair": {"first": {"variable": "hydra.rdf.syntax.Node"}, "second": {"list": {"variable": "t1"}}}}}},
                                                     "cases": [
                                                       {
                                                         "name": "named",
@@ -2378,6 +2310,50 @@
                                                                                   "function": {"application": {"function": {"variable": "toTriples"}, "argument": {"variable": "b"}}},
                                                                                   "argument": {"variable": "x"}}}}},
                                                                           "type": {"variable": "hydra.rdf.syntax.Node"}}},
+                                                                      "type": {"list": {"variable": "t1"}}}}}}}}}},
+                                                      {
+                                                        "name": "definition",
+                                                        "handler": {
+                                                          "lambda": {
+                                                            "parameter": "def",
+                                                            "domain": {"application": {"function": {"variable": "hydra.rdf.shacl.model.Definition"}, "argument": {"variable": "t0"}}},
+                                                            "body": {
+                                                              "let": {
+                                                                "bindings": [
+                                                                  {
+                                                                    "name": "iri_",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "typeApplication": {"body": {"project": {"typeName": "hydra.rdf.shacl.model.Definition", "fieldName": "iri"}}, "type": {"variable": "t0"}}},
+                                                                        "argument": {"variable": "def"}}},
+                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.rdf.syntax.Iri"}, "constraints": []}},
+                                                                  {
+                                                                    "name": "target",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"project": {"typeName": "hydra.rdf.shacl.model.Definition", "fieldName": "target"}},
+                                                                            "type": {"variable": "t0"}}},
+                                                                        "argument": {"variable": "def"}}},
+                                                                    "typeScheme": {"variables": [], "body": {"variable": "t0"}, "constraints": []}}],
+                                                                "body": {
+                                                                  "optional": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "pair": {
+                                                                              "first": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.iriNode"}, "argument": {"variable": "iri_"}}},
+                                                                              "second": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {"variable": "toTriples"},
+                                                                                      "argument": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.iriResource"}, "argument": {"variable": "iri_"}}}}},
+                                                                                  "argument": {"variable": "target"}}}}},
+                                                                          "type": {"variable": "hydra.rdf.syntax.Node"}}},
                                                                       "type": {"list": {"variable": "t1"}}}}}}}}}}]}},
                                                 "type": {"variable": "t0"}}},
                                             "argument": {"variable": "ref"}}}}}}}}}}}}},
@@ -2387,7 +2363,7 @@
                           "key": {"variable": "description"},
                           "value": {
                             "literal": {
-                              "string": "Resolve the k-th reference-valued object of a SHACL property (given by its local name) on a subject to an RDF node, together with any triples describing it. A named reference is its IRI; an anonymous reference is a fresh deterministic blank node, onto which the inline shape is serialized using the given function. Inline definitions are not handled here (see propertyRefToTriples), and yield nothing."}}}]}}}}}}}}},
+                              "string": "Resolve the k-th reference-valued object of a SHACL property (given by its local name) on a subject to an RDF node, together with any triples describing it. A named reference is its IRI; an anonymous reference is a fresh deterministic blank node, onto which the inline shape is serialized using the given function. An inline definition is its own IRI, onto which the inline shape is serialized."}}}]}}}}}}}}},
     {
       "term": {
         "name": "hydra.rdf.shaclRdf.referenceToTriples",
