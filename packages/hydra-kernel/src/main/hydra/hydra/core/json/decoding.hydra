@@ -1,0 +1,26 @@
+## Decoding functions for JSON data
+module hydra.core.json.decoding
+
+import hydra.core.json.model as model
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.maps as maps
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.strings as strings
+
+## Decode a JSON array using a decoder for elements
+term decodeArray = λdecodeElem.cases(model.Value){array=λa.eithers.mapList decodeElem a, `_`=left("expected an array")}
+
+## Decode a JSON boolean value
+term decodeBoolean = cases(model.Value){`boolean`=λb.right(b), `_`=left("expected a boolean")}
+
+## Decode a required field from a JSON object
+term decodeField = λdecodeValue,name,m.eithers.bind (decodeOptionalField decodeValue name m) (λmf.optionals.match mf left(strings.concat2 "missing field: " name) (λf.right(f)))
+
+## Decode a JSON object value to a name-keyed map. Field order is not preserved; decoding looks fields up by name.
+term decodeObject = cases(model.Value){object=λo.right(maps.fromList o), `_`=left("expected an object")}
+
+## Decode an optional field from a JSON object
+term decodeOptionalField = λdecodeValue,name,m.optionals.match (maps.lookup name m) right(none) (λv.eithers.map (λx.given(x)) (decodeValue v))
+
+## Decode a JSON string value
+term decodeString = cases(model.Value){`string`=λs.right(s), `_`=left("expected a string")}

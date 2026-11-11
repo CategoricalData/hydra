@@ -1,0 +1,57 @@
+## JSON serialization functions using the Hydra AST
+module hydra.core.json.writer
+
+import hydra.core.ast as ast
+import hydra.core.json.model as model
+import hydra.core.lib.equality as equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.literals as literals
+import hydra.core.lib.logic as logic
+import hydra.core.lib.math as math
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.ordering as ordering
+import hydra.core.lib.pairs as pairs
+import hydra.core.lib.strings as strings
+import hydra.core.serialization as serialization
+
+## The colon operator used to separate keys and values in JSON objects
+term colonOp = ast.Op{symbol = ast.Symbol{":"}, padding = ast.Padding{`left` = ast.Ws{`none`}, `right` = ast.Ws{space}}, precedence = ast.Precedence{0:int32}, associativity = ast.Associativity{`none`}}
+
+## Like colonOp, but with no padding on either side, for compact-mode output
+term compactColonOp = ast.Op{symbol = ast.Symbol{":"}, padding = ast.Padding{`left` = ast.Ws{`none`}, `right` = ast.Ws{`none`}}, precedence = ast.Precedence{0:int32}, associativity = ast.Associativity{`none`}}
+
+## A comma separator with no padding on either side, for compact-mode output
+term compactCommaOp = ast.Op{symbol = ast.Symbol{","}, padding = ast.Padding{`left` = ast.Ws{`none`}, `right` = ast.Ws{`none`}}, precedence = ast.Precedence{0:int32}, associativity = ast.Associativity{`none`}}
+
+## Comma-separate the elements inside the given bracket pair with no insignificant whitespace at all.
+term compactList = λbr,els.logic.ifElse (lists.isEmpty els) (serialization.brackets br serialization.inlineStyle (serialization.cst "")) (serialization.brackets br serialization.inlineStyle (serialization.sep compactCommaOp els))
+
+## The default layout options, reproducing the historical, non-configurable behavior of printJson byte-for-byte: pretty-printed, two-space indent, 120-column adaptive width, no indent-depth limit.
+term defaultJsonWriterOptions = model.JsonWriterOptions{compact = false, indent = "  ", maxLineWidth = 120:int32, maxIndentDepth = none}
+
+## A half-block style (newline before content, none after) using the options' indent string.
+term halfBlockStyleWith = λoptions.ast.BlockStyle{indent = given(model.JsonWriterOptions[indent] options), newlineBeforeContent = true, newlineAfterContent = false}
+
+## Encode a byte (0..255) as a two-character lowercase hex string. Non-byte inputs yield placeholder '?' characters.
+term hexByte = λc.let nibble := λi.optionals.withDefault "?" (optionals.map (λch.strings.fromList (lists.singleton ch)) (strings.charAt i "0123456789abcdef")) in let hi := nibble (optionals.withDefault 0:int32 (math.div c 16:int32)) in let lo := nibble (optionals.withDefault 0:int32 (math.mod c 16:int32)) in strings.concat2 hi lo
+
+## Escape and quote a string for JSON output
+term jsonString = λs.let hexEscape := λc.strings.concat2 "\\u00" (hexByte c) in let escape := λc.logic.ifElse (equality.equal c 34:int32) "\\\"" (logic.ifElse (equality.equal c 92:int32) "\\\\" (logic.ifElse (equality.equal c 8:int32) "\\b" (logic.ifElse (equality.equal c 12:int32) "\\f" (logic.ifElse (equality.equal c 10:int32) "\\n" (logic.ifElse (equality.equal c 13:int32) "\\r" (logic.ifElse (equality.equal c 9:int32) "\\t" (logic.ifElse (ordering.lt c 32:int32) (hexEscape c) (strings.fromList (lists.singleton c))))))))) in let escaped := strings.concat (lists.map escape (strings.toList s)) in strings.concat2 (strings.concat2 "\"" escaped) "\""
+
+## Convert a key-value pair to an AST expression, honoring the given writer options and nesting depth.
+term keyValueToExprWith = λoptions,depth,pair.let key := pairs.first pair in let value := pairs.second pair in let colon := logic.ifElse (model.JsonWriterOptions[compact] options) compactColonOp colonOp in serialization.ifx colon (serialization.cst (jsonString key)) (valueToExprWith options depth value)
+
+## Serialize a JSON value to a string, using the default (pretty-printed) layout options.
+term printJson = λvalue.printJsonWith defaultJsonWriterOptions value
+
+## Serialize a JSON value to a string using the given layout options.
+term printJsonWith = λoptions,value.serialization.printExpr (valueToExprWith options 0:int32 value)
+
+## Choose between an inline and a block rendering of the same logical collection, given the (non-compact) writer options and the current nesting depth. Depths at or beyond maxIndentDepth always render inline; otherwise the width-adaptive choice from chooseLayout applies, using the options' own line width in place of the fixed maxLineWidth constant.
+term styleForDepth = λoptions,depth,inlineExpr,blockExpr.let atMaxDepth := optionals.match (model.JsonWriterOptions[maxIndentDepth] options) false (λmaxDepth.ordering.gte depth maxDepth) in logic.ifElse atMaxDepth inlineExpr (serialization.chooseLayout (model.JsonWriterOptions[maxLineWidth] options) inlineExpr blockExpr)
+
+## Convert a JSON value to an AST expression for serialization, using the default layout options.
+term valueToExpr = λvalue.valueToExprWith defaultJsonWriterOptions 0:int32 value
+
+## Convert a JSON value to an AST expression for serialization, honoring the given writer options and nesting depth.
+term valueToExprWith = λoptions,depth,value.let childDepth := math.add depth 1:int32 in let compact := model.JsonWriterOptions[compact] options in let style := logic.ifElse compact serialization.inlineStyle (halfBlockStyleWith options) in cases(model.Value){array=λarr.let els := lists.map (valueToExprWith options childDepth) arr in logic.ifElse compact (compactList serialization.squareBrackets els) (styleForDepth options depth (serialization.bracketList serialization.inlineStyle els) (serialization.bracketList style els)), `boolean`=λb.serialization.cst (logic.ifElse b "true" "false"), null=λ`_`.serialization.cst "null", number=λn.let rounded := literals.decimalToBigint n in let shown := literals.printDecimal n in let notExponential := ordering.lte (lists.length (strings.splitOn "e" shown)) 1:int32 in let fracParts := strings.splitOn "." shown in let frac := optionals.withDefault "" (lists.at 1:int32 fracParts) in let isWhole := logic.and notExponential (logic.or (ordering.lte (lists.length fracParts) 1:int32) (strings.isEmpty (strings.concat (strings.splitOn "0" frac)))) in let plain := literals.printBigint rounded in serialization.cst (logic.ifElse (logic.and isWhole (ordering.lte (strings.length plain) (strings.length shown))) plain shown), object=λobj.let els := lists.map (keyValueToExprWith options childDepth) obj in logic.ifElse compact (compactList serialization.curlyBraces els) (styleForDepth options depth (serialization.curlyBracesList none serialization.inlineStyle els) (serialization.curlyBracesList none style els)), `string`=λs.serialization.cst (jsonString s)} value
