@@ -1,0 +1,1017 @@
+## Functions for generating term encoders from type modules
+module hydra.core.encoding
+
+import hydra.core.annotations as annotations
+import hydra.core.constants as constants
+import hydra.core.decode.model as decode.model
+import hydra.core.encode.model as encode.model
+import hydra.core.errors as errors
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.lists as lists
+import hydra.core.lib.logic as logic
+import hydra.core.lib.maps as maps
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.sets as sets
+import hydra.core.lib.strings as strings
+import hydra.core.model as model
+import hydra.core.names as names
+import hydra.core.packaging as packaging
+import hydra.core.predicates as predicates
+import hydra.core.scoping as scoping
+
+## Left-apply type-variable params to a base type in binder order (fixes param reversal)
+term applyForallParamsInOrder =
+  λbase,params.lists.foldl
+      (λacc,p.model.Type{
+          application = model.ApplicationType{
+            function = acc,
+            argument = model.Type{variable = p}}})
+      base
+      params
+
+## Transform a type binding into an encoder binding
+term encodeBinding =
+  λcx,graph,b.eithers.bind
+      (decode.model.type graph (model.Binding[`term`] b))
+      (λtyp.
+        let rawBody := encodeTypeNamed (model.Binding[name] b) typ in
+        let description := strings.concat ["Encoder for ", model.Name[] (model.Binding[name] b)] in
+        right(model.Binding{
+          name = encodeBindingName (model.Binding[name] b),
+          `term` = annotations.setTermDescription given(description) rawBody,
+          typeScheme = given(encoderTypeSchemeNamed (model.Binding[name] b) typ)}))
+
+## Generate a binding name for an encoder function from a type name
+term encodeBindingName = names.derivedBindingName ["encode"] true
+
+## Generate an encoder for an Either type
+term encodeEitherType =
+  λet.model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"e"},
+        domain = given(model.Type{
+            `either` = model.EitherType{
+              `left` = encoderFullResultType
+                  (model.EitherType[`left`] et),
+              `right` = encoderFullResultType
+                  (model.EitherType[`right`] et)}}),
+        body = model.Term{
+          `inject` = model.Injection{
+            typeName = model.Name{"hydra.core.model.Term"},
+            field = model.Field{
+              name = model.Name{"either"},
+              `term` = model.Term{
+                application = model.Application{
+                  function = model.Term{
+                    application = model.Application{
+                      function = model.Term{
+                        application = model.Application{
+                          function = model.Term{
+                            typeApplication = model.TypeApplicationTerm{
+                              body = model.Term{
+                                typeApplication = model.TypeApplicationTerm{
+                                  body = model.Term{
+                                    typeApplication = model.TypeApplicationTerm{
+                                      body = model.Term{
+                                        typeApplication = model.TypeApplicationTerm{
+                                          body = model.Term{
+                                            variable = model.Name{"hydra.core.lib.eithers.bimap"}},
+                                          `type` = encoderFullResultType
+                                              (model.EitherType[`left`] et)}},
+                                      `type` = encoderFullResultType
+                                          (model.EitherType[`right`] et)}},
+                                  `type` = model.Type{
+                                    variable = model.Name{"hydra.core.model.Term"}}}},
+                              `type` = model.Type{
+                                variable = model.Name{"hydra.core.model.Term"}}}},
+                          argument = encodeType (model.EitherType[`left`] et)}},
+                      argument = encodeType
+                          (model.EitherType[`right`] et)}},
+                  argument = model.Term{
+                    variable = model.Name{"e"}}}}}}}}}
+
+## Generate the encoder for a field's value
+term encodeFieldValue =
+  λtypeName,fieldName,fieldType.model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"y"},
+        domain = given(encoderFullResultType fieldType),
+        body = model.Term{
+          `inject` = model.Injection{
+            typeName = model.Name{"hydra.core.model.Term"},
+            field = model.Field{
+              name = model.Name{"inject"},
+              `term` = encodeInjection
+                  typeName
+                  fieldName
+                  model.Term{
+                    application = model.Application{
+                      function = encodeType fieldType,
+                      argument = model.Term{
+                        variable = model.Name{"y"}}}}}}}}}
+
+## Encode a float value based on its float type
+term encodeFloatValue =
+  λfloatType,valTerm.model.Term{
+      `inject` = model.Injection{
+        typeName = model.Name{"hydra.core.model.FloatValue"},
+        field = model.Field{
+          name = cases(model.FloatType){
+              `float32`=λ`_`.model.Name{"float32"},
+              `float64`=λ`_`.model.Name{"float64"}}
+              floatType,
+          `term` = valTerm}}}
+
+## Generate an encoder for a polymorphic (forall) type
+term encodeForallType =
+  λft.model.Term{
+      lambda = model.Lambda{
+        parameter = encodeBindingName (model.ForallType[parameter] ft),
+        domain = given(model.Type{
+            function = model.FunctionType{
+              domain = model.Type{
+                variable = model.ForallType[parameter] ft},
+              codomain = model.Type{
+                variable = model.Name{"hydra.core.model.Term"}}}}),
+        body = encodeType (model.ForallType[body] ft)}}
+
+## Encode an Injection as a term
+term encodeInjection =
+  λtypeName,fieldName,fieldTerm.model.Term{
+      `record` = model.Record{
+        typeName = model.Name{"hydra.core.model.Injection"},
+        fields = [
+          model.Field{name = model.Name{"typeName"}, `term` = encodeName typeName},
+          model.Field{
+            name = model.Name{"field"},
+            `term` = (λfname,fterm.model.Term{
+                  `record` = model.Record{
+                    typeName = model.Name{"hydra.core.model.Field"},
+                    fields = [
+                      model.Field{name = model.Name{"name"}, `term` = encodeName fname},
+                      model.Field{name = model.Name{"term"}, `term` = fterm}]}})
+                fieldName
+                fieldTerm}]}}
+
+## Encode an integer value based on its integer type
+term encodeIntegerValue =
+  λintType,valTerm.model.Term{
+      `inject` = model.Injection{
+        typeName = model.Name{"hydra.core.model.IntegerValue"},
+        field = model.Field{
+          name = cases(model.IntegerType){
+              `bigint`=λ`_`.model.Name{"bigint"},
+              `int8`=λ`_`.model.Name{"int8"},
+              `int16`=λ`_`.model.Name{"int16"},
+              `int32`=λ`_`.model.Name{"int32"},
+              `int64`=λ`_`.model.Name{"int64"},
+              `uint8`=λ`_`.model.Name{"uint8"},
+              `uint16`=λ`_`.model.Name{"uint16"},
+              `uint32`=λ`_`.model.Name{"uint32"},
+              `uint64`=λ`_`.model.Name{"uint64"}}
+              intType,
+          `term` = valTerm}}}
+
+## Generate an encoder for a list type
+term encodeListType =
+  λelemType.model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"xs"},
+        domain = given(model.Type{`list` = encoderFullResultType elemType}),
+        body = model.Term{
+          `inject` = model.Injection{
+            typeName = model.Name{"hydra.core.model.Term"},
+            field = model.Field{
+              name = model.Name{"list"},
+              `term` = model.Term{
+                application = model.Application{
+                  function = model.Term{
+                    application = model.Application{
+                      function = model.Term{
+                        typeApplication = model.TypeApplicationTerm{
+                          body = model.Term{
+                            typeApplication = model.TypeApplicationTerm{
+                              body = model.Term{
+                                variable = model.Name{"hydra.core.lib.lists.map"}},
+                              `type` = encoderFullResultType elemType}},
+                          `type` = model.Type{
+                            variable = model.Name{"hydra.core.model.Term"}}}},
+                      argument = encodeType elemType}},
+                  argument = model.Term{
+                    variable = model.Name{"xs"}}}}}}}}}
+
+## Generate an encoder for a literal type
+term encodeLiteralType =
+  cases(model.LiteralType){
+    `binary`=λ`_`.model.Term{
+          lambda = model.Lambda{
+            parameter = model.Name{"x"},
+            domain = given(model.Type{
+                literal = model.LiteralType{
+                  `binary`}}),
+            body = model.Term{
+              `inject` = model.Injection{
+                typeName = model.Name{"hydra.core.model.Term"},
+                field = model.Field{
+                  name = model.Name{"literal"},
+                  `term` = model.Term{
+                    `inject` = model.Injection{
+                      typeName = model.Name{"hydra.core.model.Literal"},
+                      field = model.Field{
+                        name = model.Name{"binary"},
+                        `term` = model.Term{
+                          variable = model.Name{"x"}}}}}}}}}},
+    `boolean`=λ`_`.model.Term{
+          lambda = model.Lambda{
+            parameter = model.Name{"x"},
+            domain = given(model.Type{
+                literal = model.LiteralType{
+                  `boolean`}}),
+            body = model.Term{
+              `inject` = model.Injection{
+                typeName = model.Name{"hydra.core.model.Term"},
+                field = model.Field{
+                  name = model.Name{"literal"},
+                  `term` = model.Term{
+                    `inject` = model.Injection{
+                      typeName = model.Name{"hydra.core.model.Literal"},
+                      field = model.Field{
+                        name = model.Name{"boolean"},
+                        `term` = model.Term{
+                          variable = model.Name{"x"}}}}}}}}}},
+    `decimal`=λ`_`.model.Term{
+          lambda = model.Lambda{
+            parameter = model.Name{"x"},
+            domain = given(model.Type{
+                literal = model.LiteralType{
+                  `decimal`}}),
+            body = model.Term{
+              `inject` = model.Injection{
+                typeName = model.Name{"hydra.core.model.Term"},
+                field = model.Field{
+                  name = model.Name{"literal"},
+                  `term` = model.Term{
+                    `inject` = model.Injection{
+                      typeName = model.Name{"hydra.core.model.Literal"},
+                      field = model.Field{
+                        name = model.Name{"decimal"},
+                        `term` = model.Term{
+                          variable = model.Name{"x"}}}}}}}}}},
+    `string`=λ`_`.model.Term{
+          lambda = model.Lambda{
+            parameter = model.Name{"x"},
+            domain = given(model.Type{
+                literal = model.LiteralType{
+                  `string`}}),
+            body = model.Term{
+              `inject` = model.Injection{
+                typeName = model.Name{"hydra.core.model.Term"},
+                field = model.Field{
+                  name = model.Name{"literal"},
+                  `term` = model.Term{
+                    `inject` = model.Injection{
+                      typeName = model.Name{"hydra.core.model.Literal"},
+                      field = model.Field{
+                        name = model.Name{"string"},
+                        `term` = model.Term{
+                          variable = model.Name{"x"}}}}}}}}}},
+    integer=λintType.model.Term{
+          lambda = model.Lambda{
+            parameter = model.Name{"x"},
+            domain = given(model.Type{
+                literal = model.LiteralType{
+                  integer = intType}}),
+            body = model.Term{
+              `inject` = model.Injection{
+                typeName = model.Name{"hydra.core.model.Term"},
+                field = model.Field{
+                  name = model.Name{"literal"},
+                  `term` = model.Term{
+                    `inject` = model.Injection{
+                      typeName = model.Name{"hydra.core.model.Literal"},
+                      field = model.Field{
+                        name = model.Name{"integer"},
+                        `term` = encodeIntegerValue
+                            intType
+                            model.Term{
+                              variable = model.Name{"x"}}}}}}}}}},
+    float=λfloatType.model.Term{
+          lambda = model.Lambda{
+            parameter = model.Name{"x"},
+            domain = given(model.Type{
+                literal = model.LiteralType{
+                  float = floatType}}),
+            body = model.Term{
+              `inject` = model.Injection{
+                typeName = model.Name{"hydra.core.model.Term"},
+                field = model.Field{
+                  name = model.Name{"literal"},
+                  `term` = model.Term{
+                    `inject` = model.Injection{
+                      typeName = model.Name{"hydra.core.model.Literal"},
+                      field = model.Field{
+                        name = model.Name{"float"},
+                        `term` = encodeFloatValue
+                            floatType
+                            model.Term{
+                              variable = model.Name{"x"}}}}}}}}}},
+    `_`=model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"x"},
+        domain = none,
+        body = model.Term{variable = model.Name{"x"}}}}}
+
+## Generate an encoder for a map type
+term encodeMapType =
+  λmt.model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"m"},
+        domain = given(model.Type{
+            `map` = model.MapType{
+              keys = encoderFullResultType
+                  (model.MapType[keys] mt),
+              values = encoderFullResultType
+                  (model.MapType[values] mt)}}),
+        body = model.Term{
+          `inject` = model.Injection{
+            typeName = model.Name{"hydra.core.model.Term"},
+            field = model.Field{
+              name = model.Name{"map"},
+              `term` = model.Term{
+                application = model.Application{
+                  function = model.Term{
+                    application = model.Application{
+                      function = model.Term{
+                        application = model.Application{
+                          function = model.Term{
+                            typeApplication = model.TypeApplicationTerm{
+                              body = model.Term{
+                                typeApplication = model.TypeApplicationTerm{
+                                  body = model.Term{
+                                    typeApplication = model.TypeApplicationTerm{
+                                      body = model.Term{
+                                        typeApplication = model.TypeApplicationTerm{
+                                          body = model.Term{
+                                            variable = model.Name{"hydra.core.lib.maps.bimap"}},
+                                          `type` = encoderFullResultType
+                                              (model.MapType[keys] mt)}},
+                                      `type` = model.Type{
+                                        variable = model.Name{"hydra.core.model.Term"}}}},
+                                  `type` = encoderFullResultType
+                                      (model.MapType[values] mt)}},
+                              `type` = model.Type{
+                                variable = model.Name{"hydra.core.model.Term"}}}},
+                          argument = encodeType (model.MapType[keys] mt)}},
+                      argument = encodeType (model.MapType[values] mt)}},
+                  argument = model.Term{
+                    variable = model.Name{"m"}}}}}}}}}
+
+## Transform a type module into an encoder module
+term encodeModule =
+  λcx,graph,mod.eithers.bind
+      (filterTypeBindings
+        cx
+        graph
+        (optionals.givens
+          (lists.map
+            (λd.cases(packaging.Definition){
+                `type`=λtd.given((λname,typ.
+                      let schemaTerm := model.Term{
+                        variable = model.Name{"hydra.core.model.Type"}} in
+                      let dataTerm := annotations.normalizeTermAnnotations
+                          model.Term{
+                            annotated = model.AnnotatedTerm{
+                              body = encode.model.type typ,
+                              annotation = annotations.wrapAnnotationMap
+                                  (maps.fromList
+                                    [(constants.keyType, schemaTerm)])}} in
+                      model.Binding{
+                        name = name,
+                        `term` = dataTerm,
+                        typeScheme = given(model.TypeScheme{
+                            variables = [],
+                            body = model.Type{
+                              variable = model.Name{"hydra.core.model.Type"}},
+                            constraints = maps.empty})})
+                      (packaging.TypeDefinition[name] td)
+                      (model.TypeScheme[body]
+                        (packaging.TypeDefinition[body] td))),
+                `_`=none}
+                d)
+            (packaging.Module[definitions] mod))))
+      (λtypeBindings.logic.ifElse
+          (lists.isEmpty typeBindings)
+          right(none)
+          (eithers.bind
+            (eithers.mapList
+              (λb.eithers.bimap
+                  (λ`_e`.errors.Error{decoding = `_e`})
+                  (λx.x)
+                  (encodeBinding cx graph b))
+              typeBindings)
+            (λencodedBindings.right(given(packaging.Module{
+                name = encodeModuleName
+                    (packaging.Module[name] mod),
+                metadata = given(packaging.EntityMetadata{
+                    description = given(strings.concat
+                        ["Term encoders for ", packaging.ModuleName[] (packaging.Module[name] mod)]),
+                    comments = [],
+                    seeAlso = [],
+                    lifecycle = none,
+                    provisions = []}),
+                dependencies = lists.map
+                    (λns.packaging.ModuleDependency{
+                        `module` = ns,
+                        package = none})
+                    (lists.distinct
+                      (lists.concat2
+                        (lists.map
+                          encodeModuleName
+                          (lists.map
+                            (λdep.packaging.ModuleDependency[`module`] dep)
+                            (packaging.Module[dependencies] mod)))
+                        [packaging.Module[name] mod])),
+                definitions = lists.map
+                    (λb.packaging.Definition{
+                        `term` = packaging.TermDefinition{
+                          name = model.Binding[name] b,
+                          metadata = none,
+                          signature = optionals.map
+                              scoping.typeSchemeToTermSignature
+                              (model.Binding[typeScheme] b),
+                          body = model.Binding[`term`] b}})
+                    encodedBindings})))))
+
+## Generate an encoder module name from a source module name
+term encodeModuleName = names.derivedModuleName ["encode"] true
+
+## Encode a Name as a term
+term encodeName =
+  λn.model.Term{
+      `wrap` = model.WrappedTerm{
+        typeName = model.Name{"hydra.core.model.Name"},
+        body = model.Term{literal = model.Literal{`string` = model.Name[] n}}}}
+
+## Generate an encoder for a Maybe type
+term encodeOptionalType =
+  λelemType.model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"opt"},
+        domain = given(model.Type{`optional` = encoderFullResultType elemType}),
+        body = model.Term{
+          `inject` = model.Injection{
+            typeName = model.Name{"hydra.core.model.Term"},
+            field = model.Field{
+              name = model.Name{"optional"},
+              `term` = model.Term{
+                application = model.Application{
+                  function = model.Term{
+                    application = model.Application{
+                      function = model.Term{
+                        typeApplication = model.TypeApplicationTerm{
+                          body = model.Term{
+                            typeApplication = model.TypeApplicationTerm{
+                              body = model.Term{
+                                variable = model.Name{"hydra.core.lib.optionals.map"}},
+                              `type` = encoderFullResultType elemType}},
+                          `type` = model.Type{
+                            variable = model.Name{"hydra.core.model.Term"}}}},
+                      argument = encodeType elemType}},
+                  argument = model.Term{
+                    variable = model.Name{"opt"}}}}}}}}}
+
+## Generate an encoder for a pair type
+term encodePairType =
+  λpt.model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"p"},
+        domain = given(model.Type{
+            pair = model.PairType{
+              first = encoderFullResultType
+                  (model.PairType[first] pt),
+              second = encoderFullResultType
+                  (model.PairType[second] pt)}}),
+        body = model.Term{
+          `inject` = model.Injection{
+            typeName = model.Name{"hydra.core.model.Term"},
+            field = model.Field{
+              name = model.Name{"pair"},
+              `term` = model.Term{
+                application = model.Application{
+                  function = model.Term{
+                    application = model.Application{
+                      function = model.Term{
+                        application = model.Application{
+                          function = model.Term{
+                            typeApplication = model.TypeApplicationTerm{
+                              body = model.Term{
+                                typeApplication = model.TypeApplicationTerm{
+                                  body = model.Term{
+                                    typeApplication = model.TypeApplicationTerm{
+                                      body = model.Term{
+                                        typeApplication = model.TypeApplicationTerm{
+                                          body = model.Term{
+                                            variable = model.Name{"hydra.core.lib.pairs.bimap"}},
+                                          `type` = encoderFullResultType
+                                              (model.PairType[first] pt)}},
+                                      `type` = encoderFullResultType
+                                          (model.PairType[second] pt)}},
+                                  `type` = model.Type{
+                                    variable = model.Name{"hydra.core.model.Term"}}}},
+                              `type` = model.Type{
+                                variable = model.Name{"hydra.core.model.Term"}}}},
+                          argument = encodeType (model.PairType[first] pt)}},
+                      argument = encodeType (model.PairType[second] pt)}},
+                  argument = model.Term{
+                    variable = model.Name{"p"}}}}}}}}}
+
+## Generate an encoder for a record type (unnamed — should not be called directly)
+term encodeRecordType = λrt.encodeRecordTypeNamed model.Name{"unknown"} rt
+
+## Generate an encoder for a record type with the given element name
+term encodeRecordTypeNamed =
+  λename,rt.model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"x"},
+        domain = given(model.Type{variable = ename}),
+        body = model.Term{
+          `inject` = model.Injection{
+            typeName = model.Name{"hydra.core.model.Term"},
+            field = model.Field{
+              name = model.Name{"record"},
+              `term` = model.Term{
+                `record` = model.Record{
+                  typeName = model.Name{"hydra.core.model.Record"},
+                  fields = [
+                    model.Field{name = model.Name{"typeName"}, `term` = encodeName ename},
+                    model.Field{
+                      name = model.Name{"fields"},
+                      `term` = model.Term{
+                        `list` = lists.map
+                            ((λtname,recType,ft.model.Term{
+                                `record` = model.Record{
+                                  typeName = model.Name{"hydra.core.model.Field"},
+                                  fields = [
+                                    model.Field{name = model.Name{"name"}, `term` = encodeName (model.FieldType[name] ft)},
+                                    model.Field{
+                                      name = model.Name{"term"},
+                                      `term` = model.Term{
+                                        application = model.Application{
+                                          function = encodeType (model.FieldType[`type`] ft),
+                                          argument = model.Term{
+                                            application = model.Application{
+                                              function = model.Term{
+                                                `project` = model.Projection{
+                                                  typeName = tname,
+                                                  fieldName = model.FieldType[name] ft}},
+                                              argument = model.Term{
+                                                variable = model.Name{"x"}}}}}}}]}})
+                              ename
+                              rt)
+                            rt}}]}}}}}}}
+
+## Generate an encoder for a set type
+term encodeSetType =
+  λelemType.model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"s"},
+        domain = given(model.Type{`set` = encoderFullResultType elemType}),
+        body = model.Term{
+          `inject` = model.Injection{
+            typeName = model.Name{"hydra.core.model.Term"},
+            field = model.Field{
+              name = model.Name{"set"},
+              `term` = model.Term{
+                application = model.Application{
+                  function = model.Term{
+                    application = model.Application{
+                      function = model.Term{
+                        typeApplication = model.TypeApplicationTerm{
+                          body = model.Term{
+                            typeApplication = model.TypeApplicationTerm{
+                              body = model.Term{
+                                variable = model.Name{"hydra.core.lib.sets.map"}},
+                              `type` = encoderFullResultType elemType}},
+                          `type` = model.Type{
+                            variable = model.Name{"hydra.core.model.Term"}}}},
+                      argument = encodeType elemType}},
+                  argument = model.Term{
+                    variable = model.Name{"s"}}}}}}}}}
+
+## Generate an encoder term for a Type
+term encodeType =
+  cases(model.Type){
+    annotated=λat.encodeType (model.AnnotatedType[body] at),
+    application=λappType.model.Term{
+          application = model.Application{
+            function = encodeType
+                (model.ApplicationType[function] appType),
+            argument = encodeType
+                (model.ApplicationType[argument] appType)}},
+    `effect`=λelemType.encodeType elemType,
+    `either`=λet.encodeEitherType et,
+    `forall`=λft.encodeForallType ft,
+    function=λ`_`.model.Term{
+          lambda = model.Lambda{
+            parameter = model.Name{"x"},
+            domain = none,
+            body = model.Term{variable = model.Name{"x"}}}},
+    `list`=λelemType.encodeListType elemType,
+    literal=λlt.encodeLiteralType lt,
+    `map`=λmt.encodeMapType mt,
+    `optional`=λelemType.encodeOptionalType elemType,
+    pair=λpt.encodePairType pt,
+    `record`=λrt.encodeRecordType rt,
+    `set`=λelemType.encodeSetType elemType,
+    `union`=λrt.encodeUnionType rt,
+    `wrap`=λwt.encodeWrappedType wt,
+    `unit`=λ`_`.model.Term{
+          lambda = model.Lambda{
+            parameter = model.Name{"_"},
+            domain = given(model.Type{`unit`}),
+            body = model.Term{
+              `inject` = model.Injection{
+                typeName = model.Name{"hydra.core.model.Term"},
+                field = model.Field{
+                  name = model.Name{"unit"},
+                  `term` = model.Term{
+                    `unit`}}}}}},
+    `void`=λ`_`.model.Term{
+          lambda = model.Lambda{
+            parameter = model.Name{"_"},
+            domain = given(model.Type{`unit`}),
+            body = model.Term{
+              `inject` = model.Injection{
+                typeName = model.Name{"hydra.core.model.Term"},
+                field = model.Field{
+                  name = model.Name{"unit"},
+                  `term` = model.Term{
+                    `unit`}}}}}},
+    variable=λtypeName.model.Term{variable = encodeBindingName typeName},
+    `_`=model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"x"},
+        domain = none,
+        body = model.Term{variable = model.Name{"x"}}}}}
+
+## Generate an encoder term for a Type, with the element name for nominal types
+term encodeTypeNamed =
+  λename,typ.cases(model.Type){
+      annotated=λat.encodeTypeNamed ename (model.AnnotatedType[body] at),
+      application=λappType.model.Term{
+            application = model.Application{
+              function = encodeType
+                  (model.ApplicationType[function] appType),
+              argument = encodeType
+                  (model.ApplicationType[argument] appType)}},
+      `effect`=λelemType.encodeTypeNamed ename elemType,
+      `either`=λet.encodeEitherType et,
+      `forall`=λft.model.Term{
+            lambda = model.Lambda{
+              parameter = encodeBindingName
+                  (model.ForallType[parameter] ft),
+              domain = given(model.Type{
+                  function = model.FunctionType{
+                    domain = model.Type{
+                      variable = model.ForallType[parameter] ft},
+                    codomain = model.Type{
+                      variable = model.Name{"hydra.core.model.Term"}}}}),
+              body = encodeTypeNamed
+                  ename
+                  (model.ForallType[body] ft)}},
+      function=λ`_`.model.Term{
+            lambda = model.Lambda{
+              parameter = model.Name{"x"},
+              domain = none,
+              body = model.Term{
+                variable = model.Name{"x"}}}},
+      `list`=λelemType.encodeListType elemType,
+      literal=λlt.encodeLiteralType lt,
+      `map`=λmt.encodeMapType mt,
+      `optional`=λelemType.encodeOptionalType elemType,
+      pair=λpt.encodePairType pt,
+      `record`=λrt.encodeRecordTypeNamed ename rt,
+      `set`=λelemType.encodeSetType elemType,
+      `union`=λrt.encodeUnionTypeNamed ename rt,
+      `wrap`=λwt.encodeWrappedTypeNamed ename wt,
+      `unit`=λ`_`.model.Term{
+            lambda = model.Lambda{
+              parameter = model.Name{"_"},
+              domain = given(model.Type{`unit`}),
+              body = model.Term{
+                `inject` = model.Injection{
+                  typeName = model.Name{"hydra.core.model.Term"},
+                  field = model.Field{
+                    name = model.Name{"unit"},
+                    `term` = model.Term{
+                      `unit`}}}}}},
+      `void`=λ`_`.model.Term{
+            lambda = model.Lambda{
+              parameter = model.Name{"_"},
+              domain = given(model.Type{`unit`}),
+              body = model.Term{
+                `inject` = model.Injection{
+                  typeName = model.Name{"hydra.core.model.Term"},
+                  field = model.Field{
+                    name = model.Name{"unit"},
+                    `term` = model.Term{
+                      `unit`}}}}}},
+      variable=λtypeName.model.Term{variable = encodeBindingName typeName},
+      `_`=model.Term{
+        lambda = model.Lambda{
+          parameter = model.Name{"x"},
+          domain = none,
+          body = model.Term{variable = model.Name{"x"}}}}}
+      typ
+
+## Generate an encoder for a union type (placeholder name)
+term encodeUnionType = λrt.encodeUnionTypeNamed model.Name{"unknown"} rt
+
+## Generate an encoder for a union type with the given element name
+term encodeUnionTypeNamed =
+  λename,rt.model.Term{
+      `cases` = model.CaseStatement{
+        typeName = ename,
+        default = none,
+        `cases` = lists.map
+            (λft.model.CaseAlternative{
+                name = model.FieldType[name] ft,
+                handler = encodeFieldValue
+                    ename
+                    (model.FieldType[name] ft)
+                    (model.FieldType[`type`] ft)})
+            rt}}
+
+## Generate an encoder for a wrapped type (placeholder name)
+term encodeWrappedType = λwt.encodeWrappedTypeNamed model.Name{"unknown"} wt
+
+## Generate an encoder for a wrapped type with the given element name
+term encodeWrappedTypeNamed =
+  λename,wt.model.Term{
+      lambda = model.Lambda{
+        parameter = model.Name{"x"},
+        domain = given(model.Type{variable = ename}),
+        body = model.Term{
+          `inject` = model.Injection{
+            typeName = model.Name{"hydra.core.model.Term"},
+            field = model.Field{
+              name = model.Name{"wrap"},
+              `term` = model.Term{
+                `record` = model.Record{
+                  typeName = model.Name{"hydra.core.model.WrappedTerm"},
+                  fields = [
+                    model.Field{name = model.Name{"typeName"}, `term` = encodeName ename},
+                    model.Field{
+                      name = model.Name{"body"},
+                      `term` = model.Term{
+                        application = model.Application{
+                          function = encodeType wt,
+                          argument = model.Term{
+                            application = model.Application{
+                              function = model.Term{
+                                `unwrap` = ename},
+                              argument = model.Term{
+                                variable = model.Name{"x"}}}}}}}]}}}}}}}
+
+## Collect forall type variable names from a type
+term encoderCollectForallVariables =
+  λtyp.cases(model.Type){
+      annotated=λat.encoderCollectForallVariables (model.AnnotatedType[body] at),
+      `forall`=λft.lists.cons
+            (model.ForallType[parameter] ft)
+            (encoderCollectForallVariables (model.ForallType[body] ft)),
+      `_`=[]}
+      typ
+
+## Collect type variables needing Ord constraints
+term encoderCollectOrdVars =
+  λtyp.cases(model.Type){
+      annotated=λat.encoderCollectOrdVars (model.AnnotatedType[body] at),
+      application=λappType.lists.concat2
+            (encoderCollectOrdVars (model.ApplicationType[function] appType))
+            (encoderCollectOrdVars (model.ApplicationType[argument] appType)),
+      `effect`=λelemType.encoderCollectOrdVars elemType,
+      `either`=λet.lists.concat2
+            (encoderCollectOrdVars (model.EitherType[`left`] et))
+            (encoderCollectOrdVars (model.EitherType[`right`] et)),
+      `forall`=λft.encoderCollectOrdVars (model.ForallType[body] ft),
+      `list`=λelemType.encoderCollectOrdVars elemType,
+      `map`=λmt.lists.concat
+            [
+              encoderCollectTypeVarsFromType (model.MapType[keys] mt),
+              encoderCollectOrdVars (model.MapType[keys] mt),
+              encoderCollectOrdVars (model.MapType[values] mt)],
+      `optional`=λelemType.encoderCollectOrdVars elemType,
+      pair=λpt.lists.concat2
+            (encoderCollectOrdVars (model.PairType[first] pt))
+            (encoderCollectOrdVars (model.PairType[second] pt)),
+      `record`=λrt.lists.concat
+            (lists.map (λft.encoderCollectOrdVars (model.FieldType[`type`] ft)) rt),
+      `set`=λelemType.lists.concat2
+            (encoderCollectTypeVarsFromType elemType)
+            (encoderCollectOrdVars elemType),
+      `union`=λrt.lists.concat
+            (lists.map (λft.encoderCollectOrdVars (model.FieldType[`type`] ft)) rt),
+      `wrap`=λwt.encoderCollectOrdVars wt,
+      `_`=[]}
+      typ
+
+## Collect all type variable names from a type expression
+term encoderCollectTypeVarsFromType =
+  λtyp.cases(model.Type){
+      annotated=λat.encoderCollectTypeVarsFromType (model.AnnotatedType[body] at),
+      application=λappType.lists.concat2
+            (encoderCollectTypeVarsFromType (model.ApplicationType[function] appType))
+            (encoderCollectTypeVarsFromType (model.ApplicationType[argument] appType)),
+      `effect`=λelemType.encoderCollectTypeVarsFromType elemType,
+      `forall`=λft.encoderCollectTypeVarsFromType (model.ForallType[body] ft),
+      `list`=λelemType.encoderCollectTypeVarsFromType elemType,
+      `map`=λmt.lists.concat2
+            (encoderCollectTypeVarsFromType (model.MapType[keys] mt))
+            (encoderCollectTypeVarsFromType (model.MapType[values] mt)),
+      `optional`=λelemType.encoderCollectTypeVarsFromType elemType,
+      pair=λpt.lists.concat2
+            (encoderCollectTypeVarsFromType (model.PairType[first] pt))
+            (encoderCollectTypeVarsFromType (model.PairType[second] pt)),
+      `record`=λrt.lists.concat
+            (lists.map (λft.encoderCollectTypeVarsFromType (model.FieldType[`type`] ft)) rt),
+      `set`=λelemType.encoderCollectTypeVarsFromType elemType,
+      `union`=λrt.lists.concat
+            (lists.map (λft.encoderCollectTypeVarsFromType (model.FieldType[`type`] ft)) rt),
+      variable=λname.[name],
+      `wrap`=λwt.encoderCollectTypeVarsFromType wt,
+      `_`=[]}
+      typ
+
+## Get full result type for encoder input
+term encoderFullResultType =
+  λtyp.cases(model.Type){
+      annotated=λat.encoderFullResultType (model.AnnotatedType[body] at),
+      application=λappType.model.Type{
+            application = model.ApplicationType{
+              function = encoderFullResultType
+                  (model.ApplicationType[function] appType),
+              argument = model.ApplicationType[argument] appType}},
+      `effect`=λelemType.model.Type{`effect` = encoderFullResultType elemType},
+      `either`=λet.model.Type{
+            `either` = model.EitherType{
+              `left` = encoderFullResultType
+                  (model.EitherType[`left`] et),
+              `right` = encoderFullResultType
+                  (model.EitherType[`right`] et)}},
+      `forall`=λft.applyForallParamsInOrder
+            (encoderFullResultType (stripForalls (model.ForallType[body] ft)))
+            (encoderCollectForallVariables typ),
+      `list`=λelemType.model.Type{`list` = encoderFullResultType elemType},
+      literal=λlt.model.Type{literal = lt},
+      `map`=λmt.model.Type{
+            `map` = model.MapType{
+              keys = encoderFullResultType
+                  (model.MapType[keys] mt),
+              values = encoderFullResultType
+                  (model.MapType[values] mt)}},
+      `optional`=λelemType.model.Type{`optional` = encoderFullResultType elemType},
+      pair=λpt.model.Type{
+            pair = model.PairType{
+              first = encoderFullResultType
+                  (model.PairType[first] pt),
+              second = encoderFullResultType
+                  (model.PairType[second] pt)}},
+      `record`=λ`_`.model.Type{variable = model.Name{"hydra.core.model.Term"}},
+      `set`=λelemType.model.Type{`set` = encoderFullResultType elemType},
+      `union`=λ`_`.model.Type{variable = model.Name{"hydra.core.model.Term"}},
+      `unit`=λ`_`.model.Type{`unit`},
+      variable=λname.model.Type{variable = name},
+      `void`=λ`_`.model.Type{`void`},
+      `wrap`=λwt.encoderFullResultType wt,
+      `_`=model.Type{variable = model.Name{"hydra.core.model.Term"}}}
+      typ
+
+## Get full result type for encoder input, using element name for nominal types
+term encoderFullResultTypeNamed =
+  λename,typ.cases(model.Type){
+      annotated=λat.encoderFullResultTypeNamed ename (model.AnnotatedType[body] at),
+      application=λappType.model.Type{
+            application = model.ApplicationType{
+              function = encoderFullResultType
+                  (model.ApplicationType[function] appType),
+              argument = model.ApplicationType[argument] appType}},
+      `effect`=λelemType.model.Type{`effect` = encoderFullResultType elemType},
+      `either`=λet.model.Type{
+            `either` = model.EitherType{
+              `left` = encoderFullResultType
+                  (model.EitherType[`left`] et),
+              `right` = encoderFullResultType
+                  (model.EitherType[`right`] et)}},
+      `forall`=λft.applyForallParamsInOrder
+            (encoderFullResultTypeNamed ename (stripForalls (model.ForallType[body] ft)))
+            (encoderCollectForallVariables typ),
+      `list`=λelemType.model.Type{`list` = encoderFullResultType elemType},
+      literal=λlt.model.Type{literal = lt},
+      `map`=λmt.model.Type{
+            `map` = model.MapType{
+              keys = encoderFullResultType
+                  (model.MapType[keys] mt),
+              values = encoderFullResultType
+                  (model.MapType[values] mt)}},
+      `optional`=λelemType.model.Type{`optional` = encoderFullResultType elemType},
+      pair=λpt.model.Type{
+            pair = model.PairType{
+              first = encoderFullResultType
+                  (model.PairType[first] pt),
+              second = encoderFullResultType
+                  (model.PairType[second] pt)}},
+      `record`=λ`_`.model.Type{variable = ename},
+      `set`=λelemType.model.Type{`set` = encoderFullResultType elemType},
+      `union`=λ`_`.model.Type{variable = ename},
+      `unit`=λ`_`.model.Type{`unit`},
+      variable=λname.model.Type{variable = name},
+      `void`=λ`_`.model.Type{`void`},
+      `wrap`=λ`_`.model.Type{variable = ename},
+      `_`=model.Type{variable = model.Name{"hydra.core.model.Term"}}}
+      typ
+
+## Build encoder function type
+term encoderType =
+  λtyp.
+    let resultType := encoderFullResultType typ in
+    let baseType := model.Type{
+      function = model.FunctionType{
+        domain = resultType,
+        codomain = model.Type{
+          variable = model.Name{"hydra.core.model.Term"}}}} in
+    prependForallEncoders baseType typ
+
+## Build encoder function type with element name for nominal types
+term encoderTypeNamed =
+  λename,typ.
+    let resultType := encoderFullResultTypeNamed ename typ in
+    let baseType := model.Type{
+      function = model.FunctionType{
+        domain = resultType,
+        codomain = model.Type{
+          variable = model.Name{"hydra.core.model.Term"}}}} in
+    prependForallEncoders baseType typ
+
+## Construct a TypeScheme for an encoder function from a source type
+term encoderTypeScheme =
+  λtyp.
+    let typeVars := encoderCollectForallVariables typ, encoderFunType := encoderType typ, allOrdVars := encoderCollectOrdVars typ, ordVars := lists.filter (λv.lists.member v typeVars) allOrdVars, constraints := maps.fromList
+        (lists.map
+          (λv.(
+              v,
+              model.TypeVariableConstraints{classes = sets.singleton model.TypeClassConstraint{simple = model.Name{"ordering"}}}))
+          ordVars)
+    in model.TypeScheme{variables = typeVars, body = encoderFunType, constraints = constraints}
+
+## Construct a TypeScheme for an encoder function, with element name for nominal types
+term encoderTypeSchemeNamed =
+  λename,typ.
+    let typeVars := encoderCollectForallVariables typ, encoderFunType := encoderTypeNamed ename typ, allOrdVars := encoderCollectOrdVars typ, ordVars := lists.filter (λv.lists.member v typeVars) allOrdVars, constraints := maps.fromList
+        (lists.map
+          (λv.(
+              v,
+              model.TypeVariableConstraints{classes = sets.singleton model.TypeClassConstraint{simple = model.Name{"ordering"}}}))
+          ordVars)
+    in model.TypeScheme{variables = typeVars, body = encoderFunType, constraints = constraints}
+
+## Filter bindings to only encodable type definitions
+term filterTypeBindings =
+  λcx,graph,bindings.eithers.map
+      optionals.givens
+      (eithers.mapList (isEncodableBinding cx graph) (lists.filter annotations.isNativeType bindings))
+
+## Check if a binding is encodable (serializable type)
+term isEncodableBinding =
+  λcx,graph,b.eithers.bind
+      (predicates.isSerializableByName cx graph (model.Binding[name] b))
+      (λserializable.right(logic.ifElse serializable given(b) none))
+
+## Check whether a type is the unit type
+term isUnitType = cases(model.Type){`unit`=λ`_`.true, `_`=false}
+
+## Prepend encoder types for forall parameters to base type
+term prependForallEncoders =
+  λbaseType,typ.cases(model.Type){
+      annotated=λat.prependForallEncoders baseType (model.AnnotatedType[body] at),
+      `forall`=λft.model.Type{
+            function = model.FunctionType{
+              domain = model.Type{
+                function = model.FunctionType{
+                  domain = model.Type{
+                    variable = model.ForallType[parameter] ft},
+                  codomain = model.Type{
+                    variable = model.Name{"hydra.core.model.Term"}}}},
+              codomain = prependForallEncoders
+                  baseType
+                  (model.ForallType[body] ft)}},
+      `_`=baseType}
+      typ
+
+## Remove all leading forall quantifiers, returning the quantified body
+term stripForalls =
+  λtyp.cases(model.Type){
+      annotated=λat.stripForalls (model.AnnotatedType[body] at),
+      `forall`=λft.stripForalls (model.ForallType[body] ft),
+      `_`=typ}
+      typ
