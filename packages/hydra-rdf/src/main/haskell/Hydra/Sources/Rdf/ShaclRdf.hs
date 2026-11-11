@@ -362,14 +362,7 @@ propertyRefToTriples = define "propertyRefToTriples" $
   doc ("Serialize the k-th property shape reference of a subject (may be named, anonymous, or an inline"
     <> " definition)") $
   lambda "subj" $ lambda "k" $ lambda "ref" $
-    match Shacl._Reference (var "ref")
-      (Just $ referenceToTriples @@ var "subj" @@ string "property" @@ propertyShapeToTriples @@ var "k" @@ var "ref") [
-      Shacl._Reference_definition>>: lambda "def" $ lets [
-        "iri_">: project Shacl._Definition Shacl._Definition_iri @@ var "def",
-        "ps">: project Shacl._Definition Shacl._Definition_target @@ var "def"] $
-        Lists.concat (list [
-          list [tripleRII @@ var "subj" @@ (sh @@ string "property") @@ var "iri_"],
-          propertyShapeToTriples @@ (iriResource @@ var "iri_") @@ var "ps"])]
+    referenceToTriples @@ var "subj" @@ string "property" @@ propertyShapeToTriples @@ var "k" @@ var "ref"
 
 -- | Serialize a PropertyShapeConstraint to triples
 propertyShapeConstraintToTriples :: TypedTermDefinition (Rdf.Resource -> Shacl.PropertyShapeConstraint -> [Rdf.Triple])
@@ -459,14 +452,18 @@ referenceToObject = define "referenceToObject" $
   doc ("Resolve the k-th reference-valued object of a SHACL property (given by its local name) on a subject"
     <> " to an RDF node, together with any triples describing it. A named reference is its IRI; an anonymous"
     <> " reference is a fresh deterministic blank node, onto which the inline shape is serialized using the"
-    <> " given function. Inline definitions are not handled here (see propertyRefToTriples), and yield nothing.") $
+    <> " given function. An inline definition is its own IRI, onto which the inline shape is serialized.") $
   lambda "subj" $ lambda "rel" $ lambda "toTriples" $ lambda "k" $ lambda "ref" $
-    match Shacl._Reference (var "ref") (Just nothing) [
+    match Shacl._Reference (var "ref") Nothing [
       Shacl._Reference_named>>: lambda "i" $
         just (pair (iriNode @@ var "i") (list ([] :: [TypedTerm Rdf.Triple]))),
       Shacl._Reference_anonymous>>: lambda "x" $ lets [
         "b">: anonymousBlankNode @@ var "subj" @@ var "rel" @@ var "k"] $
-        just (pair (RdfUtils.resourceToNode @@ var "b") (var "toTriples" @@ var "b" @@ var "x"))]
+        just (pair (RdfUtils.resourceToNode @@ var "b") (var "toTriples" @@ var "b" @@ var "x")),
+      Shacl._Reference_definition>>: lambda "def" $ lets [
+        "iri_">: project Shacl._Definition Shacl._Definition_iri @@ var "def",
+        "target">: project Shacl._Definition Shacl._Definition_target @@ var "def"] $
+        just (pair (iriNode @@ var "iri_") (var "toTriples" @@ (iriResource @@ var "iri_") @@ var "target"))]
 
 -- | Serialize the k-th reference-valued object of a SHACL property on a subject
 referenceToTriples :: TypedTermDefinition (Rdf.Resource -> String -> (Rdf.Resource -> a -> [Rdf.Triple]) -> Int -> Shacl.Reference a -> [Rdf.Triple])

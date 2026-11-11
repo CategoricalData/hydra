@@ -136,6 +136,40 @@ spec = do
           objectsOf triples (Rdf.ResourceBnode b) (sh "path") `H.shouldBe` [Rdf.NodeIri (Rdf.Iri "urn:example:p")]
         os -> H.expectationFailure $ "expected one blank node sh:property object, got " ++ show os
 
+ -- Regression tests for #832: inline-definition references (an inline shape with its own IRI) were
+ -- handled only under sh:property; under sh:node/sh:not they emitted nothing, and under sh:and/sh:or/
+ -- sh:xone the member silently dropped out of the list.
+ H.describe "ShaclRdf serialization of definition references (#832)" $ do
+
+    H.it "emits sh:node to the definition's IRI, with the definition's own shape triples" $ do
+      let triples = ShaclRdf.commonConstraintToTriples testSubject
+            (ShaclModel.CommonConstraintNode (S.singleton (ShaclModel.ReferenceDefinition defB)))
+      objectsOf triples testSubject (sh "node") `H.shouldBe` [Rdf.NodeIri iriB]
+      assertDefinitionTriples triples
+
+    H.it "emits sh:not to the definition's IRI, with the definition's own shape triples" $ do
+      let triples = ShaclRdf.commonConstraintToTriples testSubject
+            (ShaclModel.CommonConstraintNot (S.singleton (ShaclModel.ReferenceDefinition (shapeDef))))
+      objectsOf triples testSubject (sh "not") `H.shouldBe` [Rdf.NodeIri iriB]
+      assertDefinitionTriples triples
+
+    mapM_ (\(name, mk) ->
+      H.it ("keeps a definition member in the sh:" ++ name ++ " list") $ do
+        let refs = S.fromList [ShaclModel.ReferenceNamed (Rdf.Iri "urn:example:A"),
+                               ShaclModel.ReferenceDefinition shapeDef]
+            triples = ShaclRdf.commonConstraintToTriples testSubject (mk refs)
+        case objectsOf triples testSubject (sh name) of
+          [l] -> case listMembers triples l of
+            Nothing -> H.expectationFailure "object is not a well-formed RDF list"
+            Just members -> do
+              length members `H.shouldBe` 2
+              members `H.shouldSatisfy` elem (Rdf.NodeIri iriB)
+              members `H.shouldSatisfy` elem (Rdf.NodeIri (Rdf.Iri "urn:example:A"))
+          os -> H.expectationFailure $ "expected one sh:" ++ name ++ " triple, got " ++ show os
+        assertDefinitionTriples triples)
+      [("and", ShaclModel.CommonConstraintAnd), ("or", ShaclModel.CommonConstraintOr),
+       ("xone", ShaclModel.CommonConstraintXone)]
+
  -- Regression tests for #751 Bug 2: sh:in was emitted as N parallel triples (a conjunction, hence
  -- unsatisfiable for N > 1), and sh:languageIn was dropped. Both must be a single SHACL list.
  H.describe "ShaclRdf serialization of list-valued constraints (#751 Bug 2)" $ do
@@ -159,6 +193,17 @@ spec = do
       length lis `H.shouldBe` 1
       listMembers triples (head lis) `H.shouldBe` Just [lit "en", lit "fr"]
   where
+    iriB = Rdf.Iri "urn:example:B"
+    strIri = Rdf.Iri "http://www.w3.org/2001/XMLSchema#string"
+    nodeB = ShaclModel.NodeShape {
+      ShaclModel.nodeShapeCommon = emptyCommon {
+        ShaclModel.commonPropertiesConstraints = S.singleton (ShaclModel.CommonConstraintDatatype strIri)}}
+    defB = ShaclModel.Definition iriB nodeB
+    shapeDef = ShaclModel.Definition iriB (ShaclModel.ShapeNode nodeB)
+    assertDefinitionTriples triples = do
+      let r = Rdf.ResourceIri iriB
+      objectsOf triples r (rdf "type") `H.shouldBe` [Rdf.NodeIri (sh "NodeShape")]
+      objectsOf triples r (sh "datatype") `H.shouldBe` [Rdf.NodeIri strIri]
     testSubject = Rdf.ResourceIri $ Rdf.Iri "urn:example:1"
     enumInstance = injectUnit (Name "test.Color") (Name "red")
     sh local = Rdf.Iri $ "http://www.w3.org/ns/shacl#" ++ local
