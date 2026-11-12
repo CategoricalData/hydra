@@ -23,16 +23,15 @@
 
 module Main where
 
-import Hydra.Generation (writeModulesJsonPackageSplit, writeDslJsonPackageSplit, writeTestModulesJson, loadNativePackageModules, loadNativePackageModuleNamesTagged, generateEncoderModules, generateDecoderModules)
+import Hydra.Generation (writeModulesJsonPackageSplit, writeDerivedJsonPackageSplit, writeTestModulesJson, loadNativePackageModules, loadNativePackageModuleNamesTagged, generateEncoderModules, generateDecoderModules, isDerivedModule)
 import Hydra.PackageRouting (RoutingMap, defaultDistJsonRoot, buildRoutingMap, namespaceToPackageIn)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
-  kernelModules, haskellModules, jsonModules, otherModules,
   hydraCoqModules, hydraGoModules, hydraJvmModules, hydraJavaModules, hydraTypeScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraPgTestModules, hydraRdfModules, hydraRustModules, hydraWasmModules,
   hydraBuildModules, hydraBuildTestModules,
-  hydraExtPackageModules, allEncodingModules,
+  hydraExtPackageModules, allDslModules, allEncodingModules,
   extRoutingInput)
 import Hydra.Sources.Test.All (testModules)
 
@@ -193,26 +192,6 @@ packageTestModules "hydra-pg"     = hydraPgTestModules
 packageTestModules _              = []
 
 
--- | Return the type-defining modules whose DSL wrappers should be generated
--- for this package. The kernel DSL pass covers kernel + json + other modules;
--- the haskell DSL pass covers haskell coder modules; each coder package
--- (hydra-java, hydra-python, hydra-scala, hydra-lisp, hydra-go) maps to its
--- own type-defining modules so that Hydra/Dsl/<lang>/Syntax.hs phantom
--- helpers are regenerated whenever the syntax model changes. Other packages
--- still return [] and skip DSL generation.
-packageDslInputModules :: String -> [Kernel.Module]
-packageDslInputModules "hydra-kernel"  = kernelModules ++ jsonModules ++ otherModules
-packageDslInputModules "hydra-haskell" = haskellModules
-packageDslInputModules "hydra-jvm"     = hydraJvmModules
-packageDslInputModules "hydra-java"    = hydraJavaModules
-packageDslInputModules "hydra-python"  = hydraPythonModules
-packageDslInputModules "hydra-scala"   = hydraScalaModules
-packageDslInputModules "hydra-lisp"    = hydraLispModules
-packageDslInputModules "hydra-go"      = hydraGoModules
-packageDslInputModules "hydra-rust"    = hydraRustModules
-packageDslInputModules _               = []
-
-
 main :: IO ()
 main = do
   args <- getArgs
@@ -267,8 +246,13 @@ runSinglePackage routingMap fullMainUniverse pkg srcSet distRoot includeJavaPyth
               -- #344: skip term-level JSON for hydra.java.*/hydra.python.* unless
               -- --include-java-python (cold-start bootstrap). The native generators
               -- own these paths in normal operation.
-              kept | includeJavaPython = owned
-                   | otherwise         = filter (not . isNativeOwned) owned
+              -- #760: also exclude derived (dsl/encode/decode) modules — the
+              -- synthesizer is their sole source of truth and they must go
+              -- through the doInfer=False writeDerivedJsonPackageSplit pass
+              -- below, never this doInfer=True main pass (which would silently
+              -- serve stale on-disk JSON for them; see the doc comment there).
+              kept | includeJavaPython = filter (not . isDerivedModule) owned
+                   | otherwise         = filter (\m -> not (isNativeOwned m) && not (isDerivedModule m)) owned
           in (kept, fullUniverse)
         "test" ->
           let ts       = packageTestModules pkg
@@ -295,14 +279,24 @@ runSinglePackage routingMap fullMainUniverse pkg srcSet distRoot includeJavaPyth
     "main" -> do
       when (not (null mods)) $
         writeModulesJsonPackageSplit routingMap True distRoot universe mods
-      let dslInputs = packageDslInputModules pkg
-      case dslInputs of
-        [] -> return ()
-        _  -> do
+      -- #760: the derived pass is scoped by the package manifests' global
+      -- allDslModules/allEncodingModules lists, exactly as in update-json-main,
+      -- never by a per-package subset. writeDerivedJsonPackageSplit reconciles
+      -- orphans in every package owning a written module, so a partial keep-set
+      -- here would delete other packages' real derived JSON. Skip the pass only
+      -- when this package owns no derived-module source at all.
+      let ownsDerivedSource = any (\m -> namespaceToPackageIn routingMap (Kernel.moduleName m) == pkg)
+            (allDslModules ++ allEncodingModules)
+      when ownsDerivedSource $ do
           putStrLn ""
-          putStrLn $ "  Generating DSL wrapper modules for "
-            ++ show (length dslInputs) ++ " type modules..."
-          writeDslJsonPackageSplit routingMap distRoot universe dslInputs
+          putStrLn $ "  Generating derived (DSL wrapper + encode + decode) modules for "
+            ++ show (length allDslModules) ++ " type modules..."
+          -- #760: writeDerivedJsonPackageSplit (doInfer=False), not
+          -- writeDslJsonPackageSplit — derived modules (DSL wrappers AND
+          -- encode/decode) are synthesizer-authoritative and must never be
+          -- re-inferred/incrementally-cached. Routing distributes each derived
+          -- module to its owning package regardless of what triggered the run.
+          writeDerivedJsonPackageSplit routingMap distRoot universe allDslModules allEncodingModules
     -- #605: route through the per-package incremental test driver rather than
     -- the flat 'writeModulesJson', which re-infers the entire main+test
     -- universe on every cache miss and drives isolated per-package invocations
@@ -332,26 +326,34 @@ runAllPackages routingMap fullMainUniverse srcSet distRoot includeJavaPython = d
       -- is owned by the native generators in normal operation. Drop them from
       -- the write set unless --include-java-python (cold-start bootstrap). The
       -- full universe (incl. loaded native JSON) is still used for inference.
+      -- #760: also exclude derived (dsl/encode/decode) modules from this
+      -- doInfer=True pass — see the matching comment in runSinglePackage.
       let writeUniverse
-            | includeJavaPython = fullUniverse
-            | otherwise         = filter (not . isNativeOwned) fullUniverse
+            | includeJavaPython = filter (not . isDerivedModule) fullUniverse
+            | otherwise         = filter (\m -> not (isNativeOwned m) && not (isDerivedModule m)) fullUniverse
           excluded = length fullUniverse - length writeUniverse
       putStrLn $ "  Writing " ++ show (length writeUniverse)
         ++ " main modules (routed per-package)..."
       when (excluded > 0) $
         putStrLn $ "  (excluded " ++ show excluded
-          ++ " native-owned (hydra.jvm.*/java.*/python.*) modules; see #344/#505)"
+          ++ " native-owned/derived (hydra.jvm.*/java.*/python.*, dsl/encode/decode) modules; see #344/#505/#760)"
       writeModulesJsonPackageSplit routingMap True distRoot fullUniverse writeUniverse
-      -- DSL wrappers: generate for every package that has type-defining
-      -- inputs. The routing is derived (#474): wrapper namespaces like
-      -- hydra.core.dsl.<pkg>.* resolve to their owning package via the RoutingMap
-      -- built from each package's declared mainModules.
-      let allDslInputs = concatMap packageDslInputModules allPackages
-      when (not (null allDslInputs)) $ do
-        putStrLn ""
-        putStrLn $ "  Generating DSL wrapper modules for "
-          ++ show (length allDslInputs) ++ " type modules..."
-        writeDslJsonPackageSplit routingMap distRoot fullUniverse allDslInputs
+      -- Derived modules (DSL wrappers + encode + decode): generate for every
+      -- package that has type-defining inputs, via the doInfer=False
+      -- writeDerivedJsonPackageSplit pass (#760) — never writeDslJsonPackageSplit/
+      -- the doInfer=True path, which silently serves stale on-disk JSON for
+      -- these synthesizer-authoritative modules (no discoverable DSL source
+      -- file means the incremental-inference cache always treats them as
+      -- clean). The routing is derived (#474): wrapper/encode/decode
+      -- namespaces like hydra.core.dsl.<pkg>.* resolve to their owning package
+      -- via the RoutingMap built from each package's declared mainModules.
+      -- #760: source lists come from the package manifests (allDslModules /
+      -- allEncodingModules), the same scope update-json-main uses, so this pass
+      -- and Step 2 of sync-haskell.sh write the same derived set.
+      putStrLn ""
+      putStrLn $ "  Generating derived (DSL wrapper + encode + decode) modules for "
+        ++ show (length allDslModules) ++ " type modules..."
+      writeDerivedJsonPackageSplit routingMap distRoot fullUniverse allDslModules allEncodingModules
     "test" -> do
       let allTestMods = concatMap packageTestModules allPackages
       when (null allTestMods) $ do
