@@ -588,6 +588,67 @@ identity is the published host version when the host is published
 above is the narrower remaining case; until it is covered, run
 `/sync-haskell` twice when editing a synthesizer.
 
+#### The decoder/encoder generator is an instance of this class (#760)
+
+`Hydra/Sources/Kernel/Terms/Decoding.hs` and `.../Terms/Encoding.hs` define
+`hydra.decoding`/`hydra.encoding` — the term-level functions (`decodeType`,
+etc.) that the kernel itself references. They are also, confusingly, inputs
+to a *second*, unrelated synthesizer: `Hydra.Generation`
+(`heads/haskell/src/main/haskell/Hydra/Generation.hs`, hand-written) imports
+the **generated** `Hydra.Core.Decoding`/`Hydra.Core.Encoding` compiled from these DSL
+sources, and calls into them to synthesize the `hydra.*.decode.*`/
+`hydra.*.encode.*` JSON for every type in the kernel. So an edit to
+`Terms/Decoding.hs` can change the *compiled* `Hydra.Core.Decoding` module that
+`Hydra.Generation` is built against — but only after `/sync-haskell`'s Step 4
+(`bootstrap-from-json`) regenerates `dist/haskell/hydra-kernel/.../Hydra/Core/Decoding.hs`
+from the new JSON, and only once the exec binaries that link `Hydra.Generation`
+(`update-json-main`, `update-json-kernel`) are *rebuilt* against it. A single
+sync pass runs Steps 1–3 (build execs, export JSON, verify/reconcile) against
+the *previous* `Decoding.hs`/`Encoding.hs` before Step 4 ever regenerates them
+— so the direct kernel-JSON delta comes out correctly, but any
+`hydra.*.decode.*`/`hydra.*.encode.*` JSON that depends on the new synthesizer
+behavior does not. This cost four landing attempts on
+[#740](https://github.com/CategoricalData/hydra/issues/740) to diagnose: the
+partial N-of-M delta looked like a clean sync locally but failed CI's
+`git diff --quiet dist/json` consistency check.
+
+As of #760, `sync-haskell.sh` guards against this automatically: it hashes
+`dist/haskell/hydra-kernel/.../Hydra/Core/{Decoding,Encoding}.hs` before Step 1 and
+again after Step 4, and `die`s with a message beginning
+"Decoder/encoder generator changed ... re-run sync to reach the fixpoint" if
+they differ (it also fails loudly if either file is missing after Step 4, so a
+future module rename cannot silently disable the check).
+If you see that message, just run the sync command again — the
+second pass builds against the now-current generator and picks up the full
+delta. (The guard fails loudly rather than auto-retrying; see
+[#760](https://github.com/CategoricalData/hydra/issues/760) if that bar is ever worth
+revisiting.)
+
+#### Derived modules are synthesizer-authoritative — never re-infer them
+
+A related trap for anyone writing a *new* driver that writes
+`hydra.*.dsl.*`/`hydra.*.encode.*`/`hydra.*.decode.*` JSON (any module
+`Hydra.Generation.isDerivedModule` recognizes): these modules' in-term
+annotations (lambda domains, type applications, result-type signatures) are
+fully populated by the synthesizer at construction, not by HM inference.
+Running inference over them anyway is not merely redundant — for
+polymorphic decoders it is incorrect (HM's occurs-check rejects the
+synthesizer's saturated nominal self-application, e.g.
+`hydra.core.decode.parsing.parseResult : ParseResult @ a`), and inference
+cannot reproduce the synthesizer's deliberate alias expansion either. Always
+write derived modules via `Hydra.Generation.writeDerivedJsonPackageSplit`
+(`doInfer=False`), never via `writeModulesJsonPackageSplit` with
+`doInfer=True` — the latter's incremental-inference cache treats any module
+with no discoverable DSL source file as unconditionally "clean" and will
+silently serve stale on-disk JSON for exactly these modules instead of the
+freshly synthesized content. This was the root cause of a 25-file
+`dist/json` drift between `sync.sh` (correct — uses
+`update-json-main`/`writeDerivedJsonPackageSplit`) and
+`sync-packages.sh`/`sync-all.sh` (`transform-haskell-dsl-to-json`, which
+mis-routed derived modules through the `doInfer=True` path before #760 fixed
+it). `update-json-main/Main.hs` is the reference implementation of the
+correct split between the two write passes.
+
 ### Phase 1 cache doesn't hash `src/exec`
 
 `bin/lib/check-phase1-fresh.py` hashes the contents of
