@@ -140,6 +140,39 @@ echo ""
 HYDRA_HASKELL_HOST_MODE="$HOST_MODE" "$SCRIPT_DIR/overlay-kernel-runtime.sh"
 echo ""
 
+# #760: snapshot the generated decoder/encoder-generator source BEFORE Step 1
+# builds the exec binaries. Hydra.Generation (the synthesizer update-json-main /
+# update-json-kernel link against) imports the GENERATED Hydra.Core.Decoding /
+# Hydra.Core.Encoding under dist/haskell/hydra-kernel/.../Hydra/Core/ — not the DSL
+# source a contributor actually edits (packages/hydra-kernel/.../Sources/Kernel/
+# Terms/{Decoding,Encoding}.hs). So if dist/haskell/ is present-but-stale (a DSL
+# edit to those Terms/*.hs files hasn't propagated into the generated
+# Hydra/Core/{Decoding,Encoding}.hs yet), Steps 1-3 below build and run the execs
+# against the STALE synthesizer: the direct kernel-JSON delta comes out
+# correctly, but any hydra.*.decode.*/hydra.*.encode.* JSON the synthesizer
+# derives does not reflect the edit. Step 4 then regenerates dist/haskell
+# (including a corrected Hydra/Core/{Decoding,Encoding}.hs) from the JSON Steps 1-3
+# just wrote — too late for this pass. Comparing these two files' hashes
+# before Step 1 and after Step 4 tells us whether this run hit that gap.
+DECODING_HS="$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Decoding.hs"
+ENCODING_HS="$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Encoding.hs"
+_hash_decoder_generator() {
+    { [ -f "$DECODING_HS" ] && shasum -a 256 "$DECODING_HS"
+      [ -f "$ENCODING_HS" ] && shasum -a 256 "$ENCODING_HS"
+      true
+    } 2>/dev/null | shasum -a 256 | awk '{print $1}'
+}
+# On a cold worktree (dist/haskell/ not seeded yet), BOTH files are absent
+# before Step 1. Step 4 then creates them for the first time, which is not a
+# fixpoint violation — there is no "previous" synthesizer state they could
+# have drifted from. Only run the after-Step-4 comparison when at least one
+# of the files already existed before Step 1.
+DECODER_GENERATOR_PRE_EXISTED=false
+if [ -f "$DECODING_HS" ] || [ -f "$ENCODING_HS" ]; then
+    DECODER_GENERATOR_PRE_EXISTED=true
+fi
+DECODER_GENERATOR_HASH_BEFORE=$(_hash_decoder_generator)
+
 step 1 $TOTAL_STEPS "Building required executables"
 echo ""
 stack build \
@@ -283,6 +316,31 @@ else
         --prune-stale \
         $RTS_FLAGS
     step_cache_record "$BFJ_CACHE" "$BFJ_HASH"
+fi
+
+# #760: decoder/encoder-generator stale-synthesizer guard. If Step 4 just
+# rewrote Hydra/{Decoding,Encoding}.hs differently from what Steps 1-3 built
+# and ran against, the kernel-JSON delta Step 2 wrote (and Step 3 reconciled)
+# reflects the OLD synthesizer, not the one dist/haskell/ now contains — any
+# hydra.*.decode.*/hydra.*.encode.* JSON that depends on the new behavior is
+# missing from this pass. Re-running sync picks it up (Steps 1-3 then build
+# and run against the now-current Decoding.hs/Encoding.hs), so fail loudly
+# with that one-line instruction rather than silently shipping a partial
+# N-of-M decode/encode delta that only surfaces later as a CI consistency-
+# check failure (the #740 class; see docs/recipes/code-generation.md
+# "Editing the synthesizer itself").
+# Step 4 must have produced both files. If either is missing here, the paths
+# above no longer match where Hydra.Generation's imports are generated (e.g.
+# after a module rename), and the guard would silently never fire.
+if [ ! -f "$DECODING_HS" ] || [ ! -f "$ENCODING_HS" ]; then
+    die "#760 guard: expected generated $DECODING_HS and $ENCODING_HS after Step 4, but at least one is missing. Update DECODING_HS/ENCODING_HS in sync-haskell.sh to match Hydra.Generation's Decoding/Encoding imports."
+fi
+if [ "$DECODER_GENERATOR_PRE_EXISTED" = true ]; then
+    DECODER_GENERATOR_HASH_AFTER=$(_hash_decoder_generator)
+    if [ "$DECODER_GENERATOR_HASH_BEFORE" != "$DECODER_GENERATOR_HASH_AFTER" ]; then
+        echo ""
+        die "Decoder/encoder generator changed (Hydra/Core/Decoding.hs or Hydra/Core/Encoding.hs regenerated with new content); re-run sync to reach the fixpoint. The exec binaries this run built and used in Steps 1-3 were compiled against the PREVIOUS generator, so any hydra.*.decode.*/hydra.*.encode.* JSON derived from the new behavior was not yet written. A second run will build against the now-current generator and pick it up. See docs/recipes/code-generation.md § Editing the synthesizer itself."
+    fi
 fi
 
 step 5 $TOTAL_STEPS "Post-processing generated files"
