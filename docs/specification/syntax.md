@@ -593,16 +593,47 @@ shorter candidate alias collides. The `from <package>` clause disambiguates a mo
 more than one package publishes; it is independent of aliasing and may appear on either a bare
 or an aliased import.
 
-### 6.4 Alias selection (informative)
+Every module a file actually depends on gets its own `import` line — bare or aliased — regardless
+of whether any BODY reference to it ends up printed unqualified (§6.4); an import line is never
+omitted just because its dependency happens to be read-safe. The printed text is required to
+state its own dependencies in full: a build or editor tool loading a `.hydra` file in isolation
+reads the import list to know what else to load, and a reparse must be able to resolve every name
+the file uses without any information beyond the file's own text plus each imported module's
+declared names (#5, #711).
 
-The alias (or bareness) of each import is chosen by the printer, not carried in the AST: a
+### 6.4 Alias selection and body-reference bareness (informative)
+
+The alias (or bareness) of each import LINE is chosen by the printer, not carried in the AST: a
 module dependency has no alias field of its own. Printing a module computes, for every imported
-module, whether it can stay bare — leaving it unqualified introduces no local-name collision,
-either against another import or against the printed module's own declared names — and resolves
-the remaining collisions with the shortest-unique-dotted-suffix available, preferring to leave
-the more heavily referenced side of a collision bare. This specification states the *syntax* two
-import lines may take (§6.3); the collision-resolution algorithm itself is an implementation
-detail of the printer, not part of the grammar.
+module, whether its import line can stay bare — leaving it unqualified introduces no local-name
+collision, either against another import or against the printed module's own declared names — and
+resolves the remaining collisions with the shortest-unique-dotted-suffix available, preferring to
+leave the more heavily referenced side of a collision bare.
+
+Separately, and independently of the import line's own bareness, a BODY reference to a name from
+an aliased import may still print unqualified (e.g. `ifElse` rather than `logic.ifElse`) when doing
+so is provably safe for the round trip (Josh's readability request #5, 2026-11-09: "only use
+namespace prefixes when there are conflicts"). A referenced local name prints bare only when it is
+(a) declared by the imported module, (b) not declared by any OTHER import this file also declares
+or by the file's own definitions, and (c) never shadowed by a lambda/let/forall binder anywhere in
+the file — condition (c) is a module-wide, not site-local, check: a binder with the same name
+ANYWHERE in the file forces qualification for that name everywhere, even where the specific
+reference site has no actual conflict. This is conservative (never prints an unsafe bare name, but
+occasionally qualifies a name that a site-local analysis could have left bare) by deliberate
+choice, trading a strictly safe over-approximation for not needing to thread binder scope through
+every term/type printing function.
+
+A body reference's bareness is resolved the same way on reparse: the parser looks up each bare
+name against (in order) the current binder scope, the file's own definitions, then the unique
+module AMONG THIS FILE'S OWN DECLARED IMPORTS that defines it — using each imported module's
+declared-name set (supplied to the parser by its caller; see `hydra.core.parse.packaging`'s
+`parseModuleWith`) purely to answer "does this import declare this name," never to search outside
+the file's own import list. An unresolved or ambiguous bare name (declared by zero or more than
+one of the file's own imports) is a hard parse error — the parser never guesses.
+
+This specification states the *syntax* an import line may take (§6.3) and the fact that a body
+reference may be qualified or bare; the collision-resolution and bareness-decision algorithms
+themselves are implementation details of the printer/parser pair, not part of the grammar.
 
 ### Notes
 
@@ -614,31 +645,25 @@ detail of the printer, not part of the grammar.
 - A `term`/`primitive` definition's `: termSignature` ascription is the term-signature notation
   of §3 (`∀` header, `lazy` parameters), not a plain `type`; a `type` definition's own `=`
   right-hand side is always a `typeScheme`, never a `termSignature`.
-- **Bare-import round-trip gap (#805, #711).** A single-file parser has no access to a
-  bare-imported module's own definitions, so it cannot re-qualify a bare body name back to the
-  module it came from — there is no alias table entry for a bare (no `as`) import to look the
-  name up by, and nothing else in the printed text records which module defines it. Two distinct
-  symptoms follow from this, both present even with no local-name collision at all (an earlier
-  version of this note claimed the no-collision case was textually stable across a reparse;
-  that claim was never exercised against a real build and was found to be wrong while
-  implementing #711):
-  - **Collision case (#805):** the printer may leave two colliding imports split bare vs. aliased
-    (the one with fewer references gets the alias; see §6.4). On reparse, the aliased side's name
-    re-qualifies correctly (the alias supplies the lookup key), but the bare side's name does not,
-    so the second print sees only one module referenced and may print it bare too.
-  - **No-collision case (#711):** even with nothing to disambiguate, a bare body reference (e.g.
-    `FilePath` from a bare `import hydra.core.file`) survives the round trip as a bare,
-    module-less name — the identifier text itself is unchanged — but since nothing can attribute
-    it back to `hydra.core.file` anymore, the printer no longer sees that module as referenced and
-    omits its `import` line on the second print. The body is textually stable; the import block is
-    not.
-  Both symptoms share one root cause and one of two possible fixes, neither implemented: give the
-  parser access to each imported module's own declared names (so a bare reference can be matched
-  against them), or have the printer always alias every import, bare or not (removing the
-  ambiguity at the source, at the cost of `#803`'s bare-import readability win). This is a
-  tracked, open gap, not a design decision to leave unfixed; Josh is deciding between accepting
-  the gap (adjusting the affected round-trip test's expectation) and committing to one of the two
-  fixes above (2026-10-31, Decision Desk card `711-bare-import-roundtrip`).
+- **Bare-import and bare-body-reference round-trip (#805, #711, #5 — settled).** An earlier
+  design (2026-10-31, Decision Desk card `711-bare-import-roundtrip`) aliased every cross-module
+  import unconditionally, specifically because a single-file parser had no access to a bare
+  import's own declared names and so could never re-qualify a bare body reference back to the
+  module that declared it — not in the no-collision case (#711) nor the split-bare-vs-aliased
+  collision case (#805) that surfaced first. That approach traded away `#803`'s bare-import
+  readability win to close the gap. #5 (2026-11-09, Josh: "only use namespace prefixes when there
+  are conflicts") replaced it with the richer fix the 2026-10-31 note had left for later: give the
+  parser access to each imported module's own declared names. Both the import LINE's own
+  bareness/alias choice (§6.4, unconditional per-import, independent of body usage) and a BODY
+  reference's bareness (also §6.4, conditional on provable round-trip safety) are now resolved by
+  threading a `Map ModuleName (Set Name)` universe through both the printer
+  (`moduleAliasesWith`) and the parser (`parseModuleWith`) — the parser scopes its lookups to the
+  file's own declared imports (recovered from the text, per the invariant that every dependency
+  always gets a printed import line), using the universe only to answer "does THIS import declare
+  that name." The round trip is therefore exact in both directions: a reparse resolves every bare
+  reference the printer judged safe, and a context-free caller (no universe supplied) gets the
+  fully-conservative pre-#5 behavior — every import aliased, nothing printed bare — as the exact
+  `Map.empty` degenerate case of the same functions, not a separate code path.
 - **Doc-comment description placement, by definition kind (#711).** A `type` definition's
   description is carried as a trailing `@{description=...}` annotation on the type scheme's
   BODY in the DSL source; a `term` definition's is carried the same way, as a trailing
