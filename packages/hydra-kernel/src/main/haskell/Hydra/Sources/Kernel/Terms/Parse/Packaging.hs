@@ -118,9 +118,15 @@ module_ = Module {
      toDefinition modulePackage,
      toDefinition moduleParser,
      toDefinition parseModule,
+     toDefinition parseModuleWith,
      toDefinition primitiveDefinitionParser,
      toDefinition primitiveModifiers,
      toDefinition qualifyLocalName,
+     toDefinition resolveNameRefWith,
+     toDefinition resolveNameRefsInDefinitionWith,
+     toDefinition resolveNameRefsInTermSignatureWith,
+     toDefinition resolveNameRefsInTermWith,
+     toDefinition resolveNameRefsInTypeWith,
      toDefinition stripSpansInType,
      toDefinition termDefinitionParser,
      toDefinition token,
@@ -596,6 +602,185 @@ expandAliasesInTypeSelfAware = define "expandAliasesInTypeSelfAware" $
   "modName" ~> "ownNames" ~> "bound0" ~> "aliases" ~> "typ0" ~>
   expandAliasesInTypeSelfAwareGo @@ var "modName" @@ var "aliases" @@ var "ownNames" @@ var "bound0" @@ var "typ0"
 
+-- | Resolve a single bare (post-alias-expansion) name reference against the printer's universe,
+-- per Josh's readability request #5 (2026-11-09): the parser-side counterpart of
+-- 'Print.Packaging.moduleAliasesWith's bareness gate. Called only on names that have ALREADY run
+-- through 'expandAliasedName' (so a genuinely aliased prefix is already expanded) and are not
+-- currently in-scope bound variables ('bound', checked by the caller before reaching here).
+-- Resolution order, exactly mirroring the spec: (1) if the bare local name is one of 'ownNames'
+-- (the module's own declared definitions), it is ALREADY correct as a same-module reference and
+-- is returned unchanged -- no qualification needed, since a same-module reference is round-trip-
+-- safe without one (#711/#803); (2) otherwise, look it up in 'universe' (every OTHER module's
+-- full declared-name set, excluding this module's own namespace) and require EXACTLY one owner --
+-- zero or two-or-more owners is a hard error (never guess, per the spec); (3) a dotted (already
+-- multi-segment) name reaching here was neither a bound variable nor an own-name nor an
+-- alias-table hit, so it is left as-is (same "out of scope" fallback 'expandAliasedName' uses for
+-- any name it can't resolve -- a name that is already fully/partly qualified is not this
+-- function's problem to solve further).
+resolveNameRefWith :: TypedTermDefinition (ModuleName -> S.Set String -> M.Map ModuleName (S.Set Name) -> Name -> Either String Name)
+resolveNameRefWith = define "resolveNameRefWith" $
+  doc "Resolve a single bare name reference against the printer's universe: own-definitions first, then the unique owning import, hard error on zero or multiple owners (#5/#711)" $
+  "modName" ~> "ownNames" ~> "universe" ~> "n" ~>
+  "s" <~ Core.unName (var "n") $
+  Logic.ifElse (Logic.not (Equality.equal (Lists.length (Strings.splitOn (string ".") (var "s"))) (int32 1)))
+    (right (var "n"))
+    (Logic.ifElse (Sets.member (var "s") (var "ownNames" :: TypedTerm (S.Set String)))
+      (right (var "n"))
+      ("owners" <~ Lists.filter
+          ("entry" ~> Logic.and
+            (Logic.not (Equality.equal (Pairs.first $ var "entry") (var "modName")))
+            (Sets.member (var "s" :: TypedTerm String) (Sets.map (asTerm Names.localNameOf) (Pairs.second $ var "entry") :: TypedTerm (S.Set String))))
+          (Maps.toList (var "universe" :: TypedTerm (M.Map ModuleName (S.Set Name)))) $
+       Logic.ifElse (Equality.equal (Lists.length $ var "owners") (int32 1))
+         ("owner" <~ Pairs.first (Optionals.withDefault (pair (var "modName") (Sets.empty :: TypedTerm (S.Set Name))) (Lists.head $ var "owners")) $
+          right (Names.qname @@ var "owner" @@ var "s"))
+         (Logic.ifElse (Equality.equal (Lists.length $ var "owners") (int32 0))
+           (left (Strings.concat (list [
+             string "unresolved bare name reference: '", var "s",
+             string "' is not a local binder, not one of the module's own definitions, and not declared by any module in scope"])))
+           (left (Strings.concat (list [
+             string "ambiguous bare name reference: '", var "s", string "' is declared by ",
+             Literals.printInt32 (Lists.length $ var "owners"), string " different imported modules in scope"]))))))
+
+-- | Recursively resolve bare name references inside a type against the printer's universe,
+-- tracking bound type variables (forall parameters) so a genuinely bound variable is never
+-- mistaken for a nominal reference -- same recursive shape as 'expandAliasesInTypeSelfAwareGo',
+-- but calling 'resolveNameRefWith' instead of 'expandTypeNameRefSelfAware' for the 'variable'
+-- case, and threading 'Either' for the hard-error path.
+resolveNameRefsInTypeWith :: TypedTermDefinition (ModuleName -> S.Set String -> M.Map ModuleName (S.Set Name) -> S.Set String -> Type -> Either String Type)
+resolveNameRefsInTypeWith = define "resolveNameRefsInTypeWith" $
+  doc "Recursively resolve bare name references inside a type against the printer's universe, tracking bound type variables" $
+  "modName" ~> "ownNames" ~> "universe" ~> "bound" ~> "typ" ~>
+  "recurse" <~ (resolveNameRefsInTypeWith @@ var "modName" @@ var "ownNames" @@ var "universe") $
+  "forField" <~ ("boundHere" ~> "field" ~>
+    Eithers.map ("t" ~> Core.fieldTypeWithType (var "field") (var "t")) (var "recurse" @@ var "boundHere" @@ (Core.fieldTypeType $ var "field"))) $
+  match _Type (var "typ") Nothing [
+    _Type_annotated>>: "at" ~> Eithers.map
+      ("b" ~> Core.typeAnnotated $ Core.annotatedType (var "b") (Core.annotatedTypeAnnotation $ var "at"))
+      (var "recurse" @@ var "bound" @@ (Core.annotatedTypeBody $ var "at")),
+    _Type_application>>: "app" ~> Eithers.bind (var "recurse" @@ var "bound" @@ (Core.applicationTypeFunction $ var "app"))
+      ("f" ~> Eithers.map ("a" ~> Core.typeApplication $ Core.applicationType (var "f") (var "a")) (var "recurse" @@ var "bound" @@ (Core.applicationTypeArgument $ var "app"))),
+    _Type_effect>>: "t" ~> Eithers.map (reify Core.typeEffect) (var "recurse" @@ var "bound" @@ var "t"),
+    _Type_either>>: "et" ~> Eithers.bind (var "recurse" @@ var "bound" @@ (Core.eitherTypeLeft $ var "et"))
+      ("l" ~> Eithers.map ("r" ~> Core.typeEither $ Core.eitherType (var "l") (var "r")) (var "recurse" @@ var "bound" @@ (Core.eitherTypeRight $ var "et"))),
+    _Type_forall>>: "ft" ~>
+      "param" <~ Core.forallTypeParameter (var "ft") $
+      "bound'" <~ Sets.insert (Core.unName $ var "param") (var "bound" :: TypedTerm (S.Set String)) $
+      Eithers.map
+        ("b" ~> Core.typeForall $ Core.forallType (var "param") (var "b"))
+        (resolveNameRefsInTypeWith @@ var "modName" @@ var "ownNames" @@ var "universe" @@ var "bound'" @@ (Core.forallTypeBody $ var "ft")),
+    _Type_function>>: "fun" ~> Eithers.bind (var "recurse" @@ var "bound" @@ (Core.functionTypeDomain $ var "fun"))
+      ("d" ~> Eithers.map ("c" ~> Core.typeFunction $ Core.functionType (var "d") (var "c")) (var "recurse" @@ var "bound" @@ (Core.functionTypeCodomain $ var "fun"))),
+    _Type_list>>: "t" ~> Eithers.map (reify Core.typeList) (var "recurse" @@ var "bound" @@ var "t"),
+    _Type_literal>>: "lt" ~> right (Core.typeLiteral $ var "lt"),
+    _Type_map>>: "mt" ~> Eithers.bind (var "recurse" @@ var "bound" @@ (Core.mapTypeKeys $ var "mt"))
+      ("k" ~> Eithers.map ("v" ~> Core.typeMap $ Core.mapType (var "k") (var "v")) (var "recurse" @@ var "bound" @@ (Core.mapTypeValues $ var "mt"))),
+    _Type_optional>>: "t" ~> Eithers.map (reify Core.typeOptional) (var "recurse" @@ var "bound" @@ var "t"),
+    _Type_pair>>: "pt" ~> Eithers.bind (var "recurse" @@ var "bound" @@ (Core.pairTypeFirst $ var "pt"))
+      ("f" ~> Eithers.map ("s" ~> Core.typePair $ Core.pairType (var "f") (var "s")) (var "recurse" @@ var "bound" @@ (Core.pairTypeSecond $ var "pt"))),
+    _Type_record>>: "rt" ~> Eithers.map (reify Core.typeRecord) (Eithers.mapList (var "forField" @@ var "bound") (var "rt")),
+    _Type_set>>: "t" ~> Eithers.map (reify Core.typeSet) (var "recurse" @@ var "bound" @@ var "t"),
+    _Type_union>>: "rt" ~> Eithers.map (reify Core.typeUnion) (Eithers.mapList (var "forField" @@ var "bound") (var "rt")),
+    _Type_unit>>: constant (right Core.typeUnit),
+    _Type_variable>>: "n" ~>
+      Logic.ifElse (Sets.member (Core.unName $ var "n") (var "bound" :: TypedTerm (S.Set String)))
+        (right (Core.typeVariable (var "n")))
+        (Eithers.map (reify Core.typeVariable) (resolveNameRefWith @@ var "modName" @@ var "ownNames" @@ var "universe" @@ var "n")),
+    _Type_void>>: constant (right Core.typeVoid),
+    _Type_wrap>>: "wt" ~> Eithers.map (reify Core.typeWrap) (var "recurse" @@ var "bound" @@ var "wt")]
+
+-- | Recursively resolve bare name references inside a term against the printer's universe,
+-- tracking bound term variables (lambda parameters, let-binding names) so a genuinely bound
+-- variable is never mistaken for a nominal reference -- the term-level counterpart
+-- 'expandAliasesInTerm' (by design, #805) leaves unimplemented, now needed for #5's resolution
+-- pass. Covers the same name-valued positions 'expandAliasesInTerm' does: 'variable', 'project',
+-- 'record', 'unwrap', 'wrap', 'cases', 'inject'.
+resolveNameRefsInTermWith :: TypedTermDefinition (ModuleName -> S.Set String -> M.Map ModuleName (S.Set Name) -> S.Set String -> Term -> Either String Term)
+resolveNameRefsInTermWith = define "resolveNameRefsInTermWith" $
+  doc "Recursively resolve bare name references inside a term against the printer's universe, tracking bound term variables" $
+  "modName" ~> "ownNames" ~> "universe" ~> "bound" ~> "term" ~>
+  "recurse" <~ (resolveNameRefsInTermWith @@ var "modName" @@ var "ownNames" @@ var "universe") $
+  "resolveN" <~ (resolveNameRefWith @@ var "modName" @@ var "ownNames" @@ var "universe") $
+  "forField" <~ ("boundHere" ~> "field" ~>
+    Eithers.map ("t" ~> Core.fieldWithTerm (var "field") (var "t")) (var "recurse" @@ var "boundHere" @@ (Core.fieldTerm $ var "field"))) $
+  "forCaseAlternative" <~ ("boundHere" ~> "alt" ~>
+    Eithers.map ("h" ~> Core.caseAlternativeWithHandler (var "alt") (var "h")) (var "recurse" @@ var "boundHere" @@ (Core.caseAlternativeHandler $ var "alt"))) $
+  match _Term (var "term") Nothing [
+    _Term_annotated>>: "at" ~> Eithers.map
+      ("b" ~> Core.termAnnotated $ Core.annotatedTerm (var "b") (Core.annotatedTermAnnotation $ var "at"))
+      (var "recurse" @@ var "bound" @@ (Core.annotatedTermBody $ var "at")),
+    _Term_application>>: "a" ~> Eithers.bind (var "recurse" @@ var "bound" @@ (Core.applicationFunction $ var "a"))
+      ("f" ~> Eithers.map ("x" ~> Core.termApplication $ Core.application (var "f") (var "x")) (var "recurse" @@ var "bound" @@ (Core.applicationArgument $ var "a"))),
+    _Term_cases>>: "cs" ~>
+      "tn" <<~ var "resolveN" @@ (Core.caseStatementTypeName $ var "cs") $
+      "rdflt" <<~ Eithers.mapOptional (var "recurse" @@ var "bound") (Core.caseStatementDefault $ var "cs") $
+      Eithers.map
+        ("rcases" ~> Core.termCases $ Core.caseStatement (var "tn") (var "rdflt") (var "rcases"))
+        (Eithers.mapList (var "forCaseAlternative" @@ var "bound") (Core.caseStatementCases $ var "cs")),
+    _Term_either>>: "e" ~>
+      "re" <<~ Eithers.either
+        ("l" ~> Eithers.map (reify left) $ var "recurse" @@ var "bound" @@ var "l")
+        ("r" ~> Eithers.map (reify right) $ var "recurse" @@ var "bound" @@ var "r")
+        (var "e") $
+      right $ Core.termEither $ var "re",
+    _Term_lambda>>: "l" ~>
+      "param" <~ Core.lambdaParameter (var "l") $
+      "bound'" <~ Sets.insert (Core.unName $ var "param") (var "bound" :: TypedTerm (S.Set String)) $
+      Eithers.map
+        ("b" ~> Core.termLambda $ Core.lambda (var "param") (Core.lambdaDomain $ var "l") (var "b"))
+        (resolveNameRefsInTermWith @@ var "modName" @@ var "ownNames" @@ var "universe" @@ var "bound'" @@ (Core.lambdaBody $ var "l")),
+    _Term_let>>: "lt" ~>
+      "bindingNames" <~ Sets.fromList (Lists.map ("b" ~> Core.unName (Core.bindingName $ var "b")) (Core.letBindings $ var "lt")) $
+      "bound'" <~ Sets.union (var "bound" :: TypedTerm (S.Set String)) (var "bindingNames" :: TypedTerm (S.Set String)) $
+      "mapBinding" <~ ("b" ~> Eithers.map
+        ("t" ~> Core.binding (Core.bindingName $ var "b") (var "t") (Core.bindingTypeScheme $ var "b"))
+        (resolveNameRefsInTermWith @@ var "modName" @@ var "ownNames" @@ var "universe" @@ var "bound'" @@ (Core.bindingTerm $ var "b"))) $
+      "rbindings" <<~ Eithers.mapList (var "mapBinding") (Core.letBindings $ var "lt") $
+      Eithers.map
+        ("renv" ~> Core.termLet $ Core.let_ (var "rbindings") (var "renv"))
+        (resolveNameRefsInTermWith @@ var "modName" @@ var "ownNames" @@ var "universe" @@ var "bound'" @@ (Core.letBody $ var "lt")),
+    _Term_list>>: "els" ~> Eithers.map (reify Core.termList) (Eithers.mapList (var "recurse" @@ var "bound") (var "els")),
+    _Term_literal>>: "v" ~> right (Core.termLiteral $ var "v"),
+    _Term_map>>: "m" ~>
+      "forPair" <~ ("p" ~>
+        "k" <<~ var "recurse" @@ var "bound" @@ (Pairs.first $ var "p") $
+        Eithers.map ("v" ~> pair (var "k") (var "v")) (var "recurse" @@ var "bound" @@ (Pairs.second $ var "p"))) $
+      Eithers.map ("rpairs" ~> Core.termMap (Maps.fromList $ var "rpairs")) (Eithers.mapList (var "forPair") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))),
+    _Term_optional>>: "m" ~> Eithers.map (reify Core.termOptional) (Eithers.mapOptional (var "recurse" @@ var "bound") (var "m")),
+    _Term_pair>>: "p" ~> Eithers.bind (var "recurse" @@ var "bound" @@ (Pairs.first $ var "p"))
+      ("f" ~> Eithers.map ("s" ~> Core.termPair $ pair (var "f") (var "s")) (var "recurse" @@ var "bound" @@ (Pairs.second $ var "p"))),
+    _Term_project>>: "p" ~>
+      "tn" <<~ var "resolveN" @@ (Core.projectionTypeName $ var "p") $
+      Eithers.map ("fn" ~> Core.termProject $ Core.projection (var "tn") (var "fn")) (var "resolveN" @@ (Core.projectionFieldName $ var "p")),
+    _Term_record>>: "r" ~>
+      "tn" <<~ var "resolveN" @@ (Core.recordTypeName $ var "r") $
+      Eithers.map
+        ("rfields" ~> Core.termRecord $ Core.record (var "tn") (var "rfields"))
+        (Eithers.mapList (var "forField" @@ var "bound") (Core.recordFields $ var "r")),
+    _Term_set>>: "s" ~> Eithers.map ("rlist" ~> Core.termSet (Sets.fromList $ var "rlist")) (Eithers.mapList (var "recurse" @@ var "bound") (Sets.toList (var "s" :: TypedTerm (S.Set Term)))),
+    _Term_typeApplication>>: "tt" ~> Eithers.map
+      ("b" ~> Core.termTypeApplication $ Core.typeApplicationTerm (var "b") (Core.typeApplicationTermType $ var "tt"))
+      (var "recurse" @@ var "bound" @@ (Core.typeApplicationTermBody $ var "tt")),
+    _Term_typeLambda>>: "ta" ~> Eithers.map
+      ("b" ~> Core.termTypeLambda $ Core.typeLambda (Core.typeLambdaParameter $ var "ta") (var "b"))
+      (var "recurse" @@ var "bound" @@ (Core.typeLambdaBody $ var "ta")),
+    _Term_inject>>: "inj" ~>
+      "tn" <<~ var "resolveN" @@ (Core.injectionTypeName $ var "inj") $
+      Eithers.map
+        ("rfield" ~> Core.termInject $ Core.injection (var "tn") (var "rfield"))
+        (var "forField" @@ var "bound" @@ (Core.injectionField $ var "inj")),
+    _Term_unit>>: constant (right Core.termUnit),
+    _Term_unwrap>>: "n" ~> Eithers.map (reify Core.termUnwrap) (var "resolveN" @@ var "n"),
+    _Term_variable>>: "v" ~>
+      Logic.ifElse (Sets.member (Core.unName $ var "v") (var "bound" :: TypedTerm (S.Set String)))
+        (right (Core.termVariable (var "v")))
+        (Eithers.map (reify Core.termVariable) (var "resolveN" @@ var "v")),
+    _Term_wrap>>: "wt" ~>
+      "tn" <<~ var "resolveN" @@ (Core.wrappedTermTypeName $ var "wt") $
+      Eithers.map
+        ("b" ~> Core.termWrap $ Core.wrappedTerm (var "tn") (var "b"))
+        (var "recurse" @@ var "bound" @@ (Core.wrappedTermBody $ var "wt"))]
+
 -- | Expand every aliased name reference inside a term signature's parameter and result types,
 -- per the given alias table. Operates directly on TermSignature (not via a TypeScheme bridge),
 -- preserving parameter names, descriptions, and isLazy flags (#800) exactly.
@@ -647,6 +832,101 @@ expandAliasesInDefinition = define "expandAliasesInDefinition" $
       (expandAliasesInTermSignature @@ (var "aliases" :: TypedTerm (M.Map String ModuleName)) @@ (Packaging.primitiveDefinitionSignature $ var "pd"))
       (Packaging.primitiveDefinitionIsPure $ var "pd") (Packaging.primitiveDefinitionIsTotal $ var "pd")
       (Optionals.map (expandAliasesInTerm @@ (var "aliases" :: TypedTerm (M.Map String ModuleName))) (Packaging.primitiveDefinitionDefaultImplementation $ var "pd")))]
+
+-- | Resolve bare name references inside a term signature's parameter and result types against
+-- the printer's universe (#5/#711), the type-only counterpart of 'resolveNameRefsInTermWith'
+-- used by 'resolveNameRefsInDefinitionWith''s primitive-definition branch.
+resolveNameRefsInTermSignatureWith :: TypedTermDefinition (ModuleName -> S.Set String -> M.Map ModuleName (S.Set Name) -> TermSignature -> Either String TermSignature)
+resolveNameRefsInTermSignatureWith = define "resolveNameRefsInTermSignatureWith" $
+  doc "Resolve bare name references inside a term signature's parameter and result types against the printer's universe" $
+  "modName" ~> "ownNames" ~> "universe" ~> "sig" ~>
+  "resolveT" <~ (resolveNameRefsInTypeWith @@ var "modName" @@ var "ownNames" @@ var "universe" @@ (Sets.empty :: TypedTerm (S.Set String))) $
+  "mapParam" <~ ("p" ~> Eithers.map
+    ("t" ~> Typing.parameter (Typing.parameterName $ var "p") (Typing.parameterDescription $ var "p") (var "t") (Typing.parameterIsLazy $ var "p"))
+    (var "resolveT" @@ (Typing.parameterType $ var "p"))) $
+  "rparams" <<~ Eithers.mapList (var "mapParam") (Typing.termSignatureParameters $ var "sig") $
+  "r" <~ Typing.termSignatureResult (var "sig") $
+  Eithers.map
+    ("rt" ~> Typing.termSignature (Typing.termSignatureTypeParameters $ var "sig") (var "rparams")
+      (Typing.result (Typing.resultDescription $ var "r") (var "rt")))
+    (var "resolveT" @@ (Typing.resultType $ var "r"))
+
+-- | Resolve every remaining bare name reference inside a definition's body/signature against the
+-- printer's universe (#5/#711) -- the dispatcher 'parseModuleWith' runs AFTER 'moduleParser'
+-- (which has already expanded every ALIASED reference via 'expandAliasesInDefinition'; what
+-- reaches here is only the names that were bare, unaliased, and not one of the module's own
+-- declarations, i.e. exactly the references 'Print.Packaging.moduleAliasesWith' may have decided
+-- to leave bare). A type definition's own type-scheme variables seed the bound set, same as
+-- 'expandAliasesInDefinition''s 'expandScheme'.
+resolveNameRefsInDefinitionWith :: TypedTermDefinition (ModuleName -> S.Set String -> M.Map ModuleName (S.Set Name) -> Definition -> Either String Definition)
+resolveNameRefsInDefinitionWith = define "resolveNameRefsInDefinitionWith" $
+  doc "Resolve every remaining bare name reference inside a definition's body/signature against the printer's universe" $
+  "modName" ~> "ownNames" ~> "universe" ~> "def" ~>
+  "resolveScheme" <~ ("ts" ~>
+    "vars" <~ Core.typeSchemeVariables (var "ts") $
+    "boundNames" <~ Sets.fromList (Lists.map ("v" ~> Core.unName (var "v")) (var "vars" :: TypedTerm [Name])) $
+    Eithers.map
+      ("b" ~> Core.typeScheme (var "vars") (var "b") (Core.typeSchemeConstraints $ var "ts"))
+      (resolveNameRefsInTypeWith @@ var "modName" @@ var "ownNames" @@ var "universe" @@ (var "boundNames" :: TypedTerm (S.Set String)) @@ (Core.typeSchemeBody $ var "ts"))) $
+  match _Definition (var "def") Nothing [
+    _Definition_type>>: "td" ~> Eithers.map
+      ("ts" ~> Packaging.definitionType (Packaging.typeDefinition (Packaging.typeDefinitionName $ var "td") (Packaging.typeDefinitionMetadata $ var "td") (var "ts")))
+      (var "resolveScheme" @@ (Packaging.typeDefinitionBody $ var "td")),
+    _Definition_term>>: "td" ~>
+      "rsig" <<~ Eithers.mapOptional (resolveNameRefsInTermSignatureWith @@ var "modName" @@ var "ownNames" @@ var "universe") (Packaging.termDefinitionSignature $ var "td") $
+      Eithers.map
+        ("rbody" ~> Packaging.definitionTerm (Packaging.termDefinition (Packaging.termDefinitionName $ var "td") (Packaging.termDefinitionMetadata $ var "td") (var "rsig") (var "rbody")))
+        (resolveNameRefsInTermWith @@ var "modName" @@ var "ownNames" @@ var "universe" @@ (Sets.empty :: TypedTerm (S.Set String)) @@ (Packaging.termDefinitionBody $ var "td")),
+    _Definition_primitive>>: "pd" ~>
+      "rsig" <<~ resolveNameRefsInTermSignatureWith @@ var "modName" @@ var "ownNames" @@ var "universe" @@ (Packaging.primitiveDefinitionSignature $ var "pd") $
+      Eithers.map
+        ("rimpl" ~> Packaging.definitionPrimitive (Packaging.primitiveDefinition (Packaging.primitiveDefinitionName $ var "pd") (Packaging.primitiveDefinitionMetadata $ var "pd") (var "rsig") (Packaging.primitiveDefinitionIsPure $ var "pd") (Packaging.primitiveDefinitionIsTotal $ var "pd") (var "rimpl")))
+        (Eithers.mapOptional (resolveNameRefsInTermWith @@ var "modName" @@ var "ownNames" @@ var "universe" @@ (Sets.empty :: TypedTerm (S.Set String))) (Packaging.primitiveDefinitionDefaultImplementation $ var "pd"))]
+
+-- | Parse a complete module from a string, given the declared-name sets of modules available to
+-- look up ('Print.Packaging.moduleAliasesWith's exact counterpart, #5/#711). Reuses 'parseModule's
+-- grammar and alias expansion unchanged (every ALIASED reference is already resolved by the time
+-- this function sees the parsed 'Module'), then resolves every remaining bare reference: local
+-- binder (left alone by the walkers above), then the module's own definitions (left alone --
+-- already correct), then the unique module AMONG THIS FILE'S OWN RECOVERED IMPORTS
+-- ('Packaging.moduleDependencies' on the just-parsed 'Module' -- every real dependency, aliased
+-- or bare-safe, always has a printed import line per staging's 2026-11-01 ruling: dropping the
+-- line for a bare-safe dependency would mean the text no longer states its own dependencies,
+-- undermining '.hydra' becoming a self-contained build input) that declares it (rewritten to
+-- fully qualified). 'universe' is consulted ONLY to look up each of THOSE imports' declared-name
+-- sets -- it is not itself the resolution scope, and modules outside the file's own import list
+-- are never consulted even if 'universe' happens to contain them (an unrelated module sharing a
+-- local name poses no real ambiguity risk, since it was never relevant to the printer's bareness
+-- decision either). Zero or multiple declaring modules among the file's own imports is a hard
+-- parse error -- never guess, per the spec. With an empty universe this is identical to
+-- 'parseModule' (every bare name either resolves to 'ownNames' or is left untouched, since no
+-- import's declared set is known to prove anything), matching
+-- 'moduleAliases'/'moduleAliasesWith's own empty-map symmetry on the printer side. This function
+-- is therefore SELF-CONTAINED given 'universe' -- unlike an earlier draft, it does not require the
+-- caller to separately narrow 'universe' down to "the original module's own imports" out of band
+-- (that context only exists while a non-textual source of truth is still around; after '.hydra'
+-- ingestion lands, there is no "original module" to ask -- only this file's own text).
+parseModuleWith :: TypedTermDefinition (M.Map ModuleName (S.Set Name) -> String -> Either String Module)
+parseModuleWith = define "parseModuleWith" $
+  doc "Parse a complete module from a string, resolving bare name references against the file's own recovered imports, using the given universe only to look up each import's declared names (#5/#711)" $
+  "universe" ~> "input" ~>
+  "parsed" <<~ parseModule @@ var "input" $
+  "modName" <~ Packaging.moduleName (var "parsed") $
+  "ownNames" <~ Sets.fromList (Lists.map
+    ("def" ~> Names.localNameOf @@ (match _Definition (var "def") Nothing [
+      _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td"),
+      _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
+      _Definition_primitive>>: "pd" ~> Packaging.primitiveDefinitionName (var "pd")]))
+    (Packaging.moduleDefinitions $ var "parsed")) $
+  -- Resolution candidates are the file's own recovered imports -- never the whole 'universe' the
+  -- caller happens to supply, and never derived from anything but THIS file's text (see this
+  -- function's own doc comment for why).
+  "declaredImportModNames" <~ Lists.map ("d" ~> Packaging.moduleDependencyModule $ var "d") (Packaging.moduleDependencies $ var "parsed") $
+  "scopedUniverse" <~ Maps.fromList (Optionals.givens (Lists.map
+    ("nm" ~> Optionals.map ("declared" ~> pair (var "nm") (var "declared")) (Maps.lookup (var "nm") (var "universe" :: TypedTerm (M.Map ModuleName (S.Set Name)))))
+    (var "declaredImportModNames"))) $
+  "rdefs" <<~ Eithers.mapList (resolveNameRefsInDefinitionWith @@ var "modName" @@ var "ownNames" @@ (var "scopedUniverse" :: TypedTerm (M.Map ModuleName (S.Set Name)))) (Packaging.moduleDefinitions $ var "parsed") $
+  right (Packaging.module_ (var "modName") (Packaging.moduleMetadata $ var "parsed") (Packaging.moduleDependencies $ var "parsed") (var "rdefs"))
 
 -- | True iff a type, once stripped of its 'forall' quantifiers and annotations, is a union type
 -- (#809). Used to decide whether a one-field record-style construct over this type name is actually

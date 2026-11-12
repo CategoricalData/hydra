@@ -5,6 +5,9 @@ module Hydra.Sources.Kernel.Terms.Analysis where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
   addNamesToModuleNames,
+  allBinderNamesInDefinitions,
+  allBinderNamesInTerm,
+  allBinderNamesInType,
   analyzeFunctionTerm,
   analyzeFunctionTermWith,
   analyzeFunctionTermWithFinish,
@@ -99,6 +102,9 @@ module_ = Module {
   where
     definitions = [
       toDefinition addNamesToModuleNames,
+      toDefinition allBinderNamesInDefinitions,
+      toDefinition allBinderNamesInTerm,
+      toDefinition allBinderNamesInType,
       toDefinition analyzeFunctionTerm,
       toDefinition analyzeFunctionTermWith,
       toDefinition analyzeFunctionTermWithFinish,
@@ -353,6 +359,60 @@ definitionDependencyNamesByModule = define "definitionDependencyNamesByModule" $
       Maps.insert (var "mn") (Maps.insert (var "local") (var "newCount") (var "inner" :: TypedTerm (M.Map String Int))) (var "acc" :: TypedTerm (M.Map ModuleName (M.Map String Int))))
     (Maps.empty :: TypedTerm (M.Map ModuleName (M.Map String Int)))
     (var "pairs")
+
+-- | Collect every local name bound by a lambda, let-binding, or forall anywhere within a term
+-- (lambda/let parameters) or type (forall parameters), including under nested binders. Used by
+-- the textual-syntax printer's unqualified-name gate (#711): a dependency module's local name must
+-- never print bare if it coincides with a binder anywhere in the printed module, since a bare
+-- reference inside that binder's scope would then resolve to the LOCAL binding instead of the
+-- import on reparse -- a silent round-trip-breaking shadow, not merely an ambiguity. This is a
+-- module-wide (not site-local) approximation: it forbids bareness for a name that shadows
+-- ANYWHERE in the module, even in an unrelated definition where no actual conflict exists. Strictly
+-- safe (never wrong), simply more conservative than an exact per-reference-site scope check would
+-- be; see 'Print.Packaging.moduleAliasesWith's own doc comment for the full design note.
+allBinderNamesInTerm :: TypedTermDefinition (Term -> S.Set Name)
+allBinderNamesInTerm = define "allBinderNamesInTerm" $
+  doc "Find every name bound by a lambda or let-binding anywhere within a term, including nested binders" $
+  "term" ~>
+  "ownBinders" <~ match _Term (var "term")
+    (Just (Sets.empty :: TypedTerm (S.Set Name))) [
+    _Term_lambda>>: "l" ~> Sets.singleton (Core.lambdaParameter $ var "l"),
+    _Term_let>>: "l" ~> Sets.fromList (Lists.map (reify Core.bindingName) (Core.letBindings $ var "l"))] $
+  Lists.foldl ("s" ~> "t" ~> Sets.union (var "s") (allBinderNamesInTerm @@ var "t"))
+    (var "ownBinders")
+    (Rewriting.subterms @@ var "term")
+
+-- | Find every name bound by a forall anywhere within a type, including nested binders. The type
+-- analog of 'allBinderNamesInTerm'.
+allBinderNamesInType :: TypedTermDefinition (Type -> S.Set Name)
+allBinderNamesInType = define "allBinderNamesInType" $
+  doc "Find every name bound by a forall anywhere within a type, including nested binders" $
+  "typ" ~>
+  "ownBinders" <~ match _Type (var "typ")
+    (Just (Sets.empty :: TypedTerm (S.Set Name))) [
+    _Type_forall>>: "ft" ~> Sets.singleton (Core.forallTypeParameter $ var "ft")] $
+  Lists.foldl ("s" ~> "t" ~> Sets.union (var "s") (allBinderNamesInType @@ var "t"))
+    (var "ownBinders")
+    (Rewriting.subtypes @@ var "typ")
+
+-- | Find every name bound by a lambda, let-binding, or forall anywhere within a list of
+-- definitions -- a type definition's own type-scheme variables, a term definition's own
+-- lambda/let/forall binders (term-level and, via type applications/lambdas, type-level), and a
+-- primitive definition's signature's forall variables. See 'allBinderNamesInTerm's doc comment for
+-- why this module-wide set (not a site-local scope) is what the printer's bareness gate needs.
+allBinderNamesInDefinitions :: TypedTermDefinition ([Definition] -> S.Set Name)
+allBinderNamesInDefinitions = define "allBinderNamesInDefinitions" $
+  doc "Find every lambda/let/forall-bound name anywhere within a list of definitions" $
+  "defs" ~>
+  "binderSetOf" <~ ("def" ~> match _Definition (var "def")
+    Nothing [
+    _Definition_type>>: "td" ~> Sets.union
+      (Sets.fromList (Core.typeSchemeVariables $ Packaging.typeDefinitionBody (var "td")))
+      (allBinderNamesInType @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "td"))),
+    _Definition_term>>: "termDef" ~> allBinderNamesInTerm @@ Packaging.termDefinitionBody (var "termDef"),
+    _Definition_primitive>>: "primDef" ~> Sets.fromList
+      (Core.typeSchemeVariables $ Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "primDef"))]) $
+  Sets.unions (Lists.map (var "binderSetOf") (var "defs") :: TypedTerm [S.Set Name])
 
 dependencyModuleNames :: TypedTermDefinition (InferenceContext -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either Error (S.Set ModuleName))
 dependencyModuleNames = define "dependencyModuleNames" $

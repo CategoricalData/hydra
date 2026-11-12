@@ -24,6 +24,7 @@ import qualified Hydra.Core.Dsl.Lib.Math     as Math
 import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
 import qualified Hydra.Core.Dsl.Lib.Ordering    as Ordering
 import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
 import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals          as Literals
 import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
@@ -87,7 +88,9 @@ module_ = Module {
      toDefinition growAliasesStep,
      toDefinition importDecl,
      toDefinition moduleAliases,
+     toDefinition moduleAliasesWith,
      toDefinition module',
+     toDefinition moduleDefinitionWith,
      toDefinition moduleNameString,
      toDefinition primitiveDefinitionDoc,
      toDefinition termDefinition,
@@ -268,55 +271,116 @@ growAliasesStep = define "growAliasesStep" $
       pair (var "nm") (Logic.ifElse (var "canGrow") (Math.add (var "n") (int32 1)) (var "n")))
     (var "entries"))
 
--- | Compute the printing alias for every module referenced by the given module's definitions.
+-- | Compute the printing alias for every module referenced by the given module's definitions,
+-- given the FULL declared-name set of every module in scope (the printed module's own universe).
 -- Per Josh's 2026-10-31 Decision Desk ruling (card '711-bare-import-roundtrip', folding #805 into
 -- #711's scope): the required round-trip contract is 'module -> print -> parse == original
--- module' (structural identity on the module, not just textual stability of repeated prints).
--- A single-file parser has no access to a bare (unaliased) import's own declared names, so it can
--- NEVER re-qualify a bare cross-module body reference back to the module that declared it -- not
--- even in the no-collision case (#711) and not in the split bare/aliased collision case (#805);
--- both are the same root cause (see syntax.md #6.4's notes). Of the two possible fixes the
--- bare-import gap note laid out -- give the parser a multi-module environment, or have the
--- printer always alias every cross-module import -- Josh picked the simplest: this is the
--- printer-only fix, applied by routing every referenced dependency straight into the
--- shortest-unique-suffix aliasing fixed point below, bypassing the MWIS bare/alias split
--- entirely, so every ACTUAL dependency always receives a real (non-empty) alias. 'mwisSolve' and
--- the collision-avoidance machinery it fed (#804) are therefore unused now; only the
--- self-reference case below (the printed module's OWN namespace, mapped unconditionally to "")
--- still prints bare, since that one IS round-trip-safe -- 'ownNames' is available to the parser
--- from the module being parsed itself, no other module's definitions are needed to resolve it.
+-- module' (structural identity on the module, not just textual stability of repeated prints). A
+-- single-file parser has no access to a bare (unaliased) import's own declared names, so without
+-- a universe it can NEVER re-qualify a bare cross-module body reference back to the module that
+-- declared it. 'Parse.Packaging.parseModuleWith' closes that gap by taking the same universe this
+-- function does, so bareness decided HERE is exactly what that parser can resolve THERE.
 --
--- (1) Collect, per dependency module, the COUNTED set of its local names referenced by the printed
---     module's definitions ('Analysis.definitionDependencyNamesByModule'), plus the printed
---     module's OWN declared local names.
--- (2) Every dependency module is aliased (never left bare) by the shortest-unique-suffix fixed
---     point ('growAliasesStep'/'aliasFromSuffix'), run over the full dependency list.
+-- Per Josh's readability request #5 (2026-11-09, via staging): "only use namespace prefixes when
+-- there are conflicts." A dependency module's local names print bare when doing so is PROVABLY
+-- safe for the round-trip -- never merely plausible. A local name referenced from dependency
+-- module 'd' is bare-safe iff ALL of:
+--   (a) 'd' is present in the universe (its full declared-name set is known to the caller);
+--   (b) that local name is a member of 'd''s declared set;
+--   (c) no OTHER module in the universe (including the printed module's own definitions) ALSO
+--       declares that same local name -- otherwise the parser, resolving the bare name against
+--       every import's full definitions, would find >1 owner and hard-error (ambiguous), breaking
+--       the round trip even though the PRINTED module itself never referenced the colliding name;
+--   (d) that local name is never used as a lambda/let/forall binder anywhere in the printed
+--       module ('Analysis.allBinderNamesInDefinitions') -- otherwise a bare reference inside that
+--       binder's scope would resolve to the LOCAL binding on reparse instead of the import, a
+--       silent round-trip-breaking shadow. This is a MODULE-WIDE (not site-local) approximation:
+--       it forbids bareness for a name that shadows ANYWHERE in the module, even where no actual
+--       conflict exists at a given reference site. Strictly safe (never wrong), just more
+--       conservative than an exact per-reference-site scope check would be -- deliberately chosen
+--       (2026-11-11, staging/Josh "option 2") over threading site-local binder scope through every
+--       one of 'Print/Core.hs's dozen-plus mutually-recursive print functions, which would be a
+--       rewrite comparable in size to the held line-layout work.
+-- A dependency module is only printed FULLY bare (i.e. assigned the "" alias) when EVERY local
+-- name the printed module actually references from it satisfies (a)-(d); if even one referenced
+-- name fails, the whole module stays aliased (shortest-unique-suffix, as before) -- there is no
+-- "aliased for this reference, bare for that one" split within a single dependency module, since
+-- 'PrintCore.printNameAliased' keys off a single alias string per 'ModuleName'.
 --
--- The result map's two states feed 'Print/Core.printNameAliased' directly: ""-> bare local name
--- (self-reference only), "<alias>" -> 'alias.Local' (every real dependency). Dependency modules
--- are collected via a pure walk of the definitions' term/type contents (no InferenceContext/Graph
--- needed; the printer always prints a module's own in-memory 'Definition's).
+-- With an empty universe (no module's declared-name set is known), condition (a) fails for every
+-- dependency, so every dependency stays aliased -- 'moduleAliases' (the context-free wrapper,
+-- below) is therefore IDENTICAL to this function's pre-#5 behavior, by construction, not by
+-- coincidence: nothing without a universe ever prints a bare cross-module name.
 --
--- The printed module's OWN namespace ('ownNs') is also inserted into the result, mapped to the
--- empty-string alias, so 'PrintCore.printNameAliased's existing "empty alias -> bare local name"
--- branch (#803) also covers same-module self-references -- a reference to a type defined in the
--- SAME module prints as its bare local name (e.g. 'Block', not 'hydra.core.markdown.Block'),
--- matching every other host's own intra-module reference style (#711). This entry is deliberately
--- excluded from import-line generation: 'module'' filters it back out of 'usedDeps' (a module
--- never imports itself), so it affects only name-shortening, not the printed 'import' block.
-moduleAliases :: TypedTermDefinition (Module -> M.Map ModuleName String)
-moduleAliases = define "moduleAliases" $
-  doc "Compute the printing alias for every module referenced by the given module's definitions, plus the module's own namespace (mapped to the empty alias, for self-reference shortening, #711)" $
-  "mod" ~>
+-- The printed module's OWN namespace ('ownNs') is unconditionally mapped to the empty-string
+-- alias regardless of the universe, exactly as before (#711/#803) -- that entry is excluded from
+-- import-line generation by 'module'''s own filtering (a module never imports itself) and from
+-- the per-name bareness check above the same way (a self-reference is Hydra.Kernel-term printing,
+-- not an import), so it doesn't interact with conditions (a)-(d) at all.
+moduleAliasesWith :: TypedTermDefinition (M.Map ModuleName (S.Set Name) -> Module -> M.Map ModuleName String)
+moduleAliasesWith = define "moduleAliasesWith" $
+  doc "Compute the printing alias for every module referenced by the given module's definitions, given the full declared-name universe of modules in scope (#5/#711); the printed module's own namespace is always mapped to the empty alias for self-reference shortening (#711/#803)" $
+  "universe" ~> "mod" ~>
   "ownNs" <~ Packaging.moduleName (var "mod") $
   "defs" <~ (Packaging.moduleDefinitions $ var "mod") $
   -- Per-module counted referenced local names, excluding self-references to the printed module.
   "namesByModRaw" <~ (Analysis.definitionDependencyNamesByModule @@ var "defs") $
   "namesByMod" <~ Maps.delete (var "ownNs") (var "namesByModRaw" :: TypedTerm (M.Map ModuleName (M.Map String Int))) $
   "nssAsList" <~ Lists.sortBy ("nm" ~> Packaging.unModuleName $ var "nm") (Maps.keys (var "namesByMod" :: TypedTerm (M.Map ModuleName (M.Map String Int)))) $
-  -- Every referenced dependency module is aliased (never left bare) -- see this definition's own
-  -- doc comment for why cross-module bareness was removed (2026-10-31 round-trip-identity ruling).
-  "aliasedList" <~ var "nssAsList" $
+  -- The printed module's own declared local names (condition (c)'s "no OTHER module" set always
+  -- includes the printed module itself -- a bare reference that happens to equal one of the
+  -- module's own definitions would resolve to the wrong thing on reparse, per 'parseModuleWith's
+  -- own resolution order: local binder, then OWN definitions, THEN imports).
+  "ownLocalNames" <~ Sets.fromList (Lists.map
+    ("def" ~> Names.localNameOf @@ (match _Definition (var "def") Nothing [
+      _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td"),
+      _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
+      _Definition_primitive>>: "pd" ~> Packaging.primitiveDefinitionName (var "pd")]))
+    (var "defs")) $
+  -- Every DECLARED import module name (from 'moduleDependencies', NOT just the subset this
+  -- module's definitions happen to reference) -- the collision scope must include an imported-
+  -- but-unreferenced module, since 'parseModuleWith's resolution set comes from the whole
+  -- import list a real caller would load, not from what this module happens to use (staging's
+  -- counterexample, 2026-11-11: module A imports both 'logic' and 'foo' but only references
+  -- 'logic.ifElse' -- 'foo' declaring an unrelated 'ifElse' still makes a bare 'ifElse' ambiguous
+  -- on reparse, even though A never touches 'foo.ifElse').
+  "declaredImportNames" <~ Lists.map ("d" ~> Packaging.moduleDependencyModule $ var "d") (Packaging.moduleDependencies $ var "mod") $
+  -- Every LOCAL name (bare, '.'-stripped) declared by every OTHER DECLARED import (excluding 'd'
+  -- itself), unioned with the printed module's own names -- condition (c)'s full "is this local
+  -- name claimed by anyone else" check for a given dependency 'd'. Compares by bare local-name
+  -- STRING throughout (not fully-qualified 'Name's): 'universe's values are fully-qualified, so
+  -- each is stripped via 'Names.localNameOf' before joining the set. Deliberately scoped to
+  -- 'declaredImportNames' (this module's real, DECLARED imports), NOT every module the universe
+  -- happens to contain: 'parseModuleWith' only ever resolves a bare name against the printed
+  -- module's own definitions and its DECLARED imports (never against an unrelated, unimported
+  -- module), so an unimported module sharing a common local name (e.g. some other module also
+  -- defining 'map' or 'first') poses no actual collision risk and must not force needless
+  -- qualification (staging, 2026-11-11).
+  "otherLocalNamesExcluding" <~ ("d" ~>
+    Sets.unions (Lists.cons (var "ownLocalNames" :: TypedTerm (S.Set String)) (Lists.map
+      ("other" ~> Sets.map (asTerm Names.localNameOf) (Optionals.withDefault (Sets.empty :: TypedTerm (S.Set Name)) (Maps.lookup (var "other") (var "universe" :: TypedTerm (M.Map ModuleName (S.Set Name))))))
+      (Lists.filter ("nm" ~> Logic.not (Equality.equal (var "nm") (var "d"))) (var "declaredImportNames"))))) $
+  "allBinderLocalNames" <~ Sets.map (asTerm Names.localNameOf) (Analysis.allBinderNamesInDefinitions @@ var "defs") $
+  -- A dependency module 'd' may print fully bare iff EVERY local name actually referenced from it
+  -- is (a) present in 'd''s own declared set per the universe, (b)/(c) claimed by no other module
+  -- in scope (including the printed module's own definitions), and (d) never used as a binder
+  -- anywhere in the printed module. Compared by bare local-name string throughout.
+  "isSafeBare" <~ ("d" ~>
+    Optionals.match (Maps.lookup (var "d") (var "universe" :: TypedTerm (M.Map ModuleName (S.Set Name))))
+      false
+      ("declaredNames" ~>
+        "declaredLocalNames" <~ Sets.map (asTerm Names.localNameOf) (var "declaredNames" :: TypedTerm (S.Set Name)) $
+        "referencedLocalNames" <~ Maps.keys (Optionals.withDefault (Maps.empty :: TypedTerm (M.Map String Int)) (Maps.lookup (var "d") (var "namesByMod" :: TypedTerm (M.Map ModuleName (M.Map String Int))))) $
+        "otherLocalNames" <~ var "otherLocalNamesExcluding" @@ var "d" $
+        "isUnsafe" <~ ("local" ~>
+          Logic.not (Logic.and
+            (Sets.member (var "local" :: TypedTerm String) (var "declaredLocalNames" :: TypedTerm (S.Set String)))
+            (Logic.and
+              (Logic.not (Sets.member (var "local" :: TypedTerm String) (var "otherLocalNames" :: TypedTerm (S.Set String))))
+              (Logic.not (Sets.member (var "local" :: TypedTerm String) (var "allBinderLocalNames" :: TypedTerm (S.Set String))))))) $
+        Lists.isEmpty (Lists.filter (var "isUnsafe") (var "referencedLocalNames")))) $
+  "bareList" <~ Lists.filter (var "isSafeBare") (var "nssAsList") $
+  "aliasedList" <~ Lists.filter ("nm" ~> Logic.not (var "isSafeBare" @@ var "nm")) (var "nssAsList") $
   "segmentsOf" <~ ("nm" ~> Strings.splitOn (string ".") (Packaging.unModuleName $ var "nm")) $
   "segsMap" <~ Maps.fromList (Lists.map ("nm" ~> pair (var "nm") (var "segmentsOf" @@ var "nm")) (var "aliasedList")) $
   "maxSegs" <~ Lists.foldl
@@ -325,18 +389,32 @@ moduleAliases = define "moduleAliases" $
     (Lists.map ("nm" ~> Lists.length (var "segmentsOf" @@ var "nm")) (var "aliasedList")) $
   "initialState" <~ Maps.fromList (Lists.map ("nm" ~> pair (var "nm") (int32 1)) (var "aliasedList")) $
   "finalState" <~ Lists.foldl (growAliasesStep @@ (var "segsMap" :: TypedTerm (M.Map ModuleName [String]))) (var "initialState") (Lists.replicate (var "maxSegs") unit) $
-  -- Assemble the per-OTHER-module result: bare modules -> "", aliased modules -> their grown
+  -- Assemble the per-OTHER-module result: bare-safe modules -> "", aliased modules -> their grown
   -- dotted alias. Then insert the printed module's OWN namespace, mapped to the empty alias
   -- too, so 'PrintCore.printNameAliased's existing "empty alias -> bare local name" branch
   -- (#803) also covers same-module self-references (e.g. 'Block', not
   -- 'hydra.core.markdown.Block') -- this entry is deliberately excluded from import-line
   -- generation; 'module'' filters it back out of 'usedDeps' (a module never imports itself).
-  "otherAliases" <~ Maps.fromList (Lists.map
+  "bareAliases" <~ Maps.fromList (Lists.map ("nm" ~> pair (var "nm") (string "")) (var "bareList")) $
+  "aliasedAliases" <~ Maps.fromList (Lists.map
     ("nm" ~> pair (var "nm")
       (aliasFromSuffix @@ (Optionals.withDefault (list ([] :: [TypedTerm String])) (Maps.lookup (var "nm") (var "segsMap" :: TypedTerm (M.Map ModuleName [String]))))
                        @@ (Optionals.withDefault (int32 1) (Maps.lookup (var "nm") (var "finalState" :: TypedTerm (M.Map ModuleName Int))))))
-    (var "nssAsList")) $
+    (var "aliasedList")) $
+  "otherAliases" <~ Maps.union (var "bareAliases" :: TypedTerm (M.Map ModuleName String)) (var "aliasedAliases" :: TypedTerm (M.Map ModuleName String)) $
   Maps.insert (var "ownNs") (string "") (var "otherAliases" :: TypedTerm (M.Map ModuleName String))
+
+-- | Context-free wrapper over 'moduleAliasesWith': no module's declared-name set is known, so
+-- every dependency fails condition (a) and stays aliased, exactly reproducing this function's
+-- pre-#5 (2026-11-09) behavior -- every real dependency always receives a real alias, only the
+-- printed module's own self-reference prints bare. Used by every caller that prints a single
+-- module with no access to its imports' real content (most of the kernel's own print-from-DSL
+-- conversion harnesses, standalone tests, the lexicon generator): see 'moduleAliasesWith's own doc
+-- comment for the full design.
+moduleAliases :: TypedTermDefinition (Module -> M.Map ModuleName String)
+moduleAliases = define "moduleAliases" $
+  doc "Compute the printing alias for every module referenced by the given module's definitions, plus the module's own namespace (mapped to the empty alias, for self-reference shortening, #711); context-free, so every real dependency stays aliased" $
+  "mod" ~> moduleAliasesWith @@ (Maps.empty :: TypedTerm (M.Map ModuleName (S.Set Name))) @@ var "mod"
 
 -- | Show a module dependency as an import declaration, given the printer's computed alias for
 -- that dependency (per 'moduleAliases'). The alias map's value for this module decides the form:
@@ -490,30 +568,34 @@ definition = define "definition" $
 
 -- | Show an entire module: header, imports, then definitions in the order given (#710: the
 -- grammar imposes no ordering requirement; this printer preserves 'Module.definitions' list
--- order as given rather than re-sorting).
+-- order as given rather than re-sorting), given the full declared-name universe of modules in
+-- scope ('moduleAliasesWith', #5/#711).
 --
--- Import-line aliasing: computed per syntax.md §6.4's settled algorithm (see 'moduleAliases'),
--- so every printed import line carries an 'as <alias>' clause chosen by the asymmetric
--- shortest-wins collision rule. The SAME 'moduleAliases' map is now threaded into definition
--- BODIES too (#803): 'definition' -> 'typeDefinition'/'termDefinition'/'primitiveDefinitionDoc'
--- -> 'PrintCore.{typeSchemeAliased,termAliased,termSignatureAliased}', so every nominal reference
--- in a term/type body is shortened via that same alias map. This makes the printed 'import ... as
--- <alias>' lines load-bearing (the body uses the alias) rather than advertising a shortening the
--- body never took. The alias forms round-trip: 'Parse/Packaging.hs's 'expandAliasesInDefinition'
--- re-expands each aliased first segment back to its full module name using the same import table.
--- Callers with no module context (tests, the lexicon generator, the JSON coder, standalone spec
--- examples) keep the fully-dotted output because they call 'PrintCore.{term,type_,typeScheme,
--- termSignature}', whose empty-alias-map delegation reproduces the pre-#803 behaviour exactly.
+-- Import-line aliasing: computed per syntax.md §6.4's settled algorithm plus #5's bareness gate
+-- (see 'moduleAliasesWith'), so every printed import line carries an 'as <alias>' clause chosen
+-- by the asymmetric shortest-wins collision rule UNLESS the universe proves that dependency can
+-- print fully bare. The SAME alias map is threaded into definition BODIES too (#803):
+-- 'definition' -> 'typeDefinition'/'termDefinition'/'primitiveDefinitionDoc' ->
+-- 'PrintCore.{typeSchemeAliased,termAliased,termSignatureAliased}', so every nominal reference in
+-- a term/type body is shortened (or left bare) via that same alias map. This makes the printed
+-- 'import ... as <alias>' lines load-bearing (the body uses the alias) rather than advertising a
+-- shortening the body never took. The alias forms round-trip: 'Parse/Packaging.hs's
+-- 'parseModuleWith' resolves each bare reference back to its declaring module using the same
+-- universe this function was given; 'expandAliasesInDefinition' re-expands each ALIASED first
+-- segment back to its full module name using the same import table. Callers with no module
+-- context (tests, the lexicon generator, the JSON coder, standalone spec examples) keep the fully-
+-- dotted output because they call 'PrintCore.{term,type_,typeScheme,termSignature}', whose
+-- empty-alias-map delegation reproduces the pre-#803 behaviour exactly.
 --
 -- Module-level doc-comment printing: per §6.2's grammar (module ::= moduleDoc? moduleHeader
 -- importDecl* definition*), the doc block precedes the header.
-module' :: TypedTermDefinition (Module -> String)
-module' = define "moduleDefinition" $
-  doc "Show a module as a string" $
-  "mod" ~>
+moduleDefinitionWith :: TypedTermDefinition (M.Map ModuleName (S.Set Name) -> Module -> String)
+moduleDefinitionWith = define "moduleDefinitionWith" $
+  doc "Show a module as a string, given the full declared-name universe of modules in scope (#5/#711)" $
+  "universe" ~> "mod" ~>
   "headerStr" <~ (withDefinitionDoc @@ (Packaging.moduleMetadata $ var "mod") @@
     (Strings.concat (list [string "module ", moduleNameString @@ (Packaging.moduleName $ var "mod")]))) $
-  "aliases" <~ (moduleAliases @@ var "mod") $
+  "aliases" <~ (moduleAliasesWith @@ (var "universe" :: TypedTerm (M.Map ModuleName (S.Set Name))) @@ var "mod") $
   -- Print exactly one import per module actually referenced by this module's definitions (per
   -- 'aliases'' key set) -- not filtered from the declared 'moduleDependencies', and not limited to
   -- it either. 'moduleDependencies' may be broader than real usage (e.g. the kernel DSL's blanket
@@ -522,16 +604,36 @@ module' = define "moduleDefinition" $
   -- convention never declares) -- so real usage ('aliases'' keys) is the sole source of which
   -- imports to print; 'moduleDependencies' is consulted only to recover a declared 'package' for
   -- dependencies that do happen to list one (#711).
+  --
+  -- A bare-safe dependency (alias "") STILL gets an import line -- just without an 'as' clause
+  -- ('importDecl' already handles this: an empty alias prints 'import <module>' bare). Per
+  -- staging's 2026-11-11 ruling: dropping the import line entirely would mean the printed text no
+  -- longer states its own dependencies, undermining '.hydra' becoming the build's source of truth
+  -- (the ingestion work this is a building block for) -- the loader needs the import list from
+  -- the TEXT to know what to load and in what order, the LSP needs it to show readers the
+  -- dependency list, and 'parseModuleWith' needs it to recover its OWN resolution scope (see that
+  -- function's doc comment) rather than requiring an out-of-band "what did the original module
+  -- import" context that only exists while a non-textual source of truth (the Haskell DSL) is
+  -- still around.
   "declaredByModule" <~ Maps.fromList (Lists.map ("d" ~> pair (Packaging.moduleDependencyModule $ var "d") (var "d")) (Packaging.moduleDependencies $ var "mod")) $
-  -- 'aliases'' keys include the module's own namespace (added by 'moduleAliases' for
+  -- 'aliases'' keys include the module's own namespace (added by 'moduleAliasesWith' for
   -- self-reference shortening) -- excluded here, since a module never imports itself.
   "ownNs" <~ Packaging.moduleName (var "mod") $
   "usedDeps" <~ Lists.map
     ("nm" ~> Maps.findWithDefault (Packaging.moduleDependency (var "nm") nothing) (var "nm") (var "declaredByModule" :: TypedTerm (M.Map ModuleName ModuleDependency)))
-    (Lists.filter ("nm" ~> Logic.not (Equality.equal (var "nm") (var "ownNs"))) (Maps.keys (var "aliases" :: TypedTerm (M.Map ModuleName String)))) $
+    (Lists.filter ("nm" ~> Logic.not (Equality.equal (var "nm") (var "ownNs")))
+      (Maps.keys (var "aliases" :: TypedTerm (M.Map ModuleName String)))) $
   "importStrs" <~ Lists.map (importDecl @@ (var "aliases" :: TypedTerm (M.Map ModuleName String))) (var "usedDeps") $
   "defStrs" <~ Lists.map (definition @@ (var "aliases" :: TypedTerm (M.Map ModuleName String))) (Packaging.moduleDefinitions $ var "mod") $
   "sections" <~ Logic.ifElse (Lists.isEmpty $ var "importStrs")
     (var "defStrs")
     (Lists.cons (Strings.join (string "\n") (var "importStrs")) (var "defStrs")) $
   Strings.join (string "\n\n") (Lists.cons (var "headerStr") (var "sections"))
+
+-- | Context-free wrapper over 'moduleDefinitionWith': no module's declared-name set is known, so
+-- (per 'moduleAliases') every dependency stays aliased and gets a printed import line, exactly
+-- reproducing this function's pre-#5 (2026-11-09) behavior.
+module' :: TypedTermDefinition (Module -> String)
+module' = define "moduleDefinition" $
+  doc "Show a module as a string; context-free, so every real dependency stays aliased with a printed import line" $
+  "mod" ~> moduleDefinitionWith @@ (Maps.empty :: TypedTerm (M.Map ModuleName (S.Set Name))) @@ var "mod"
