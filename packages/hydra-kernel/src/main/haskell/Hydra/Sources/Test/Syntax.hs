@@ -17,9 +17,11 @@ import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
+import qualified Data.Set                     as S
 
 import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
 import qualified Hydra.Core.Dsl.Lib.Literals as LibLiterals
 import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
 import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
@@ -58,7 +60,8 @@ module_ = Module {
       Phantoms.toDefinition nominalSugarGroup,
       Phantoms.toDefinition sourcePositionGroup,
       Phantoms.toDefinition sourceSpanGroup,
-      Phantoms.toDefinition termDocCommentGroup]
+      Phantoms.toDefinition termDocCommentGroup,
+      Phantoms.toDefinition unqualifiedNamesGroup]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -70,7 +73,7 @@ allTests = define "allTests" $
   where
     subgroups = [annotationRoundtripGroup, corpusRoundtripGroup, doSugarGroup, forallMultiBinderGroup,
                  lambdaMultiBinderGroup, lazyParameterRoundtripGroup, moduleAliasGroup, multiLineDocCommentGroup,
-                 nominalSugarGroup, sourceSpanGroup, sourcePositionGroup, termDocCommentGroup]
+                 nominalSugarGroup, sourceSpanGroup, sourcePositionGroup, termDocCommentGroup, unqualifiedNamesGroup]
 
 -- | Print a term signature, then parse the printed text back, and show the round-tripped
 -- signature. Compares against the original signature's own printed form, so the test both
@@ -606,6 +609,162 @@ moduleAliasGroup = define "moduleAliasGroup" $
     moduleAliasPathTest,
     moduleAliasRoundtripTest,
     moduleCollisionRoundtripTest])
+
+-- | A universe entry: (module name, its full set of declared names). The universe map's values
+-- are FULLY QUALIFIED 'Name's ('module.local', matching 'Names.qname's own construction and
+-- 'Print.Packaging.moduleAliasesWith'/'Parse.Packaging.resolveNameRefWith's membership checks
+-- against it), built here from the module name plus a list of local-name strings for test
+-- brevity.
+universeEntry :: String -> [String] -> (TypedTerm ModuleName, TypedTerm (S.Set Name))
+universeEntry modName localNames = (Packaging.moduleName2 $ Phantoms.string modName,
+  Sets.fromList (Phantoms.list [Core.name (Phantoms.string (modName L.++ "." L.++ n)) | n <- localNames]))
+
+-- | Print a module given an explicit universe map (#5/#711).
+moduleWithUniversePrintTest :: String -> TypedTerm Module -> [(TypedTerm ModuleName, TypedTerm (S.Set Name))] -> String -> TypedTerm TestCaseWithMetadata
+moduleWithUniversePrintTest testName m universeEntries expectedStr = universalCase testName
+  (PrintPackaging.moduleDefinitionWith @@ (Maps.fromList $ Phantoms.list [Phantoms.pair k v | (k, v) <- universeEntries]) @@ m)
+  (Phantoms.string expectedStr)
+
+-- | print(universe) -> parse(SAME universe) -> fingerprint round-trip test (#5/#711): unlike
+-- 'roundtripFingerprint' (which always uses the context-free 'module''/'parseModule'), this drives
+-- both sides through the SAME explicit universe map, exactly mirroring how a real caller (the
+-- build/sync, loading all modules together) would use 'moduleDefinitionWith'/'parseModuleWith' in
+-- tandem.
+-- | 'parseModuleWith' is self-contained given 'universe': it scopes its own resolution to the
+-- printed text's own recovered import lines (every real dependency, aliased or bare-safe, always
+-- has one -- staging's 2026-11-01 ruling), using 'universe' only to look up each import's
+-- declared names. So this test helper passes the SAME 'universeMap' to both the printer and the
+-- parser -- no narrowing needed, matching how a real caller (which only has the universe, not
+-- the original in-memory 'Module') would use it.
+moduleWithUniverseRoundtripTest :: String -> TypedTerm Module -> [(TypedTerm ModuleName, TypedTerm (S.Set Name))] -> TypedTerm TestCaseWithMetadata
+moduleWithUniverseRoundtripTest testName m universeEntries = universalCase testName actual expected
+  where
+    universeMap = Maps.fromList $ Phantoms.list [Phantoms.pair k v | (k, v) <- universeEntries]
+    printed = PrintPackaging.moduleDefinitionWith @@ universeMap @@ m
+    actual = Eithers.either
+      (Phantoms.lambda "e" $ Phantoms.var "e")
+      (Phantoms.lambda "mod2" $ moduleFingerprint (Phantoms.var "mod2"))
+      (ParsePackaging.parseModuleWith @@ universeMap @@ printed)
+    expected = moduleFingerprint m
+
+-- | Staging's counterexample (2026-11-11): module A imports 'logic' (referencing only
+-- 'logic.ifElse') and 'foo' (an UNRELATED import, never referenced at all, but which happens to
+-- ALSO declare a local name 'ifElse'). Under a naive "is the REFERENCED name unique" rule the
+-- printer would emit bare 'ifElse' (no collision among what A actually references) -- but the
+-- parser, resolving against the imports' FULL declared sets as it must, would then find TWO
+-- modules declaring 'ifElse' and hard-error as ambiguous, breaking 'module -> print -> parse'
+-- identity. The fix (per staging/Josh, 'option 2' + the universe-symmetric printer) requires the
+-- FULL declared set of 'foo' to be known and checked, not just what A references -- so 'ifElse'
+-- must print qualified ('logic.ifElse'), even though A itself never touches 'foo.ifElse'.
+ambiguousOwnerCounterexampleModule :: TypedTerm Module
+ambiguousOwnerCounterexampleModule = testModule "hydra.example.ambiguous"
+  ["hydra.logic", "hydra.foo"]
+  [("UsesIfElse", monoScheme (T.variable "hydra.logic.ifElse"))]
+
+ambiguousOwnerCounterexampleUniverse :: [(TypedTerm ModuleName, TypedTerm (S.Set Name))]
+ambiguousOwnerCounterexampleUniverse = [
+  universeEntry "hydra.logic" ["ifElse", "and", "or"],
+  universeEntry "hydra.foo" ["ifElse", "bar"]]
+
+ambiguousOwnerCounterexamplePrintTest :: TypedTerm TestCaseWithMetadata
+ambiguousOwnerCounterexamplePrintTest = moduleWithUniversePrintTest
+  "staging's counterexample: 'ifElse' stays qualified because an UNREFERENCED import also declares it"
+  ambiguousOwnerCounterexampleModule
+  ambiguousOwnerCounterexampleUniverse
+  (L.intercalate "\n" [
+    "module hydra.example.ambiguous",
+    "",
+    "import hydra.logic as logic",
+    "",
+    "type UsesIfElse = logic.ifElse"])
+
+ambiguousOwnerCounterexampleRoundtripTest :: TypedTerm TestCaseWithMetadata
+ambiguousOwnerCounterexampleRoundtripTest = moduleWithUniverseRoundtripTest
+  "staging's counterexample round-trips (module->print->parse with the same universe)"
+  ambiguousOwnerCounterexampleModule
+  ambiguousOwnerCounterexampleUniverse
+
+-- | A dependency module whose local name collides with one of the PRINTED module's own
+-- definitions: 'hydra.lib' declares 'Widget' (among others), and the printed module ALSO defines
+-- its own 'Widget'. Per 'parseModuleWith's resolution order (local binder, THEN own definitions,
+-- THEN imports), a bare 'Widget' reference would resolve to the module's OWN 'Widget' on reparse
+-- -- not 'hydra.lib.Widget' -- so the import's reference to 'Widget' must print qualified, even
+-- though 'Widget' is otherwise unique among the imports in scope.
+ownNameCollisionModule :: TypedTerm Module
+ownNameCollisionModule = testModule "hydra.example.ownclash"
+  ["hydra.lib"]
+  [("Widget", monoScheme T.string),
+   ("UsesLibWidget", monoScheme (T.variable "hydra.lib.Widget"))]
+
+ownNameCollisionUniverse :: [(TypedTerm ModuleName, TypedTerm (S.Set Name))]
+ownNameCollisionUniverse = [universeEntry "hydra.lib" ["Widget", "Thing"]]
+
+ownNameCollisionPrintTest :: TypedTerm TestCaseWithMetadata
+ownNameCollisionPrintTest = moduleWithUniversePrintTest
+  "an import's local name colliding with the module's OWN definition forces qualification"
+  ownNameCollisionModule
+  ownNameCollisionUniverse
+  (L.intercalate "\n" [
+    "module hydra.example.ownclash",
+    "",
+    "import hydra.lib as lib",
+    "",
+    "type Widget = string",
+    "",
+    "type UsesLibWidget = lib.Widget"])
+
+ownNameCollisionRoundtripTest :: TypedTerm TestCaseWithMetadata
+ownNameCollisionRoundtripTest = moduleWithUniverseRoundtripTest
+  "own-definition/import local-name collision round-trips, resolving the bare name to the module's own definition"
+  ownNameCollisionModule
+  ownNameCollisionUniverse
+
+-- | Staging's scope refinement (2026-11-11): the collision check that gates bareness must be
+-- scoped to the printed module's own definitions plus its ACTUAL imports, never every module the
+-- universe happens to contain -- 'parseModuleWith' only ever resolves a bare name against the
+-- module's own definitions and its declared imports, so an UNIMPORTED module sharing a common
+-- local name poses no real ambiguity risk. 'hydra.unrelated' here also declares 'ifElse' (same
+-- local name as 'hydra.logic.ifElse', the one actually referenced), but since
+-- 'hydra.example.unimported' never imports 'hydra.unrelated' at all, that collision must NOT force
+-- qualification -- 'ifElse' should print bare.
+unimportedCollisionModule :: TypedTerm Module
+unimportedCollisionModule = testModule "hydra.example.unimported"
+  ["hydra.logic"]
+  [("UsesIfElse", monoScheme (T.variable "hydra.logic.ifElse"))]
+
+unimportedCollisionUniverse :: [(TypedTerm ModuleName, TypedTerm (S.Set Name))]
+unimportedCollisionUniverse = [
+  universeEntry "hydra.logic" ["ifElse", "and", "or"],
+  universeEntry "hydra.unrelated" ["ifElse", "somethingElse"]]
+
+unimportedCollisionPrintTest :: TypedTerm TestCaseWithMetadata
+unimportedCollisionPrintTest = moduleWithUniversePrintTest
+  "a same-local-name module that is NOT imported does not block bareness (scoped collision check)"
+  unimportedCollisionModule
+  unimportedCollisionUniverse
+  (L.intercalate "\n" [
+    "module hydra.example.unimported",
+    "",
+    "import hydra.logic",
+    "",
+    "type UsesIfElse = ifElse"])
+
+unimportedCollisionRoundtripTest :: TypedTerm TestCaseWithMetadata
+unimportedCollisionRoundtripTest = moduleWithUniverseRoundtripTest
+  "scoped-collision bare module round-trips (module->print->parse with the same universe)"
+  unimportedCollisionModule
+  unimportedCollisionUniverse
+
+unqualifiedNamesGroup :: TypedTermDefinition TestGroup
+unqualifiedNamesGroup = define "unqualifiedNamesGroup" $
+  doc "Unqualified (bare) cross-module name printing when provably safe, and the universe-aware parser resolution that makes it round-trip (#5/#711)" $
+  Testing.testGroup (string "unqualified names") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    ambiguousOwnerCounterexamplePrintTest,
+    ambiguousOwnerCounterexampleRoundtripTest,
+    ownNameCollisionPrintTest,
+    ownNameCollisionRoundtripTest,
+    unimportedCollisionPrintTest,
+    unimportedCollisionRoundtripTest])
 
 ----------------------------------------------------------------------------------------------
 -- #809: nominal construction/elimination sugar (Wave 1 -- record/injection/wrap + project/unwrap).
