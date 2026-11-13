@@ -1,3 +1,4 @@
 node_modules/
 out/
 *.vsix
+tests/scopes/*.snap
