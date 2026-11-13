@@ -1,8 +1,6 @@
 ## Hydra's core data model, consisting of the fundamental hydra.core.model.Term type and all of its dependencies.
 module hydra.core.model
 
-
-
 ## A term together with an annotation
 type AnnotatedTerm = record{
   ## The term being annotated

@@ -2,46 +2,103 @@
 module hydra.core.print.markdown
 
 import hydra.core.lib.lists as lists
-import hydra.core.lib.literals as literals
-import hydra.core.lib.logic as logic
-import hydra.core.lib.math as math
-import hydra.core.lib.optionals as optionals
-import hydra.core.lib.pairs as pairs
+import hydra.core.lib.literals
+import hydra.core.lib.logic
+import hydra.core.lib.math
+import hydra.core.lib.optionals
+import hydra.core.lib.pairs
 import hydra.core.lib.strings as strings
-import hydra.core.markdown as markdown
+import hydra.core.markdown
 
 ## Render a single Block to its Markdown text form
-term block = λb.cases(markdown.Block){codeBlock=λcb.codeBlock cb, `list`=λl.`list` l, paragraph=λp.inlines (markdown.Paragraph[content] p), raw=λs.s, section=λs.let h := markdown.Section[heading] s in let content := markdown.Section[content] s in strings.join "\n\n" (lists.cons (heading h) (lists.map block content)), table=λt.table t} b
+term block =
+  λb.cases(Block){
+      codeBlock=λcb.codeBlock cb,
+      `list`=λl.`list` l,
+      paragraph=λp.inlines (Paragraph[content] p),
+      raw=λs.s,
+      section=λs.
+          let h := Section[heading] s in
+          let content := Section[content] s in
+          strings.join "\n\n" (lists.cons (heading h) (lists.map block content)),
+      table=λt.table t}
+      b
 
 ## Render a list of Blocks, joined by a blank line
 term blocks = λbs.strings.join "\n\n" (lists.map block bs)
 
 ## Render a CodeBlock as a fenced code block, with the language tag on the opening fence if present
-term codeBlock = λcb.let lang := markdown.CodeBlock[language] cb in let content := markdown.CodeBlock[content] cb in let fence := strings.concat2 "```" (optionals.withDefault "" lang) in strings.join "\n" [fence, content, "```"]
+term codeBlock =
+  λcb.
+    let lang := CodeBlock[language] cb in
+    let content := CodeBlock[content] cb in
+    let fence := strings.concat2 "```" (withDefault "" lang) in
+    strings.join "\n" [fence, content, "```"]
 
 ## Render a Document as its complete Markdown text, an H1 title followed by its blocks
-term document = λd.let title := markdown.Document[title] d in let content := markdown.Document[content] d in strings.join "\n\n" (lists.cons (strings.concat2 "# " title) (lists.map block content))
+term document =
+  λd.
+    let title := Document[title] d in
+    let content := Document[content] d in
+    strings.join "\n\n" (lists.cons (strings.concat2 "# " title) (lists.map block content))
 
 ## Render a Heading, prefixing its inline content with the appropriate number of `#` characters
-term heading = λh.let level := markdown.Heading[level] h in let content := markdown.Heading[content] h in let hashes := strings.concat (lists.replicate level "#") in strings.concat2 (strings.concat2 hashes " ") (inlines content)
+term heading =
+  λh.
+    let level := Heading[level] h in
+    let content := Heading[content] h in
+    let hashes := strings.concat (lists.replicate level "#") in
+    strings.concat2 (strings.concat2 hashes " ") (inlines content)
 
 ## Render a single Inline to its Markdown text form
-term inline = λi.cases(markdown.Inline){code=λs.strings.concat2 (strings.concat2 "`" s) "`", emphasis=λis.strings.concat2 (strings.concat2 "*" (inlines is)) "*", link=λlk.link lk, strong=λis.strings.concat2 (strings.concat2 "**" (inlines is)) "**", text=λs.s} i
+term inline =
+  λi.cases(Inline){
+      code=λs.strings.concat2 (strings.concat2 "`" s) "`",
+      emphasis=λis.strings.concat2 (strings.concat2 "*" (inlines is)) "*",
+      link=λlk.link lk,
+      strong=λis.strings.concat2 (strings.concat2 "**" (inlines is)) "**",
+      text=λs.s}
+      i
 
 ## Render a list of Inlines, concatenated with no separator
 term inlines = λis.strings.concat (lists.map inline is)
 
 ## Render a Link in the standard `[text](target)` form
-term link = λlk.let text := markdown.Link[text] lk in let target := markdown.Link[target] lk in strings.concat2 (strings.concat2 (strings.concat2 (strings.concat2 "[" (inlines text)) "](") target) ")"
+term link =
+  λlk.
+    let text := Link[text] lk in
+    let target := Link[target] lk in
+    strings.concat2 (strings.concat2 (strings.concat2 (strings.concat2 "[" (inlines text)) "](") target) ")"
 
 ## Render a List as bulleted (`-`) or numbered (`1.`, `2.`, ...) lines, one per item; item content is joined with a blank line for items spanning multiple blocks
-term list = λl.let ordered := markdown.List[ordered] l in let items := markdown.List[items] l in let itemContent := λit.blocks (markdown.ListItem[] it) in let indices := math.range 0:int32 (lists.length items) in let indexedItems := lists.zip indices items in let renderIndexed := λip.let idx := pairs.first ip in let it := pairs.second ip in let marker := logic.ifElse ordered (strings.concat2 (literals.printInt32 (math.add idx 1:int32)) ".") "-" in strings.concat2 (strings.concat2 marker " ") (itemContent it) in strings.join "\n" (lists.map renderIndexed indexedItems)
+term list =
+  λl.
+    let ordered := List[ordered] l in
+    let items := List[items] l in
+    let itemContent := λit.blocks (ListItem[] it) in
+    let indices := range 0:int32 (lists.length items) in
+    let indexedItems := lists.zip indices items in
+    let renderIndexed := λip.
+        let idx := first ip in
+        let it := second ip in
+        let marker := ifElse ordered (strings.concat2 (printInt32 (add idx 1:int32)) ".") "-" in
+        strings.concat2 (strings.concat2 marker " ") (itemContent it) in
+    strings.join "\n" (lists.map renderIndexed indexedItems)
 
 ## Render a Table in GitHub-flavored Markdown pipe-table form, with a `---` separator row after the header
-term table = λt.let header := markdown.Table[header] t in let rows := markdown.Table[rows] t in let headerCells := markdown.TableRow[] header in let sepRow := strings.concat2 "|" (strings.concat (lists.map (λ`_`." --- |") headerCells)) in strings.join "\n" (lists.cons (tableRow header) (lists.cons sepRow (lists.map tableRow rows)))
+term table =
+  λt.
+    let header := Table[header] t in
+    let rows := Table[rows] t in
+    let headerCells := TableRow[] header in
+    let sepRow := strings.concat2 "|" (strings.concat (lists.map (λ`_`." --- |") headerCells)) in
+    strings.join "\n" (lists.cons (tableRow header) (lists.cons sepRow (lists.map tableRow rows)))
 
 ## Render a TableCell's inline content
-term tableCell = λc.inlines (markdown.TableCell[] c)
+term tableCell = λc.inlines (TableCell[] c)
 
 ## Render a TableRow as a pipe-delimited line
-term tableRow = λr.let cells := markdown.TableRow[] r in strings.concat2 (strings.concat2 "| " (strings.join " | " (lists.map tableCell cells))) " |"
+term tableRow =
+  λr.
+    let cells := TableRow[] r
+    in strings.concat2 (strings.concat2 "| " (strings.join " | " (lists.map tableCell cells))) " |"

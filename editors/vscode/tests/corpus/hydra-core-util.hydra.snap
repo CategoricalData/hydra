@@ -6,14 +6,10 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.packaging as packaging
+>import hydra.core.packaging
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                           ^ source.hydra
-#                            ^^ source.hydra keyword.control.import.hydra
-#                              ^ source.hydra
-#                               ^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
 >## A naming convention for symbols, such as camelCase or snake_case
 #^^ source.hydra comment.block.documentation.hydra
@@ -118,31 +114,31 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  focus: (packaging.ModuleName, n),
+>  focus: (ModuleName, n),
 #^^ source.hydra
 #  ^^^^^ source.hydra variable.other.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^^ source.hydra
-#          ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                              ^^ source.hydra
-#                                ^ source.hydra variable.other.hydra
-#                                 ^^^ source.hydra
+#          ^^^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^ source.hydra
+#                      ^ source.hydra variable.other.hydra
+#                       ^^^ source.hydra
 >  ## A mapping of module names to values
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  mapping: map<packaging.ModuleName, n>}
+>  mapping: map<ModuleName, n>}
 #^^ source.hydra
 #  ^^^^^^^ source.hydra variable.other.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^ source.hydra support.type.hydra
 #              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#               ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                   ^^ source.hydra
-#                                     ^ source.hydra variable.other.hydra
-#                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                       ^^ source.hydra
+#               ^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^ source.hydra
+#                           ^ source.hydra variable.other.hydra
+#                            ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                             ^^ source.hydra
 >
 >## Numeric precision: arbitrary precision, or precision to a specified number of bits
 #^^ source.hydra comment.block.documentation.hydra
@@ -195,16 +191,16 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  moduleName: optional<packaging.ModuleName>,
+>  moduleName: optional<ModuleName>,
 #^^ source.hydra
 #  ^^^^^^^^^^ source.hydra variable.other.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^^^^^ source.hydra support.type.hydra
 #                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                       ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                            ^^ source.hydra
+#                       ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                  ^^ source.hydra
 >  ## The local name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

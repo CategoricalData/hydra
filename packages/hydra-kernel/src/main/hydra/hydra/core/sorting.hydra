@@ -1,51 +1,236 @@
 ## Utilities for sorting. This module includes an implementation of Tarjan's algorithm, originally based on GraphSCC by Iavor S. Diatchki: https://hackage.haskell.org/package/GraphSCC. Tarjan was chosen because it computes strongly connected components in O(V+E), in a single pass, and yields the components in reverse topological order — exactly the shape every consumer in the kernel (HM let-generalization, schema graph construction, target-language emission) needs.
 module hydra.core.sorting
 
-import hydra.core.constants as constants
-import hydra.core.lib.equality as equality
-import hydra.core.lib.functions as functions
+import hydra.core.constants
+import hydra.core.lib.equality
+import hydra.core.lib.functions
 import hydra.core.lib.lists as lists
-import hydra.core.lib.logic as logic
+import hydra.core.lib.logic
 import hydra.core.lib.maps as maps
-import hydra.core.lib.math as math
+import hydra.core.lib.math
 import hydra.core.lib.optionals as optionals
-import hydra.core.lib.ordering as ordering
-import hydra.core.lib.pairs as pairs
+import hydra.core.lib.ordering
+import hydra.core.lib.pairs
 import hydra.core.lib.sets as sets
-import hydra.core.topology as topology
+import hydra.core.topology
 
 ## Convert an adjacency list to a map, concatenating values for duplicate keys
-term adjacencyListToMap = λpairs.lists.foldl (λmp,p.let k := pairs.first p in let vs := pairs.second p in let existing := optionals.match (maps.lookup k mp) [] functions.identity in maps.insert k (lists.concat2 existing vs) mp) maps.empty pairs
+term adjacencyListToMap =
+  λpairs.lists.foldl
+      (λmp,p.
+        let k := first p in
+        let vs := second p in
+        let existing := optionals.match (maps.lookup k mp) [] identity in
+        maps.insert k (lists.concat2 existing vs) mp)
+      maps.empty
+      pairs
 
 ## Given a list of adjacency lists represented as (key, [key]) pairs, construct a graph along with a function mapping each vertex (an Int) back to its original key (Nothing for unknown vertices).
-term adjacencyListsToGraph = λedges0.let sortedEdges := lists.sortBy pairs.first edges0 in let indexedEdges := lists.zip (math.range 0:int32 (lists.length sortedEdges)) sortedEdges in let keyToVertex := maps.fromList (lists.map (λvkNeighbors.let v := pairs.first vkNeighbors in let kNeighbors := pairs.second vkNeighbors in let k := pairs.first kNeighbors in (k, v)) indexedEdges) in let vertexMap := maps.fromList (lists.map (λvkNeighbors.let v := pairs.first vkNeighbors in let kNeighbors := pairs.second vkNeighbors in let k := pairs.first kNeighbors in (v, k)) indexedEdges) in let graph := maps.fromList (lists.map (λvkNeighbors.let v := pairs.first vkNeighbors in let kNeighbors := pairs.second vkNeighbors in let neighbors := pairs.second kNeighbors in (v, optionals.mapOptional (λk.maps.lookup k keyToVertex) neighbors)) indexedEdges) in let vertexToKey := λv.maps.lookup v vertexMap in (graph, vertexToKey)
+term adjacencyListsToGraph =
+  λedges0.
+    let sortedEdges := lists.sortBy first edges0 in
+    let indexedEdges := lists.zip (range 0:int32 (lists.length sortedEdges)) sortedEdges in
+    let keyToVertex := maps.fromList
+        (lists.map
+          (λvkNeighbors.
+            let v := first vkNeighbors in
+            let kNeighbors := second vkNeighbors in
+            let k := first kNeighbors in
+            (k, v))
+          indexedEdges) in
+    let vertexMap := maps.fromList
+        (lists.map
+          (λvkNeighbors.
+            let v := first vkNeighbors in
+            let kNeighbors := second vkNeighbors in
+            let k := first kNeighbors in
+            (v, k))
+          indexedEdges) in
+    let graph := maps.fromList
+        (lists.map
+          (λvkNeighbors.
+            let v := first vkNeighbors in
+            let kNeighbors := second vkNeighbors in
+            let neighbors := second kNeighbors in
+            (v, optionals.mapOptional (λk.maps.lookup k keyToVertex) neighbors))
+          indexedEdges) in
+    let vertexToKey := λv.maps.lookup v vertexMap in
+    (graph, vertexToKey)
 
 ## Construct an OrderingIsomorphism between two orderings of the same elements. The two list arguments must be permutations of each other; the result is a pair of mappings that transport an element list from one ordering to the other.
-term createOrderingIsomorphism = λsourceOrd,targetOrd.let sourceToTargetMapping := λels.let mp := maps.fromList (lists.zip sourceOrd els) in optionals.givens (lists.map (λn.maps.lookup n mp) targetOrd) in let targetToSourceMapping := λels.let mp := maps.fromList (lists.zip targetOrd els) in optionals.givens (lists.map (λn.maps.lookup n mp) sourceOrd) in topology.OrderingIsomorphism{encode = sourceToTargetMapping, decode = targetToSourceMapping}
+term createOrderingIsomorphism =
+  λsourceOrd,targetOrd.
+    let sourceToTargetMapping := λels.
+        let mp := maps.fromList (lists.zip sourceOrd els)
+        in optionals.givens (lists.map (λn.maps.lookup n mp) targetOrd) in
+    let targetToSourceMapping := λels.
+        let mp := maps.fromList (lists.zip targetOrd els)
+        in optionals.givens (lists.map (λn.maps.lookup n mp) sourceOrd) in
+    OrderingIsomorphism{encode = sourceToTargetMapping, decode = targetToSourceMapping}
 
 ## Given an adjacency function and a distinguished root node, find all reachable nodes (including the root node)
-term findReachableNodes = λadj,root.let visit := λvisited,node.let toVisit := sets.difference (adj node) visited in logic.ifElse (sets.isEmpty toVisit) visited (lists.foldl (λv,n.visit (sets.insert n v) n) visited (sets.toList toVisit)) in visit (sets.singleton root) root
+term findReachableNodes =
+  λadj,root.
+    let visit := λvisited,node.
+        let toVisit := sets.difference (adj node) visited
+        in ifElse
+          (sets.isEmpty toVisit)
+          visited
+          (lists.foldl (λv,n.visit (sets.insert n v) n) visited (sets.toList toVisit))
+    in visit (sets.singleton root) root
 
 ## Initial state for Tarjan's algorithm
-term initialState = topology.TarjanState{counter = 0:int32, indices = maps.empty, lowLinks = maps.empty, stack = [], onStack = sets.empty, sccs = []}
+term initialState =
+  TarjanState{
+    counter = 0:int32,
+    indices = maps.empty,
+    lowLinks = maps.empty,
+    stack = [],
+    onStack = sets.empty,
+    sccs = []}
 
 ## Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component
-term popStackUntil = λv,st0.let go := λacc,st.optionals.match (lists.uncons (topology.TarjanState[stack] st)) (lists.reverse acc, st) (λuc.let x := pairs.first uc in let xs := pairs.second uc in let newSt := topology.TarjanState{counter = topology.TarjanState[counter] st, indices = topology.TarjanState[indices] st, lowLinks = topology.TarjanState[lowLinks] st, stack = xs, onStack = topology.TarjanState[onStack] st, sccs = topology.TarjanState[sccs] st} in let newSt2 := topology.TarjanState{counter = topology.TarjanState[counter] newSt, indices = topology.TarjanState[indices] newSt, lowLinks = topology.TarjanState[lowLinks] newSt, stack = topology.TarjanState[stack] newSt, onStack = sets.delete x (topology.TarjanState[onStack] st), sccs = topology.TarjanState[sccs] newSt} in let `acc'` := lists.cons x acc in logic.ifElse (equality.equal x v) (lists.reverse `acc'`, newSt2) (go `acc'` newSt2)) in go [] st0
+term popStackUntil =
+  λv,st0.
+    let go := λacc,st.optionals.match
+          (lists.uncons (TarjanState[stack] st))
+          (lists.reverse acc, st)
+          (λuc.
+            let x := first uc in
+            let xs := second uc in
+            let newSt := TarjanState{
+              counter = TarjanState[counter] st,
+              indices = TarjanState[indices] st,
+              lowLinks = TarjanState[lowLinks] st,
+              stack = xs,
+              onStack = TarjanState[onStack] st,
+              sccs = TarjanState[sccs] st} in
+            let newSt2 := TarjanState{
+              counter = TarjanState[counter] newSt,
+              indices = TarjanState[indices] newSt,
+              lowLinks = TarjanState[lowLinks] newSt,
+              stack = TarjanState[stack] newSt,
+              onStack = sets.delete x (TarjanState[onStack] st),
+              sccs = TarjanState[sccs] newSt} in
+            let `acc'` := lists.cons x acc in
+            ifElse (equal x v) (lists.reverse `acc'`, newSt2) (go `acc'` newSt2))
+    in go [] st0
 
 ## Given a graph as an adjacency list of edges and a list of explicit tags per node, compute the full set of tags for each node by propagating tags through edges. If there is an edge from n1 to n2 and n2 has tag t, then n1 also has tag t. Note: pairs in the output are not ordered.
-term propagateTags = λedges,nodeTags.let adjMap := adjacencyListToMap edges in let tagMap := maps.map sets.fromList (adjacencyListToMap nodeTags) in let allNodes := sets.toList (sets.fromList (lists.concat2 (lists.map pairs.first edges) (lists.map pairs.first nodeTags))) in let getTagsForNode := λnode.let reachable := findReachableNodes (λn.sets.fromList (optionals.match (maps.lookup n adjMap) [] functions.identity)) node in sets.unions (lists.map (λn.optionals.match (maps.lookup n tagMap) sets.empty functions.identity) (sets.toList reachable)) in lists.map (λn.(n, getTagsForNode n)) allNodes
+term propagateTags =
+  λedges,nodeTags.
+    let adjMap := adjacencyListToMap edges in
+    let tagMap := maps.map sets.fromList (adjacencyListToMap nodeTags) in
+    let allNodes := sets.toList
+        (sets.fromList (lists.concat2 (lists.map first edges) (lists.map first nodeTags))) in
+    let getTagsForNode := λnode.
+        let reachable := findReachableNodes
+            (λn.sets.fromList
+                (optionals.match (maps.lookup n adjMap) [] identity))
+            node
+        in sets.unions
+          (lists.map
+            (λn.optionals.match (maps.lookup n tagMap) sets.empty identity)
+            (sets.toList reachable)) in
+    lists.map (λn.(n, getTagsForNode n)) allNodes
 
 ## Visit a vertex and recursively explore its successors
-term strongConnect = λgraph,v,st.let i := topology.TarjanState[counter] st in let newSt := topology.TarjanState{counter = math.add i 1:int32, indices = maps.insert v i (topology.TarjanState[indices] st), lowLinks = maps.insert v i (topology.TarjanState[lowLinks] st), stack = lists.cons v (topology.TarjanState[stack] st), onStack = sets.insert v (topology.TarjanState[onStack] st), sccs = topology.TarjanState[sccs] st} in let neighbors := maps.findWithDefault [] v graph in let processNeighbor := λ`st_`,w.let lowLink := λs.let lowV1 := maps.findWithDefault constants.maxInt32 v (topology.TarjanState[lowLinks] s) in let `idx_w` := maps.findWithDefault constants.maxInt32 w (topology.TarjanState[indices] s) in topology.TarjanState{counter = topology.TarjanState[counter] s, indices = topology.TarjanState[indices] s, lowLinks = maps.insert v (ordering.min lowV1 `idx_w`) (topology.TarjanState[lowLinks] s), stack = topology.TarjanState[stack] s, onStack = topology.TarjanState[onStack] s, sccs = topology.TarjanState[sccs] s} in logic.ifElse (logic.not (maps.member w (topology.TarjanState[indices] `st_`))) (let stAfter := strongConnect graph w `st_` in let lowV2 := maps.findWithDefault constants.maxInt32 v (topology.TarjanState[lowLinks] stAfter) in let `low_w` := maps.findWithDefault constants.maxInt32 w (topology.TarjanState[lowLinks] stAfter) in topology.TarjanState{counter = topology.TarjanState[counter] stAfter, indices = topology.TarjanState[indices] stAfter, lowLinks = maps.insert v (ordering.min lowV2 `low_w`) (topology.TarjanState[lowLinks] stAfter), stack = topology.TarjanState[stack] stAfter, onStack = topology.TarjanState[onStack] stAfter, sccs = topology.TarjanState[sccs] stAfter}) (logic.ifElse (sets.member w (topology.TarjanState[onStack] `st_`)) (lowLink `st_`) `st_`) in let stAfterNeighbors := lists.foldl processNeighbor newSt neighbors in let `low_v` := maps.findWithDefault constants.maxInt32 v (topology.TarjanState[lowLinks] stAfterNeighbors) in let `idx_v` := maps.findWithDefault constants.maxInt32 v (topology.TarjanState[indices] stAfterNeighbors) in logic.ifElse (equality.equal `low_v` `idx_v`) (let compResult := popStackUntil v stAfterNeighbors in let comp := pairs.first compResult in let stPopped := pairs.second compResult in topology.TarjanState{counter = topology.TarjanState[counter] stPopped, indices = topology.TarjanState[indices] stPopped, lowLinks = topology.TarjanState[lowLinks] stPopped, stack = topology.TarjanState[stack] stPopped, onStack = topology.TarjanState[onStack] stPopped, sccs = lists.cons comp (topology.TarjanState[sccs] stPopped)}) stAfterNeighbors
+term strongConnect =
+  λgraph,v,st.
+    let i := TarjanState[counter] st in
+    let newSt := TarjanState{
+      counter = add i 1:int32,
+      indices = maps.insert v i (TarjanState[indices] st),
+      lowLinks = maps.insert v i (TarjanState[lowLinks] st),
+      stack = lists.cons v (TarjanState[stack] st),
+      onStack = sets.insert v (TarjanState[onStack] st),
+      sccs = TarjanState[sccs] st} in
+    let neighbors := maps.findWithDefault [] v graph in
+    let processNeighbor := λ`st_`,w.
+        let lowLink := λs.
+            let lowV1 := maps.findWithDefault
+                maxInt32
+                v
+                (TarjanState[lowLinks] s) in
+            let `idx_w` := maps.findWithDefault
+                maxInt32
+                w
+                (TarjanState[indices] s) in
+            TarjanState{
+              counter = TarjanState[counter] s,
+              indices = TarjanState[indices] s,
+              lowLinks = maps.insert
+                  v
+                  (min lowV1 `idx_w`)
+                  (TarjanState[lowLinks] s),
+              stack = TarjanState[stack] s,
+              onStack = TarjanState[onStack] s,
+              sccs = TarjanState[sccs] s}
+        in ifElse
+          (not (maps.member w (TarjanState[indices] `st_`)))
+          (let stAfter := strongConnect graph w `st_` in
+          let lowV2 := maps.findWithDefault maxInt32 v (TarjanState[lowLinks] stAfter) in
+          let `low_w` := maps.findWithDefault
+              maxInt32
+              w
+              (TarjanState[lowLinks] stAfter) in
+          TarjanState{
+            counter = TarjanState[counter] stAfter,
+            indices = TarjanState[indices] stAfter,
+            lowLinks = maps.insert
+                v
+                (min lowV2 `low_w`)
+                (TarjanState[lowLinks] stAfter),
+            stack = TarjanState[stack] stAfter,
+            onStack = TarjanState[onStack] stAfter,
+            sccs = TarjanState[sccs] stAfter})
+          (ifElse (sets.member w (TarjanState[onStack] `st_`)) (lowLink `st_`) `st_`) in
+    let stAfterNeighbors := lists.foldl processNeighbor newSt neighbors in
+    let `low_v` := maps.findWithDefault maxInt32 v (TarjanState[lowLinks] stAfterNeighbors) in
+    let `idx_v` := maps.findWithDefault maxInt32 v (TarjanState[indices] stAfterNeighbors) in
+    ifElse
+      (equal `low_v` `idx_v`)
+      (let compResult := popStackUntil v stAfterNeighbors in
+      let comp := first compResult in
+      let stPopped := second compResult in
+      TarjanState{
+        counter = TarjanState[counter] stPopped,
+        indices = TarjanState[indices] stPopped,
+        lowLinks = TarjanState[lowLinks] stPopped,
+        stack = TarjanState[stack] stPopped,
+        onStack = TarjanState[onStack] stPopped,
+        sccs = lists.cons comp (TarjanState[sccs] stPopped)})
+      stAfterNeighbors
 
 ## Compute the strongly connected components of the given graph. The components are returned in reverse topological order
-term stronglyConnectedComponents = λgraph.let verts := maps.keys graph in let finalState := lists.foldl (λst,v.logic.ifElse (maps.member v (topology.TarjanState[indices] st)) st (strongConnect graph v st)) initialState verts in lists.reverse (lists.map lists.sort (topology.TarjanState[sccs] finalState))
+term stronglyConnectedComponents =
+  λgraph.
+    let verts := maps.keys graph in
+    let finalState := lists.foldl
+        (λst,v.ifElse (maps.member v (TarjanState[indices] st)) st (strongConnect graph v st))
+        initialState
+        verts in
+    lists.reverse (lists.map lists.sort (TarjanState[sccs] finalState))
 
 ## Sort a directed acyclic graph (DAG) based on an adjacency list. Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list.
-term topologicalSort = λpairs.let sccs := topologicalSortComponents pairs in let isCycle := λscc.ordering.gt (lists.length scc) 1:int32 in let withCycles := lists.filter isCycle sccs in logic.ifElse (lists.isEmpty withCycles) right(lists.concat sccs) left(withCycles)
+term topologicalSort =
+  λpairs.
+    let sccs := topologicalSortComponents pairs in
+    let isCycle := λscc.gt (lists.length scc) 1:int32 in
+    let withCycles := lists.filter isCycle sccs in
+    ifElse (lists.isEmpty withCycles) right(lists.concat sccs) left(withCycles)
 
 ## Find the strongly connected components (including cycles and isolated vertices) of a graph, in (reverse) topological order, i.e. dependencies before dependents
-term topologicalSortComponents = λpairs.let graphResult := adjacencyListsToGraph pairs in let g := pairs.first graphResult in lists.map (λcomp.optionals.mapOptional (pairs.second graphResult) comp) (stronglyConnectedComponents g)
+term topologicalSortComponents =
+  λpairs.
+    let graphResult := adjacencyListsToGraph pairs in
+    let g := first graphResult in
+    lists.map (λcomp.optionals.mapOptional (second graphResult) comp) (stronglyConnectedComponents g)
 
 ## Sort a directed acyclic graph (DAG) of nodes using two helper functions: one for node keys, and one for the adjacency list of connected node keys. The result is a list of strongly-connected components (cycles), in which singleton lists represent acyclic nodes.
-term topologicalSortNodes = λgetKey,getAdj,nodes.let nodesByKey := maps.fromList (lists.map (λn.(getKey n, n)) nodes) in let pairs := lists.map (λn.(getKey n, getAdj n)) nodes in let comps := topologicalSortComponents pairs in lists.map (λc.optionals.givens (lists.map (λk.maps.lookup k nodesByKey) c)) comps
+term topologicalSortNodes =
+  λgetKey,getAdj,nodes.
+    let nodesByKey := maps.fromList (lists.map (λn.(getKey n, n)) nodes) in
+    let pairs := lists.map (λn.(getKey n, getAdj n)) nodes in
+    let comps := topologicalSortComponents pairs in
+    lists.map (λc.optionals.givens (lists.map (λk.maps.lookup k nodesByKey) c)) comps

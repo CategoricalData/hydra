@@ -1,8 +1,8 @@
 ## A model for Hydra module names, modules, and packages
 module hydra.core.packaging
 
-import hydra.core.model as model
-import hydra.core.typing as typing
+import hydra.core.model
+import hydra.core.typing
 
 ## A definition, which may be either a term, type, or primitive definition
 type Definition = union{
@@ -16,11 +16,11 @@ type Definition = union{
 ## A typed reference to a definition: a type, a term, or a primitive, identified by name
 type DefinitionReference = union{
   ## A reference to a primitive definition, by name
-  `primitive`: model.Name,
+  `primitive`: Name,
   ## A reference to a term definition, by name
-  `term`: model.Name,
+  `term`: Name,
   ## A reference to a type definition, by name
-  `type`: model.Name}
+  `type`: Name}
 
 ## The scope in which a package dependency is required. Relevant mainly to dependencies on third-party (non-Hydra) artifacts, where build systems distinguish compile-time, runtime, test-only, and build-tool-only dependencies. Hydra inter-package dependencies normally leave the scope unspecified.
 type DependencyScope = union{
@@ -113,22 +113,22 @@ type PackageName = wrap(string)
 ## A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, documentation and lifecycle metadata, totality and purity flags, and an optional default implementation expressed as a Hydra term.
 type PrimitiveDefinition = record{
   ## The name of the primitive
-  name: model.Name,
+  name: Name,
   ## Optional documentation and lifecycle metadata for the primitive.
   metadata: optional<EntityMetadata>,
   ## The signature of the primitive. Always explicit, never inferred.
-  signature: typing.TermSignature,
+  signature: TermSignature,
   ## Whether the primitive is pure (referentially transparent, no observable side effects). Normally true.
   isPure: boolean,
   ## Whether the primitive is total (terminates on every input of its declared type). Normally true.
   isTotal: boolean,
   ## An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation.
-  defaultImplementation: optional<model.Term>}
+  defaultImplementation: optional<Term>}
 
 ## A named normative statement concerning an entity: a single falsifiable condition a conforming implementation is measured against. Tests reference provisions by name.
 type Provision = record{
   ## The fully-qualified name of the provision: the enclosing entity's name extended by one segment (e.g. hydra.core.lib.lists.concat.emptyLists). Composed at definition time by a helper that prefixes the entity's name, exactly as a definition's name is composed from its module's name -- so the author writes only the final segment, but the stored value is the full name.
-  name: model.Name,
+  name: Name,
   ## Whether this provision is a requirement or a recommendation.
   kind: ProvisionKind,
   ## The normative statement itself, as markdown prose: the falsifiable claim.
@@ -144,22 +144,22 @@ type ProvisionKind = union{
 ## A term-level definition, including a name, an optional signature, and a term
 type TermDefinition = record{
   ## The name of the term
-  name: model.Name,
+  name: Name,
   ## Optional documentation and lifecycle metadata for the term definition
   metadata: optional<EntityMetadata>,
   ## The optional signature of the term. When absent, the signature has yet to be inferred.
-  signature: optional<typing.TermSignature>,
+  signature: optional<TermSignature>,
   ## The term being defined
-  body: model.Term}
+  body: Term}
 
 ## A type-level definition, including a name and the type scheme
 type TypeDefinition = record{
   ## The name of the type
-  name: model.Name,
+  name: Name,
   ## Optional documentation and lifecycle metadata for the type definition
   metadata: optional<EntityMetadata>,
   ## The type scheme being defined
-  body: model.TypeScheme}
+  body: TypeScheme}
 
 ## A version string, e.g. "0.15" or "1.0.0".
 type Version = wrap(string)

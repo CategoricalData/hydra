@@ -1,0 +1,593 @@
+## Module dependency module name analysis
+module hydra.core.analysis
+
+import hydra.core.annotations
+import hydra.core.checking
+import hydra.core.coders
+import hydra.core.constants
+import hydra.core.decode.model as decode.model
+import hydra.core.dependencies
+import hydra.core.encode.model as encode.model
+import hydra.core.errors
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.logic
+import hydra.core.lib.maps as maps
+import hydra.core.lib.math
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.pairs
+import hydra.core.lib.sets as sets
+import hydra.core.model
+import hydra.core.names
+import hydra.core.packaging
+import hydra.core.predicates
+import hydra.core.rewriting
+import hydra.core.scoping
+import hydra.core.strip
+import hydra.core.typing
+import hydra.core.util
+import hydra.core.variables
+
+## Add names to existing module names mapping
+term addNamesToModuleNames =
+  λencodeModuleName,names,ns0.
+    let nss := sets.fromList (optionals.givens (lists.map moduleNameOf (sets.toList names))) in
+    let toPair := λns.(ns, encodeModuleName ns) in
+    ModuleNames{
+      focus = ModuleNames[focus] ns0,
+      mapping = maps.union
+          (ModuleNames[mapping] ns0)
+          (maps.fromList (lists.map toPair (sets.toList nss)))}
+
+## Find every lambda/let/forall-bound name anywhere within a list of definitions
+term allBinderNamesInDefinitions =
+  λdefs.
+    let binderSetOf := λdef.cases(Definition){
+          `type`=λtd.sets.union
+                (sets.fromList
+                  (TypeScheme[variables] (TypeDefinition[body] td)))
+                (allBinderNamesInType
+                  (TypeScheme[body] (TypeDefinition[body] td))),
+          `term`=λtermDef.allBinderNamesInTerm (TermDefinition[body] termDef),
+          `primitive`=λprimDef.sets.fromList
+                (TypeScheme[variables]
+                  (termSignatureToTypeScheme
+                    (PrimitiveDefinition[signature] primDef)))}
+          def
+    in sets.unions (lists.map binderSetOf defs)
+
+## Find every name bound by a lambda or let-binding anywhere within a term, including nested binders
+term allBinderNamesInTerm =
+  λ`term`.
+    let ownBinders := cases(Term){
+        lambda=λl.sets.singleton (Lambda[parameter] l),
+        `let`=λl.sets.fromList (lists.map Binding[name] (Let[bindings] l)),
+        `_`=sets.empty}
+        `term`
+    in lists.foldl (λs,t.sets.union s (allBinderNamesInTerm t)) ownBinders (subterms `term`)
+
+## Find every name bound by a forall anywhere within a type, including nested binders
+term allBinderNamesInType =
+  λtyp.
+    let ownBinders := cases(Type){`forall`=λft.sets.singleton (ForallType[parameter] ft), `_`=sets.empty} typ
+    in lists.foldl (λs,t.sets.union s (allBinderNamesInType t)) ownBinders (subtypes typ)
+
+## Analyze a function term, collecting lambdas, type lambdas, lets, and type applications
+term analyzeFunctionTerm =
+  λcx,getTC,setTC,env,`term`.analyzeFunctionTermWith
+      cx
+      (λg,b.ifElse (isComplexBinding g b) given(Term{literal = Literal{`boolean` = true}}) none)
+      getTC
+      setTC
+      env
+      `term`
+
+## Analyze a function term with configurable binding metadata
+term analyzeFunctionTermWith =
+  λcx,forBinding,getTC,setTC,env,`term`.analyzeFunctionTermWithGather
+      cx
+      forBinding
+      getTC
+      setTC
+      true
+      env
+      []
+      []
+      []
+      []
+      []
+      `term`
+
+## Final step of the function-term walk: type-apply the body and assemble the FunctionStructure
+term analyzeFunctionTermWithFinish =
+  λcx,getTC,fEnv,tparams,args,bindings,doms,tapps,body.
+    let bodyWithTapps := lists.foldl
+        (λtrm,typ.Term{
+            typeApplication = TypeApplicationTerm{
+              body = trm,
+              `type` = typ}})
+        body
+        tapps in
+    let mcod := eithers.either
+        (λ`_`.none)
+        (λc.given(c))
+        (typeOfTerm cx (getTC fEnv) bodyWithTapps) in
+    right(FunctionStructure{
+      typeParams = lists.reverse tparams,
+      params = lists.reverse args,
+      bindings = bindings,
+      body = bodyWithTapps,
+      domains = lists.reverse doms,
+      codomain = mcod,
+      environment = fEnv})
+
+## Recursive step of the function-term walk: peel lambdas / type-lambdas / type-applications, accumulating params and bindings, then call analyzeFunctionTermWithFinish
+term analyzeFunctionTermWithGather =
+  λcx,forBinding,getTC,setTC,argMode,gEnv,tparams,args,bindings,doms,tapps,t.cases(Term){
+      lambda=λlam.ifElse
+            argMode
+            (let v := Lambda[parameter] lam in
+            let dom := optionals.match
+                (Lambda[domain] lam)
+                Type{
+                  variable = Name{"_"}}
+                (λ`x_`.`x_`) in
+            let body := Lambda[body] lam in
+            let newEnv := setTC
+                (extendGraphForLambda (getTC gEnv) lam)
+                gEnv in
+            analyzeFunctionTermWithGather
+              cx
+              forBinding
+              getTC
+              setTC
+              argMode
+              newEnv
+              tparams
+              (lists.cons v args)
+              bindings
+              (lists.cons dom doms)
+              tapps
+              body)
+            (analyzeFunctionTermWithFinish
+              cx
+              getTC
+              gEnv
+              tparams
+              args
+              bindings
+              doms
+              tapps
+              t),
+      `let`=λlt.
+          let inScope0 := sets.union
+              (sets.fromList args)
+              (sets.fromList
+                (lists.map Binding[name] bindings)) in
+          let resolveBinding := λacc,b.
+              let bname := Binding[name] b in
+              let resolvedSoFar := first acc in
+              let scopeSoFar := second acc in
+              ifElse
+                (sets.member bname scopeSoFar)
+                (let bname2 := freshNameAvoiding bname scopeSoFar
+                in (lists.cons (bname, bname2) resolvedSoFar, sets.insert bname2 scopeSoFar))
+                (resolvedSoFar, sets.insert bname scopeSoFar) in
+          let resolveState := lists.foldl
+              resolveBinding
+              ([], inScope0)
+              (Let[bindings] lt) in
+          let renames := maps.fromList (first resolveState) in
+          let renameBindingName := λb.Binding{
+                name = optionals.withDefault
+                    (Binding[name] b)
+                    (maps.lookup (Binding[name] b) renames),
+                `term` = substituteVariables
+                    renames
+                    (Binding[`term`] b),
+                typeScheme = Binding[typeScheme] b} in
+          let newBindings := lists.map
+              renameBindingName
+              (Let[bindings] lt) in
+          let body := ifElse
+              (maps.isEmpty renames)
+              (Let[body] lt)
+              (substituteVariables
+                renames
+                (Let[body] lt)) in
+          let newEnv := setTC
+              (extendGraphForLet
+                forBinding
+                (getTC gEnv)
+                lt)
+              gEnv in
+          analyzeFunctionTermWithGather
+            cx
+            forBinding
+            getTC
+            setTC
+            false
+            newEnv
+            tparams
+            args
+            (lists.concat2 bindings newBindings)
+            doms
+            tapps
+            body,
+      typeApplication=λta.
+          let taBody := TypeApplicationTerm[body] ta in
+          let typ := TypeApplicationTerm[`type`] ta in
+          analyzeFunctionTermWithGather
+            cx
+            forBinding
+            getTC
+            setTC
+            argMode
+            gEnv
+            tparams
+            args
+            bindings
+            doms
+            (lists.cons typ tapps)
+            taBody,
+      typeLambda=λtl.
+          let tvar := TypeLambda[parameter] tl in
+          let tlBody := TypeLambda[body] tl in
+          let newEnv := setTC
+              (extendGraphForTypeLambda (getTC gEnv) tl)
+              gEnv in
+          analyzeFunctionTermWithGather
+            cx
+            forBinding
+            getTC
+            setTC
+            argMode
+            newEnv
+            (lists.cons tvar tparams)
+            args
+            bindings
+            doms
+            tapps
+            tlBody,
+      `_`=analyzeFunctionTermWithFinish
+          cx
+          getTC
+          gEnv
+          tparams
+          args
+          bindings
+          doms
+          tapps
+          t}
+      (deannotateTerm t)
+
+## Get dependency module names from definitions
+term definitionDependencyModuleNames =
+  λdefs.
+    let defNames := λdef.cases(Definition){
+          `type`=λtypeDef.typeDependencyNames
+                true
+                (TypeScheme[body] (TypeDefinition[body] typeDef)),
+          `term`=λtermDef.termDependencyNames
+                true
+                true
+                true
+                (TermDefinition[body] termDef),
+          `primitive`=λprimDef.sets.union
+                (typeDependencyNames
+                  true
+                  (TypeScheme[body]
+                    (termSignatureToTypeScheme
+                      (PrimitiveDefinition[signature] primDef))))
+                (optionals.match
+                  (PrimitiveDefinition[defaultImplementation] primDef)
+                  sets.empty
+                  (λimpl.termDependencyNames true true true impl))}
+          def in
+    let allNames := sets.unions (lists.map defNames defs) in
+    sets.fromList (optionals.givens (lists.map moduleNameOf (sets.toList allNames)))
+
+## Get, per dependency module, the counted multiset of its local names referenced by the definitions
+term definitionDependencyNamesByModule =
+  λdefs.
+    let defNames := λdef.cases(Definition){
+          `type`=λtypeDef.typeDependencyNames
+                true
+                (TypeScheme[body] (TypeDefinition[body] typeDef)),
+          `term`=λtermDef.termDependencyNames
+                true
+                true
+                true
+                (TermDefinition[body] termDef),
+          `primitive`=λprimDef.typeDependencyNames
+                true
+                (TypeScheme[body]
+                  (termSignatureToTypeScheme
+                    (PrimitiveDefinition[signature] primDef)))}
+          def in
+    let pairs := lists.concat
+        (lists.map
+          (λdef.optionals.givens
+              (lists.map
+                (λnm.optionals.map (λmn.(mn, localNameOf nm)) (moduleNameOf nm))
+                (sets.toList (defNames def))))
+          defs) in
+    lists.foldl
+      (λacc,p.
+        let mn := first p in
+        let local := second p in
+        let inner := optionals.withDefault maps.empty (maps.lookup mn acc) in
+        let newCount := add 1:int32 (optionals.withDefault 0:int32 (maps.lookup local inner)) in
+        maps.insert mn (maps.insert local newCount inner) acc)
+      maps.empty
+      pairs
+
+## Find dependency module names in all of a set of terms (Either version)
+term dependencyModuleNames =
+  λcx,graph,binds,withPrims,withNoms,withSchema,els.
+    let depNames := λel.
+        let `term` := Binding[`term`] el in
+        let deannotatedTerm := deannotateTerm `term` in
+        let dataNames := termDependencyNames
+            binds
+            withPrims
+            withNoms
+            `term` in
+        let schemaNames := ifElse
+            withSchema
+            (optionals.match
+              (Binding[typeScheme] el)
+              sets.empty
+              (λts.typeDependencyNames
+                  true
+                  (TypeScheme[body] ts)))
+            sets.empty in
+        ifElse
+          (isEncodedType deannotatedTerm)
+          (eithers.map
+            (λtyp.sets.unions
+                [dataNames, schemaNames, typeDependencyNames true typ])
+            (eithers.bimap
+              (λ`_e`.Error{decoding = `_e`})
+              (λ`_a`.`_a`)
+              (decode.model.type graph `term`)))
+          (ifElse
+            (isEncodedTerm deannotatedTerm)
+            (eithers.map
+              (λdecodedTerm.sets.unions
+                  [dataNames, schemaNames, termDependencyNames binds withPrims withNoms decodedTerm])
+              (eithers.bimap
+                (λ`_e`.Error{decoding = `_e`})
+                (λ`_a`.`_a`)
+                (decode.model.term graph `term`)))
+            right(sets.unions [dataNames, schemaNames]))
+    in eithers.map
+      (λnamesList.sets.fromList
+          (optionals.givens
+            (lists.map
+              moduleNameOf
+              (sets.toList (sets.unions namesList)))))
+      (eithers.mapList depNames els)
+
+## Gather applications from a term, returning (args, baseTerm)
+term gatherApplications =
+  λ`term`.
+    let go := λargs,t.cases(Term){
+          application=λapp.
+              let lhs := Application[function] app in
+              let rhs := Application[argument] app in
+              go (lists.cons rhs args) lhs,
+          `_`=(args, t)}
+          (deannotateTerm t)
+    in go [] `term`
+
+## Gather term arguments, stripping type-level constructs
+term gatherArgs =
+  λ`term`,args.cases(Term){
+      application=λapp.
+          let lhs := Application[function] app in
+          let rhs := Application[argument] app in
+          gatherArgs lhs (lists.cons rhs args),
+      typeLambda=λtl.let body := TypeLambda[body] tl in gatherArgs body args,
+      typeApplication=λta.let body := TypeApplicationTerm[body] ta in gatherArgs body args,
+      `_`=(`term`, args)}
+      (deannotateTerm `term`)
+
+## Gather term and type arguments from a term
+term gatherArgsWithTypeApps =
+  λ`term`,args,tyArgs.cases(Term){
+      application=λapp.
+          let lhs := Application[function] app in
+          let rhs := Application[argument] app in
+          gatherArgsWithTypeApps lhs (lists.cons rhs args) tyArgs,
+      typeLambda=λtl.
+          let body := TypeLambda[body] tl
+          in gatherArgsWithTypeApps body args tyArgs,
+      typeApplication=λta.
+          let body := TypeApplicationTerm[body] ta in
+          let typ := TypeApplicationTerm[`type`] ta in
+          gatherArgsWithTypeApps body args (lists.cons typ tyArgs),
+      `_`=(`term`, (args, tyArgs))}
+      (deannotateTerm `term`)
+
+## Check if a term body is self-tail-recursive with respect to a function name
+term isSelfTailRecursive =
+  λfuncName,body.
+    let callsSelf := not (isFreeVariableInTerm funcName body)
+    in ifElse callsSelf (isTailRecursiveInTailPosition funcName body) false
+
+## Check if a term can be encoded as a simple assignment
+term isSimpleAssignment =
+  λ`term`.cases(Term){
+      annotated=λat.isSimpleAssignment (AnnotatedTerm[body] at),
+      lambda=λ`_`.false,
+      `let`=λ`_`.false,
+      typeLambda=λ`_`.false,
+      typeApplication=λta.isSimpleAssignment (TypeApplicationTerm[body] ta),
+      `_`=let baseTerm := first (gatherArgs `term` [])
+        in cases(Term){`cases`=λ`_`.false, `_`=true} baseTerm}
+      `term`
+
+## Check that all self-references are in tail position
+term isTailRecursiveInTailPosition =
+  λfuncName,`term`.
+    let stripped := deannotateAndDetypeTerm `term`
+    in cases(Term){
+      application=λapp.
+          let gathered := gatherApplications stripped in
+          let gatherArgs := first gathered in
+          let gatherFun := second gathered in
+          let strippedFun := deannotateAndDetypeTerm gatherFun in
+          cases(Term){
+            variable=λvname.ifElse
+                  (equal vname funcName)
+                  (let argsNoFunc := lists.foldl
+                      (λok,arg.and
+                          ok
+                          (isFreeVariableInTerm funcName arg))
+                      true
+                      gatherArgs in
+                  let argsNoLambda := lists.foldl
+                      (λok,arg.and
+                          ok
+                          (not
+                            (foldOverTerm
+                              TraversalOrder{
+                                pre}
+                              (λfound,t.or
+                                  found
+                                  (cases(Term){
+                                    lambda=λlam.
+                                        let ignore := Lambda[body] lam
+                                        in true,
+                                    `_`=false}
+                                    t))
+                              false
+                              arg)))
+                      true
+                      gatherArgs in
+                  and argsNoFunc argsNoLambda)
+                  (isFreeVariableInTerm funcName `term`),
+            `cases`=λcs.
+                let `cases_` := CaseStatement[`cases`] cs in
+                let dflt := CaseStatement[default] cs in
+                let branchesOk := lists.foldl
+                    (λok,field.and
+                        ok
+                        (isTailRecursiveInTailPosition
+                          funcName
+                          (CaseAlternative[handler] field)))
+                    true
+                    `cases_` in
+                let dfltOk := optionals.match
+                    dflt
+                    true
+                    (λd.isTailRecursiveInTailPosition funcName d) in
+                let argsOk := lists.foldl
+                    (λok,arg.and
+                        ok
+                        (isFreeVariableInTerm funcName arg))
+                    true
+                    gatherArgs in
+                and (and branchesOk dfltOk) argsOk,
+            `_`=isFreeVariableInTerm funcName `term`}
+            strippedFun,
+      lambda=λlam.isTailRecursiveInTailPosition funcName (Lambda[body] lam),
+      `let`=λlt.
+          let bindingsOk := lists.foldl
+              (λok,b.and
+                  ok
+                  (isFreeVariableInTerm funcName (Binding[`term`] b)))
+              true
+              (Let[bindings] lt)
+          in and bindingsOk (isTailRecursiveInTailPosition funcName (Let[body] lt)),
+      `_`=isFreeVariableInTerm funcName `term`}
+      stripped
+
+## Check whether a module contains any binary literal values
+term moduleContainsBinaryLiterals =
+  λmod.
+    let checkTerm := λfound,`term`.or
+          found
+          (cases(Term){
+            literal=λlit.cases(Literal){`binary`=λ`_`.true, `_`=false} lit,
+            `_`=false}
+            `term`) in
+    let termContainsBinary := λ`term`.foldOverTerm TraversalOrder{pre} checkTerm false `term` in
+    let defTerms := optionals.givens
+        (lists.map
+          (λd.cases(Definition){`term`=λtd.given(TermDefinition[body] td), `_`=none} d)
+          (Module[definitions] mod)) in
+    lists.foldl (λacc,t.or acc (termContainsBinary t)) false defTerms
+
+## Check whether a module contains any decimal literal values
+term moduleContainsDecimalLiterals =
+  λmod.
+    let checkTerm := λfound,`term`.or
+          found
+          (cases(Term){
+            literal=λlit.cases(Literal){`decimal`=λ`_`.true, `_`=false} lit,
+            `_`=false}
+            `term`) in
+    let termContainsDecimal := λ`term`.foldOverTerm TraversalOrder{pre} checkTerm false `term` in
+    let defTerms := optionals.givens
+        (lists.map
+          (λd.cases(Definition){`term`=λtd.given(TermDefinition[body] td), `_`=none} d)
+          (Module[definitions] mod)) in
+    lists.foldl (λacc,t.or acc (termContainsDecimal t)) false defTerms
+
+## Find dependency module names in all elements of a module, excluding the module's own module name (Either version)
+term moduleDependencyModuleNames =
+  λcx,graph,binds,withPrims,withNoms,withSchema,mod.
+    let allBindings := optionals.givens
+        (lists.map
+          (λd.cases(Definition){
+              `type`=λtd.given((λname,typ.
+                    let schemaTerm := Term{
+                      variable = Name{"hydra.core.model.Type"}} in
+                    let dataTerm := normalizeTermAnnotations
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = encode.model.type typ,
+                            annotation = wrapAnnotationMap
+                                (maps.fromList [(keyType, schemaTerm)])}} in
+                    Binding{
+                      name = name,
+                      `term` = dataTerm,
+                      typeScheme = given(TypeScheme{
+                          variables = [],
+                          body = Type{
+                            variable = Name{"hydra.core.model.Type"}},
+                          constraints = maps.empty})})
+                    (TypeDefinition[name] td)
+                    (TypeScheme[body]
+                      (TypeDefinition[body] td))),
+              `term`=λtd.given(Binding{
+                    name = TermDefinition[name] td,
+                    `term` = TermDefinition[body] td,
+                    typeScheme = optionals.map
+                        termSignatureToTypeScheme
+                        (TermDefinition[signature] td)}),
+              `_`=none}
+              d)
+          (Module[definitions] mod))
+    in eithers.map
+      (λdeps.sets.delete (Module[name] mod) deps)
+      (dependencyModuleNames
+        cx
+        graph
+        binds
+        withPrims
+        withNoms
+        withSchema
+        allBindings)
+
+## Create module names mapping for definitions
+term moduleNamesForDefinitions =
+  λencodeModuleName,focusNs,defs.
+    let nss := sets.delete focusNs (definitionDependencyModuleNames defs) in
+    let toPair := λns.(ns, encodeModuleName ns) in
+    ModuleNames{
+      focus = toPair focusNs,
+      mapping = maps.fromList (lists.map toPair (sets.toList nss))}

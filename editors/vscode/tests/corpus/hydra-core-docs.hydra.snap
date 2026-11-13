@@ -6,14 +6,10 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.packaging as packaging
+>import hydra.core.packaging
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                           ^ source.hydra
-#                            ^^ source.hydra keyword.control.import.hydra
-#                              ^ source.hydra
-#                               ^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
 >## A segment of a documentation string, either a raw text fragment or an inline entity reference. Documentation strings are parsed into a sequence of DocSegments for host-specific rendering.
 #^^ source.hydra comment.block.documentation.hydra
@@ -31,13 +27,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  ref: packaging.EntityReference,
+>  ref: EntityReference,
 #^^ source.hydra
 #  ^^^ source.hydra variable.other.hydra
 #     ^ source.hydra punctuation.separator.type.hydra
 #      ^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                ^^ source.hydra
+#       ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                      ^^ source.hydra
 >  ## A raw prose fragment, passed through verbatim
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

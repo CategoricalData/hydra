@@ -4,8 +4,6 @@
 ## Hashing is pure: both primitives are ordinary total functions of their input bytes, and hashing never fails.
 module hydra.core.lib.hashing
 
-
-
 ## Compute the SHA-256 digest of a sequence of bytes.
 ##
 ## sha256(bytes) returns the 32-byte SHA-256 digest of bytes. Total: hashing is pure and never fails.

@@ -7,8 +7,6 @@
 ## effect<t> is total: a leaf effect always completes and yields a value (for hydra.lib.files, an either<FileError, t>); the obligations above govern order, multiplicity, and deferral, not failure short-circuiting.
 module hydra.core.lib.effects
 
-
-
 ## Applicative apply for effects.
 ##
 ## apply(ef, ex) describes an effectful computation which first interprets ef to produce a function, then interprets ex to produce an argument, and returns the result of applying the function to the argument.

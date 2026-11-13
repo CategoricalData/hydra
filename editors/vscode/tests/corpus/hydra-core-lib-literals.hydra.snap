@@ -17,8 +17,6 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->
->
 >## Decode a base64 ASCII string to binary data.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra

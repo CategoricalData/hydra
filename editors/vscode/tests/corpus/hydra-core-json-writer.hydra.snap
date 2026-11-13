@@ -1,0 +1,1478 @@
+>## JSON serialization functions using the Hydra AST
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.json.writer
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>import hydra.core.ast
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.json.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.lib.equality
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.lib.lists as lists
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                           ^ source.hydra
+#                            ^^ source.hydra keyword.control.import.hydra
+#                              ^ source.hydra
+#                               ^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.lib.literals
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.lib.logic
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.lib.math
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.lib.optionals as optionals
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                               ^ source.hydra
+#                                ^^ source.hydra keyword.control.import.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.lib.ordering
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.lib.pairs
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.lib.strings as strings
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                             ^ source.hydra
+#                              ^^ source.hydra keyword.control.import.hydra
+#                                ^ source.hydra
+#                                 ^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.serialization
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>## The colon operator used to separate keys and values in JSON objects
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term colonOp =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^ source.hydra entity.name.function.hydra
+#            ^ source.hydra
+#             ^ source.hydra keyword.operator.equals.hydra
+>  Op{
+#^^ source.hydra
+#  ^^ source.hydra entity.name.type.nominal.hydra
+#    ^^ source.hydra
+>    symbol = Symbol{":"},
+#^^^^ source.hydra
+#    ^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra
+#           ^ source.hydra keyword.operator.equals.hydra
+#            ^ source.hydra
+#             ^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                     ^ source.hydra string.quoted.double.hydra
+#                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                       ^^^ source.hydra
+>    padding = Padding{`left` = Ws{`none`}, `right` = Ws{space}},
+#^^^^ source.hydra
+#    ^^^^^^^ source.hydra variable.other.hydra
+#           ^ source.hydra
+#            ^ source.hydra keyword.operator.equals.hydra
+#             ^ source.hydra
+#              ^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                       ^^^^ source.hydra variable.other.escaped.hydra
+#                           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra keyword.operator.equals.hydra
+#                              ^ source.hydra
+#                               ^^ source.hydra entity.name.type.nominal.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                   ^^^^ source.hydra variable.other.escaped.hydra
+#                                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                        ^^^ source.hydra
+#                                           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                            ^^^^^ source.hydra variable.other.escaped.hydra
+#                                                 ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                  ^ source.hydra
+#                                                   ^ source.hydra keyword.operator.equals.hydra
+#                                                    ^ source.hydra
+#                                                     ^^ source.hydra entity.name.type.nominal.hydra
+#                                                       ^ source.hydra
+#                                                        ^^^^^ source.hydra variable.other.hydra
+#                                                             ^^^^ source.hydra
+>    precedence = Precedence{0:int32},
+#^^^^ source.hydra
+#    ^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra constant.numeric.integer.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                   ^^^ source.hydra
+>    associativity = Associativity{`none`}}
+#^^^^ source.hydra
+#    ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                   ^^^^ source.hydra variable.other.escaped.hydra
+#                                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                        ^^^ source.hydra
+>
+>## Like colonOp, but with no padding on either side, for compact-mode output
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term compactColonOp =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.equals.hydra
+>  Op{
+#^^ source.hydra
+#  ^^ source.hydra entity.name.type.nominal.hydra
+#    ^^ source.hydra
+>    symbol = Symbol{":"},
+#^^^^ source.hydra
+#    ^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra
+#           ^ source.hydra keyword.operator.equals.hydra
+#            ^ source.hydra
+#             ^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                     ^ source.hydra string.quoted.double.hydra
+#                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                       ^^^ source.hydra
+>    padding = Padding{`left` = Ws{`none`}, `right` = Ws{`none`}},
+#^^^^ source.hydra
+#    ^^^^^^^ source.hydra variable.other.hydra
+#           ^ source.hydra
+#            ^ source.hydra keyword.operator.equals.hydra
+#             ^ source.hydra
+#              ^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                       ^^^^ source.hydra variable.other.escaped.hydra
+#                           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra keyword.operator.equals.hydra
+#                              ^ source.hydra
+#                               ^^ source.hydra entity.name.type.nominal.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                   ^^^^ source.hydra variable.other.escaped.hydra
+#                                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                        ^^^ source.hydra
+#                                           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                            ^^^^^ source.hydra variable.other.escaped.hydra
+#                                                 ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                  ^ source.hydra
+#                                                   ^ source.hydra keyword.operator.equals.hydra
+#                                                    ^ source.hydra
+#                                                     ^^ source.hydra entity.name.type.nominal.hydra
+#                                                       ^ source.hydra
+#                                                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                                         ^^^^ source.hydra variable.other.escaped.hydra
+#                                                             ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                              ^^^^ source.hydra
+>    precedence = Precedence{0:int32},
+#^^^^ source.hydra
+#    ^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra constant.numeric.integer.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                   ^^^ source.hydra
+>    associativity = Associativity{`none`}}
+#^^^^ source.hydra
+#    ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                   ^^^^ source.hydra variable.other.escaped.hydra
+#                                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                        ^^^ source.hydra
+>
+>## A comma separator with no padding on either side, for compact-mode output
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term compactCommaOp =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.equals.hydra
+>  Op{
+#^^ source.hydra
+#  ^^ source.hydra entity.name.type.nominal.hydra
+#    ^^ source.hydra
+>    symbol = Symbol{","},
+#^^^^ source.hydra
+#    ^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra
+#           ^ source.hydra keyword.operator.equals.hydra
+#            ^ source.hydra
+#             ^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                     ^ source.hydra string.quoted.double.hydra
+#                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                       ^^^ source.hydra
+>    padding = Padding{`left` = Ws{`none`}, `right` = Ws{`none`}},
+#^^^^ source.hydra
+#    ^^^^^^^ source.hydra variable.other.hydra
+#           ^ source.hydra
+#            ^ source.hydra keyword.operator.equals.hydra
+#             ^ source.hydra
+#              ^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                       ^^^^ source.hydra variable.other.escaped.hydra
+#                           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra keyword.operator.equals.hydra
+#                              ^ source.hydra
+#                               ^^ source.hydra entity.name.type.nominal.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                   ^^^^ source.hydra variable.other.escaped.hydra
+#                                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                        ^^^ source.hydra
+#                                           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                            ^^^^^ source.hydra variable.other.escaped.hydra
+#                                                 ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                  ^ source.hydra
+#                                                   ^ source.hydra keyword.operator.equals.hydra
+#                                                    ^ source.hydra
+#                                                     ^^ source.hydra entity.name.type.nominal.hydra
+#                                                       ^ source.hydra
+#                                                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                                         ^^^^ source.hydra variable.other.escaped.hydra
+#                                                             ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                              ^^^^ source.hydra
+>    precedence = Precedence{0:int32},
+#^^^^ source.hydra
+#    ^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra constant.numeric.integer.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                   ^^^ source.hydra
+>    associativity = Associativity{`none`}}
+#^^^^ source.hydra
+#    ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                   ^^^^ source.hydra variable.other.escaped.hydra
+#                                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                        ^^^ source.hydra
+>
+>## Comma-separate the elements inside the given bracket pair with no insignificant whitespace at all.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term compactList =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.equals.hydra
+>  λbr,els.ifElse (lists.isEmpty els) (brackets br inlineStyle (cst "")) (brackets br inlineStyle (sep compactCommaOp els))
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^^ source.hydra variable.parameter.hydra
+#     ^ source.hydra punctuation.separator.binder.hydra
+#      ^^^ source.hydra variable.parameter.hydra
+#         ^ source.hydra punctuation.separator.binder.hydra
+#          ^^^^^^ source.hydra variable.other.hydra
+#                ^^ source.hydra
+#                  ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                               ^ source.hydra
+#                                ^^^ source.hydra variable.other.hydra
+#                                   ^^^ source.hydra
+#                                      ^^^^^^^^ source.hydra variable.other.hydra
+#                                              ^ source.hydra
+#                                               ^^ source.hydra variable.other.hydra
+#                                                 ^ source.hydra
+#                                                  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                             ^^ source.hydra
+#                                                               ^^^ source.hydra variable.other.hydra
+#                                                                  ^ source.hydra
+#                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                     ^^^^ source.hydra
+#                                                                         ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                 ^ source.hydra
+#                                                                                  ^^ source.hydra variable.other.hydra
+#                                                                                    ^ source.hydra
+#                                                                                     ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                ^^ source.hydra
+#                                                                                                  ^^^ source.hydra variable.other.hydra
+#                                                                                                     ^ source.hydra
+#                                                                                                      ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                                    ^ source.hydra
+#                                                                                                                     ^^^ source.hydra variable.other.hydra
+#                                                                                                                        ^^^ source.hydra
+>
+>## The default layout options, reproducing the historical, non-configurable behavior of printJson byte-for-byte: pretty-printed, two-space indent, 120-column adaptive width, no indent-depth limit.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term defaultJsonWriterOptions =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.equals.hydra
+>  JsonWriterOptions{compact = false, indent = "  ", maxLineWidth = 120:int32, maxIndentDepth = none}
+#^^ source.hydra
+#  ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^ source.hydra variable.other.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.equals.hydra
+#                             ^ source.hydra
+#                              ^^^^^ source.hydra constant.language.boolean.hydra
+#                                   ^^ source.hydra
+#                                     ^^^^^^ source.hydra variable.other.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra keyword.operator.equals.hydra
+#                                             ^ source.hydra
+#                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                               ^^ source.hydra string.quoted.double.hydra
+#                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                  ^^ source.hydra
+#                                                    ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                ^ source.hydra
+#                                                                 ^ source.hydra keyword.operator.equals.hydra
+#                                                                  ^ source.hydra
+#                                                                   ^^^ source.hydra constant.numeric.integer.hydra
+#                                                                      ^ source.hydra punctuation.separator.type.hydra
+#                                                                       ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                                            ^^ source.hydra
+#                                                                              ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                            ^ source.hydra
+#                                                                                             ^ source.hydra keyword.operator.equals.hydra
+#                                                                                              ^ source.hydra
+#                                                                                               ^^^^ source.hydra keyword.control.hydra
+#                                                                                                   ^^ source.hydra
+>
+>## A half-block style (newline before content, none after) using the options' indent string.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term halfBlockStyleWith =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra keyword.operator.equals.hydra
+>  λoptions.BlockStyle{
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^^^^^^^ source.hydra variable.parameter.hydra
+#          ^ source.hydra punctuation.separator.binder.hydra
+#           ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                     ^^ source.hydra
+>      indent = given(JsonWriterOptions[indent] options),
+#^^^^^^ source.hydra
+#      ^^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra
+#             ^ source.hydra keyword.operator.equals.hydra
+#              ^ source.hydra
+#               ^^^^^ source.hydra keyword.control.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^ source.hydra variable.other.hydra
+#                                             ^^ source.hydra
+#                                               ^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^^ source.hydra
+>      newlineBeforeContent = true,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.equals.hydra
+#                            ^ source.hydra
+#                             ^^^^ source.hydra constant.language.boolean.hydra
+#                                 ^^ source.hydra
+>      newlineAfterContent = false}
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.equals.hydra
+#                           ^ source.hydra
+#                            ^^^^^ source.hydra constant.language.boolean.hydra
+#                                 ^^ source.hydra
+>
+>## Encode a byte (0..255) as a two-character lowercase hex string. Non-byte inputs yield placeholder '?' characters.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term hexByte =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^ source.hydra entity.name.function.hydra
+#            ^ source.hydra
+#             ^ source.hydra keyword.operator.equals.hydra
+>  λc.
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^ source.hydra variable.parameter.hydra
+#    ^ source.hydra punctuation.separator.binder.hydra
+>    let nibble := λi.optionals.withDefault
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^^^^^ source.hydra variable.other.hydra
+#              ^ source.hydra
+#               ^^ source.hydra keyword.operator.assignment.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.lambda.hydra
+#                   ^ source.hydra variable.parameter.hydra
+#                    ^ source.hydra punctuation.separator.binder.hydra
+#                     ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+>          "?"
+#^^^^^^^^^^ source.hydra
+#          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#           ^ source.hydra string.quoted.double.hydra
+#            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+>          (optionals.map (λch.strings.fromList (lists.singleton ch)) (strings.charAt i "0123456789abcdef")) in
+#^^^^^^^^^^^ source.hydra
+#           ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                        ^^ source.hydra
+#                          ^ source.hydra keyword.operator.lambda.hydra
+#                           ^^ source.hydra variable.parameter.hydra
+#                             ^ source.hydra punctuation.separator.binder.hydra
+#                              ^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                              ^^ source.hydra
+#                                                ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                               ^ source.hydra
+#                                                                ^^ source.hydra variable.other.hydra
+#                                                                  ^^^^ source.hydra
+#                                                                      ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                    ^ source.hydra
+#                                                                                     ^ source.hydra variable.other.hydra
+#                                                                                      ^ source.hydra
+#                                                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                                                        ^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                                         ^^^ source.hydra
+#                                                                                                            ^^ source.hydra keyword.control.hydra
+>    let hi := nibble (optionals.withDefault 0:int32 (div c 16:int32)) in
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^ source.hydra variable.other.hydra
+#          ^ source.hydra
+#           ^^ source.hydra keyword.operator.assignment.hydra
+#             ^ source.hydra
+#              ^^^^^^ source.hydra variable.other.hydra
+#                    ^^ source.hydra
+#                      ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra constant.numeric.integer.hydra
+#                                             ^ source.hydra punctuation.separator.type.hydra
+#                                              ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                   ^^ source.hydra
+#                                                     ^^^ source.hydra variable.other.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra variable.other.hydra
+#                                                          ^ source.hydra
+#                                                           ^^ source.hydra constant.numeric.integer.hydra
+#                                                             ^ source.hydra punctuation.separator.type.hydra
+#                                                              ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                                   ^^^ source.hydra
+#                                                                      ^^ source.hydra keyword.control.hydra
+>    let lo := nibble (optionals.withDefault 0:int32 (mod c 16:int32)) in
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^ source.hydra variable.other.hydra
+#          ^ source.hydra
+#           ^^ source.hydra keyword.operator.assignment.hydra
+#             ^ source.hydra
+#              ^^^^^^ source.hydra variable.other.hydra
+#                    ^^ source.hydra
+#                      ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra constant.numeric.integer.hydra
+#                                             ^ source.hydra punctuation.separator.type.hydra
+#                                              ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                   ^^ source.hydra
+#                                                     ^^^ source.hydra variable.other.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra variable.other.hydra
+#                                                          ^ source.hydra
+#                                                           ^^ source.hydra constant.numeric.integer.hydra
+#                                                             ^ source.hydra punctuation.separator.type.hydra
+#                                                              ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                                   ^^^ source.hydra
+#                                                                      ^^ source.hydra keyword.control.hydra
+>    strings.concat2 hi lo
+#^^^^ source.hydra
+#    ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                   ^ source.hydra
+#                    ^^ source.hydra variable.other.hydra
+#                      ^ source.hydra
+#                       ^^ source.hydra variable.other.hydra
+>
+>## Escape and quote a string for JSON output
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term jsonString =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.equals.hydra
+>  λs.
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^ source.hydra variable.parameter.hydra
+#    ^ source.hydra punctuation.separator.binder.hydra
+>    let hexEscape := λc.strings.concat2 "\\u00" (hexByte c) in
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra
+#                  ^^ source.hydra keyword.operator.assignment.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.lambda.hydra
+#                      ^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                         ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                           ^^^ source.hydra string.quoted.double.hydra
+#                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                               ^^ source.hydra
+#                                                 ^^^^^^^ source.hydra variable.other.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra variable.other.hydra
+#                                                          ^^ source.hydra
+#                                                            ^^ source.hydra keyword.control.hydra
+>    let escape := λc.ifElse
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^^^^^ source.hydra variable.other.hydra
+#              ^ source.hydra
+#               ^^ source.hydra keyword.operator.assignment.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.lambda.hydra
+#                   ^ source.hydra variable.parameter.hydra
+#                    ^ source.hydra punctuation.separator.binder.hydra
+#                     ^^^^^^ source.hydra variable.other.hydra
+>          (equal c 34:int32)
+#^^^^^^^^^^^ source.hydra
+#           ^^^^^ source.hydra variable.other.hydra
+#                ^ source.hydra
+#                 ^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^^ source.hydra constant.numeric.integer.hydra
+#                     ^ source.hydra punctuation.separator.type.hydra
+#                      ^^^^^ source.hydra support.type.literal.integer.hydra
+#                           ^^ source.hydra
+>          "\\\""
+#^^^^^^^^^^ source.hydra
+#          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#           ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#             ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+>          (ifElse
+#^^^^^^^^^^^ source.hydra
+#           ^^^^^^ source.hydra variable.other.hydra
+>            (equal c 92:int32)
+#^^^^^^^^^^^^^ source.hydra
+#             ^^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra variable.other.hydra
+#                    ^ source.hydra
+#                     ^^ source.hydra constant.numeric.integer.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^^^^^ source.hydra support.type.literal.integer.hydra
+#                             ^^ source.hydra
+>            "\\\\"
+#^^^^^^^^^^^^ source.hydra
+#            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#             ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#               ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+>            (ifElse
+#^^^^^^^^^^^^^ source.hydra
+#             ^^^^^^ source.hydra variable.other.hydra
+>              (equal c 8:int32)
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra variable.other.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra constant.numeric.integer.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^^^^^ source.hydra support.type.literal.integer.hydra
+#                              ^^ source.hydra
+>              "\\b"
+#^^^^^^^^^^^^^^ source.hydra
+#              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#               ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                 ^ source.hydra string.quoted.double.hydra
+#                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+>              (ifElse
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^^^^^ source.hydra variable.other.hydra
+>                (equal c 12:int32)
+#^^^^^^^^^^^^^^^^^ source.hydra
+#                 ^^^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra variable.other.hydra
+#                        ^ source.hydra
+#                         ^^ source.hydra constant.numeric.integer.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                 ^^ source.hydra
+>                "\\f"
+#^^^^^^^^^^^^^^^^ source.hydra
+#                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                 ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                   ^ source.hydra string.quoted.double.hydra
+#                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+>                (ifElse
+#^^^^^^^^^^^^^^^^^ source.hydra
+#                 ^^^^^^ source.hydra variable.other.hydra
+>                  (equal c 10:int32)
+#^^^^^^^^^^^^^^^^^^^ source.hydra
+#                   ^^^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^^ source.hydra constant.numeric.integer.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                   ^^ source.hydra
+>                  "\\n"
+#^^^^^^^^^^^^^^^^^^ source.hydra
+#                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                   ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                     ^ source.hydra string.quoted.double.hydra
+#                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+>                  (ifElse
+#^^^^^^^^^^^^^^^^^^^ source.hydra
+#                   ^^^^^^ source.hydra variable.other.hydra
+>                    (equal c 13:int32)
+#^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                     ^^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^^ source.hydra constant.numeric.integer.hydra
+#                               ^ source.hydra punctuation.separator.type.hydra
+#                                ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                     ^^ source.hydra
+>                    "\\r"
+#^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                     ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                       ^ source.hydra string.quoted.double.hydra
+#                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+>                    (ifElse
+#^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                     ^^^^^^ source.hydra variable.other.hydra
+>                      (equal c 9:int32)
+#^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                       ^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra constant.numeric.integer.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                      ^^ source.hydra
+>                      "\\t"
+#^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                       ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                         ^ source.hydra string.quoted.double.hydra
+#                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+>                      (ifElse (lt c 32:int32) (hexEscape c) (strings.fromList (lists.singleton c))))))))) in
+#^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                       ^^^^^^ source.hydra variable.other.hydra
+#                             ^^ source.hydra
+#                               ^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^^ source.hydra constant.numeric.integer.hydra
+#                                      ^ source.hydra punctuation.separator.type.hydra
+#                                       ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                            ^^^ source.hydra
+#                                               ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra variable.other.hydra
+#                                                          ^^^ source.hydra
+#                                                             ^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                             ^^ source.hydra
+#                                                                               ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                              ^ source.hydra
+#                                                                                               ^ source.hydra variable.other.hydra
+#                                                                                                ^^^^^^^^^^ source.hydra
+#                                                                                                          ^^ source.hydra keyword.control.hydra
+>    let escaped := strings.concat (lists.map escape (strings.toList s)) in
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^^^^^^ source.hydra variable.other.hydra
+#               ^ source.hydra
+#                ^^ source.hydra keyword.operator.assignment.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                 ^^ source.hydra
+#                                   ^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                            ^ source.hydra
+#                                             ^^^^^^ source.hydra variable.other.hydra
+#                                                   ^^ source.hydra
+#                                                     ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                   ^ source.hydra
+#                                                                    ^ source.hydra variable.other.hydra
+#                                                                     ^^^ source.hydra
+#                                                                        ^^ source.hydra keyword.control.hydra
+>    strings.concat2 (strings.concat2 "\"" escaped) "\""
+#^^^^ source.hydra
+#    ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                   ^^ source.hydra
+#                     ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                      ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^ source.hydra variable.other.hydra
+#                                                 ^^ source.hydra
+#                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                    ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+>
+>## Convert a key-value pair to an AST expression, honoring the given writer options and nesting depth.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term keyValueToExprWith =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra keyword.operator.equals.hydra
+>  λoptions,depth,pair.
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^^^^^^^ source.hydra variable.parameter.hydra
+#          ^ source.hydra punctuation.separator.binder.hydra
+#           ^^^^^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^^^^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+>    let key := first pair in
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^^ source.hydra variable.other.hydra
+#           ^ source.hydra
+#            ^^ source.hydra keyword.operator.assignment.hydra
+#              ^ source.hydra
+#               ^^^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra
+#                     ^^^^ source.hydra variable.other.hydra
+#                         ^ source.hydra
+#                          ^^ source.hydra keyword.control.hydra
+>    let value := second pair in
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra
+#              ^^ source.hydra keyword.operator.assignment.hydra
+#                ^ source.hydra
+#                 ^^^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra
+#                        ^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^^ source.hydra keyword.control.hydra
+>    let colon := ifElse (JsonWriterOptions[compact] options) compactColonOp colonOp in
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra
+#              ^^ source.hydra keyword.operator.assignment.hydra
+#                ^ source.hydra
+#                 ^^^^^^ source.hydra variable.other.hydra
+#                       ^^ source.hydra
+#                         ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                          ^ source.hydra
+#                                           ^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^^ source.hydra
+#                                                    ^^^^^^^ source.hydra variable.other.hydra
+#                                                           ^^ source.hydra
+#                                                             ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                           ^ source.hydra
+#                                                                            ^^^^^^^ source.hydra variable.other.hydra
+#                                                                                   ^ source.hydra
+#                                                                                    ^^ source.hydra keyword.control.hydra
+>    ifx colon (cst (jsonString key)) (valueToExprWith options depth value)
+#^^^^ source.hydra
+#    ^^^ source.hydra variable.other.hydra
+#       ^ source.hydra
+#        ^^^^^ source.hydra variable.other.hydra
+#             ^^ source.hydra
+#               ^^^ source.hydra variable.other.hydra
+#                  ^^ source.hydra
+#                    ^^^^^^^^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^^^ source.hydra variable.other.hydra
+#                                  ^^^^ source.hydra
+#                                      ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                     ^ source.hydra
+#                                                      ^^^^^^^ source.hydra variable.other.hydra
+#                                                             ^ source.hydra
+#                                                              ^^^^^ source.hydra variable.other.hydra
+#                                                                   ^ source.hydra
+#                                                                    ^^^^^ source.hydra variable.other.hydra
+#                                                                         ^^ source.hydra
+>
+>## Serialize a JSON value to a string, using the default (pretty-printed) layout options.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term printJson = λvalue.printJsonWith defaultJsonWriterOptions value
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.lambda.hydra
+#                  ^^^^^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                              ^ source.hydra
+#                                                               ^^^^^ source.hydra variable.other.hydra
+>
+>## Serialize a JSON value to a string using the given layout options.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term printJsonWith = λoptions,value.printExpr (valueToExprWith options 0:int32 value)
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.lambda.hydra
+#                      ^^^^^^^ source.hydra variable.parameter.hydra
+#                             ^ source.hydra punctuation.separator.binder.hydra
+#                              ^^^^^ source.hydra variable.parameter.hydra
+#                                   ^ source.hydra punctuation.separator.binder.hydra
+#                                    ^^^^^^^^^ source.hydra variable.other.hydra
+#                                             ^^ source.hydra
+#                                               ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                              ^ source.hydra
+#                                                               ^^^^^^^ source.hydra variable.other.hydra
+#                                                                      ^ source.hydra
+#                                                                       ^ source.hydra constant.numeric.integer.hydra
+#                                                                        ^ source.hydra punctuation.separator.type.hydra
+#                                                                         ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                                              ^ source.hydra
+#                                                                               ^^^^^ source.hydra variable.other.hydra
+#                                                                                    ^^ source.hydra
+>
+>## Choose between an inline and a block rendering of the same logical collection, given the (non-compact) writer options and the current nesting depth. Depths at or beyond maxIndentDepth always render inline; otherwise the width-adaptive choice from chooseLayout applies, using the options' own line width in place of the fixed maxLineWidth constant.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term styleForDepth =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+>  λoptions,depth,inlineExpr,blockExpr.
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^^^^^^^ source.hydra variable.parameter.hydra
+#          ^ source.hydra punctuation.separator.binder.hydra
+#           ^^^^^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^^^^^^^^^^ source.hydra variable.parameter.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^^^^^^^^^ source.hydra variable.parameter.hydra
+#                                     ^ source.hydra punctuation.separator.binder.hydra
+>    let atMaxDepth := optionals.match
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^^ source.hydra keyword.operator.assignment.hydra
+#                     ^ source.hydra
+#                      ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+>        (JsonWriterOptions[maxIndentDepth] options)
+#^^^^^^^^^ source.hydra
+#         ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                         ^^ source.hydra
+#                                           ^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^^ source.hydra
+>        false
+#^^^^^^^^ source.hydra
+#        ^^^^^ source.hydra constant.language.boolean.hydra
+>        (λmaxDepth.gte depth maxDepth)
+#^^^^^^^^^ source.hydra
+#         ^ source.hydra keyword.operator.lambda.hydra
+#          ^^^^^^^^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra
+#                       ^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^^ source.hydra
+>    in ifElse
+#^^^^ source.hydra
+#    ^^ source.hydra keyword.control.hydra
+#      ^ source.hydra
+#       ^^^^^^ source.hydra variable.other.hydra
+>      atMaxDepth
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^ source.hydra variable.other.hydra
+>      inlineExpr
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^ source.hydra variable.other.hydra
+>      (chooseLayout (JsonWriterOptions[maxLineWidth] options) inlineExpr blockExpr)
+#^^^^^^^ source.hydra
+#       ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^ source.hydra
+#                     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^^ source.hydra
+#                                                     ^^^^^^^ source.hydra variable.other.hydra
+#                                                            ^^ source.hydra
+#                                                              ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                        ^ source.hydra
+#                                                                         ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                  ^^ source.hydra
+>
+>## Convert a JSON value to an AST expression for serialization, using the default layout options.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term valueToExpr = λvalue.valueToExprWith defaultJsonWriterOptions 0:int32 value
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.equals.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.lambda.hydra
+#                    ^^^^^ source.hydra variable.parameter.hydra
+#                         ^ source.hydra punctuation.separator.binder.hydra
+#                          ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                  ^ source.hydra
+#                                                                   ^ source.hydra constant.numeric.integer.hydra
+#                                                                    ^ source.hydra punctuation.separator.type.hydra
+#                                                                     ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                                          ^ source.hydra
+#                                                                           ^^^^^ source.hydra variable.other.hydra
+>
+>## Convert a JSON value to an AST expression for serialization, honoring the given writer options and nesting depth.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term valueToExprWith =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.equals.hydra
+>  λoptions,depth,value.
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^^^^^^^ source.hydra variable.parameter.hydra
+#          ^ source.hydra punctuation.separator.binder.hydra
+#           ^^^^^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^^^^^ source.hydra variable.parameter.hydra
+#                      ^ source.hydra punctuation.separator.binder.hydra
+>    let childDepth := add depth 1:int32 in
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^^ source.hydra keyword.operator.assignment.hydra
+#                     ^ source.hydra
+#                      ^^^ source.hydra variable.other.hydra
+#                         ^ source.hydra
+#                          ^^^^^ source.hydra variable.other.hydra
+#                               ^ source.hydra
+#                                ^ source.hydra constant.numeric.integer.hydra
+#                                 ^ source.hydra punctuation.separator.type.hydra
+#                                  ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                       ^ source.hydra
+#                                        ^^ source.hydra keyword.control.hydra
+>    let compact := JsonWriterOptions[compact] options in
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^^^^^^ source.hydra variable.other.hydra
+#               ^ source.hydra
+#                ^^ source.hydra keyword.operator.assignment.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^ source.hydra variable.other.hydra
+#                                            ^^ source.hydra
+#                                              ^^^^^^^ source.hydra variable.other.hydra
+#                                                     ^ source.hydra
+#                                                      ^^ source.hydra keyword.control.hydra
+>    let style := ifElse compact inlineStyle (halfBlockStyleWith options) in
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra
+#              ^^ source.hydra keyword.operator.assignment.hydra
+#                ^ source.hydra
+#                 ^^^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra
+#                        ^^^^^^^ source.hydra variable.other.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+#                                             ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                               ^ source.hydra
+#                                                                ^^^^^^^ source.hydra variable.other.hydra
+#                                                                       ^^ source.hydra
+#                                                                         ^^ source.hydra keyword.control.hydra
+>    cases(Value){
+#^^^^ source.hydra
+#    ^^^^^ source.hydra keyword.control.hydra
+#         ^ source.hydra
+#          ^^^^^ source.hydra variable.other.hydra
+#               ^^^ source.hydra
+>      array=λarr.
+#^^^^^^ source.hydra
+#      ^^^^^ source.hydra variable.other.hydra
+#           ^ source.hydra keyword.operator.equals.hydra
+#            ^ source.hydra keyword.operator.lambda.hydra
+#             ^^^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+>          let els := lists.map (valueToExprWith options childDepth) arr
+#^^^^^^^^^^ source.hydra
+#          ^^^ source.hydra keyword.control.hydra
+#             ^ source.hydra
+#              ^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra
+#                  ^^ source.hydra keyword.operator.assignment.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                              ^^ source.hydra
+#                                ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                               ^ source.hydra
+#                                                ^^^^^^^ source.hydra variable.other.hydra
+#                                                       ^ source.hydra
+#                                                        ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                  ^^ source.hydra
+#                                                                    ^^^ source.hydra variable.other.hydra
+>          in ifElse
+#^^^^^^^^^^ source.hydra
+#          ^^ source.hydra keyword.control.hydra
+#            ^ source.hydra
+#             ^^^^^^ source.hydra variable.other.hydra
+>            compact
+#^^^^^^^^^^^^ source.hydra
+#            ^^^^^^^ source.hydra variable.other.hydra
+>            (compactList squareBrackets els)
+#^^^^^^^^^^^^^ source.hydra
+#             ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                       ^ source.hydra
+#                                        ^^^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+>            (styleForDepth
+#^^^^^^^^^^^^^ source.hydra
+#             ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+>              options
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^^^ source.hydra variable.other.hydra
+>              depth
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^ source.hydra variable.other.hydra
+>              (bracketList inlineStyle els)
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^^^ source.hydra variable.other.hydra
+#                                          ^^ source.hydra
+>              (bracketList style els)),
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^^^^^ source.hydra variable.other.hydra
+#                                ^ source.hydra
+#                                 ^^^ source.hydra variable.other.hydra
+#                                    ^^^^ source.hydra
+>      `boolean`=λb.cst (ifElse b "true" "false"),
+#^^^^^^ source.hydra
+#      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#       ^^^^^^^ source.hydra variable.other.escaped.hydra
+#              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra keyword.operator.lambda.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^^^ source.hydra variable.other.hydra
+#                      ^^ source.hydra
+#                        ^^^^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra variable.other.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                  ^^^^ source.hydra string.quoted.double.hydra
+#                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                         ^^^^^ source.hydra string.quoted.double.hydra
+#                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                               ^^^ source.hydra
+>      null=λ`_`.cst "null",
+#^^^^^^ source.hydra
+#      ^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra keyword.operator.equals.hydra
+#           ^ source.hydra keyword.operator.lambda.hydra
+#            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#             ^ source.hydra variable.other.escaped.hydra
+#              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#               ^ source.hydra punctuation.separator.binder.hydra
+#                ^^^ source.hydra variable.other.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                     ^^^^ source.hydra string.quoted.double.hydra
+#                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                          ^^ source.hydra
+>      number=λn.
+#^^^^^^ source.hydra
+#      ^^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra keyword.operator.equals.hydra
+#             ^ source.hydra keyword.operator.lambda.hydra
+#              ^ source.hydra variable.parameter.hydra
+#               ^ source.hydra punctuation.separator.binder.hydra
+>          let rounded := decimalToBigint n in
+#^^^^^^^^^^ source.hydra
+#          ^^^ source.hydra keyword.control.hydra
+#             ^ source.hydra
+#              ^^^^^^^ source.hydra variable.other.hydra
+#                     ^ source.hydra
+#                      ^^ source.hydra keyword.operator.assignment.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra variable.other.hydra
+#                                          ^ source.hydra
+#                                           ^^ source.hydra keyword.control.hydra
+>          let shown := printDecimal n in
+#^^^^^^^^^^ source.hydra
+#          ^^^ source.hydra keyword.control.hydra
+#             ^ source.hydra
+#              ^^^^^ source.hydra variable.other.hydra
+#                   ^ source.hydra
+#                    ^^ source.hydra keyword.operator.assignment.hydra
+#                      ^ source.hydra
+#                       ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra variable.other.hydra
+#                                     ^ source.hydra
+#                                      ^^ source.hydra keyword.control.hydra
+>          let notExponential := lte
+#^^^^^^^^^^ source.hydra
+#          ^^^ source.hydra keyword.control.hydra
+#             ^ source.hydra
+#              ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^^ source.hydra keyword.operator.assignment.hydra
+#                               ^ source.hydra
+#                                ^^^ source.hydra variable.other.hydra
+>              (lists.length (strings.splitOn "e" shown))
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                           ^^ source.hydra
+#                             ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                            ^ source.hydra
+#                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                              ^ source.hydra string.quoted.double.hydra
+#                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                ^ source.hydra
+#                                                 ^^^^^ source.hydra variable.other.hydra
+#                                                      ^^^ source.hydra
+>              1:int32 in
+#^^^^^^^^^^^^^^ source.hydra
+#              ^ source.hydra constant.numeric.integer.hydra
+#               ^ source.hydra punctuation.separator.type.hydra
+#                ^^^^^ source.hydra support.type.literal.integer.hydra
+#                     ^ source.hydra
+#                      ^^ source.hydra keyword.control.hydra
+>          let fracParts := strings.splitOn "." shown in
+#^^^^^^^^^^ source.hydra
+#          ^^^ source.hydra keyword.control.hydra
+#             ^ source.hydra
+#              ^^^^^^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra
+#                        ^^ source.hydra keyword.operator.assignment.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                            ^ source.hydra string.quoted.double.hydra
+#                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                              ^ source.hydra
+#                                               ^^^^^ source.hydra variable.other.hydra
+#                                                    ^ source.hydra
+#                                                     ^^ source.hydra keyword.control.hydra
+>          let frac := optionals.withDefault "" (lists.at 1:int32 fracParts) in
+#^^^^^^^^^^ source.hydra
+#          ^^^ source.hydra keyword.control.hydra
+#             ^ source.hydra
+#              ^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^^ source.hydra keyword.operator.assignment.hydra
+#                     ^ source.hydra
+#                      ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                              ^^ source.hydra
+#                                                ^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra constant.numeric.integer.hydra
+#                                                          ^ source.hydra punctuation.separator.type.hydra
+#                                                           ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                                ^ source.hydra
+#                                                                 ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                          ^^ source.hydra
+#                                                                            ^^ source.hydra keyword.control.hydra
+>          let isWhole := and
+#^^^^^^^^^^ source.hydra
+#          ^^^ source.hydra keyword.control.hydra
+#             ^ source.hydra
+#              ^^^^^^^ source.hydra variable.other.hydra
+#                     ^ source.hydra
+#                      ^^ source.hydra keyword.operator.assignment.hydra
+#                        ^ source.hydra
+#                         ^^^ source.hydra variable.other.hydra
+>              notExponential
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+>              (or
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^ source.hydra variable.other.hydra
+>                (lte (lists.length fracParts) 1:int32)
+#^^^^^^^^^^^^^^^^^ source.hydra
+#                 ^^^ source.hydra variable.other.hydra
+#                    ^^ source.hydra
+#                      ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^^^ source.hydra variable.other.hydra
+#                                            ^^ source.hydra
+#                                              ^ source.hydra constant.numeric.integer.hydra
+#                                               ^ source.hydra punctuation.separator.type.hydra
+#                                                ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                     ^^ source.hydra
+>                (strings.isEmpty (strings.concat (strings.splitOn "0" frac)))) in
+#^^^^^^^^^^^^^^^^^ source.hydra
+#                 ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                ^^ source.hydra
+#                                  ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                ^^ source.hydra
+#                                                  ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                 ^ source.hydra
+#                                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                                   ^ source.hydra string.quoted.double.hydra
+#                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                     ^ source.hydra
+#                                                                      ^^^^ source.hydra variable.other.hydra
+#                                                                          ^^^^^ source.hydra
+#                                                                               ^^ source.hydra keyword.control.hydra
+>          let plain := printBigint rounded in
+#^^^^^^^^^^ source.hydra
+#          ^^^ source.hydra keyword.control.hydra
+#             ^ source.hydra
+#              ^^^^^ source.hydra variable.other.hydra
+#                   ^ source.hydra
+#                    ^^ source.hydra keyword.operator.assignment.hydra
+#                      ^ source.hydra
+#                       ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^ source.hydra variable.other.hydra
+#                                          ^ source.hydra
+#                                           ^^ source.hydra keyword.control.hydra
+>          cst
+#^^^^^^^^^^ source.hydra
+#          ^^^ source.hydra variable.other.hydra
+>            (ifElse
+#^^^^^^^^^^^^^ source.hydra
+#             ^^^^^^ source.hydra variable.other.hydra
+>              (and isWhole (lte (strings.length plain) (strings.length shown)))
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^ source.hydra variable.other.hydra
+#                          ^^ source.hydra
+#                            ^^^ source.hydra variable.other.hydra
+#                               ^^ source.hydra
+#                                 ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                               ^ source.hydra
+#                                                ^^^^^ source.hydra variable.other.hydra
+#                                                     ^^^ source.hydra
+#                                                        ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                      ^ source.hydra
+#                                                                       ^^^^^ source.hydra variable.other.hydra
+#                                                                            ^^^^ source.hydra
+>              plain
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^ source.hydra variable.other.hydra
+>              shown),
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^ source.hydra variable.other.hydra
+#                   ^^^ source.hydra
+>      object=λobj.
+#^^^^^^ source.hydra
+#      ^^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra keyword.operator.equals.hydra
+#             ^ source.hydra keyword.operator.lambda.hydra
+#              ^^^ source.hydra variable.parameter.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+>          let els := lists.map (keyValueToExprWith options childDepth) obj
+#^^^^^^^^^^ source.hydra
+#          ^^^ source.hydra keyword.control.hydra
+#             ^ source.hydra
+#              ^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra
+#                  ^^ source.hydra keyword.operator.assignment.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                              ^^ source.hydra
+#                                ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^ source.hydra
+#                                                   ^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^ source.hydra
+#                                                           ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                     ^^ source.hydra
+#                                                                       ^^^ source.hydra variable.other.hydra
+>          in ifElse
+#^^^^^^^^^^ source.hydra
+#          ^^ source.hydra keyword.control.hydra
+#            ^ source.hydra
+#             ^^^^^^ source.hydra variable.other.hydra
+>            compact
+#^^^^^^^^^^^^ source.hydra
+#            ^^^^^^^ source.hydra variable.other.hydra
+>            (compactList curlyBraces els)
+#^^^^^^^^^^^^^ source.hydra
+#             ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra
+#                                     ^^^ source.hydra variable.other.hydra
+#                                        ^^ source.hydra
+>            (styleForDepth
+#^^^^^^^^^^^^^ source.hydra
+#             ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+>              options
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^^^ source.hydra variable.other.hydra
+>              depth
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^ source.hydra variable.other.hydra
+>              (curlyBracesList none inlineStyle els)
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^^^^ source.hydra keyword.control.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                               ^ source.hydra
+#                                                ^^^ source.hydra variable.other.hydra
+#                                                   ^^ source.hydra
+>              (curlyBracesList none style els)),
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^^^^ source.hydra keyword.control.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^ source.hydra variable.other.hydra
+#                                         ^ source.hydra
+#                                          ^^^ source.hydra variable.other.hydra
+#                                             ^^^^ source.hydra
+>      `string`=λs.cst (jsonString s)}
+#^^^^^^ source.hydra
+#      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#       ^^^^^^ source.hydra variable.other.escaped.hydra
+#             ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+#               ^ source.hydra keyword.operator.lambda.hydra
+#                ^ source.hydra variable.parameter.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^^^ source.hydra variable.other.hydra
+#                     ^^ source.hydra
+#                       ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^^^ source.hydra
+>      value
+#^^^^^^ source.hydra
+#      ^^^^^ source.hydra variable.other.hydra

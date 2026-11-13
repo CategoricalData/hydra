@@ -1,16 +1,28 @@
 ## JSON-to-YAML encoding. Converts JSON Values to YAML Nodes (always succeeds), and Hydra Terms to YAML Nodes via JSON.
 module hydra.core.json.yaml.encode
 
-import hydra.core.json.encode as encode
-import hydra.core.json.model as json.model
+import hydra.core.json.encode
+import hydra.core.json.model
 import hydra.core.lib.eithers as eithers
 import hydra.core.lib.lists as lists
-import hydra.core.lib.maps as maps
-import hydra.core.lib.pairs as pairs
-import hydra.core.yaml.model as yaml.model
+import hydra.core.lib.maps
+import hydra.core.lib.pairs
+import hydra.core.yaml.model
 
 ## Convert a JSON value to a YAML node. Always succeeds since YAML is a superset of JSON.
-term jsonToYaml = λvalue.cases(json.model.Value){array=λarr.yaml.model.Node{sequence = lists.map (λv.jsonToYaml v) arr}, `boolean`=λb.yaml.model.Node{scalar = yaml.model.Scalar{bool = b}}, null=λ`_`.yaml.model.Node{scalar = yaml.model.Scalar{null}}, number=λn.yaml.model.Node{scalar = yaml.model.Scalar{`decimal` = n}}, object=λobj.yaml.model.Node{mapping = maps.fromList (lists.map (λkv.(yaml.model.Node{scalar = yaml.model.Scalar{str = pairs.first kv}}, jsonToYaml (pairs.second kv))) obj)}, `string`=λs.yaml.model.Node{scalar = yaml.model.Scalar{str = s}}} value
+term jsonToYaml =
+  λvalue.cases(Value){
+      array=λarr.Node{sequence = lists.map (λv.jsonToYaml v) arr},
+      `boolean`=λb.Node{scalar = Scalar{bool = b}},
+      null=λ`_`.Node{scalar = Scalar{null}},
+      number=λn.Node{scalar = Scalar{`decimal` = n}},
+      object=λobj.Node{
+            mapping = fromList
+                (lists.map
+                  (λkv.(Node{scalar = Scalar{str = first kv}}, jsonToYaml (second kv)))
+                  obj)},
+      `string`=λs.Node{scalar = Scalar{str = s}}}
+      value
 
 ## Encode a Hydra term to a YAML node via JSON encoding.
-term toYaml = λtypes,tname,typ,`term`.eithers.map (λv.jsonToYaml v) (encode.toJson types false tname typ `term`)
+term toYaml = λtypes,tname,typ,`term`.eithers.map (λv.jsonToYaml v) (toJson types false tname typ `term`)

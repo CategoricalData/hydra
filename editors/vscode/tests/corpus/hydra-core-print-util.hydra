@@ -1,10 +1,18 @@
 ## String representations of hydra.core.util types
 module hydra.core.print.util
 
-import hydra.core.util as util
+import hydra.core.util
 
 ## Show a case convention as a string
-term caseConvention = λc.cases(util.CaseConvention){lowerSnake=λ`_`."lower_snake_case", upperSnake=λ`_`."UPPER_SNAKE_CASE", camel=λ`_`."camelCase", pascal=λ`_`."PascalCase", upperDashed=λ`_`."UPPER-DASHED-CASE"} c
+term caseConvention =
+  λc.cases(CaseConvention){
+      lowerSnake=λ`_`."lower_snake_case",
+      upperSnake=λ`_`."UPPER_SNAKE_CASE",
+      camel=λ`_`."camelCase",
+      pascal=λ`_`."PascalCase",
+      upperDashed=λ`_`."UPPER-DASHED-CASE"}
+      c
 
 ## Show a comparison result as a string
-term comparison = λc.cases(util.Comparison){lessThan=λ`_`."lessThan", equalTo=λ`_`."equalTo", greaterThan=λ`_`."greaterThan"} c
+term comparison =
+  λc.cases(Comparison){lessThan=λ`_`."lessThan", equalTo=λ`_`."equalTo", greaterThan=λ`_`."greaterThan"} c

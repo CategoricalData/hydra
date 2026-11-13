@@ -1,0 +1,40 @@
+## Shared utility functions for test code generation codecs
+module hydra.core.test.utils
+
+import hydra.core.inference
+import hydra.core.lexical
+import hydra.core.lib.eithers
+import hydra.core.print.errors
+import hydra.core.testing
+import hydra.core.typing
+
+## Run type inference on a single term
+term inferTerm =
+  λg,`term`.bimap (λe.error e) (λx.InferenceResult[`term`] x) (inferInGraphContext emptyInferenceContext g `term`)
+
+## Run type inference on the terms in a test case
+term inferTestCase =
+  λg,tcm.
+    let `name_` := TestCaseWithMetadata[name] tcm, tcase := TestCaseWithMetadata[case] tcm, desc := TestCaseWithMetadata[description] tcm, `tags_` := TestCaseWithMetadata[tags] tcm, `provisions_` := TestCaseWithMetadata[provisions] tcm
+    in `map`
+      (λinferredCase.TestCaseWithMetadata{
+          name = `name_`,
+          case = inferredCase,
+          description = desc,
+          tags = `tags_`,
+          provisions = `provisions_`})
+      right(tcase)
+
+## Run type inference on all terms in a TestGroup to ensure lambdas have domain types
+term inferTestGroupTerms =
+  λg,tg.
+    let `name_` := TestGroup[name] tg, desc := TestGroup[description] tg, subgroups := TestGroup[subgroups] tg, `cases_` := TestGroup[`cases`] tg
+    in bind
+      (mapList (λsg.inferTestGroupTerms g sg) subgroups)
+      (λinferredSubgroups.`map`
+          (λinferredCases.TestGroup{
+              name = `name_`,
+              description = desc,
+              subgroups = inferredSubgroups,
+              `cases` = inferredCases})
+          (mapList (λtc.inferTestCase g tc) `cases_`))

@@ -6,8 +6,6 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->
->
 >## A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
@@ -86,7 +84,7 @@
 #                  ^ source.hydra
 #                   ^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                               ^^ source.hydra
->  keys: map<ColumnName, ColumnName>@{description="The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation.", minLength=1:int32}}
+>  keys: map<ColumnName, ColumnName>@{
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
@@ -98,19 +96,23 @@
 #                        ^^^^^^^^^^ source.hydra variable.other.hydra
 #                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                   ^ source.hydra keyword.operator.annotation.hydra
-#                                    ^ source.hydra
-#                                     ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                ^ source.hydra keyword.operator.equals.hydra
-#                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                                                                   ^^ source.hydra
-#                                                                                                                                                                                                     ^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                              ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                                                                                                                               ^ source.hydra constant.numeric.integer.hydra
-#                                                                                                                                                                                                                ^ source.hydra punctuation.separator.type.hydra
-#                                                                                                                                                                                                                 ^^^^^ source.hydra support.type.literal.integer.hydra
-#                                                                                                                                                                                                                      ^^^ source.hydra
+#                                    ^^ source.hydra
+>    description="The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation.",
+#^^^^ source.hydra
+#    ^^^^^^^^^^^ source.hydra variable.other.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                                                                                                  ^^ source.hydra
+>    minLength=1:int32}}
+#^^^^ source.hydra
+#    ^^^^^^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra keyword.operator.equals.hydra
+#              ^ source.hydra constant.numeric.integer.hydra
+#               ^ source.hydra punctuation.separator.type.hydra
+#                ^^^^^ source.hydra support.type.literal.integer.hydra
+#                     ^^^ source.hydra
 >
 >## A primary key of a relation, specified either as a single column, or as a list of columns
 #^^ source.hydra comment.block.documentation.hydra

@@ -6,14 +6,10 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.file as file
+>import hydra.core.file
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                      ^ source.hydra
-#                       ^^ source.hydra keyword.control.import.hydra
-#                         ^ source.hydra
-#                          ^^^^ source.hydra entity.name.namespace.hydra
 >
 >## A description of a program to run, supplying the inputs the POSIX posix_spawn / execve family takes: the executable, its argument vector, and optionally a working directory and a replacement environment. Only the portable subset is modeled; POSIX file actions, spawn attributes, and signal masks are omitted. See https://pubs.opengroup.org/onlinepubs/9799919799/functions/posix_spawn.html and https://pubs.opengroup.org/onlinepubs/9799919799/functions/execve.html
 #^^ source.hydra comment.block.documentation.hydra
@@ -31,13 +27,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  program: file.FilePath,
+>  program: FilePath,
 #^^ source.hydra
 #  ^^^^^^^ source.hydra variable.other.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                        ^^ source.hydra
+#           ^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^ source.hydra
 >  ## The arguments following the program name, becoming argv[1..] for the child. The program name (argv[0]) is not included here
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -56,16 +52,16 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  workingDirectory: optional<file.FilePath>,
+>  workingDirectory: optional<FilePath>,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                  ^ source.hydra punctuation.separator.type.hydra
 #                   ^ source.hydra
 #                    ^^^^^^^^ source.hydra support.type.hydra
 #                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                             ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                           ^^ source.hydra
+#                             ^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                      ^^ source.hydra
 >  ## The complete environment for the child (POSIX environ). None inherits the parent's environment; given(m) replaces it entirely, as execve's envp argument does. There is no partial-merge form; merge in pure code before calling
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

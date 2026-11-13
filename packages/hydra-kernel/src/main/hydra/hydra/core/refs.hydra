@@ -6,30 +6,30 @@ import hydra.core.lib.maps as maps
 import hydra.core.lib.optionals as optionals
 import hydra.core.lib.pairs as pairs
 import hydra.core.lib.sets as sets
-import hydra.core.model as model
-import hydra.core.names as names
-import hydra.core.typed as typed
+import hydra.core.model
+import hydra.core.names
+import hydra.core.typed
 
 ## Look up the decoder function for a type given its TypedName token
-term decodeRef = λtn.model.Term{variable = names.derivedBindingName ["decode"] true (typed.TypedName[] tn)}
+term decodeRef = λtn.Term{variable = derivedBindingName ["decode"] true (TypedName[] tn)}
 
 ## Build an encoder for a list, given an encoder for its element type
-term encodeList = λelemEncoder,xs.model.Term{`list` = lists.map elemEncoder xs}
+term encodeList = λelemEncoder,xs.Term{`list` = lists.map elemEncoder xs}
 
 ## Build an encoder for a map, given encoders for its key and value types
-term encodeMap = λkeyEncoder,valEncoder,m.model.Term{`map` = maps.bimap keyEncoder valEncoder m}
+term encodeMap = λkeyEncoder,valEncoder,m.Term{`map` = maps.bimap keyEncoder valEncoder m}
 
 ## Build an encoder for an optional value, given an encoder for its element type
-term encodeOptional = λelemEncoder,x.model.Term{`optional` = optionals.map elemEncoder x}
+term encodeOptional = λelemEncoder,x.Term{`optional` = optionals.map elemEncoder x}
 
 ## Build an encoder for a pair, given encoders for its first and second components
-term encodePair = λfirstEncoder,secondEncoder,p.model.Term{pair = pairs.bimap firstEncoder secondEncoder p}
+term encodePair = λfirstEncoder,secondEncoder,p.Term{pair = pairs.bimap firstEncoder secondEncoder p}
 
 ## Look up the encoder function for a type given its TypedName token
-term encodeRef = λtn.model.Term{variable = names.derivedBindingName ["encode"] true (typed.TypedName[] tn)}
+term encodeRef = λtn.Term{variable = derivedBindingName ["encode"] true (TypedName[] tn)}
 
 ## Build an encoder for a set, given an encoder for its element type
-term encodeSet = λelemEncoder,xs.model.Term{`set` = sets.map elemEncoder xs}
+term encodeSet = λelemEncoder,xs.Term{`set` = sets.map elemEncoder xs}
 
 ## Look up the string-shower function for a type given its TypedName token
-term showRef = λtn.model.Term{variable = names.derivedBindingName ["show"] true (typed.TypedName[] tn)}
+term showRef = λtn.Term{variable = derivedBindingName ["show"] true (TypedName[] tn)}

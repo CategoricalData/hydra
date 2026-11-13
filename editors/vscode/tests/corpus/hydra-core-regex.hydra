@@ -1,8 +1,6 @@
 ## A model for Hydra's translingual regular-expression syntax: the abstract syntax tree (AST) into which hydra.core.parse.regex parses a pattern and from which hydra.core.print.regex (and the per-dialect hydra.core.print.<dialect>.regex renderers) emit target syntax. Covers the minimal core defined in docs/specification/regex.md (literals, character classes, ., quantifiers, alternation, anchors, grouping). See issue #567.
 module hydra.core.regex
 
-
-
 ## A non-empty list of alternative sequences, joined by the | operator. Matches if any alternative matches.
 type Alternation = list<RegexSequence>
 

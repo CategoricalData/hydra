@@ -1,0 +1,558 @@
+>## Utilities for extracting values from JSON objects
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.extract.json
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>import hydra.core.json.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.json.writer
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.lib.eithers as eithers
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                             ^ source.hydra
+#                              ^^ source.hydra keyword.control.import.hydra
+#                                ^ source.hydra
+#                                 ^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.lib.maps as maps
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                          ^ source.hydra
+#                           ^^ source.hydra keyword.control.import.hydra
+#                             ^ source.hydra
+#                              ^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.lib.optionals
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.lib.strings
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>## Extract an array from a JSON value, failing if the value is not an array
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term expectArray =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.equals.hydra
+>  λvalue.cases(Value){
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^^^^^ source.hydra variable.parameter.hydra
+#        ^ source.hydra punctuation.separator.binder.hydra
+#         ^^^^^ source.hydra keyword.control.hydra
+#              ^ source.hydra
+#               ^^^^^ source.hydra variable.other.hydra
+#                    ^^^ source.hydra
+>      array=λels.right(els),
+#^^^^^^ source.hydra
+#      ^^^^^ source.hydra variable.other.hydra
+#           ^ source.hydra keyword.operator.equals.hydra
+#            ^ source.hydra keyword.operator.lambda.hydra
+#             ^^^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^^^^^ source.hydra keyword.control.hydra
+#                      ^ source.hydra
+#                       ^^^ source.hydra variable.other.hydra
+#                          ^^^ source.hydra
+>      `_`=left(concat2 (concat2 "expected " "JSON array") (concat2 " but found " (showValue value)))}
+#^^^^^^ source.hydra
+#      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#       ^ source.hydra variable.other.escaped.hydra
+#        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#         ^ source.hydra keyword.operator.equals.hydra
+#          ^^^^ source.hydra keyword.control.hydra
+#              ^ source.hydra
+#               ^^^^^^^ source.hydra variable.other.hydra
+#                      ^^ source.hydra
+#                        ^^^^^^^ source.hydra variable.other.hydra
+#                               ^ source.hydra
+#                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                 ^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                             ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                        ^^^ source.hydra
+#                                                           ^^^^^^^ source.hydra variable.other.hydra
+#                                                                  ^ source.hydra
+#                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                                    ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                ^^ source.hydra
+#                                                                                  ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                           ^ source.hydra
+#                                                                                            ^^^^^ source.hydra variable.other.hydra
+#                                                                                                 ^^^^^ source.hydra
+>      value
+#^^^^^^ source.hydra
+#      ^^^^^ source.hydra variable.other.hydra
+>
+>## Extract a number from a JSON value, failing if the value is not a number
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term expectNumber =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+>  λvalue.cases(Value){
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^^^^^ source.hydra variable.parameter.hydra
+#        ^ source.hydra punctuation.separator.binder.hydra
+#         ^^^^^ source.hydra keyword.control.hydra
+#              ^ source.hydra
+#               ^^^^^ source.hydra variable.other.hydra
+#                    ^^^ source.hydra
+>      number=λd.right(d),
+#^^^^^^ source.hydra
+#      ^^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra keyword.operator.equals.hydra
+#             ^ source.hydra keyword.operator.lambda.hydra
+#              ^ source.hydra variable.parameter.hydra
+#               ^ source.hydra punctuation.separator.binder.hydra
+#                ^^^^^ source.hydra keyword.control.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra variable.other.hydra
+#                       ^^^ source.hydra
+>      `_`=left(concat2 (concat2 "expected " "JSON number") (concat2 " but found " (showValue value)))}
+#^^^^^^ source.hydra
+#      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#       ^ source.hydra variable.other.escaped.hydra
+#        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#         ^ source.hydra keyword.operator.equals.hydra
+#          ^^^^ source.hydra keyword.control.hydra
+#              ^ source.hydra
+#               ^^^^^^^ source.hydra variable.other.hydra
+#                      ^^ source.hydra
+#                        ^^^^^^^ source.hydra variable.other.hydra
+#                               ^ source.hydra
+#                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                 ^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                             ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                         ^^^ source.hydra
+#                                                            ^^^^^^^ source.hydra variable.other.hydra
+#                                                                   ^ source.hydra
+#                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                                     ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                 ^^ source.hydra
+#                                                                                   ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                            ^ source.hydra
+#                                                                                             ^^^^^ source.hydra variable.other.hydra
+#                                                                                                  ^^^^^ source.hydra
+>      value
+#^^^^^^ source.hydra
+#      ^^^^^ source.hydra variable.other.hydra
+>
+>## Extract an object from a JSON value as a name-keyed map, failing if the value is not an object. Field order is not preserved; lookups are by name.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term expectObject =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+>  λvalue.cases(Value){
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^^^^^ source.hydra variable.parameter.hydra
+#        ^ source.hydra punctuation.separator.binder.hydra
+#         ^^^^^ source.hydra keyword.control.hydra
+#              ^ source.hydra
+#               ^^^^^ source.hydra variable.other.hydra
+#                    ^^^ source.hydra
+>      object=λm.right(maps.fromList m),
+#^^^^^^ source.hydra
+#      ^^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra keyword.operator.equals.hydra
+#             ^ source.hydra keyword.operator.lambda.hydra
+#              ^ source.hydra variable.parameter.hydra
+#               ^ source.hydra punctuation.separator.binder.hydra
+#                ^^^^^ source.hydra keyword.control.hydra
+#                     ^ source.hydra
+#                      ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra variable.other.hydra
+#                                     ^^^ source.hydra
+>      `_`=left(concat2 (concat2 "expected " "JSON object") (concat2 " but found " (showValue value)))}
+#^^^^^^ source.hydra
+#      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#       ^ source.hydra variable.other.escaped.hydra
+#        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#         ^ source.hydra keyword.operator.equals.hydra
+#          ^^^^ source.hydra keyword.control.hydra
+#              ^ source.hydra
+#               ^^^^^^^ source.hydra variable.other.hydra
+#                      ^^ source.hydra
+#                        ^^^^^^^ source.hydra variable.other.hydra
+#                               ^ source.hydra
+#                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                 ^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                             ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                         ^^^ source.hydra
+#                                                            ^^^^^^^ source.hydra variable.other.hydra
+#                                                                   ^ source.hydra
+#                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                                     ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                 ^^ source.hydra
+#                                                                                   ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                            ^ source.hydra
+#                                                                                             ^^^^^ source.hydra variable.other.hydra
+#                                                                                                  ^^^^^ source.hydra
+>      value
+#^^^^^^ source.hydra
+#      ^^^^^ source.hydra variable.other.hydra
+>
+>## Extract a string from a JSON value, failing if the value is not a string
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term expectString =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+>  λvalue.cases(Value){
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^^^^^ source.hydra variable.parameter.hydra
+#        ^ source.hydra punctuation.separator.binder.hydra
+#         ^^^^^ source.hydra keyword.control.hydra
+#              ^ source.hydra
+#               ^^^^^ source.hydra variable.other.hydra
+#                    ^^^ source.hydra
+>      `string`=λs.right(s),
+#^^^^^^ source.hydra
+#      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#       ^^^^^^ source.hydra variable.other.escaped.hydra
+#             ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+#               ^ source.hydra keyword.operator.lambda.hydra
+#                ^ source.hydra variable.parameter.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^^^^^ source.hydra keyword.control.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra variable.other.hydra
+#                         ^^^ source.hydra
+>      `_`=left(concat2 (concat2 "expected " "JSON string") (concat2 " but found " (showValue value)))}
+#^^^^^^ source.hydra
+#      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#       ^ source.hydra variable.other.escaped.hydra
+#        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#         ^ source.hydra keyword.operator.equals.hydra
+#          ^^^^ source.hydra keyword.control.hydra
+#              ^ source.hydra
+#               ^^^^^^^ source.hydra variable.other.hydra
+#                      ^^ source.hydra
+#                        ^^^^^^^ source.hydra variable.other.hydra
+#                               ^ source.hydra
+#                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                 ^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                             ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                         ^^^ source.hydra
+#                                                            ^^^^^^^ source.hydra variable.other.hydra
+#                                                                   ^ source.hydra
+#                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                                     ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                 ^^ source.hydra
+#                                                                                   ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                            ^ source.hydra
+#                                                                                             ^^^^^ source.hydra variable.other.hydra
+#                                                                                                  ^^^^^ source.hydra
+>      value
+#^^^^^^ source.hydra
+#      ^^^^^ source.hydra variable.other.hydra
+>
+>## Look up an optional field in a JSON object
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term opt = λfname,m.maps.lookup fname m
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^ source.hydra entity.name.function.hydra
+#        ^ source.hydra
+#         ^ source.hydra keyword.operator.equals.hydra
+#          ^ source.hydra
+#           ^ source.hydra keyword.operator.lambda.hydra
+#            ^^^^^ source.hydra variable.parameter.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^ source.hydra variable.parameter.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                               ^ source.hydra
+#                                ^^^^^ source.hydra variable.other.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+>
+>## Look up an optional array field in a JSON object
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term optArray = λfname,m.match (opt fname m) right(none) (λa.eithers.map (λx.given(x)) (expectArray a))
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.lambda.hydra
+#                 ^^^^^ source.hydra variable.parameter.hydra
+#                      ^ source.hydra punctuation.separator.binder.hydra
+#                       ^ source.hydra variable.parameter.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^^^^^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^^^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^ source.hydra variable.other.hydra
+#                                         ^ source.hydra
+#                                          ^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+#                                             ^^^^^ source.hydra keyword.control.hydra
+#                                                  ^ source.hydra
+#                                                   ^^^^ source.hydra keyword.control.hydra
+#                                                       ^^^ source.hydra
+#                                                          ^ source.hydra keyword.operator.lambda.hydra
+#                                                           ^ source.hydra variable.parameter.hydra
+#                                                            ^ source.hydra punctuation.separator.binder.hydra
+#                                                             ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                        ^^ source.hydra
+#                                                                          ^ source.hydra keyword.operator.lambda.hydra
+#                                                                           ^ source.hydra variable.parameter.hydra
+#                                                                            ^ source.hydra punctuation.separator.binder.hydra
+#                                                                             ^^^^^ source.hydra keyword.control.hydra
+#                                                                                  ^ source.hydra
+#                                                                                   ^ source.hydra variable.other.hydra
+#                                                                                    ^^^^ source.hydra
+#                                                                                        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                   ^ source.hydra
+#                                                                                                    ^ source.hydra variable.other.hydra
+#                                                                                                     ^^^ source.hydra
+>
+>## Look up an optional string field in a JSON object
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term optString = λfname,m.match (opt fname m) right(none) (λs.eithers.map (λx.given(x)) (expectString s))
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.lambda.hydra
+#                  ^^^^^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^ source.hydra variable.parameter.hydra
+#                         ^ source.hydra punctuation.separator.binder.hydra
+#                          ^^^^^ source.hydra variable.other.hydra
+#                               ^^ source.hydra
+#                                 ^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^ source.hydra variable.other.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra variable.other.hydra
+#                                            ^^ source.hydra
+#                                              ^^^^^ source.hydra keyword.control.hydra
+#                                                   ^ source.hydra
+#                                                    ^^^^ source.hydra keyword.control.hydra
+#                                                        ^^^ source.hydra
+#                                                           ^ source.hydra keyword.operator.lambda.hydra
+#                                                            ^ source.hydra variable.parameter.hydra
+#                                                             ^ source.hydra punctuation.separator.binder.hydra
+#                                                              ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                         ^^ source.hydra
+#                                                                           ^ source.hydra keyword.operator.lambda.hydra
+#                                                                            ^ source.hydra variable.parameter.hydra
+#                                                                             ^ source.hydra punctuation.separator.binder.hydra
+#                                                                              ^^^^^ source.hydra keyword.control.hydra
+#                                                                                   ^ source.hydra
+#                                                                                    ^ source.hydra variable.other.hydra
+#                                                                                     ^^^^ source.hydra
+#                                                                                         ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                     ^ source.hydra
+#                                                                                                      ^ source.hydra variable.other.hydra
+#                                                                                                       ^^^ source.hydra
+>
+>## Look up a required field in a JSON object, failing if not found
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term require =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^ source.hydra entity.name.function.hydra
+#            ^ source.hydra
+#             ^ source.hydra keyword.operator.equals.hydra
+>  λfname,m.match
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^^^^^ source.hydra variable.parameter.hydra
+#        ^ source.hydra punctuation.separator.binder.hydra
+#         ^ source.hydra variable.parameter.hydra
+#          ^ source.hydra punctuation.separator.binder.hydra
+#           ^^^^^ source.hydra variable.other.hydra
+>      (maps.lookup fname m)
+#^^^^^^^ source.hydra
+#       ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                  ^ source.hydra
+#                   ^^^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra variable.other.hydra
+#                          ^^ source.hydra
+>      left(concat ["required attribute ", showValue Value{`string` = fname}, " not found"])
+#^^^^^^ source.hydra
+#      ^^^^ source.hydra keyword.control.hydra
+#          ^ source.hydra
+#           ^^^^^^ source.hydra variable.other.hydra
+#                 ^^ source.hydra
+#                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                    ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                        ^^ source.hydra
+#                                          ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^ source.hydra
+#                                                    ^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                         ^ source.hydra
+#                                                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                                           ^^^^^^ source.hydra variable.other.escaped.hydra
+#                                                                 ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                                  ^ source.hydra
+#                                                                   ^ source.hydra keyword.operator.equals.hydra
+#                                                                    ^ source.hydra
+#                                                                     ^^^^^ source.hydra variable.other.hydra
+#                                                                          ^^^ source.hydra
+#                                                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                                              ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                         ^^^ source.hydra
+>      (λvalue.right(value))
+#^^^^^^^ source.hydra
+#       ^ source.hydra keyword.operator.lambda.hydra
+#        ^^^^^ source.hydra variable.parameter.hydra
+#             ^ source.hydra punctuation.separator.binder.hydra
+#              ^^^^^ source.hydra keyword.control.hydra
+#                   ^ source.hydra
+#                    ^^^^^ source.hydra variable.other.hydra
+#                         ^^^ source.hydra
+>
+>## Look up a required array field in a JSON object
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term requireArray = λfname,m.eithers.bind (require fname m) expectArray
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.lambda.hydra
+#                     ^^^^^ source.hydra variable.parameter.hydra
+#                          ^ source.hydra punctuation.separator.binder.hydra
+#                           ^ source.hydra variable.parameter.hydra
+#                            ^ source.hydra punctuation.separator.binder.hydra
+#                             ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                         ^^ source.hydra
+#                                           ^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^ source.hydra
+#                                                   ^^^^^ source.hydra variable.other.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra variable.other.hydra
+#                                                          ^^ source.hydra
+#                                                            ^^^^^^^^^^^ source.hydra variable.other.hydra
+>
+>## Look up a required number field in a JSON object
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term requireNumber = λfname,m.eithers.bind (require fname m) expectNumber
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.lambda.hydra
+#                      ^^^^^ source.hydra variable.parameter.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^ source.hydra variable.parameter.hydra
+#                             ^ source.hydra punctuation.separator.binder.hydra
+#                              ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                          ^^ source.hydra
+#                                            ^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^ source.hydra
+#                                                    ^^^^^ source.hydra variable.other.hydra
+#                                                         ^ source.hydra
+#                                                          ^ source.hydra variable.other.hydra
+#                                                           ^^ source.hydra
+#                                                             ^^^^^^^^^^^^ source.hydra variable.other.hydra
+>
+>## Look up a required string field in a JSON object
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term requireString = λfname,m.eithers.bind (require fname m) expectString
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.lambda.hydra
+#                      ^^^^^ source.hydra variable.parameter.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^ source.hydra variable.parameter.hydra
+#                             ^ source.hydra punctuation.separator.binder.hydra
+#                              ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                          ^^ source.hydra
+#                                            ^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^ source.hydra
+#                                                    ^^^^^ source.hydra variable.other.hydra
+#                                                         ^ source.hydra
+#                                                          ^ source.hydra variable.other.hydra
+#                                                           ^^ source.hydra
+#                                                             ^^^^^^^^^^^^ source.hydra variable.other.hydra
+>
+>## Show a JSON value as a string
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term showValue = λvalue.printJson value
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.lambda.hydra
+#                  ^^^^^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^ source.hydra variable.other.hydra

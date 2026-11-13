@@ -6,14 +6,10 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.lib.equality as equality
+>import hydra.core.lib.equality
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                              ^ source.hydra
-#                               ^^ source.hydra keyword.control.import.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^^ source.hydra entity.name.namespace.hydra
 >import hydra.core.lib.lists as lists
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
@@ -22,22 +18,14 @@
 #                            ^^ source.hydra keyword.control.import.hydra
 #                              ^ source.hydra
 #                               ^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.lib.literals as literals
+>import hydra.core.lib.literals
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                              ^ source.hydra
-#                               ^^ source.hydra keyword.control.import.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.lib.logic as logic
+>import hydra.core.lib.logic
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                           ^ source.hydra
-#                            ^^ source.hydra keyword.control.import.hydra
-#                              ^ source.hydra
-#                               ^^^^^ source.hydra entity.name.namespace.hydra
 >import hydra.core.lib.optionals as optionals
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
@@ -54,22 +42,14 @@
 #                              ^^ source.hydra keyword.control.import.hydra
 #                                ^ source.hydra
 #                                 ^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.model as model
+>import hydra.core.model
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                       ^ source.hydra
-#                        ^^ source.hydra keyword.control.import.hydra
-#                          ^ source.hydra
-#                           ^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.paths as paths
+>import hydra.core.paths
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                       ^ source.hydra
-#                        ^^ source.hydra keyword.control.import.hydra
-#                          ^ source.hydra
-#                           ^^^^^ source.hydra entity.name.namespace.hydra
 >
 >## Parse a printed subterm path (steps joined by '/') back into a SubtermPath
 #^^ source.hydra comment.block.documentation.hydra
@@ -86,17 +66,17 @@
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->      (λx.wrap(paths.SubtermPath){x})
+>      (λx.wrap(SubtermPath){x})
 #^^^^^^^ source.hydra
 #       ^ source.hydra keyword.operator.lambda.hydra
 #        ^ source.hydra variable.parameter.hydra
 #         ^ source.hydra punctuation.separator.binder.hydra
 #          ^^^^ source.hydra keyword.control.hydra
 #              ^ source.hydra
-#               ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                ^^ source.hydra
-#                                  ^ source.hydra variable.other.hydra
-#                                   ^^^ source.hydra
+#               ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^^^ source.hydra
 >      (lists.foldl
 #^^^^^^^ source.hydra
 #       ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
@@ -213,7 +193,7 @@
 #                                     ^^^^ source.hydra variable.other.hydra
 #                                         ^ source.hydra
 #                                          ^^ source.hydra keyword.control.hydra
->    let name := optionals.map (λx.wrap(model.Name){x}) mpayload in
+>    let name := optionals.map (λx.wrap(Name){x}) mpayload in
 #^^^^ source.hydra
 #    ^^^ source.hydra keyword.control.hydra
 #       ^ source.hydra
@@ -228,14 +208,14 @@
 #                                 ^ source.hydra punctuation.separator.binder.hydra
 #                                  ^^^^ source.hydra keyword.control.hydra
 #                                      ^ source.hydra
-#                                       ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                 ^^ source.hydra
-#                                                   ^ source.hydra variable.other.hydra
-#                                                    ^^^ source.hydra
-#                                                       ^^^^^^^^ source.hydra variable.other.hydra
-#                                                               ^ source.hydra
-#                                                                ^^ source.hydra keyword.control.hydra
->    let idx := optionals.bind mpayload literals.parseInt32 in
+#                                       ^^^^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+#                                             ^ source.hydra variable.other.hydra
+#                                              ^^^ source.hydra
+#                                                 ^^^^^^^^ source.hydra variable.other.hydra
+#                                                         ^ source.hydra
+#                                                          ^^ source.hydra keyword.control.hydra
+>    let idx := optionals.bind mpayload parseInt32 in
 #^^^^ source.hydra
 #    ^^^ source.hydra keyword.control.hydra
 #       ^ source.hydra
@@ -247,533 +227,533 @@
 #                             ^ source.hydra
 #                              ^^^^^^^^ source.hydra variable.other.hydra
 #                                      ^ source.hydra
-#                                       ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                          ^ source.hydra
-#                                                           ^^ source.hydra keyword.control.hydra
->    logic.ifElse
+#                                       ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                 ^ source.hydra
+#                                                  ^^ source.hydra keyword.control.hydra
+>    ifElse
 #^^^^ source.hydra
-#    ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->      (equality.equal tag "annotatedAnnotation")
+#    ^^^^^^ source.hydra variable.other.hydra
+>      (equal tag "annotatedAnnotation")
 #^^^^^^^ source.hydra
-#       ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                     ^ source.hydra
-#                      ^^^ source.hydra variable.other.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                           ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                               ^^ source.hydra
->      given(paths.SubtermStep{annotatedAnnotation})
+#       ^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra
+#             ^^^ source.hydra variable.other.hydra
+#                ^ source.hydra
+#                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                  ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                      ^^ source.hydra
+>      given(SubtermStep{annotatedAnnotation})
 #^^^^^^ source.hydra
 #      ^^^^^ source.hydra keyword.control.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                             ^ source.hydra
-#                              ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                 ^^^ source.hydra
->      (logic.ifElse
-#^^^^^^^ source.hydra
-#       ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->        (equality.equal tag "annotatedBody")
-#^^^^^^^^^ source.hydra
-#         ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                       ^ source.hydra
-#                        ^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra
-#                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                             ^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                           ^^ source.hydra
->        given(paths.SubtermStep{annotatedBody})
+#                        ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                           ^^^ source.hydra
+>      (ifElse
+#^^^^^^^ source.hydra
+#       ^^^^^^ source.hydra variable.other.hydra
+>        (equal tag "annotatedBody")
+#^^^^^^^^^ source.hydra
+#         ^^^^^ source.hydra variable.other.hydra
+#              ^ source.hydra
+#               ^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                    ^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                  ^^ source.hydra
+>        given(SubtermStep{annotatedBody})
 #^^^^^^^^ source.hydra
 #        ^^^^^ source.hydra keyword.control.hydra
 #             ^ source.hydra
-#              ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                               ^ source.hydra
-#                                ^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                             ^^^ source.hydra
->        (logic.ifElse
-#^^^^^^^^^ source.hydra
-#         ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->          (equality.equal tag "applicationArgument")
-#^^^^^^^^^^^ source.hydra
-#           ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                         ^ source.hydra
-#                          ^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra
-#                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                               ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                   ^^ source.hydra
->          given(paths.SubtermStep{applicationArgument})
+#                          ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                       ^^^ source.hydra
+>        (ifElse
+#^^^^^^^^^ source.hydra
+#         ^^^^^^ source.hydra variable.other.hydra
+>          (equal tag "applicationArgument")
+#^^^^^^^^^^^ source.hydra
+#           ^^^^^ source.hydra variable.other.hydra
+#                ^ source.hydra
+#                 ^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                      ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                          ^^ source.hydra
+>          given(SubtermStep{applicationArgument})
 #^^^^^^^^^^ source.hydra
 #          ^^^^^ source.hydra keyword.control.hydra
 #               ^ source.hydra
-#                ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                     ^^^ source.hydra
->          (logic.ifElse
-#^^^^^^^^^^^ source.hydra
-#           ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->            (equality.equal tag "applicationFunction")
-#^^^^^^^^^^^^^ source.hydra
-#             ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                           ^ source.hydra
-#                            ^^^ source.hydra variable.other.hydra
-#                               ^ source.hydra
-#                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                 ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                     ^^ source.hydra
->            given(paths.SubtermStep{applicationFunction})
+#                            ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                               ^^^ source.hydra
+>          (ifElse
+#^^^^^^^^^^^ source.hydra
+#           ^^^^^^ source.hydra variable.other.hydra
+>            (equal tag "applicationFunction")
+#^^^^^^^^^^^^^ source.hydra
+#             ^^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                        ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                            ^^ source.hydra
+>            given(SubtermStep{applicationFunction})
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^ source.hydra keyword.control.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                       ^^^ source.hydra
->            (logic.ifElse
-#^^^^^^^^^^^^^ source.hydra
-#             ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->              (equality.equal tag "casesCase")
-#^^^^^^^^^^^^^^^ source.hydra
-#               ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                             ^ source.hydra
-#                              ^^^ source.hydra variable.other.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                   ^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                             ^^ source.hydra
->              (optionals.map (λx.paths.SubtermStep{casesCase = x}) name)
+#                              ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                 ^^^ source.hydra
+>            (ifElse
+#^^^^^^^^^^^^^ source.hydra
+#             ^^^^^^ source.hydra variable.other.hydra
+>              (equal tag "casesCase")
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra
+#                     ^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                          ^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                    ^^ source.hydra
+>              (optionals.map (λx.SubtermStep{casesCase = x}) name)
 #^^^^^^^^^^^^^^^ source.hydra
 #               ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                            ^^ source.hydra
 #                              ^ source.hydra keyword.operator.lambda.hydra
 #                               ^ source.hydra variable.parameter.hydra
 #                                ^ source.hydra punctuation.separator.binder.hydra
-#                                 ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                  ^ source.hydra
-#                                                   ^^^^^^^^^ source.hydra variable.other.hydra
-#                                                            ^ source.hydra
-#                                                             ^ source.hydra keyword.operator.equals.hydra
-#                                                              ^ source.hydra
-#                                                               ^ source.hydra variable.other.hydra
-#                                                                ^^^ source.hydra
-#                                                                   ^^^^ source.hydra variable.other.hydra
-#                                                                       ^^ source.hydra
->              (logic.ifElse
+#                                 ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                            ^ source.hydra
+#                                             ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^ source.hydra
+#                                                       ^ source.hydra keyword.operator.equals.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra variable.other.hydra
+#                                                          ^^^ source.hydra
+#                                                             ^^^^ source.hydra variable.other.hydra
+#                                                                 ^^ source.hydra
+>              (ifElse
 #^^^^^^^^^^^^^^^ source.hydra
-#               ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                (equality.equal tag "casesDefault")
+#               ^^^^^^ source.hydra variable.other.hydra
+>                (equal tag "casesDefault")
 #^^^^^^^^^^^^^^^^^ source.hydra
-#                 ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                               ^ source.hydra
-#                                ^^^ source.hydra variable.other.hydra
-#                                   ^ source.hydra
-#                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                     ^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                  ^^ source.hydra
->                given(paths.SubtermStep{casesDefault})
+#                 ^^^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra
+#                       ^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                            ^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                         ^^ source.hydra
+>                given(SubtermStep{casesDefault})
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^ source.hydra keyword.control.hydra
 #                     ^ source.hydra
-#                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^ source.hydra
-#                                        ^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^^^ source.hydra
->                (logic.ifElse
-#^^^^^^^^^^^^^^^^^ source.hydra
-#                 ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                  (equality.equal tag "eitherLeft")
-#^^^^^^^^^^^^^^^^^^^ source.hydra
-#                   ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                      ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                 ^ source.hydra
-#                                  ^^^ source.hydra variable.other.hydra
-#                                     ^ source.hydra
-#                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                       ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                  ^^ source.hydra
->                  given(paths.SubtermStep{eitherLeft})
+#                                  ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                              ^^^ source.hydra
+>                (ifElse
+#^^^^^^^^^^^^^^^^^ source.hydra
+#                 ^^^^^^ source.hydra variable.other.hydra
+>                  (equal tag "eitherLeft")
+#^^^^^^^^^^^^^^^^^^^ source.hydra
+#                   ^^^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra
+#                         ^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                              ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                         ^^ source.hydra
+>                  given(SubtermStep{eitherLeft})
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^ source.hydra keyword.control.hydra
 #                       ^ source.hydra
-#                        ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                         ^ source.hydra
-#                                          ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^^^ source.hydra
->                  (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^ source.hydra
-#                   ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                    (equality.equal tag "eitherRight")
-#^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                     ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                   ^ source.hydra
-#                                    ^^^ source.hydra variable.other.hydra
-#                                       ^ source.hydra
-#                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                         ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                     ^^ source.hydra
->                    given(paths.SubtermStep{eitherRight})
+#                                    ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                              ^^^ source.hydra
+>                  (ifElse
+#^^^^^^^^^^^^^^^^^^^ source.hydra
+#                   ^^^^^^ source.hydra variable.other.hydra
+>                    (equal tag "eitherRight")
+#^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                     ^^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                            ^^ source.hydra
+>                    given(SubtermStep{eitherRight})
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                    ^^^^^ source.hydra keyword.control.hydra
 #                         ^ source.hydra
-#                          ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                           ^ source.hydra
-#                                            ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                       ^^^ source.hydra
->                    (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                     ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                      (equality.equal tag "injectField")
-#^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                       ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                          ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                     ^ source.hydra
-#                                      ^^^ source.hydra variable.other.hydra
-#                                         ^ source.hydra
-#                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                           ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                       ^^ source.hydra
->                      (optionals.map (λx.paths.SubtermStep{injectField = x}) name)
+#                                      ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                 ^^^ source.hydra
+>                    (ifElse
+#^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                     ^^^^^^ source.hydra variable.other.hydra
+>                      (equal tag "injectField")
+#^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                       ^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^^^ source.hydra variable.other.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                  ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                              ^^ source.hydra
+>                      (optionals.map (λx.SubtermStep{injectField = x}) name)
 #^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                       ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                    ^^ source.hydra
 #                                      ^ source.hydra keyword.operator.lambda.hydra
 #                                       ^ source.hydra variable.parameter.hydra
 #                                        ^ source.hydra punctuation.separator.binder.hydra
-#                                         ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                          ^ source.hydra
-#                                                           ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                      ^ source.hydra
-#                                                                       ^ source.hydra keyword.operator.equals.hydra
-#                                                                        ^ source.hydra
-#                                                                         ^ source.hydra variable.other.hydra
-#                                                                          ^^^ source.hydra
-#                                                                             ^^^^ source.hydra variable.other.hydra
-#                                                                                 ^^ source.hydra
->                      (logic.ifElse
+#                                         ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                    ^ source.hydra
+#                                                     ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                ^ source.hydra
+#                                                                 ^ source.hydra keyword.operator.equals.hydra
+#                                                                  ^ source.hydra
+#                                                                   ^ source.hydra variable.other.hydra
+#                                                                    ^^^ source.hydra
+#                                                                       ^^^^ source.hydra variable.other.hydra
+#                                                                           ^^ source.hydra
+>                      (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                       ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                        (equality.equal tag "lambdaBody")
+#                       ^^^^^^ source.hydra variable.other.hydra
+>                        (equal tag "lambdaBody")
 #^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                         ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                       ^ source.hydra
-#                                        ^^^ source.hydra variable.other.hydra
-#                                           ^ source.hydra
-#                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                             ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                        ^^ source.hydra
->                        given(paths.SubtermStep{lambdaBody})
+#                         ^^^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^^^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                    ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                               ^^ source.hydra
+>                        given(SubtermStep{lambdaBody})
 #^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                        ^^^^^ source.hydra keyword.control.hydra
 #                             ^ source.hydra
-#                              ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                               ^ source.hydra
-#                                                ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                          ^^^ source.hydra
->                        (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                         ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                          (equality.equal tag "letBinding")
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                           ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                         ^ source.hydra
-#                                          ^^^ source.hydra variable.other.hydra
-#                                             ^ source.hydra
-#                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                               ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                          ^^ source.hydra
->                          (optionals.map (λx.paths.SubtermStep{letBinding = x}) name)
+#                                          ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                    ^^^ source.hydra
+>                        (ifElse
+#^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                         ^^^^^^ source.hydra variable.other.hydra
+>                          (equal tag "letBinding")
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                           ^^^^^ source.hydra variable.other.hydra
+#                                ^ source.hydra
+#                                 ^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                      ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                 ^^ source.hydra
+>                          (optionals.map (λx.SubtermStep{letBinding = x}) name)
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                           ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                        ^^ source.hydra
 #                                          ^ source.hydra keyword.operator.lambda.hydra
 #                                           ^ source.hydra variable.parameter.hydra
 #                                            ^ source.hydra punctuation.separator.binder.hydra
-#                                             ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                              ^ source.hydra
-#                                                               ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                         ^ source.hydra
-#                                                                          ^ source.hydra keyword.operator.equals.hydra
-#                                                                           ^ source.hydra
-#                                                                            ^ source.hydra variable.other.hydra
-#                                                                             ^^^ source.hydra
-#                                                                                ^^^^ source.hydra variable.other.hydra
-#                                                                                    ^^ source.hydra
->                          (logic.ifElse
+#                                             ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                        ^ source.hydra
+#                                                         ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                   ^ source.hydra
+#                                                                    ^ source.hydra keyword.operator.equals.hydra
+#                                                                     ^ source.hydra
+#                                                                      ^ source.hydra variable.other.hydra
+#                                                                       ^^^ source.hydra
+#                                                                          ^^^^ source.hydra variable.other.hydra
+#                                                                              ^^ source.hydra
+>                          (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                           ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                            (equality.equal tag "letBody")
+#                           ^^^^^^ source.hydra variable.other.hydra
+>                            (equal tag "letBody")
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                             ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                           ^ source.hydra
-#                                            ^^^ source.hydra variable.other.hydra
-#                                               ^ source.hydra
-#                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                 ^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                         ^^ source.hydra
->                            given(paths.SubtermStep{letBody})
+#                             ^^^^^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^^^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                        ^^^^^^^ source.hydra string.quoted.double.hydra
+#                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                ^^ source.hydra
+>                            given(SubtermStep{letBody})
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                            ^^^^^ source.hydra keyword.control.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                   ^ source.hydra
-#                                                    ^^^^^^^ source.hydra variable.other.hydra
-#                                                           ^^^ source.hydra
->                            (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                             ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                              (equality.equal tag "listElement")
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                               ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                             ^ source.hydra
-#                                              ^^^ source.hydra variable.other.hydra
-#                                                 ^ source.hydra
-#                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                   ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                               ^^ source.hydra
->                              (optionals.map (λx.paths.SubtermStep{listElement = x}) idx)
+#                                              ^^^^^^^ source.hydra variable.other.hydra
+#                                                     ^^^ source.hydra
+>                            (ifElse
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                             ^^^^^^ source.hydra variable.other.hydra
+>                              (equal tag "listElement")
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                               ^^^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra
+#                                     ^^^ source.hydra variable.other.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                          ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                      ^^ source.hydra
+>                              (optionals.map (λx.SubtermStep{listElement = x}) idx)
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                               ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                            ^^ source.hydra
 #                                              ^ source.hydra keyword.operator.lambda.hydra
 #                                               ^ source.hydra variable.parameter.hydra
 #                                                ^ source.hydra punctuation.separator.binder.hydra
-#                                                 ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                  ^ source.hydra
-#                                                                   ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                              ^ source.hydra
-#                                                                               ^ source.hydra keyword.operator.equals.hydra
-#                                                                                ^ source.hydra
-#                                                                                 ^ source.hydra variable.other.hydra
-#                                                                                  ^^^ source.hydra
-#                                                                                     ^^^ source.hydra variable.other.hydra
-#                                                                                        ^^ source.hydra
->                              (logic.ifElse
+#                                                 ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                            ^ source.hydra
+#                                                             ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                        ^ source.hydra
+#                                                                         ^ source.hydra keyword.operator.equals.hydra
+#                                                                          ^ source.hydra
+#                                                                           ^ source.hydra variable.other.hydra
+#                                                                            ^^^ source.hydra
+#                                                                               ^^^ source.hydra variable.other.hydra
+#                                                                                  ^^ source.hydra
+>                              (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                               ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                (equality.equal tag "mapEntry")
+#                               ^^^^^^ source.hydra variable.other.hydra
+>                                (equal tag "mapEntry")
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                 ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                               ^ source.hydra
-#                                                ^^^ source.hydra variable.other.hydra
-#                                                   ^ source.hydra
-#                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                     ^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                              ^^ source.hydra
->                                (optionals.map (λx.paths.SubtermStep{mapEntry = x}) idx)
+#                                 ^^^^^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^^^ source.hydra variable.other.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                            ^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                     ^^ source.hydra
+>                                (optionals.map (λx.SubtermStep{mapEntry = x}) idx)
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                 ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                              ^^ source.hydra
 #                                                ^ source.hydra keyword.operator.lambda.hydra
 #                                                 ^ source.hydra variable.parameter.hydra
 #                                                  ^ source.hydra punctuation.separator.binder.hydra
-#                                                   ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                    ^ source.hydra
-#                                                                     ^^^^^^^^ source.hydra variable.other.hydra
-#                                                                             ^ source.hydra
-#                                                                              ^ source.hydra keyword.operator.equals.hydra
-#                                                                               ^ source.hydra
-#                                                                                ^ source.hydra variable.other.hydra
-#                                                                                 ^^^ source.hydra
-#                                                                                    ^^^ source.hydra variable.other.hydra
-#                                                                                       ^^ source.hydra
->                                (logic.ifElse
+#                                                   ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                              ^ source.hydra
+#                                                               ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                       ^ source.hydra
+#                                                                        ^ source.hydra keyword.operator.equals.hydra
+#                                                                         ^ source.hydra
+#                                                                          ^ source.hydra variable.other.hydra
+#                                                                           ^^^ source.hydra
+#                                                                              ^^^ source.hydra variable.other.hydra
+#                                                                                 ^^ source.hydra
+>                                (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                 ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                  (equality.equal tag "optionalGiven")
+#                                 ^^^^^^ source.hydra variable.other.hydra
+>                                  (equal tag "optionalGiven")
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                   ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                 ^ source.hydra
-#                                                  ^^^ source.hydra variable.other.hydra
-#                                                     ^ source.hydra
-#                                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                       ^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                     ^^ source.hydra
->                                  given(paths.SubtermStep{optionalGiven})
+#                                   ^^^^^ source.hydra variable.other.hydra
+#                                        ^ source.hydra
+#                                         ^^^ source.hydra variable.other.hydra
+#                                            ^ source.hydra
+#                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                              ^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                            ^^ source.hydra
+>                                  given(SubtermStep{optionalGiven})
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                  ^^^^^ source.hydra keyword.control.hydra
 #                                       ^ source.hydra
-#                                        ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                         ^ source.hydra
-#                                                          ^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                       ^^^ source.hydra
->                                  (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                   ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                    (equality.equal tag "pairFirst")
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                     ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                   ^ source.hydra
-#                                                    ^^^ source.hydra variable.other.hydra
-#                                                       ^ source.hydra
-#                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                         ^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                   ^^ source.hydra
->                                    given(paths.SubtermStep{pairFirst})
+#                                                    ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                 ^^^ source.hydra
+>                                  (ifElse
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                   ^^^^^^ source.hydra variable.other.hydra
+>                                    (equal tag "pairFirst")
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                     ^^^^^ source.hydra variable.other.hydra
+#                                          ^ source.hydra
+#                                           ^^^ source.hydra variable.other.hydra
+#                                              ^ source.hydra
+#                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                ^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                          ^^ source.hydra
+>                                    given(SubtermStep{pairFirst})
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                    ^^^^^ source.hydra keyword.control.hydra
 #                                         ^ source.hydra
-#                                          ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                           ^ source.hydra
-#                                                            ^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                     ^^^ source.hydra
->                                    (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                     ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                      (equality.equal tag "pairSecond")
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                       ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                          ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                     ^ source.hydra
-#                                                      ^^^ source.hydra variable.other.hydra
-#                                                         ^ source.hydra
-#                                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                           ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                      ^^ source.hydra
->                                      given(paths.SubtermStep{pairSecond})
+#                                                      ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                               ^^^ source.hydra
+>                                    (ifElse
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                     ^^^^^^ source.hydra variable.other.hydra
+>                                      (equal tag "pairSecond")
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                       ^^^^^ source.hydra variable.other.hydra
+#                                            ^ source.hydra
+#                                             ^^^ source.hydra variable.other.hydra
+#                                                ^ source.hydra
+#                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                  ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                             ^^ source.hydra
+>                                      given(SubtermStep{pairSecond})
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                      ^^^^^ source.hydra keyword.control.hydra
 #                                           ^ source.hydra
-#                                            ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                             ^ source.hydra
-#                                                              ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                        ^^^ source.hydra
->                                      (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                       ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                        (equality.equal tag "recordField")
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                         ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                       ^ source.hydra
-#                                                        ^^^ source.hydra variable.other.hydra
-#                                                           ^ source.hydra
-#                                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                             ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                         ^^ source.hydra
->                                        (optionals.map (λx.paths.SubtermStep{recordField = x}) name)
+#                                                        ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                  ^^^ source.hydra
+>                                      (ifElse
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                       ^^^^^^ source.hydra variable.other.hydra
+>                                        (equal tag "recordField")
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                         ^^^^^ source.hydra variable.other.hydra
+#                                              ^ source.hydra
+#                                               ^^^ source.hydra variable.other.hydra
+#                                                  ^ source.hydra
+#                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                    ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                ^^ source.hydra
+>                                        (optionals.map (λx.SubtermStep{recordField = x}) name)
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                         ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                                      ^^ source.hydra
 #                                                        ^ source.hydra keyword.operator.lambda.hydra
 #                                                         ^ source.hydra variable.parameter.hydra
 #                                                          ^ source.hydra punctuation.separator.binder.hydra
-#                                                           ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                            ^ source.hydra
-#                                                                             ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                        ^ source.hydra
-#                                                                                         ^ source.hydra keyword.operator.equals.hydra
-#                                                                                          ^ source.hydra
-#                                                                                           ^ source.hydra variable.other.hydra
-#                                                                                            ^^^ source.hydra
-#                                                                                               ^^^^ source.hydra variable.other.hydra
-#                                                                                                   ^^ source.hydra
->                                        (logic.ifElse
+#                                                           ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                      ^ source.hydra
+#                                                                       ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                  ^ source.hydra
+#                                                                                   ^ source.hydra keyword.operator.equals.hydra
+#                                                                                    ^ source.hydra
+#                                                                                     ^ source.hydra variable.other.hydra
+#                                                                                      ^^^ source.hydra
+#                                                                                         ^^^^ source.hydra variable.other.hydra
+#                                                                                             ^^ source.hydra
+>                                        (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                         ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                          (equality.equal tag "setElement")
+#                                         ^^^^^^ source.hydra variable.other.hydra
+>                                          (equal tag "setElement")
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                           ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                         ^ source.hydra
-#                                                          ^^^ source.hydra variable.other.hydra
-#                                                             ^ source.hydra
-#                                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                               ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                          ^^ source.hydra
->                                          (optionals.map (λx.paths.SubtermStep{setElement = x}) idx)
+#                                           ^^^^^ source.hydra variable.other.hydra
+#                                                ^ source.hydra
+#                                                 ^^^ source.hydra variable.other.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                      ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                 ^^ source.hydra
+>                                          (optionals.map (λx.SubtermStep{setElement = x}) idx)
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                           ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                                        ^^ source.hydra
 #                                                          ^ source.hydra keyword.operator.lambda.hydra
 #                                                           ^ source.hydra variable.parameter.hydra
 #                                                            ^ source.hydra punctuation.separator.binder.hydra
-#                                                             ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                              ^ source.hydra
-#                                                                               ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                         ^ source.hydra
-#                                                                                          ^ source.hydra keyword.operator.equals.hydra
-#                                                                                           ^ source.hydra
-#                                                                                            ^ source.hydra variable.other.hydra
-#                                                                                             ^^^ source.hydra
-#                                                                                                ^^^ source.hydra variable.other.hydra
-#                                                                                                   ^^ source.hydra
->                                          (logic.ifElse
+#                                                             ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                        ^ source.hydra
+#                                                                         ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                   ^ source.hydra
+#                                                                                    ^ source.hydra keyword.operator.equals.hydra
+#                                                                                     ^ source.hydra
+#                                                                                      ^ source.hydra variable.other.hydra
+#                                                                                       ^^^ source.hydra
+#                                                                                          ^^^ source.hydra variable.other.hydra
+#                                                                                             ^^ source.hydra
+>                                          (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                           ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                            (equality.equal tag "typeApplicationBody")
+#                                           ^^^^^^ source.hydra variable.other.hydra
+>                                            (equal tag "typeApplicationBody")
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                             ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                           ^ source.hydra
-#                                                            ^^^ source.hydra variable.other.hydra
-#                                                               ^ source.hydra
-#                                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                                 ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                     ^^ source.hydra
->                                            given(paths.SubtermStep{typeApplicationBody})
+#                                             ^^^^^ source.hydra variable.other.hydra
+#                                                  ^ source.hydra
+#                                                   ^^^ source.hydra variable.other.hydra
+#                                                      ^ source.hydra
+#                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                        ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                            ^^ source.hydra
+>                                            given(SubtermStep{typeApplicationBody})
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                            ^^^^^ source.hydra keyword.control.hydra
 #                                                 ^ source.hydra
-#                                                  ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                   ^ source.hydra
-#                                                                    ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                       ^^^ source.hydra
->                                            (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                             ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                              (equality.equal tag "typeLambdaBody")
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                               ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                             ^ source.hydra
-#                                                              ^^^ source.hydra variable.other.hydra
-#                                                                 ^ source.hydra
-#                                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                                   ^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                  ^^ source.hydra
->                                              given(paths.SubtermStep{typeLambdaBody})
+#                                                              ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                 ^^^ source.hydra
+>                                            (ifElse
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                             ^^^^^^ source.hydra variable.other.hydra
+>                                              (equal tag "typeLambdaBody")
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                               ^^^^^ source.hydra variable.other.hydra
+#                                                    ^ source.hydra
+#                                                     ^^^ source.hydra variable.other.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                          ^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                         ^^ source.hydra
+>                                              given(SubtermStep{typeLambdaBody})
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                              ^^^^^ source.hydra keyword.control.hydra
 #                                                   ^ source.hydra
-#                                                    ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                     ^ source.hydra
-#                                                                      ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                    ^^^ source.hydra
->                                              (logic.ifElse (equality.equal tag "wrapBody") given(paths.SubtermStep{wrapBody}) none)))))))))))))))))))))
+#                                                    ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                               ^ source.hydra
+#                                                                ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                              ^^^ source.hydra
+>                                              (ifElse (equal tag "wrapBody") given(SubtermStep{wrapBody}) none)))))))))))))))))))))
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                               ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                           ^^ source.hydra
-#                                                             ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                           ^ source.hydra
-#                                                                            ^^^ source.hydra variable.other.hydra
-#                                                                               ^ source.hydra
-#                                                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                                                 ^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                          ^^ source.hydra
-#                                                                                            ^^^^^ source.hydra keyword.control.hydra
-#                                                                                                 ^ source.hydra
-#                                                                                                  ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                                                   ^ source.hydra
-#                                                                                                                    ^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                            ^^^ source.hydra
-#                                                                                                                               ^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                               ^^^^^^ source.hydra variable.other.hydra
+#                                                     ^^ source.hydra
+#                                                       ^^^^^ source.hydra variable.other.hydra
+#                                                            ^ source.hydra
+#                                                             ^^^ source.hydra variable.other.hydra
+#                                                                ^ source.hydra
+#                                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                                  ^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                           ^^ source.hydra
+#                                                                             ^^^^^ source.hydra keyword.control.hydra
+#                                                                                  ^ source.hydra
+#                                                                                   ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                                              ^ source.hydra
+#                                                                                               ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                       ^^^ source.hydra
+#                                                                                                          ^^^^ source.hydra keyword.control.hydra
+#                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 >
 >## Parse a printed subtype path (steps joined by '/') back into a SubtypePath
 #^^ source.hydra comment.block.documentation.hydra
@@ -790,17 +770,17 @@
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->      (λx.wrap(paths.SubtypePath){x})
+>      (λx.wrap(SubtypePath){x})
 #^^^^^^^ source.hydra
 #       ^ source.hydra keyword.operator.lambda.hydra
 #        ^ source.hydra variable.parameter.hydra
 #         ^ source.hydra punctuation.separator.binder.hydra
 #          ^^^^ source.hydra keyword.control.hydra
 #              ^ source.hydra
-#               ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                ^^ source.hydra
-#                                  ^ source.hydra variable.other.hydra
-#                                   ^^^ source.hydra
+#               ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^^^ source.hydra
 >      (lists.foldl
 #^^^^^^^ source.hydra
 #       ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
@@ -917,7 +897,7 @@
 #                                     ^^^^ source.hydra variable.other.hydra
 #                                         ^ source.hydra
 #                                          ^^ source.hydra keyword.control.hydra
->    let name := optionals.map (λx.wrap(model.Name){x}) mpayload in
+>    let name := optionals.map (λx.wrap(Name){x}) mpayload in
 #^^^^ source.hydra
 #    ^^^ source.hydra keyword.control.hydra
 #       ^ source.hydra
@@ -932,434 +912,434 @@
 #                                 ^ source.hydra punctuation.separator.binder.hydra
 #                                  ^^^^ source.hydra keyword.control.hydra
 #                                      ^ source.hydra
-#                                       ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                 ^^ source.hydra
-#                                                   ^ source.hydra variable.other.hydra
-#                                                    ^^^ source.hydra
-#                                                       ^^^^^^^^ source.hydra variable.other.hydra
-#                                                               ^ source.hydra
-#                                                                ^^ source.hydra keyword.control.hydra
->    logic.ifElse
+#                                       ^^^^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+#                                             ^ source.hydra variable.other.hydra
+#                                              ^^^ source.hydra
+#                                                 ^^^^^^^^ source.hydra variable.other.hydra
+#                                                         ^ source.hydra
+#                                                          ^^ source.hydra keyword.control.hydra
+>    ifElse
 #^^^^ source.hydra
-#    ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->      (equality.equal tag "annotatedBody")
+#    ^^^^^^ source.hydra variable.other.hydra
+>      (equal tag "annotatedBody")
 #^^^^^^^ source.hydra
-#       ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                     ^ source.hydra
-#                      ^^^ source.hydra variable.other.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                           ^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                         ^^ source.hydra
->      given(paths.SubtypeStep{annotatedBody})
+#       ^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra
+#             ^^^ source.hydra variable.other.hydra
+#                ^ source.hydra
+#                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                  ^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                ^^ source.hydra
+>      given(SubtypeStep{annotatedBody})
 #^^^^^^ source.hydra
 #      ^^^^^ source.hydra keyword.control.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                             ^ source.hydra
-#                              ^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^^ source.hydra
->      (logic.ifElse
-#^^^^^^^ source.hydra
-#       ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->        (equality.equal tag "applicationArgument")
-#^^^^^^^^^ source.hydra
-#         ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                       ^ source.hydra
-#                        ^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra
-#                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                             ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                 ^^ source.hydra
->        given(paths.SubtypeStep{applicationArgument})
+#                        ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^^^ source.hydra
+>      (ifElse
+#^^^^^^^ source.hydra
+#       ^^^^^^ source.hydra variable.other.hydra
+>        (equal tag "applicationArgument")
+#^^^^^^^^^ source.hydra
+#         ^^^^^ source.hydra variable.other.hydra
+#              ^ source.hydra
+#               ^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                    ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                        ^^ source.hydra
+>        given(SubtypeStep{applicationArgument})
 #^^^^^^^^ source.hydra
 #        ^^^^^ source.hydra keyword.control.hydra
 #             ^ source.hydra
-#              ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                               ^ source.hydra
-#                                ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                   ^^^ source.hydra
->        (logic.ifElse
-#^^^^^^^^^ source.hydra
-#         ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->          (equality.equal tag "applicationFunction")
-#^^^^^^^^^^^ source.hydra
-#           ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                         ^ source.hydra
-#                          ^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra
-#                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                               ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                   ^^ source.hydra
->          given(paths.SubtypeStep{applicationFunction})
+#                          ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                             ^^^ source.hydra
+>        (ifElse
+#^^^^^^^^^ source.hydra
+#         ^^^^^^ source.hydra variable.other.hydra
+>          (equal tag "applicationFunction")
+#^^^^^^^^^^^ source.hydra
+#           ^^^^^ source.hydra variable.other.hydra
+#                ^ source.hydra
+#                 ^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                      ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                          ^^ source.hydra
+>          given(SubtypeStep{applicationFunction})
 #^^^^^^^^^^ source.hydra
 #          ^^^^^ source.hydra keyword.control.hydra
 #               ^ source.hydra
-#                ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                     ^^^ source.hydra
->          (logic.ifElse
-#^^^^^^^^^^^ source.hydra
-#           ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->            (equality.equal tag "effectValue")
-#^^^^^^^^^^^^^ source.hydra
-#             ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                           ^ source.hydra
-#                            ^^^ source.hydra variable.other.hydra
-#                               ^ source.hydra
-#                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                 ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                             ^^ source.hydra
->            given(paths.SubtypeStep{effectValue})
+#                            ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                               ^^^ source.hydra
+>          (ifElse
+#^^^^^^^^^^^ source.hydra
+#           ^^^^^^ source.hydra variable.other.hydra
+>            (equal tag "effectValue")
+#^^^^^^^^^^^^^ source.hydra
+#             ^^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                        ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                    ^^ source.hydra
+>            given(SubtypeStep{effectValue})
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^ source.hydra keyword.control.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                               ^^^ source.hydra
->            (logic.ifElse
-#^^^^^^^^^^^^^ source.hydra
-#             ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->              (equality.equal tag "eitherLeft")
-#^^^^^^^^^^^^^^^ source.hydra
-#               ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                             ^ source.hydra
-#                              ^^^ source.hydra variable.other.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                   ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                              ^^ source.hydra
->              given(paths.SubtypeStep{eitherLeft})
+#                              ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                         ^^^ source.hydra
+>            (ifElse
+#^^^^^^^^^^^^^ source.hydra
+#             ^^^^^^ source.hydra variable.other.hydra
+>              (equal tag "eitherLeft")
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra
+#                     ^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                          ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                     ^^ source.hydra
+>              given(SubtypeStep{eitherLeft})
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^^ source.hydra keyword.control.hydra
 #                   ^ source.hydra
-#                    ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                     ^ source.hydra
-#                                      ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                ^^^ source.hydra
->              (logic.ifElse
-#^^^^^^^^^^^^^^^ source.hydra
-#               ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                (equality.equal tag "eitherRight")
-#^^^^^^^^^^^^^^^^^ source.hydra
-#                 ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                    ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                               ^ source.hydra
-#                                ^^^ source.hydra variable.other.hydra
-#                                   ^ source.hydra
-#                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                     ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                 ^^ source.hydra
->                given(paths.SubtypeStep{eitherRight})
+#                                ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                          ^^^ source.hydra
+>              (ifElse
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^^^^^ source.hydra variable.other.hydra
+>                (equal tag "eitherRight")
+#^^^^^^^^^^^^^^^^^ source.hydra
+#                 ^^^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra
+#                       ^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                            ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                        ^^ source.hydra
+>                given(SubtypeStep{eitherRight})
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^ source.hydra keyword.control.hydra
 #                     ^ source.hydra
-#                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^ source.hydra
-#                                        ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                   ^^^ source.hydra
->                (logic.ifElse
-#^^^^^^^^^^^^^^^^^ source.hydra
-#                 ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                  (equality.equal tag "forallBody")
-#^^^^^^^^^^^^^^^^^^^ source.hydra
-#                   ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                      ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                 ^ source.hydra
-#                                  ^^^ source.hydra variable.other.hydra
-#                                     ^ source.hydra
-#                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                       ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                  ^^ source.hydra
->                  given(paths.SubtypeStep{forallBody})
+#                                  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                             ^^^ source.hydra
+>                (ifElse
+#^^^^^^^^^^^^^^^^^ source.hydra
+#                 ^^^^^^ source.hydra variable.other.hydra
+>                  (equal tag "forallBody")
+#^^^^^^^^^^^^^^^^^^^ source.hydra
+#                   ^^^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra
+#                         ^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                              ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                         ^^ source.hydra
+>                  given(SubtypeStep{forallBody})
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^ source.hydra keyword.control.hydra
 #                       ^ source.hydra
-#                        ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                         ^ source.hydra
-#                                          ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^^^ source.hydra
->                  (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^ source.hydra
-#                   ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                    (equality.equal tag "functionCodomain")
-#^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                     ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                   ^ source.hydra
-#                                    ^^^ source.hydra variable.other.hydra
-#                                       ^ source.hydra
-#                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                         ^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                          ^^ source.hydra
->                    given(paths.SubtypeStep{functionCodomain})
+#                                    ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                              ^^^ source.hydra
+>                  (ifElse
+#^^^^^^^^^^^^^^^^^^^ source.hydra
+#                   ^^^^^^ source.hydra variable.other.hydra
+>                    (equal tag "functionCodomain")
+#^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                     ^^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                ^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                 ^^ source.hydra
+>                    given(SubtypeStep{functionCodomain})
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                    ^^^^^ source.hydra keyword.control.hydra
 #                         ^ source.hydra
-#                          ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                           ^ source.hydra
-#                                            ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                            ^^^ source.hydra
->                    (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                     ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                      (equality.equal tag "functionDomain")
-#^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                       ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                          ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                     ^ source.hydra
-#                                      ^^^ source.hydra variable.other.hydra
-#                                         ^ source.hydra
-#                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                           ^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                          ^^ source.hydra
->                      given(paths.SubtypeStep{functionDomain})
+#                                      ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^^ source.hydra
+>                    (ifElse
+#^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                     ^^^^^^ source.hydra variable.other.hydra
+>                      (equal tag "functionDomain")
+#^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                       ^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^^^ source.hydra variable.other.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                  ^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                 ^^ source.hydra
+>                      given(SubtypeStep{functionDomain})
 #^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                      ^^^^^ source.hydra keyword.control.hydra
 #                           ^ source.hydra
-#                            ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                             ^ source.hydra
-#                                              ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                            ^^^ source.hydra
->                      (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                       ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                        (equality.equal tag "listElement")
-#^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                         ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                       ^ source.hydra
-#                                        ^^^ source.hydra variable.other.hydra
-#                                           ^ source.hydra
-#                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                             ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                         ^^ source.hydra
->                        given(paths.SubtypeStep{listElement})
+#                                        ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^^ source.hydra
+>                      (ifElse
+#^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                       ^^^^^^ source.hydra variable.other.hydra
+>                        (equal tag "listElement")
+#^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                         ^^^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^^^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                    ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                ^^ source.hydra
+>                        given(SubtypeStep{listElement})
 #^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                        ^^^^^ source.hydra keyword.control.hydra
 #                             ^ source.hydra
-#                              ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                               ^ source.hydra
-#                                                ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                           ^^^ source.hydra
->                        (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                         ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                          (equality.equal tag "mapKeys")
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                           ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                         ^ source.hydra
-#                                          ^^^ source.hydra variable.other.hydra
-#                                             ^ source.hydra
-#                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                               ^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                       ^^ source.hydra
->                          given(paths.SubtypeStep{mapKeys})
+#                                          ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                     ^^^ source.hydra
+>                        (ifElse
+#^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                         ^^^^^^ source.hydra variable.other.hydra
+>                          (equal tag "mapKeys")
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                           ^^^^^ source.hydra variable.other.hydra
+#                                ^ source.hydra
+#                                 ^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                      ^^^^^^^ source.hydra string.quoted.double.hydra
+#                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                              ^^ source.hydra
+>                          given(SubtypeStep{mapKeys})
 #^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                          ^^^^^ source.hydra keyword.control.hydra
 #                               ^ source.hydra
-#                                ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                 ^ source.hydra
-#                                                  ^^^^^^^ source.hydra variable.other.hydra
-#                                                         ^^^ source.hydra
->                          (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                           ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                            (equality.equal tag "mapValues")
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                             ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                           ^ source.hydra
-#                                            ^^^ source.hydra variable.other.hydra
-#                                               ^ source.hydra
-#                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                 ^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                           ^^ source.hydra
->                            given(paths.SubtypeStep{mapValues})
+#                                            ^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^^^ source.hydra
+>                          (ifElse
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                           ^^^^^^ source.hydra variable.other.hydra
+>                            (equal tag "mapValues")
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                             ^^^^^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^^^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                        ^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                  ^^ source.hydra
+>                            given(SubtypeStep{mapValues})
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                            ^^^^^ source.hydra keyword.control.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                   ^ source.hydra
-#                                                    ^^^^^^^^^ source.hydra variable.other.hydra
-#                                                             ^^^ source.hydra
->                            (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                             ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                              (equality.equal tag "optionalElement")
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                               ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                             ^ source.hydra
-#                                              ^^^ source.hydra variable.other.hydra
-#                                                 ^ source.hydra
-#                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                   ^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                   ^^ source.hydra
->                              given(paths.SubtypeStep{optionalElement})
+#                                              ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                       ^^^ source.hydra
+>                            (ifElse
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                             ^^^^^^ source.hydra variable.other.hydra
+>                              (equal tag "optionalElement")
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                               ^^^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra
+#                                     ^^^ source.hydra variable.other.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                          ^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                          ^^ source.hydra
+>                              given(SubtypeStep{optionalElement})
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                              ^^^^^ source.hydra keyword.control.hydra
 #                                   ^ source.hydra
-#                                    ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                     ^ source.hydra
-#                                                      ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                     ^^^ source.hydra
->                              (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                               ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                (equality.equal tag "pairFirst")
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                 ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                    ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                               ^ source.hydra
-#                                                ^^^ source.hydra variable.other.hydra
-#                                                   ^ source.hydra
-#                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                     ^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                               ^^ source.hydra
->                                given(paths.SubtypeStep{pairFirst})
+#                                                ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                               ^^^ source.hydra
+>                              (ifElse
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                               ^^^^^^ source.hydra variable.other.hydra
+>                                (equal tag "pairFirst")
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                 ^^^^^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^^^ source.hydra variable.other.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                            ^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                      ^^ source.hydra
+>                                given(SubtypeStep{pairFirst})
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                ^^^^^ source.hydra keyword.control.hydra
 #                                     ^ source.hydra
-#                                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                       ^ source.hydra
-#                                                        ^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                 ^^^ source.hydra
->                                (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                 ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                  (equality.equal tag "pairSecond")
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                   ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                      ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                 ^ source.hydra
-#                                                  ^^^ source.hydra variable.other.hydra
-#                                                     ^ source.hydra
-#                                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                       ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                  ^^ source.hydra
->                                  given(paths.SubtypeStep{pairSecond})
+#                                                  ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                           ^^^ source.hydra
+>                                (ifElse
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                 ^^^^^^ source.hydra variable.other.hydra
+>                                  (equal tag "pairSecond")
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                   ^^^^^ source.hydra variable.other.hydra
+#                                        ^ source.hydra
+#                                         ^^^ source.hydra variable.other.hydra
+#                                            ^ source.hydra
+#                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                              ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                         ^^ source.hydra
+>                                  given(SubtypeStep{pairSecond})
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                  ^^^^^ source.hydra keyword.control.hydra
 #                                       ^ source.hydra
-#                                        ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                         ^ source.hydra
-#                                                          ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                    ^^^ source.hydra
->                                  (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                   ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                    (equality.equal tag "recordField")
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                     ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                   ^ source.hydra
-#                                                    ^^^ source.hydra variable.other.hydra
-#                                                       ^ source.hydra
-#                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                         ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                     ^^ source.hydra
->                                    (optionals.map (λx.paths.SubtypeStep{recordField = x}) name)
+#                                                    ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                              ^^^ source.hydra
+>                                  (ifElse
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                   ^^^^^^ source.hydra variable.other.hydra
+>                                    (equal tag "recordField")
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                     ^^^^^ source.hydra variable.other.hydra
+#                                          ^ source.hydra
+#                                           ^^^ source.hydra variable.other.hydra
+#                                              ^ source.hydra
+#                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                            ^^ source.hydra
+>                                    (optionals.map (λx.SubtypeStep{recordField = x}) name)
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                     ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                                  ^^ source.hydra
 #                                                    ^ source.hydra keyword.operator.lambda.hydra
 #                                                     ^ source.hydra variable.parameter.hydra
 #                                                      ^ source.hydra punctuation.separator.binder.hydra
-#                                                       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                        ^ source.hydra
-#                                                                         ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                    ^ source.hydra
-#                                                                                     ^ source.hydra keyword.operator.equals.hydra
-#                                                                                      ^ source.hydra
-#                                                                                       ^ source.hydra variable.other.hydra
-#                                                                                        ^^^ source.hydra
-#                                                                                           ^^^^ source.hydra variable.other.hydra
-#                                                                                               ^^ source.hydra
->                                    (logic.ifElse
+#                                                       ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                  ^ source.hydra
+#                                                                   ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                              ^ source.hydra
+#                                                                               ^ source.hydra keyword.operator.equals.hydra
+#                                                                                ^ source.hydra
+#                                                                                 ^ source.hydra variable.other.hydra
+#                                                                                  ^^^ source.hydra
+#                                                                                     ^^^^ source.hydra variable.other.hydra
+#                                                                                         ^^ source.hydra
+>                                    (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                     ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                      (equality.equal tag "setElement")
+#                                     ^^^^^^ source.hydra variable.other.hydra
+>                                      (equal tag "setElement")
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                       ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                     ^ source.hydra
-#                                                      ^^^ source.hydra variable.other.hydra
-#                                                         ^ source.hydra
-#                                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                           ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                      ^^ source.hydra
->                                      given(paths.SubtypeStep{setElement})
+#                                       ^^^^^ source.hydra variable.other.hydra
+#                                            ^ source.hydra
+#                                             ^^^ source.hydra variable.other.hydra
+#                                                ^ source.hydra
+#                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                  ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                             ^^ source.hydra
+>                                      given(SubtypeStep{setElement})
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                      ^^^^^ source.hydra keyword.control.hydra
 #                                           ^ source.hydra
-#                                            ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                             ^ source.hydra
-#                                                              ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                        ^^^ source.hydra
->                                      (logic.ifElse
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                       ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                        (equality.equal tag "unionField")
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                         ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                       ^ source.hydra
-#                                                        ^^^ source.hydra variable.other.hydra
-#                                                           ^ source.hydra
-#                                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                             ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                        ^^ source.hydra
->                                        (optionals.map (λx.paths.SubtypeStep{unionField = x}) name)
+#                                                        ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                  ^^^ source.hydra
+>                                      (ifElse
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                       ^^^^^^ source.hydra variable.other.hydra
+>                                        (equal tag "unionField")
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                         ^^^^^ source.hydra variable.other.hydra
+#                                              ^ source.hydra
+#                                               ^^^ source.hydra variable.other.hydra
+#                                                  ^ source.hydra
+#                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                    ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                               ^^ source.hydra
+>                                        (optionals.map (λx.SubtypeStep{unionField = x}) name)
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                         ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                                      ^^ source.hydra
 #                                                        ^ source.hydra keyword.operator.lambda.hydra
 #                                                         ^ source.hydra variable.parameter.hydra
 #                                                          ^ source.hydra punctuation.separator.binder.hydra
-#                                                           ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                            ^ source.hydra
-#                                                                             ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                       ^ source.hydra
-#                                                                                        ^ source.hydra keyword.operator.equals.hydra
-#                                                                                         ^ source.hydra
-#                                                                                          ^ source.hydra variable.other.hydra
-#                                                                                           ^^^ source.hydra
-#                                                                                              ^^^^ source.hydra variable.other.hydra
-#                                                                                                  ^^ source.hydra
->                                        (logic.ifElse (equality.equal tag "wrapBody") given(paths.SubtypeStep{wrapBody}) none))))))))))))))))))
+#                                                           ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                      ^ source.hydra
+#                                                                       ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                 ^ source.hydra
+#                                                                                  ^ source.hydra keyword.operator.equals.hydra
+#                                                                                   ^ source.hydra
+#                                                                                    ^ source.hydra variable.other.hydra
+#                                                                                     ^^^ source.hydra
+#                                                                                        ^^^^ source.hydra variable.other.hydra
+#                                                                                            ^^ source.hydra
+>                                        (ifElse (equal tag "wrapBody") given(SubtypeStep{wrapBody}) none))))))))))))))))))
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                         ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                     ^^ source.hydra
-#                                                       ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                     ^ source.hydra
-#                                                                      ^^^ source.hydra variable.other.hydra
-#                                                                         ^ source.hydra
-#                                                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                                           ^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                    ^^ source.hydra
-#                                                                                      ^^^^^ source.hydra keyword.control.hydra
-#                                                                                           ^ source.hydra
-#                                                                                            ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                                             ^ source.hydra
-#                                                                                                              ^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                      ^^^ source.hydra
-#                                                                                                                         ^^^^ source.hydra keyword.control.hydra
-#                                                                                                                             ^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                         ^^^^^^ source.hydra variable.other.hydra
+#                                               ^^ source.hydra
+#                                                 ^^^^^ source.hydra variable.other.hydra
+#                                                      ^ source.hydra
+#                                                       ^^^ source.hydra variable.other.hydra
+#                                                          ^ source.hydra
+#                                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                            ^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                     ^^ source.hydra
+#                                                                       ^^^^^ source.hydra keyword.control.hydra
+#                                                                            ^ source.hydra
+#                                                                             ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                                        ^ source.hydra
+#                                                                                         ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                 ^^^ source.hydra
+#                                                                                                    ^^^^ source.hydra keyword.control.hydra
+#                                                                                                        ^^^^^^^^^^^^^^^^^^^ source.hydra
 >
 >## Print a subterm path as its steps joined by '/'
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->term subtermPath = λpath.strings.join "/" (lists.map subtermStep (paths.SubtermPath[] path))
+>term subtermPath = λpath.strings.join "/" (lists.map subtermStep (SubtermPath[] path))
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -1379,10 +1359,10 @@
 #                                                    ^ source.hydra
 #                                                     ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                                ^^ source.hydra
-#                                                                  ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                   ^^^ source.hydra
-#                                                                                      ^^^^ source.hydra variable.other.hydra
-#                                                                                          ^^^ source.hydra
+#                                                                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                             ^^^ source.hydra
+#                                                                                ^^^^ source.hydra variable.other.hydra
+#                                                                                    ^^^ source.hydra
 >
 >## Print a subterm step in its round-trippable notation
 #^^ source.hydra comment.block.documentation.hydra
@@ -1393,15 +1373,15 @@
 #     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
->  λstep.cases(paths.SubtermStep){
+>  λstep.cases(SubtermStep){
 #^^ source.hydra
 #  ^ source.hydra keyword.operator.lambda.hydra
 #   ^^^^ source.hydra variable.parameter.hydra
 #       ^ source.hydra punctuation.separator.binder.hydra
 #        ^^^^^ source.hydra keyword.control.hydra
 #             ^ source.hydra
-#              ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                               ^^^ source.hydra
+#              ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^^ source.hydra
 >      annotatedAnnotation=λ`_`."annotatedAnnotation",
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
@@ -1454,7 +1434,7 @@
 #                                ^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                    ^^ source.hydra
->      casesCase=λname.strings.concat2 "casesCase:" (model.Name[] name),
+>      casesCase=λname.strings.concat2 "casesCase:" (Name[] name),
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra variable.other.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
@@ -1467,10 +1447,10 @@
 #                                       ^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                  ^^ source.hydra
-#                                                    ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                              ^^^ source.hydra
-#                                                                 ^^^^ source.hydra variable.other.hydra
-#                                                                     ^^^ source.hydra
+#                                                    ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                        ^^^ source.hydra
+#                                                           ^^^^ source.hydra variable.other.hydra
+#                                                               ^^^ source.hydra
 >      casesDefault=λ`_`."casesDefault",
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^ source.hydra variable.other.hydra
@@ -1510,7 +1490,7 @@
 #                        ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                    ^^ source.hydra
->      injectField=λname.strings.concat2 "injectField:" (model.Name[] name),
+>      injectField=λname.strings.concat2 "injectField:" (Name[] name),
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
@@ -1523,10 +1503,10 @@
 #                                         ^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                      ^^ source.hydra
-#                                                        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                  ^^^ source.hydra
-#                                                                     ^^^^ source.hydra variable.other.hydra
-#                                                                         ^^^ source.hydra
+#                                                        ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                            ^^^ source.hydra
+#                                                               ^^^^ source.hydra variable.other.hydra
+#                                                                   ^^^ source.hydra
 >      lambdaBody=λ`_`."lambdaBody",
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^ source.hydra variable.other.hydra
@@ -1540,7 +1520,7 @@
 #                       ^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                  ^^ source.hydra
->      letBinding=λname.strings.concat2 "letBinding:" (model.Name[] name),
+>      letBinding=λname.strings.concat2 "letBinding:" (Name[] name),
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^ source.hydra variable.other.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
@@ -1553,10 +1533,10 @@
 #                                        ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                    ^^ source.hydra
-#                                                      ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                ^^^ source.hydra
-#                                                                   ^^^^ source.hydra variable.other.hydra
-#                                                                       ^^^ source.hydra
+#                                                      ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                          ^^^ source.hydra
+#                                                             ^^^^ source.hydra variable.other.hydra
+#                                                                 ^^^ source.hydra
 >      letBody=λ`_`."letBody",
 #^^^^^^ source.hydra
 #      ^^^^^^^ source.hydra variable.other.hydra
@@ -1570,7 +1550,7 @@
 #                    ^^^^^^^ source.hydra string.quoted.double.hydra
 #                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                            ^^ source.hydra
->      listElement=λi.strings.concat2 "listElement:" (literals.printInt32 i),
+>      listElement=λi.strings.concat2 "listElement:" (printInt32 i),
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
@@ -1583,11 +1563,11 @@
 #                                      ^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                   ^^ source.hydra
-#                                                     ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                        ^ source.hydra
-#                                                                         ^ source.hydra variable.other.hydra
-#                                                                          ^^^ source.hydra
->      mapEntry=λi.strings.concat2 "mapEntry:" (literals.printInt32 i),
+#                                                     ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                               ^ source.hydra
+#                                                                ^ source.hydra variable.other.hydra
+#                                                                 ^^^ source.hydra
+>      mapEntry=λi.strings.concat2 "mapEntry:" (printInt32 i),
 #^^^^^^ source.hydra
 #      ^^^^^^^^ source.hydra variable.other.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
@@ -1600,10 +1580,10 @@
 #                                   ^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                             ^^ source.hydra
-#                                               ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                  ^ source.hydra
-#                                                                   ^ source.hydra variable.other.hydra
-#                                                                    ^^^ source.hydra
+#                                               ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                         ^ source.hydra
+#                                                          ^ source.hydra variable.other.hydra
+#                                                           ^^^ source.hydra
 >      optionalGiven=λ`_`."optionalGiven",
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^ source.hydra variable.other.hydra
@@ -1643,7 +1623,7 @@
 #                       ^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                  ^^ source.hydra
->      recordField=λname.strings.concat2 "recordField:" (model.Name[] name),
+>      recordField=λname.strings.concat2 "recordField:" (Name[] name),
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
@@ -1656,11 +1636,11 @@
 #                                         ^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                      ^^ source.hydra
-#                                                        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                  ^^^ source.hydra
-#                                                                     ^^^^ source.hydra variable.other.hydra
-#                                                                         ^^^ source.hydra
->      setElement=λi.strings.concat2 "setElement:" (literals.printInt32 i),
+#                                                        ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                            ^^^ source.hydra
+#                                                               ^^^^ source.hydra variable.other.hydra
+#                                                                   ^^^ source.hydra
+>      setElement=λi.strings.concat2 "setElement:" (printInt32 i),
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^ source.hydra variable.other.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
@@ -1673,10 +1653,10 @@
 #                                     ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                 ^^ source.hydra
-#                                                   ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                      ^ source.hydra
-#                                                                       ^ source.hydra variable.other.hydra
-#                                                                        ^^^ source.hydra
+#                                                   ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                             ^ source.hydra
+#                                                              ^ source.hydra variable.other.hydra
+#                                                               ^^^ source.hydra
 >      typeApplicationBody=λ`_`."typeApplicationBody",
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
@@ -1723,7 +1703,7 @@
 >## Print a subtype path as its steps joined by '/'
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->term subtypePath = λpath.strings.join "/" (lists.map subtypeStep (paths.SubtypePath[] path))
+>term subtypePath = λpath.strings.join "/" (lists.map subtypeStep (SubtypePath[] path))
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -1743,10 +1723,10 @@
 #                                                    ^ source.hydra
 #                                                     ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                                ^^ source.hydra
-#                                                                  ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                   ^^^ source.hydra
-#                                                                                      ^^^^ source.hydra variable.other.hydra
-#                                                                                          ^^^ source.hydra
+#                                                                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                             ^^^ source.hydra
+#                                                                                ^^^^ source.hydra variable.other.hydra
+#                                                                                    ^^^ source.hydra
 >
 >## Print a subtype step in its round-trippable notation
 #^^ source.hydra comment.block.documentation.hydra
@@ -1757,15 +1737,15 @@
 #     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
->  λstep.cases(paths.SubtypeStep){
+>  λstep.cases(SubtypeStep){
 #^^ source.hydra
 #  ^ source.hydra keyword.operator.lambda.hydra
 #   ^^^^ source.hydra variable.parameter.hydra
 #       ^ source.hydra punctuation.separator.binder.hydra
 #        ^^^^^ source.hydra keyword.control.hydra
 #             ^ source.hydra
-#              ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                               ^^^ source.hydra
+#              ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^^ source.hydra
 >      annotatedBody=λ`_`."annotatedBody",
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^ source.hydra variable.other.hydra
@@ -1961,7 +1941,7 @@
 #                       ^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                  ^^ source.hydra
->      recordField=λname.strings.concat2 "recordField:" (model.Name[] name),
+>      recordField=λname.strings.concat2 "recordField:" (Name[] name),
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
@@ -1974,10 +1954,10 @@
 #                                         ^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                      ^^ source.hydra
-#                                                        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                  ^^^ source.hydra
-#                                                                     ^^^^ source.hydra variable.other.hydra
-#                                                                         ^^^ source.hydra
+#                                                        ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                            ^^^ source.hydra
+#                                                               ^^^^ source.hydra variable.other.hydra
+#                                                                   ^^^ source.hydra
 >      setElement=λ`_`."setElement",
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^ source.hydra variable.other.hydra
@@ -1991,7 +1971,7 @@
 #                       ^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                  ^^ source.hydra
->      unionField=λname.strings.concat2 "unionField:" (model.Name[] name),
+>      unionField=λname.strings.concat2 "unionField:" (Name[] name),
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^ source.hydra variable.other.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
@@ -2004,10 +1984,10 @@
 #                                        ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                    ^^ source.hydra
-#                                                      ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                ^^^ source.hydra
-#                                                                   ^^^^ source.hydra variable.other.hydra
-#                                                                       ^^^ source.hydra
+#                                                      ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                          ^^^ source.hydra
+#                                                             ^^^^ source.hydra variable.other.hydra
+#                                                                 ^^^ source.hydra
 >      wrapBody=λ`_`."wrapBody"}
 #^^^^^^ source.hydra
 #      ^^^^^^^^ source.hydra variable.other.hydra

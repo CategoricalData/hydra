@@ -6,8 +6,6 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->
->
 >## Layout options for hydra.core.json.writer.printJsonWith
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra

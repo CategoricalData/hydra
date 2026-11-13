@@ -6,38 +6,22 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.error.checking as checking
+>import hydra.core.error.checking
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                                ^ source.hydra
-#                                 ^^ source.hydra keyword.control.import.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.error.model as error.model
+>import hydra.core.error.model
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                             ^ source.hydra
-#                              ^^ source.hydra keyword.control.import.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.model as model
+>import hydra.core.model
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                       ^ source.hydra
-#                        ^^ source.hydra keyword.control.import.hydra
-#                          ^ source.hydra
-#                           ^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.paths as paths
+>import hydra.core.paths
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                       ^ source.hydra
-#                        ^^ source.hydra keyword.control.import.hydra
-#                          ^ source.hydra
-#                           ^^^^^ source.hydra entity.name.namespace.hydra
 >
 >## An error that occurred during decoding of a term
 #^^ source.hydra comment.block.documentation.hydra
@@ -82,13 +66,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  checking: checking.CheckingError,
+>  checking: CheckingError,
 #^^ source.hydra
 #  ^^^^^^^^ source.hydra variable.other.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                  ^^ source.hydra
+#            ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^ source.hydra
 >  ## An error that occurred during decoding of a term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -104,24 +88,24 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  duplicateBinding: error.model.DuplicateBindingError,
+>  duplicateBinding: DuplicateBindingError,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                  ^ source.hydra punctuation.separator.type.hydra
 #                   ^ source.hydra
-#                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                     ^^ source.hydra
+#                    ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                         ^^ source.hydra
 >  ## A duplicate field name error
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  duplicateField: error.model.DuplicateFieldError,
+>  duplicateField: DuplicateFieldError,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                 ^^ source.hydra
+#                  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^^ source.hydra
 >  ## An error that occurred while extracting a value from a term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -148,13 +132,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  invalidLiteral: error.model.InvalidLiteralError,
+>  invalidLiteral: InvalidLiteralError,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                 ^^ source.hydra
+#                  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^^ source.hydra
 >  ## Any other error
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -181,57 +165,57 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  undefinedField: error.model.UndefinedFieldError,
+>  undefinedField: UndefinedFieldError,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                 ^^ source.hydra
+#                  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^^ source.hydra
 >  ## A reference to an undefined term variable
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  undefinedTermVariable: error.model.UndefinedTermVariableError,
+>  undefinedTermVariable: UndefinedTermVariableError,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                               ^^ source.hydra
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^^ source.hydra
 >  ## A term variable whose type is not known
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  untypedTermVariable: error.model.UntypedTermVariableError,
+>  untypedTermVariable: UntypedTermVariableError,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                           ^^ source.hydra
+#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                               ^^ source.hydra
 >  ## An unexpected term variant
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  unexpectedTermVariant: error.model.UnexpectedTermVariantError,
+>  unexpectedTermVariant: UnexpectedTermVariantError,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                               ^^ source.hydra
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^^ source.hydra
 >  ## An unexpected type variant
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  unexpectedTypeVariant: error.model.UnexpectedTypeVariantError,
+>  unexpectedTypeVariant: UnexpectedTypeVariantError,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                               ^^ source.hydra
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^^ source.hydra
 >  ## A type unification error
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -350,13 +334,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  checking: checking.CheckingError,
+>  checking: CheckingError,
 #^^ source.hydra
 #  ^^^^^^^^ source.hydra variable.other.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                  ^^ source.hydra
+#            ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^ source.hydra
 >  ## A generic inference error carrying a message and a subterm path. Placeholder arm; sites should migrate to typed variants.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -396,13 +380,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  name: model.Name}
+>  name: Name}
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >
 >## Multiple fields with the same name were found in a record
 #^^ source.hydra comment.block.documentation.hydra
@@ -420,13 +404,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  fieldName: model.Name}
+>  fieldName: Name}
 #^^ source.hydra
 #  ^^^^^^^^^ source.hydra variable.other.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                       ^^ source.hydra
+#             ^^^^ source.hydra variable.other.hydra
+#                 ^^ source.hydra
 >
 >## No field with the expected name was present
 #^^ source.hydra comment.block.documentation.hydra
@@ -444,13 +428,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  fieldName: model.Name}
+>  fieldName: Name}
 #^^ source.hydra
 #  ^^^^^^^^^ source.hydra variable.other.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                       ^^ source.hydra
+#             ^^^^ source.hydra variable.other.hydra
+#                 ^^ source.hydra
 >
 >## No let binding with the expected name was present
 #^^ source.hydra comment.block.documentation.hydra
@@ -468,13 +452,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  name: model.Name}
+>  name: Name}
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >
 >## No primitive function with the expected name was registered in the graph
 #^^ source.hydra comment.block.documentation.hydra
@@ -492,13 +476,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  name: model.Name}
+>  name: Name}
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >
 >## A case statement was missing a case for the requested variant
 #^^ source.hydra comment.block.documentation.hydra
@@ -543,13 +527,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  path: paths.SubtermPath,
+>  path: SubtermPath,
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                         ^^ source.hydra
+#        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^ source.hydra
 >  ## A human-readable error message
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -696,24 +680,24 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  leftType: model.Type,
+>  leftType: Type,
 #^^ source.hydra
 #  ^^^^^^^^ source.hydra variable.other.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                      ^^ source.hydra
+#            ^^^^ source.hydra variable.other.hydra
+#                ^^ source.hydra
 >  ## The right-hand type in the unification
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  rightType: model.Type,
+>  rightType: Type,
 #^^ source.hydra
 #  ^^^^^^^^^ source.hydra variable.other.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                       ^^ source.hydra
+#             ^^^^ source.hydra variable.other.hydra
+#                 ^^ source.hydra
 >  ## A human-readable error message
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -742,13 +726,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  path: paths.SubtermPath,
+>  path: SubtermPath,
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                         ^^ source.hydra
+#        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^ source.hydra
 >  ## The underlying unification error
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

@@ -17,8 +17,6 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->
->
 >## Check whether two values are equal.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra

@@ -1,84 +1,131 @@
 ## Parsers for hydra.core.packaging types
 module hydra.core.parse.packaging
 
-import hydra.core.lib.chars as chars
-import hydra.core.lib.equality as equality
+import hydra.core.lib.chars
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.equality
 import hydra.core.lib.lists as lists
-import hydra.core.lib.logic as logic
+import hydra.core.lib.literals
+import hydra.core.lib.logic
 import hydra.core.lib.maps as maps
-import hydra.core.lib.math as math
+import hydra.core.lib.math
 import hydra.core.lib.optionals as optionals
-import hydra.core.lib.pairs as pairs
+import hydra.core.lib.pairs
 import hydra.core.lib.sets as sets
 import hydra.core.lib.strings as strings
-import hydra.core.model as model
-import hydra.core.names as names
-import hydra.core.packaging as packaging
+import hydra.core.model
+import hydra.core.names
+import hydra.core.packaging
 import hydra.core.parse.core as core
-import hydra.core.parse.docs as docs
+import hydra.core.parse.docs
 import hydra.core.parsers as parsers
-import hydra.core.parsing as parsing
-import hydra.core.positions as positions
-import hydra.core.rewriting as rewriting
-import hydra.core.strip as strip
-import hydra.core.typing as typing
-import hydra.core.util as util
+import hydra.core.parsing
+import hydra.core.positions
+import hydra.core.rewriting
+import hydra.core.strip
+import hydra.core.typing
+import hydra.core.util
+
+## Apply the cross-module record->injection correction to a definition's term bodies (#5/#837)
+term correctCrossModuleInjectionsInDefinition =
+  λunionNames,def.
+    let correct := correctCrossModuleInjectionsInTerm unionNames
+    in cases(Definition){
+      `type`=λ`_`.def,
+      `term`=λtd.Definition{
+            `term` = TermDefinition{
+              name = TermDefinition[name] td,
+              metadata = TermDefinition[metadata] td,
+              signature = TermDefinition[signature] td,
+              body = correct (TermDefinition[body] td)}},
+      `primitive`=λpd.Definition{
+            `primitive` = PrimitiveDefinition{
+              name = PrimitiveDefinition[name] pd,
+              metadata = PrimitiveDefinition[metadata] pd,
+              signature = PrimitiveDefinition[signature] pd,
+              isPure = PrimitiveDefinition[isPure] pd,
+              isTotal = PrimitiveDefinition[isTotal] pd,
+              defaultImplementation = optionals.map
+                  correct
+                  (PrimitiveDefinition[defaultImplementation]
+                    pd)}}}
+      def
+
+## Rewrite a one-field record over a KNOWN cross-module union type name into an injection (#5/#837)
+term correctCrossModuleInjectionsInTerm =
+  λunionNames,t0.
+    let rewrite := λrecurse,`term`.cases(Term){
+          `record`=λr.
+              let tname := Record[typeName] r in
+              let flds := Record[fields] r in
+              ifElse
+                (and
+                  (sets.member tname unionNames)
+                  (equal (lists.length flds) 1:int32))
+                (optionals.match
+                  (lists.head flds)
+                  (recurse `term`)
+                  (λf.recurse
+                      Term{
+                        `inject` = Injection{
+                          typeName = tname,
+                          field = f}}))
+                (recurse `term`),
+          `_`=recurse `term`}
+          `term`
+    in rewriteTerm rewrite t0
 
 ## Apply the record->injection correction to a definition's term bodies, per the type env (#809)
 term correctInjectionsInDefinition =
   λenv,def.
     let correct := correctInjectionsInTerm env
-    in cases(packaging.Definition){
+    in cases(Definition){
       `type`=λ`_`.def,
-      `term`=λtd.packaging.Definition{
-            `term` = packaging.TermDefinition{
-              name = packaging.TermDefinition[name] td,
-              metadata = packaging.TermDefinition[metadata] td,
-              signature = packaging.TermDefinition[signature] td,
-              body = correct
-                  (packaging.TermDefinition[body] td)}},
-      `primitive`=λpd.packaging.Definition{
-            `primitive` = packaging.PrimitiveDefinition{
-              name = packaging.PrimitiveDefinition[name] pd,
-              metadata = packaging.PrimitiveDefinition[metadata]
-                  pd,
-              signature = packaging.PrimitiveDefinition[signature]
-                  pd,
-              isPure = packaging.PrimitiveDefinition[isPure] pd,
-              isTotal = packaging.PrimitiveDefinition[isTotal]
-                  pd,
+      `term`=λtd.Definition{
+            `term` = TermDefinition{
+              name = TermDefinition[name] td,
+              metadata = TermDefinition[metadata] td,
+              signature = TermDefinition[signature] td,
+              body = correct (TermDefinition[body] td)}},
+      `primitive`=λpd.Definition{
+            `primitive` = PrimitiveDefinition{
+              name = PrimitiveDefinition[name] pd,
+              metadata = PrimitiveDefinition[metadata] pd,
+              signature = PrimitiveDefinition[signature] pd,
+              isPure = PrimitiveDefinition[isPure] pd,
+              isTotal = PrimitiveDefinition[isTotal] pd,
               defaultImplementation = optionals.map
                   correct
-                  (packaging.PrimitiveDefinition[defaultImplementation]
+                  (PrimitiveDefinition[defaultImplementation]
                     pd)}}}
       def
 
 ## Rewrite a one-field record over a union type into an injection, per the type env (#809)
 term correctInjectionsInTerm =
   λenv,t0.
-    let rewrite := λrecurse,`term`.cases(model.Term){
+    let rewrite := λrecurse,`term`.cases(Term){
           `record`=λr.
-              let tname := model.Record[typeName] r in
-              let flds := model.Record[fields] r in
+              let tname := Record[typeName] r in
+              let flds := Record[fields] r in
               optionals.match
                 (maps.lookup tname env)
                 (recurse `term`)
-                (λty.logic.ifElse
-                    (logic.and
+                (λty.ifElse
+                    (and
                       (isUnionType ty)
-                      (equality.equal (lists.length flds) 1:int32))
+                      (equal (lists.length flds) 1:int32))
                     (optionals.match
                       (lists.head flds)
                       (recurse `term`)
                       (λf.recurse
-                          model.Term{
-                            `inject` = model.Injection{
+                          Term{
+                            `inject` = Injection{
                               typeName = tname,
                               field = f}}))
                     (recurse `term`)),
           `_`=recurse `term`}
           `term`
-    in rewriting.rewriteTerm rewrite t0
+    in rewriteTerm rewrite t0
 
 ## Parse a single definition: type, term, or primitive
 term definitionParser =
@@ -101,20 +148,20 @@ term docCommentBlock =
                   (λ`_`.parsers.bind
                       (parsers.map
                         (λcs.strings.fromList cs)
-                        (parsers.many (parsers.satisfy (λc.logic.not (equality.equal c 10:int32)))))
+                        (parsers.many (parsers.satisfy (λc.not (equal c 10:int32)))))
                       (λs.parsers.bind
-                          (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.chars.isSpace c))))
+                          (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
                           (λ`_`.parsers.pure s)))))))
-      (λlns.logic.ifElse
+      (λlns.ifElse
           (lists.isEmpty lns)
           (parsers.pure none)
           (parsers.pure
             given((λmodName,lns.
               let sections := (λlns.
-                  let step := λacc,ln.logic.ifElse
+                  let step := λacc,ln.ifElse
                         (strings.isEmpty ln)
                         (lists.concat2 acc [[]])
-                        (let i := math.sub (lists.length acc) 1:int32 in
+                        (let i := sub (lists.length acc) 1:int32 in
                         let cur := optionals.withDefault
                             []
                             (lists.head (lists.drop i acc)) in
@@ -122,7 +169,7 @@ term docCommentBlock =
                           (lists.take i acc)
                           [lists.concat2 cur [ln]])
                   in lists.filter
-                    (λsec.logic.not (lists.isEmpty sec))
+                    (λsec.not (lists.isEmpty sec))
                     (lists.foldl step [[]] lns))
                   lns in
               let isKeySection := λsec.optionals.match
@@ -131,9 +178,9 @@ term docCommentBlock =
                     (λs.optionals.match
                         (strings.charAt 0:int32 s)
                         false
-                        (λc.equality.equal c 64:int32)) in
+                        (λc.equal c 64:int32)) in
               let keyLines := lists.concat (lists.filter isKeySection sections) in
-              let nonKeySections := lists.filter (λsec.logic.not (isKeySection sec)) sections in
+              let nonKeySections := lists.filter (λsec.not (isKeySection sec)) sections in
               let mdesc := optionals.map (λsec.strings.join "\n" sec) (lists.head nonKeySections) in
               let comments := optionals.withDefault
                   []
@@ -142,23 +189,18 @@ term docCommentBlock =
                   (lists.map
                     (λln.
                       let parts := strings.splitOn " " ln
-                      in logic.ifElse
-                        (equality.equal
-                          (optionals.withDefault "" (lists.head parts))
-                          "@seeAlso")
-                        (docs.parseDocAnnotation
-                          (strings.join " " (lists.drop 1:int32 parts)))
+                      in ifElse
+                        (equal (optionals.withDefault "" (lists.head parts)) "@seeAlso")
+                        (parseDocAnnotation (strings.join " " (lists.drop 1:int32 parts)))
                         none)
                     keyLines) in
               let avail := optionals.givens
                   (lists.map
                     ((λtag,ln.
                       let parts := strings.splitOn " " ln
-                      in logic.ifElse
-                        (equality.equal (optionals.withDefault "" (lists.head parts)) tag)
-                        given(packaging.Version{strings.join
-                          " "
-                          (lists.drop 1:int32 parts)})
+                      in ifElse
+                        (equal (optionals.withDefault "" (lists.head parts)) tag)
+                        given(Version{strings.join " " (lists.drop 1:int32 parts)})
                         none)
                       "@availableSince")
                     keyLines) in
@@ -166,9 +208,9 @@ term docCommentBlock =
                   (lists.map
                     ((λtag,ln.
                       let parts := strings.splitOn " " ln
-                      in logic.ifElse
-                        (equality.equal (optionals.withDefault "" (lists.head parts)) tag)
-                        given(packaging.Version{strings.join " " (lists.drop 1:int32 parts)})
+                      in ifElse
+                        (equal (optionals.withDefault "" (lists.head parts)) tag)
+                        given(Version{strings.join " " (lists.drop 1:int32 parts)})
                         none)
                       "@deprecatedSince")
                     keyLines) in
@@ -190,30 +232,28 @@ term docCommentBlock =
                       let stmt := strings.join
                           ": "
                           (lists.drop 1:int32 nameAndStmt) in
-                      logic.ifElse
-                        (equality.equal tag "@requirement")
-                        given(packaging.Provision{
+                      ifElse
+                        (equal tag "@requirement")
+                        given(Provision{
                           name = qualifyLocalName modName localName,
-                          kind = packaging.ProvisionKind{
-                            requirement},
+                          kind = ProvisionKind{requirement},
                           statement = stmt})
-                        (logic.ifElse
-                          (equality.equal tag "@recommendation")
-                          given(packaging.Provision{
+                        (ifElse
+                          (equal tag "@recommendation")
+                          given(Provision{
                             name = qualifyLocalName modName localName,
-                            kind = packaging.ProvisionKind{
-                              recommendation},
+                            kind = ProvisionKind{recommendation},
                             statement = stmt})
                           none))
                       modName)
                     keyLines) in
-              let mlifecycle := logic.ifElse
-                  (logic.and (lists.isEmpty avail) (lists.isEmpty depr))
+              let mlifecycle := ifElse
+                  (and (lists.isEmpty avail) (lists.isEmpty depr))
                   none
-                  given(packaging.LifecycleInfo{
+                  given(LifecycleInfo{
                     availableSince = lists.head avail,
                     deprecatedSince = lists.head depr}) in
-              packaging.EntityMetadata{
+              EntityMetadata{
                 description = mdesc,
                 comments = comments,
                 seeAlso = seeAlso,
@@ -227,24 +267,22 @@ term dottedIdentifier =
   parsers.map
     (λsegs.strings.join "." segs)
     (parsers.sepBy1
-      (parsers.map (λxs.strings.fromList xs) (parsers.some (parsers.satisfy (λc.chars.isAlphaNum c))))
+      (parsers.map (λxs.strings.fromList xs) (parsers.some (parsers.satisfy (λc.isAlphaNum c))))
       (parsers.char 46:int32))
 
 ## Expand a name's aliased leading prefix (longest match) to its full module name, per the given alias table
 term expandAliasedName =
   λaliases,n.
-    let s := model.Name[] n in
+    let s := Name[] n in
     let segs := strings.splitOn "." s in
     let segCount := lists.length segs in
     let tryLen := λk.
         let prefix := strings.join "." (lists.take k segs)
         in optionals.map
-          (λmodName.model.Name{strings.join
-              "."
-              (lists.cons (packaging.ModuleName[] modName) (lists.drop k segs))})
+          (λmodName.Name{strings.join "." (lists.cons (ModuleName[] modName) (lists.drop k segs))})
           (maps.lookup prefix aliases) in
     let prefixLens := lists.foldl
-        (λacc,`_seg`.lists.concat2 acc [math.add (lists.length acc) 1:int32])
+        (λacc,`_seg`.lists.concat2 acc [add (lists.length acc) 1:int32])
         []
         (optionals.withDefault [] (lists.init segs)) in
     let matches := optionals.mapOptional tryLen prefixLens in
@@ -254,50 +292,45 @@ term expandAliasedName =
 term expandAliasesInDefinition =
   λmodName,ownNames,aliases,def.
     let expandScheme := λts.
-        let vars := model.TypeScheme[variables] ts in
-        let boundNames := sets.fromList
-            (lists.map (λv.model.Name[] v) vars) in
-        model.TypeScheme{
+        let vars := TypeScheme[variables] ts in
+        let boundNames := sets.fromList (lists.map (λv.Name[] v) vars) in
+        TypeScheme{
           variables = vars,
           body = expandAliasesInTypeSelfAware
               modName
               ownNames
               boundNames
               aliases
-              (model.TypeScheme[body] ts),
-          constraints = model.TypeScheme[constraints] ts}
-    in cases(packaging.Definition){
-      `type`=λtd.packaging.Definition{
-            `type` = packaging.TypeDefinition{
-              name = packaging.TypeDefinition[name] td,
-              metadata = packaging.TypeDefinition[metadata] td,
-              body = expandScheme
-                  (packaging.TypeDefinition[body] td)}},
-      `term`=λtd.packaging.Definition{
-            `term` = packaging.TermDefinition{
-              name = packaging.TermDefinition[name] td,
-              metadata = packaging.TermDefinition[metadata] td,
+              (TypeScheme[body] ts),
+          constraints = TypeScheme[constraints] ts}
+    in cases(Definition){
+      `type`=λtd.Definition{
+            `type` = TypeDefinition{
+              name = TypeDefinition[name] td,
+              metadata = TypeDefinition[metadata] td,
+              body = expandScheme (TypeDefinition[body] td)}},
+      `term`=λtd.Definition{
+            `term` = TermDefinition{
+              name = TermDefinition[name] td,
+              metadata = TermDefinition[metadata] td,
               signature = optionals.map
                   (expandAliasesInTermSignature aliases)
-                  (packaging.TermDefinition[signature] td),
+                  (TermDefinition[signature] td),
               body = expandAliasesInTerm
                   aliases
-                  (packaging.TermDefinition[body] td)}},
-      `primitive`=λpd.packaging.Definition{
-            `primitive` = packaging.PrimitiveDefinition{
-              name = packaging.PrimitiveDefinition[name] pd,
-              metadata = packaging.PrimitiveDefinition[metadata]
-                  pd,
+                  (TermDefinition[body] td)}},
+      `primitive`=λpd.Definition{
+            `primitive` = PrimitiveDefinition{
+              name = PrimitiveDefinition[name] pd,
+              metadata = PrimitiveDefinition[metadata] pd,
               signature = expandAliasesInTermSignature
                   aliases
-                  (packaging.PrimitiveDefinition[signature]
-                    pd),
-              isPure = packaging.PrimitiveDefinition[isPure] pd,
-              isTotal = packaging.PrimitiveDefinition[isTotal]
-                  pd,
+                  (PrimitiveDefinition[signature] pd),
+              isPure = PrimitiveDefinition[isPure] pd,
+              isTotal = PrimitiveDefinition[isTotal] pd,
               defaultImplementation = optionals.map
                   (expandAliasesInTerm aliases)
-                  (packaging.PrimitiveDefinition[defaultImplementation]
+                  (PrimitiveDefinition[defaultImplementation]
                     pd)}}}
       def
 
@@ -305,66 +338,62 @@ term expandAliasesInDefinition =
 term expandAliasesInTerm =
   λaliases,t0.
     let expand := expandAliasedName aliases in
-    let rewrite := λrecurse,`term`.cases(model.Term){
-          variable=λn.model.Term{variable = expand n},
-          `project`=λp.model.Term{
-                `project` = model.Projection{
-                  typeName = expand (model.Projection[typeName] p),
-                  fieldName = expand (model.Projection[fieldName] p)}},
+    let rewrite := λrecurse,`term`.cases(Term){
+          variable=λn.Term{variable = expand n},
+          `project`=λp.Term{
+                `project` = Projection{
+                  typeName = expand (Projection[typeName] p),
+                  fieldName = expand (Projection[fieldName] p)}},
           `record`=λr.recurse
-                model.Term{
-                  `record` = model.Record{
-                    typeName = expand (model.Record[typeName] r),
-                    fields = model.Record[fields] r}},
-          `unwrap`=λn.model.Term{`unwrap` = expand n},
+                Term{
+                  `record` = Record{
+                    typeName = expand (Record[typeName] r),
+                    fields = Record[fields] r}},
+          `unwrap`=λn.Term{`unwrap` = expand n},
           `wrap`=λw.recurse
-                model.Term{
-                  `wrap` = model.WrappedTerm{
-                    typeName = expand (model.WrappedTerm[typeName] w),
-                    body = model.WrappedTerm[body] w}},
+                Term{
+                  `wrap` = WrappedTerm{
+                    typeName = expand (WrappedTerm[typeName] w),
+                    body = WrappedTerm[body] w}},
           `cases`=λcs.recurse
-                model.Term{
-                  `cases` = model.CaseStatement{
-                    typeName = expand
-                        (model.CaseStatement[typeName] cs),
-                    default = model.CaseStatement[default] cs,
-                    `cases` = model.CaseStatement[`cases`] cs}},
+                Term{
+                  `cases` = CaseStatement{
+                    typeName = expand (CaseStatement[typeName] cs),
+                    default = CaseStatement[default] cs,
+                    `cases` = CaseStatement[`cases`] cs}},
           `inject`=λinj.recurse
-                model.Term{
-                  `inject` = model.Injection{
-                    typeName = expand (model.Injection[typeName] inj),
-                    field = model.Injection[field] inj}},
+                Term{
+                  `inject` = Injection{
+                    typeName = expand (Injection[typeName] inj),
+                    field = Injection[field] inj}},
           `_`=recurse `term`}
           `term` in
-    rewriting.rewriteTerm rewrite t0
+    rewriteTerm rewrite t0
 
 ## Expand every aliased name reference inside a term signature's parameter and result types
 term expandAliasesInTermSignature =
   λaliases,sig.
     let expand := expandAliasesInType aliases
-    in typing.TermSignature{
-      typeParameters = typing.TermSignature[typeParameters] sig,
+    in TermSignature{
+      typeParameters = TermSignature[typeParameters] sig,
       parameters = lists.map
-          (λp.typing.Parameter{
-              name = typing.Parameter[name] p,
-              description = typing.Parameter[description] p,
-              `type` = expand (typing.Parameter[`type`] p),
-              isLazy = typing.Parameter[isLazy] p})
-          (typing.TermSignature[parameters] sig),
-      result = let r := typing.TermSignature[result] sig
-        in typing.Result{
-          description = typing.Result[description] r,
-          `type` = expand (typing.Result[`type`] r)}}
+          (λp.Parameter{
+              name = Parameter[name] p,
+              description = Parameter[description] p,
+              `type` = expand (Parameter[`type`] p),
+              isLazy = Parameter[isLazy] p})
+          (TermSignature[parameters] sig),
+      result = let r := TermSignature[result] sig
+        in Result{description = Result[description] r, `type` = expand (Result[`type`] r)}}
 
 ## Expand every aliased name reference inside a type, per the given alias table
 term expandAliasesInType =
   λaliases,typ0.
-    let rewrite := λrecurse,typ.cases(model.Type){
-          variable=λn.model.Type{
-                variable = expandAliasedName aliases n},
+    let rewrite := λrecurse,typ.cases(Type){
+          variable=λn.Type{variable = expandAliasedName aliases n},
           `_`=recurse typ}
           typ
-    in rewriting.rewriteType rewrite typ0
+    in rewriteType rewrite typ0
 
 ## Expand aliased AND bare self-referencing names inside a type, tracking bound type variables and the module's own declared names
 term expandAliasesInTypeSelfAware =
@@ -374,89 +403,83 @@ term expandAliasesInTypeSelfAware =
 term expandAliasesInTypeSelfAwareGo =
   λmodName,aliases,ownNames,bound,typ.
     let recurse := expandAliasesInTypeSelfAwareGo modName aliases ownNames bound in
-    let forField := λfield.model.FieldType{
-          name = model.FieldType[name] field,
-          `type` = recurse (model.FieldType[`type`] field)} in
-    cases(model.Type){
-      annotated=λat.model.Type{
-            annotated = model.AnnotatedType{
-              body = recurse (model.AnnotatedType[body] at),
-              annotation = model.AnnotatedType[annotation] at}},
-      application=λapp.model.Type{
-            application = model.ApplicationType{
-              function = recurse
-                  (model.ApplicationType[function] app),
-              argument = recurse
-                  (model.ApplicationType[argument] app)}},
-      `effect`=λt.model.Type{`effect` = recurse t},
-      `either`=λet.model.Type{
-            `either` = model.EitherType{
-              `left` = recurse (model.EitherType[`left`] et),
-              `right` = recurse (model.EitherType[`right`] et)}},
+    let forField := λfield.FieldType{
+          name = FieldType[name] field,
+          `type` = recurse (FieldType[`type`] field)} in
+    cases(Type){
+      annotated=λat.Type{
+            annotated = AnnotatedType{
+              body = recurse (AnnotatedType[body] at),
+              annotation = AnnotatedType[annotation] at}},
+      application=λapp.Type{
+            application = ApplicationType{
+              function = recurse (ApplicationType[function] app),
+              argument = recurse (ApplicationType[argument] app)}},
+      `effect`=λt.Type{`effect` = recurse t},
+      `either`=λet.Type{
+            `either` = EitherType{
+              `left` = recurse (EitherType[`left`] et),
+              `right` = recurse (EitherType[`right`] et)}},
       `forall`=λft.
-          let param := model.ForallType[parameter] ft in
-          let `bound'` := sets.insert (model.Name[] param) bound in
-          model.Type{
-            `forall` = model.ForallType{
+          let param := ForallType[parameter] ft in
+          let `bound'` := sets.insert (Name[] param) bound in
+          Type{
+            `forall` = ForallType{
               parameter = param,
               body = expandAliasesInTypeSelfAwareGo
                   modName
                   aliases
                   ownNames
                   `bound'`
-                  (model.ForallType[body] ft)}},
-      function=λfun.model.Type{
-            function = model.FunctionType{
-              domain = recurse (model.FunctionType[domain] fun),
-              codomain = recurse
-                  (model.FunctionType[codomain] fun)}},
-      `list`=λt.model.Type{`list` = recurse t},
-      literal=λlt.model.Type{literal = lt},
-      `map`=λmt.model.Type{
-            `map` = model.MapType{
-              keys = recurse (model.MapType[keys] mt),
-              values = recurse (model.MapType[values] mt)}},
-      `optional`=λt.model.Type{`optional` = recurse t},
-      pair=λpt.model.Type{
-            pair = model.PairType{
-              first = recurse (model.PairType[first] pt),
-              second = recurse (model.PairType[second] pt)}},
-      `record`=λrt.model.Type{`record` = lists.map forField rt},
-      `set`=λt.model.Type{`set` = recurse t},
-      `union`=λrt.model.Type{`union` = lists.map forField rt},
-      `unit`=λ`_`.model.Type{`unit`},
-      variable=λn.model.Type{
+                  (ForallType[body] ft)}},
+      function=λfun.Type{
+            function = FunctionType{
+              domain = recurse (FunctionType[domain] fun),
+              codomain = recurse (FunctionType[codomain] fun)}},
+      `list`=λt.Type{`list` = recurse t},
+      literal=λlt.Type{literal = lt},
+      `map`=λmt.Type{
+            `map` = MapType{
+              keys = recurse (MapType[keys] mt),
+              values = recurse (MapType[values] mt)}},
+      `optional`=λt.Type{`optional` = recurse t},
+      pair=λpt.Type{
+            pair = PairType{
+              first = recurse (PairType[first] pt),
+              second = recurse (PairType[second] pt)}},
+      `record`=λrt.Type{`record` = lists.map forField rt},
+      `set`=λt.Type{`set` = recurse t},
+      `union`=λrt.Type{`union` = lists.map forField rt},
+      `unit`=λ`_`.Type{`unit`},
+      variable=λn.Type{
             variable = expandTypeNameRefSelfAware
                 modName
                 aliases
                 ownNames
                 bound
                 n},
-      `void`=λ`_`.model.Type{`void`},
-      `wrap`=λwt.model.Type{`wrap` = recurse wt}}
+      `void`=λ`_`.Type{`void`},
+      `wrap`=λwt.Type{`wrap` = recurse wt}}
       typ
 
 ## Expand a single type-level name reference, treating a bare unbound name as a self-reference only when it is one of the module's own declared names
 term expandTypeNameRefSelfAware =
   λmodName,aliases,ownNames,bound,n.
-    let s := model.Name[] n
-    in logic.ifElse
+    let s := Name[] n
+    in ifElse
       (sets.member s bound)
       n
       (let expanded := expandAliasedName aliases n
-      in logic.ifElse
-        (equality.equal expanded n)
-        (logic.ifElse
-          (logic.and
-            (equality.equal (lists.length (strings.splitOn "." s)) 1:int32)
-            (sets.member s ownNames))
+      in ifElse
+        (equal expanded n)
+        (ifElse
+          (and (equal (lists.length (strings.splitOn "." s)) 1:int32) (sets.member s ownNames))
           (qualifyLocalName modName s)
           n)
         expanded)
 
 ## Parse a bare dotted name (TODO: backtick-escaped form per syntax.md 2.4)
-term identifier =
-  token (parsers.map (λxs.strings.fromList xs) (parsers.some (parsers.satisfy (λc.chars.isAlphaNum c))))
+term identifier = token (parsers.map (λxs.strings.fromList xs) (parsers.some (parsers.satisfy (λc.isAlphaNum c))))
 
 ## Parse an import declaration, returning its ModuleDependency paired with the optional alias
 term importDecl =
@@ -468,10 +491,10 @@ term importDecl =
             (parsers.optional (parsers.bind (keyword "as") (λ`_`.token dottedIdentifier)))
             (λmalias.parsers.bind
                 (parsers.optional modulePackage)
-                (λmpkg.parsers.pure (packaging.ModuleDependency{`module` = modName, package = mpkg}, malias)))))
+                (λmpkg.parsers.pure (ModuleDependency{`module` = modName, package = mpkg}, malias)))))
 
 ## True iff a type (after stripping foralls/annotations) is a union type (#809)
-term isUnionType = λtyp.cases(model.Type){`union`=λ`_`.true, `_`=false} (strip.deannotateTypeParameters typ)
+term isUnionType = λtyp.cases(Type){`union`=λ`_`.true, `_`=false} (deannotateTypeParameters typ)
 
 ## Parse a specific keyword, followed by optional trailing whitespace
 term keyword = λkw.token (parsers.string kw)
@@ -480,10 +503,10 @@ term keyword = λkw.token (parsers.string kw)
 term moduleHeader = parsers.bind (keyword "module") (λ`_`.token moduleName)
 
 ## Parse a dotted module name
-term moduleName = parsers.map (λs.wrap(packaging.ModuleName){s}) dottedIdentifier
+term moduleName = parsers.map (λs.wrap(ModuleName){s}) dottedIdentifier
 
 ## Parse a 'from <packageName>' clause
-term modulePackage = parsers.bind (keyword "from") (λ`_`.parsers.map (λs.wrap(packaging.PackageName){s}) identifier)
+term modulePackage = parsers.bind (keyword "from") (λ`_`.parsers.map (λs.wrap(PackageName){s}) identifier)
 
 ## Parse a complete module: ['##' doc comment] header, imports, then definitions. Aliased name references inside definition bodies (per syntax.md #6.3's 'import X as alias' convenience) are expanded to their fully-qualified form after parsing, using the alias table built from this module's own import declarations -- see 'expandAliasesInDefinition'. The module's own leading doc comment is captured as plain lines (via 'docCommentLines') BEFORE 'moduleHeader' runs -- unlike a definition's doc comment ('docCommentBlock'), which already has its enclosing module's name in scope to qualify provision names with, the module-level comment precedes the very 'module ...' line that introduces that name; the lines are captured first and only turned into an 'EntityMetadata' (via 'docCommentLinesToMetadata') once 'modName' is available. After alias expansion, the record/injection sugar ambiguity (#809) is corrected against a type env built from the (now fully-qualified) type definitions.
 term moduleParser =
@@ -496,11 +519,9 @@ term moduleParser =
             (λ`_`.parsers.bind
                 (parsers.optional (parsers.char 32:int32))
                 (λ`_`.parsers.bind
-                    (parsers.map
-                      (λcs.strings.fromList cs)
-                      (parsers.many (parsers.satisfy (λc.logic.not (equality.equal c 10:int32)))))
+                    (parsers.map (λcs.strings.fromList cs) (parsers.many (parsers.satisfy (λc.not (equal c 10:int32)))))
                     (λs.parsers.bind
-                        (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.chars.isSpace c))))
+                        (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
                         (λ`_`.parsers.pure s)))))))
     (λlns.parsers.bind
         moduleHeader
@@ -511,18 +532,18 @@ term moduleParser =
                   (optionals.givens
                     (lists.map
                       (λp.optionals.map
-                          (λalias.(alias, packaging.ModuleDependency[`module`] (pairs.first p)))
-                          (pairs.second p))
+                          (λalias.(alias, ModuleDependency[`module`] (first p)))
+                          (second p))
                       imports)) in
-              let mmeta := logic.ifElse
+              let mmeta := ifElse
                   (lists.isEmpty lns)
                   none
                   given((λmodName,lns.
                     let sections := (λlns.
-                        let step := λacc,ln.logic.ifElse
+                        let step := λacc,ln.ifElse
                               (strings.isEmpty ln)
                               (lists.concat2 acc [[]])
-                              (let i := math.sub (lists.length acc) 1:int32 in
+                              (let i := sub (lists.length acc) 1:int32 in
                               let cur := optionals.withDefault
                                   []
                                   (lists.head (lists.drop i acc)) in
@@ -530,7 +551,7 @@ term moduleParser =
                                 (lists.take i acc)
                                 [lists.concat2 cur [ln]])
                         in lists.filter
-                          (λsec.logic.not (lists.isEmpty sec))
+                          (λsec.not (lists.isEmpty sec))
                           (lists.foldl step [[]] lns))
                         lns in
                     let isKeySection := λsec.optionals.match
@@ -539,10 +560,10 @@ term moduleParser =
                           (λs.optionals.match
                               (strings.charAt 0:int32 s)
                               false
-                              (λc.equality.equal c 64:int32)) in
+                              (λc.equal c 64:int32)) in
                     let keyLines := lists.concat (lists.filter isKeySection sections) in
                     let nonKeySections := lists.filter
-                        (λsec.logic.not (isKeySection sec))
+                        (λsec.not (isKeySection sec))
                         sections in
                     let mdesc := optionals.map
                         (λsec.strings.join "\n" sec)
@@ -554,11 +575,11 @@ term moduleParser =
                         (lists.map
                           (λln.
                             let parts := strings.splitOn " " ln
-                            in logic.ifElse
-                              (equality.equal
+                            in ifElse
+                              (equal
                                 (optionals.withDefault "" (lists.head parts))
                                 "@seeAlso")
-                              (docs.parseDocAnnotation
+                              (parseDocAnnotation
                                 (strings.join " " (lists.drop 1:int32 parts)))
                               none)
                           keyLines) in
@@ -566,11 +587,11 @@ term moduleParser =
                         (lists.map
                           ((λtag,ln.
                             let parts := strings.splitOn " " ln
-                            in logic.ifElse
-                              (equality.equal
+                            in ifElse
+                              (equal
                                 (optionals.withDefault "" (lists.head parts))
                                 tag)
-                              given(packaging.Version{strings.join
+                              given(Version{strings.join
                                 " "
                                 (lists.drop 1:int32 parts)})
                               none)
@@ -580,11 +601,11 @@ term moduleParser =
                         (lists.map
                           ((λtag,ln.
                             let parts := strings.splitOn " " ln
-                            in logic.ifElse
-                              (equality.equal
+                            in ifElse
+                              (equal
                                 (optionals.withDefault "" (lists.head parts))
                                 tag)
-                              given(packaging.Version{strings.join
+                              given(Version{strings.join
                                 " "
                                 (lists.drop 1:int32 parts)})
                               none)
@@ -608,32 +629,30 @@ term moduleParser =
                             let stmt := strings.join
                                 ": "
                                 (lists.drop 1:int32 nameAndStmt) in
-                            logic.ifElse
-                              (equality.equal tag "@requirement")
-                              given(packaging.Provision{
+                            ifElse
+                              (equal tag "@requirement")
+                              given(Provision{
                                 name = qualifyLocalName modName localName,
-                                kind = packaging.ProvisionKind{
+                                kind = ProvisionKind{
                                   requirement},
                                 statement = stmt})
-                              (logic.ifElse
-                                (equality.equal tag "@recommendation")
-                                given(packaging.Provision{
+                              (ifElse
+                                (equal tag "@recommendation")
+                                given(Provision{
                                   name = qualifyLocalName modName localName,
-                                  kind = packaging.ProvisionKind{
+                                  kind = ProvisionKind{
                                     recommendation},
                                   statement = stmt})
                                 none))
                             modName)
                           keyLines) in
-                    let mlifecycle := logic.ifElse
-                        (logic.and
-                          (lists.isEmpty avail)
-                          (lists.isEmpty depr))
+                    let mlifecycle := ifElse
+                        (and (lists.isEmpty avail) (lists.isEmpty depr))
                         none
-                        given(packaging.LifecycleInfo{
+                        given(LifecycleInfo{
                           availableSince = lists.head avail,
                           deprecatedSince = lists.head depr}) in
-                    packaging.EntityMetadata{
+                    EntityMetadata{
                       description = mdesc,
                       comments = comments,
                       seeAlso = seeAlso,
@@ -645,32 +664,70 @@ term moduleParser =
                 (λdefs.
                   let ownNames := sets.fromList
                       (lists.map
-                        (λdef.names.localNameOf
-                            (cases(packaging.Definition){
-                              `type`=λtd.packaging.TypeDefinition[name] td,
-                              `term`=λtd.packaging.TermDefinition[name] td,
-                              `primitive`=λpd.packaging.PrimitiveDefinition[name] pd}
+                        (λdef.localNameOf
+                            (cases(Definition){
+                              `type`=λtd.TypeDefinition[name] td,
+                              `term`=λtd.TermDefinition[name] td,
+                              `primitive`=λpd.PrimitiveDefinition[name] pd}
                               def))
                         defs) in
                   let expanded := lists.map (expandAliasesInDefinition modName ownNames aliases) defs in
                   let env := typeEnvFromDefinitions expanded in
-                  packaging.Module{
+                  Module{
                     name = modName,
                     metadata = mmeta,
-                    dependencies = lists.map (λp.pairs.first p) imports,
+                    dependencies = lists.map (λp.first p) imports,
                     definitions = lists.map (correctInjectionsInDefinition env) expanded})
                 (parsers.many (definitionParser modName)))))
 
 ## Parse a complete module from a string, requiring the parse to consume all input
 term parseModule =
-  λinput.cases(parsing.ParseResult){
-      success=λs.logic.ifElse
-            (lists.isEmpty
-              (parsing.ParseInput[codepoints] (parsing.ParseSuccess[remainder] s)))
-            right(parsing.ParseSuccess[value] s)
+  λinput.cases(ParseResult){
+      success=λs.ifElse
+            (lists.isEmpty (ParseInput[codepoints] (ParseSuccess[remainder] s)))
+            right(ParseSuccess[value] s)
             left("trailing input after module"),
-      failure=λe.left(parsing.ParseError[message] e)}
+      failure=λe.left(ParseError[message] e)}
       (parsers.runParser (parsers.bind whitespace (λ`_`.moduleParser)) input)
+
+## Parse a complete module from a string, resolving bare name references and cross-module union injections against the universe (#5/#711/#837)
+term parseModuleWith =
+  λuniverse,unionTypeNames,input.eithers.bind
+      (parseModule input)
+      (λparsed.
+        let modName := Module[name] parsed in
+        let ownNames := sets.fromList
+            (lists.map
+              (λdef.localNameOf
+                  (cases(Definition){
+                    `type`=λtd.TypeDefinition[name] td,
+                    `term`=λtd.TermDefinition[name] td,
+                    `primitive`=λpd.PrimitiveDefinition[name] pd}
+                    def))
+              (Module[definitions] parsed)) in
+        let declaredImportModNames := lists.map
+            (λd.ModuleDependency[`module`] d)
+            (Module[dependencies] parsed) in
+        let scopedUniverse := maps.fromList
+            (optionals.givens
+              (lists.map
+                (λnm.optionals.map
+                    (λdeclared.(nm, declared))
+                    (maps.lookup nm universe))
+                declaredImportModNames)) in
+        eithers.bind
+          (eithers.mapList
+            (resolveNameRefsInDefinitionWith modName ownNames scopedUniverse)
+            (Module[definitions] parsed))
+          (λrdefs.
+            let cdefs := lists.map
+                (correctCrossModuleInjectionsInDefinition unionTypeNames)
+                rdefs
+            in right(Module{
+              name = modName,
+              metadata = Module[metadata] parsed,
+              dependencies = Module[dependencies] parsed,
+              definitions = cdefs})))
 
 ## Parse a primitive definition: ['##' doc comment] '[impure] [partial] primitive name : termSignature [= term]'
 term primitiveDefinitionParser =
@@ -679,8 +736,8 @@ term primitiveDefinitionParser =
       (λmmeta.parsers.bind
           primitiveModifiers
           (λmods.
-            let isPure := pairs.first mods in
-            let isTotal := pairs.second mods in
+            let isPure := first mods in
+            let isTotal := second mods in
             parsers.bind
               (keyword "primitive")
               (λ`_`.parsers.bind
@@ -690,8 +747,8 @@ term primitiveDefinitionParser =
                       (λ`_`.parsers.bind
                           core.termSignature
                           (λsig.parsers.map
-                              (λmimpl.packaging.Definition{
-                                  `primitive` = packaging.PrimitiveDefinition{
+                              (λmimpl.Definition{
+                                  `primitive` = PrimitiveDefinition{
                                     name = qualifyLocalName modName local,
                                     metadata = mmeta,
                                     signature = sig,
@@ -699,9 +756,7 @@ term primitiveDefinitionParser =
                                     isTotal = isTotal,
                                     defaultImplementation = mimpl}})
                               (parsers.optional
-                                (parsers.bind
-                                  (keyword "=")
-                                  (λ`_`.token (parsers.map positions.stripSpans core.term))))))))))
+                                (parsers.bind (keyword "=") (λ`_`.token (parsers.map stripSpans core.term))))))))))
 
 ## Parse the optional 'impure'/'partial' primitive-definition modifier keywords
 term primitiveModifiers =
@@ -709,26 +764,416 @@ term primitiveModifiers =
     (parsers.optional (keyword "impure"))
     (λmimp.parsers.bind
         (parsers.optional (keyword "partial"))
-        (λmpar.parsers.pure (logic.not (optionals.isGiven mimp), logic.not (optionals.isGiven mpar))))
+        (λmpar.parsers.pure (not (optionals.isGiven mimp), not (optionals.isGiven mpar))))
 
 ## Qualify a bare local identifier into a full Name under the given module
-term qualifyLocalName =
-  λmodName,local.names.unqualifyName util.QualifiedName{moduleName = given(modName), local = local}
+term qualifyLocalName = λmodName,local.unqualifyName QualifiedName{moduleName = given(modName), local = local}
+
+## Resolve a single bare name reference against the printer's universe: own-definitions first, then the unique owning import, hard error on zero or multiple owners (#5/#711)
+term resolveNameRefWith =
+  λmodName,ownNames,universe,n.
+    let s := Name[] n
+    in ifElse
+      (not (equal (lists.length (strings.splitOn "." s)) 1:int32))
+      right(n)
+      (ifElse
+        (sets.member s ownNames)
+        right(n)
+        (let owners := lists.filter
+            (λentry.and
+                (not (equal (first entry) modName))
+                (sets.member s (sets.map localNameOf (second entry))))
+            (maps.toList universe)
+        in ifElse
+          (equal (lists.length owners) 1:int32)
+          (let owner := first (optionals.withDefault (modName, sets.empty) (lists.head owners))
+          in right(qname owner s))
+          (ifElse
+            (equal (lists.length owners) 0:int32)
+            left(strings.concat
+              [
+                "unresolved bare name reference: '",
+                s,
+                "' is not a local binder, not one of the module's own definitions, and not declared by any module in scope"])
+            left(strings.concat
+              [
+                "ambiguous bare name reference: '",
+                s,
+                "' is declared by ",
+                printInt32 (lists.length owners),
+                " different imported modules in scope"]))))
+
+## Resolve every remaining bare name reference inside a definition's body/signature against the printer's universe
+term resolveNameRefsInDefinitionWith =
+  λmodName,ownNames,universe,def.
+    let resolveScheme := λts.
+        let vars := TypeScheme[variables] ts in
+        let boundNames := sets.fromList (lists.map (λv.Name[] v) vars) in
+        eithers.map
+          (λb.TypeScheme{
+              variables = vars,
+              body = b,
+              constraints = TypeScheme[constraints] ts})
+          (resolveNameRefsInTypeWith
+            modName
+            ownNames
+            universe
+            boundNames
+            (TypeScheme[body] ts))
+    in cases(Definition){
+      `type`=λtd.eithers.map
+            (λts.Definition{
+                `type` = TypeDefinition{
+                  name = TypeDefinition[name] td,
+                  metadata = TypeDefinition[metadata] td,
+                  body = ts}})
+            (resolveScheme (TypeDefinition[body] td)),
+      `term`=λtd.eithers.bind
+            (eithers.mapOptional
+              (resolveNameRefsInTermSignatureWith
+                modName
+                ownNames
+                universe)
+              (TermDefinition[signature] td))
+            (λrsig.eithers.map
+                (λrbody.Definition{
+                    `term` = TermDefinition{
+                      name = TermDefinition[name] td,
+                      metadata = TermDefinition[metadata] td,
+                      signature = rsig,
+                      body = rbody}})
+                (resolveNameRefsInTermWith
+                  modName
+                  ownNames
+                  universe
+                  sets.empty
+                  (TermDefinition[body] td))),
+      `primitive`=λpd.eithers.bind
+            (resolveNameRefsInTermSignatureWith
+              modName
+              ownNames
+              universe
+              (PrimitiveDefinition[signature] pd))
+            (λrsig.eithers.map
+                (λrimpl.Definition{
+                    `primitive` = PrimitiveDefinition{
+                      name = PrimitiveDefinition[name] pd,
+                      metadata = PrimitiveDefinition[metadata] pd,
+                      signature = rsig,
+                      isPure = PrimitiveDefinition[isPure] pd,
+                      isTotal = PrimitiveDefinition[isTotal] pd,
+                      defaultImplementation = rimpl}})
+                (eithers.mapOptional
+                  (resolveNameRefsInTermWith
+                    modName
+                    ownNames
+                    universe
+                    sets.empty)
+                  (PrimitiveDefinition[defaultImplementation] pd)))}
+      def
+
+## Resolve bare name references inside a term signature's parameter and result types against the printer's universe
+term resolveNameRefsInTermSignatureWith =
+  λmodName,ownNames,universe,sig.
+    let boundNames := sets.fromList
+        (lists.map
+          (λtp.Name[] (TypeParameter[name] tp))
+          (TermSignature[typeParameters] sig)) in
+    let resolveT := resolveNameRefsInTypeWith modName ownNames universe boundNames in
+    let mapParam := λp.eithers.map
+          (λt.Parameter{
+              name = Parameter[name] p,
+              description = Parameter[description] p,
+              `type` = t,
+              isLazy = Parameter[isLazy] p})
+          (resolveT (Parameter[`type`] p)) in
+    eithers.bind
+      (eithers.mapList mapParam (TermSignature[parameters] sig))
+      (λrparams.
+        let r := TermSignature[result] sig
+        in eithers.map
+          (λrt.TermSignature{
+              typeParameters = TermSignature[typeParameters] sig,
+              parameters = rparams,
+              result = Result{
+                description = Result[description] r,
+                `type` = rt}})
+          (resolveT (Result[`type`] r)))
+
+## Recursively resolve bare name references inside a term against the printer's universe, tracking bound term variables
+term resolveNameRefsInTermWith =
+  λmodName,ownNames,universe,bound,`term`.
+    let recurse := resolveNameRefsInTermWith modName ownNames universe in
+    let resolveN := resolveNameRefWith modName ownNames universe in
+    let forField := λboundHere,field.eithers.map
+          (λt.Field{
+              name = Field[name] field,
+              `term` = t})
+          (recurse boundHere (Field[`term`] field)) in
+    let forCaseAlternative := λboundHere,alt.eithers.map
+          (λh.CaseAlternative{
+              name = CaseAlternative[name] alt,
+              handler = h})
+          (recurse
+            boundHere
+            (CaseAlternative[handler] alt)) in
+    cases(Term){
+      annotated=λat.eithers.map
+            (λb.Term{
+                annotated = AnnotatedTerm{
+                  body = b,
+                  annotation = AnnotatedTerm[annotation] at}})
+            (recurse bound (AnnotatedTerm[body] at)),
+      application=λa.eithers.bind
+            (recurse bound (Application[function] a))
+            (λf.eithers.map
+                (λx.Term{
+                    application = Application{
+                      function = f,
+                      argument = x}})
+                (recurse bound (Application[argument] a))),
+      `cases`=λcs.eithers.bind
+            (resolveN (CaseStatement[typeName] cs))
+            (λtn.eithers.bind
+                (eithers.mapOptional
+                  (recurse bound)
+                  (CaseStatement[default] cs))
+                (λrdflt.eithers.map
+                    (λrcases.Term{
+                        `cases` = CaseStatement{
+                          typeName = tn,
+                          default = rdflt,
+                          `cases` = rcases}})
+                    (eithers.mapList
+                      (forCaseAlternative bound)
+                      (CaseStatement[`cases`] cs)))),
+      `either`=λe.eithers.bind
+            (eithers.either
+              (λl.eithers.map (λx.left(x)) (recurse bound l))
+              (λr.eithers.map (λx.right(x)) (recurse bound r))
+              e)
+            (λre.right(Term{`either` = re})),
+      lambda=λl.
+          let param := Lambda[parameter] l in
+          let `bound'` := sets.insert (Name[] param) bound in
+          eithers.map
+            (λb.Term{
+                lambda = Lambda{
+                  parameter = param,
+                  domain = Lambda[domain] l,
+                  body = b}})
+            (resolveNameRefsInTermWith
+              modName
+              ownNames
+              universe
+              `bound'`
+              (Lambda[body] l)),
+      `let`=λlt.
+          let bindingNames := sets.fromList
+              (lists.map
+                (λb.Name[] (Binding[name] b))
+                (Let[bindings] lt)) in
+          let `bound'` := sets.union bound bindingNames in
+          let mapBinding := λb.eithers.map
+                (λt.Binding{
+                    name = Binding[name] b,
+                    `term` = t,
+                    typeScheme = Binding[typeScheme] b})
+                (resolveNameRefsInTermWith
+                  modName
+                  ownNames
+                  universe
+                  `bound'`
+                  (Binding[`term`] b)) in
+          eithers.bind
+            (eithers.mapList mapBinding (Let[bindings] lt))
+            (λrbindings.eithers.map
+                (λrenv.Term{
+                    `let` = Let{
+                      bindings = rbindings,
+                      body = renv}})
+                (resolveNameRefsInTermWith
+                  modName
+                  ownNames
+                  universe
+                  `bound'`
+                  (Let[body] lt))),
+      `list`=λels.eithers.map
+            (λx.Term{`list` = x})
+            (eithers.mapList (recurse bound) els),
+      literal=λv.right(Term{literal = v}),
+      `map`=λm.
+          let forPair := λp.eithers.bind
+                (recurse bound (first p))
+                (λk.eithers.map
+                    (λv.(k, v))
+                    (recurse bound (second p)))
+          in eithers.map
+            (λrpairs.Term{`map` = maps.fromList rpairs})
+            (eithers.mapList forPair (maps.toList m)),
+      `optional`=λm.eithers.map
+            (λx.Term{`optional` = x})
+            (eithers.mapOptional (recurse bound) m),
+      pair=λp.eithers.bind
+            (recurse bound (first p))
+            (λf.eithers.map
+                (λs.Term{pair = (f, s)})
+                (recurse bound (second p))),
+      `project`=λp.eithers.map
+            (λtn.Term{
+                `project` = Projection{
+                  typeName = tn,
+                  fieldName = Projection[fieldName] p}})
+            (resolveN (Projection[typeName] p)),
+      `record`=λr.eithers.bind
+            (resolveN (Record[typeName] r))
+            (λtn.eithers.map
+                (λrfields.Term{
+                    `record` = Record{
+                      typeName = tn,
+                      fields = rfields}})
+                (eithers.mapList (forField bound) (Record[fields] r))),
+      `set`=λs.eithers.map
+            (λrlist.Term{`set` = sets.fromList rlist})
+            (eithers.mapList (recurse bound) (sets.toList s)),
+      typeApplication=λtt.eithers.map
+            (λb.Term{
+                typeApplication = TypeApplicationTerm{
+                  body = b,
+                  `type` = TypeApplicationTerm[`type`] tt}})
+            (recurse bound (TypeApplicationTerm[body] tt)),
+      typeLambda=λta.eithers.map
+            (λb.Term{
+                typeLambda = TypeLambda{
+                  parameter = TypeLambda[parameter] ta,
+                  body = b}})
+            (recurse bound (TypeLambda[body] ta)),
+      `inject`=λinj.eithers.bind
+            (resolveN (Injection[typeName] inj))
+            (λtn.eithers.map
+                (λrfield.Term{
+                    `inject` = Injection{
+                      typeName = tn,
+                      field = rfield}})
+                (forField bound (Injection[field] inj))),
+      `unit`=λ`_`.right(Term{`unit`}),
+      `unwrap`=λn.eithers.map (λx.Term{`unwrap` = x}) (resolveN n),
+      variable=λv.ifElse
+            (sets.member (Name[] v) bound)
+            right(Term{variable = v})
+            (eithers.map (λx.Term{variable = x}) (resolveN v)),
+      `wrap`=λwt.eithers.bind
+            (resolveN (WrappedTerm[typeName] wt))
+            (λtn.eithers.map
+                (λb.Term{
+                    `wrap` = WrappedTerm{
+                      typeName = tn,
+                      body = b}})
+                (recurse bound (WrappedTerm[body] wt)))}
+      `term`
+
+## Recursively resolve bare name references inside a type against the printer's universe, tracking bound type variables
+term resolveNameRefsInTypeWith =
+  λmodName,ownNames,universe,bound,typ.
+    let recurse := resolveNameRefsInTypeWith modName ownNames universe in
+    let forField := λboundHere,field.eithers.map
+          (λt.FieldType{
+              name = FieldType[name] field,
+              `type` = t})
+          (recurse boundHere (FieldType[`type`] field)) in
+    cases(Type){
+      annotated=λat.eithers.map
+            (λb.Type{
+                annotated = AnnotatedType{
+                  body = b,
+                  annotation = AnnotatedType[annotation] at}})
+            (recurse bound (AnnotatedType[body] at)),
+      application=λapp.eithers.bind
+            (recurse bound (ApplicationType[function] app))
+            (λf.eithers.map
+                (λa.Type{
+                    application = ApplicationType{
+                      function = f,
+                      argument = a}})
+                (recurse bound (ApplicationType[argument] app))),
+      `effect`=λt.eithers.map (λx.Type{`effect` = x}) (recurse bound t),
+      `either`=λet.eithers.bind
+            (recurse bound (EitherType[`left`] et))
+            (λl.eithers.map
+                (λr.Type{
+                    `either` = EitherType{
+                      `left` = l,
+                      `right` = r}})
+                (recurse bound (EitherType[`right`] et))),
+      `forall`=λft.
+          let param := ForallType[parameter] ft in
+          let `bound'` := sets.insert (Name[] param) bound in
+          eithers.map
+            (λb.Type{
+                `forall` = ForallType{
+                  parameter = param,
+                  body = b}})
+            (resolveNameRefsInTypeWith
+              modName
+              ownNames
+              universe
+              `bound'`
+              (ForallType[body] ft)),
+      function=λfun.eithers.bind
+            (recurse bound (FunctionType[domain] fun))
+            (λd.eithers.map
+                (λc.Type{
+                    function = FunctionType{
+                      domain = d,
+                      codomain = c}})
+                (recurse bound (FunctionType[codomain] fun))),
+      `list`=λt.eithers.map (λx.Type{`list` = x}) (recurse bound t),
+      literal=λlt.right(Type{literal = lt}),
+      `map`=λmt.eithers.bind
+            (recurse bound (MapType[keys] mt))
+            (λk.eithers.map
+                (λv.Type{`map` = MapType{keys = k, values = v}})
+                (recurse bound (MapType[values] mt))),
+      `optional`=λt.eithers.map
+            (λx.Type{`optional` = x})
+            (recurse bound t),
+      pair=λpt.eithers.bind
+            (recurse bound (PairType[first] pt))
+            (λf.eithers.map
+                (λs.Type{pair = PairType{first = f, second = s}})
+                (recurse bound (PairType[second] pt))),
+      `record`=λrt.eithers.map
+            (λx.Type{`record` = x})
+            (eithers.mapList (forField bound) rt),
+      `set`=λt.eithers.map (λx.Type{`set` = x}) (recurse bound t),
+      `union`=λrt.eithers.map
+            (λx.Type{`union` = x})
+            (eithers.mapList (forField bound) rt),
+      `unit`=λ`_`.right(Type{`unit`}),
+      variable=λn.ifElse
+            (sets.member (Name[] n) bound)
+            right(Type{variable = n})
+            (eithers.map
+              (λx.Type{variable = x})
+              (resolveNameRefWith modName ownNames universe n)),
+      `void`=λ`_`.right(Type{`void`}),
+      `wrap`=λwt.eithers.map (λx.Type{`wrap` = x}) (recurse bound wt)}
+      typ
 
 ## Remove every span annotation from a type's own annotation payloads
 term stripSpansInType =
   λtyp.
     let remove := λrecurse,typ.
         let rewritten := recurse typ
-        in cases(model.Type){
-          annotated=λat.model.Type{
-                annotated = model.AnnotatedType{
-                  body = model.AnnotatedType[body] at,
-                  annotation = positions.stripSpans
-                      (model.AnnotatedType[annotation] at)}},
+        in cases(Type){
+          annotated=λat.Type{
+                annotated = AnnotatedType{
+                  body = AnnotatedType[body] at,
+                  annotation = stripSpans
+                      (AnnotatedType[annotation] at)}},
           `_`=rewritten}
           rewritten
-    in rewriting.rewriteType remove typ
+    in rewriteType remove typ
 
 ## Parse a term definition: ['##' doc comment] 'term name [: termSignature] = term'
 term termDefinitionParser =
@@ -743,13 +1188,13 @@ term termDefinitionParser =
                   (λmsig.parsers.bind
                       (keyword "=")
                       (λ`_`.parsers.map
-                          (λt.packaging.Definition{
-                              `term` = packaging.TermDefinition{
+                          (λt.Definition{
+                              `term` = TermDefinition{
                                 name = qualifyLocalName modName local,
                                 metadata = mmeta,
                                 signature = msig,
                                 body = t}})
-                          (token (parsers.map positions.stripSpans core.term)))))))
+                          (token (parsers.map stripSpans core.term)))))))
 
 ## Parse a token followed by optional trailing whitespace
 term token = λp.parsers.bind p (λx.parsers.bind whitespace (λ`_`.parsers.pure x))
@@ -765,15 +1210,14 @@ term typeDefinitionParser =
               (λlocal.parsers.bind
                   (keyword "=")
                   (λ`_`.parsers.map
-                      (λts.packaging.Definition{
-                          `type` = packaging.TypeDefinition{
+                      (λts.Definition{
+                          `type` = TypeDefinition{
                             name = qualifyLocalName modName local,
                             metadata = mmeta,
-                            body = model.TypeScheme{
-                              variables = model.TypeScheme[variables] ts,
-                              body = stripSpansInType
-                                  (model.TypeScheme[body] ts),
-                              constraints = model.TypeScheme[constraints] ts}}})
+                            body = TypeScheme{
+                              variables = TypeScheme[variables] ts,
+                              body = stripSpansInType (TypeScheme[body] ts),
+                              constraints = TypeScheme[constraints] ts}}})
                       (token core.typeScheme)))))
 
 ## Map each of a module's own type definitions to its (deannotated) scheme body (#809)
@@ -781,9 +1225,7 @@ term typeEnvFromDefinitions =
   λdefs.maps.fromList
       (optionals.givens
         (lists.map
-          (λdef.cases(packaging.Definition){
-              `type`=λtd.given((packaging.TypeDefinition[name] td, model.TypeScheme[body] (packaging.TypeDefinition[body] td))),
-              `_`=none}
+          (λdef.cases(Definition){`type`=λtd.given((TypeDefinition[name] td, TypeScheme[body] (TypeDefinition[body] td))), `_`=none}
               def)
           defs))
 
@@ -793,10 +1235,10 @@ term whitespace =
     (λ`_`.unit)
     (parsers.many
       (parsers.alt
-        (parsers.map (λ`_`.unit) (parsers.satisfy (λc.chars.isSpace c)))
+        (parsers.map (λ`_`.unit) (parsers.satisfy (λc.isSpace c)))
         (parsers.try
           (parsers.bind
             (parsers.char 35:int32)
             (λ`_`.parsers.bind
-                (parsers.alt parsers.eof (parsers.map (λ`_`.unit) (parsers.satisfy (λc.logic.not (equality.equal c 35:int32)))))
-                (λ`_`.parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.logic.not (equality.equal c 10:int32))))))))))
+                (parsers.alt parsers.eof (parsers.map (λ`_`.unit) (parsers.satisfy (λc.not (equal c 35:int32)))))
+                (λ`_`.parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.not (equal c 10:int32))))))))))

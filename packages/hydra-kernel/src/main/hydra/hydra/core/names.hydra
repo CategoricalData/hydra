@@ -1,45 +1,45 @@
 ## Functions for working with qualified names.
 module hydra.core.names
 
-import hydra.core.file as file
-import hydra.core.formatting as formatting
-import hydra.core.lib.equality as equality
+import hydra.core.file
+import hydra.core.formatting
+import hydra.core.lib.equality
 import hydra.core.lib.lists as lists
-import hydra.core.lib.literals as literals
-import hydra.core.lib.logic as logic
-import hydra.core.lib.maps as maps
-import hydra.core.lib.math as math
-import hydra.core.lib.optionals as optionals
-import hydra.core.lib.pairs as pairs
+import hydra.core.lib.literals
+import hydra.core.lib.logic
+import hydra.core.lib.maps
+import hydra.core.lib.math
+import hydra.core.lib.optionals
+import hydra.core.lib.pairs
 import hydra.core.lib.sets as sets
 import hydra.core.lib.strings as strings
-import hydra.core.model as model
-import hydra.core.packaging as packaging
-import hydra.core.typing as typing
-import hydra.core.util as util
+import hydra.core.model
+import hydra.core.packaging
+import hydra.core.typing
+import hydra.core.util
 
 ## Pick a string label that does not collide with a reserved set, by appending a numeric suffix when necessary
 term chooseUniqueLabel =
-  λreserved,label.let tryLabel := λindex.let candidate := logic.ifElse
-            (equality.equal index 1:int32)
+  λreserved,label.
+    let tryLabel := λindex.
+        let candidate := ifElse
+            (equal index 1:int32)
             label
-            (strings.concat2 label (literals.printInt32 index))
-        in logic.ifElse
-          (sets.member candidate reserved)
-          (tryLabel (math.add index 1:int32))
-          candidate
+            (strings.concat2 label (printInt32 index))
+        in ifElse (sets.member candidate reserved) (tryLabel (add index 1:int32)) candidate
     in tryLabel 1:int32
 
 ## Given a mapping of namespaces to prefixes, convert a name to a compact string representation
 term compactName =
-  λnamespaces,name.let qualName := qualifyName name, mns := util.QualifiedName[moduleName] qualName, local := util.QualifiedName[local] qualName
-    in optionals.match
+  λnamespaces,name.
+    let qualName := qualifyName name, mns := QualifiedName[moduleName] qualName, local := QualifiedName[local] qualName
+    in match
       mns
-      (model.Name[] name)
-      (λns.optionals.match (maps.lookup ns namespaces) local (λpre.strings.concat [pre, ":", local]))
+      (Name[] name)
+      (λns.match (lookup ns namespaces) local (λpre.strings.concat [pre, ":", local]))
 
 ## Compose a provision's fully-qualified name from its enclosing entity's name and its local segment
-term composeProvisionName = λentityName,localName.model.Name{strings.concat [model.Name[] entityName, ".", localName]}
+term composeProvisionName = λentityName,localName.Name{strings.concat [Name[] entityName, ".", localName]}
 
 ## Generate a binding name for a derived function from a type/term name, given the category's namespace segments
 term derivedBindingName =
@@ -48,142 +48,140 @@ term derivedBindingName =
       alwaysDropFirst
       false
       n
-      (formatting.decapitalize (localNameOf n))
+      (decapitalize (localNameOf n))
 
 ## Generate a derived element name from a source name's namespace and an explicit local name
 term derivedDefinitionName =
-  λcategoryPrefix,`_alwaysDropFirst`,prefixWhenNoNamespace,n,localName.let localResult := wrap(model.Name){localName} in
-    let prefixedResult := model.Name{strings.join
-        "."
-        (lists.concat2
-          categoryPrefix
-          [localName])} in
-    let noNamespaceResult := logic.ifElse
+  λcategoryPrefix,`_alwaysDropFirst`,prefixWhenNoNamespace,n,localName.
+    let localResult := wrap(Name){localName} in
+    let prefixedResult := Name{strings.join
+      "."
+      (lists.concat2 categoryPrefix [localName])} in
+    let noNamespaceResult := ifElse
         prefixWhenNoNamespace
         prefixedResult
         localResult in
-    optionals.match
-      (lists.init (strings.splitOn "." (model.Name[] n)))
+    match
+      (lists.init (strings.splitOn "." (Name[] n)))
       noNamespaceResult
-      (λnsParts.optionals.match
+      (λnsParts.match
           (lists.uncons nsParts)
           noNamespaceResult
-          (λ`_nsHeadTail`.let root := lists.take
-                2:int32
-                nsParts in
-            let rest := lists.drop
-                2:int32
-                nsParts in
-            model.Name{strings.join
+          (λ`_nsHeadTail`.
+            let root := lists.take 2:int32 nsParts in
+            let rest := lists.drop 2:int32 nsParts in
+            Name{strings.join
               "."
               (lists.concat2
                 root
                 (lists.concat2
                   categoryPrefix
-                  (lists.concat2
-                    rest
-                    [localName])))}))
+                  (lists.concat2 rest [localName])))}))
 
 ## Generate a derived module name by inserting the category after the package root (hydra.<pkgroot>)
 term derivedModuleName =
-  λcategoryPrefix,`_alwaysDropFirst`,ns.let parts := strings.splitOn "." (packaging.ModuleName[] ns) in
+  λcategoryPrefix,`_alwaysDropFirst`,ns.
+    let parts := strings.splitOn "." (ModuleName[] ns) in
     let root := lists.take 2:int32 parts in
     let rest := lists.drop 2:int32 parts in
-    packaging.ModuleName{strings.join
+    ModuleName{strings.join
       "."
       (lists.concat2 root (lists.concat2 categoryPrefix rest))}
 
 ## Generate a fresh type variable name, threading InferenceContext
 term freshName =
-  λcx.let count := typing.InferenceContext[freshTypeVariableCount] cx
+  λcx.
+    let count := InferenceContext[freshTypeVariableCount] cx
     in (
       normalTypeVariable count,
-      typing.InferenceContext{freshTypeVariableCount = math.add count 1:int32, trace = typing.InferenceContext[trace] cx})
+      InferenceContext{freshTypeVariableCount = add count 1:int32, trace = InferenceContext[trace] cx})
 
 ## Generate multiple fresh type variable names, threading InferenceContext
 term freshNames =
-  λn,cx.let go := λacc,`_`.let names := pairs.first acc in
-        let cx0 := pairs.second acc in
+  λn,cx.
+    let go := λacc,`_`.
+        let names := first acc in
+        let cx0 := second acc in
         let result := freshName cx0 in
-        let name := pairs.first result in
-        let cx1 := pairs.second result in
+        let name := first result in
+        let cx1 := second result in
         (lists.concat2 names (lists.singleton name), cx1)
     in lists.foldl go ([], cx) (lists.replicate n unit)
 
 ## Extract the local part of a name
-term localNameOf = λ`arg_`.util.QualifiedName[local] (qualifyName `arg_`)
+term localNameOf = λ`arg_`.QualifiedName[local] (qualifyName `arg_`)
 
 ## Extract the module name of a name, if any
-term moduleNameOf = λ`arg_`.util.QualifiedName[moduleName] (qualifyName `arg_`)
+term moduleNameOf = λ`arg_`.QualifiedName[moduleName] (qualifyName `arg_`)
 
 ## Convert a module name to a file path with the given case convention and file extension
 term moduleNameToFilePath =
-  λcaseConv,ext,ns.let parts := lists.map
-        (formatting.convertCase util.CaseConvention{camel} caseConv)
-        (strings.splitOn "." (packaging.ModuleName[] ns))
-    in strings.concat2 (strings.concat2 (strings.join "/" parts) ".") (file.FileExtension[] ext)
+  λcaseConv,ext,ns.
+    let parts := lists.map
+        (convertCase CaseConvention{camel} caseConv)
+        (strings.splitOn "." (ModuleName[] ns))
+    in strings.concat2 (strings.concat2 (strings.join "/" parts) ".") (FileExtension[] ext)
 
 ## Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
 term nameToFilePath =
-  λnsConv,localConv,ext,name.let qualName := qualifyName name in
-    let ns := util.QualifiedName[moduleName] qualName in
-    let local := util.QualifiedName[local] qualName in
+  λnsConv,localConv,ext,name.
+    let qualName := qualifyName name in
+    let ns := QualifiedName[moduleName] qualName in
+    let local := QualifiedName[local] qualName in
     let nsToFilePath := λnsArg.strings.join
           "/"
           (lists.map
-            (λpart.formatting.convertCase
-                util.CaseConvention{camel}
-                nsConv
-                part)
-            (strings.splitOn "." (packaging.ModuleName[] nsArg))) in
-    let prefix := optionals.match ns "" (λn.strings.concat2 (nsToFilePath n) "/") in
-    let suffix := formatting.convertCase util.CaseConvention{pascal} localConv local in
-    strings.concat [prefix, suffix, ".", file.FileExtension[] ext]
+            (λpart.convertCase CaseConvention{camel} nsConv part)
+            (strings.splitOn "." (ModuleName[] nsArg))) in
+    let prefix := match ns "" (λn.strings.concat2 (nsToFilePath n) "/") in
+    let suffix := convertCase CaseConvention{pascal} localConv local in
+    strings.concat [prefix, suffix, ".", FileExtension[] ext]
 
 ## Convert a name to UPPER-DASHED display form, splitting on '.' and joining with '-'
 term nameToUpperDashed =
-  λname.let parts := lists.map
-        (formatting.convertCase util.CaseConvention{camel} util.CaseConvention{upperDashed})
-        (strings.splitOn "." (model.Name[] name))
+  λname.
+    let parts := lists.map
+        (convertCase CaseConvention{camel} CaseConvention{upperDashed})
+        (strings.splitOn "." (Name[] name))
     in strings.join "-" parts
 
 ## Type variable naming convention follows Haskell: t0, t1, etc.
-term normalTypeVariable = λi.model.Name{strings.concat2 "t" (literals.printInt32 i)}
+term normalTypeVariable = λi.Name{strings.concat2 "t" (printInt32 i)}
 
 ## Prepend a SubtermStep to the InferenceContext's trace. The trace is accumulated backwards as inference descends through subterms; at error-emission time the list is reversed and wrapped into a SubtermPath stamped onto the error.
 term pushSubtermStep =
-  λstep,cx.typing.InferenceContext{
-      freshTypeVariableCount = typing.InferenceContext[freshTypeVariableCount] cx,
-      trace = lists.cons step (typing.InferenceContext[trace] cx)}
+  λstep,cx.InferenceContext{
+      freshTypeVariableCount = InferenceContext[freshTypeVariableCount] cx,
+      trace = lists.cons step (InferenceContext[trace] cx)}
 
 ## Construct a qualified (dot-separated) name
-term qname = λns,name.model.Name{strings.concat [packaging.ModuleName[] ns, ".", name]}
+term qname = λns,name.Name{strings.concat [ModuleName[] ns, ".", name]}
 
 ## Split a dot-separated name into a namespace and local name
 term qualifyName =
-  λname.let parts := lists.reverse (strings.splitOn "." (model.Name[] name))
-    in optionals.match
+  λname.
+    let parts := lists.reverse (strings.splitOn "." (Name[] name))
+    in match
       (lists.uncons parts)
-      util.QualifiedName{moduleName = none, local = model.Name[] name}
-      (λuc.let localName := pairs.first uc in
-        let restReversed := pairs.second uc in
-        logic.ifElse
+      QualifiedName{moduleName = none, local = Name[] name}
+      (λuc.
+        let localName := first uc in
+        let restReversed := second uc in
+        ifElse
           (lists.isEmpty restReversed)
-          util.QualifiedName{moduleName = none, local = model.Name[] name}
-          util.QualifiedName{
-            moduleName = given(packaging.ModuleName{strings.join "." (lists.reverse restReversed)}),
+          QualifiedName{moduleName = none, local = Name[] name}
+          QualifiedName{
+            moduleName = given(ModuleName{strings.join "." (lists.reverse restReversed)}),
             local = localName})
 
 ## Restore the original trace from baseCx, while keeping the freshTypeVariableCount from newCx. Used between sibling sub-inferences (e.g. application LHS vs RHS) so that an error in the second sibling doesn't include the first sibling's trace path. Returns a new InferenceContext.
 term restoreTrace =
-  λbaseCx,newCx.typing.InferenceContext{
-      freshTypeVariableCount = typing.InferenceContext[freshTypeVariableCount] newCx,
-      trace = typing.InferenceContext[trace] baseCx}
+  λbaseCx,newCx.InferenceContext{
+      freshTypeVariableCount = InferenceContext[freshTypeVariableCount] newCx,
+      trace = InferenceContext[trace] baseCx}
 
 ## Convert a qualified name to a dot-separated name
 term unqualifyName =
-  λqname.let prefix := optionals.match
-        (util.QualifiedName[moduleName] qname)
-        ""
-        (λn.strings.concat2 (packaging.ModuleName[] n) ".")
-    in model.Name{strings.concat2 prefix (util.QualifiedName[local] qname)}
+  λqname.
+    let prefix := match (QualifiedName[moduleName] qname) "" (λn.strings.concat2 (ModuleName[] n) ".")
+    in Name{strings.concat2 prefix (QualifiedName[local] qname)}

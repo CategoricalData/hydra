@@ -5,8 +5,6 @@
 ## For floating-point values equality is value identity.
 module hydra.core.lib.equality
 
-
-
 ## Check whether two values are equal.
 ##
 ## equal(x, y) returns true if x and y are structurally equal under the type's notion of equality.

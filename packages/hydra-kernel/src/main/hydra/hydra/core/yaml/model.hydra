@@ -1,0 +1,30 @@
+## A basic YAML representation model. Based on:
+##   https://yaml.org/spec/1.2/spec.html
+## The Serialization and Presentation properties of YAML,
+## including directives, comments, anchors, style, formatting, and aliases, are not supported by this model.
+## In addition, tags are omitted from this model, and non-standard scalars are unsupported.
+module hydra.core.yaml.model
+
+## A YAML node (value)
+type Node = union{
+  ## A mapping from nodes to nodes
+  mapping: map<Node, Node>,
+  ## A scalar value
+  scalar: Scalar,
+  ## A sequence of nodes
+  sequence: list<Node>}
+
+## A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here
+type Scalar = union{
+  ## Represents a true/false value
+  bool: boolean,
+  ## An arbitrary-precision decimal number (lexically a valid JSON number)
+  `decimal`: decimal,
+  ## Represents an approximation to real numbers
+  float: float64,
+  ## Represents arbitrary sized finite mathematical integers
+  int: bigint,
+  ## Represents the lack of a value
+  null: unit,
+  ## A string value
+  str: string}

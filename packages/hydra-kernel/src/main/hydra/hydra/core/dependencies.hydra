@@ -1,87 +1,84 @@
 ## Dependency extraction, binding sort, and let normalization
 module hydra.core.dependencies
 
-import hydra.core.annotations as annotations
-import hydra.core.coders as coders
-import hydra.core.constants as constants
-import hydra.core.errors as errors
-import hydra.core.lexical as lexical
+import hydra.core.annotations
+import hydra.core.coders
+import hydra.core.constants
+import hydra.core.errors
+import hydra.core.lexical
 import hydra.core.lib.eithers as eithers
-import hydra.core.lib.equality as equality
+import hydra.core.lib.equality
 import hydra.core.lib.lists as lists
-import hydra.core.lib.literals as literals
-import hydra.core.lib.logic as logic
+import hydra.core.lib.literals
+import hydra.core.lib.logic
 import hydra.core.lib.maps as maps
-import hydra.core.lib.math as math
-import hydra.core.lib.optionals as optionals
-import hydra.core.lib.ordering as ordering
-import hydra.core.lib.pairs as pairs
+import hydra.core.lib.math
+import hydra.core.lib.optionals
+import hydra.core.lib.ordering
+import hydra.core.lib.pairs
 import hydra.core.lib.sets as sets
 import hydra.core.lib.strings as strings
-import hydra.core.model as model
-import hydra.core.names as names
-import hydra.core.packaging as packaging
-import hydra.core.rewriting as rewriting
-import hydra.core.sorting as sorting
-import hydra.core.strip as strip
-import hydra.core.variables as variables
+import hydra.core.model
+import hydra.core.names
+import hydra.core.packaging
+import hydra.core.rewriting
+import hydra.core.sorting
+import hydra.core.strip
+import hydra.core.variables
 
 ## Get definitions with their dependencies
 term definitionsWithDependencies =
   λcx,graph,original.
-    let depNames := λel.sets.toList (termDependencyNames true false false (model.Binding[`term`] el)) in
+    let depNames := λel.sets.toList (termDependencyNames true false false (Binding[`term`] el)) in
     let allDepNames := lists.distinct
         (lists.concat2
-          (lists.map model.Binding[name] original)
+          (lists.map Binding[name] original)
           (lists.concat (lists.map depNames original))) in
-    eithers.mapList (λname.lexical.requireBinding graph name) allDepNames
+    eithers.mapList (λname.requireBinding graph name) allDepNames
 
 ## Flatten nested let expressions
 term flattenLetTerms =
   λ`term`.
     let rewriteBinding := λbinding.
-        let key0 := model.Binding[name] binding in
-        let val0 := model.Binding[`term`] binding in
-        let t := model.Binding[typeScheme] binding in
-        cases(model.Term){
+        let key0 := Binding[name] binding in
+        let val0 := Binding[`term`] binding in
+        let t := Binding[typeScheme] binding in
+        cases(Term){
           annotated=λat.
-              let val1 := model.AnnotatedTerm[body] at in
-              let ann := model.AnnotatedTerm[annotation] at in
+              let val1 := AnnotatedTerm[body] at in
+              let ann := AnnotatedTerm[annotation] at in
               let recursive := rewriteBinding
-                  model.Binding{
+                  Binding{
                     name = key0,
                     `term` = val1,
                     typeScheme = t} in
-              let innerBinding := pairs.first recursive in
-              let deps := pairs.second recursive in
-              let val2 := model.Binding[`term`] innerBinding in
+              let innerBinding := first recursive in
+              let deps := second recursive in
+              let val2 := Binding[`term`] innerBinding in
               (
-                model.Binding{
-                  name = key0,
-                  `term` = model.Term{annotated = model.AnnotatedTerm{body = val2, annotation = ann}},
-                  typeScheme = t},
+                Binding{name = key0, `term` = Term{annotated = AnnotatedTerm{body = val2, annotation = ann}}, typeScheme = t},
                 deps),
           `let`=λinnerLet.
-              let bindings1 := model.Let[bindings] innerLet in
-              let body1 := model.Let[body] innerLet in
-              let prefix := strings.concat2 (model.Name[] key0) "_" in
-              let qualify := λn.model.Name{strings.concat2 prefix (model.Name[] n)} in
-              let toSubstPair := λb.(model.Binding[name] b, qualify (model.Binding[name] b)) in
+              let bindings1 := Let[bindings] innerLet in
+              let body1 := Let[body] innerLet in
+              let prefix := strings.concat2 (Name[] key0) "_" in
+              let qualify := λn.Name{strings.concat2 prefix (Name[] n)} in
+              let toSubstPair := λb.(Binding[name] b, qualify (Binding[name] b)) in
               let subst := maps.fromList
                   (lists.map toSubstPair bindings1) in
-              let replaceVars := variables.substituteVariables subst in
+              let replaceVars := substituteVariables subst in
               let newBody := replaceVars body1 in
-              let newBinding := λb.model.Binding{
-                    name = qualify (model.Binding[name] b),
-                    `term` = replaceVars (model.Binding[`term`] b),
-                    typeScheme = model.Binding[typeScheme] b} in
-              (model.Binding{name = key0, `term` = newBody, typeScheme = t}, lists.map newBinding bindings1),
-          `_`=(model.Binding{name = key0, `term` = val0, typeScheme = t}, [])}
+              let newBinding := λb.Binding{
+                    name = qualify (Binding[name] b),
+                    `term` = replaceVars (Binding[`term`] b),
+                    typeScheme = Binding[typeScheme] b} in
+              (Binding{name = key0, `term` = newBody, typeScheme = t}, lists.map newBinding bindings1),
+          `_`=(Binding{name = key0, `term` = val0, typeScheme = t}, [])}
           val0 in
-    let flattenBodyLet := λbindings,body.cases(model.Term){
+    let flattenBodyLet := λbindings,body.cases(Term){
           `let`=λinnerLt.
-              let innerBindings := model.Let[bindings] innerLt in
-              let innerBody := model.Let[body] innerLt in
+              let innerBindings := Let[bindings] innerLt in
+              let innerBody := Let[body] innerLt in
               flattenBodyLet
                 (lists.concat2 bindings innerBindings)
                 innerBody,
@@ -89,230 +86,217 @@ term flattenLetTerms =
           body in
     let flatten := λrecurse,`term`.
         let rewritten := recurse `term`
-        in cases(model.Term){
+        in cases(Term){
           `let`=λlt.
-              let bindings := model.Let[bindings] lt in
-              let body := model.Let[body] lt in
+              let bindings := Let[bindings] lt in
+              let body := Let[body] lt in
               let forResult := λhr.lists.concat2
-                    (pairs.second hr)
-                    (lists.singleton (pairs.first hr)) in
+                    (second hr)
+                    (lists.singleton (first hr)) in
               let flattenedBindings := lists.concat
                   (lists.map
                     (λ`arg_`.forResult (rewriteBinding `arg_`))
                     bindings) in
               let merged := flattenBodyLet flattenedBindings body in
-              let newBindings := pairs.first merged in
-              let newBody := pairs.second merged in
-              model.Term{
-                `let` = model.Let{
+              let newBindings := first merged in
+              let newBody := second merged in
+              Term{
+                `let` = Let{
                   bindings = newBindings,
                   body = newBody}},
           `_`=rewritten}
           rewritten in
-    rewriting.rewriteTerm flatten `term`
+    rewriteTerm flatten `term`
 
 ## Inline all type variables in a type using the provided schema (Either version). Note: this function is only appropriate for nonrecursive type definitions
 term inlineType =
   λschema,typ.
     let f := λrecurse,typ.
-        let afterRecurse := λtr.cases(model.Type){
-              variable=λv.optionals.match
+        let afterRecurse := λtr.cases(Type){
+              variable=λv.match
                     (maps.lookup v schema)
-                    left(errors.Error{
-                      other = errors.OtherError{strings.concat2
+                    left(Error{
+                      other = OtherError{strings.concat2
                         "No such type in schema: "
-                        (model.Name[] v)}})
+                        (Name[] v)}})
                     (inlineType schema),
               `_`=right(tr)}
               tr
         in eithers.bind (recurse typ) (λtr.afterRecurse tr)
-    in rewriting.rewriteTypeM f typ
+    in rewriteTypeM f typ
 
 ## Check whether a term is a lambda, possibly nested within let and/or annotation terms
 term isLambda =
-  λ`term`.cases(model.Term){lambda=λ`_`.true, `let`=λlt.isLambda (model.Let[body] lt), `_`=false}
-      (strip.deannotateTerm `term`)
+  λ`term`.cases(Term){lambda=λ`_`.true, `let`=λlt.isLambda (Let[body] lt), `_`=false} (deannotateTerm `term`)
 
 ## Rewrite terms like `let foo = bar in λx.baz` to `λx.let foo = bar in baz`, lifting lambda-bound variables above let-bound variables, recursively. This is helpful for targets such as Python.
 term liftLambdaAboveLet =
   λterm0.
     let rewrite := λrecurse,`term`.
-        let rewriteBinding := λb.model.Binding{
-              name = model.Binding[name] b,
-              `term` = rewrite
-                  recurse
-                  (model.Binding[`term`] b),
-              typeScheme = model.Binding[typeScheme] b} in
+        let rewriteBinding := λb.Binding{
+              name = Binding[name] b,
+              `term` = rewrite recurse (Binding[`term`] b),
+              typeScheme = Binding[typeScheme] b} in
         let rewriteBindings := λbs.lists.map rewriteBinding bs in
-        let digForLambdas := λoriginal,cons,`term`.cases(model.Term){
+        let digForLambdas := λoriginal,cons,`term`.cases(Term){
               annotated=λat.digForLambdas
                     original
-                    (λt.model.Term{
-                        annotated = model.AnnotatedTerm{
+                    (λt.Term{
+                        annotated = AnnotatedTerm{
                           body = cons t,
-                          annotation = model.AnnotatedTerm[annotation] at}})
-                    (model.AnnotatedTerm[body] at),
-              lambda=λl.model.Term{
-                    lambda = model.Lambda{
-                      parameter = model.Lambda[parameter] l,
-                      domain = model.Lambda[domain] l,
+                          annotation = AnnotatedTerm[annotation] at}})
+                    (AnnotatedTerm[body] at),
+              lambda=λl.Term{
+                    lambda = Lambda{
+                      parameter = Lambda[parameter] l,
+                      domain = Lambda[domain] l,
                       body = digForLambdas
-                          (cons (model.Lambda[body] l))
+                          (cons (Lambda[body] l))
                           (λt.cons t)
-                          (model.Lambda[body] l)}},
+                          (Lambda[body] l)}},
               `let`=λl.digForLambdas
                     original
                     (λt.cons
-                        model.Term{
-                          `let` = model.Let{
-                            bindings = rewriteBindings (model.Let[bindings] l),
+                        Term{
+                          `let` = Let{
+                            bindings = rewriteBindings (Let[bindings] l),
                             body = t}})
-                    (model.Let[body] l),
+                    (Let[body] l),
               `_`=recurse original}
               `term` in
-        cases(model.Term){
+        cases(Term){
           `let`=λl.digForLambdas
                 `term`
-                (λt.model.Term{
-                    `let` = model.Let{
-                      bindings = rewriteBindings (model.Let[bindings] l),
+                (λt.Term{
+                    `let` = Let{
+                      bindings = rewriteBindings (Let[bindings] l),
                       body = t}})
-                (model.Let[body] l),
+                (Let[body] l),
           `_`=recurse `term`}
           `term`
-    in rewriting.rewriteTerm rewrite term0
+    in rewriteTerm rewrite term0
 
 ## Given a let expression, remove any unused bindings. The resulting expression is still a let, even if has no remaining bindings
 term pruneLet =
   λl.
-    let bindingMap := maps.fromList
-        (lists.map (λb.(model.Binding[name] b, model.Binding[`term`] b)) (model.Let[bindings] l)) in
-    let rootName := model.Name{"[[[root]]]"} in
+    let bindingMap := maps.fromList (lists.map (λb.(Binding[name] b, Binding[`term`] b)) (Let[bindings] l)) in
+    let rootName := Name{"[[[root]]]"} in
     let adj := λn.sets.intersection
           (sets.fromList (maps.keys bindingMap))
-          (variables.freeVariablesInTerm
-            (logic.ifElse
-              (equality.equal n rootName)
-              (model.Let[body] l)
-              (optionals.withDefault model.Term{`unit`} (maps.lookup n bindingMap)))) in
-    let reachable := sorting.findReachableNodes adj rootName in
-    let prunedBindings := lists.filter (λb.sets.member (model.Binding[name] b) reachable) (model.Let[bindings] l) in
-    model.Let{bindings = prunedBindings, body = model.Let[body] l}
+          (freeVariablesInTerm
+            (ifElse (equal n rootName) (Let[body] l) (withDefault Term{`unit`} (maps.lookup n bindingMap)))) in
+    let reachable := findReachableNodes adj rootName in
+    let prunedBindings := lists.filter (λb.sets.member (Binding[name] b) reachable) (Let[bindings] l) in
+    Let{bindings = prunedBindings, body = Let[body] l}
 
 ## Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively
 term replaceTypedefs =
   λtypes,typ0.
-    let rewrite := λrecurse,typ.cases(model.Type){
-          annotated=λat.model.Type{
-                annotated = model.AnnotatedType{
-                  body = rewrite
-                      recurse
-                      (model.AnnotatedType[body] at),
-                  annotation = model.AnnotatedType[annotation] at}},
+    let rewrite := λrecurse,typ.cases(Type){
+          annotated=λat.Type{
+                annotated = AnnotatedType{
+                  body = rewrite recurse (AnnotatedType[body] at),
+                  annotation = AnnotatedType[annotation] at}},
           `record`=λ`_`.typ,
           `union`=λ`_`.typ,
           variable=λv.
-              let forMono := λt.cases(model.Type){
+              let forMono := λt.cases(Type){
                     `record`=λ`_`.typ,
                     `union`=λ`_`.typ,
                     `wrap`=λ`_`.typ,
                     `_`=rewrite recurse t}
                     t in
               let forTypeScheme := λts.
-                  let t := model.TypeScheme[body] ts
-                  in logic.ifElse
-                    (lists.isEmpty
-                      (model.TypeScheme[variables] ts))
+                  let t := TypeScheme[body] ts
+                  in ifElse
+                    (lists.isEmpty (TypeScheme[variables] ts))
                     (forMono t)
                     typ in
-              optionals.match
+              match
                 (maps.lookup v types)
                 typ
                 (λts.forTypeScheme ts),
           `wrap`=λ`_`.typ,
           `_`=recurse typ}
           typ
-    in rewriting.rewriteType rewrite typ0
+    in rewriteType rewrite typ0
 
 ## Simplify terms by applying beta reduction where possible
 term simplifyTerm =
   λ`term`.
     let simplify := λrecurse,`term`.
-        let forRhs := λrhs,var,body.cases(model.Term){
+        let forRhs := λrhs,var,body.cases(Term){
               variable=λv.simplifyTerm
-                    (variables.substituteVariable var v body),
+                    (substituteVariable var v body),
               `_`=`term`}
-              (strip.deannotateTerm rhs) in
-        let forLhs := λlhs,rhs.cases(model.Term){
+              (deannotateTerm rhs) in
+        let forLhs := λlhs,rhs.cases(Term){
               lambda=λl.
-                  let var := model.Lambda[parameter] l in
-                  let body := model.Lambda[body] l in
-                  logic.ifElse
+                  let var := Lambda[parameter] l in
+                  let body := Lambda[body] l in
+                  ifElse
                     (sets.member
                       var
-                      (variables.freeVariablesInTerm body))
+                      (freeVariablesInTerm body))
                     (forRhs rhs var body)
                     (simplifyTerm body),
               `_`=`term`}
-              (strip.deannotateTerm lhs) in
-        let forTerm := λstripped.cases(model.Term){
+              (deannotateTerm lhs) in
+        let forTerm := λstripped.cases(Term){
               application=λapp.
-                  let lhs := model.Application[function] app in
-                  let rhs := model.Application[argument] app in
+                  let lhs := Application[function] app in
+                  let rhs := Application[argument] app in
                   forLhs lhs rhs,
               `_`=`term`}
               stripped in
-        let stripped := strip.deannotateTerm `term` in
+        let stripped := deannotateTerm `term` in
         recurse (forTerm stripped)
-    in rewriting.rewriteTerm simplify `term`
+    in rewriteTerm simplify `term`
 
 ## Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
 term termDependencyNames =
   λbinds,withPrims,withNoms,term0.
     let addNames := λnames,`term`.
-        let nominal := λname.logic.ifElse
+        let nominal := λname.ifElse
               withNoms
               (sets.insert name names)
               names in
-        let prim := λname.logic.ifElse
+        let prim := λname.ifElse
               withPrims
               (sets.insert name names)
               names in
-        let var := λname.logic.ifElse
+        let var := λname.ifElse
               binds
               (sets.insert name names)
               names in
-        cases(model.Term){
+        cases(Term){
           `cases`=λcaseStmt.nominal
-                (model.CaseStatement[typeName] caseStmt),
-          `project`=λproj.nominal
-                (model.Projection[typeName] proj),
+                (CaseStatement[typeName] caseStmt),
+          `project`=λproj.nominal (Projection[typeName] proj),
           `unwrap`=λname.nominal name,
-          `record`=λ`record`.nominal
-                (model.Record[typeName] `record`),
-          `inject`=λinjection.nominal
-                (model.Injection[typeName] injection),
+          `record`=λ`record`.nominal (Record[typeName] `record`),
+          `inject`=λinjection.nominal (Injection[typeName] injection),
           variable=λname.var name,
           `wrap`=λwrappedTerm.nominal
-                (model.WrappedTerm[typeName] wrappedTerm),
+                (WrappedTerm[typeName] wrappedTerm),
           `_`=names}
           `term`
-    in rewriting.foldOverTerm coders.TraversalOrder{pre} addNames sets.empty term0
+    in foldOverTerm TraversalOrder{pre} addNames sets.empty term0
 
 ## Generate short names from a list of fully qualified names
 term toShortNames =
   λoriginal.
     let addName := λacc,name.
-        let local := names.localNameOf name in
-        let group := optionals.withDefault sets.empty (maps.lookup local acc) in
+        let local := localNameOf name in
+        let group := withDefault sets.empty (maps.lookup local acc) in
         maps.insert local (sets.insert name group) acc in
     let groupNamesByLocal := λnames.lists.foldl addName maps.empty names in
     let groups := groupNamesByLocal original in
     let renameGroup := λlocalNames.
-        let local := pairs.first localNames in
-        let names := pairs.second localNames in
-        let rangeFrom := λstart.lists.cons start (rangeFrom (math.add start 1:int32)) in
-        let rename := λname,i.(name, model.Name{logic.ifElse (ordering.gt i 1:int32) (strings.concat2 local (literals.printInt32 i)) local}) in
+        let local := first localNames in
+        let names := second localNames in
+        let rangeFrom := λstart.lists.cons start (rangeFrom (add start 1:int32)) in
+        let rename := λname,i.(name, Name{ifElse (gt i 1:int32) (strings.concat2 local (printInt32 i)) local}) in
         lists.zipWith rename (sets.toList names) (rangeFrom 1:int32) in
     maps.fromList (lists.concat (lists.map renameGroup (maps.toList groups)))
 
@@ -320,43 +304,33 @@ term toShortNames =
 term topologicalSortBindingMap =
   λbindingMap.
     let bindings := maps.toList bindingMap in
-    let keys := sets.fromList (lists.map pairs.first bindings) in
-    let hasTypeAnnotation := λ`term`.optionals.isGiven (annotations.getTermAnnotation constants.keyType `term`) in
+    let keys := sets.fromList (lists.map first bindings) in
+    let hasTypeAnnotation := λ`term`.isGiven (getTermAnnotation keyType `term`) in
     let depsOf := λnameAndTerm.
-        let name := pairs.first nameAndTerm in
-        let `term` := pairs.second nameAndTerm in
-        (
-          name,
-          logic.ifElse (hasTypeAnnotation `term`) [] (sets.toList (sets.intersection keys (variables.freeVariablesInTerm `term`)))) in
-    let toPair := λname.(
-          name,
-          optionals.withDefault model.Term{literal = model.Literal{`string` = "Impossible!"}} (maps.lookup name bindingMap)) in
-    lists.map (lists.map toPair) (sorting.topologicalSortComponents (lists.map depsOf bindings))
+        let name := first nameAndTerm in
+        let `term` := second nameAndTerm in
+        (name, ifElse (hasTypeAnnotation `term`) [] (sets.toList (sets.intersection keys (freeVariablesInTerm `term`)))) in
+    let toPair := λname.(name, withDefault Term{literal = Literal{`string` = "Impossible!"}} (maps.lookup name bindingMap)) in
+    lists.map (lists.map toPair) (topologicalSortComponents (lists.map depsOf bindings))
 
 ## Topological sort of bindings based on their dependencies. Returns `Right` with a flat order when the dependency graph is acyclic; returns `Left` with the cyclic SCCs when it is not. Use this variant when the consumer needs a strict acyclic ordering and must reject cycles (e.g. import resolution); use `topologicalSortBindingMap` when mutual recursion should be packaged into SCC groups instead.
 term topologicalSortBindings =
   λels.
-    let adjlist := λe.(model.Binding[name] e, sets.toList (termDependencyNames false true true (model.Binding[`term`] e)))
-    in sorting.topologicalSort (lists.map adjlist els)
+    let adjlist := λe.(Binding[name] e, sets.toList (termDependencyNames false true true (Binding[`term`] e)))
+    in topologicalSort (lists.map adjlist els)
 
 ## Topologically sort type definitions by their structural dependencies, grouped into SCCs. The SCC grouping handles mutually recursive types (e.g. a pair of records that reference each other's names) by delivering them together as one cluster, so the emitter can produce a coherent set of declarations rather than failing with an undefined-name error mid-emission.
 term topologicalSortTypeDefinitions =
   λdefs.
-    let toPair := λdef.(
-          packaging.TypeDefinition[name] def,
-          sets.toList (typeDependencyNames false (model.TypeScheme[body] (packaging.TypeDefinition[body] def)))) in
-    let nameToDef := maps.fromList (lists.map (λd.(packaging.TypeDefinition[name] d, d)) defs) in
-    let sorted := sorting.topologicalSortComponents (lists.map toPair defs) in
-    lists.map (λnames.optionals.givens (lists.map (λn.maps.lookup n nameToDef) names)) sorted
+    let toPair := λdef.(TypeDefinition[name] def, sets.toList (typeDependencyNames false (TypeScheme[body] (TypeDefinition[body] def)))) in
+    let nameToDef := maps.fromList (lists.map (λd.(TypeDefinition[name] d, d)) defs) in
+    let sorted := topologicalSortComponents (lists.map toPair defs) in
+    lists.map (λnames.givens (lists.map (λn.maps.lookup n nameToDef) names)) sorted
 
 ## Collect all type names referenced by a type. The boolean controls whether type-scheme references (free variables in type expressions) are included alongside structural references
 term typeDependencyNames =
-  λwithSchema,typ.logic.ifElse
-      withSchema
-      (sets.union (variables.freeVariablesInType typ) (typeNamesInType typ))
-      (variables.freeVariablesInType typ)
+  λwithSchema,typ.ifElse withSchema (sets.union (freeVariablesInType typ) (typeNamesInType typ)) (freeVariablesInType typ)
 
 ## Collect every type name that appears anywhere inside a type expression
 term typeNamesInType =
-  λtyp0.
-    let addNames := λnames,typ.names in rewriting.foldOverType coders.TraversalOrder{pre} addNames sets.empty typ0
+  λtyp0.let addNames := λnames,typ.names in foldOverType TraversalOrder{pre} addNames sets.empty typ0

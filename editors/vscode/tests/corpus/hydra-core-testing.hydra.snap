@@ -6,14 +6,10 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.model as model
+>import hydra.core.model
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                       ^ source.hydra
-#                        ^^ source.hydra keyword.control.import.hydra
-#                          ^ source.hydra
-#                           ^^^^^ source.hydra entity.name.namespace.hydra
 >
 >## An effectful test case: the actual value is a thunk producing an effect, which the test runner interprets (performing host interactions, e.g. file I/O within a per-case empty temporary directory) to obtain a result string; the expected value is a thunk producing a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -177,16 +173,16 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  provisions: list<model.Name>}
+>  provisions: list<Name>}
 #^^ source.hydra
 #  ^^^^^^^^^^ source.hydra variable.other.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                   ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                             ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                              ^^ source.hydra
+#                   ^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                        ^^ source.hydra
 >
 >## A collection of test cases with a name and optional description
 #^^ source.hydra comment.block.documentation.hydra

@@ -1,37 +1,504 @@
 ## JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling.
 module hydra.core.json.encode
 
-import hydra.core.json.model as json.model
+import hydra.core.json.model
 import hydra.core.lib.eithers as eithers
-import hydra.core.lib.equality as equality
-import hydra.core.lib.lists as lists
-import hydra.core.lib.literals as literals
-import hydra.core.lib.logic as logic
+import hydra.core.lib.equality
+import hydra.core.lib.lists
+import hydra.core.lib.literals
+import hydra.core.lib.logic
 import hydra.core.lib.maps as maps
-import hydra.core.lib.optionals as optionals
+import hydra.core.lib.optionals
 import hydra.core.lib.pairs as pairs
 import hydra.core.lib.sets as sets
 import hydra.core.lib.strings as strings
-import hydra.core.model as model
-import hydra.core.print.model as print.model
-import hydra.core.resolution as resolution
-import hydra.core.strip as strip
-import hydra.core.substitution as substitution
+import hydra.core.model
+import hydra.core.print.model as model
+import hydra.core.resolution
+import hydra.core.strip
+import hydra.core.substitution
 
 ## Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode.
-term encodeFloat = λfv.cases(model.FloatValue){`float32`=λf.let s := literals.printFloat32 f in logic.ifElse (requiresJsonStringSentinel s) right(json.model.Value{`string` = s}) right(json.model.Value{number = literals.float32ToDecimal f}), `float64`=λf.let s := literals.printFloat64 f in logic.ifElse (requiresJsonStringSentinel s) right(json.model.Value{`string` = s}) right(json.model.Value{number = literals.float64ToDecimal f})} fv
+term encodeFloat =
+  λfv.cases(FloatValue){
+      `float32`=λf.
+          let s := printFloat32 f
+          in ifElse
+            (requiresJsonStringSentinel s)
+            right(Value{`string` = s})
+            right(Value{number = float32ToDecimal f}),
+      `float64`=λf.
+          let s := printFloat64 f
+          in ifElse
+            (requiresJsonStringSentinel s)
+            right(Value{`string` = s})
+            right(Value{number = float64ToDecimal f})}
+      fv
 
 ## Encode an integer value to JSON. Small ints use native numbers; large ints use strings.
-term encodeInteger = λiv.cases(model.IntegerValue){`bigint`=λbi.right(json.model.Value{`string` = literals.printBigint bi}), `int64`=λi.right(json.model.Value{`string` = literals.printInt64 i}), `uint64`=λi.right(json.model.Value{`string` = literals.printUint64 i}), `int8`=λi.right(json.model.Value{number = literals.bigintToDecimal (literals.int8ToBigint i)}), `int16`=λi.right(json.model.Value{number = literals.bigintToDecimal (literals.int16ToBigint i)}), `int32`=λi.right(json.model.Value{number = literals.bigintToDecimal (literals.int32ToBigint i)}), `uint8`=λi.right(json.model.Value{number = literals.bigintToDecimal (literals.uint8ToBigint i)}), `uint16`=λi.right(json.model.Value{number = literals.bigintToDecimal (literals.uint16ToBigint i)}), `uint32`=λi.right(json.model.Value{number = literals.bigintToDecimal (literals.uint32ToBigint i)})} iv
+term encodeInteger =
+  λiv.cases(IntegerValue){
+      `bigint`=λbi.right(Value{`string` = printBigint bi}),
+      `int64`=λi.right(Value{`string` = printInt64 i}),
+      `uint64`=λi.right(Value{`string` = printUint64 i}),
+      `int8`=λi.right(Value{number = bigintToDecimal (int8ToBigint i)}),
+      `int16`=λi.right(Value{number = bigintToDecimal (int16ToBigint i)}),
+      `int32`=λi.right(Value{number = bigintToDecimal (int32ToBigint i)}),
+      `uint8`=λi.right(Value{number = bigintToDecimal (uint8ToBigint i)}),
+      `uint16`=λi.right(Value{number = bigintToDecimal (uint16ToBigint i)}),
+      `uint32`=λi.right(Value{number = bigintToDecimal (uint32ToBigint i)})}
+      iv
 
 ## Encode a Hydra literal to a JSON value
-term encodeLiteral = λlit.cases(model.Literal){`binary`=λb.right(json.model.Value{`string` = literals.binaryToBase64 b}), `boolean`=λb.right(json.model.Value{`boolean` = b}), `decimal`=λd.right(json.model.Value{number = d}), float=λf.encodeFloat f, integer=λi.encodeInteger i, `string`=λs.right(json.model.Value{`string` = s})} lit
+term encodeLiteral =
+  λlit.cases(Literal){
+      `binary`=λb.right(Value{`string` = binaryToBase64 b}),
+      `boolean`=λb.right(Value{`boolean` = b}),
+      `decimal`=λd.right(Value{number = d}),
+      float=λf.encodeFloat f,
+      integer=λi.encodeInteger i,
+      `string`=λs.right(Value{`string` = s})}
+      lit
 
 ## True for IEEE sentinel strings that JSON must escape as a string to preserve.
-term requiresJsonStringSentinel = λs.logic.or (equality.equal s "NaN") (logic.or (equality.equal s "Infinity") (logic.or (equality.equal s "-Infinity") (equality.equal s "-0.0")))
+term requiresJsonStringSentinel =
+  λs.or (equal s "NaN") (or (equal s "Infinity") (or (equal s "-Infinity") (equal s "-0.0")))
 
 ## Encode a Hydra term to a JSON value given a type and type name. Returns Left for unsupported constructs. The compactMaps flag enables the #624 compact object form for string-resolving map keys; it must be False for any caller that reads/writes the checked-in dist/json module-bootstrapping representation (moduleToJson, decodeModuleFromJson, verify-json-kernel), since that wire format is consumed by the published (pre-#624) host and must stay byte-stable. New callers encoding/decoding arbitrary values against a schema (e.g. hydra.build.format digests) may pass True.
-term toJson = λtypes,compactMaps,tname,typ,`term`.let stripped := strip.deannotateType typ in let strippedTerm := strip.deannotateTerm `term` in let isVariableTerm := cases(model.Term){variable=λ`_`.true, `_`=false} strippedTerm in logic.ifElse isVariableTerm (cases(model.Term){variable=λn.right(json.model.Value{object = [("@var", json.model.Value{`string` = model.Name[] n})]}), `_`=left("expected variable term")} strippedTerm) (let reduceApp := λapp.let fn := strip.deannotateType (model.ApplicationType[function] app) in let arg := model.ApplicationType[argument] app in cases(model.Type){application=λinnerApp.eithers.either (λerr.left(err)) (λreducedFn.reduceApp model.ApplicationType{function = reducedFn, argument = arg}) (reduceApp innerApp), `forall`=λft.right(substitution.substInType (substitution.singletonTypeSubst (model.ForallType[parameter] ft) arg) (model.ForallType[body] ft)), variable=λname.let lookedUp := maps.lookup name types in optionals.match lookedUp left(strings.concat ["unknown type variable: ", model.Name[] name]) (λresolvedFn.reduceApp model.ApplicationType{function = resolvedFn, argument = arg}), `_`=left(strings.concat ["cannot apply a non-parametric type: ", print.model.type fn])} fn in cases(model.Type){application=λat.eithers.either (λerr.left(err)) (λreducedType.toJson types compactMaps tname reducedType `term`) (reduceApp at), `forall`=λft.toJson types compactMaps tname (model.ForallType[body] ft) `term`, literal=λ`_`.cases(model.Term){literal=λlit.encodeLiteral lit, `_`=left("expected literal term")} strippedTerm, `list`=λelemType.cases(model.Term){`list`=λterms.let results := eithers.mapList (λt.toJson types compactMaps tname elemType t) terms in eithers.map (λvs.json.model.Value{array = vs}) results, `_`=left("expected list term")} strippedTerm, `set`=λelemType.cases(model.Term){`set`=λvals.let terms := sets.toList vals in let results := eithers.mapList (λt.toJson types compactMaps tname elemType t) terms in eithers.map (λvs.json.model.Value{array = vs}) results, `_`=left("expected set term")} strippedTerm, `optional`=λinnerType.let innerStripped := strip.deannotateType innerType in let isNestedMaybe := cases(model.Type){`optional`=λ`_`.true, `_`=false} innerStripped in cases(model.Term){`optional`=λopt.optionals.match opt right(json.model.Value{null}) (λv.let encoded := toJson types compactMaps tname innerType v in logic.ifElse isNestedMaybe (eithers.map (λev.json.model.Value{array = [ev]}) encoded) encoded), `_`=left("expected maybe term")} strippedTerm, `record`=λrt.cases(model.Term){`record`=λr.let isSimpleMaybe := λftype.cases(model.Type){`optional`=λinnerT.cases(model.Type){`optional`=λ`_`.false, `_`=true} (strip.deannotateType innerT), `_`=false} (strip.deannotateType ftype) in let encodeFieldWithType := λft,f.let fname := model.Name[] (model.Field[name] f) in let fterm := model.Field[`term`] f in let ftype := model.FieldType[`type`] ft in logic.ifElse (isSimpleMaybe ftype) (cases(model.Term){`optional`=λopt.optionals.match opt right(none) (λv.let innerType := cases(model.Type){`optional`=λit.it, `_`=ftype} (strip.deannotateType ftype) in let encoded := toJson types compactMaps tname innerType v in eithers.map (λev.given((fname, ev))) encoded), `_`=left("expected maybe term for optional field")} (strip.deannotateTerm fterm)) (let encoded := toJson types compactMaps tname ftype fterm in eithers.map (λev.given((fname, ev))) encoded) in let fieldTypes := rt in let fields := model.Record[fields] r in let encodedPairs := eithers.mapList (λftf.encodeFieldWithType (pairs.first ftf) (pairs.second ftf)) (lists.zip fieldTypes fields) in eithers.map (λpairs.json.model.Value{object = optionals.givens pairs}) encodedPairs, `_`=left("expected record term")} strippedTerm, `union`=λrt.cases(model.Term){`inject`=λinj.let field := model.Injection[field] inj in let fname := model.Name[] (model.Field[name] field) in let fterm := model.Field[`term`] field in let ftypeResult := optionals.match (lists.find (λft.equality.equal (model.Name[] (model.FieldType[name] ft)) fname) rt) left(strings.concat ["unknown variant: ", fname]) (λft.right(model.FieldType[`type`] ft)) in eithers.either (λerr.left(err)) (λftype.let ftypeStripped := strip.deannotateType ftype in let isUnit := cases(model.Type){`unit`=λ`_`.true, `_`=false} ftypeStripped in logic.ifElse isUnit right(json.model.Value{`string` = fname}) (let encodedUnion := toJson types compactMaps tname ftype fterm in eithers.map (λv.json.model.Value{object = [(fname, v)]}) encodedUnion)) ftypeResult, `_`=left("expected union term")} strippedTerm, `unit`=λ`_`.right(json.model.Value{object = []}), `wrap`=λwn.cases(model.Term){`wrap`=λwt.toJson types compactMaps tname wn (model.WrappedTerm[body] wt), `_`=left("expected wrapped term")} strippedTerm, `map`=λmt.let keyType := model.MapType[keys] mt in let valType := model.MapType[values] mt in let typeAllowsCompact := logic.and compactMaps (resolution.mapKeyResolvesToString types keyType) in cases(model.Term){`map`=λm.let hasVariableKey := optionals.match (lists.find (λk.cases(model.Term){variable=λ`_`.true, `_`=false} (strip.deannotateTerm k)) (maps.keys m)) false (λ`_`.true) in let compact := logic.and typeAllowsCompact (logic.not hasVariableKey) in logic.ifElse compact (let encodeCompactEntry := λkv.let k := pairs.first kv in let v := pairs.second kv in let encodedK := toJson types compactMaps tname keyType k in let encodedV := toJson types compactMaps tname valType v in eithers.either (λerr.left(err)) (λek.let keyStrResult := cases(json.model.Value){`string`=λs.right(s), `_`=left("internal error: string-resolving map key did not encode to a JSON string")} ek in eithers.either (λerr.left(err)) (λks.eithers.map (λev.(ks, ev)) encodedV) keyStrResult) encodedK in let entries := eithers.mapList encodeCompactEntry (maps.toList m) in eithers.map (λes.json.model.Value{object = es}) entries) (let encodeEntry := λkv.let k := pairs.first kv in let v := pairs.second kv in let encodedK := toJson types compactMaps tname keyType k in let encodedV := toJson types compactMaps tname valType v in eithers.either (λerr.left(err)) (λek.eithers.map (λev.json.model.Value{object = [("key", ek), ("value", ev)]}) encodedV) encodedK in let entries := eithers.mapList encodeEntry (maps.toList m) in eithers.map (λes.json.model.Value{array = es}) entries), `_`=left("expected map term")} strippedTerm, pair=λpt.let firstType := model.PairType[first] pt in let secondType := model.PairType[second] pt in cases(model.Term){pair=λp.let first := pairs.first p in let second := pairs.second p in let encodedFirst := toJson types compactMaps tname firstType first in let encodedSecond := toJson types compactMaps tname secondType second in eithers.either (λerr.left(err)) (λef.eithers.map (λes.json.model.Value{object = [("first", ef), ("second", es)]}) encodedSecond) encodedFirst, `_`=left("expected pair term")} strippedTerm, `either`=λet.let leftType := model.EitherType[`left`] et in let rightType := model.EitherType[`right`] et in cases(model.Term){`either`=λe.eithers.either (λl.let encodedL := toJson types compactMaps tname leftType l in eithers.map (λv.json.model.Value{object = [("left", v)]}) encodedL) (λr.let encodedR := toJson types compactMaps tname rightType r in eithers.map (λv.json.model.Value{object = [("right", v)]}) encodedR) e, `_`=left("expected either term")} strippedTerm, variable=λname.let lookedUp := maps.lookup name types in optionals.match lookedUp (toJsonUntyped `term`) (λresolvedType.toJson types compactMaps name resolvedType `term`), `_`=left(strings.concat ["unsupported type for JSON encoding: ", print.model.type typ])} stripped)
+term toJson =
+  λtypes,compactMaps,tname,typ,`term`.
+    let stripped := deannotateType typ in
+    let strippedTerm := deannotateTerm `term` in
+    let isVariableTerm := cases(Term){variable=λ`_`.true, `_`=false} strippedTerm in
+    ifElse
+      isVariableTerm
+      (cases(Term){
+        variable=λn.right(Value{
+              object = [("@var", Value{`string` = Name[] n})]}),
+        `_`=left("expected variable term")}
+        strippedTerm)
+      (let reduceApp := λapp.
+          let fn := deannotateType (ApplicationType[function] app) in
+          let arg := ApplicationType[argument] app in
+          cases(Type){
+            application=λinnerApp.eithers.either
+                  (λerr.left(err))
+                  (λreducedFn.reduceApp
+                      ApplicationType{
+                        function = reducedFn,
+                        argument = arg})
+                  (reduceApp innerApp),
+            `forall`=λft.right(substInType
+                  (singletonTypeSubst
+                    (ForallType[parameter] ft)
+                    arg)
+                  (ForallType[body] ft)),
+            variable=λname.
+                let lookedUp := maps.lookup name types
+                in match
+                  lookedUp
+                  left(strings.concat
+                    ["unknown type variable: ", Name[] name])
+                  (λresolvedFn.reduceApp
+                      ApplicationType{
+                        function = resolvedFn,
+                        argument = arg}),
+            `_`=left(strings.concat
+                ["cannot apply a non-parametric type: ", model.type fn])}
+            fn
+      in cases(Type){
+        application=λat.eithers.either
+              (λerr.left(err))
+              (λreducedType.toJson
+                  types
+                  compactMaps
+                  tname
+                  reducedType
+                  `term`)
+              (reduceApp at),
+        `forall`=λft.toJson
+              types
+              compactMaps
+              tname
+              (ForallType[body] ft)
+              `term`,
+        literal=λ`_`.cases(Term){
+              literal=λlit.encodeLiteral lit,
+              `_`=left("expected literal term")}
+              strippedTerm,
+        `list`=λelemType.cases(Term){
+              `list`=λterms.
+                  let results := eithers.mapList
+                      (λt.toJson
+                          types
+                          compactMaps
+                          tname
+                          elemType
+                          t)
+                      terms
+                  in eithers.map
+                    (λvs.Value{array = vs})
+                    results,
+              `_`=left("expected list term")}
+              strippedTerm,
+        `set`=λelemType.cases(Term){
+              `set`=λvals.
+                  let terms := sets.toList vals in
+                  let results := eithers.mapList
+                      (λt.toJson
+                          types
+                          compactMaps
+                          tname
+                          elemType
+                          t)
+                      terms in
+                  eithers.map
+                    (λvs.Value{array = vs})
+                    results,
+              `_`=left("expected set term")}
+              strippedTerm,
+        `optional`=λinnerType.
+            let innerStripped := deannotateType innerType in
+            let isNestedMaybe := cases(Type){
+                `optional`=λ`_`.true,
+                `_`=false}
+                innerStripped in
+            cases(Term){
+              `optional`=λopt.match
+                    opt
+                    right(Value{null})
+                    (λv.
+                      let encoded := toJson
+                          types
+                          compactMaps
+                          tname
+                          innerType
+                          v
+                      in ifElse
+                        isNestedMaybe
+                        (eithers.map
+                          (λev.Value{
+                              array = [ev]})
+                          encoded)
+                        encoded),
+              `_`=left("expected maybe term")}
+              strippedTerm,
+        `record`=λrt.cases(Term){
+              `record`=λr.
+                  let isSimpleMaybe := λftype.cases(Type){
+                        `optional`=λinnerT.cases(Type){
+                              `optional`=λ`_`.false,
+                              `_`=true}
+                              (deannotateType innerT),
+                        `_`=false}
+                        (deannotateType ftype) in
+                  let encodeFieldWithType := λft,f.
+                      let fname := Name[] (Field[name] f) in
+                      let fterm := Field[`term`] f in
+                      let ftype := FieldType[`type`] ft in
+                      ifElse
+                        (isSimpleMaybe ftype)
+                        (cases(Term){
+                          `optional`=λopt.match
+                                opt
+                                right(none)
+                                (λv.
+                                  let innerType := cases(Type){
+                                      `optional`=λit.it,
+                                      `_`=ftype}
+                                      (deannotateType ftype) in
+                                  let encoded := toJson
+                                      types
+                                      compactMaps
+                                      tname
+                                      innerType
+                                      v in
+                                  eithers.map
+                                    (λev.given((fname, ev)))
+                                    encoded),
+                          `_`=left("expected maybe term for optional field")}
+                          (deannotateTerm fterm))
+                        (let encoded := toJson
+                            types
+                            compactMaps
+                            tname
+                            ftype
+                            fterm
+                        in eithers.map
+                          (λev.given((fname, ev)))
+                          encoded) in
+                  let fieldTypes := rt in
+                  let fields := Record[fields] r in
+                  let encodedPairs := eithers.mapList
+                      (λftf.encodeFieldWithType
+                          (pairs.first ftf)
+                          (pairs.second ftf))
+                      (zip fieldTypes fields) in
+                  eithers.map
+                    (λpairs.Value{
+                        object = givens pairs})
+                    encodedPairs,
+              `_`=left("expected record term")}
+              strippedTerm,
+        `union`=λrt.cases(Term){
+              `inject`=λinj.
+                  let field := Injection[field] inj in
+                  let fname := Name[] (Field[name] field) in
+                  let fterm := Field[`term`] field in
+                  let ftypeResult := match
+                      (find
+                        (λft.equal
+                            (Name[] (FieldType[name] ft))
+                            fname)
+                        rt)
+                      left(strings.concat
+                        ["unknown variant: ", fname])
+                      (λft.right(FieldType[`type`] ft)) in
+                  eithers.either
+                    (λerr.left(err))
+                    (λftype.
+                      let ftypeStripped := deannotateType ftype in
+                      let isUnit := cases(Type){
+                          `unit`=λ`_`.true,
+                          `_`=false}
+                          ftypeStripped in
+                      ifElse
+                        isUnit
+                        right(Value{
+                          `string` = fname})
+                        (let encodedUnion := toJson
+                            types
+                            compactMaps
+                            tname
+                            ftype
+                            fterm
+                        in eithers.map
+                          (λv.Value{
+                              object = [(fname, v)]})
+                          encodedUnion))
+                    ftypeResult,
+              `_`=left("expected union term")}
+              strippedTerm,
+        `unit`=λ`_`.right(Value{object = []}),
+        `wrap`=λwn.cases(Term){
+              `wrap`=λwt.toJson
+                    types
+                    compactMaps
+                    tname
+                    wn
+                    (WrappedTerm[body] wt),
+              `_`=left("expected wrapped term")}
+              strippedTerm,
+        `map`=λmt.
+            let keyType := MapType[keys] mt in
+            let valType := MapType[values] mt in
+            let typeAllowsCompact := and
+                compactMaps
+                (mapKeyResolvesToString types keyType) in
+            cases(Term){
+              `map`=λm.
+                  let hasVariableKey := match
+                      (find
+                        (λk.cases(Term){
+                            variable=λ`_`.true,
+                            `_`=false}
+                            (deannotateTerm k))
+                        (maps.keys m))
+                      false
+                      (λ`_`.true) in
+                  let compact := and
+                      typeAllowsCompact
+                      (not hasVariableKey) in
+                  ifElse
+                    compact
+                    (let encodeCompactEntry := λkv.
+                        let k := pairs.first kv in
+                        let v := pairs.second kv in
+                        let encodedK := toJson types compactMaps tname keyType k in
+                        let encodedV := toJson types compactMaps tname valType v in
+                        eithers.either
+                          (λerr.left(err))
+                          (λek.
+                            let keyStrResult := cases(Value){
+                                `string`=λs.right(s),
+                                `_`=left("internal error: string-resolving map key did not encode to a JSON string")}
+                                ek
+                            in eithers.either
+                              (λerr.left(err))
+                              (λks.eithers.map (λev.(ks, ev)) encodedV)
+                              keyStrResult)
+                          encodedK in
+                    let entries := eithers.mapList
+                        encodeCompactEntry
+                        (maps.toList m) in
+                    eithers.map
+                      (λes.Value{object = es})
+                      entries)
+                    (let encodeEntry := λkv.
+                        let k := pairs.first kv in
+                        let v := pairs.second kv in
+                        let encodedK := toJson types compactMaps tname keyType k in
+                        let encodedV := toJson types compactMaps tname valType v in
+                        eithers.either
+                          (λerr.left(err))
+                          (λek.eithers.map
+                              (λev.Value{
+                                  object = [("key", ek), ("value", ev)]})
+                              encodedV)
+                          encodedK in
+                    let entries := eithers.mapList
+                        encodeEntry
+                        (maps.toList m) in
+                    eithers.map
+                      (λes.Value{array = es})
+                      entries),
+              `_`=left("expected map term")}
+              strippedTerm,
+        pair=λpt.
+            let firstType := PairType[first] pt in
+            let secondType := PairType[second] pt in
+            cases(Term){
+              pair=λp.
+                  let first := pairs.first p in
+                  let second := pairs.second p in
+                  let encodedFirst := toJson
+                      types
+                      compactMaps
+                      tname
+                      firstType
+                      first in
+                  let encodedSecond := toJson
+                      types
+                      compactMaps
+                      tname
+                      secondType
+                      second in
+                  eithers.either
+                    (λerr.left(err))
+                    (λef.eithers.map
+                        (λes.Value{
+                            object = [("first", ef), ("second", es)]})
+                        encodedSecond)
+                    encodedFirst,
+              `_`=left("expected pair term")}
+              strippedTerm,
+        `either`=λet.
+            let leftType := EitherType[`left`] et in
+            let rightType := EitherType[`right`] et in
+            cases(Term){
+              `either`=λe.eithers.either
+                    (λl.
+                      let encodedL := toJson
+                          types
+                          compactMaps
+                          tname
+                          leftType
+                          l
+                      in eithers.map
+                        (λv.Value{
+                            object = [("left", v)]})
+                        encodedL)
+                    (λr.
+                      let encodedR := toJson
+                          types
+                          compactMaps
+                          tname
+                          rightType
+                          r
+                      in eithers.map
+                        (λv.Value{
+                            object = [("right", v)]})
+                        encodedR)
+                    e,
+              `_`=left("expected either term")}
+              strippedTerm,
+        variable=λname.
+            let lookedUp := maps.lookup name types
+            in match
+              lookedUp
+              (toJsonUntyped `term`)
+              (λresolvedType.toJson
+                  types
+                  compactMaps
+                  name
+                  resolvedType
+                  `term`),
+        `_`=left(strings.concat
+            ["unsupported type for JSON encoding: ", model.type typ])}
+        stripped)
 
 ## Encode a Hydra term to a JSON value without type information. Falls back to array-wrapped Maybe encoding.
-term toJsonUntyped = λ`term`.let stripped := strip.deannotateTerm `term` in cases(model.Term){variable=λn.right(json.model.Value{object = [("@var", json.model.Value{`string` = model.Name[] n})]}), literal=λlit.encodeLiteral lit, `list`=λterms.let results := eithers.mapList (λt.toJsonUntyped t) terms in eithers.map (λvs.json.model.Value{array = vs}) results, `set`=λvals.let terms := sets.toList vals in let results := eithers.mapList (λt.toJsonUntyped t) terms in eithers.map (λvs.json.model.Value{array = vs}) results, `optional`=λopt.optionals.match opt right(json.model.Value{null}) (λv.let encodedMaybe := toJsonUntyped v in eithers.map (λencoded.json.model.Value{array = [encoded]}) encodedMaybe), `record`=λr.let encodeField := λf.let fname := model.Name[] (model.Field[name] f) in let fterm := model.Field[`term`] f in let encodedField := toJsonUntyped fterm in eithers.map (λv.(fname, v)) encodedField in let fields := model.Record[fields] r in let encodedFields := eithers.mapList encodeField fields in eithers.map (λfs.json.model.Value{object = fs}) encodedFields, `inject`=λinj.let field := model.Injection[field] inj in let fname := model.Name[] (model.Field[name] field) in let fterm := model.Field[`term`] field in let ftermStripped := strip.deannotateTerm fterm in let isUnit := cases(model.Term){`unit`=λ`_`.true, `_`=false} ftermStripped in logic.ifElse isUnit right(json.model.Value{`string` = fname}) (let encodedUnion := toJsonUntyped fterm in eithers.map (λv.json.model.Value{object = [(fname, v)]}) encodedUnion), `unit`=λ`_`.right(json.model.Value{object = []}), `wrap`=λwt.toJsonUntyped (model.WrappedTerm[body] wt), `map`=λm.let encodeEntry := λkv.let k := pairs.first kv in let v := pairs.second kv in let encodedK := toJsonUntyped k in let encodedV := toJsonUntyped v in eithers.either (λerr.left(err)) (λek.eithers.map (λev.json.model.Value{object = [("key", ek), ("value", ev)]}) encodedV) encodedK in let entries := eithers.mapList encodeEntry (maps.toList m) in eithers.map (λes.json.model.Value{array = es}) entries, pair=λp.let first := pairs.first p in let second := pairs.second p in let encodedFirst := toJsonUntyped first in let encodedSecond := toJsonUntyped second in eithers.either (λerr.left(err)) (λef.eithers.map (λes.json.model.Value{object = [("first", ef), ("second", es)]}) encodedSecond) encodedFirst, `either`=λe.eithers.either (λl.let encodedL := toJsonUntyped l in eithers.map (λv.json.model.Value{object = [("left", v)]}) encodedL) (λr.let encodedR := toJsonUntyped r in eithers.map (λv.json.model.Value{object = [("right", v)]}) encodedR) e, `_`=left(strings.concat ["unsupported term variant for JSON encoding: ", print.model.term `term`])} stripped
+term toJsonUntyped =
+  λ`term`.
+    let stripped := deannotateTerm `term`
+    in cases(Term){
+      variable=λn.right(Value{object = [("@var", Value{`string` = Name[] n})]}),
+      literal=λlit.encodeLiteral lit,
+      `list`=λterms.
+          let results := eithers.mapList (λt.toJsonUntyped t) terms
+          in eithers.map (λvs.Value{array = vs}) results,
+      `set`=λvals.
+          let terms := sets.toList vals in
+          let results := eithers.mapList (λt.toJsonUntyped t) terms in
+          eithers.map (λvs.Value{array = vs}) results,
+      `optional`=λopt.match
+            opt
+            right(Value{null})
+            (λv.
+              let encodedMaybe := toJsonUntyped v
+              in eithers.map (λencoded.Value{array = [encoded]}) encodedMaybe),
+      `record`=λr.
+          let encodeField := λf.
+              let fname := Name[] (Field[name] f) in
+              let fterm := Field[`term`] f in
+              let encodedField := toJsonUntyped fterm in
+              eithers.map (λv.(fname, v)) encodedField in
+          let fields := Record[fields] r in
+          let encodedFields := eithers.mapList encodeField fields in
+          eithers.map (λfs.Value{object = fs}) encodedFields,
+      `inject`=λinj.
+          let field := Injection[field] inj in
+          let fname := Name[] (Field[name] field) in
+          let fterm := Field[`term`] field in
+          let ftermStripped := deannotateTerm fterm in
+          let isUnit := cases(Term){`unit`=λ`_`.true, `_`=false} ftermStripped in
+          ifElse
+            isUnit
+            right(Value{`string` = fname})
+            (let encodedUnion := toJsonUntyped fterm
+            in eithers.map (λv.Value{object = [(fname, v)]}) encodedUnion),
+      `unit`=λ`_`.right(Value{object = []}),
+      `wrap`=λwt.toJsonUntyped (WrappedTerm[body] wt),
+      `map`=λm.
+          let encodeEntry := λkv.
+              let k := pairs.first kv in
+              let v := pairs.second kv in
+              let encodedK := toJsonUntyped k in
+              let encodedV := toJsonUntyped v in
+              eithers.either
+                (λerr.left(err))
+                (λek.eithers.map
+                    (λev.Value{object = [("key", ek), ("value", ev)]})
+                    encodedV)
+                encodedK in
+          let entries := eithers.mapList encodeEntry (maps.toList m) in
+          eithers.map (λes.Value{array = es}) entries,
+      pair=λp.
+          let first := pairs.first p in
+          let second := pairs.second p in
+          let encodedFirst := toJsonUntyped first in
+          let encodedSecond := toJsonUntyped second in
+          eithers.either
+            (λerr.left(err))
+            (λef.eithers.map (λes.Value{object = [("first", ef), ("second", es)]}) encodedSecond)
+            encodedFirst,
+      `either`=λe.eithers.either
+            (λl.
+              let encodedL := toJsonUntyped l
+              in eithers.map (λv.Value{object = [("left", v)]}) encodedL)
+            (λr.
+              let encodedR := toJsonUntyped r
+              in eithers.map (λv.Value{object = [("right", v)]}) encodedR)
+            e,
+      `_`=left(strings.concat ["unsupported term variant for JSON encoding: ", model.term `term`])}
+      stripped

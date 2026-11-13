@@ -1,10 +1,10 @@
 ## Top-level error types for the Hydra kernel
 module hydra.core.errors
 
-import hydra.core.error.checking as checking
-import hydra.core.error.model as error.model
-import hydra.core.model as model
-import hydra.core.paths as paths
+import hydra.core.error.checking
+import hydra.core.error.model
+import hydra.core.model
+import hydra.core.paths
 
 ## An error that occurred during decoding of a term
 type DecodingError = wrap(string)
@@ -15,33 +15,33 @@ type EmptyListError = unit
 ## An error of any kind, with kernel errors particularly differentiated
 type Error = union{
   ## A type checking error
-  checking: checking.CheckingError,
+  checking: CheckingError,
   ## An error that occurred during decoding of a term
   decoding: DecodingError,
   ## A duplicate binding name error
-  duplicateBinding: error.model.DuplicateBindingError,
+  duplicateBinding: DuplicateBindingError,
   ## A duplicate field name error
-  duplicateField: error.model.DuplicateFieldError,
+  duplicateField: DuplicateFieldError,
   ## An error that occurred while extracting a value from a term
   extraction: ExtractionError,
   ## A type inference error
   inference: InferenceError,
   ## A literal value validation error
-  invalidLiteral: error.model.InvalidLiteralError,
+  invalidLiteral: InvalidLiteralError,
   ## Any other error
   other: OtherError,
   ## A name-resolution error
   resolution: ResolutionError,
   ## A reference to an undefined field
-  undefinedField: error.model.UndefinedFieldError,
+  undefinedField: UndefinedFieldError,
   ## A reference to an undefined term variable
-  undefinedTermVariable: error.model.UndefinedTermVariableError,
+  undefinedTermVariable: UndefinedTermVariableError,
   ## A term variable whose type is not known
-  untypedTermVariable: error.model.UntypedTermVariableError,
+  untypedTermVariable: UntypedTermVariableError,
   ## An unexpected term variant
-  unexpectedTermVariant: error.model.UnexpectedTermVariantError,
+  unexpectedTermVariant: UnexpectedTermVariantError,
   ## An unexpected type variant
-  unexpectedTypeVariant: error.model.UnexpectedTypeVariantError,
+  unexpectedTypeVariant: UnexpectedTypeVariantError,
   ## A type unification error
   unification: UnificationError}
 
@@ -65,7 +65,7 @@ type ExtractionError = union{
 ## An error that occurred during type inference
 type InferenceError = union{
   ## A type checking error encountered during inference
-  checking: checking.CheckingError,
+  checking: CheckingError,
   ## A generic inference error carrying a message and a subterm path. Placeholder arm; sites should migrate to typed variants.
   other: OtherInferenceError,
   ## A unification failure encountered while inferring types
@@ -74,27 +74,27 @@ type InferenceError = union{
 ## Multiple let bindings with the same name were found
 type MultipleBindingsError = record{
   ## The binding name which was duplicated
-  name: model.Name}
+  name: Name}
 
 ## Multiple fields with the same name were found in a record
 type MultipleFieldsError = record{
   ## The field name which appeared more than once
-  fieldName: model.Name}
+  fieldName: Name}
 
 ## No field with the expected name was present
 type NoMatchingFieldError = record{
   ## The field name which was not found
-  fieldName: model.Name}
+  fieldName: Name}
 
 ## No let binding with the expected name was present
 type NoSuchBindingError = record{
   ## The binding name which was not found
-  name: model.Name}
+  name: Name}
 
 ## No primitive function with the expected name was registered in the graph
 type NoSuchPrimitiveError = record{
   ## The primitive name which was not found
-  name: model.Name}
+  name: Name}
 
 ## A case statement was missing a case for the requested variant
 type NotEnoughCasesError = unit
@@ -105,7 +105,7 @@ type OtherError = wrap(string)
 ## A generic inference error: message + subterm path
 type OtherInferenceError = record{
   ## The subterm path at which the error was observed
-  path: paths.SubtermPath,
+  path: SubtermPath,
   ## A human-readable error message
   message: string}
 
@@ -135,15 +135,15 @@ type UnexpectedShapeError = record{
 ## An error that occurred during type unification
 type UnificationError = record{
   ## The left-hand type in the unification
-  leftType: model.Type,
+  leftType: Type,
   ## The right-hand type in the unification
-  rightType: model.Type,
+  rightType: Type,
   ## A human-readable error message
   message: string}
 
 ## A unification failure at a specific subterm locus during inference
 type UnificationInferenceError = record{
   ## The subterm path at which the unification failure was observed
-  path: paths.SubtermPath,
+  path: SubtermPath,
   ## The underlying unification error
   cause: UnificationError}

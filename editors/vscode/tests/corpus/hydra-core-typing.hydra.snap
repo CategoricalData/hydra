@@ -6,22 +6,14 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.model as model
+>import hydra.core.model
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                       ^ source.hydra
-#                        ^^ source.hydra keyword.control.import.hydra
-#                          ^ source.hydra
-#                           ^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.paths as paths
+>import hydra.core.paths
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                       ^ source.hydra
-#                        ^^ source.hydra keyword.control.import.hydra
-#                          ^ source.hydra
-#                           ^^^^^ source.hydra entity.name.namespace.hydra
 >
 >## A structured representation of a function term's components, replacing ad-hoc tuples. This captures all the information extracted from peeling lambdas, type lambdas, lets, and type applications from a term.
 #^^ source.hydra comment.block.documentation.hydra
@@ -44,83 +36,83 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  typeParams: list<model.Name>,
+>  typeParams: list<Name>,
 #^^ source.hydra
 #  ^^^^^^^^^^ source.hydra variable.other.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                   ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                             ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                              ^^ source.hydra
+#                   ^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                        ^^ source.hydra
 >  ## Value parameters (from lambdas)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  params: list<model.Name>,
+>  params: list<Name>,
 #^^ source.hydra
 #  ^^^^^^ source.hydra variable.other.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#               ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                         ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                          ^^ source.hydra
+#               ^^^^ source.hydra variable.other.hydra
+#                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                    ^^ source.hydra
 >  ## Let bindings accumulated from the term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  bindings: list<model.Binding>,
+>  bindings: list<Binding>,
 #^^ source.hydra
 #  ^^^^^^^^ source.hydra variable.other.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                 ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                              ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                               ^^ source.hydra
+#                 ^^^^^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                         ^^ source.hydra
 >  ## The body term after removing all lambdas, lets, etc.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  body: model.Term,
+>  body: Term,
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >  ## Domain types of the value parameters
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  domains: list<model.Type>,
+>  domains: list<Type>,
 #^^ source.hydra
 #  ^^^^^^^ source.hydra variable.other.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                          ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                           ^^ source.hydra
+#                ^^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                     ^^ source.hydra
 >  ## The return type of the function (if type inference succeeded)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  codomain: optional<model.Type>,
+>  codomain: optional<Type>,
 #^^ source.hydra
 #  ^^^^^^^^ source.hydra variable.other.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^^^^^ source.hydra support.type.hydra
 #                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                     ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                               ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                ^^ source.hydra
+#                     ^^^^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                          ^^ source.hydra
 >  ## Updated environment after processing all bindings
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -160,16 +152,16 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  trace: list<paths.SubtermStep>}
+>  trace: list<SubtermStep>}
 #^^ source.hydra
 #  ^^^^^ source.hydra variable.other.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
 #             ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#              ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                               ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                ^^ source.hydra
+#              ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                          ^^ source.hydra
 >
 >## The result of applying inference rules to a term.
 #^^ source.hydra comment.block.documentation.hydra
@@ -187,28 +179,28 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `term`: model.Term,
+>  `term`: Term,
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >  ## The inferred type of the term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `type`: model.Type,
+>  `type`: Type,
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >  ## The type substitution resulting from unification
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -224,18 +216,18 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  classConstraints: map<model.Name, model.TypeVariableConstraints>,
+>  classConstraints: map<Name, TypeVariableConstraints>,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                  ^ source.hydra punctuation.separator.type.hydra
 #                   ^ source.hydra
 #                    ^^^ source.hydra support.type.hydra
 #                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                  ^^ source.hydra
-#                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                  ^^ source.hydra
+#                        ^^^^ source.hydra variable.other.hydra
+#                            ^^ source.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                      ^^ source.hydra
 >  ## The updated InferenceContext after inference (carries fresh-variable counter and trace)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -264,13 +256,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  name: model.Name,
+>  name: Name,
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >  ## An optional human-readable description of the parameter
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -289,15 +281,15 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `type`: model.Type,
+>  `type`: Type,
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >  ## Whether the parameter must be passed lazily (thunked) at call sites in hosts that distinguish strict from lazy evaluation
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -340,15 +332,15 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `type`: model.Type}
+>  `type`: Type}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >
 >## A structured signature for a term: an ordered list of type parameters (with optional class constraints), an ordered list of value parameters, and a result. TermSignature is a richer view of TypeScheme: every TermSignature can be converted to a TypeScheme by erasing parameter names, descriptions, and laziness flags.
 #^^ source.hydra comment.block.documentation.hydra
@@ -405,7 +397,7 @@
 >## A substitution of term variables for terms
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->type TermSubst = wrap(map<model.Name, model.Term>)
+>type TermSubst = wrap(map<Name, Term>)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -416,11 +408,11 @@
 #                     ^ source.hydra
 #                      ^^^ source.hydra support.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                    ^^ source.hydra
-#                                      ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                 ^^ source.hydra
+#                          ^^^^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                     ^^ source.hydra
 >
 >## A type class identifier together with a human-readable description. Type classes are referenced as bare names (e.g. the local name "equality") in TypeVariableConstraints.classes; the canonical definitions live as term bindings under hydra.core.classes.
 #^^ source.hydra comment.block.documentation.hydra
@@ -462,28 +454,28 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `left`: model.Type,
+>  `left`: Type,
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >  ## The right-hand side of the constraint
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `right`: model.Type,
+>  `right`: Type,
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^^ source.hydra variable.other.escaped.hydra
 #        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                     ^^ source.hydra
+#           ^^^^ source.hydra variable.other.hydra
+#               ^^ source.hydra
 >  ## A description of the type constraint which may be used for tracing or debugging
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -512,32 +504,32 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  name: model.Name,
+>  name: Name,
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >  ## Any type class constraints on the type parameter
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  constraints: list<model.TypeClassConstraint>}
+>  constraints: list<TypeClassConstraint>}
 #^^ source.hydra
 #  ^^^^^^^^^^^ source.hydra variable.other.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
 #                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                    ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                              ^^ source.hydra
+#                    ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                        ^^ source.hydra
 >
 >## A substitution of type variables for types
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->type TypeSubst = wrap(map<model.Name, model.Type>)
+>type TypeSubst = wrap(map<Name, Type>)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -548,8 +540,8 @@
 #                     ^ source.hydra
 #                      ^^^ source.hydra support.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                    ^^ source.hydra
-#                                      ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                 ^^ source.hydra
+#                          ^^^^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                     ^^ source.hydra

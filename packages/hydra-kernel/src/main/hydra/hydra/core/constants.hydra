@@ -1,7 +1,7 @@
 ## A module for tier-0 constants.
 module hydra.core.constants
 
-import hydra.core.model as model
+import hydra.core.model
 
 ## The conventional field name used when normalizing a wrapped (newtype) value to a single-field record
 term fieldNameValue = "value"
@@ -10,37 +10,37 @@ term fieldNameValue = "value"
 term ignoredVariable = "_"
 
 ## Annotation key for type classes
-term keyClasses = model.Name{"classes"}
+term keyClasses = Name{"classes"}
 
 ## Annotation key for debug identifiers
-term keyDebugId = model.Name{"debugId"}
+term keyDebugId = Name{"debugId"}
 
 ## Annotation key for deprecated markers
-term keyDeprecated = model.Name{"deprecated"}
+term keyDeprecated = Name{"deprecated"}
 
 ## Annotation key for descriptions
-term keyDescription = model.Name{"description"}
+term keyDescription = Name{"description"}
 
 ## Annotation key for exclusions
-term keyExclude = model.Name{"exclude"}
+term keyExclude = Name{"exclude"}
 
 ## A flag which tells the language coders to encode a given encoded type as a term rather than a native type
-term keyFirstClassType = model.Name{"firstClassType"}
+term keyFirstClassType = Name{"firstClassType"}
 
 ## A counter for generating fresh type variable names
-term keyFreshTypeVariableCount = model.Name{"freshTypeVariableCount"}
+term keyFreshTypeVariableCount = Name{"freshTypeVariableCount"}
 
 ## Annotation key for maximum length constraints
-term keyMaxLength = model.Name{"maxLength"}
+term keyMaxLength = Name{"maxLength"}
 
 ## Annotation key for minimum length constraints
-term keyMinLength = model.Name{"minLength"}
+term keyMinLength = Name{"minLength"}
 
 ## Annotation key for preserving field names during code generation
-term keyPreserveFieldName = model.Name{"preserveFieldName"}
+term keyPreserveFieldName = Name{"preserveFieldName"}
 
 ## Annotation key for type information
-term keyType = model.Name{"type"}
+term keyType = Name{"type"}
 
 ## The maximum value of a 32-bit integer
 term maxInt32 = 2147483647:int32

@@ -1,7 +1,7 @@
 ## A model for file-system paths and metadata. Several types here are drawn from the POSIX <sys/stat.h> specification; see https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/sys_stat.h.html
 module hydra.core.file
 
-import hydra.core.time as time
+import hydra.core.time
 
 ## A file extension (without the dot), e.g. "json" or "py"
 type FileExtension = wrap(string)
@@ -16,11 +16,11 @@ type FileStatus = record{
   ## st_size / the size of the file in bytes. Well-defined for regular files and symbolic links; implementation-defined for other file types
   size: int64,
   ## st_mtim / the time of last data modification
-  modificationTime: time.Timespec,
+  modificationTime: Timespec,
   ## st_atim / the time of last data access, if available. Optional, as it is unreliable or untracked on some filesystems and platforms (e.g. noatime mounts)
-  accessTime: optional<time.Timespec>,
+  accessTime: optional<Timespec>,
   ## st_ctim / the time of last file status change, if available. Optional, as this POSIX-specific notion does not map onto all platforms
-  statusChangeTime: optional<time.Timespec>}
+  statusChangeTime: optional<Timespec>}
 
 ## An enumeration of POSIX file types, following the file type macros of <sys/stat.h>
 type FileType = union{

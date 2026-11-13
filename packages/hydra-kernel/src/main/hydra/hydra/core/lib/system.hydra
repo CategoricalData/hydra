@@ -4,10 +4,10 @@
 ## Every primitive in this module is effectful: it describes a computation against the ambient state of the running process -- its environment, its working directory, the system clock, child processes -- and executing that computation is separate from describing it.
 module hydra.core.lib.system
 
-import hydra.core.error.system as error.system
-import hydra.core.file as file
-import hydra.core.system as system
-import hydra.core.time as time
+import hydra.core.error.system
+import hydra.core.file
+import hydra.core.system
+import hydra.core.time
 
 ## Run a program to completion and capture its result.
 ##
@@ -19,14 +19,14 @@ import hydra.core.time as time
 ## @requirement reportsExitStatusAsRight: execute reports a child's exit status as right(result), for both a zero (successful) and a non-zero exit status -- a non-zero exit is a normal, successful launch outcome, not a SystemError.
 ## @requirement honorsWorkingDirectoryAndEnvironmentFields: execute honors the command's workingDirectory field (running the child with that directory as its current directory) and its environment field (replacing the child's environment with exactly the given bindings, not merely augmenting it).
 ## @requirement leftCommandNotFoundOnMissingProgram: execute returns left(commandNotFound) when the program does not exist, distinguishing a launch failure from a program that ran and exited non-zero.
-impure primitive execute : system.Command → effect<either<error.system.SystemError, system.ProcessResult>>
+impure primitive execute : Command → effect<either<SystemError, ProcessResult>>
 
 ## Terminate the current process with a status code.
 ##
 ## exit(code) describes an effectful computation which terminates the current process immediately with the given status, exactly as the POSIX exit() function (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/exit.html). The status is reported to the parent through wait(); by the XCU section 2.8.2 convention, 0 denotes success and non-zero denotes failure. This computation does not return, so subsequent effects in a sequence are not performed.
 ##
 ## @availableSince 0.17
-impure primitive exit : system.StatusCode → effect<unit>
+impure primitive exit : StatusCode → effect<unit>
 
 ## Get the full set of environment variables.
 ##
@@ -34,7 +34,7 @@ impure primitive exit : system.StatusCode → effect<unit>
 ##
 ## @availableSince 0.17
 ## @requirement returnsExactEnvironmentContents: getEnvironment returns a map containing exactly the current process's environment, with no entries for variables that are not actually set (observed by the absence of a guaranteed-unset variable name).
-impure primitive getEnvironment : effect<map<system.EnvironmentVariable, string>>
+impure primitive getEnvironment : effect<map<EnvironmentVariable, string>>
 
 ## Look up a single environment variable by name.
 ##
@@ -42,7 +42,7 @@ impure primitive getEnvironment : effect<map<system.EnvironmentVariable, string>
 ##
 ## @availableSince 0.17
 ## @requirement noneForAbsentVariable: getEnvironmentVariable returns none when the named environment variable is not set.
-impure primitive getEnvironmentVariable : system.EnvironmentVariable → effect<optional<string>>
+impure primitive getEnvironmentVariable : EnvironmentVariable → effect<optional<string>>
 
 ## Get the current wall-clock time.
 ##
@@ -52,7 +52,7 @@ impure primitive getEnvironmentVariable : system.EnvironmentVariable → effect<
 ## @requirement returnsPositiveEpochSeconds: getTime returns a Timespec whose seconds field is a positive number of seconds since the Unix epoch.
 ## @requirement returnsNanosecondsInValidRange: getTime returns a Timespec whose nanoseconds field is within the documented range [0, 1000000000).
 ## @requirement readsTheClockWhenRun: getTime reads the clock each time the computation runs, not once when it is defined or loaded: a read taken after a pause is later than a read taken before it.
-impure primitive getTime : effect<time.Timespec>
+impure primitive getTime : effect<Timespec>
 
 ## Get the current working directory.
 ##
@@ -60,25 +60,25 @@ impure primitive getTime : effect<time.Timespec>
 ##
 ## @availableSince 0.17
 ## @requirement returnsNonEmptyPath: getWorkingDirectory returns a non-empty absolute path for the current working directory.
-impure primitive getWorkingDirectory : effect<either<error.system.SystemError, file.FilePath>>
+impure primitive getWorkingDirectory : effect<either<SystemError, FilePath>>
 
 ## Read the complete contents of standard input as raw bytes.
 ##
 ## readStdin describes an effectful computation which reads standard input (POSIX file descriptor 0) until end-of-file and returns the complete contents as raw bytes, with no character decoding or newline translation -- the POSIX read() function (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/read.html) applied repeatedly to fd 0 until it signals end-of-file. To interpret the result as text, decode it (e.g. via hydra.core.lib.text.decodeUtf8). A recoverable I/O failure is returned as left(error); success is returned as right(contents), including the empty byte string if stdin is closed or empty.
 ##
 ## @availableSince 0.17.6
-impure primitive readStdin : effect<either<error.system.SystemError, binary>>
+impure primitive readStdin : effect<either<SystemError, binary>>
 
 ## Write raw bytes to standard error.
 ##
 ## writeStderr(bytes) describes an effectful computation which writes bytes to standard error (POSIX file descriptor 2), with no character encoding or newline translation -- the POSIX write() function (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/write.html) applied repeatedly to fd 2 until all bytes are written. To write text, encode it first (e.g. via hydra.core.lib.text.encodeUtf8). A recoverable I/O failure (for example a closed pipe, POSIX EPIPE) is returned as left(error); success is returned as right(unit).
 ##
 ## @availableSince 0.17.6
-impure primitive writeStderr : binary → effect<either<error.system.SystemError, unit>>
+impure primitive writeStderr : binary → effect<either<SystemError, unit>>
 
 ## Write raw bytes to standard output.
 ##
 ## writeStdout(bytes) describes an effectful computation which writes bytes to standard output (POSIX file descriptor 1), with no character encoding or newline translation -- the POSIX write() function (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/write.html) applied repeatedly to fd 1 until all bytes are written. To write text, encode it first (e.g. via hydra.core.lib.text.encodeUtf8). A recoverable I/O failure (for example a closed pipe, POSIX EPIPE) is returned as left(error); success is returned as right(unit).
 ##
 ## @availableSince 0.17.6
-impure primitive writeStdout : binary → effect<either<error.system.SystemError, unit>>
+impure primitive writeStdout : binary → effect<either<SystemError, unit>>

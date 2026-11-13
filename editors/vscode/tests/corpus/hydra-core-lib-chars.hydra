@@ -6,8 +6,6 @@
 ## Case mapping (toLower/toUpper) is the simple (one-to-one) single-code-point Unicode case mapping, not full case folding.
 module hydra.core.lib.chars
 
-
-
 ## Check whether a character is alphabetic.
 ##
 ## True if the argument is a Unicode letter — any of the general categories L* (Lu, Ll, Lt, Lm, Lo) — and false otherwise.

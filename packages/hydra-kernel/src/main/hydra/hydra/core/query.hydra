@@ -1,7 +1,7 @@
 ## A model for language-agnostic graph pattern queries
 module hydra.core.query
 
-import hydra.core.model as model
+import hydra.core.model
 
 ## One of several comparison operators
 type ComparisonConstraint = union{
@@ -15,23 +15,23 @@ type ComparisonConstraint = union{
 ## An abstract edge based on a record type
 type Edge = record{
   ## The name of a record type, for which the edge also specifies an out- and an in- projection
-  `type`: model.Name,
+  `type`: Name,
   ## The field representing the out-projection of the edge. Defaults to 'out'.
-  out: optional<model.Name>,
+  out: optional<Name>,
   ## The field representing the in-projection of the edge. Defaults to 'in'.
-  `in`: optional<model.Name>}
+  `in`: optional<Name>}
 
 ## A query pattern which matches within a designated component subgraph
 type GraphPattern = record{
   ## The name of the component graph
-  graph: model.Name,
+  graph: Name,
   ## The patterns to match within the subgraph
   patterns: list<Pattern>}
 
 ## A node in a query expression; it may be a term, a variable, or a wildcard
 type Node = union{
   ## A graph term; an expression which is valid in the graph being matched
-  `term`: model.Term,
+  `term`: Term,
   ## A query variable, not to be confused with a variable term
   variable: Variable,
   ## An anonymous variable which we do not care to join across patterns
@@ -116,7 +116,7 @@ type Step = union{
   ## An out-to-in traversal of an abstract edge
   edge: Edge,
   ## A projection from a record through one of its fields
-  `project`: model.Projection,
+  `project`: Projection,
   ## A comparison of two terms
   compare: ComparisonConstraint}
 

@@ -1,12 +1,39 @@
 ## Language constraints for Hydra Core
 module hydra.core.languages
 
-import hydra.core.coders as coders
-import hydra.core.file as file
-import hydra.core.lib.sets as sets
-import hydra.core.model as model
+import hydra.core.coders
+import hydra.core.file
+import hydra.core.lib.sets
+import hydra.core.model
 import hydra.core.reflect as reflect
-import hydra.core.util as util
+import hydra.core.util
 
 ## Language constraints for Hydra Core, i.e. no constraints.
-term hydraLanguage = let literalVariants := sets.fromList reflect.literalVariants, floatTypes := sets.fromList reflect.floatTypes, integerTypes := sets.fromList reflect.integerTypes, termVariants := sets.fromList reflect.termVariants, typeVariants := sets.fromList reflect.typeVariants, types := λt.cases(model.Type){`_`=true} t in coders.Language{name = coders.LanguageName{"hydra.core.model"}, constraints = coders.LanguageConstraints{literalVariants = literalVariants, floatTypes = floatTypes, integerTypes = integerTypes, termVariants = termVariants, typeVariants = typeVariants, types = types}, supportedFeatures = sets.fromList [coders.LanguageFeature{partialApplication}, coders.LanguageFeature{nestedCaseStatements}, coders.LanguageFeature{nestedPolymorphicLetBindings}], caseConventions = coders.CaseConventions{constant = util.CaseConvention{upperSnake}, directory = util.CaseConvention{pascal}, enumValue = util.CaseConvention{pascal}, field = util.CaseConvention{camel}, file = util.CaseConvention{pascal}, `module` = util.CaseConvention{lowerSnake}, `term` = util.CaseConvention{camel}, termVariable = util.CaseConvention{camel}, `type` = util.CaseConvention{pascal}, typeVariable = util.CaseConvention{camel}}, defaultFileExtension = file.FileExtension{""}}
+term hydraLanguage =
+  let literalVariants := fromList reflect.literalVariants, floatTypes := fromList reflect.floatTypes, integerTypes := fromList reflect.integerTypes, termVariants := fromList reflect.termVariants, typeVariants := fromList reflect.typeVariants, types := λt.cases(Type){`_`=true} t
+  in Language{
+    name = LanguageName{"hydra.core.model"},
+    constraints = LanguageConstraints{
+      literalVariants = literalVariants,
+      floatTypes = floatTypes,
+      integerTypes = integerTypes,
+      termVariants = termVariants,
+      typeVariants = typeVariants,
+      types = types},
+    supportedFeatures = fromList
+        [
+          LanguageFeature{partialApplication},
+          LanguageFeature{nestedCaseStatements},
+          LanguageFeature{nestedPolymorphicLetBindings}],
+    caseConventions = CaseConventions{
+      constant = CaseConvention{upperSnake},
+      directory = CaseConvention{pascal},
+      enumValue = CaseConvention{pascal},
+      field = CaseConvention{camel},
+      file = CaseConvention{pascal},
+      `module` = CaseConvention{lowerSnake},
+      `term` = CaseConvention{camel},
+      termVariable = CaseConvention{camel},
+      `type` = CaseConvention{pascal},
+      typeVariable = CaseConvention{camel}},
+    defaultFileExtension = FileExtension{""}}

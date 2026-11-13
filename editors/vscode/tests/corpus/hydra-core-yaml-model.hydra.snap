@@ -1,0 +1,154 @@
+>## A basic YAML representation model. Based on:
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>##   https://yaml.org/spec/1.2/spec.html
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## The Serialization and Presentation properties of YAML,
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## including directives, comments, anchors, style, formatting, and aliases, are not supported by this model.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## In addition, tags are omitted from this model, and non-standard scalars are unsupported.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.yaml.model
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>## A YAML node (value)
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Node = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^ source.hydra entity.name.function.hydra
+#         ^ source.hydra
+#          ^ source.hydra keyword.operator.equals.hydra
+#           ^ source.hydra
+#            ^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+>  ## A mapping from nodes to nodes
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  mapping: map<Node, Node>,
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^ source.hydra support.type.hydra
+#              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#               ^^^^ source.hydra variable.other.hydra
+#                   ^^ source.hydra
+#                     ^^^^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                          ^^ source.hydra
+>  ## A scalar value
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  scalar: Scalar,
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra variable.other.hydra
+#                ^^ source.hydra
+>  ## A sequence of nodes
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  sequence: list<Node>}
+#^^ source.hydra
+#  ^^^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^ source.hydra support.type.hydra
+#                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                 ^^^^ source.hydra variable.other.hydra
+#                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                      ^^ source.hydra
+>
+>## A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type Scalar = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^ source.hydra entity.name.function.hydra
+#           ^ source.hydra
+#            ^ source.hydra keyword.operator.equals.hydra
+#             ^ source.hydra
+#              ^^^^^ source.hydra support.type.hydra
+#                   ^^ source.hydra
+>  ## Represents a true/false value
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  bool: boolean,
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^^^^ source.hydra support.type.hydra
+#               ^^ source.hydra
+>  ## An arbitrary-precision decimal number (lexically a valid JSON number)
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  `decimal`: decimal,
+#^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^^^^ source.hydra variable.other.escaped.hydra
+#          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#           ^ source.hydra punctuation.separator.type.hydra
+#            ^ source.hydra
+#             ^^^^^^^ source.hydra support.type.hydra
+#                    ^^ source.hydra
+>  ## Represents an approximation to real numbers
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  float: float64,
+#^^ source.hydra
+#  ^^^^^ source.hydra variable.other.hydra
+#       ^ source.hydra punctuation.separator.type.hydra
+#        ^ source.hydra
+#         ^^^^^^^ source.hydra support.type.hydra
+#                ^^ source.hydra
+>  ## Represents arbitrary sized finite mathematical integers
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  int: bigint,
+#^^ source.hydra
+#  ^^^ source.hydra variable.other.hydra
+#     ^ source.hydra punctuation.separator.type.hydra
+#      ^ source.hydra
+#       ^^^^^^ source.hydra support.type.hydra
+#             ^^ source.hydra
+>  ## Represents the lack of a value
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  null: unit,
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^ source.hydra support.type.hydra
+#            ^^ source.hydra
+>  ## A string value
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  str: string}
+#^^ source.hydra
+#  ^^^ source.hydra variable.other.hydra
+#     ^ source.hydra punctuation.separator.type.hydra
+#      ^ source.hydra
+#       ^^^^^^ source.hydra support.type.hydra
+#             ^^ source.hydra

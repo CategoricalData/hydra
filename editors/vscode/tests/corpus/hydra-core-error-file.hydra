@@ -1,17 +1,17 @@
 ## File-system error types
 module hydra.core.error.file
 
-import hydra.core.file as file
+import hydra.core.file
 
 ## A recoverable file-system error
 type FileError = union{
   ## A path already exists where one was required not to (POSIX EEXIST), e.g. creating a directory that is already present
-  alreadyExists: file.FilePath,
+  alreadyExists: FilePath,
   ## The path is syntactically invalid or cannot be represented by the host file system
   invalidPath: string,
   ## The requested path does not exist
-  notFound: file.FilePath,
+  notFound: FilePath,
   ## Any other file-system error, represented as a host-provided message
   other: string,
   ## The host denied access to the requested path
-  permissionDenied: file.FilePath}
+  permissionDenied: FilePath}

@@ -3,8 +3,6 @@
 ## Pairs: the two-component product type. This module provides the two projections, the bifunctor map, and the constructor.
 module hydra.core.lib.pairs
 
-
-
 ## Map over both elements of a pair.
 ##
 ## bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.

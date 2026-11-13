@@ -1,8 +1,6 @@
 ## A Markdown document model, used as the target representation for generated documentation
 module hydra.core.markdown
 
-
-
 ## A block-level Markdown element
 type Block = union{
   ## A fenced code block

@@ -6,8 +6,6 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->
->
 >## A base-relative edit (delta) transforming a value into a new value. Applied forward against a base; a symmetric before/after 'diff' is derived from (base, Edit), not stored here. Canonical by construction: descend carries single-step StepEdits, so there is exactly one encoding of any change.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra

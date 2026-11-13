@@ -5,8 +5,6 @@
 ## The parseX primitives are pure conversions from text to values, with an optional codomain wherever parsing can fail; the printX primitives are the pure conversions back from values to text.
 module hydra.core.lib.literals
 
-
-
 ## Decode a base64 ASCII string to binary data.
 ##
 ## base64ToBinary(s) decodes the standard base64 (RFC 4648) ASCII string s and returns the resulting bytes as binary data.

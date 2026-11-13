@@ -1,81 +1,1330 @@
 ## Core rewrite and fold combinators for terms and types
 module hydra.core.rewriting
 
-import hydra.core.coders as coders
-import hydra.core.constants as constants
+import hydra.core.coders
+import hydra.core.constants
 import hydra.core.lib.eithers as eithers
 import hydra.core.lib.lists as lists
 import hydra.core.lib.maps as maps
-import hydra.core.lib.math as math
+import hydra.core.lib.math
 import hydra.core.lib.optionals as optionals
-import hydra.core.lib.pairs as pairs
+import hydra.core.lib.pairs
 import hydra.core.lib.sets as sets
-import hydra.core.model as model
-import hydra.core.paths as paths
-import hydra.core.scoping as scoping
+import hydra.core.model
+import hydra.core.paths
+import hydra.core.scoping
 
 ## Apply a term-level function inside any leading type lambdas
-term applyInsideTypeLambdasAndAnnotations = λf,term0.cases(model.Term){annotated=λat.model.Term{annotated = model.AnnotatedTerm{body = applyInsideTypeLambdasAndAnnotations f (model.AnnotatedTerm[body] at), annotation = model.AnnotatedTerm[annotation] at}}, typeLambda=λtl.model.Term{typeLambda = model.TypeLambda{parameter = model.TypeLambda[parameter] tl, body = applyInsideTypeLambdasAndAnnotations f (model.TypeLambda[body] tl)}}, `_`=f term0} term0
+term applyInsideTypeLambdasAndAnnotations =
+  λf,term0.cases(Term){
+      annotated=λat.Term{
+            annotated = AnnotatedTerm{
+              body = applyInsideTypeLambdasAndAnnotations
+                  f
+                  (AnnotatedTerm[body] at),
+              annotation = AnnotatedTerm[annotation] at}},
+      typeLambda=λtl.Term{
+            typeLambda = TypeLambda{
+              parameter = TypeLambda[parameter] tl,
+              body = applyInsideTypeLambdasAndAnnotations
+                  f
+                  (TypeLambda[body] tl)}},
+      `_`=f term0}
+      term0
 
 ## Fold over a term, traversing its subterms in the specified order
-term foldOverTerm = λorder,fld,b0,`term`.cases(coders.TraversalOrder){pre=λ`_`.lists.foldl (foldOverTerm order fld) (fld b0 `term`) (subterms `term`), post=λ`_`.fld (lists.foldl (foldOverTerm order fld) b0 (subterms `term`)) `term`} order
+term foldOverTerm =
+  λorder,fld,b0,`term`.cases(TraversalOrder){
+      pre=λ`_`.lists.foldl
+            (foldOverTerm order fld)
+            (fld b0 `term`)
+            (subterms `term`),
+      post=λ`_`.fld
+            (lists.foldl (foldOverTerm order fld) b0 (subterms `term`))
+            `term`}
+      order
 
 ## Fold over a type, traversing its subtypes in the specified order
-term foldOverType = λorder,fld,b0,typ.cases(coders.TraversalOrder){pre=λ`_`.lists.foldl (foldOverType order fld) (fld b0 typ) (subtypes typ), post=λ`_`.fld (lists.foldl (foldOverType order fld) b0 (subtypes typ)) typ} order
+term foldOverType =
+  λorder,fld,b0,typ.cases(TraversalOrder){
+      pre=λ`_`.lists.foldl (foldOverType order fld) (fld b0 typ) (subtypes typ),
+      post=λ`_`.fld (lists.foldl (foldOverType order fld) b0 (subtypes typ)) typ}
+      order
 
 ## Fold over a term to produce a value, with both Graph and accessor path tracked. Like rewriteAndFoldTermWithGraphAndPath, but only folds without rewriting. The Graph is automatically updated when descending into lambdas, lets, and type lambdas.
-term foldTermWithGraphAndPath = λf,cx0,val0,term0.let wrapper := λrecurse,path,cx,val,`term`.let recurseForUser := λvalIn,subterm.let r := recurse valIn subterm in pairs.first r in (f recurseForUser path cx val `term`, `term`) in let result := rewriteAndFoldTermWithGraphAndPath wrapper cx0 val0 term0 in pairs.first result
+term foldTermWithGraphAndPath =
+  λf,cx0,val0,term0.
+    let wrapper := λrecurse,path,cx,val,`term`.
+        let recurseForUser := λvalIn,subterm.
+            let r := recurse valIn subterm
+            in first r
+        in (f recurseForUser path cx val `term`, `term`) in
+    let result := rewriteAndFoldTermWithGraphAndPath wrapper cx0 val0 term0 in
+    first result
 
 ## Apply a transformation to the first type beneath a chain of annotations
-term mapBeneathTypeAnnotations = λf,t.cases(model.Type){annotated=λat.model.Type{annotated = model.AnnotatedType{body = mapBeneathTypeAnnotations f (model.AnnotatedType[body] at), annotation = model.AnnotatedType[annotation] at}}, `_`=f t} t
+term mapBeneathTypeAnnotations =
+  λf,t.cases(Type){
+      annotated=λat.Type{
+            annotated = AnnotatedType{
+              body = mapBeneathTypeAnnotations
+                  f
+                  (AnnotatedType[body] at),
+              annotation = AnnotatedType[annotation] at}},
+      `_`=f t}
+      t
 
 ## Rewrite a term, and at the same time, fold a function over it, accumulating a value
-term rewriteAndFoldTerm = λf,term0.let fsub := λrecurse,val0,term0.let forSingle := λrec,cons,val,`term`.let r := rec val `term` in (pairs.first r, cons (pairs.second r)) in let forMany := λrec,cons,val,els.let rr := lists.foldl (λr,el.let r2 := rec (pairs.first r) el in (pairs.first r2, lists.cons (pairs.second r2) (pairs.second r))) (val, []) els in (pairs.first rr, cons (lists.reverse (pairs.second rr))) in let forField := λval,field.let r := recurse val (model.Field[`term`] field) in (pairs.first r, model.Field{name = model.Field[name] field, `term` = pairs.second r}) in let forFields := forMany forField (λx.x) in let forCaseAlternative := λval,alt.let r := recurse val (model.CaseAlternative[handler] alt) in (pairs.first r, model.CaseAlternative{name = model.CaseAlternative[name] alt, handler = pairs.second r}) in let forCaseAlternatives := forMany forCaseAlternative (λx.x) in let forPair := λval,kv.let rk := recurse val (pairs.first kv) in let rv := recurse (pairs.first rk) (pairs.second kv) in (pairs.first rv, (pairs.second rk, pairs.second rv)) in let forBinding := λval,binding.let r := recurse val (model.Binding[`term`] binding) in (pairs.first r, model.Binding{name = model.Binding[name] binding, `term` = pairs.second r, typeScheme = model.Binding[typeScheme] binding}) in let dflt := (val0, term0) in cases(model.Term){annotated=λat.forSingle recurse (λt.model.Term{annotated = model.AnnotatedTerm{body = t, annotation = model.AnnotatedTerm[annotation] at}}) val0 (model.AnnotatedTerm[body] at), application=λa.let rlhs := recurse val0 (model.Application[function] a) in let rrhs := recurse (pairs.first rlhs) (model.Application[argument] a) in (pairs.first rrhs, model.Term{application = model.Application{function = pairs.second rlhs, argument = pairs.second rrhs}}), `cases`=λcs.let rmd := optionals.map (recurse val0) (model.CaseStatement[default] cs) in let val1 := optionals.match rmd val0 pairs.first in let rcases := forCaseAlternatives val1 (model.CaseStatement[`cases`] cs) in (pairs.first rcases, model.Term{`cases` = model.CaseStatement{typeName = model.CaseStatement[typeName] cs, default = optionals.map pairs.second rmd, `cases` = pairs.second rcases}}), `either`=λe.eithers.either (λl.let rl := recurse val0 l in (pairs.first rl, model.Term{`either` = left(pairs.second rl)})) (λr.let rr := recurse val0 r in (pairs.first rr, model.Term{`either` = right(pairs.second rr)})) e, lambda=λl.let rl := recurse val0 (model.Lambda[body] l) in (pairs.first rl, model.Term{lambda = model.Lambda{parameter = model.Lambda[parameter] l, domain = model.Lambda[domain] l, body = pairs.second rl}}), `let`=λl.let renv := recurse val0 (model.Let[body] l) in forMany forBinding (λbins.model.Term{`let` = model.Let{bindings = bins, body = pairs.second renv}}) (pairs.first renv) (model.Let[bindings] l), `list`=λels.forMany recurse (λx.model.Term{`list` = x}) val0 els, `map`=λm.forMany forPair (λpairs.model.Term{`map` = maps.fromList pairs}) val0 (maps.toList m), `optional`=λmt.optionals.match mt dflt (λt.forSingle recurse (λt1.model.Term{`optional` = given(t1)}) val0 t), pair=λp.let rf := recurse val0 (pairs.first p) in let rs := recurse (pairs.first rf) (pairs.second p) in (pairs.first rs, model.Term{pair = (pairs.second rf, pairs.second rs)}), `project`=λp.(val0, model.Term{`project` = p}), `record`=λr.forMany forField (λfields.model.Term{`record` = model.Record{typeName = model.Record[typeName] r, fields = fields}}) val0 (model.Record[fields] r), `set`=λels.forMany recurse (λe.model.Term{`set` = sets.fromList e}) val0 (sets.toList els), typeApplication=λta.forSingle recurse (λt.model.Term{typeApplication = model.TypeApplicationTerm{body = t, `type` = model.TypeApplicationTerm[`type`] ta}}) val0 (model.TypeApplicationTerm[body] ta), typeLambda=λtl.forSingle recurse (λt.model.Term{typeLambda = model.TypeLambda{parameter = model.TypeLambda[parameter] tl, body = t}}) val0 (model.TypeLambda[body] tl), `inject`=λinj.forSingle recurse (λt.model.Term{`inject` = model.Injection{typeName = model.Injection[typeName] inj, field = model.Field{name = model.Field[name] (model.Injection[field] inj), `term` = t}}}) val0 (model.Field[`term`] (model.Injection[field] inj)), `unwrap`=λn.(val0, model.Term{`unwrap` = n}), `wrap`=λwt.forSingle recurse (λt.model.Term{`wrap` = model.WrappedTerm{typeName = model.WrappedTerm[typeName] wt, body = t}}) val0 (model.WrappedTerm[body] wt), `_`=dflt} term0 in let recurse := f (fsub recurse) in recurse term0
+term rewriteAndFoldTerm =
+  λf,term0.
+    let fsub := λrecurse,val0,term0.
+        let forSingle := λrec,cons,val,`term`.
+            let r := rec val `term`
+            in (first r, cons (second r)) in
+        let forMany := λrec,cons,val,els.
+            let rr := lists.foldl
+                (λr,el.
+                  let r2 := rec (first r) el
+                  in (first r2, lists.cons (second r2) (second r)))
+                (val, [])
+                els
+            in (first rr, cons (lists.reverse (second rr))) in
+        let forField := λval,field.
+            let r := recurse val (Field[`term`] field)
+            in (first r, Field{name = Field[name] field, `term` = second r}) in
+        let forFields := forMany forField (λx.x) in
+        let forCaseAlternative := λval,alt.
+            let r := recurse
+                val
+                (CaseAlternative[handler] alt)
+            in (first r, CaseAlternative{name = CaseAlternative[name] alt, handler = second r}) in
+        let forCaseAlternatives := forMany forCaseAlternative (λx.x) in
+        let forPair := λval,kv.
+            let rk := recurse val (first kv) in
+            let rv := recurse (first rk) (second kv) in
+            (first rv, (second rk, second rv)) in
+        let forBinding := λval,binding.
+            let r := recurse val (Binding[`term`] binding)
+            in (first r, Binding{name = Binding[name] binding, `term` = second r, typeScheme = Binding[typeScheme] binding}) in
+        let dflt := (val0, term0) in
+        cases(Term){
+          annotated=λat.forSingle
+                recurse
+                (λt.Term{
+                    annotated = AnnotatedTerm{
+                      body = t,
+                      annotation = AnnotatedTerm[annotation] at}})
+                val0
+                (AnnotatedTerm[body] at),
+          application=λa.
+              let rlhs := recurse val0 (Application[function] a) in
+              let rrhs := recurse
+                  (first rlhs)
+                  (Application[argument] a) in
+              (first rrhs, Term{application = Application{function = second rlhs, argument = second rrhs}}),
+          `cases`=λcs.
+              let rmd := optionals.map
+                  (recurse val0)
+                  (CaseStatement[default] cs) in
+              let val1 := optionals.match rmd val0 first in
+              let rcases := forCaseAlternatives
+                  val1
+                  (CaseStatement[`cases`] cs) in
+              (
+                first rcases,
+                Term{
+                  `cases` = CaseStatement{
+                    typeName = CaseStatement[typeName] cs,
+                    default = optionals.map second rmd,
+                    `cases` = second rcases}}),
+          `either`=λe.eithers.either
+                (λl.
+                  let rl := recurse val0 l
+                  in (first rl, Term{`either` = left(second rl)}))
+                (λr.
+                  let rr := recurse val0 r
+                  in (first rr, Term{`either` = right(second rr)}))
+                e,
+          lambda=λl.
+              let rl := recurse val0 (Lambda[body] l)
+              in (first rl, Term{lambda = Lambda{parameter = Lambda[parameter] l, domain = Lambda[domain] l, body = second rl}}),
+          `let`=λl.
+              let renv := recurse val0 (Let[body] l)
+              in forMany
+                forBinding
+                (λbins.Term{
+                    `let` = Let{
+                      bindings = bins,
+                      body = second renv}})
+                (first renv)
+                (Let[bindings] l),
+          `list`=λels.forMany recurse (λx.Term{`list` = x}) val0 els,
+          `map`=λm.forMany
+                forPair
+                (λpairs.Term{`map` = maps.fromList pairs})
+                val0
+                (maps.toList m),
+          `optional`=λmt.optionals.match
+                mt
+                dflt
+                (λt.forSingle
+                    recurse
+                    (λt1.Term{`optional` = given(t1)})
+                    val0
+                    t),
+          pair=λp.
+              let rf := recurse val0 (first p) in
+              let rs := recurse (first rf) (second p) in
+              (first rs, Term{pair = (second rf, second rs)}),
+          `project`=λp.(val0, Term{`project` = p}),
+          `record`=λr.forMany
+                forField
+                (λfields.Term{
+                    `record` = Record{
+                      typeName = Record[typeName] r,
+                      fields = fields}})
+                val0
+                (Record[fields] r),
+          `set`=λels.forMany
+                recurse
+                (λe.Term{`set` = sets.fromList e})
+                val0
+                (sets.toList els),
+          typeApplication=λta.forSingle
+                recurse
+                (λt.Term{
+                    typeApplication = TypeApplicationTerm{
+                      body = t,
+                      `type` = TypeApplicationTerm[`type`] ta}})
+                val0
+                (TypeApplicationTerm[body] ta),
+          typeLambda=λtl.forSingle
+                recurse
+                (λt.Term{
+                    typeLambda = TypeLambda{
+                      parameter = TypeLambda[parameter] tl,
+                      body = t}})
+                val0
+                (TypeLambda[body] tl),
+          `inject`=λinj.forSingle
+                recurse
+                (λt.Term{
+                    `inject` = Injection{
+                      typeName = Injection[typeName] inj,
+                      field = Field{
+                        name = Field[name] (Injection[field] inj),
+                        `term` = t}}})
+                val0
+                (Field[`term`] (Injection[field] inj)),
+          `unwrap`=λn.(val0, Term{`unwrap` = n}),
+          `wrap`=λwt.forSingle
+                recurse
+                (λt.Term{
+                    `wrap` = WrappedTerm{
+                      typeName = WrappedTerm[typeName] wt,
+                      body = t}})
+                val0
+                (WrappedTerm[body] wt),
+          `_`=dflt}
+          term0 in
+    let recurse := f (fsub recurse) in
+    recurse term0
 
 ## Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms. Combines the features of rewriteAndFoldTerm and rewriteTermWithGraph. The user function f receives a recurse function that handles subterm traversal and Graph management.
-term rewriteAndFoldTermWithGraph = λf,cx0,val0,term0.let wrapper := λlowLevelRecurse,valAndCx,`term`.let val := pairs.first valAndCx in let cx := pairs.second valAndCx in let cx1 := cases(model.Term){lambda=λl.scoping.extendGraphForLambda cx l, `let`=λl.scoping.extendGraphForLet (λ`_`,`_`.none) cx l, typeLambda=λtl.scoping.extendGraphForTypeLambda cx tl, `_`=cx} `term` in let recurseForUser := λnewVal,subterm.let result := lowLevelRecurse (newVal, cx1) subterm in (pairs.first (pairs.first result), pairs.second result) in let fResult := f recurseForUser cx1 val `term` in ((pairs.first fResult, cx), pairs.second fResult) in let result := rewriteAndFoldTerm wrapper (val0, cx0) term0 in (pairs.first (pairs.first result), pairs.second result)
+term rewriteAndFoldTermWithGraph =
+  λf,cx0,val0,term0.
+    let wrapper := λlowLevelRecurse,valAndCx,`term`.
+        let val := first valAndCx in
+        let cx := second valAndCx in
+        let cx1 := cases(Term){
+            lambda=λl.extendGraphForLambda cx l,
+            `let`=λl.extendGraphForLet (λ`_`,`_`.none) cx l,
+            typeLambda=λtl.extendGraphForTypeLambda cx tl,
+            `_`=cx}
+            `term` in
+        let recurseForUser := λnewVal,subterm.
+            let result := lowLevelRecurse (newVal, cx1) subterm
+            in (first (first result), second result) in
+        let fResult := f recurseForUser cx1 val `term` in
+        ((first fResult, cx), second fResult) in
+    let result := rewriteAndFoldTerm wrapper (val0, cx0) term0 in
+    (first (first result), second result)
 
 ## Rewrite a term while folding to produce a value, with both Graph and accessor path tracked. The path is a list of SubtermSteps representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and Graph tracking. The Graph is automatically updated when descending into lambdas, lets, and type lambdas.
-term rewriteAndFoldTermWithGraphAndPath = λf,cx0,val0,term0.let wrapper := λrecurse,path,cxAndVal,`term`.let cx := pairs.first cxAndVal in let val := pairs.second cxAndVal in let cx1 := cases(model.Term){lambda=λl.scoping.extendGraphForLambda cx l, `let`=λl.scoping.extendGraphForLet (λ`_`,`_`.none) cx l, typeLambda=λtl.scoping.extendGraphForTypeLambda cx tl, `_`=cx} `term` in let recurseForUser := λvalIn,termIn.let result := recurse path (cx1, valIn) termIn in (pairs.second (pairs.first result), pairs.second result) in let fResult := f recurseForUser path cx1 val `term` in ((cx, pairs.first fResult), pairs.second fResult) in let result := rewriteAndFoldTermWithPath wrapper (cx0, val0) term0 in (pairs.second (pairs.first result), pairs.second result)
+term rewriteAndFoldTermWithGraphAndPath =
+  λf,cx0,val0,term0.
+    let wrapper := λrecurse,path,cxAndVal,`term`.
+        let cx := first cxAndVal in
+        let val := second cxAndVal in
+        let cx1 := cases(Term){
+            lambda=λl.extendGraphForLambda cx l,
+            `let`=λl.extendGraphForLet (λ`_`,`_`.none) cx l,
+            typeLambda=λtl.extendGraphForTypeLambda cx tl,
+            `_`=cx}
+            `term` in
+        let recurseForUser := λvalIn,termIn.
+            let result := recurse path (cx1, valIn) termIn
+            in (second (first result), second result) in
+        let fResult := f recurseForUser path cx1 val `term` in
+        ((cx, first fResult), second fResult) in
+    let result := rewriteAndFoldTermWithPath wrapper (cx0, val0) term0 in
+    (second (first result), second result)
 
 ## Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of SubtermSteps from root to current position.
-term rewriteAndFoldTermWithPath = λf,term0.let fsub := λrecurse,path,val0,term0.let forSingleWithAccessor := λrec,cons,accessor,val,`term`.let r := rec (lists.concat2 path [accessor]) val `term` in (pairs.first r, cons (pairs.second r)) in let forManyWithAccessors := λrec,cons,val,accessorTermPairs.let rr := lists.foldl (λr,atp.let r2 := rec (lists.concat2 path [pairs.first atp]) (pairs.first r) (pairs.second atp) in (pairs.first r2, lists.cons (pairs.second r2) (pairs.second r))) (val, []) accessorTermPairs in (pairs.first rr, cons (lists.reverse (pairs.second rr))) in let forFieldWithAccessor := λmkAccessor,val,field.let r := recurse (lists.concat2 path [mkAccessor (model.Field[name] field)]) val (model.Field[`term`] field) in (pairs.first r, model.Field{name = model.Field[name] field, `term` = pairs.second r}) in let forFieldsWithAccessor := λmkAccessor.forManyWithAccessors (λpath1,val1,field1.forFieldWithAccessor mkAccessor val1 field1) (λx.x) in let forPairWithAccessors := λkeyAccessor,valAccessor,val,kv.let rk := recurse (lists.concat2 path [keyAccessor]) val (pairs.first kv) in let rv := recurse (lists.concat2 path [valAccessor]) (pairs.first rk) (pairs.second kv) in (pairs.first rv, (pairs.second rk, pairs.second rv)) in let forBindingWithAccessor := λval,binding.let r := recurse (lists.concat2 path [paths.SubtermStep{letBinding = model.Binding[name] binding}]) val (model.Binding[`term`] binding) in (pairs.first r, model.Binding{name = model.Binding[name] binding, `term` = pairs.second r, typeScheme = model.Binding[typeScheme] binding}) in let dflt := (val0, term0) in cases(model.Term){annotated=λat.forSingleWithAccessor recurse (λt.model.Term{annotated = model.AnnotatedTerm{body = t, annotation = model.AnnotatedTerm[annotation] at}}) paths.SubtermStep{annotatedBody} val0 (model.AnnotatedTerm[body] at), application=λa.let rlhs := recurse (lists.concat2 path [paths.SubtermStep{applicationFunction}]) val0 (model.Application[function] a) in let rrhs := recurse (lists.concat2 path [paths.SubtermStep{applicationArgument}]) (pairs.first rlhs) (model.Application[argument] a) in (pairs.first rrhs, model.Term{application = model.Application{function = pairs.second rlhs, argument = pairs.second rrhs}}), `cases`=λcs.let rmd := optionals.map (λdef.recurse (lists.concat2 path [paths.SubtermStep{casesDefault}]) val0 def) (model.CaseStatement[default] cs) in let val1 := optionals.match rmd val0 pairs.first in let rcases := forManyWithAccessors recurse (λx.x) val1 (lists.map (λf.(paths.SubtermStep{casesCase = model.CaseAlternative[name] f}, model.CaseAlternative[handler] f)) (model.CaseStatement[`cases`] cs)) in (pairs.first rcases, model.Term{`cases` = model.CaseStatement{typeName = model.CaseStatement[typeName] cs, default = optionals.map pairs.second rmd, `cases` = lists.map (λft.model.CaseAlternative{name = pairs.first ft, handler = pairs.second ft}) (lists.zip (lists.map model.CaseAlternative[name] (model.CaseStatement[`cases`] cs)) (pairs.second rcases))}}), `either`=λe.eithers.either (λl.let rl := recurse (lists.concat2 path [paths.SubtermStep{eitherLeft}]) val0 l in (pairs.first rl, model.Term{`either` = left(pairs.second rl)})) (λr.let rr := recurse (lists.concat2 path [paths.SubtermStep{eitherRight}]) val0 r in (pairs.first rr, model.Term{`either` = right(pairs.second rr)})) e, lambda=λl.let rl := recurse (lists.concat2 path [paths.SubtermStep{lambdaBody}]) val0 (model.Lambda[body] l) in (pairs.first rl, model.Term{lambda = model.Lambda{parameter = model.Lambda[parameter] l, domain = model.Lambda[domain] l, body = pairs.second rl}}), `let`=λl.let renv := recurse (lists.concat2 path [paths.SubtermStep{letBody}]) val0 (model.Let[body] l) in let rbindings := lists.foldl (λr,binding.let rb := forBindingWithAccessor (pairs.first r) binding in (pairs.first rb, lists.cons (pairs.second rb) (pairs.second r))) (pairs.first renv, []) (model.Let[bindings] l) in (pairs.first rbindings, model.Term{`let` = model.Let{bindings = lists.reverse (pairs.second rbindings), body = pairs.second renv}}), `list`=λels.let idx := 0:int32 in let rr := lists.foldl (λr,el.let r2 := recurse (lists.concat2 path [paths.SubtermStep{listElement = pairs.first r}]) (pairs.first (pairs.second r)) el in (math.add (pairs.first r) 1:int32, (pairs.first r2, lists.cons (pairs.second r2) (pairs.second (pairs.second r))))) (idx, (val0, [])) els in (pairs.first (pairs.second rr), model.Term{`list` = lists.reverse (pairs.second (pairs.second rr))}), `map`=λm.let idx := 0:int32 in let rr := lists.foldl (λr,kv.let rk := recurse (lists.concat2 path [paths.SubtermStep{mapEntry = pairs.first r}, paths.SubtermStep{pairFirst}]) (pairs.first (pairs.second r)) (pairs.first kv) in let rv := recurse (lists.concat2 path [paths.SubtermStep{mapEntry = pairs.first r}, paths.SubtermStep{pairSecond}]) (pairs.first rk) (pairs.second kv) in (math.add (pairs.first r) 1:int32, (pairs.first rv, lists.cons (pairs.second rk, pairs.second rv) (pairs.second (pairs.second r))))) (idx, (val0, [])) (maps.toList m) in (pairs.first (pairs.second rr), model.Term{`map` = maps.fromList (lists.reverse (pairs.second (pairs.second rr)))}), `optional`=λmt.optionals.match mt dflt (λt.forSingleWithAccessor recurse (λt1.model.Term{`optional` = given(t1)}) paths.SubtermStep{optionalGiven} val0 t), pair=λp.let rf := recurse (lists.concat2 path [paths.SubtermStep{pairFirst}]) val0 (pairs.first p) in let rs := recurse (lists.concat2 path [paths.SubtermStep{pairSecond}]) (pairs.first rf) (pairs.second p) in (pairs.first rs, model.Term{pair = (pairs.second rf, pairs.second rs)}), `project`=λp.(val0, model.Term{`project` = p}), `record`=λr.let rfields := forManyWithAccessors recurse (λx.x) val0 (lists.map (λf.(paths.SubtermStep{recordField = model.Field[name] f}, model.Field[`term`] f)) (model.Record[fields] r)) in (pairs.first rfields, model.Term{`record` = model.Record{typeName = model.Record[typeName] r, fields = lists.map (λft.model.Field{name = pairs.first ft, `term` = pairs.second ft}) (lists.zip (lists.map model.Field[name] (model.Record[fields] r)) (pairs.second rfields))}}), `set`=λels.let idx := 0:int32 in let rr := lists.foldl (λr,el.let r2 := recurse (lists.concat2 path [paths.SubtermStep{setElement = pairs.first r}]) (pairs.first (pairs.second r)) el in (math.add (pairs.first r) 1:int32, (pairs.first r2, lists.cons (pairs.second r2) (pairs.second (pairs.second r))))) (idx, (val0, [])) (sets.toList els) in (pairs.first (pairs.second rr), model.Term{`set` = sets.fromList (lists.reverse (pairs.second (pairs.second rr)))}), typeApplication=λta.forSingleWithAccessor recurse (λt.model.Term{typeApplication = model.TypeApplicationTerm{body = t, `type` = model.TypeApplicationTerm[`type`] ta}}) paths.SubtermStep{typeApplicationBody} val0 (model.TypeApplicationTerm[body] ta), typeLambda=λtl.forSingleWithAccessor recurse (λt.model.Term{typeLambda = model.TypeLambda{parameter = model.TypeLambda[parameter] tl, body = t}}) paths.SubtermStep{typeLambdaBody} val0 (model.TypeLambda[body] tl), `inject`=λinj.forSingleWithAccessor recurse (λt.model.Term{`inject` = model.Injection{typeName = model.Injection[typeName] inj, field = model.Field{name = model.Field[name] (model.Injection[field] inj), `term` = t}}}) paths.SubtermStep{injectField = model.Field[name] (model.Injection[field] inj)} val0 (model.Field[`term`] (model.Injection[field] inj)), `unwrap`=λn.(val0, model.Term{`unwrap` = n}), `wrap`=λwt.forSingleWithAccessor recurse (λt.model.Term{`wrap` = model.WrappedTerm{typeName = model.WrappedTerm[typeName] wt, body = t}}) paths.SubtermStep{wrapBody} val0 (model.WrappedTerm[body] wt), `_`=dflt} term0 in let recurse := f (fsub recurse) in recurse [] term0
+term rewriteAndFoldTermWithPath =
+  λf,term0.
+    let fsub := λrecurse,path,val0,term0.
+        let forSingleWithAccessor := λrec,cons,accessor,val,`term`.
+            let r := rec
+                (lists.concat2 path [accessor])
+                val
+                `term`
+            in (first r, cons (second r)) in
+        let forManyWithAccessors := λrec,cons,val,accessorTermPairs.
+            let rr := lists.foldl
+                (λr,atp.
+                  let r2 := rec
+                      (lists.concat2 path [first atp])
+                      (first r)
+                      (second atp)
+                  in (first r2, lists.cons (second r2) (second r)))
+                (val, [])
+                accessorTermPairs
+            in (first rr, cons (lists.reverse (second rr))) in
+        let forFieldWithAccessor := λmkAccessor,val,field.
+            let r := recurse
+                (lists.concat2
+                  path
+                  [mkAccessor (Field[name] field)])
+                val
+                (Field[`term`] field)
+            in (first r, Field{name = Field[name] field, `term` = second r}) in
+        let forFieldsWithAccessor := λmkAccessor.forManyWithAccessors
+              (λpath1,val1,field1.forFieldWithAccessor
+                  mkAccessor
+                  val1
+                  field1)
+              (λx.x) in
+        let forPairWithAccessors := λkeyAccessor,valAccessor,val,kv.
+            let rk := recurse
+                (lists.concat2 path [keyAccessor])
+                val
+                (first kv) in
+            let rv := recurse
+                (lists.concat2 path [valAccessor])
+                (first rk)
+                (second kv) in
+            (first rv, (second rk, second rv)) in
+        let forBindingWithAccessor := λval,binding.
+            let r := recurse
+                (lists.concat2
+                  path
+                  [SubtermStep{letBinding = Binding[name] binding}])
+                val
+                (Binding[`term`] binding)
+            in (first r, Binding{name = Binding[name] binding, `term` = second r, typeScheme = Binding[typeScheme] binding}) in
+        let dflt := (val0, term0) in
+        cases(Term){
+          annotated=λat.forSingleWithAccessor
+                recurse
+                (λt.Term{
+                    annotated = AnnotatedTerm{
+                      body = t,
+                      annotation = AnnotatedTerm[annotation] at}})
+                SubtermStep{annotatedBody}
+                val0
+                (AnnotatedTerm[body] at),
+          application=λa.
+              let rlhs := recurse
+                  (lists.concat2
+                    path
+                    [SubtermStep{applicationFunction}])
+                  val0
+                  (Application[function] a) in
+              let rrhs := recurse
+                  (lists.concat2
+                    path
+                    [SubtermStep{applicationArgument}])
+                  (first rlhs)
+                  (Application[argument] a) in
+              (first rrhs, Term{application = Application{function = second rlhs, argument = second rrhs}}),
+          `cases`=λcs.
+              let rmd := optionals.map
+                  (λdef.recurse
+                      (lists.concat2
+                        path
+                        [SubtermStep{casesDefault}])
+                      val0
+                      def)
+                  (CaseStatement[default] cs) in
+              let val1 := optionals.match rmd val0 first in
+              let rcases := forManyWithAccessors
+                  recurse
+                  (λx.x)
+                  val1
+                  (lists.map
+                    (λf.(SubtermStep{casesCase = CaseAlternative[name] f}, CaseAlternative[handler] f))
+                    (CaseStatement[`cases`] cs)) in
+              (
+                first rcases,
+                Term{
+                  `cases` = CaseStatement{
+                    typeName = CaseStatement[typeName] cs,
+                    default = optionals.map second rmd,
+                    `cases` = lists.map
+                        (λft.CaseAlternative{name = first ft, handler = second ft})
+                        (lists.zip
+                          (lists.map CaseAlternative[name] (CaseStatement[`cases`] cs))
+                          (second rcases))}}),
+          `either`=λe.eithers.either
+                (λl.
+                  let rl := recurse
+                      (lists.concat2
+                        path
+                        [SubtermStep{eitherLeft}])
+                      val0
+                      l
+                  in (first rl, Term{`either` = left(second rl)}))
+                (λr.
+                  let rr := recurse
+                      (lists.concat2
+                        path
+                        [SubtermStep{eitherRight}])
+                      val0
+                      r
+                  in (first rr, Term{`either` = right(second rr)}))
+                e,
+          lambda=λl.
+              let rl := recurse
+                  (lists.concat2
+                    path
+                    [SubtermStep{lambdaBody}])
+                  val0
+                  (Lambda[body] l)
+              in (first rl, Term{lambda = Lambda{parameter = Lambda[parameter] l, domain = Lambda[domain] l, body = second rl}}),
+          `let`=λl.
+              let renv := recurse
+                  (lists.concat2
+                    path
+                    [SubtermStep{letBody}])
+                  val0
+                  (Let[body] l) in
+              let rbindings := lists.foldl
+                  (λr,binding.
+                    let rb := forBindingWithAccessor (first r) binding
+                    in (first rb, lists.cons (second rb) (second r)))
+                  (first renv, [])
+                  (Let[bindings] l) in
+              (first rbindings, Term{`let` = Let{bindings = lists.reverse (second rbindings), body = second renv}}),
+          `list`=λels.
+              let idx := 0:int32 in
+              let rr := lists.foldl
+                  (λr,el.
+                    let r2 := recurse
+                        (lists.concat2
+                          path
+                          [SubtermStep{listElement = first r}])
+                        (first (second r))
+                        el
+                    in (add (first r) 1:int32, (first r2, lists.cons (second r2) (second (second r)))))
+                  (idx, (val0, []))
+                  els in
+              (first (second rr), Term{`list` = lists.reverse (second (second rr))}),
+          `map`=λm.
+              let idx := 0:int32 in
+              let rr := lists.foldl
+                  (λr,kv.
+                    let rk := recurse
+                        (lists.concat2
+                          path
+                          [SubtermStep{mapEntry = first r}, SubtermStep{pairFirst}])
+                        (first (second r))
+                        (first kv) in
+                    let rv := recurse
+                        (lists.concat2
+                          path
+                          [SubtermStep{mapEntry = first r}, SubtermStep{pairSecond}])
+                        (first rk)
+                        (second kv) in
+                    (add (first r) 1:int32, (first rv, lists.cons (second rk, second rv) (second (second r)))))
+                  (idx, (val0, []))
+                  (maps.toList m) in
+              (first (second rr), Term{`map` = maps.fromList (lists.reverse (second (second rr)))}),
+          `optional`=λmt.optionals.match
+                mt
+                dflt
+                (λt.forSingleWithAccessor
+                    recurse
+                    (λt1.Term{`optional` = given(t1)})
+                    SubtermStep{optionalGiven}
+                    val0
+                    t),
+          pair=λp.
+              let rf := recurse
+                  (lists.concat2 path [SubtermStep{pairFirst}])
+                  val0
+                  (first p) in
+              let rs := recurse
+                  (lists.concat2
+                    path
+                    [SubtermStep{pairSecond}])
+                  (first rf)
+                  (second p) in
+              (first rs, Term{pair = (second rf, second rs)}),
+          `project`=λp.(val0, Term{`project` = p}),
+          `record`=λr.
+              let rfields := forManyWithAccessors
+                  recurse
+                  (λx.x)
+                  val0
+                  (lists.map
+                    (λf.(SubtermStep{recordField = Field[name] f}, Field[`term`] f))
+                    (Record[fields] r))
+              in (
+                first rfields,
+                Term{
+                  `record` = Record{
+                    typeName = Record[typeName] r,
+                    fields = lists.map
+                        (λft.Field{name = first ft, `term` = second ft})
+                        (lists.zip (lists.map Field[name] (Record[fields] r)) (second rfields))}}),
+          `set`=λels.
+              let idx := 0:int32 in
+              let rr := lists.foldl
+                  (λr,el.
+                    let r2 := recurse
+                        (lists.concat2
+                          path
+                          [SubtermStep{setElement = first r}])
+                        (first (second r))
+                        el
+                    in (add (first r) 1:int32, (first r2, lists.cons (second r2) (second (second r)))))
+                  (idx, (val0, []))
+                  (sets.toList els) in
+              (first (second rr), Term{`set` = sets.fromList (lists.reverse (second (second rr)))}),
+          typeApplication=λta.forSingleWithAccessor
+                recurse
+                (λt.Term{
+                    typeApplication = TypeApplicationTerm{
+                      body = t,
+                      `type` = TypeApplicationTerm[`type`] ta}})
+                SubtermStep{typeApplicationBody}
+                val0
+                (TypeApplicationTerm[body] ta),
+          typeLambda=λtl.forSingleWithAccessor
+                recurse
+                (λt.Term{
+                    typeLambda = TypeLambda{
+                      parameter = TypeLambda[parameter] tl,
+                      body = t}})
+                SubtermStep{typeLambdaBody}
+                val0
+                (TypeLambda[body] tl),
+          `inject`=λinj.forSingleWithAccessor
+                recurse
+                (λt.Term{
+                    `inject` = Injection{
+                      typeName = Injection[typeName] inj,
+                      field = Field{
+                        name = Field[name] (Injection[field] inj),
+                        `term` = t}}})
+                SubtermStep{
+                  injectField = Field[name] (Injection[field] inj)}
+                val0
+                (Field[`term`] (Injection[field] inj)),
+          `unwrap`=λn.(val0, Term{`unwrap` = n}),
+          `wrap`=λwt.forSingleWithAccessor
+                recurse
+                (λt.Term{
+                    `wrap` = WrappedTerm{
+                      typeName = WrappedTerm[typeName] wt,
+                      body = t}})
+                SubtermStep{wrapBody}
+                val0
+                (WrappedTerm[body] wt),
+          `_`=dflt}
+          term0 in
+    let recurse := f (fsub recurse) in
+    recurse [] term0
 
 ## Rewrite a term with a custom transformation function. The function receives a recursive walker and the current term and decides whether to recurse, replace, or both.
-term rewriteTerm = λf,term0.let fsub := λrecurse,`term`.let forField := λf.model.Field{name = model.Field[name] f, `term` = recurse (model.Field[`term`] f)} in let forCaseAlternative := λa.model.CaseAlternative{name = model.CaseAlternative[name] a, handler = recurse (model.CaseAlternative[handler] a)} in let forLet := λlt.let mapBinding := λb.model.Binding{name = model.Binding[name] b, `term` = recurse (model.Binding[`term`] b), typeScheme = model.Binding[typeScheme] b} in model.Let{bindings = lists.map mapBinding (model.Let[bindings] lt), body = recurse (model.Let[body] lt)} in let forMap := λm.let forPair := λp.(recurse (pairs.first p), recurse (pairs.second p)) in maps.fromList (lists.map forPair (maps.toList m)) in cases(model.Term){annotated=λat.model.Term{annotated = model.AnnotatedTerm{body = recurse (model.AnnotatedTerm[body] at), annotation = model.AnnotatedTerm[annotation] at}}, application=λa.model.Term{application = model.Application{function = recurse (model.Application[function] a), argument = recurse (model.Application[argument] a)}}, `cases`=λcs.model.Term{`cases` = model.CaseStatement{typeName = model.CaseStatement[typeName] cs, default = optionals.map recurse (model.CaseStatement[default] cs), `cases` = lists.map forCaseAlternative (model.CaseStatement[`cases`] cs)}}, `either`=λe.model.Term{`either` = eithers.either (λl.left(recurse l)) (λr.right(recurse r)) e}, lambda=λl.model.Term{lambda = model.Lambda{parameter = model.Lambda[parameter] l, domain = model.Lambda[domain] l, body = recurse (model.Lambda[body] l)}}, `let`=λlt.model.Term{`let` = forLet lt}, `list`=λels.model.Term{`list` = lists.map recurse els}, literal=λv.model.Term{literal = v}, `map`=λm.model.Term{`map` = forMap m}, `optional`=λm.model.Term{`optional` = optionals.map recurse m}, pair=λp.model.Term{pair = (recurse (pairs.first p), recurse (pairs.second p))}, `project`=λp.model.Term{`project` = p}, `record`=λr.model.Term{`record` = model.Record{typeName = model.Record[typeName] r, fields = lists.map forField (model.Record[fields] r)}}, `set`=λs.model.Term{`set` = sets.fromList (lists.map recurse (sets.toList s))}, typeApplication=λtt.model.Term{typeApplication = model.TypeApplicationTerm{body = recurse (model.TypeApplicationTerm[body] tt), `type` = model.TypeApplicationTerm[`type`] tt}}, typeLambda=λta.model.Term{typeLambda = model.TypeLambda{parameter = model.TypeLambda[parameter] ta, body = recurse (model.TypeLambda[body] ta)}}, `inject`=λi.model.Term{`inject` = model.Injection{typeName = model.Injection[typeName] i, field = forField (model.Injection[field] i)}}, `unit`=λ`_`.model.Term{`unit`}, `unwrap`=λn.model.Term{`unwrap` = n}, variable=λv.model.Term{variable = v}, `wrap`=λwt.model.Term{`wrap` = model.WrappedTerm{typeName = model.WrappedTerm[typeName] wt, body = recurse (model.WrappedTerm[body] wt)}}} `term` in let recurse := f (fsub recurse) in recurse term0
+term rewriteTerm =
+  λf,term0.
+    let fsub := λrecurse,`term`.
+        let forField := λf.Field{
+              name = Field[name] f,
+              `term` = recurse (Field[`term`] f)} in
+        let forCaseAlternative := λa.CaseAlternative{
+              name = CaseAlternative[name] a,
+              handler = recurse (CaseAlternative[handler] a)} in
+        let forLet := λlt.
+            let mapBinding := λb.Binding{
+                  name = Binding[name] b,
+                  `term` = recurse (Binding[`term`] b),
+                  typeScheme = Binding[typeScheme] b}
+            in Let{
+              bindings = lists.map mapBinding (Let[bindings] lt),
+              body = recurse (Let[body] lt)} in
+        let forMap := λm.
+            let forPair := λp.(recurse (first p), recurse (second p))
+            in maps.fromList (lists.map forPair (maps.toList m)) in
+        cases(Term){
+          annotated=λat.Term{
+                annotated = AnnotatedTerm{
+                  body = recurse (AnnotatedTerm[body] at),
+                  annotation = AnnotatedTerm[annotation] at}},
+          application=λa.Term{
+                application = Application{
+                  function = recurse (Application[function] a),
+                  argument = recurse (Application[argument] a)}},
+          `cases`=λcs.Term{
+                `cases` = CaseStatement{
+                  typeName = CaseStatement[typeName] cs,
+                  default = optionals.map
+                      recurse
+                      (CaseStatement[default] cs),
+                  `cases` = lists.map
+                      forCaseAlternative
+                      (CaseStatement[`cases`] cs)}},
+          `either`=λe.Term{
+                `either` = eithers.either
+                    (λl.left(recurse l))
+                    (λr.right(recurse r))
+                    e},
+          lambda=λl.Term{
+                lambda = Lambda{
+                  parameter = Lambda[parameter] l,
+                  domain = Lambda[domain] l,
+                  body = recurse (Lambda[body] l)}},
+          `let`=λlt.Term{`let` = forLet lt},
+          `list`=λels.Term{`list` = lists.map recurse els},
+          literal=λv.Term{literal = v},
+          `map`=λm.Term{`map` = forMap m},
+          `optional`=λm.Term{`optional` = optionals.map recurse m},
+          pair=λp.Term{pair = (recurse (first p), recurse (second p))},
+          `project`=λp.Term{`project` = p},
+          `record`=λr.Term{
+                `record` = Record{
+                  typeName = Record[typeName] r,
+                  fields = lists.map forField (Record[fields] r)}},
+          `set`=λs.Term{
+                `set` = sets.fromList
+                    (lists.map recurse (sets.toList s))},
+          typeApplication=λtt.Term{
+                typeApplication = TypeApplicationTerm{
+                  body = recurse (TypeApplicationTerm[body] tt),
+                  `type` = TypeApplicationTerm[`type`] tt}},
+          typeLambda=λta.Term{
+                typeLambda = TypeLambda{
+                  parameter = TypeLambda[parameter] ta,
+                  body = recurse (TypeLambda[body] ta)}},
+          `inject`=λi.Term{
+                `inject` = Injection{
+                  typeName = Injection[typeName] i,
+                  field = forField (Injection[field] i)}},
+          `unit`=λ`_`.Term{`unit`},
+          `unwrap`=λn.Term{`unwrap` = n},
+          variable=λv.Term{variable = v},
+          `wrap`=λwt.Term{
+                `wrap` = WrappedTerm{
+                  typeName = WrappedTerm[typeName] wt,
+                  body = recurse (WrappedTerm[body] wt)}}}
+          `term` in
+    let recurse := f (fsub recurse) in
+    recurse term0
 
 ## Either-based term rewriting with custom transformation function
-term rewriteTermM = λf,term0.let fsub := λrecurse,`term`.let forField := λfield.eithers.bind (recurse (model.Field[`term`] field)) (λt.right(model.Field{name = model.Field[name] field, `term` = t})) in let forCaseAlternative := λalt.eithers.bind (recurse (model.CaseAlternative[handler] alt)) (λt.right(model.CaseAlternative{name = model.CaseAlternative[name] alt, handler = t})) in let forPair := λkv.eithers.bind (recurse (pairs.first kv)) (λk.eithers.bind (recurse (pairs.second kv)) (λv.right((k, v)))) in let mapBinding := λb.eithers.bind (recurse (model.Binding[`term`] b)) (λv.right(model.Binding{name = model.Binding[name] b, `term` = v, typeScheme = model.Binding[typeScheme] b})) in cases(model.Term){annotated=λat.eithers.bind (recurse (model.AnnotatedTerm[body] at)) (λex.right(model.Term{annotated = model.AnnotatedTerm{body = ex, annotation = model.AnnotatedTerm[annotation] at}})), application=λapp.eithers.bind (recurse (model.Application[function] app)) (λlhs.eithers.bind (recurse (model.Application[argument] app)) (λrhs.right(model.Term{application = model.Application{function = lhs, argument = rhs}}))), `cases`=λcs.let n := model.CaseStatement[typeName] cs in let def := model.CaseStatement[default] cs in let csCases := model.CaseStatement[`cases`] cs in eithers.bind (optionals.match def right(none) (λt.eithers.map optionals.given (recurse t))) (λrdef.eithers.map (λrcases.model.Term{`cases` = model.CaseStatement{typeName = n, default = rdef, `cases` = rcases}}) (eithers.mapList forCaseAlternative csCases)), `either`=λe.eithers.bind (eithers.either (λl.eithers.map (λx.left(x)) (recurse l)) (λr.eithers.map (λx.right(x)) (recurse r)) e) (λre.right(model.Term{`either` = re})), lambda=λl.let v := model.Lambda[parameter] l in let d := model.Lambda[domain] l in let body := model.Lambda[body] l in eithers.bind (recurse body) (λrbody.right(model.Term{lambda = model.Lambda{parameter = v, domain = d, body = rbody}})), `let`=λlt.let bindings := model.Let[bindings] lt in let env := model.Let[body] lt in eithers.bind (eithers.mapList mapBinding bindings) (λrbindings.eithers.bind (recurse env) (λrenv.right(model.Term{`let` = model.Let{bindings = rbindings, body = renv}}))), `list`=λels.eithers.bind (eithers.mapList recurse els) (λrels.right(model.Term{`list` = rels})), literal=λv.right(model.Term{literal = v}), `map`=λm.eithers.bind (eithers.mapList forPair (maps.toList m)) (λpairs.right(model.Term{`map` = maps.fromList pairs})), `optional`=λm.eithers.bind (eithers.mapOptional recurse m) (λrm.right(model.Term{`optional` = rm})), pair=λp.eithers.bind (recurse (pairs.first p)) (λrf.eithers.bind (recurse (pairs.second p)) (λrs.right(model.Term{pair = (rf, rs)}))), `project`=λp.right(model.Term{`project` = p}), `record`=λr.let n := model.Record[typeName] r in let fields := model.Record[fields] r in eithers.map (λrfields.model.Term{`record` = model.Record{typeName = n, fields = rfields}}) (eithers.mapList forField fields), `set`=λs.eithers.bind (eithers.mapList recurse (sets.toList s)) (λrlist.right(model.Term{`set` = sets.fromList rlist})), typeApplication=λtt.eithers.bind (recurse (model.TypeApplicationTerm[body] tt)) (λt.right(model.Term{typeApplication = model.TypeApplicationTerm{body = t, `type` = model.TypeApplicationTerm[`type`] tt}})), typeLambda=λtl.let v := model.TypeLambda[parameter] tl in let body := model.TypeLambda[body] tl in eithers.bind (recurse body) (λrbody.right(model.Term{typeLambda = model.TypeLambda{parameter = v, body = rbody}})), `inject`=λi.let n := model.Injection[typeName] i in let field := model.Injection[field] i in eithers.map (λrfield.model.Term{`inject` = model.Injection{typeName = n, field = rfield}}) (forField field), `unit`=λ`_`.right(model.Term{`unit`}), `unwrap`=λn.right(model.Term{`unwrap` = n}), variable=λv.right(model.Term{variable = v}), `wrap`=λwt.let name := model.WrappedTerm[typeName] wt in let t := model.WrappedTerm[body] wt in eithers.bind (recurse t) (λrt.right(model.Term{`wrap` = model.WrappedTerm{typeName = name, body = rt}}))} `term` in let recurse := f (fsub recurse) in recurse term0
+term rewriteTermM =
+  λf,term0.
+    let fsub := λrecurse,`term`.
+        let forField := λfield.eithers.bind
+              (recurse (Field[`term`] field))
+              (λt.right(Field{name = Field[name] field, `term` = t})) in
+        let forCaseAlternative := λalt.eithers.bind
+              (recurse (CaseAlternative[handler] alt))
+              (λt.right(CaseAlternative{
+                  name = CaseAlternative[name] alt,
+                  handler = t})) in
+        let forPair := λkv.eithers.bind
+              (recurse (first kv))
+              (λk.eithers.bind (recurse (second kv)) (λv.right((k, v)))) in
+        let mapBinding := λb.eithers.bind
+              (recurse (Binding[`term`] b))
+              (λv.right(Binding{
+                  name = Binding[name] b,
+                  `term` = v,
+                  typeScheme = Binding[typeScheme] b})) in
+        cases(Term){
+          annotated=λat.eithers.bind
+                (recurse (AnnotatedTerm[body] at))
+                (λex.right(Term{
+                    annotated = AnnotatedTerm{
+                      body = ex,
+                      annotation = AnnotatedTerm[annotation] at}})),
+          application=λapp.eithers.bind
+                (recurse (Application[function] app))
+                (λlhs.eithers.bind
+                    (recurse (Application[argument] app))
+                    (λrhs.right(Term{
+                        application = Application{
+                          function = lhs,
+                          argument = rhs}}))),
+          `cases`=λcs.
+              let n := CaseStatement[typeName] cs in
+              let def := CaseStatement[default] cs in
+              let csCases := CaseStatement[`cases`] cs in
+              eithers.bind
+                (optionals.match
+                  def
+                  right(none)
+                  (λt.eithers.map optionals.given (recurse t)))
+                (λrdef.eithers.map
+                    (λrcases.Term{
+                        `cases` = CaseStatement{
+                          typeName = n,
+                          default = rdef,
+                          `cases` = rcases}})
+                    (eithers.mapList forCaseAlternative csCases)),
+          `either`=λe.eithers.bind
+                (eithers.either
+                  (λl.eithers.map (λx.left(x)) (recurse l))
+                  (λr.eithers.map (λx.right(x)) (recurse r))
+                  e)
+                (λre.right(Term{`either` = re})),
+          lambda=λl.
+              let v := Lambda[parameter] l in
+              let d := Lambda[domain] l in
+              let body := Lambda[body] l in
+              eithers.bind
+                (recurse body)
+                (λrbody.right(Term{
+                    lambda = Lambda{
+                      parameter = v,
+                      domain = d,
+                      body = rbody}})),
+          `let`=λlt.
+              let bindings := Let[bindings] lt in
+              let env := Let[body] lt in
+              eithers.bind
+                (eithers.mapList mapBinding bindings)
+                (λrbindings.eithers.bind
+                    (recurse env)
+                    (λrenv.right(Term{
+                        `let` = Let{
+                          bindings = rbindings,
+                          body = renv}}))),
+          `list`=λels.eithers.bind
+                (eithers.mapList recurse els)
+                (λrels.right(Term{`list` = rels})),
+          literal=λv.right(Term{literal = v}),
+          `map`=λm.eithers.bind
+                (eithers.mapList forPair (maps.toList m))
+                (λpairs.right(Term{`map` = maps.fromList pairs})),
+          `optional`=λm.eithers.bind
+                (eithers.mapOptional recurse m)
+                (λrm.right(Term{`optional` = rm})),
+          pair=λp.eithers.bind
+                (recurse (first p))
+                (λrf.eithers.bind
+                    (recurse (second p))
+                    (λrs.right(Term{pair = (rf, rs)}))),
+          `project`=λp.right(Term{`project` = p}),
+          `record`=λr.
+              let n := Record[typeName] r in
+              let fields := Record[fields] r in
+              eithers.map
+                (λrfields.Term{
+                    `record` = Record{
+                      typeName = n,
+                      fields = rfields}})
+                (eithers.mapList forField fields),
+          `set`=λs.eithers.bind
+                (eithers.mapList recurse (sets.toList s))
+                (λrlist.right(Term{`set` = sets.fromList rlist})),
+          typeApplication=λtt.eithers.bind
+                (recurse (TypeApplicationTerm[body] tt))
+                (λt.right(Term{
+                    typeApplication = TypeApplicationTerm{
+                      body = t,
+                      `type` = TypeApplicationTerm[`type`] tt}})),
+          typeLambda=λtl.
+              let v := TypeLambda[parameter] tl in
+              let body := TypeLambda[body] tl in
+              eithers.bind
+                (recurse body)
+                (λrbody.right(Term{
+                    typeLambda = TypeLambda{
+                      parameter = v,
+                      body = rbody}})),
+          `inject`=λi.
+              let n := Injection[typeName] i in
+              let field := Injection[field] i in
+              eithers.map
+                (λrfield.Term{
+                    `inject` = Injection{
+                      typeName = n,
+                      field = rfield}})
+                (forField field),
+          `unit`=λ`_`.right(Term{`unit`}),
+          `unwrap`=λn.right(Term{`unwrap` = n}),
+          variable=λv.right(Term{variable = v}),
+          `wrap`=λwt.
+              let name := WrappedTerm[typeName] wt in
+              let t := WrappedTerm[body] wt in
+              eithers.bind
+                (recurse t)
+                (λrt.right(Term{
+                    `wrap` = WrappedTerm{
+                      typeName = name,
+                      body = rt}}))}
+          `term` in
+    let recurse := f (fsub recurse) in
+    recurse term0
 
 ## A variant of rewriteTerm which allows a context (e.g. a TypeContext) to be passed down to all subterms during rewriting
-term rewriteTermWithContext = λf,cx0,term0.let forSubterms := λrecurse0,cx,`term`.let recurse := recurse0 cx in let forField := λfield.model.Field{name = model.Field[name] field, `term` = recurse (model.Field[`term`] field)} in let forCaseAlternative := λalt.model.CaseAlternative{name = model.CaseAlternative[name] alt, handler = recurse (model.CaseAlternative[handler] alt)} in let forLet := λlt.let mapBinding := λb.model.Binding{name = model.Binding[name] b, `term` = recurse (model.Binding[`term`] b), typeScheme = model.Binding[typeScheme] b} in model.Let{bindings = lists.map mapBinding (model.Let[bindings] lt), body = recurse (model.Let[body] lt)} in let forMap := λm.let forPair := λp.(recurse (pairs.first p), recurse (pairs.second p)) in maps.fromList (lists.map forPair (maps.toList m)) in cases(model.Term){annotated=λat.model.Term{annotated = model.AnnotatedTerm{body = recurse (model.AnnotatedTerm[body] at), annotation = model.AnnotatedTerm[annotation] at}}, application=λa.model.Term{application = model.Application{function = recurse (model.Application[function] a), argument = recurse (model.Application[argument] a)}}, `cases`=λcs.model.Term{`cases` = model.CaseStatement{typeName = model.CaseStatement[typeName] cs, default = optionals.map recurse (model.CaseStatement[default] cs), `cases` = lists.map forCaseAlternative (model.CaseStatement[`cases`] cs)}}, `either`=λe.model.Term{`either` = eithers.either (λl.left(recurse l)) (λr.right(recurse r)) e}, lambda=λl.model.Term{lambda = model.Lambda{parameter = model.Lambda[parameter] l, domain = model.Lambda[domain] l, body = recurse (model.Lambda[body] l)}}, `let`=λlt.model.Term{`let` = forLet lt}, `list`=λels.model.Term{`list` = lists.map recurse els}, literal=λv.model.Term{literal = v}, `map`=λm.model.Term{`map` = forMap m}, `optional`=λm.model.Term{`optional` = optionals.map recurse m}, pair=λp.model.Term{pair = (recurse (pairs.first p), recurse (pairs.second p))}, `project`=λp.model.Term{`project` = p}, `record`=λr.model.Term{`record` = model.Record{typeName = model.Record[typeName] r, fields = lists.map forField (model.Record[fields] r)}}, `set`=λs.model.Term{`set` = sets.fromList (lists.map recurse (sets.toList s))}, typeApplication=λtt.model.Term{typeApplication = model.TypeApplicationTerm{body = recurse (model.TypeApplicationTerm[body] tt), `type` = model.TypeApplicationTerm[`type`] tt}}, typeLambda=λta.model.Term{typeLambda = model.TypeLambda{parameter = model.TypeLambda[parameter] ta, body = recurse (model.TypeLambda[body] ta)}}, `inject`=λi.model.Term{`inject` = model.Injection{typeName = model.Injection[typeName] i, field = forField (model.Injection[field] i)}}, `unit`=λ`_`.model.Term{`unit`}, `unwrap`=λn.model.Term{`unwrap` = n}, variable=λv.model.Term{variable = v}, `wrap`=λwt.model.Term{`wrap` = model.WrappedTerm{typeName = model.WrappedTerm[typeName] wt, body = recurse (model.WrappedTerm[body] wt)}}} `term` in let rewrite := λcx,`term`.f (forSubterms rewrite) cx `term` in rewrite cx0 term0
+term rewriteTermWithContext =
+  λf,cx0,term0.
+    let forSubterms := λrecurse0,cx,`term`.
+        let recurse := recurse0 cx in
+        let forField := λfield.Field{
+              name = Field[name] field,
+              `term` = recurse (Field[`term`] field)} in
+        let forCaseAlternative := λalt.CaseAlternative{
+              name = CaseAlternative[name] alt,
+              handler = recurse (CaseAlternative[handler] alt)} in
+        let forLet := λlt.
+            let mapBinding := λb.Binding{
+                  name = Binding[name] b,
+                  `term` = recurse (Binding[`term`] b),
+                  typeScheme = Binding[typeScheme] b}
+            in Let{
+              bindings = lists.map mapBinding (Let[bindings] lt),
+              body = recurse (Let[body] lt)} in
+        let forMap := λm.
+            let forPair := λp.(recurse (first p), recurse (second p))
+            in maps.fromList (lists.map forPair (maps.toList m)) in
+        cases(Term){
+          annotated=λat.Term{
+                annotated = AnnotatedTerm{
+                  body = recurse (AnnotatedTerm[body] at),
+                  annotation = AnnotatedTerm[annotation] at}},
+          application=λa.Term{
+                application = Application{
+                  function = recurse (Application[function] a),
+                  argument = recurse (Application[argument] a)}},
+          `cases`=λcs.Term{
+                `cases` = CaseStatement{
+                  typeName = CaseStatement[typeName] cs,
+                  default = optionals.map
+                      recurse
+                      (CaseStatement[default] cs),
+                  `cases` = lists.map
+                      forCaseAlternative
+                      (CaseStatement[`cases`] cs)}},
+          `either`=λe.Term{
+                `either` = eithers.either
+                    (λl.left(recurse l))
+                    (λr.right(recurse r))
+                    e},
+          lambda=λl.Term{
+                lambda = Lambda{
+                  parameter = Lambda[parameter] l,
+                  domain = Lambda[domain] l,
+                  body = recurse (Lambda[body] l)}},
+          `let`=λlt.Term{`let` = forLet lt},
+          `list`=λels.Term{`list` = lists.map recurse els},
+          literal=λv.Term{literal = v},
+          `map`=λm.Term{`map` = forMap m},
+          `optional`=λm.Term{
+                `optional` = optionals.map recurse m},
+          pair=λp.Term{
+                pair = (recurse (first p), recurse (second p))},
+          `project`=λp.Term{`project` = p},
+          `record`=λr.Term{
+                `record` = Record{
+                  typeName = Record[typeName] r,
+                  fields = lists.map forField (Record[fields] r)}},
+          `set`=λs.Term{
+                `set` = sets.fromList
+                    (lists.map recurse (sets.toList s))},
+          typeApplication=λtt.Term{
+                typeApplication = TypeApplicationTerm{
+                  body = recurse (TypeApplicationTerm[body] tt),
+                  `type` = TypeApplicationTerm[`type`] tt}},
+          typeLambda=λta.Term{
+                typeLambda = TypeLambda{
+                  parameter = TypeLambda[parameter] ta,
+                  body = recurse (TypeLambda[body] ta)}},
+          `inject`=λi.Term{
+                `inject` = Injection{
+                  typeName = Injection[typeName] i,
+                  field = forField (Injection[field] i)}},
+          `unit`=λ`_`.Term{`unit`},
+          `unwrap`=λn.Term{`unwrap` = n},
+          variable=λv.Term{variable = v},
+          `wrap`=λwt.Term{
+                `wrap` = WrappedTerm{
+                  typeName = WrappedTerm[typeName] wt,
+                  body = recurse (WrappedTerm[body] wt)}}}
+          `term` in
+    let rewrite := λcx,`term`.f (forSubterms rewrite) cx `term` in
+    rewrite cx0 term0
 
 ## Either-based variant of rewriteTermWithContextM which allows a context (e.g. a TypeContext) to be passed down to all subterms during rewriting
-term rewriteTermWithContextM = λf,cx0,term0.let forSubterms := λrecurse0,cx,`term`.let recurse := recurse0 cx in let forField := λfield.eithers.bind (recurse (model.Field[`term`] field)) (λt.right(model.Field{name = model.Field[name] field, `term` = t})) in let forCaseAlternative := λalt.eithers.bind (recurse (model.CaseAlternative[handler] alt)) (λt.right(model.CaseAlternative{name = model.CaseAlternative[name] alt, handler = t})) in let forPair := λkv.eithers.bind (recurse (pairs.first kv)) (λk.eithers.bind (recurse (pairs.second kv)) (λv.right((k, v)))) in let mapBinding := λb.eithers.bind (recurse (model.Binding[`term`] b)) (λv.right(model.Binding{name = model.Binding[name] b, `term` = v, typeScheme = model.Binding[typeScheme] b})) in cases(model.Term){annotated=λat.eithers.bind (recurse (model.AnnotatedTerm[body] at)) (λex.right(model.Term{annotated = model.AnnotatedTerm{body = ex, annotation = model.AnnotatedTerm[annotation] at}})), application=λapp.eithers.bind (recurse (model.Application[function] app)) (λlhs.eithers.bind (recurse (model.Application[argument] app)) (λrhs.right(model.Term{application = model.Application{function = lhs, argument = rhs}}))), `cases`=λcs.let n := model.CaseStatement[typeName] cs in let def := model.CaseStatement[default] cs in let csCases := model.CaseStatement[`cases`] cs in eithers.bind (optionals.match def right(none) (λt.eithers.map optionals.given (recurse t))) (λrdef.eithers.map (λrcases.model.Term{`cases` = model.CaseStatement{typeName = n, default = rdef, `cases` = rcases}}) (eithers.mapList forCaseAlternative csCases)), `either`=λe.eithers.bind (eithers.either (λl.eithers.map (λx.left(x)) (recurse l)) (λr.eithers.map (λx.right(x)) (recurse r)) e) (λre.right(model.Term{`either` = re})), lambda=λl.let v := model.Lambda[parameter] l in let d := model.Lambda[domain] l in let body := model.Lambda[body] l in eithers.bind (recurse body) (λrbody.right(model.Term{lambda = model.Lambda{parameter = v, domain = d, body = rbody}})), `let`=λlt.let bindings := model.Let[bindings] lt in let body := model.Let[body] lt in eithers.bind (eithers.mapList mapBinding bindings) (λrbindings.eithers.bind (recurse body) (λrbody.right(model.Term{`let` = model.Let{bindings = rbindings, body = rbody}}))), `list`=λels.eithers.bind (eithers.mapList recurse els) (λrels.right(model.Term{`list` = rels})), literal=λv.right(model.Term{literal = v}), `map`=λm.eithers.bind (eithers.mapList forPair (maps.toList m)) (λpairs.right(model.Term{`map` = maps.fromList pairs})), `optional`=λm.eithers.bind (eithers.mapOptional recurse m) (λrm.right(model.Term{`optional` = rm})), pair=λp.eithers.bind (recurse (pairs.first p)) (λrfirst.eithers.bind (recurse (pairs.second p)) (λrsecond.right(model.Term{pair = (rfirst, rsecond)}))), `project`=λp.right(model.Term{`project` = p}), `record`=λr.let n := model.Record[typeName] r in let fields := model.Record[fields] r in eithers.map (λrfields.model.Term{`record` = model.Record{typeName = n, fields = rfields}}) (eithers.mapList forField fields), `set`=λs.eithers.bind (eithers.mapList recurse (sets.toList s)) (λrlist.right(model.Term{`set` = sets.fromList rlist})), typeApplication=λtt.eithers.bind (recurse (model.TypeApplicationTerm[body] tt)) (λt.right(model.Term{typeApplication = model.TypeApplicationTerm{body = t, `type` = model.TypeApplicationTerm[`type`] tt}})), typeLambda=λtl.let v := model.TypeLambda[parameter] tl in let body := model.TypeLambda[body] tl in eithers.bind (recurse body) (λrbody.right(model.Term{typeLambda = model.TypeLambda{parameter = v, body = rbody}})), `inject`=λi.let n := model.Injection[typeName] i in let field := model.Injection[field] i in eithers.map (λrfield.model.Term{`inject` = model.Injection{typeName = n, field = rfield}}) (forField field), `unit`=λ`_`.right(model.Term{`unit`}), `unwrap`=λn.right(model.Term{`unwrap` = n}), variable=λv.right(model.Term{variable = v}), `wrap`=λwt.let name := model.WrappedTerm[typeName] wt in let t := model.WrappedTerm[body] wt in eithers.bind (recurse t) (λrt.right(model.Term{`wrap` = model.WrappedTerm{typeName = name, body = rt}}))} `term` in let rewrite := λcx,`term`.f (forSubterms rewrite) cx `term` in rewrite cx0 term0
+term rewriteTermWithContextM =
+  λf,cx0,term0.
+    let forSubterms := λrecurse0,cx,`term`.
+        let recurse := recurse0 cx in
+        let forField := λfield.eithers.bind
+              (recurse (Field[`term`] field))
+              (λt.right(Field{
+                  name = Field[name] field,
+                  `term` = t})) in
+        let forCaseAlternative := λalt.eithers.bind
+              (recurse (CaseAlternative[handler] alt))
+              (λt.right(CaseAlternative{
+                  name = CaseAlternative[name] alt,
+                  handler = t})) in
+        let forPair := λkv.eithers.bind
+              (recurse (first kv))
+              (λk.eithers.bind
+                  (recurse (second kv))
+                  (λv.right((k, v)))) in
+        let mapBinding := λb.eithers.bind
+              (recurse (Binding[`term`] b))
+              (λv.right(Binding{
+                  name = Binding[name] b,
+                  `term` = v,
+                  typeScheme = Binding[typeScheme] b})) in
+        cases(Term){
+          annotated=λat.eithers.bind
+                (recurse (AnnotatedTerm[body] at))
+                (λex.right(Term{
+                    annotated = AnnotatedTerm{
+                      body = ex,
+                      annotation = AnnotatedTerm[annotation] at}})),
+          application=λapp.eithers.bind
+                (recurse (Application[function] app))
+                (λlhs.eithers.bind
+                    (recurse (Application[argument] app))
+                    (λrhs.right(Term{
+                        application = Application{
+                          function = lhs,
+                          argument = rhs}}))),
+          `cases`=λcs.
+              let n := CaseStatement[typeName] cs in
+              let def := CaseStatement[default] cs in
+              let csCases := CaseStatement[`cases`] cs in
+              eithers.bind
+                (optionals.match
+                  def
+                  right(none)
+                  (λt.eithers.map optionals.given (recurse t)))
+                (λrdef.eithers.map
+                    (λrcases.Term{
+                        `cases` = CaseStatement{
+                          typeName = n,
+                          default = rdef,
+                          `cases` = rcases}})
+                    (eithers.mapList
+                      forCaseAlternative
+                      csCases)),
+          `either`=λe.eithers.bind
+                (eithers.either
+                  (λl.eithers.map (λx.left(x)) (recurse l))
+                  (λr.eithers.map (λx.right(x)) (recurse r))
+                  e)
+                (λre.right(Term{`either` = re})),
+          lambda=λl.
+              let v := Lambda[parameter] l in
+              let d := Lambda[domain] l in
+              let body := Lambda[body] l in
+              eithers.bind
+                (recurse body)
+                (λrbody.right(Term{
+                    lambda = Lambda{
+                      parameter = v,
+                      domain = d,
+                      body = rbody}})),
+          `let`=λlt.
+              let bindings := Let[bindings] lt in
+              let body := Let[body] lt in
+              eithers.bind
+                (eithers.mapList mapBinding bindings)
+                (λrbindings.eithers.bind
+                    (recurse body)
+                    (λrbody.right(Term{
+                        `let` = Let{
+                          bindings = rbindings,
+                          body = rbody}}))),
+          `list`=λels.eithers.bind
+                (eithers.mapList recurse els)
+                (λrels.right(Term{`list` = rels})),
+          literal=λv.right(Term{literal = v}),
+          `map`=λm.eithers.bind
+                (eithers.mapList forPair (maps.toList m))
+                (λpairs.right(Term{
+                    `map` = maps.fromList pairs})),
+          `optional`=λm.eithers.bind
+                (eithers.mapOptional recurse m)
+                (λrm.right(Term{`optional` = rm})),
+          pair=λp.eithers.bind
+                (recurse (first p))
+                (λrfirst.eithers.bind
+                    (recurse (second p))
+                    (λrsecond.right(Term{
+                        pair = (rfirst, rsecond)}))),
+          `project`=λp.right(Term{`project` = p}),
+          `record`=λr.
+              let n := Record[typeName] r in
+              let fields := Record[fields] r in
+              eithers.map
+                (λrfields.Term{
+                    `record` = Record{
+                      typeName = n,
+                      fields = rfields}})
+                (eithers.mapList forField fields),
+          `set`=λs.eithers.bind
+                (eithers.mapList recurse (sets.toList s))
+                (λrlist.right(Term{
+                    `set` = sets.fromList rlist})),
+          typeApplication=λtt.eithers.bind
+                (recurse (TypeApplicationTerm[body] tt))
+                (λt.right(Term{
+                    typeApplication = TypeApplicationTerm{
+                      body = t,
+                      `type` = TypeApplicationTerm[`type`] tt}})),
+          typeLambda=λtl.
+              let v := TypeLambda[parameter] tl in
+              let body := TypeLambda[body] tl in
+              eithers.bind
+                (recurse body)
+                (λrbody.right(Term{
+                    typeLambda = TypeLambda{
+                      parameter = v,
+                      body = rbody}})),
+          `inject`=λi.
+              let n := Injection[typeName] i in
+              let field := Injection[field] i in
+              eithers.map
+                (λrfield.Term{
+                    `inject` = Injection{
+                      typeName = n,
+                      field = rfield}})
+                (forField field),
+          `unit`=λ`_`.right(Term{`unit`}),
+          `unwrap`=λn.right(Term{`unwrap` = n}),
+          variable=λv.right(Term{variable = v}),
+          `wrap`=λwt.
+              let name := WrappedTerm[typeName] wt in
+              let t := WrappedTerm[body] wt in
+              eithers.bind
+                (recurse t)
+                (λrt.right(Term{
+                    `wrap` = WrappedTerm{
+                      typeName = name,
+                      body = rt}}))}
+          `term` in
+    let rewrite := λcx,`term`.f (forSubterms rewrite) cx `term` in
+    rewrite cx0 term0
 
 ## Rewrite a term with the help of a Graph which is updated as we descend into subterms
-term rewriteTermWithGraph = λf,cx0,term0.let f2 := λrecurse,cx,`term`.let recurse1 := λ`term`.recurse cx `term` in cases(model.Term){lambda=λl.let cx1 := scoping.extendGraphForLambda cx l in let recurse2 := λ`term`.recurse cx1 `term` in f recurse2 cx1 `term`, `let`=λl.let cx1 := scoping.extendGraphForLet (λ`_`,`_`.none) cx l in let recurse2 := λ`term`.recurse cx1 `term` in f recurse2 cx1 `term`, typeLambda=λtl.let cx1 := scoping.extendGraphForTypeLambda cx tl in let recurse2 := λ`term`.recurse cx1 `term` in f recurse2 cx1 `term`, `_`=f recurse1 cx `term`} `term` in let rewrite := λcx,`term`.f2 rewrite cx `term` in rewrite cx0 term0
+term rewriteTermWithGraph =
+  λf,cx0,term0.
+    let f2 := λrecurse,cx,`term`.
+        let recurse1 := λ`term`.recurse cx `term`
+        in cases(Term){
+          lambda=λl.
+              let cx1 := extendGraphForLambda cx l in
+              let recurse2 := λ`term`.recurse cx1 `term` in
+              f recurse2 cx1 `term`,
+          `let`=λl.
+              let cx1 := extendGraphForLet (λ`_`,`_`.none) cx l in
+              let recurse2 := λ`term`.recurse cx1 `term` in
+              f recurse2 cx1 `term`,
+          typeLambda=λtl.
+              let cx1 := extendGraphForTypeLambda cx tl in
+              let recurse2 := λ`term`.recurse cx1 `term` in
+              f recurse2 cx1 `term`,
+          `_`=f recurse1 cx `term`}
+          `term` in
+    let rewrite := λcx,`term`.f2 rewrite cx `term` in
+    rewrite cx0 term0
 
 ## Rewrite a type with a custom transformation function. The function receives a recursive walker and the current type and decides whether to recurse, replace, or both.
-term rewriteType = λf,typ0.let fsub := λrecurse,typ.let forField := λfield.model.FieldType{name = model.FieldType[name] field, `type` = recurse (model.FieldType[`type`] field)} in cases(model.Type){annotated=λat.model.Type{annotated = model.AnnotatedType{body = recurse (model.AnnotatedType[body] at), annotation = model.AnnotatedType[annotation] at}}, application=λapp.model.Type{application = model.ApplicationType{function = recurse (model.ApplicationType[function] app), argument = recurse (model.ApplicationType[argument] app)}}, `effect`=λt.model.Type{`effect` = recurse t}, `either`=λet.model.Type{`either` = model.EitherType{`left` = recurse (model.EitherType[`left`] et), `right` = recurse (model.EitherType[`right`] et)}}, pair=λpt.model.Type{pair = model.PairType{first = recurse (model.PairType[first] pt), second = recurse (model.PairType[second] pt)}}, function=λfun.model.Type{function = model.FunctionType{domain = recurse (model.FunctionType[domain] fun), codomain = recurse (model.FunctionType[codomain] fun)}}, `forall`=λlt.model.Type{`forall` = model.ForallType{parameter = model.ForallType[parameter] lt, body = recurse (model.ForallType[body] lt)}}, `list`=λt.model.Type{`list` = recurse t}, literal=λlt.model.Type{literal = lt}, `map`=λmt.model.Type{`map` = model.MapType{keys = recurse (model.MapType[keys] mt), values = recurse (model.MapType[values] mt)}}, `optional`=λt.model.Type{`optional` = recurse t}, `record`=λrt.model.Type{`record` = lists.map forField rt}, `set`=λt.model.Type{`set` = recurse t}, `union`=λrt.model.Type{`union` = lists.map forField rt}, `unit`=λ`_`.model.Type{`unit`}, variable=λv.model.Type{variable = v}, `void`=λ`_`.model.Type{`void`}, `wrap`=λwt.model.Type{`wrap` = recurse wt}} typ in let recurse := f (fsub recurse) in recurse typ0
+term rewriteType =
+  λf,typ0.
+    let fsub := λrecurse,typ.
+        let forField := λfield.FieldType{
+              name = FieldType[name] field,
+              `type` = recurse (FieldType[`type`] field)}
+        in cases(Type){
+          annotated=λat.Type{
+                annotated = AnnotatedType{
+                  body = recurse (AnnotatedType[body] at),
+                  annotation = AnnotatedType[annotation] at}},
+          application=λapp.Type{
+                application = ApplicationType{
+                  function = recurse (ApplicationType[function] app),
+                  argument = recurse (ApplicationType[argument] app)}},
+          `effect`=λt.Type{`effect` = recurse t},
+          `either`=λet.Type{
+                `either` = EitherType{
+                  `left` = recurse (EitherType[`left`] et),
+                  `right` = recurse (EitherType[`right`] et)}},
+          pair=λpt.Type{
+                pair = PairType{
+                  first = recurse (PairType[first] pt),
+                  second = recurse (PairType[second] pt)}},
+          function=λfun.Type{
+                function = FunctionType{
+                  domain = recurse (FunctionType[domain] fun),
+                  codomain = recurse (FunctionType[codomain] fun)}},
+          `forall`=λlt.Type{
+                `forall` = ForallType{
+                  parameter = ForallType[parameter] lt,
+                  body = recurse (ForallType[body] lt)}},
+          `list`=λt.Type{`list` = recurse t},
+          literal=λlt.Type{literal = lt},
+          `map`=λmt.Type{
+                `map` = MapType{
+                  keys = recurse (MapType[keys] mt),
+                  values = recurse (MapType[values] mt)}},
+          `optional`=λt.Type{`optional` = recurse t},
+          `record`=λrt.Type{`record` = lists.map forField rt},
+          `set`=λt.Type{`set` = recurse t},
+          `union`=λrt.Type{`union` = lists.map forField rt},
+          `unit`=λ`_`.Type{`unit`},
+          variable=λv.Type{variable = v},
+          `void`=λ`_`.Type{`void`},
+          `wrap`=λwt.Type{`wrap` = recurse wt}}
+          typ in
+    let recurse := f (fsub recurse) in
+    recurse typ0
 
 ## Either-based type rewriting
-term rewriteTypeM = λf,typ0.let fsub := λrecurse,typ.cases(model.Type){annotated=λat.eithers.bind (recurse (model.AnnotatedType[body] at)) (λt.right(model.Type{annotated = model.AnnotatedType{body = t, annotation = model.AnnotatedType[annotation] at}})), application=λat.eithers.bind (recurse (model.ApplicationType[function] at)) (λlhs.eithers.bind (recurse (model.ApplicationType[argument] at)) (λrhs.right(model.Type{application = model.ApplicationType{function = lhs, argument = rhs}}))), `effect`=λt.eithers.bind (recurse t) (λrt.right(model.Type{`effect` = rt})), `either`=λet.eithers.bind (recurse (model.EitherType[`left`] et)) (λ`left`.eithers.bind (recurse (model.EitherType[`right`] et)) (λ`right`.right(model.Type{`either` = model.EitherType{`left` = `left`, `right` = `right`}}))), pair=λpt.eithers.bind (recurse (model.PairType[first] pt)) (λpairFirst.eithers.bind (recurse (model.PairType[second] pt)) (λpairSecond.right(model.Type{pair = model.PairType{first = pairFirst, second = pairSecond}}))), function=λft.eithers.bind (recurse (model.FunctionType[domain] ft)) (λdom.eithers.bind (recurse (model.FunctionType[codomain] ft)) (λcod.right(model.Type{function = model.FunctionType{domain = dom, codomain = cod}}))), `forall`=λft.eithers.bind (recurse (model.ForallType[body] ft)) (λb.right(model.Type{`forall` = model.ForallType{parameter = model.ForallType[parameter] ft, body = b}})), `list`=λt.eithers.bind (recurse t) (λrt.right(model.Type{`list` = rt})), literal=λlt.right(model.Type{literal = lt}), `map`=λmt.eithers.bind (recurse (model.MapType[keys] mt)) (λkt.eithers.bind (recurse (model.MapType[values] mt)) (λvt.right(model.Type{`map` = model.MapType{keys = kt, values = vt}}))), `optional`=λt.eithers.bind (recurse t) (λrt.right(model.Type{`optional` = rt})), `record`=λrt.let forField := λf.eithers.bind (recurse (model.FieldType[`type`] f)) (λt.right(model.FieldType{name = model.FieldType[name] f, `type` = t})) in eithers.bind (eithers.mapList forField rt) (λrfields.right(model.Type{`record` = rfields})), `set`=λt.eithers.bind (recurse t) (λrt.right(model.Type{`set` = rt})), `union`=λrt.let forField := λf.eithers.bind (recurse (model.FieldType[`type`] f)) (λt.right(model.FieldType{name = model.FieldType[name] f, `type` = t})) in eithers.bind (eithers.mapList forField rt) (λrfields.right(model.Type{`union` = rfields})), `unit`=λ`_`.right(model.Type{`unit`}), variable=λv.right(model.Type{variable = v}), `void`=λ`_`.right(model.Type{`void`}), `wrap`=λwt.eithers.bind (recurse wt) (λt.right(model.Type{`wrap` = t}))} typ in let recurse := f (fsub recurse) in recurse typ0
+term rewriteTypeM =
+  λf,typ0.
+    let fsub := λrecurse,typ.cases(Type){
+          annotated=λat.eithers.bind
+                (recurse (AnnotatedType[body] at))
+                (λt.right(Type{
+                    annotated = AnnotatedType{
+                      body = t,
+                      annotation = AnnotatedType[annotation] at}})),
+          application=λat.eithers.bind
+                (recurse (ApplicationType[function] at))
+                (λlhs.eithers.bind
+                    (recurse (ApplicationType[argument] at))
+                    (λrhs.right(Type{
+                        application = ApplicationType{
+                          function = lhs,
+                          argument = rhs}}))),
+          `effect`=λt.eithers.bind (recurse t) (λrt.right(Type{`effect` = rt})),
+          `either`=λet.eithers.bind
+                (recurse (EitherType[`left`] et))
+                (λ`left`.eithers.bind
+                    (recurse (EitherType[`right`] et))
+                    (λ`right`.right(Type{
+                        `either` = EitherType{
+                          `left` = `left`,
+                          `right` = `right`}}))),
+          pair=λpt.eithers.bind
+                (recurse (PairType[first] pt))
+                (λpairFirst.eithers.bind
+                    (recurse (PairType[second] pt))
+                    (λpairSecond.right(Type{
+                        pair = PairType{
+                          first = pairFirst,
+                          second = pairSecond}}))),
+          function=λft.eithers.bind
+                (recurse (FunctionType[domain] ft))
+                (λdom.eithers.bind
+                    (recurse (FunctionType[codomain] ft))
+                    (λcod.right(Type{
+                        function = FunctionType{
+                          domain = dom,
+                          codomain = cod}}))),
+          `forall`=λft.eithers.bind
+                (recurse (ForallType[body] ft))
+                (λb.right(Type{
+                    `forall` = ForallType{
+                      parameter = ForallType[parameter] ft,
+                      body = b}})),
+          `list`=λt.eithers.bind (recurse t) (λrt.right(Type{`list` = rt})),
+          literal=λlt.right(Type{literal = lt}),
+          `map`=λmt.eithers.bind
+                (recurse (MapType[keys] mt))
+                (λkt.eithers.bind
+                    (recurse (MapType[values] mt))
+                    (λvt.right(Type{`map` = MapType{keys = kt, values = vt}}))),
+          `optional`=λt.eithers.bind
+                (recurse t)
+                (λrt.right(Type{`optional` = rt})),
+          `record`=λrt.
+              let forField := λf.eithers.bind
+                    (recurse (FieldType[`type`] f))
+                    (λt.right(FieldType{
+                        name = FieldType[name] f,
+                        `type` = t}))
+              in eithers.bind
+                (eithers.mapList forField rt)
+                (λrfields.right(Type{`record` = rfields})),
+          `set`=λt.eithers.bind (recurse t) (λrt.right(Type{`set` = rt})),
+          `union`=λrt.
+              let forField := λf.eithers.bind
+                    (recurse (FieldType[`type`] f))
+                    (λt.right(FieldType{
+                        name = FieldType[name] f,
+                        `type` = t}))
+              in eithers.bind
+                (eithers.mapList forField rt)
+                (λrfields.right(Type{`union` = rfields})),
+          `unit`=λ`_`.right(Type{`unit`}),
+          variable=λv.right(Type{variable = v}),
+          `void`=λ`_`.right(Type{`void`}),
+          `wrap`=λwt.eithers.bind (recurse wt) (λt.right(Type{`wrap` = t}))}
+          typ in
+    let recurse := f (fsub recurse) in
+    recurse typ0
 
 ## Find the children of a given term
-term subterms = cases(model.Term){annotated=λat.[model.AnnotatedTerm[body] at], application=λp.[model.Application[function] p, model.Application[argument] p], `cases`=λcs.lists.concat2 (optionals.match (model.CaseStatement[default] cs) [] (λt.[t])) (lists.map model.CaseAlternative[handler] (model.CaseStatement[`cases`] cs)), `either`=λe.eithers.either (λl.[l]) (λr.[r]) e, lambda=λl.[model.Lambda[body] l], `let`=λlt.lists.cons (model.Let[body] lt) (lists.map model.Binding[`term`] (model.Let[bindings] lt)), `list`=λl.l, literal=λ`_`.[], `map`=λm.lists.concat (lists.map (λp.[pairs.first p, pairs.second p]) (maps.toList m)), `optional`=λm.optionals.match m [] (λt.[t]), pair=λp.[pairs.first p, pairs.second p], `project`=λ`_`.[], `record`=λrt.lists.map model.Field[`term`] (model.Record[fields] rt), `set`=λl.sets.toList l, typeApplication=λta.[model.TypeApplicationTerm[body] ta], typeLambda=λta.[model.TypeLambda[body] ta], `inject`=λut.[model.Field[`term`] (model.Injection[field] ut)], `unit`=λ`_`.[], `unwrap`=λ`_`.[], variable=λ`_`.[], `wrap`=λn.[model.WrappedTerm[body] n]}
+term subterms =
+  cases(Term){
+    annotated=λat.[AnnotatedTerm[body] at],
+    application=λp.[Application[function] p, Application[argument] p],
+    `cases`=λcs.lists.concat2
+          (optionals.match (CaseStatement[default] cs) [] (λt.[t]))
+          (lists.map CaseAlternative[handler] (CaseStatement[`cases`] cs)),
+    `either`=λe.eithers.either (λl.[l]) (λr.[r]) e,
+    lambda=λl.[Lambda[body] l],
+    `let`=λlt.lists.cons (Let[body] lt) (lists.map Binding[`term`] (Let[bindings] lt)),
+    `list`=λl.l,
+    literal=λ`_`.[],
+    `map`=λm.lists.concat (lists.map (λp.[first p, second p]) (maps.toList m)),
+    `optional`=λm.optionals.match m [] (λt.[t]),
+    pair=λp.[first p, second p],
+    `project`=λ`_`.[],
+    `record`=λrt.lists.map Field[`term`] (Record[fields] rt),
+    `set`=λl.sets.toList l,
+    typeApplication=λta.[TypeApplicationTerm[body] ta],
+    typeLambda=λta.[TypeLambda[body] ta],
+    `inject`=λut.[Field[`term`] (Injection[field] ut)],
+    `unit`=λ`_`.[],
+    `unwrap`=λ`_`.[],
+    variable=λ`_`.[],
+    `wrap`=λn.[WrappedTerm[body] n]}
 
 ## Find the children of a given term
-term subtermsWithSteps = cases(model.Term){annotated=λat.[(paths.SubtermStep{annotatedBody}, model.AnnotatedTerm[body] at)], application=λp.[(paths.SubtermStep{applicationFunction}, model.Application[function] p), (paths.SubtermStep{applicationArgument}, model.Application[argument] p)], `cases`=λcs.lists.concat2 (optionals.match (model.CaseStatement[default] cs) [] (λt.[(paths.SubtermStep{casesDefault}, t)])) (lists.map (λf.(paths.SubtermStep{casesCase = model.CaseAlternative[name] f}, model.CaseAlternative[handler] f)) (model.CaseStatement[`cases`] cs)), `either`=λe.eithers.either (λl.[(paths.SubtermStep{eitherLeft}, l)]) (λr.[(paths.SubtermStep{eitherRight}, r)]) e, lambda=λl.[(paths.SubtermStep{lambdaBody}, model.Lambda[body] l)], `let`=λlt.lists.cons (paths.SubtermStep{letBody}, model.Let[body] lt) (lists.map (λb.(paths.SubtermStep{letBinding = model.Binding[name] b}, model.Binding[`term`] b)) (model.Let[bindings] lt)), `list`=λl.lists.map (λip.(paths.SubtermStep{listElement = pairs.first ip}, pairs.second ip)) (lists.reverse (pairs.second (lists.foldl (λr,el.let idx := pairs.first r in (math.add idx 1:int32, lists.cons (idx, el) (pairs.second r))) (0:int32, []) l))), literal=λ`_`.[], `map`=λm.lists.map (λip.(paths.SubtermStep{mapEntry = pairs.first ip}, model.Term{pair = (pairs.first (pairs.second ip), pairs.second (pairs.second ip))})) (lists.reverse (pairs.second (lists.foldl (λr,el.let idx := pairs.first r in (math.add idx 1:int32, lists.cons (idx, el) (pairs.second r))) (0:int32, []) (maps.toList m)))), `optional`=λm.optionals.match m [] (λt.[(paths.SubtermStep{optionalGiven}, t)]), pair=λp.[(paths.SubtermStep{pairFirst}, pairs.first p), (paths.SubtermStep{pairSecond}, pairs.second p)], `project`=λ`_`.[], `record`=λrt.lists.map (λf.(paths.SubtermStep{recordField = model.Field[name] f}, model.Field[`term`] f)) (model.Record[fields] rt), `set`=λs.lists.map (λip.(paths.SubtermStep{setElement = pairs.first ip}, pairs.second ip)) (lists.reverse (pairs.second (lists.foldl (λr,el.let idx := pairs.first r in (math.add idx 1:int32, lists.cons (idx, el) (pairs.second r))) (0:int32, []) (sets.toList s)))), typeApplication=λta.[(paths.SubtermStep{typeApplicationBody}, model.TypeApplicationTerm[body] ta)], typeLambda=λta.[(paths.SubtermStep{typeLambdaBody}, model.TypeLambda[body] ta)], `inject`=λut.[(paths.SubtermStep{injectField = model.Field[name] (model.Injection[field] ut)}, model.Field[`term`] (model.Injection[field] ut))], `unit`=λ`_`.[], `unwrap`=λ`_`.[], variable=λ`_`.[], `wrap`=λn.[(paths.SubtermStep{wrapBody}, model.WrappedTerm[body] n)]}
+term subtermsWithSteps =
+  cases(Term){
+    annotated=λat.[(SubtermStep{annotatedBody}, AnnotatedTerm[body] at)],
+    application=λp.[
+          (SubtermStep{applicationFunction}, Application[function] p),
+          (SubtermStep{applicationArgument}, Application[argument] p)],
+    `cases`=λcs.lists.concat2
+          (optionals.match (CaseStatement[default] cs) [] (λt.[(SubtermStep{casesDefault}, t)]))
+          (lists.map
+            (λf.(SubtermStep{casesCase = CaseAlternative[name] f}, CaseAlternative[handler] f))
+            (CaseStatement[`cases`] cs)),
+    `either`=λe.eithers.either (λl.[(SubtermStep{eitherLeft}, l)]) (λr.[(SubtermStep{eitherRight}, r)]) e,
+    lambda=λl.[(SubtermStep{lambdaBody}, Lambda[body] l)],
+    `let`=λlt.lists.cons
+          (SubtermStep{letBody}, Let[body] lt)
+          (lists.map
+            (λb.(SubtermStep{letBinding = Binding[name] b}, Binding[`term`] b))
+            (Let[bindings] lt)),
+    `list`=λl.lists.map
+          (λip.(SubtermStep{listElement = first ip}, second ip))
+          (lists.reverse
+            (second
+              (lists.foldl
+                (λr,el.let idx := first r in (add idx 1:int32, lists.cons (idx, el) (second r)))
+                (0:int32, [])
+                l))),
+    literal=λ`_`.[],
+    `map`=λm.lists.map
+          (λip.(SubtermStep{mapEntry = first ip}, Term{pair = (first (second ip), second (second ip))}))
+          (lists.reverse
+            (second
+              (lists.foldl
+                (λr,el.let idx := first r in (add idx 1:int32, lists.cons (idx, el) (second r)))
+                (0:int32, [])
+                (maps.toList m)))),
+    `optional`=λm.optionals.match m [] (λt.[(SubtermStep{optionalGiven}, t)]),
+    pair=λp.[(SubtermStep{pairFirst}, first p), (SubtermStep{pairSecond}, second p)],
+    `project`=λ`_`.[],
+    `record`=λrt.lists.map
+          (λf.(SubtermStep{recordField = Field[name] f}, Field[`term`] f))
+          (Record[fields] rt),
+    `set`=λs.lists.map
+          (λip.(SubtermStep{setElement = first ip}, second ip))
+          (lists.reverse
+            (second
+              (lists.foldl
+                (λr,el.let idx := first r in (add idx 1:int32, lists.cons (idx, el) (second r)))
+                (0:int32, [])
+                (sets.toList s)))),
+    typeApplication=λta.[(SubtermStep{typeApplicationBody}, TypeApplicationTerm[body] ta)],
+    typeLambda=λta.[(SubtermStep{typeLambdaBody}, TypeLambda[body] ta)],
+    `inject`=λut.[(SubtermStep{injectField = Field[name] (Injection[field] ut)}, Field[`term`] (Injection[field] ut))],
+    `unit`=λ`_`.[],
+    `unwrap`=λ`_`.[],
+    variable=λ`_`.[],
+    `wrap`=λn.[(SubtermStep{wrapBody}, WrappedTerm[body] n)]}
 
 ## Find the children of a given type expression
-term subtypes = cases(model.Type){annotated=λat.[model.AnnotatedType[body] at], application=λat.[model.ApplicationType[function] at, model.ApplicationType[argument] at], `effect`=λet.[et], `either`=λet.[model.EitherType[`left`] et, model.EitherType[`right`] et], pair=λpt.[model.PairType[first] pt, model.PairType[second] pt], function=λft.[model.FunctionType[domain] ft, model.FunctionType[codomain] ft], `forall`=λlt.[model.ForallType[body] lt], `list`=λlt.[lt], literal=λ`_`.[], `map`=λmt.[model.MapType[keys] mt, model.MapType[values] mt], `optional`=λot.[ot], `record`=λrt.lists.map model.FieldType[`type`] rt, `set`=λst.[st], `union`=λrt.lists.map model.FieldType[`type`] rt, `unit`=λ`_`.[], variable=λ`_`.[], `void`=λ`_`.[], `wrap`=λnt.[nt]}
+term subtypes =
+  cases(Type){
+    annotated=λat.[AnnotatedType[body] at],
+    application=λat.[ApplicationType[function] at, ApplicationType[argument] at],
+    `effect`=λet.[et],
+    `either`=λet.[EitherType[`left`] et, EitherType[`right`] et],
+    pair=λpt.[PairType[first] pt, PairType[second] pt],
+    function=λft.[FunctionType[domain] ft, FunctionType[codomain] ft],
+    `forall`=λlt.[ForallType[body] lt],
+    `list`=λlt.[lt],
+    literal=λ`_`.[],
+    `map`=λmt.[MapType[keys] mt, MapType[values] mt],
+    `optional`=λot.[ot],
+    `record`=λrt.lists.map FieldType[`type`] rt,
+    `set`=λst.[st],
+    `union`=λrt.lists.map FieldType[`type`] rt,
+    `unit`=λ`_`.[],
+    variable=λ`_`.[],
+    `void`=λ`_`.[],
+    `wrap`=λnt.[nt]}
 
 ## Find the children of a given type expression, each paired with the step by which it is reached
-term subtypesWithSteps = cases(model.Type){annotated=λat.[(paths.SubtypeStep{annotatedBody}, model.AnnotatedType[body] at)], application=λat.[(paths.SubtypeStep{applicationFunction}, model.ApplicationType[function] at), (paths.SubtypeStep{applicationArgument}, model.ApplicationType[argument] at)], `effect`=λet.[(paths.SubtypeStep{effectValue}, et)], `either`=λet.[(paths.SubtypeStep{eitherLeft}, model.EitherType[`left`] et), (paths.SubtypeStep{eitherRight}, model.EitherType[`right`] et)], `forall`=λlt.[(paths.SubtypeStep{forallBody}, model.ForallType[body] lt)], function=λft.[(paths.SubtypeStep{functionDomain}, model.FunctionType[domain] ft), (paths.SubtypeStep{functionCodomain}, model.FunctionType[codomain] ft)], `list`=λlt.[(paths.SubtypeStep{listElement}, lt)], literal=λ`_`.[], `map`=λmt.[(paths.SubtypeStep{mapKeys}, model.MapType[keys] mt), (paths.SubtypeStep{mapValues}, model.MapType[values] mt)], `optional`=λot.[(paths.SubtypeStep{optionalElement}, ot)], pair=λpt.[(paths.SubtypeStep{pairFirst}, model.PairType[first] pt), (paths.SubtypeStep{pairSecond}, model.PairType[second] pt)], `record`=λrt.lists.map (λf.(paths.SubtypeStep{recordField = model.FieldType[name] f}, model.FieldType[`type`] f)) rt, `set`=λst.[(paths.SubtypeStep{setElement}, st)], `union`=λrt.lists.map (λf.(paths.SubtypeStep{unionField = model.FieldType[name] f}, model.FieldType[`type`] f)) rt, `unit`=λ`_`.[], variable=λ`_`.[], `void`=λ`_`.[], `wrap`=λnt.[(paths.SubtypeStep{wrapBody}, nt)]}
+term subtypesWithSteps =
+  cases(Type){
+    annotated=λat.[(SubtypeStep{annotatedBody}, AnnotatedType[body] at)],
+    application=λat.[
+          (SubtypeStep{applicationFunction}, ApplicationType[function] at),
+          (SubtypeStep{applicationArgument}, ApplicationType[argument] at)],
+    `effect`=λet.[(SubtypeStep{effectValue}, et)],
+    `either`=λet.[(SubtypeStep{eitherLeft}, EitherType[`left`] et), (SubtypeStep{eitherRight}, EitherType[`right`] et)],
+    `forall`=λlt.[(SubtypeStep{forallBody}, ForallType[body] lt)],
+    function=λft.[(SubtypeStep{functionDomain}, FunctionType[domain] ft), (SubtypeStep{functionCodomain}, FunctionType[codomain] ft)],
+    `list`=λlt.[(SubtypeStep{listElement}, lt)],
+    literal=λ`_`.[],
+    `map`=λmt.[(SubtypeStep{mapKeys}, MapType[keys] mt), (SubtypeStep{mapValues}, MapType[values] mt)],
+    `optional`=λot.[(SubtypeStep{optionalElement}, ot)],
+    pair=λpt.[(SubtypeStep{pairFirst}, PairType[first] pt), (SubtypeStep{pairSecond}, PairType[second] pt)],
+    `record`=λrt.lists.map (λf.(SubtypeStep{recordField = FieldType[name] f}, FieldType[`type`] f)) rt,
+    `set`=λst.[(SubtypeStep{setElement}, st)],
+    `union`=λrt.lists.map (λf.(SubtypeStep{unionField = FieldType[name] f}, FieldType[`type`] f)) rt,
+    `unit`=λ`_`.[],
+    variable=λ`_`.[],
+    `void`=λ`_`.[],
+    `wrap`=λnt.[(SubtypeStep{wrapBody}, nt)]}
 
 ## Convert a wrapped (newtype) term to an equivalent single-field record term, for target languages without a newtype concept
-term wrapTermToRecord = λtname,body.model.Term{`record` = model.Record{typeName = tname, fields = [model.Field{name = wrap(model.Name){constants.fieldNameValue}, `term` = body}]}}
+term wrapTermToRecord =
+  λtname,body.Term{
+      `record` = Record{
+        typeName = tname,
+        fields = [Field{name = wrap(Name){fieldNameValue}, `term` = body}]}}
 
 ## Convert a wrapped (newtype) type to an equivalent single-field record type, for target languages without a newtype concept
-term wrapTypeToRecord = λt.model.Type{`record` = [model.FieldType{name = wrap(model.Name){constants.fieldNameValue}, `type` = t}]}
+term wrapTypeToRecord = λt.Type{`record` = [FieldType{name = wrap(Name){fieldNameValue}, `type` = t}]}

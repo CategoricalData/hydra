@@ -6,14 +6,10 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.model as model
+>import hydra.core.model
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                       ^ source.hydra
-#                        ^^ source.hydra keyword.control.import.hydra
-#                          ^ source.hydra
-#                           ^^^^^ source.hydra entity.name.namespace.hydra
 >
 >## An association of a named term (element) with a phantom type
 #^^ source.hydra comment.block.documentation.hydra
@@ -36,13 +32,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  name: model.Name,
+>  name: Name,
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >  ## The term with its phantom type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -62,7 +58,7 @@
 >## An association of a name with a phantom type
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->type TypedName = forall a. wrap(model.Name)
+>type TypedName = forall a. wrap(Name)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -76,13 +72,13 @@
 #                          ^ source.hydra
 #                           ^^^^ source.hydra keyword.control.hydra
 #                               ^ source.hydra
-#                                ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                          ^^ source.hydra
+#                                ^^^^ source.hydra variable.other.hydra
+#                                    ^^ source.hydra
 >
 >## An association of a term with a phantom type
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->type TypedTerm = forall a. wrap(model.Term)
+>type TypedTerm = forall a. wrap(Term)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^ source.hydra entity.name.function.hydra
@@ -96,8 +92,8 @@
 #                          ^ source.hydra
 #                           ^^^^ source.hydra keyword.control.hydra
 #                               ^ source.hydra
-#                                ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                          ^^ source.hydra
+#                                ^^^^ source.hydra variable.other.hydra
+#                                    ^^ source.hydra
 >
 >## An association of a term definition with a phantom type
 #^^ source.hydra comment.block.documentation.hydra
@@ -120,13 +116,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  name: model.Name,
+>  name: Name,
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >  ## The term with its phantom type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

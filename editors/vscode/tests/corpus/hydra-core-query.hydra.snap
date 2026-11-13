@@ -6,14 +6,10 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.model as model
+>import hydra.core.model
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                       ^ source.hydra
-#                        ^^ source.hydra keyword.control.import.hydra
-#                          ^ source.hydra
-#                           ^^^^^ source.hydra entity.name.namespace.hydra
 >
 >## One of several comparison operators
 #^^ source.hydra comment.block.documentation.hydra
@@ -86,34 +82,34 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `type`: model.Name,
+>  `type`: Name,
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >  ## The field representing the out-projection of the edge. Defaults to 'out'.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  out: optional<model.Name>,
+>  out: optional<Name>,
 #^^ source.hydra
 #  ^^^ source.hydra variable.other.hydra
 #     ^ source.hydra punctuation.separator.type.hydra
 #      ^ source.hydra
 #       ^^^^^^^^ source.hydra support.type.hydra
 #               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                          ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                           ^^ source.hydra
+#                ^^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                     ^^ source.hydra
 >  ## The field representing the in-projection of the edge. Defaults to 'in'.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `in`: optional<model.Name>}
+>  `in`: optional<Name>}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^ source.hydra variable.other.escaped.hydra
@@ -122,9 +118,9 @@
 #       ^ source.hydra
 #        ^^^^^^^^ source.hydra support.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                 ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                           ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                            ^^ source.hydra
+#                 ^^^^ source.hydra variable.other.hydra
+#                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                      ^^ source.hydra
 >
 >## A query pattern which matches within a designated component subgraph
 #^^ source.hydra comment.block.documentation.hydra
@@ -142,13 +138,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  graph: model.Name,
+>  graph: Name,
 #^^ source.hydra
 #  ^^^^^ source.hydra variable.other.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                   ^^ source.hydra
+#         ^^^^ source.hydra variable.other.hydra
+#             ^^ source.hydra
 >  ## The patterns to match within the subgraph
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -180,15 +176,15 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `term`: model.Term,
+>  `term`: Term,
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >  ## A query variable, not to be confused with a variable term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -634,15 +630,15 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `project`: model.Projection,
+>  `project`: Projection,
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^^^^ source.hydra variable.other.escaped.hydra
 #          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                             ^^ source.hydra
+#             ^^^^^^^^^^ source.hydra variable.other.hydra
+#                       ^^ source.hydra
 >  ## A comparison of two terms
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

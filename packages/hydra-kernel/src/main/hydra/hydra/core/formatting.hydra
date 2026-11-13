@@ -1,42 +1,79 @@
 ## String formatting types and functions.
 module hydra.core.formatting
 
-import hydra.core.lib.chars as chars
-import hydra.core.lib.equality as equality
+import hydra.core.lib.chars
+import hydra.core.lib.equality
 import hydra.core.lib.lists as lists
-import hydra.core.lib.logic as logic
+import hydra.core.lib.logic
 import hydra.core.lib.maps as maps
-import hydra.core.lib.math as math
+import hydra.core.lib.math
 import hydra.core.lib.optionals as optionals
-import hydra.core.lib.ordering as ordering
-import hydra.core.lib.pairs as pairs
+import hydra.core.lib.ordering
+import hydra.core.lib.pairs
 import hydra.core.lib.sets as sets
 import hydra.core.lib.strings as strings
-import hydra.core.util as util
+import hydra.core.util
 
 ## Capitalize the first letter of a string
 term capitalize = mapFirstLetter strings.toUpper
 
 ## Convert a string from one case convention to another
-term convertCase = λ`from`,to,original.let parts := let byCaps := let splitOnUppercase := λacc,c.lists.concat2 (logic.ifElse (chars.isUpper c) [[]] []) (optionals.withDefault acc (optionals.map (λuc.lists.cons (lists.cons c (pairs.first uc)) (pairs.second uc)) (lists.uncons acc))) in lists.map strings.fromList (lists.foldl splitOnUppercase [[]] (lists.reverse (strings.toList (decapitalize original)))), byUnderscores := strings.splitOn "_" original, byDashes := strings.splitOn "-" original in cases(util.CaseConvention){camel=λ`_`.byCaps, pascal=λ`_`.byCaps, lowerSnake=λ`_`.byUnderscores, upperSnake=λ`_`.byUnderscores, upperDashed=λ`_`.byDashes} `from` in cases(util.CaseConvention){camel=λ`_`.decapitalize (strings.concat (lists.map (λ`arg_`.capitalize (strings.toLower `arg_`)) parts)), pascal=λ`_`.strings.concat (lists.map (λ`arg_`.capitalize (strings.toLower `arg_`)) parts), lowerSnake=λ`_`.strings.join "_" (lists.map strings.toLower parts), upperSnake=λ`_`.strings.join "_" (lists.map strings.toUpper parts), upperDashed=λ`_`.strings.join "-" (lists.map strings.toUpper parts)} to
+term convertCase =
+  λ`from`,to,original.
+    let parts := let byCaps := let splitOnUppercase := λacc,c.lists.concat2
+              (ifElse (isUpper c) [[]] [])
+              (optionals.withDefault
+                acc
+                (optionals.map
+                  (λuc.lists.cons
+                      (lists.cons c (first uc))
+                      (second uc))
+                  (lists.uncons acc)))
+        in lists.map
+          strings.fromList
+          (lists.foldl
+            splitOnUppercase
+            [[]]
+            (lists.reverse (strings.toList (decapitalize original)))), byUnderscores := strings.splitOn "_" original, byDashes := strings.splitOn "-" original
+      in cases(CaseConvention){
+        camel=λ`_`.byCaps,
+        pascal=λ`_`.byCaps,
+        lowerSnake=λ`_`.byUnderscores,
+        upperSnake=λ`_`.byUnderscores,
+        upperDashed=λ`_`.byDashes}
+        `from`
+    in cases(CaseConvention){
+      camel=λ`_`.decapitalize
+            (strings.concat
+              (lists.map (λ`arg_`.capitalize (strings.toLower `arg_`)) parts)),
+      pascal=λ`_`.strings.concat
+            (lists.map (λ`arg_`.capitalize (strings.toLower `arg_`)) parts),
+      lowerSnake=λ`_`.strings.join "_" (lists.map strings.toLower parts),
+      upperSnake=λ`_`.strings.join "_" (lists.map strings.toUpper parts),
+      upperDashed=λ`_`.strings.join "-" (lists.map strings.toUpper parts)}
+      to
 
 ## Convert a string from camel case (possibly with underscores) to lower snake case. Splits on underscores first, then converts each part from camel case.
-term convertCaseCamelOrUnderscoreToLowerSnake = λs.let parts := strings.splitOn "_" s in let snakeParts := lists.map (λp.convertCaseCamelToLowerSnake p) parts in strings.join "_" snakeParts
+term convertCaseCamelOrUnderscoreToLowerSnake =
+  λs.
+    let parts := strings.splitOn "_" s in
+    let snakeParts := lists.map (λp.convertCaseCamelToLowerSnake p) parts in
+    strings.join "_" snakeParts
 
 ## Convert a string from camel case to lower snake case
-term convertCaseCamelToLowerSnake = convertCase util.CaseConvention{camel} util.CaseConvention{lowerSnake}
+term convertCaseCamelToLowerSnake = convertCase CaseConvention{camel} CaseConvention{lowerSnake}
 
 ## Convert a string from camel case to upper snake case
-term convertCaseCamelToUpperSnake = convertCase util.CaseConvention{camel} util.CaseConvention{upperSnake}
+term convertCaseCamelToUpperSnake = convertCase CaseConvention{camel} CaseConvention{upperSnake}
 
 ## Convert a string from pascal case to upper snake case
-term convertCasePascalToUpperSnake = convertCase util.CaseConvention{pascal} util.CaseConvention{upperSnake}
+term convertCasePascalToUpperSnake = convertCase CaseConvention{pascal} CaseConvention{upperSnake}
 
 ## Decapitalize the first letter of a string
 term decapitalize = mapFirstLetter strings.toLower
 
 ## Escape reserved words by appending an underscore
-term escapeWithUnderscore = λreserved,s.logic.ifElse (sets.member s reserved) (strings.concat2 s "_") s
+term escapeWithUnderscore = λreserved,s.ifElse (sets.member s reserved) (strings.concat2 s "_") s
 
 ## Indent each line of a string with four spaces
 term indentLines = λs.let indent := λl.strings.concat2 "    " l in unlines (lists.map indent (lines s))
@@ -45,16 +82,57 @@ term indentLines = λs.let indent := λl.strings.concat2 "    " l in unlines (li
 term javaStyleComment = λs.strings.concat2 (strings.concat2 (strings.concat2 "/**\n" " * ") s) "\n */"
 
 ## Split a string into lines on newline (U+000A); a trailing newline is consumed without producing an empty trailing element, and the empty string yields the empty list.
-term lines = λs.logic.ifElse (strings.isEmpty s) [] (let parts := strings.splitOn "\n" s in optionals.withDefault parts (optionals.map (λlst.logic.ifElse (strings.isEmpty lst) (optionals.withDefault parts (lists.init parts)) parts) (lists.last parts)))
+term lines =
+  λs.ifElse
+      (strings.isEmpty s)
+      []
+      (let parts := strings.splitOn "\n" s
+      in optionals.withDefault
+        parts
+        (optionals.map
+          (λlst.ifElse (strings.isEmpty lst) (optionals.withDefault parts (lists.init parts)) parts)
+          (lists.last parts)))
 
 ## A helper which maps the first letter of a string to another string
-term mapFirstLetter = λmapping,s.logic.ifElse (strings.isEmpty s) s (let `list` := strings.toList s in optionals.withDefault s (optionals.map (λuc.let firstLetter := mapping (strings.fromList (lists.singleton (pairs.first uc))) in strings.concat2 firstLetter (strings.fromList (pairs.second uc))) (lists.uncons `list`)))
+term mapFirstLetter =
+  λmapping,s.ifElse
+      (strings.isEmpty s)
+      s
+      (let `list` := strings.toList s
+      in optionals.withDefault
+        s
+        (optionals.map
+          (λuc.
+            let firstLetter := mapping (strings.fromList (lists.singleton (first uc)))
+            in strings.concat2 firstLetter (strings.fromList (second uc)))
+          (lists.uncons `list`)))
 
 ## Replace sequences of non-alphanumeric characters with single underscores
-term nonAlnumToUnderscores = λinput.let isAlnum := λc.logic.or (logic.and (ordering.gte c 65:int32) (ordering.lte c 90:int32)) (logic.or (logic.and (ordering.gte c 97:int32) (ordering.lte c 122:int32)) (logic.and (ordering.gte c 48:int32) (ordering.lte c 57:int32))) in let replace := λp,c.let s := pairs.first p in let b := pairs.second p in logic.ifElse (isAlnum c) (lists.cons c s, false) (logic.ifElse b (s, true) (lists.cons 95:int32 s, true)) in let result := lists.foldl replace ([], false) (strings.toList input) in strings.fromList (lists.reverse (pairs.first result))
+term nonAlnumToUnderscores =
+  λinput.
+    let isAlnum := λc.or
+          (and (gte c 65:int32) (lte c 90:int32))
+          (or (and (gte c 97:int32) (lte c 122:int32)) (and (gte c 48:int32) (lte c 57:int32))) in
+    let replace := λp,c.
+        let s := first p in
+        let b := second p in
+        ifElse (isAlnum c) (lists.cons c s, false) (ifElse b (s, true) (lists.cons 95:int32 s, true)) in
+    let result := lists.foldl replace ([], false) (strings.toList input) in
+    strings.fromList (lists.reverse (first result))
 
 ## Normalize a comment string for consistent output across coders
-term normalizeComment = λs.let stripped := stripLeadingAndTrailingWhitespace s in logic.ifElse (strings.isEmpty stripped) "" (let lastIdx := math.sub (strings.length stripped) 1:int32 in let appended := strings.concat2 stripped "." in optionals.match (strings.charAt lastIdx stripped) appended (λlastChar.logic.ifElse (equality.equal lastChar 46:int32) stripped appended))
+term normalizeComment =
+  λs.
+    let stripped := stripLeadingAndTrailingWhitespace s
+    in ifElse
+      (strings.isEmpty stripped)
+      ""
+      (let lastIdx := sub (strings.length stripped) 1:int32 in
+      let appended := strings.concat2 stripped "." in
+      optionals.match
+        (strings.charAt lastIdx stripped)
+        appended
+        (λlastChar.ifElse (equal lastChar 46:int32) stripped appended))
 
 ## Sanitize a string by replacing non-alphanumeric characters and escaping reserved words
 term sanitizeWithUnderscores = λreserved,s.escapeWithUnderscore reserved (nonAlnumToUnderscores s)
@@ -63,13 +141,73 @@ term sanitizeWithUnderscores = λreserved,s.escapeWithUnderscore reserved (nonAl
 term showList = λf,els.strings.concat ["[", strings.join ", " (lists.map f els), "]"]
 
 ## Remove leading and trailing whitespace from a string
-term stripLeadingAndTrailingWhitespace = λs.strings.fromList (lists.dropWhile chars.isSpace (lists.reverse (lists.dropWhile chars.isSpace (lists.reverse (strings.toList s)))))
+term stripLeadingAndTrailingWhitespace =
+  λs.strings.fromList
+      (lists.dropWhile isSpace (lists.reverse (lists.dropWhile isSpace (lists.reverse (strings.toList s)))))
 
 ## Join a list of strings with newlines (U+000A), appending a newline after each element including the last; the empty list yields the empty string.
 term unlines = λxs.strings.concat (lists.map (λl.strings.concat2 l "\n") xs)
 
 ## Replace special characters with their alphanumeric aliases
-term withCharacterAliases = λoriginal.let aliases := maps.fromList [(32:int32, "sp"), (33:int32, "excl"), (34:int32, "quot"), (35:int32, "num"), (36:int32, "dollar"), (37:int32, "percnt"), (38:int32, "amp"), (39:int32, "apos"), (40:int32, "lpar"), (41:int32, "rpar"), (42:int32, "ast"), (43:int32, "plus"), (44:int32, "comma"), (45:int32, "minus"), (46:int32, "period"), (47:int32, "sol"), (58:int32, "colon"), (59:int32, "semi"), (60:int32, "lt"), (61:int32, "equals"), (62:int32, "gt"), (63:int32, "quest"), (64:int32, "commat"), (91:int32, "lsqb"), (92:int32, "bsol"), (93:int32, "rsqb"), (94:int32, "circ"), (95:int32, "lowbar"), (96:int32, "grave"), (123:int32, "lcub"), (124:int32, "verbar"), (125:int32, "rcub"), (126:int32, "tilde")], alias := λc.optionals.withDefault (lists.singleton c) (optionals.map strings.toList (maps.lookup c aliases)) in strings.fromList (lists.filter chars.isAlphaNum (lists.concat (lists.map alias (strings.toList original))))
+term withCharacterAliases =
+  λoriginal.
+    let aliases := maps.fromList
+        [
+          (32:int32, "sp"),
+          (33:int32, "excl"),
+          (34:int32, "quot"),
+          (35:int32, "num"),
+          (36:int32, "dollar"),
+          (37:int32, "percnt"),
+          (38:int32, "amp"),
+          (39:int32, "apos"),
+          (40:int32, "lpar"),
+          (41:int32, "rpar"),
+          (42:int32, "ast"),
+          (43:int32, "plus"),
+          (44:int32, "comma"),
+          (45:int32, "minus"),
+          (46:int32, "period"),
+          (47:int32, "sol"),
+          (58:int32, "colon"),
+          (59:int32, "semi"),
+          (60:int32, "lt"),
+          (61:int32, "equals"),
+          (62:int32, "gt"),
+          (63:int32, "quest"),
+          (64:int32, "commat"),
+          (91:int32, "lsqb"),
+          (92:int32, "bsol"),
+          (93:int32, "rsqb"),
+          (94:int32, "circ"),
+          (95:int32, "lowbar"),
+          (96:int32, "grave"),
+          (123:int32, "lcub"),
+          (124:int32, "verbar"),
+          (125:int32, "rcub"),
+          (126:int32, "tilde")], alias := λc.optionals.withDefault
+          (lists.singleton c)
+          (optionals.map strings.toList (maps.lookup c aliases))
+    in strings.fromList (lists.filter isAlphaNum (lists.concat (lists.map alias (strings.toList original))))
 
 ## A simple soft line wrap which is suitable for code comments
-term wrapLine = λmaxlen,input.let helper := λprev,rem.let trunc := lists.take maxlen rem, spanResult := lists.span (λc.logic.and (logic.not (equality.equal c 32:int32)) (logic.not (equality.equal c 9:int32))) (lists.reverse trunc), prefix := lists.reverse (pairs.second spanResult), suffix := lists.reverse (pairs.first spanResult) in logic.ifElse (ordering.lte (lists.length rem) maxlen) (lists.reverse (lists.cons rem prev)) (logic.ifElse (lists.isEmpty prefix) (helper (lists.cons trunc prev) (lists.drop maxlen rem)) (optionals.withDefault (helper (lists.cons trunc prev) (lists.drop maxlen rem)) (optionals.map (λpfxInit.helper (lists.cons pfxInit prev) (lists.concat2 suffix (lists.drop maxlen rem))) (lists.init prefix)))) in strings.fromList (lists.join [10:int32] (helper [] (strings.toList input)))
+term wrapLine =
+  λmaxlen,input.
+    let helper := λprev,rem.
+        let trunc := lists.take maxlen rem, spanResult := lists.span
+            (λc.and (not (equal c 32:int32)) (not (equal c 9:int32)))
+            (lists.reverse trunc), prefix := lists.reverse (second spanResult), suffix := lists.reverse (first spanResult)
+        in ifElse
+          (lte (lists.length rem) maxlen)
+          (lists.reverse (lists.cons rem prev))
+          (ifElse
+            (lists.isEmpty prefix)
+            (helper (lists.cons trunc prev) (lists.drop maxlen rem))
+            (optionals.withDefault
+              (helper (lists.cons trunc prev) (lists.drop maxlen rem))
+              (optionals.map
+                (λpfxInit.helper
+                    (lists.cons pfxInit prev)
+                    (lists.concat2 suffix (lists.drop maxlen rem)))
+                (lists.init prefix))))
+    in strings.fromList (lists.join [10:int32] (helper [] (strings.toList input)))

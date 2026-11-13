@@ -4,8 +4,6 @@
 ## The optional type is a monad, and this module provides the full monad row -- given (the unit), map, apply, bind, and compose -- together with elimination (match), predicates, and traversal.
 module hydra.core.lib.optionals
 
-
-
 ## Applicative apply for optionals: combine an optional function and an optional argument.
 ##
 ## apply(mf, mx) returns given(f x) when mf is given(f) and mx is given(x), and none if either is none.
@@ -99,7 +97,10 @@ primitive map : ∀x,y.(x → y) → optional<x> → optional<y> = λf,m.match m
 ## Total. Corresponds to Haskell's traverse :: (a -> Maybe b) -> [a] -> Maybe [b].
 ##
 ## @availableSince 0.17.6
-primitive mapList : ∀x,y.(x → optional<y>) → list<x> → optional<list<y>> = λf,xs.hydra.core.lib.lists.foldr (λx,acc.bind (f x) (λy.`map` (λys.hydra.core.lib.lists.cons y ys) acc)) (`given` []) xs
+primitive mapList : ∀x,y.(x → optional<y>) → list<x> → optional<list<y>> = λf,xs.hydra.core.lib.lists.foldr
+    (λx,acc.bind (f x) (λy.`map` (λys.hydra.core.lib.lists.cons y ys) acc))
+    (`given` [])
+    xs
 
 ## Map a partial function over a list, keeping only the present results.
 ##
@@ -118,7 +119,12 @@ primitive mapOptional : ∀x,y.(x → optional<y>) → list<x> → list<y> = λf
 ## Total. Corresponds to a traverse-style operation specialised to Set in the Maybe monad.
 ##
 ## @availableSince 0.17.6
-primitive mapSet : ∀x,y.(ordering x, ordering y) ⇒ (x → optional<y>) → set<x> → optional<set<y>> = λf,s.`map` (λys.hydra.core.lib.sets.fromList ys) (hydra.core.lib.lists.foldr (λx,acc.bind (f x) (λy.`map` (λys.hydra.core.lib.lists.cons y ys) acc)) (`given` []) (hydra.core.lib.sets.toList s))
+primitive mapSet : ∀x,y.(ordering x, ordering y) ⇒ (x → optional<y>) → set<x> → optional<set<y>> = λf,s.`map`
+    (λys.hydra.core.lib.sets.fromList ys)
+    (hydra.core.lib.lists.foldr
+      (λx,acc.bind (f x) (λy.`map` (λys.hydra.core.lib.lists.cons y ys) acc))
+      (`given` [])
+      (hydra.core.lib.sets.toList s))
 
 ## The fundamental eliminator for the optional type, scrutinee-first.
 ##

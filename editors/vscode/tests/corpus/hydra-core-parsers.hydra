@@ -1,69 +1,154 @@
 ## General-purpose parser combinators, operating on a Parser type. A helper library, not a set of parse<T> convention functions (see docs/specification/index.md, Conventions).
 module hydra.core.parsers
 
-import hydra.core.lib.equality as equality
+import hydra.core.lib.equality
 import hydra.core.lib.lists as lists
-import hydra.core.lib.logic as logic
-import hydra.core.lib.math as math
-import hydra.core.lib.optionals as optionals
-import hydra.core.lib.ordering as ordering
-import hydra.core.lib.pairs as pairs
+import hydra.core.lib.logic
+import hydra.core.lib.math
+import hydra.core.lib.optionals
+import hydra.core.lib.ordering
+import hydra.core.lib.pairs
 import hydra.core.lib.strings as strings
-import hydra.core.parsing as parsing
+import hydra.core.parsing
 
 ## Try the first parser; if it fails without consuming input, try the second
-term alt = λp1,p2.let parse := λinput.cases(parsing.ParseResult){success=λs.parsing.ParseResult{success = s}, failure=λe.logic.ifElse (equality.equal (parsing.ParseInput[offset] (parsing.ParseError[remainder] e)) (parsing.ParseInput[offset] input)) (parsing.Parser[] p2 input) parsing.ParseResult{failure = e}} (parsing.Parser[] p1 input) in wrap(parsing.Parser){parse}
+term alt =
+  λp1,p2.
+    let parse := λinput.cases(ParseResult){
+          success=λs.ParseResult{success = s},
+          failure=λe.ifElse
+                (equal
+                  (ParseInput[offset] (ParseError[remainder] e))
+                  (ParseInput[offset] input))
+                (Parser[] p2 input)
+                ParseResult{failure = e}}
+          (Parser[] p1 input)
+    in wrap(Parser){parse}
 
 ## Parse any single character (codepoint)
 term anyChar = satisfy (λ`_`.true)
 
 ## Apply a parser containing a function to a parser containing a value
-term apply = λpf,pa.let parse := λinput.cases(parsing.ParseResult){success=λsf.cases(parsing.ParseResult){success=λsa.parsing.ParseResult{success = parsing.ParseSuccess{value = parsing.ParseSuccess[value] sf (parsing.ParseSuccess[value] sa), remainder = parsing.ParseSuccess[remainder] sa}}, failure=λe.parsing.ParseResult{failure = e}} (parsing.Parser[] pa (parsing.ParseSuccess[remainder] sf)), failure=λe.parsing.ParseResult{failure = e}} (parsing.Parser[] pf input) in wrap(parsing.Parser){parse}
+term apply =
+  λpf,pa.
+    let parse := λinput.cases(ParseResult){
+          success=λsf.cases(ParseResult){
+                success=λsa.ParseResult{
+                      success = ParseSuccess{
+                        value = ParseSuccess[value]
+                            sf
+                            (ParseSuccess[value] sa),
+                        remainder = ParseSuccess[remainder] sa}},
+                failure=λe.ParseResult{failure = e}}
+                (Parser[] pa (ParseSuccess[remainder] sf)),
+          failure=λe.ParseResult{failure = e}}
+          (Parser[] pf input)
+    in wrap(Parser){parse}
 
 ## Parse something between an opening and closing parser
 term between = λopen,close,p.bind open (λ`_`.bind p (λx.bind close (λ`_`.pure x)))
 
 ## Sequence two parsers, passing the result of the first to a function that produces the second
-term bind = λpa,f.let parse := λinput.cases(parsing.ParseResult){success=λs.parsing.Parser[] (f (parsing.ParseSuccess[value] s)) (parsing.ParseSuccess[remainder] s), failure=λe.parsing.ParseResult{failure = e}} (parsing.Parser[] pa input) in wrap(parsing.Parser){parse}
+term bind =
+  λpa,f.
+    let parse := λinput.cases(ParseResult){
+          success=λs.Parser[]
+                (f (ParseSuccess[value] s))
+                (ParseSuccess[remainder] s),
+          failure=λe.ParseResult{failure = e}}
+          (Parser[] pa input)
+    in wrap(Parser){parse}
 
 ## Parse a specific character (codepoint)
-term char = λc.satisfy (λx.equality.equal x c)
+term char = λc.satisfy (λx.equal x c)
 
 ## Try each parser in the list until one succeeds
 term choice = λps.lists.foldl alt (fail "no choice matched") ps
 
 ## A parser that succeeds only at the end of input
-term eof = parsing.Parser{λinput.logic.ifElse (lists.isEmpty (parsing.ParseInput[codepoints] input)) parsing.ParseResult{success = parsing.ParseSuccess{value, remainder = input}} parsing.ParseResult{failure = parsing.ParseError{message = "expected end of input", remainder = input}}}
+term eof =
+  Parser{λinput.ifElse
+      (lists.isEmpty (ParseInput[codepoints] input))
+      ParseResult{success = ParseSuccess{value, remainder = input}}
+      ParseResult{failure = ParseError{message = "expected end of input", remainder = input}}}
 
 ## A parser that always fails with the given error message
-term fail = λmsg.parsing.Parser{λinput.parsing.ParseResult{failure = parsing.ParseError{message = msg, remainder = input}}}
+term fail = λmsg.Parser{λinput.ParseResult{failure = ParseError{message = msg, remainder = input}}}
 
 ## Create a parser that defers construction of another parser until parsing time. This is essential for breaking recursive parser definitions.
-term lazy = λf.parsing.Parser{λinput.parsing.Parser[] (f unit) input}
+term lazy = λf.Parser{λinput.Parser[] (f unit) input}
 
 ## Parse zero or more occurrences of the given parser
-term many = λp.let parse := λinput.manyLoop p input [] in wrap(parsing.Parser){parse}
+term many = λp.let parse := λinput.manyLoop p input [] in wrap(Parser){parse}
 
 ## Repeatedly apply a parser, accumulating results, until it fails
-term manyLoop = λp,input,acc.cases(parsing.ParseResult){success=λs.manyLoop p (parsing.ParseSuccess[remainder] s) (lists.cons (parsing.ParseSuccess[value] s) acc), failure=λ`_`.parsing.ParseResult{success = parsing.ParseSuccess{value = lists.reverse acc, remainder = input}}} (parsing.Parser[] p input)
+term manyLoop =
+  λp,input,acc.cases(ParseResult){
+      success=λs.manyLoop
+            p
+            (ParseSuccess[remainder] s)
+            (lists.cons (ParseSuccess[value] s) acc),
+      failure=λ`_`.ParseResult{
+            success = ParseSuccess{
+              value = lists.reverse acc,
+              remainder = input}}}
+      (Parser[] p input)
 
 ## Apply a function to the result of a parser
-term map = λf,pa.let parse := λinput.cases(parsing.ParseResult){success=λs.parsing.ParseResult{success = parsing.ParseSuccess{value = f (parsing.ParseSuccess[value] s), remainder = parsing.ParseSuccess[remainder] s}}, failure=λe.parsing.ParseResult{failure = e}} (parsing.Parser[] pa input) in wrap(parsing.Parser){parse}
+term map =
+  λf,pa.
+    let parse := λinput.cases(ParseResult){
+          success=λs.ParseResult{
+                success = ParseSuccess{
+                  value = f (ParseSuccess[value] s),
+                  remainder = ParseSuccess[remainder] s}},
+          failure=λe.ParseResult{failure = e}}
+          (Parser[] pa input)
+    in wrap(Parser){parse}
 
 ## Record that a token has just been completed, so that a surrounding 'spanned' parser can end its span here rather than after any trailing whitespace or comments. Consumes no input.
-term markTokenEnd = parsing.Parser{λinput.parsing.ParseResult{success = parsing.ParseSuccess{value, remainder = parsing.ParseInput{offset = parsing.ParseInput[offset] input, tokenEnd = parsing.ParseInput[offset] input, codepoints = parsing.ParseInput[codepoints] input}}}}
+term markTokenEnd =
+  Parser{λinput.ParseResult{
+      success = ParseSuccess{
+        value,
+        remainder = ParseInput{
+          offset = ParseInput[offset] input,
+          tokenEnd = ParseInput[offset] input,
+          codepoints = ParseInput[codepoints] input}}}}
 
 ## Optionally parse something, returning Nothing if it fails
-term optional = λp.alt (`map` optionals.given p) (pure none)
+term optional = λp.alt (`map` `given` p) (pure none)
 
 ## A parser that always succeeds with the given value without consuming input
-term pure = λa.parsing.Parser{λinput.parsing.ParseResult{success = parsing.ParseSuccess{value = a, remainder = input}}}
+term pure = λa.Parser{λinput.ParseResult{success = ParseSuccess{value = a, remainder = input}}}
 
 ## Run a parser on the given input string. The string is converted to a codepoint list once, up front, so that the parser itself can consume characters in constant time.
-term runParser = λp,input.parsing.Parser[] p parsing.ParseInput{offset = 0:int32, tokenEnd = 0:int32, codepoints = strings.toList input}
+term runParser =
+  λp,input.Parser[] p ParseInput{offset = 0:int32, tokenEnd = 0:int32, codepoints = strings.toList input}
 
 ## Parse a character (codepoint) that satisfies the given predicate
-term satisfy = λpred.let parse := λinput.optionals.match (lists.uncons (parsing.ParseInput[codepoints] input)) parsing.ParseResult{failure = parsing.ParseError{message = "unexpected end of input", remainder = input}} (λuc.let c := pairs.first uc in let rest := pairs.second uc in logic.ifElse (pred c) parsing.ParseResult{success = parsing.ParseSuccess{value = c, remainder = parsing.ParseInput{offset = math.add (parsing.ParseInput[offset] input) 1:int32, tokenEnd = parsing.ParseInput[tokenEnd] input, codepoints = rest}}} parsing.ParseResult{failure = parsing.ParseError{message = "character did not satisfy predicate", remainder = input}}) in wrap(parsing.Parser){parse}
+term satisfy =
+  λpred.
+    let parse := λinput.match
+          (lists.uncons (ParseInput[codepoints] input))
+          ParseResult{failure = ParseError{message = "unexpected end of input", remainder = input}}
+          (λuc.
+            let c := first uc in
+            let rest := second uc in
+            ifElse
+              (pred c)
+              ParseResult{
+                success = ParseSuccess{
+                  value = c,
+                  remainder = ParseInput{
+                    offset = add (ParseInput[offset] input) 1:int32,
+                    tokenEnd = ParseInput[tokenEnd] input,
+                    codepoints = rest}}}
+              ParseResult{
+                failure = ParseError{
+                  message = "character did not satisfy predicate",
+                  remainder = input}})
+    in wrap(Parser){parse}
 
 ## Parse zero or more occurrences separated by a separator
 term sepBy = λp,sep.alt (sepBy1 p sep) (pure [])
@@ -75,10 +160,50 @@ term sepBy1 = λp,sep.bind p (λx.bind (many (bind sep (λ`_`.p))) (λxs.pure (l
 term some = λp.bind p (λx.bind (many p) (λxs.pure (lists.cons x xs)))
 
 ## Run a parser and pair its result with the source span it consumed. The span starts at the first codepoint the parser consumed and ends at the end of the last token it completed (see markTokenEnd), so trailing whitespace and comments are excluded.
-term spanned = λp.let parse := λinput.cases(parsing.ParseResult){success=λs.let start := parsing.ParseInput[offset] input in let end := ordering.max start (parsing.ParseInput[tokenEnd] (parsing.ParseSuccess[remainder] s)) in parsing.ParseResult{success = parsing.ParseSuccess{value = (parsing.ParseSuccess[value] s, parsing.SourceSpan{start = start, end = end}), remainder = parsing.ParseSuccess[remainder] s}}, failure=λe.parsing.ParseResult{failure = e}} (parsing.Parser[] p input) in wrap(parsing.Parser){parse}
+term spanned =
+  λp.
+    let parse := λinput.cases(ParseResult){
+          success=λs.
+              let start := ParseInput[offset] input in
+              let end := max
+                  start
+                  (ParseInput[tokenEnd] (ParseSuccess[remainder] s)) in
+              ParseResult{
+                success = ParseSuccess{
+                  value = (ParseSuccess[value] s, SourceSpan{start = start, end = end}),
+                  remainder = ParseSuccess[remainder] s}},
+          failure=λe.ParseResult{failure = e}}
+          (Parser[] p input)
+    in wrap(Parser){parse}
 
 ## Parse a specific string
-term string = λstr.let strCodes := strings.toList str in let strLen := lists.length strCodes in parsing.Parser{λinput.let inputPrefix := lists.take strLen (parsing.ParseInput[codepoints] input) in logic.ifElse (equality.equal strCodes inputPrefix) parsing.ParseResult{success = parsing.ParseSuccess{value = str, remainder = parsing.ParseInput{offset = math.add (parsing.ParseInput[offset] input) strLen, tokenEnd = parsing.ParseInput[tokenEnd] input, codepoints = lists.drop strLen (parsing.ParseInput[codepoints] input)}}} parsing.ParseResult{failure = parsing.ParseError{message = strings.concat2 "expected: " str, remainder = input}}}
+term string =
+  λstr.
+    let strCodes := strings.toList str in
+    let strLen := lists.length strCodes in
+    Parser{λinput.
+      let inputPrefix := lists.take strLen (ParseInput[codepoints] input)
+      in ifElse
+        (equal strCodes inputPrefix)
+        ParseResult{
+          success = ParseSuccess{
+            value = str,
+            remainder = ParseInput{
+              offset = add (ParseInput[offset] input) strLen,
+              tokenEnd = ParseInput[tokenEnd] input,
+              codepoints = lists.drop
+                  strLen
+                  (ParseInput[codepoints] input)}}}
+        ParseResult{failure = ParseError{message = strings.concat2 "expected: " str, remainder = input}}}
 
 ## Make a parser's failure backtrackable, rewinding to the original input on failure
-term try = λp.let parse := λinput.cases(parsing.ParseResult){success=λs.parsing.ParseResult{success = s}, failure=λe.parsing.ParseResult{failure = parsing.ParseError{message = parsing.ParseError[message] e, remainder = input}}} (parsing.Parser[] p input) in wrap(parsing.Parser){parse}
+term try =
+  λp.
+    let parse := λinput.cases(ParseResult){
+          success=λs.ParseResult{success = s},
+          failure=λe.ParseResult{
+                failure = ParseError{
+                  message = ParseError[message] e,
+                  remainder = input}}}
+          (Parser[] p input)
+    in wrap(Parser){parse}

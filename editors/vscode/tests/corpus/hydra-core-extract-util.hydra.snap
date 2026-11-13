@@ -6,62 +6,34 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.errors as errors
+>import hydra.core.errors
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                        ^ source.hydra
-#                         ^^ source.hydra keyword.control.import.hydra
-#                           ^ source.hydra
-#                            ^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.extract.model as extract.model
+>import hydra.core.extract.model
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                               ^ source.hydra
-#                                ^^ source.hydra keyword.control.import.hydra
-#                                  ^ source.hydra
-#                                   ^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.lib.eithers as eithers
+>import hydra.core.lib.eithers
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                             ^ source.hydra
-#                              ^^ source.hydra keyword.control.import.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.lib.equality as equality
+>import hydra.core.lib.equality
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                              ^ source.hydra
-#                               ^^ source.hydra keyword.control.import.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.lib.logic as logic
+>import hydra.core.lib.logic
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                           ^ source.hydra
-#                            ^^ source.hydra keyword.control.import.hydra
-#                              ^ source.hydra
-#                               ^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.model as model
+>import hydra.core.model
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                       ^ source.hydra
-#                        ^^ source.hydra keyword.control.import.hydra
-#                          ^ source.hydra
-#                           ^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.util as util
+>import hydra.core.util
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                      ^ source.hydra
-#                       ^^ source.hydra keyword.control.import.hydra
-#                         ^ source.hydra
-#                          ^^^^ source.hydra entity.name.namespace.hydra
 >
 >## Extract a comparison from a term
 #^^ source.hydra comment.block.documentation.hydra
@@ -72,7 +44,7 @@
 #     ^^^^^^^^^^ source.hydra entity.name.function.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
->  λcx,graph,`term`.eithers.bind
+>  λcx,graph,`term`.bind
 #^^ source.hydra
 #  ^ source.hydra keyword.operator.lambda.hydra
 #   ^^ source.hydra variable.parameter.hydra
@@ -83,136 +55,134 @@
 #             ^^^^ source.hydra variable.other.escaped.hydra
 #                 ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                  ^ source.hydra punctuation.separator.binder.hydra
-#                   ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->      (extract.model.unitVariant model.Name{"hydra.core.util.Comparison"} graph `term`)
+#                   ^^^^ source.hydra variable.other.hydra
+>      (unitVariant Name{"hydra.core.util.Comparison"} graph `term`)
 #^^^^^^^ source.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                           ^ source.hydra
-#                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                        ^^ source.hydra
-#                                                                          ^^^^^ source.hydra variable.other.hydra
-#                                                                               ^ source.hydra
-#                                                                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                                                                                 ^^^^ source.hydra variable.other.escaped.hydra
-#                                                                                     ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                                                                      ^^ source.hydra
->      (λfname.logic.ifElse
+#       ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^^^^ source.hydra entity.name.type.nominal.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                    ^^ source.hydra
+#                                                      ^^^^^ source.hydra variable.other.hydra
+#                                                           ^ source.hydra
+#                                                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                                             ^^^^ source.hydra variable.other.escaped.hydra
+#                                                                 ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                                  ^^ source.hydra
+>      (λfname.ifElse
 #^^^^^^^ source.hydra
 #       ^ source.hydra keyword.operator.lambda.hydra
 #        ^^^^^ source.hydra variable.parameter.hydra
 #             ^ source.hydra punctuation.separator.binder.hydra
-#              ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->          (equality.equal (model.Name[] fname) "equalTo")
+#              ^^^^^^ source.hydra variable.other.hydra
+>          (equal (Name[] fname) "equalTo")
 #^^^^^^^^^^^ source.hydra
-#           ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                         ^^ source.hydra
-#                           ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                     ^^^ source.hydra
-#                                        ^^^^^ source.hydra variable.other.hydra
-#                                             ^^ source.hydra
-#                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                ^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                        ^^ source.hydra
->          right(util.Comparison{equalTo})
+#           ^^^^^ source.hydra variable.other.hydra
+#                ^^ source.hydra
+#                  ^^^^ source.hydra entity.name.type.nominal.hydra
+#                      ^^^ source.hydra
+#                         ^^^^^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                 ^^^^^^^ source.hydra string.quoted.double.hydra
+#                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                         ^^ source.hydra
+>          right(Comparison{equalTo})
 #^^^^^^^^^^ source.hydra
 #          ^^^^^ source.hydra keyword.control.hydra
 #               ^ source.hydra
-#                ^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                               ^ source.hydra
-#                                ^^^^^^^ source.hydra variable.other.hydra
-#                                       ^^^ source.hydra
->          (logic.ifElse
+#                ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^ source.hydra variable.other.hydra
+#                                  ^^^ source.hydra
+>          (ifElse
 #^^^^^^^^^^^ source.hydra
-#           ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->            (equality.equal (model.Name[] fname) "lessThan")
+#           ^^^^^^ source.hydra variable.other.hydra
+>            (equal (Name[] fname) "lessThan")
 #^^^^^^^^^^^^^ source.hydra
-#             ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                           ^^ source.hydra
-#                             ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^^ source.hydra
-#                                          ^^^^^ source.hydra variable.other.hydra
-#                                               ^^ source.hydra
-#                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                  ^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                           ^^ source.hydra
->            right(util.Comparison{lessThan})
+#             ^^^^^ source.hydra variable.other.hydra
+#                  ^^ source.hydra
+#                    ^^^^ source.hydra entity.name.type.nominal.hydra
+#                        ^^^ source.hydra
+#                           ^^^^^ source.hydra variable.other.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                   ^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                            ^^ source.hydra
+>            right(Comparison{lessThan})
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^ source.hydra keyword.control.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^^ source.hydra variable.other.hydra
-#                                          ^^^ source.hydra
->            (logic.ifElse
+#                  ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^^^ source.hydra
+>            (ifElse
 #^^^^^^^^^^^^^ source.hydra
-#             ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->              (equality.equal (model.Name[] fname) "greaterThan")
+#             ^^^^^^ source.hydra variable.other.hydra
+>              (equal (Name[] fname) "greaterThan")
 #^^^^^^^^^^^^^^^ source.hydra
-#               ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                             ^^ source.hydra
-#                               ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                         ^^^ source.hydra
-#                                            ^^^^^ source.hydra variable.other.hydra
+#               ^^^^^ source.hydra variable.other.hydra
+#                    ^^ source.hydra
+#                      ^^^^ source.hydra entity.name.type.nominal.hydra
+#                          ^^^ source.hydra
+#                             ^^^^^ source.hydra variable.other.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                     ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                 ^^ source.hydra
-#                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                    ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                ^^ source.hydra
->              right(util.Comparison{greaterThan})
+>              right(Comparison{greaterThan})
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^^ source.hydra keyword.control.hydra
 #                   ^ source.hydra
-#                    ^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                               ^^^ source.hydra
->              left(errors.Error{
+#                    ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                          ^^^ source.hydra
+>              left(Error{
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^ source.hydra keyword.control.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                               ^^ source.hydra
->                extraction = errors.ExtractionError{
+#                   ^^^^^ source.hydra entity.name.type.nominal.hydra
+#                        ^^ source.hydra
+>                extraction = ExtractionError{
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^^^^^ source.hydra variable.other.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
-#                             ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                   ^^ source.hydra
->                    unexpectedShape = errors.UnexpectedShapeError{
-#^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                             ^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                            ^^ source.hydra
+>                  unexpectedShape = UnexpectedShapeError{
+#^^^^^^^^^^^^^^^^^^ source.hydra
+#                  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra keyword.operator.equals.hydra
 #                                   ^ source.hydra
-#                                    ^ source.hydra keyword.operator.equals.hydra
-#                                     ^ source.hydra
-#                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                 ^^ source.hydra
->                        expected = "comparison",
-#^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                        ^^^^^^^^ source.hydra variable.other.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.equals.hydra
-#                                  ^ source.hydra
-#                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                    ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                               ^^ source.hydra
->                        actual = model.Name[]
-#^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                        ^^^^^^ source.hydra variable.other.hydra
+#                                    ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                        ^^ source.hydra
+>                    expected = "comparison",
+#^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.equals.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                           ^^^ source.hydra
->                            fname}}}))))
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                            ^^^^^ source.hydra variable.other.hydra
-#                                 ^^^^^^^^ source.hydra
+#                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                           ^^ source.hydra
+>                    actual = Name[] fname}}}))))
+#^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                    ^^^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.equals.hydra
+#                            ^ source.hydra
+#                             ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                 ^^^ source.hydra
+#                                    ^^^^^ source.hydra variable.other.hydra
+#                                         ^^^^^^^^ source.hydra

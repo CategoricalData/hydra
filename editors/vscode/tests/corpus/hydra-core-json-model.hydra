@@ -1,8 +1,6 @@
 ## A JSON syntax model. See the BNF at https://www.json.org
 module hydra.core.json.model
 
-
-
 ## Layout options for hydra.core.json.writer.printJsonWith
 type JsonWriterOptions = record{
   ## Whether to omit all insignificant whitespace. When true, the value is rendered on a single line with no space after ':' or ',' and the indent, maxLineWidth, and maxIndentDepth fields are ignored.

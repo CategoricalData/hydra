@@ -6,8 +6,6 @@
 ## The fundamental eliminator is cases; every other primitive in this module can be derived from it.
 module hydra.core.lib.eithers
 
-
-
 ## Applicative apply for either: combine a function under either and an argument under either.
 ##
 ## apply(ef, ex) returns right(f(x)) when ef is right(f) and ex is right(x).
@@ -121,7 +119,10 @@ primitive map : ∀x,y,z.(x → y) → either<z, x> → either<z, y> = λf,e.`ei
 ##
 ## @availableSince 0.15
 ## @requirement traversesCollectingOrShortCircuiting: mapList applies the given either-returning function to each element of the list; if every application returns a right, the result is a right of the list of contained values in original order, and the first application returning a left short-circuits the whole result to that left; folding the empty list returns a right of the empty list.
-primitive mapList : ∀x,y,z.(x → either<z, y>) → list<x> → either<z, list<y>> = λf,xs.hydra.core.lib.lists.foldr (λx,acc.bind (f x) (λy.`map` (λys.hydra.core.lib.lists.cons y ys) acc)) right([]) xs
+primitive mapList : ∀x,y,z.(x → either<z, y>) → list<x> → either<z, list<y>> = λf,xs.hydra.core.lib.lists.foldr
+    (λx,acc.bind (f x) (λy.`map` (λys.hydra.core.lib.lists.cons y ys) acc))
+    right([])
+    xs
 
 ## Map a function returning either over an optional, or return Right none if none.
 ##
@@ -140,7 +141,12 @@ primitive mapOptional : ∀x,y,z.(x → either<z, y>) → optional<x> → either
 ##
 ## @availableSince 0.15
 ## @requirement traversesSetCollectingOrShortCircuiting: mapSet applies the given either-returning function to each element of the set; if every application returns a right, the result is a right of the set of contained values (deduplicated by the result type's ordering), and the first application returning a left short-circuits the whole result to that left; mapping the empty set returns a right of the empty set.
-primitive mapSet : ∀x,y,z.(ordering x, ordering y) ⇒ (x → either<z, y>) → set<x> → either<z, set<y>> = λf,s.`map` (λys.hydra.core.lib.sets.fromList ys) (hydra.core.lib.lists.foldr (λx,acc.bind (f x) (λy.`map` (λys.hydra.core.lib.lists.cons y ys) acc)) right([]) (hydra.core.lib.sets.toList s))
+primitive mapSet : ∀x,y,z.(ordering x, ordering y) ⇒ (x → either<z, y>) → set<x> → either<z, set<y>> = λf,s.`map`
+    (λys.hydra.core.lib.sets.fromList ys)
+    (hydra.core.lib.lists.foldr
+      (λx,acc.bind (f x) (λy.`map` (λys.hydra.core.lib.lists.cons y ys) acc))
+      right([])
+      (hydra.core.lib.sets.toList s))
 
 ## Partition a list of either values into lefts and rights.
 ##
@@ -150,7 +156,13 @@ primitive mapSet : ∀x,y,z.(ordering x, ordering y) ⇒ (x → either<z, y>) �
 ##
 ## @availableSince 0.17.6
 ## @requirement splitsIntoLeftsAndRights: partition returns a pair of (every left value in the input, every right value in the input), each preserving original relative order; an all-left, all-right, or empty input list degrades to the corresponding (full, empty) / (empty, full) / (empty, empty) pairing.
-primitive partition : ∀x,y.list<either<x, y>> → (list<x>, list<y>) = λxs.hydra.core.lib.lists.foldr (λe,acc.`either` (λl.(hydra.core.lib.lists.cons l (hydra.core.lib.pairs.first acc), hydra.core.lib.pairs.second acc)) (λr.(hydra.core.lib.pairs.first acc, hydra.core.lib.lists.cons r (hydra.core.lib.pairs.second acc))) e) ([], []) xs
+primitive partition : ∀x,y.list<either<x, y>> → (list<x>, list<y>) = λxs.hydra.core.lib.lists.foldr
+    (λe,acc.`either`
+        (λl.(hydra.core.lib.lists.cons l (hydra.core.lib.pairs.first acc), hydra.core.lib.pairs.second acc))
+        (λr.(hydra.core.lib.pairs.first acc, hydra.core.lib.lists.cons r (hydra.core.lib.pairs.second acc)))
+        e)
+    ([], [])
+    xs
 
 ## Construct a right (success/normal) either value.
 ##

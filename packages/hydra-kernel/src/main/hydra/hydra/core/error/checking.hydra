@@ -1,10 +1,10 @@
 ## Error types for type checking
 module hydra.core.error.checking
 
-import hydra.core.model as model
-import hydra.core.paths as paths
-import hydra.core.typing as typing
-import hydra.core.variants as variants
+import hydra.core.model
+import hydra.core.paths
+import hydra.core.typing
+import hydra.core.variants
 
 ## An error that occurred during type checking
 type CheckingError = union{
@@ -38,70 +38,70 @@ type CheckingError = union{
 ## A post-unification consistency check failure
 type IncorrectUnificationError = record{
   ## The substitution that failed the consistency check
-  substitution: typing.TypeSubst}
+  substitution: TypeSubst}
 
 ## A type that is not a forall type when type arguments are being applied
 type NotAForallTypeError = record{
   ## The actual type encountered
-  `type`: model.Type,
+  `type`: Type,
   ## The type arguments that were being applied
-  typeArguments: list<model.Type>}
+  typeArguments: list<Type>}
 
 ## A type that is not a function type when one was expected in an application
 type NotAFunctionTypeError = record{
   ## The actual type encountered
-  `type`: model.Type}
+  `type`: Type}
 
 ## A generic checking error: message + subterm path
 type OtherCheckingError = record{
   ## The subterm path at which the error was observed
-  path: paths.SubtermPath,
+  path: SubtermPath,
   ## A human-readable error message
   message: string}
 
 ## A type constructor applied to the wrong number of type arguments
 type TypeArityMismatchError = record{
   ## The type being checked
-  `type`: model.Type,
+  `type`: Type,
   ## The expected number of type arguments
   expectedArity: int32,
   ## The actual number of type arguments provided
   actualArity: int32,
   ## The type arguments that were provided
-  typeArguments: list<model.Type>}
+  typeArguments: list<Type>}
 
 ## A type mismatch between expected and actual types
 type TypeMismatchError = record{
   ## The expected type
-  expectedType: model.Type,
+  expectedType: Type,
   ## The actual type encountered
-  actualType: model.Type}
+  actualType: Type}
 
 ## Type variables that appear free in a type but are not bound in scope
 type UnboundTypeVariablesError = record{
   ## The set of unbound type variable names
-  variables: set<model.Name>,
+  variables: set<Name>,
   ## The type containing the unbound variables
-  `type`: model.Type}
+  `type`: Type}
 
 ## A reference to a term variable that is not bound in scope, encountered during checking
 type UndefinedTermVariableCheckingError = record{
   ## The subterm path at which the variable was referenced
-  path: paths.SubtermPath,
+  path: SubtermPath,
   ## The name of the undefined variable
-  name: model.Name}
+  name: Name}
 
 ## Multiple types that should all be equal but are not
 type UnequalTypesError = record{
   ## The list of types that are not all equal
-  types: list<model.Type>,
+  types: list<Type>,
   ## A description of the context in which the types were expected to be equal
   description: string}
 
 ## A term variant that the type checker does not support
 type UnsupportedTermVariantError = record{
   ## The unsupported term variant
-  termVariant: variants.TermVariant}
+  termVariant: TermVariant}
 
 ## A lambda expression without a type annotation on its parameter
 type UntypedLambdaError = record{}
@@ -109,11 +109,11 @@ type UntypedLambdaError = record{}
 ## A let binding without a type annotation
 type UntypedLetBindingError = record{
   ## The untyped binding
-  binding: model.Binding}
+  binding: Binding}
 
 ## A reference to a term variable whose type is not known, encountered during checking
 type UntypedTermVariableCheckingError = record{
   ## The subterm path at which the variable was referenced
-  path: paths.SubtermPath,
+  path: SubtermPath,
   ## The name of the untyped variable
-  name: model.Name}
+  name: Name}

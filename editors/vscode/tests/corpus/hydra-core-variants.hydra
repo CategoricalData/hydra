@@ -1,8 +1,6 @@
 ## Variant types which describe the structure of Hydra core types and terms.
 module hydra.core.variants
 
-
-
 ## The identifier of a literal constructor
 type LiteralVariant = union{
   `binary`: unit,

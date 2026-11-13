@@ -14,14 +14,10 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.util as util
+>import hydra.core.util
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                      ^ source.hydra
-#                       ^^ source.hydra keyword.control.import.hydra
-#                         ^ source.hydra
-#                          ^^^^ source.hydra entity.name.namespace.hydra
 >
 >## Compare two values and return a Comparison.
 #^^ source.hydra comment.block.documentation.hydra
@@ -63,7 +59,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive compare : ∀x.(ordering x) ⇒ x → x → util.Comparison
+>primitive compare : ∀x.(ordering x) ⇒ x → x → Comparison
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
@@ -88,7 +84,7 @@
 #                                           ^ source.hydra
 #                                            ^ source.hydra keyword.operator.arrow.hydra
 #                                             ^ source.hydra
-#                                              ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                              ^^^^^^^^^^ source.hydra variable.other.hydra
 >
 >## Check whether the first value is greater than the second.
 #^^ source.hydra comment.block.documentation.hydra

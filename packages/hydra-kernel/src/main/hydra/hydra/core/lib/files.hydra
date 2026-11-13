@@ -3,8 +3,8 @@
 ## Every primitive in this module is effectful: it describes a computation against the file system, and executing that computation is separate from describing it.
 module hydra.core.lib.files
 
-import hydra.core.error.file as error.file
-import hydra.core.file as file
+import hydra.core.error.file
+import hydra.core.file
 
 ## Append bytes to the end of a file.
 ##
@@ -12,7 +12,7 @@ import hydra.core.file as file
 ##
 ## @availableSince 0.17
 ## @requirement preservesExistingContentsAndAppends: appendFile adds the given bytes to the end of a file's existing contents, preserving what was already there, rather than replacing it as writeFile does.
-impure primitive appendFile : file.FilePath → binary → effect<either<error.file.FileError, unit>>
+impure primitive appendFile : FilePath → binary → effect<either<FileError, unit>>
 
 ## Copy a file, or a directory tree, to a destination path.
 ##
@@ -23,7 +23,7 @@ impure primitive appendFile : file.FilePath → binary → effect<either<error.f
 ## @requirement copiesSingleFile: copy with recursive=false duplicates a single file's contents at the destination path.
 ## @requirement copiesDirectoryTreeWhenRecursive: copy with recursive=true duplicates an entire directory tree, including nested files, at the destination path, succeeding even when the destination directory already exists.
 ## @requirement errorsOnNonRecursiveDirectory: copy with recursive=false on a directory source yields an error, rather than silently copying only the directory entry or a subset of its contents.
-impure primitive copy : boolean → file.FilePath → file.FilePath → effect<either<error.file.FileError, unit>>
+impure primitive copy : boolean → FilePath → FilePath → effect<either<FileError, unit>>
 
 ## Create a directory.
 ##
@@ -32,7 +32,7 @@ impure primitive copy : boolean → file.FilePath → file.FilePath → effect<e
 ##
 ## @availableSince 0.17
 ## @requirement createsDirectoryThatThenExists: createDirectory creates a directory at the given path such that a subsequent exists check on that path reports true.
-impure primitive createDirectory : boolean → file.FilePath → effect<either<error.file.FileError, unit>>
+impure primitive createDirectory : boolean → FilePath → effect<either<FileError, unit>>
 
 ## Create a symbolic link.
 ##
@@ -43,7 +43,7 @@ impure primitive createDirectory : boolean → file.FilePath → effect<either<e
 ## @requirement allowsDanglingTargets: createSymlink succeeds even when the target does not exist, creating a dangling link; the dangling link is itself reported as present by exists (observed via status, not treated as absent), and still reports fileType link under status(followLinks=false), but is reported as notFound when followed via status(followLinks=true).
 ## @requirement preservesTargetVerbatim: createSymlink stores the target path exactly as given, including a relative path, with no resolution or canonicalization; readSymlink returns that exact stored target.
 ## @requirement errorsOnExistingLinkPath: createSymlink fails (there is no force/replace flag) when the link path already exists, whether that existing entry is a regular file or another symbolic link (including a dangling one).
-impure primitive createSymlink : file.FilePath → file.FilePath → effect<either<error.file.FileError, unit>>
+impure primitive createSymlink : FilePath → FilePath → effect<either<FileError, unit>>
 
 ## Test whether a path exists.
 ##
@@ -52,7 +52,7 @@ impure primitive createSymlink : file.FilePath → file.FilePath → effect<eith
 ## @availableSince 0.17
 ## @requirement falseForMissingPath: exists returns right(false) for a missing path, without erroring on absence.
 ## @requirement trueAfterCreation: exists returns right(true) for a path immediately after a file or directory has been created there.
-impure primitive exists : file.FilePath → effect<either<error.file.FileError, boolean>>
+impure primitive exists : FilePath → effect<either<FileError, boolean>>
 
 ## List the immediate entries of a directory.
 ##
@@ -60,7 +60,7 @@ impure primitive exists : file.FilePath → effect<either<error.file.FileError, 
 ##
 ## @availableSince 0.17
 ## @requirement listsImmediateEntries: listDirectory returns exactly the immediate entries of the directory, one entry per file actually present, excluding the special "." and ".." entries.
-impure primitive listDirectory : file.FilePath → effect<either<error.file.FileError, list<file.FilePath>>>
+impure primitive listDirectory : FilePath → effect<either<FileError, list<FilePath>>>
 
 ## Read the complete contents of a file as raw bytes.
 ##
@@ -68,7 +68,7 @@ impure primitive listDirectory : file.FilePath → effect<either<error.file.File
 ##
 ## @availableSince 0.17
 ## @requirement roundTripsWithWriteFile: readFile returns exactly the bytes most recently written to a file via writeFile (and any subsequent appendFile calls), byte-exactly, with no character decoding or translation.
-impure primitive readFile : file.FilePath → effect<either<error.file.FileError, binary>>
+impure primitive readFile : FilePath → effect<either<FileError, binary>>
 
 ## Read the target of a symbolic link.
 ##
@@ -77,7 +77,7 @@ impure primitive readFile : file.FilePath → effect<either<error.file.FileError
 ## @availableSince 0.17.6
 ## @requirement returnsStoredTargetVerbatim: readSymlink returns the target exactly as stored by createSymlink, with no chain resolution or canonicalization, including a relative target returned relative.
 ## @requirement errorsOnNonLinkOrMissingPath: readSymlink yields left(invalidPath) when the path exists but is not a symbolic link, and left(notFound) when the path does not exist at all -- two distinct error conditions, neither of which is confused with a successful read.
-impure primitive readSymlink : file.FilePath → effect<either<error.file.FileError, file.FilePath>>
+impure primitive readSymlink : FilePath → effect<either<FileError, FilePath>>
 
 ## Remove a directory.
 ##
@@ -88,7 +88,7 @@ impure primitive readSymlink : file.FilePath → effect<either<error.file.FileEr
 ## @requirement removesEmptyDirectoryWhenNonRecursive: removeDirectory with recursive=false removes an empty directory, so that it no longer exists.
 ## @requirement errorsOnNonEmptyDirectoryWhenNonRecursive: removeDirectory with recursive=false on a non-empty directory yields an error, rather than silently removing it or its contents.
 ## @requirement removesPopulatedDirectoryWhenRecursive: removeDirectory with recursive=true removes a directory and its entire contents, so that the directory no longer exists.
-impure primitive removeDirectory : boolean → file.FilePath → effect<either<error.file.FileError, unit>>
+impure primitive removeDirectory : boolean → FilePath → effect<either<FileError, unit>>
 
 ## Remove a file.
 ##
@@ -96,7 +96,7 @@ impure primitive removeDirectory : boolean → file.FilePath → effect<either<e
 ##
 ## @availableSince 0.17
 ## @requirement deletesFileSoItNoLongerExists: removeFile deletes the file at the given path, so that a subsequent exists check reports false.
-impure primitive removeFile : file.FilePath → effect<either<error.file.FileError, unit>>
+impure primitive removeFile : FilePath → effect<either<FileError, unit>>
 
 ## Rename or move a file or directory.
 ##
@@ -104,7 +104,7 @@ impure primitive removeFile : file.FilePath → effect<either<error.file.FileErr
 ##
 ## @availableSince 0.17
 ## @requirement movesToNewPathPreservingContents: rename moves a file (or directory) from source to destination, such that the original contents are readable at the destination path afterward.
-impure primitive rename : file.FilePath → file.FilePath → effect<either<error.file.FileError, unit>>
+impure primitive rename : FilePath → FilePath → effect<either<FileError, unit>>
 
 ## Retrieve metadata about a file or directory.
 ##
@@ -114,7 +114,7 @@ impure primitive rename : file.FilePath → file.FilePath → effect<either<erro
 ## @requirement reportsCorrectTypeAndSizeForRegularFileAndDirectory: status reports the correct fileType and size for a regular file (size equal to its byte count) and reports directory as the fileType for a directory.
 ## @requirement followLinksControlsLinkResolution: status(followLinks=false) reports the metadata of a symbolic link itself (fileType link), while status(followLinks=true) on the same path reports the metadata of the link's target (its true fileType, not link) when the target exists -- the only way to observe fileType link is followLinks=false.
 ## @requirement notFoundOnMissingOrDanglingTarget: status yields left(notFound) for a path that does not exist, and also for a dangling symbolic link when followed via followLinks=true (even though the dangling link itself is not an error under followLinks=false).
-impure primitive status : boolean → file.FilePath → effect<either<error.file.FileError, file.FileStatus>>
+impure primitive status : boolean → FilePath → effect<either<FileError, FileStatus>>
 
 ## Write raw bytes as the complete contents of a file.
 ##
@@ -122,4 +122,4 @@ impure primitive status : boolean → file.FilePath → effect<either<error.file
 ##
 ## @availableSince 0.17
 ## @requirement replacesCompleteFileContents: writeFile replaces the complete contents of the file at the given path with the given bytes, creating the file if it does not already exist.
-impure primitive writeFile : file.FilePath → binary → effect<either<error.file.FileError, unit>>
+impure primitive writeFile : FilePath → binary → effect<either<FileError, unit>>

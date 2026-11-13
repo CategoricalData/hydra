@@ -6,8 +6,6 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->
->
 >## Operator associativity
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra

@@ -4,8 +4,6 @@
 ## The general split/join pair (splitOn and join) is the primary line-and-token machinery; the newline-specific lines and unlines were removed as primitives in its favor, their exact semantics preserved as the non-primitive term helpers hydra.formatting.lines and hydra.formatting.unlines.
 module hydra.core.lib.strings
 
-
-
 ## Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds.
 ##
 ## charAt(i, s) returns Just(c) where c is the Unicode code point at position i in s, or Nothing if i is negative or i >= length(s).

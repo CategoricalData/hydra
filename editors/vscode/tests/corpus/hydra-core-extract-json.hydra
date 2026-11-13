@@ -1,0 +1,65 @@
+## Utilities for extracting values from JSON objects
+module hydra.core.extract.json
+
+import hydra.core.json.model
+import hydra.core.json.writer
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.maps as maps
+import hydra.core.lib.optionals
+import hydra.core.lib.strings
+
+## Extract an array from a JSON value, failing if the value is not an array
+term expectArray =
+  λvalue.cases(Value){
+      array=λels.right(els),
+      `_`=left(concat2 (concat2 "expected " "JSON array") (concat2 " but found " (showValue value)))}
+      value
+
+## Extract a number from a JSON value, failing if the value is not a number
+term expectNumber =
+  λvalue.cases(Value){
+      number=λd.right(d),
+      `_`=left(concat2 (concat2 "expected " "JSON number") (concat2 " but found " (showValue value)))}
+      value
+
+## Extract an object from a JSON value as a name-keyed map, failing if the value is not an object. Field order is not preserved; lookups are by name.
+term expectObject =
+  λvalue.cases(Value){
+      object=λm.right(maps.fromList m),
+      `_`=left(concat2 (concat2 "expected " "JSON object") (concat2 " but found " (showValue value)))}
+      value
+
+## Extract a string from a JSON value, failing if the value is not a string
+term expectString =
+  λvalue.cases(Value){
+      `string`=λs.right(s),
+      `_`=left(concat2 (concat2 "expected " "JSON string") (concat2 " but found " (showValue value)))}
+      value
+
+## Look up an optional field in a JSON object
+term opt = λfname,m.maps.lookup fname m
+
+## Look up an optional array field in a JSON object
+term optArray = λfname,m.match (opt fname m) right(none) (λa.eithers.map (λx.given(x)) (expectArray a))
+
+## Look up an optional string field in a JSON object
+term optString = λfname,m.match (opt fname m) right(none) (λs.eithers.map (λx.given(x)) (expectString s))
+
+## Look up a required field in a JSON object, failing if not found
+term require =
+  λfname,m.match
+      (maps.lookup fname m)
+      left(concat ["required attribute ", showValue Value{`string` = fname}, " not found"])
+      (λvalue.right(value))
+
+## Look up a required array field in a JSON object
+term requireArray = λfname,m.eithers.bind (require fname m) expectArray
+
+## Look up a required number field in a JSON object
+term requireNumber = λfname,m.eithers.bind (require fname m) expectNumber
+
+## Look up a required string field in a JSON object
+term requireString = λfname,m.eithers.bind (require fname m) expectString
+
+## Show a JSON value as a string
+term showValue = λvalue.printJson value

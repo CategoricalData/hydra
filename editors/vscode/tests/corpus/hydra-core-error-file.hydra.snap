@@ -6,14 +6,10 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.file as file
+>import hydra.core.file
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                      ^ source.hydra
-#                       ^^ source.hydra keyword.control.import.hydra
-#                         ^ source.hydra
-#                          ^^^^ source.hydra entity.name.namespace.hydra
 >
 >## A recoverable file-system error
 #^^ source.hydra comment.block.documentation.hydra
@@ -31,13 +27,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  alreadyExists: file.FilePath,
+>  alreadyExists: FilePath,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #               ^ source.hydra punctuation.separator.type.hydra
 #                ^ source.hydra
-#                 ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                              ^^ source.hydra
+#                 ^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^ source.hydra
 >  ## The path is syntactically invalid or cannot be represented by the host file system
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -53,13 +49,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  notFound: file.FilePath,
+>  notFound: FilePath,
 #^^ source.hydra
 #  ^^^^^^^^ source.hydra variable.other.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                         ^^ source.hydra
+#            ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^ source.hydra
 >  ## Any other file-system error, represented as a host-provided message
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -75,10 +71,10 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  permissionDenied: file.FilePath}
+>  permissionDenied: FilePath}
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                  ^ source.hydra punctuation.separator.type.hydra
 #                   ^ source.hydra
-#                    ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                 ^^ source.hydra
+#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                            ^^ source.hydra

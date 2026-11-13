@@ -1,7 +1,7 @@
 ## General-purpose utility types used across Hydra.
 module hydra.core.util
 
-import hydra.core.packaging as packaging
+import hydra.core.packaging
 
 ## A naming convention for symbols, such as camelCase or snake_case
 type CaseConvention = union{
@@ -20,9 +20,9 @@ type Comparison = union{
 ## A mapping from module names to values of type n, with a focus on one module name
 type ModuleNames = forall n. record{
   ## The module name in focus, together with its associated value
-  focus: (packaging.ModuleName, n),
+  focus: (ModuleName, n),
   ## A mapping of module names to values
-  mapping: map<packaging.ModuleName, n>}
+  mapping: map<ModuleName, n>}
 
 ## Numeric precision: arbitrary precision, or precision to a specified number of bits
 type Precision = union{
@@ -34,6 +34,6 @@ type Precision = union{
 ## A qualified name consisting of an optional module name together with a mandatory local name
 type QualifiedName = record{
   ## The optional module name
-  moduleName: optional<packaging.ModuleName>,
+  moduleName: optional<ModuleName>,
   ## The local name
   local: string}

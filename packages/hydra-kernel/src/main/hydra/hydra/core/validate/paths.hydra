@@ -1,14 +1,45 @@
 ## The TermGraph : TypeGraph conformance relation: path erasure (a subterm position maps to the subtype position of its type) plus node typing, partial on the computation fragment.
 module hydra.core.validate.paths
 
-import hydra.core.lib.lists as lists
-import hydra.core.lib.logic as logic
+import hydra.core.lib.lists
+import hydra.core.lib.logic
 import hydra.core.lib.optionals as optionals
-import hydra.core.lib.pairs as pairs
-import hydra.core.paths as paths
+import hydra.core.lib.pairs
+import hydra.core.paths
 
 ## Erase a subterm path to the subtype path of its type, if wholly within the data fragment
-term eraseSubtermPath = λpath.let steps := paths.SubtermPath[] path in let go := λacc,step.optionals.match acc none (λstateP.let out := pairs.first stateP in let pendingEntry := pairs.second stateP in logic.ifElse pendingEntry (cases(paths.SubtermStep){pairFirst=λ`_`.given((lists.concat2 out [paths.SubtypeStep{mapKeys}], false)), pairSecond=λ`_`.given((lists.concat2 out [paths.SubtypeStep{mapValues}], false)), `_`=none} step) (cases(paths.SubtermStep){mapEntry=λ`_`.given((out, true)), `_`=optionals.map (λst.(lists.concat2 out [st], false)) (eraseSubtermStep step)} step)) in let result := lists.foldl go given(([], false)) steps in optionals.bind result (λstateP.logic.ifElse (pairs.second stateP) none given(paths.SubtypePath{pairs.first stateP}))
+term eraseSubtermPath =
+  λpath.
+    let steps := SubtermPath[] path in
+    let go := λacc,step.optionals.match
+          acc
+          none
+          (λstateP.
+            let out := first stateP in
+            let pendingEntry := second stateP in
+            ifElse
+              pendingEntry
+              (cases(SubtermStep){
+                pairFirst=λ`_`.given((concat2 out [SubtypeStep{mapKeys}], false)),
+                pairSecond=λ`_`.given((concat2 out [SubtypeStep{mapValues}], false)),
+                `_`=none}
+                step)
+              (cases(SubtermStep){
+                mapEntry=λ`_`.given((out, true)),
+                `_`=optionals.map
+                    (λst.(concat2 out [st], false))
+                    (eraseSubtermStep step)}
+                step)) in
+    let result := foldl go given(([], false)) steps in
+    optionals.bind result (λstateP.ifElse (second stateP) none given(SubtypePath{first stateP}))
 
 ## The subtype-side analog of a subterm step on the data fragment, or nothing on the computation fragment
-term eraseSubtermStep = λstep.cases(paths.SubtermStep){listElement=λ`_`.given(paths.SubtypeStep{listElement}), setElement=λ`_`.given(paths.SubtypeStep{setElement}), optionalGiven=λ`_`.given(paths.SubtypeStep{optionalElement}), injectField=λn.given(paths.SubtypeStep{unionField = n}), recordField=λn.given(paths.SubtypeStep{recordField = n}), `_`=none} step
+term eraseSubtermStep =
+  λstep.cases(SubtermStep){
+      listElement=λ`_`.given(SubtypeStep{listElement}),
+      setElement=λ`_`.given(SubtypeStep{setElement}),
+      optionalGiven=λ`_`.given(SubtypeStep{optionalElement}),
+      injectField=λn.given(SubtypeStep{unionField = n}),
+      recordField=λn.given(SubtypeStep{recordField = n}),
+      `_`=none}
+      step

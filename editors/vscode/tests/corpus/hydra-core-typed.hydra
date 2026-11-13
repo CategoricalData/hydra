@@ -1,24 +1,24 @@
 ## Typed (phantom) wrappers for use with Hydra DSLs
 module hydra.core.typed
 
-import hydra.core.model as model
+import hydra.core.model
 
 ## An association of a named term (element) with a phantom type
 type TypedBinding = forall a. record{
   ## The name of the term
-  name: model.Name,
+  name: Name,
   ## The term with its phantom type
   `term`: TypedTerm a}
 
 ## An association of a name with a phantom type
-type TypedName = forall a. wrap(model.Name)
+type TypedName = forall a. wrap(Name)
 
 ## An association of a term with a phantom type
-type TypedTerm = forall a. wrap(model.Term)
+type TypedTerm = forall a. wrap(Term)
 
 ## An association of a term definition with a phantom type
 type TypedTermDefinition = forall a. record{
   ## The name of the term
-  name: model.Name,
+  name: Name,
   ## The term with its phantom type
   `term`: TypedTerm a}

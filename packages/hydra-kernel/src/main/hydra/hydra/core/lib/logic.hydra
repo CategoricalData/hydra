@@ -1,8 +1,6 @@
 ## Primitives in the hydra.core.lib.logic module.
 module hydra.core.lib.logic
 
-
-
 ## Compute the logical AND of two boolean values.
 ##
 ## and(p, q) returns true iff both p and q are true.

@@ -6,14 +6,10 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.model as model
+>import hydra.core.model
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                       ^ source.hydra
-#                        ^^ source.hydra keyword.control.import.hydra
-#                          ^ source.hydra
-#                           ^^^^^ source.hydra entity.name.namespace.hydra
 >
 >## Configuration for a validation pass: which check rules are active, how each is classified, and the upper bounds on collected findings. A check whose rule name appears in neither set is never evaluated. Errors hard-stop the traversal once maxErrors is reached; warnings only stop being collected once maxWarnings is reached, never causing termination.
 #^^ source.hydra comment.block.documentation.hydra
@@ -31,30 +27,30 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  errorRules: set<model.Name>,
+>  errorRules: set<Name>,
 #^^ source.hydra
 #  ^^^^^^^^^^ source.hydra variable.other.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^ source.hydra support.type.hydra
 #                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                  ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                            ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                             ^^ source.hydra
+#                  ^^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                       ^^ source.hydra
 >  ## The set of fully qualified rule names whose findings are treated as warnings. Same name format as errorRules.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  warningRules: set<model.Name>,
+>  warningRules: set<Name>,
 #^^ source.hydra
 #  ^^^^^^^^^^^^ source.hydra variable.other.hydra
 #              ^ source.hydra punctuation.separator.type.hydra
 #               ^ source.hydra
 #                ^^^ source.hydra support.type.hydra
 #                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                    ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                              ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                               ^^ source.hydra
+#                    ^^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                         ^^ source.hydra
 >  ## Hard upper bound on collected errors. Validation terminates as soon as the errors list reaches this length. A value of 1 reproduces the legacy 'first error wins' behaviour.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

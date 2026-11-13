@@ -11,22 +11,14 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.error.file as error.file
+>import hydra.core.error.file
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                            ^ source.hydra
-#                             ^^ source.hydra keyword.control.import.hydra
-#                               ^ source.hydra
-#                                ^^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.file as file
+>import hydra.core.file
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                      ^ source.hydra
-#                       ^^ source.hydra keyword.control.import.hydra
-#                         ^ source.hydra
-#                          ^^^^ source.hydra entity.name.namespace.hydra
 >
 >## Append bytes to the end of a file.
 #^^ source.hydra comment.block.documentation.hydra
@@ -48,7 +40,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive appendFile : file.FilePath → binary → effect<either<error.file.FileError, unit>>
+>impure primitive appendFile : FilePath → binary → effect<either<FileError, unit>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -57,23 +49,23 @@
 #                           ^ source.hydra
 #                            ^ source.hydra punctuation.separator.type.hydra
 #                             ^ source.hydra
-#                              ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                           ^ source.hydra
-#                                            ^ source.hydra keyword.operator.arrow.hydra
-#                                             ^ source.hydra
-#                                              ^^^^^^ source.hydra support.type.hydra
-#                                                    ^ source.hydra
-#                                                     ^ source.hydra keyword.operator.arrow.hydra
-#                                                      ^ source.hydra
-#                                                       ^^^^^^ source.hydra support.type.hydra
-#                                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                              ^^^^^^ source.hydra support.type.hydra
-#                                                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                     ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                         ^^ source.hydra
-#                                                                                           ^^^^ source.hydra support.type.hydra
-#                                                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                              ^^^^^^^^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^ source.hydra support.type.hydra
+#                                               ^ source.hydra
+#                                                ^ source.hydra keyword.operator.arrow.hydra
+#                                                 ^ source.hydra
+#                                                  ^^^^^^ source.hydra support.type.hydra
+#                                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                         ^^^^^^ source.hydra support.type.hydra
+#                                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                         ^^ source.hydra
+#                                                                           ^^^^ source.hydra support.type.hydra
+#                                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Copy a file, or a directory tree, to a destination path.
 #^^ source.hydra comment.block.documentation.hydra
@@ -108,7 +100,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive copy : boolean → file.FilePath → file.FilePath → effect<either<error.file.FileError, unit>>
+>impure primitive copy : boolean → FilePath → FilePath → effect<either<FileError, unit>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -121,23 +113,23 @@
 #                               ^ source.hydra
 #                                ^ source.hydra keyword.operator.arrow.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                               ^ source.hydra
-#                                                ^ source.hydra keyword.operator.arrow.hydra
-#                                                 ^ source.hydra
-#                                                  ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                               ^ source.hydra
-#                                                                ^ source.hydra keyword.operator.arrow.hydra
-#                                                                 ^ source.hydra
-#                                                                  ^^^^^^ source.hydra support.type.hydra
-#                                                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                         ^^^^^^ source.hydra support.type.hydra
-#                                                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                                ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                    ^^ source.hydra
-#                                                                                                      ^^^^ source.hydra support.type.hydra
-#                                                                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                  ^^^^^^^^ source.hydra variable.other.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra keyword.operator.arrow.hydra
+#                                            ^ source.hydra
+#                                             ^^^^^^^^ source.hydra variable.other.hydra
+#                                                     ^ source.hydra
+#                                                      ^ source.hydra keyword.operator.arrow.hydra
+#                                                       ^ source.hydra
+#                                                        ^^^^^^ source.hydra support.type.hydra
+#                                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                               ^^^^^^ source.hydra support.type.hydra
+#                                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                      ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                               ^^ source.hydra
+#                                                                                 ^^^^ source.hydra support.type.hydra
+#                                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Create a directory.
 #^^ source.hydra comment.block.documentation.hydra
@@ -162,7 +154,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive createDirectory : boolean → file.FilePath → effect<either<error.file.FileError, unit>>
+>impure primitive createDirectory : boolean → FilePath → effect<either<FileError, unit>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -175,19 +167,19 @@
 #                                          ^ source.hydra
 #                                           ^ source.hydra keyword.operator.arrow.hydra
 #                                            ^ source.hydra
-#                                             ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                          ^ source.hydra
-#                                                           ^ source.hydra keyword.operator.arrow.hydra
-#                                                            ^ source.hydra
-#                                                             ^^^^^^ source.hydra support.type.hydra
-#                                                                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                    ^^^^^^ source.hydra support.type.hydra
-#                                                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                           ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                               ^^ source.hydra
-#                                                                                                 ^^^^ source.hydra support.type.hydra
-#                                                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                             ^^^^^^^^ source.hydra variable.other.hydra
+#                                                     ^ source.hydra
+#                                                      ^ source.hydra keyword.operator.arrow.hydra
+#                                                       ^ source.hydra
+#                                                        ^^^^^^ source.hydra support.type.hydra
+#                                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                               ^^^^^^ source.hydra support.type.hydra
+#                                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                      ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                               ^^ source.hydra
+#                                                                                 ^^^^ source.hydra support.type.hydra
+#                                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Create a symbolic link.
 #^^ source.hydra comment.block.documentation.hydra
@@ -224,7 +216,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive createSymlink : file.FilePath → file.FilePath → effect<either<error.file.FileError, unit>>
+>impure primitive createSymlink : FilePath → FilePath → effect<either<FileError, unit>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -233,23 +225,23 @@
 #                              ^ source.hydra
 #                               ^ source.hydra punctuation.separator.type.hydra
 #                                ^ source.hydra
-#                                 ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                              ^ source.hydra
-#                                               ^ source.hydra keyword.operator.arrow.hydra
-#                                                ^ source.hydra
-#                                                 ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                              ^ source.hydra
-#                                                               ^ source.hydra keyword.operator.arrow.hydra
-#                                                                ^ source.hydra
-#                                                                 ^^^^^^ source.hydra support.type.hydra
-#                                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                        ^^^^^^ source.hydra support.type.hydra
-#                                                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                               ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                   ^^ source.hydra
-#                                                                                                     ^^^^ source.hydra support.type.hydra
-#                                                                                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                 ^^^^^^^^ source.hydra variable.other.hydra
+#                                         ^ source.hydra
+#                                          ^ source.hydra keyword.operator.arrow.hydra
+#                                           ^ source.hydra
+#                                            ^^^^^^^^ source.hydra variable.other.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra keyword.operator.arrow.hydra
+#                                                      ^ source.hydra
+#                                                       ^^^^^^ source.hydra support.type.hydra
+#                                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                              ^^^^^^ source.hydra support.type.hydra
+#                                                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                     ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                              ^^ source.hydra
+#                                                                                ^^^^ source.hydra support.type.hydra
+#                                                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Test whether a path exists.
 #^^ source.hydra comment.block.documentation.hydra
@@ -276,7 +268,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive exists : file.FilePath → effect<either<error.file.FileError, boolean>>
+>impure primitive exists : FilePath → effect<either<FileError, boolean>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -285,19 +277,19 @@
 #                       ^ source.hydra
 #                        ^ source.hydra punctuation.separator.type.hydra
 #                         ^ source.hydra
-#                          ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                       ^ source.hydra
-#                                        ^ source.hydra keyword.operator.arrow.hydra
-#                                         ^ source.hydra
-#                                          ^^^^^^ source.hydra support.type.hydra
-#                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                 ^^^^^^ source.hydra support.type.hydra
-#                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                        ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                            ^^ source.hydra
-#                                                                              ^^^^^^^ source.hydra support.type.hydra
-#                                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                          ^^^^^^^^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.arrow.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^ source.hydra support.type.hydra
+#                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                            ^^^^^^ source.hydra support.type.hydra
+#                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                   ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                            ^^ source.hydra
+#                                                              ^^^^^^^ source.hydra support.type.hydra
+#                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## List the immediate entries of a directory.
 #^^ source.hydra comment.block.documentation.hydra
@@ -319,7 +311,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive listDirectory : file.FilePath → effect<either<error.file.FileError, list<file.FilePath>>>
+>impure primitive listDirectory : FilePath → effect<either<FileError, list<FilePath>>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -328,22 +320,22 @@
 #                              ^ source.hydra
 #                               ^ source.hydra punctuation.separator.type.hydra
 #                                ^ source.hydra
-#                                 ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                              ^ source.hydra
-#                                               ^ source.hydra keyword.operator.arrow.hydra
-#                                                ^ source.hydra
-#                                                 ^^^^^^ source.hydra support.type.hydra
-#                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                        ^^^^^^ source.hydra support.type.hydra
-#                                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                               ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                   ^^ source.hydra
-#                                                                                     ^^^^ source.hydra support.type.hydra
-#                                                                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                                          ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                        ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                 ^^^^^^^^ source.hydra variable.other.hydra
+#                                         ^ source.hydra
+#                                          ^ source.hydra keyword.operator.arrow.hydra
+#                                           ^ source.hydra
+#                                            ^^^^^^ source.hydra support.type.hydra
+#                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                   ^^^^^^ source.hydra support.type.hydra
+#                                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                          ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                   ^^ source.hydra
+#                                                                     ^^^^ source.hydra support.type.hydra
+#                                                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                          ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Read the complete contents of a file as raw bytes.
 #^^ source.hydra comment.block.documentation.hydra
@@ -365,7 +357,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive readFile : file.FilePath → effect<either<error.file.FileError, binary>>
+>impure primitive readFile : FilePath → effect<either<FileError, binary>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -374,19 +366,19 @@
 #                         ^ source.hydra
 #                          ^ source.hydra punctuation.separator.type.hydra
 #                           ^ source.hydra
-#                            ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                         ^ source.hydra
-#                                          ^ source.hydra keyword.operator.arrow.hydra
-#                                           ^ source.hydra
-#                                            ^^^^^^ source.hydra support.type.hydra
-#                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                   ^^^^^^ source.hydra support.type.hydra
-#                                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                          ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                              ^^ source.hydra
-#                                                                                ^^^^^^ source.hydra support.type.hydra
-#                                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                            ^^^^^^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra keyword.operator.arrow.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
+#                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                              ^^^^^^ source.hydra support.type.hydra
+#                                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                     ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                              ^^ source.hydra
+#                                                                ^^^^^^ source.hydra support.type.hydra
+#                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Read the target of a symbolic link.
 #^^ source.hydra comment.block.documentation.hydra
@@ -413,7 +405,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive readSymlink : file.FilePath → effect<either<error.file.FileError, file.FilePath>>
+>impure primitive readSymlink : FilePath → effect<either<FileError, FilePath>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -422,19 +414,19 @@
 #                            ^ source.hydra
 #                             ^ source.hydra punctuation.separator.type.hydra
 #                              ^ source.hydra
-#                               ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                            ^ source.hydra
-#                                             ^ source.hydra keyword.operator.arrow.hydra
-#                                              ^ source.hydra
-#                                               ^^^^^^ source.hydra support.type.hydra
-#                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                      ^^^^^^ source.hydra support.type.hydra
-#                                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                             ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                 ^^ source.hydra
-#                                                                                   ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                               ^^^^^^^^ source.hydra variable.other.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^ source.hydra support.type.hydra
+#                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                 ^^^^^^ source.hydra support.type.hydra
+#                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                        ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                 ^^ source.hydra
+#                                                                   ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Remove a directory.
 #^^ source.hydra comment.block.documentation.hydra
@@ -469,7 +461,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive removeDirectory : boolean → file.FilePath → effect<either<error.file.FileError, unit>>
+>impure primitive removeDirectory : boolean → FilePath → effect<either<FileError, unit>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -482,19 +474,19 @@
 #                                          ^ source.hydra
 #                                           ^ source.hydra keyword.operator.arrow.hydra
 #                                            ^ source.hydra
-#                                             ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                          ^ source.hydra
-#                                                           ^ source.hydra keyword.operator.arrow.hydra
-#                                                            ^ source.hydra
-#                                                             ^^^^^^ source.hydra support.type.hydra
-#                                                                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                    ^^^^^^ source.hydra support.type.hydra
-#                                                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                           ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                               ^^ source.hydra
-#                                                                                                 ^^^^ source.hydra support.type.hydra
-#                                                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                             ^^^^^^^^ source.hydra variable.other.hydra
+#                                                     ^ source.hydra
+#                                                      ^ source.hydra keyword.operator.arrow.hydra
+#                                                       ^ source.hydra
+#                                                        ^^^^^^ source.hydra support.type.hydra
+#                                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                               ^^^^^^ source.hydra support.type.hydra
+#                                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                                      ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                               ^^ source.hydra
+#                                                                                 ^^^^ source.hydra support.type.hydra
+#                                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Remove a file.
 #^^ source.hydra comment.block.documentation.hydra
@@ -516,7 +508,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive removeFile : file.FilePath → effect<either<error.file.FileError, unit>>
+>impure primitive removeFile : FilePath → effect<either<FileError, unit>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -525,19 +517,19 @@
 #                           ^ source.hydra
 #                            ^ source.hydra punctuation.separator.type.hydra
 #                             ^ source.hydra
-#                              ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                           ^ source.hydra
-#                                            ^ source.hydra keyword.operator.arrow.hydra
-#                                             ^ source.hydra
-#                                              ^^^^^^ source.hydra support.type.hydra
-#                                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                     ^^^^^^ source.hydra support.type.hydra
-#                                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                            ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                ^^ source.hydra
-#                                                                                  ^^^^ source.hydra support.type.hydra
-#                                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                              ^^^^^^^^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^ source.hydra keyword.operator.arrow.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^ source.hydra support.type.hydra
+#                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                ^^^^^^ source.hydra support.type.hydra
+#                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                       ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                ^^ source.hydra
+#                                                                  ^^^^ source.hydra support.type.hydra
+#                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Rename or move a file or directory.
 #^^ source.hydra comment.block.documentation.hydra
@@ -559,7 +551,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive rename : file.FilePath → file.FilePath → effect<either<error.file.FileError, unit>>
+>impure primitive rename : FilePath → FilePath → effect<either<FileError, unit>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -568,23 +560,23 @@
 #                       ^ source.hydra
 #                        ^ source.hydra punctuation.separator.type.hydra
 #                         ^ source.hydra
-#                          ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                       ^ source.hydra
-#                                        ^ source.hydra keyword.operator.arrow.hydra
-#                                         ^ source.hydra
-#                                          ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                       ^ source.hydra
-#                                                        ^ source.hydra keyword.operator.arrow.hydra
-#                                                         ^ source.hydra
-#                                                          ^^^^^^ source.hydra support.type.hydra
-#                                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                 ^^^^^^ source.hydra support.type.hydra
-#                                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                        ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                            ^^ source.hydra
-#                                                                                              ^^^^ source.hydra support.type.hydra
-#                                                                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                          ^^^^^^^^ source.hydra variable.other.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.arrow.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^^ source.hydra variable.other.hydra
+#                                             ^ source.hydra
+#                                              ^ source.hydra keyword.operator.arrow.hydra
+#                                               ^ source.hydra
+#                                                ^^^^^^ source.hydra support.type.hydra
+#                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                       ^^^^^^ source.hydra support.type.hydra
+#                                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                              ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                       ^^ source.hydra
+#                                                                         ^^^^ source.hydra support.type.hydra
+#                                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Retrieve metadata about a file or directory.
 #^^ source.hydra comment.block.documentation.hydra
@@ -616,7 +608,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive status : boolean → file.FilePath → effect<either<error.file.FileError, file.FileStatus>>
+>impure primitive status : boolean → FilePath → effect<either<FileError, FileStatus>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -629,19 +621,19 @@
 #                                 ^ source.hydra
 #                                  ^ source.hydra keyword.operator.arrow.hydra
 #                                   ^ source.hydra
-#                                    ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                 ^ source.hydra
-#                                                  ^ source.hydra keyword.operator.arrow.hydra
-#                                                   ^ source.hydra
-#                                                    ^^^^^^ source.hydra support.type.hydra
-#                                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                           ^^^^^^ source.hydra support.type.hydra
-#                                                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                  ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                      ^^ source.hydra
-#                                                                                        ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                                        ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                    ^^^^^^^^ source.hydra variable.other.hydra
+#                                            ^ source.hydra
+#                                             ^ source.hydra keyword.operator.arrow.hydra
+#                                              ^ source.hydra
+#                                               ^^^^^^ source.hydra support.type.hydra
+#                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                      ^^^^^^ source.hydra support.type.hydra
+#                                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                             ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                      ^^ source.hydra
+#                                                                        ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Write raw bytes as the complete contents of a file.
 #^^ source.hydra comment.block.documentation.hydra
@@ -663,7 +655,7 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->impure primitive writeFile : file.FilePath → binary → effect<either<error.file.FileError, unit>>
+>impure primitive writeFile : FilePath → binary → effect<either<FileError, unit>>
 #^^^^^^ source.hydra storage.modifier.impure.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^ source.hydra keyword.other.definition.hydra
@@ -672,20 +664,20 @@
 #                          ^ source.hydra
 #                           ^ source.hydra punctuation.separator.type.hydra
 #                            ^ source.hydra
-#                             ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                          ^ source.hydra
-#                                           ^ source.hydra keyword.operator.arrow.hydra
-#                                            ^ source.hydra
-#                                             ^^^^^^ source.hydra support.type.hydra
-#                                                   ^ source.hydra
-#                                                    ^ source.hydra keyword.operator.arrow.hydra
-#                                                     ^ source.hydra
-#                                                      ^^^^^^ source.hydra support.type.hydra
-#                                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                             ^^^^^^ source.hydra support.type.hydra
-#                                                                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                    ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                        ^^ source.hydra
-#                                                                                          ^^^^ source.hydra support.type.hydra
-#                                                                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                             ^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra keyword.operator.arrow.hydra
+#                                       ^ source.hydra
+#                                        ^^^^^^ source.hydra support.type.hydra
+#                                              ^ source.hydra
+#                                               ^ source.hydra keyword.operator.arrow.hydra
+#                                                ^ source.hydra
+#                                                 ^^^^^^ source.hydra support.type.hydra
+#                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                        ^^^^^^ source.hydra support.type.hydra
+#                                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                               ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                        ^^ source.hydra
+#                                                                          ^^^^ source.hydra support.type.hydra
+#                                                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra

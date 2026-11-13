@@ -5,8 +5,6 @@
 ## Because element ordering is part of the set type's contract, every set-typed variable in this module's signatures carries the ordering constraint on its element type, including in primitives that perform no comparison themselves.
 module hydra.core.lib.sets
 
-
-
 ## Remove an element from a set.
 ##
 ## delete(x, s) returns s with x removed; if x is not in s, s is returned unchanged.
@@ -27,7 +25,10 @@ primitive delete : ∀x.(ordering x) ⇒ x → set<x> → set<x>
 ## @availableSince 0.15
 ## @requirement removesElementsOfSecondSet: difference returns the elements of the first set that do not occur in the second set.
 ## @requirement identityWhenSecondEmpty: difference with an empty second set returns the first set unchanged.
-primitive difference : ∀x.(ordering x) ⇒ set<x> → set<x> → set<x> = λs1,s2.hydra.core.lib.lists.foldl (λacc,el.hydra.core.lib.logic.ifElse (member el s2) acc (insert el acc)) empty (toList s1)
+primitive difference : ∀x.(ordering x) ⇒ set<x> → set<x> → set<x> = λs1,s2.hydra.core.lib.lists.foldl
+    (λacc,el.hydra.core.lib.logic.ifElse (member el s2) acc (insert el acc))
+    empty
+    (toList s1)
 
 ## The empty set.
 ##
@@ -79,7 +80,10 @@ primitive insert : ∀x.(ordering x) ⇒ x → set<x> → set<x>
 ## @availableSince 0.15
 ## @requirement keepsElementsInBoth: intersection returns exactly the elements present in both sets.
 ## @requirement emptyWhenNoOverlapOrEitherEmpty: intersection is the empty set when the two sets share no elements, or when either set is empty.
-primitive intersection : ∀x.(ordering x) ⇒ set<x> → set<x> → set<x> = λs1,s2.hydra.core.lib.lists.foldl (λacc,el.hydra.core.lib.logic.ifElse (member el s2) (insert el acc) acc) empty (toList s1)
+primitive intersection : ∀x.(ordering x) ⇒ set<x> → set<x> → set<x> = λs1,s2.hydra.core.lib.lists.foldl
+    (λacc,el.hydra.core.lib.logic.ifElse (member el s2) (insert el acc) acc)
+    empty
+    (toList s1)
 
 ## Test whether a set is empty.
 ##

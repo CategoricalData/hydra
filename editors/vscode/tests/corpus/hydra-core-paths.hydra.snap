@@ -6,14 +6,10 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.model as model
+>import hydra.core.model
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                       ^ source.hydra
-#                        ^^ source.hydra keyword.control.import.hydra
-#                          ^ source.hydra
-#                           ^^^^^ source.hydra entity.name.namespace.hydra
 >
 >## A reference to a lambda-bound variable: the node introducing it is the binding lambda
 #^^ source.hydra comment.block.documentation.hydra
@@ -31,13 +27,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  variable: model.Name,
+>  variable: Name,
 #^^ source.hydra
 #  ^^^^^^^^ source.hydra variable.other.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                      ^^ source.hydra
+#            ^^^^ source.hydra variable.other.hydra
+#                ^^ source.hydra
 >  ## The id of the node at the binding lambda
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -53,15 +49,15 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `type`: model.Type}
+>  `type`: Type}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >
 >## A reference to a let-bound variable: the node introducing it is the bound term
 #^^ source.hydra comment.block.documentation.hydra
@@ -79,13 +75,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  variable: model.Name,
+>  variable: Name,
 #^^ source.hydra
 #  ^^^^^^^^ source.hydra variable.other.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                      ^^ source.hydra
+#            ^^^^ source.hydra variable.other.hydra
+#                ^^ source.hydra
 >  ## The id of the node at the bound term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -101,15 +97,15 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `type`: model.Type}
+>  `type`: Type}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >
 >## A reference to a named type of the schema (analogous to a let-bound variable)
 #^^ source.hydra comment.block.documentation.hydra
@@ -127,13 +123,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  name: model.Name}
+>  name: Name}
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >
 >## A reference to a primitive function
 #^^ source.hydra comment.block.documentation.hydra
@@ -151,26 +147,26 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  name: model.Name,
+>  name: Name,
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >  ## The type of the primitive
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `type`: model.Type}
+>  `type`: Type}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >
 >## An outgoing link to an immediate subterm, carried inline as a child node
 #^^ source.hydra comment.block.documentation.hydra
@@ -285,13 +281,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  casesCase: model.Name,
+>  casesCase: Name,
 #^^ source.hydra
 #  ^^^^^^^^^ source.hydra variable.other.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                       ^^ source.hydra
+#             ^^^^ source.hydra variable.other.hydra
+#                 ^^ source.hydra
 >  ## Access the default case of a case statement
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -329,13 +325,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  injectField: model.Name,
+>  injectField: Name,
 #^^ source.hydra
 #  ^^^^^^^^^^^ source.hydra variable.other.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                         ^^ source.hydra
+#               ^^^^ source.hydra variable.other.hydra
+#                   ^^ source.hydra
 >  ## Access the body of a lambda term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -351,13 +347,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  letBinding: model.Name,
+>  letBinding: Name,
 #^^ source.hydra
 #  ^^^^^^^^^^ source.hydra variable.other.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
-#              ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                        ^^ source.hydra
+#              ^^^^ source.hydra variable.other.hydra
+#                  ^^ source.hydra
 >  ## Access the body of a let term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -428,13 +424,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  recordField: model.Name,
+>  recordField: Name,
 #^^ source.hydra
 #  ^^^^^^^^^^^ source.hydra variable.other.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                         ^^ source.hydra
+#               ^^^^ source.hydra variable.other.hydra
+#                   ^^ source.hydra
 >  ## Access an element of a set by index
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -714,13 +710,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  recordField: model.Name,
+>  recordField: Name,
 #^^ source.hydra
 #  ^^^^^^^^^^^ source.hydra variable.other.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                         ^^ source.hydra
+#               ^^^^ source.hydra variable.other.hydra
+#                   ^^ source.hydra
 >  ## Access the element type of a set type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -736,13 +732,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  unionField: model.Name,
+>  unionField: Name,
 #^^ source.hydra
 #  ^^^^^^^^^^ source.hydra variable.other.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
-#              ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                        ^^ source.hydra
+#              ^^^^ source.hydra variable.other.hydra
+#                  ^^ source.hydra
 >  ## Access the body type of a wrapped type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -771,147 +767,147 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  casesTypeName: model.Name,
+>  casesTypeName: Name,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #               ^ source.hydra punctuation.separator.type.hydra
 #                ^ source.hydra
-#                 ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                           ^^ source.hydra
+#                 ^^^^ source.hydra variable.other.hydra
+#                     ^^ source.hydra
 >  ## The name of the union type of an injection
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  injectTypeName: model.Name,
+>  injectTypeName: Name,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                            ^^ source.hydra
+#                  ^^^^ source.hydra variable.other.hydra
+#                      ^^ source.hydra
 >  ## The (given) domain type of a lambda
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  lambdaDomainGiven: model.Type,
+>  lambdaDomainGiven: Type,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                   ^ source.hydra punctuation.separator.type.hydra
 #                    ^ source.hydra
-#                     ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                               ^^ source.hydra
+#                     ^^^^ source.hydra variable.other.hydra
+#                         ^^ source.hydra
 >  ## The parameter name of a lambda
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  lambdaParameter: model.Name,
+>  lambdaParameter: Name,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                             ^^ source.hydra
+#                   ^^^^ source.hydra variable.other.hydra
+#                       ^^ source.hydra
 >  ## The name of a let binding together with its (given) type scheme
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  letBindingTypeSchemeGiven: (model.Name, model.TypeScheme),
+>  letBindingTypeSchemeGiven: (Name, TypeScheme),
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                           ^ source.hydra punctuation.separator.type.hydra
 #                            ^^ source.hydra
-#                              ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                        ^^ source.hydra
-#                                          ^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                          ^^^ source.hydra
+#                              ^^^^ source.hydra variable.other.hydra
+#                                  ^^ source.hydra
+#                                    ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                              ^^^ source.hydra
 >  ## The literal value of a literal term (a leaf)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  literal: model.Literal,
+>  literal: Literal,
 #^^ source.hydra
 #  ^^^^^^^ source.hydra variable.other.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                        ^^ source.hydra
+#           ^^^^^^^ source.hydra variable.other.hydra
+#                  ^^ source.hydra
 >  ## The name of the field projected by a projection
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  projectFieldName: model.Name,
+>  projectFieldName: Name,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                  ^ source.hydra punctuation.separator.type.hydra
 #                   ^ source.hydra
-#                    ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                              ^^ source.hydra
+#                    ^^^^ source.hydra variable.other.hydra
+#                        ^^ source.hydra
 >  ## The name of the record type of a projection
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  projectTypeName: model.Name,
+>  projectTypeName: Name,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                             ^^ source.hydra
+#                   ^^^^ source.hydra variable.other.hydra
+#                       ^^ source.hydra
 >  ## The name of the record type of a record term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  recordTypeName: model.Name,
+>  recordTypeName: Name,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                            ^^ source.hydra
+#                  ^^^^ source.hydra variable.other.hydra
+#                      ^^ source.hydra
 >  ## The type argument of a type application term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  typeApplicationType: model.Type,
+>  typeApplicationType: Type,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                 ^^ source.hydra
+#                       ^^^^ source.hydra variable.other.hydra
+#                           ^^ source.hydra
 >  ## The type-variable parameter of a type lambda term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  typeLambdaParameter: model.Name,
+>  typeLambdaParameter: Name,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                 ^^ source.hydra
+#                       ^^^^ source.hydra variable.other.hydra
+#                           ^^ source.hydra
 >  ## The name of the wrapper type eliminated by an unwrap
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  unwrapTypeName: model.Name,
+>  unwrapTypeName: Name,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                            ^^ source.hydra
+#                  ^^^^ source.hydra variable.other.hydra
+#                      ^^ source.hydra
 >  ## The name of the wrapper type of a wrapped term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  wrapTypeName: model.Name}
+>  wrapTypeName: Name}
 #^^ source.hydra
 #  ^^^^^^^^^^^^ source.hydra variable.other.hydra
 #              ^ source.hydra punctuation.separator.type.hydra
 #               ^ source.hydra
-#                ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                          ^^ source.hydra
+#                ^^^^ source.hydra variable.other.hydra
+#                    ^^ source.hydra
 >
 >## A typed graph as a term graph: one root node per binding of the graph
 #^^ source.hydra comment.block.documentation.hydra
@@ -929,18 +925,18 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  roots: map<model.Name, TermNode>}
+>  roots: map<Name, TermNode>}
 #^^ source.hydra
 #  ^^^^^ source.hydra variable.other.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^ source.hydra support.type.hydra
 #            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#             ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                       ^^ source.hydra
-#                         ^^^^^^^^ source.hydra variable.other.hydra
-#                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                  ^^ source.hydra
+#             ^^^^ source.hydra variable.other.hydra
+#                 ^^ source.hydra
+#                   ^^^^^^^^ source.hydra variable.other.hydra
+#                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                            ^^ source.hydra
 >
 >## An outgoing link of a term node: an inline subterm, a variable occurrence, or a non-term attribute
 #^^ source.hydra comment.block.documentation.hydra
@@ -1004,28 +1000,28 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `term`: model.Term,
+>  `term`: Term,
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >  ## The subterm's type (a binding's forall type at roots), via hydra.core.checking
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `type`: model.Type,
+>  `type`: Type,
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >  ## The outgoing links of the node
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1057,13 +1053,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  root: model.Name,
+>  root: Name,
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >  ## The subterm path from the root
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1177,35 +1173,35 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  annotatedAnnotation: model.Term,
+>  annotatedAnnotation: Term,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                 ^^ source.hydra
+#                       ^^^^ source.hydra variable.other.hydra
+#                           ^^ source.hydra
 >  ## The type-variable parameter of a universally quantified type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  forallParameter: model.Name,
+>  forallParameter: Name,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                             ^^ source.hydra
+#                   ^^^^ source.hydra variable.other.hydra
+#                       ^^ source.hydra
 >  ## The literal type of a literal type (a leaf)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  literal: model.LiteralType}
+>  literal: LiteralType}
 #^^ source.hydra
 #  ^^^^^^^ source.hydra variable.other.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                            ^^ source.hydra
+#           ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                      ^^ source.hydra
 >
 >## A schema as a type graph: one root node per named type
 #^^ source.hydra comment.block.documentation.hydra
@@ -1223,18 +1219,18 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  roots: map<model.Name, TypeNode>}
+>  roots: map<Name, TypeNode>}
 #^^ source.hydra
 #  ^^^^^ source.hydra variable.other.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^ source.hydra support.type.hydra
 #            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#             ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                       ^^ source.hydra
-#                         ^^^^^^^^ source.hydra variable.other.hydra
-#                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                  ^^ source.hydra
+#             ^^^^ source.hydra variable.other.hydra
+#                 ^^ source.hydra
+#                   ^^^^^^^^ source.hydra variable.other.hydra
+#                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                            ^^ source.hydra
 >
 >## An outgoing link of a type node: an inline subtype, a type reference, or a non-type attribute
 #^^ source.hydra comment.block.documentation.hydra
@@ -1298,15 +1294,15 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `type`: model.Type,
+>  `type`: Type,
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >  ## The outgoing links of the node
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1338,13 +1334,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  root: model.Name,
+>  root: Name,
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >  ## The subtype path from the root
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1443,13 +1439,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  variable: model.Name,
+>  variable: Name,
 #^^ source.hydra
 #  ^^^^^^^^ source.hydra variable.other.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                      ^^ source.hydra
+#            ^^^^ source.hydra variable.other.hydra
+#                ^^ source.hydra
 >  ## The id of the node at the binding forall
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

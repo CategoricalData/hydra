@@ -6,14 +6,10 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.time as time
+>import hydra.core.time
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                      ^ source.hydra
-#                       ^^ source.hydra keyword.control.import.hydra
-#                         ^ source.hydra
-#                          ^^^^ source.hydra entity.name.namespace.hydra
 >
 >## A file extension (without the dot), e.g. "json" or "py"
 #^^ source.hydra comment.block.documentation.hydra
@@ -83,41 +79,41 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  modificationTime: time.Timespec,
+>  modificationTime: Timespec,
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                  ^ source.hydra punctuation.separator.type.hydra
 #                   ^ source.hydra
-#                    ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                 ^^ source.hydra
+#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                            ^^ source.hydra
 >  ## st_atim / the time of last data access, if available. Optional, as it is unreliable or untracked on some filesystems and platforms (e.g. noatime mounts)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  accessTime: optional<time.Timespec>,
+>  accessTime: optional<Timespec>,
 #^^ source.hydra
 #  ^^^^^^^^^^ source.hydra variable.other.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^^^^^ source.hydra support.type.hydra
 #                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                       ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                     ^^ source.hydra
+#                       ^^^^^^^^ source.hydra variable.other.hydra
+#                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                ^^ source.hydra
 >  ## st_ctim / the time of last file status change, if available. Optional, as this POSIX-specific notion does not map onto all platforms
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  statusChangeTime: optional<time.Timespec>}
+>  statusChangeTime: optional<Timespec>}
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                  ^ source.hydra punctuation.separator.type.hydra
 #                   ^ source.hydra
 #                    ^^^^^^^^ source.hydra support.type.hydra
 #                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                             ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                           ^^ source.hydra
+#                             ^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                      ^^ source.hydra
 >
 >## An enumeration of POSIX file types, following the file type macros of <sys/stat.h>
 #^^ source.hydra comment.block.documentation.hydra

@@ -1,33 +1,43 @@
 ## String representations of hydra.core.docs types
 module hydra.core.print.docs
 
-import hydra.core.docs as docs
-import hydra.core.lib.lists as lists
+import hydra.core.docs
+import hydra.core.lib.lists
 import hydra.core.lib.strings as strings
-import hydra.core.model as model
-import hydra.core.packaging as packaging
-import hydra.core.parse.docs as parse.docs
+import hydra.core.model
+import hydra.core.packaging
+import hydra.core.parse.docs
 
 ## Render a DefinitionReference as its fully-qualified name
-term definitionReference = cases(packaging.DefinitionReference){`primitive`=λn.model.Name[] n, `term`=λn.model.Name[] n, `type`=λn.model.Name[] n}
+term definitionReference =
+  cases(DefinitionReference){`primitive`=λn.Name[] n, `term`=λn.Name[] n, `type`=λn.Name[] n}
 
 ## Render a single DocSegment back to its source string form
 term docSegment = λseg.docSegmentWith entityReference seg
 
 ## Render a single DocSegment using a custom {@type hydra.core.packaging.EntityReference} renderer
-term docSegmentWith = λrender.cases(docs.DocSegment){ref=λr.render r, text=λs.s}
+term docSegmentWith = λrender.cases(DocSegment){ref=λr.render r, text=λs.s}
 
 ## Render a list of DocSegments back to a plain documentation string
-term docSegments = λsegs.strings.concat (lists.map docSegment segs)
+term docSegments = λsegs.strings.concat (`map` docSegment segs)
 
 ## Render a list of DocSegments using a custom {@type hydra.core.packaging.EntityReference} renderer
-term docSegmentsWith = λrender,segs.strings.concat (lists.map (docSegmentWith render) segs)
+term docSegmentsWith = λrender,segs.strings.concat (`map` (docSegmentWith render) segs)
 
 ## Render a {@type hydra.core.packaging.EntityReference} as its doc-escape tag string (without the surrounding braces)
-term entityReference = cases(packaging.EntityReference){definition=λd.strings.concat2 (cases(packaging.DefinitionReference){`primitive`=λ`_`."primitive", `term`=λ`_`."term", `type`=λ`_`."type"} d) (strings.concat2 " " (definitionReference d)), `module`=λm.strings.concat2 "module " (packaging.ModuleName[] m), package=λp.strings.concat2 "package " (packaging.PackageName[] p), termExpr=λs.strings.concat2 "term-expr " s, typeExpr=λs.strings.concat2 "type-expr " s}
+term entityReference =
+  cases(EntityReference){
+    definition=λd.strings.concat2
+          (cases(DefinitionReference){`primitive`=λ`_`."primitive", `term`=λ`_`."term", `type`=λ`_`."type"}
+            d)
+          (strings.concat2 " " (definitionReference d)),
+    `module`=λm.strings.concat2 "module " (ModuleName[] m),
+    package=λp.strings.concat2 "package " (PackageName[] p),
+    termExpr=λs.strings.concat2 "term-expr " s,
+    typeExpr=λs.strings.concat2 "type-expr " s}
 
 ## Parse a documentation string and re-render it, converting doc-escape tags through their canonical form
 term renderDocString = λs.renderDocStringWith entityReference s
 
 ## Parse a documentation string and render it using a custom {@type hydra.core.packaging.EntityReference} renderer. Text segments are passed through; ref segments are rendered by the provided function. Unrecognized doc-escape blocks are passed through as text.
-term renderDocStringWith = λrender,s.docSegmentsWith render (parse.docs.parseDocString s)
+term renderDocStringWith = λrender,s.docSegmentsWith render (parseDocString s)

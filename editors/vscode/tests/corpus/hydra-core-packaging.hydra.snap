@@ -6,22 +6,14 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.model as model
+>import hydra.core.model
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                       ^ source.hydra
-#                        ^^ source.hydra keyword.control.import.hydra
-#                          ^ source.hydra
-#                           ^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.typing as typing
+>import hydra.core.typing
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                        ^ source.hydra
-#                         ^^ source.hydra keyword.control.import.hydra
-#                           ^ source.hydra
-#                            ^^^^^^ source.hydra entity.name.namespace.hydra
 >
 >## A definition, which may be either a term, type, or primitive definition
 #^^ source.hydra comment.block.documentation.hydra
@@ -91,41 +83,41 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `primitive`: model.Name,
+>  `primitive`: Name,
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^^^^^^ source.hydra variable.other.escaped.hydra
 #            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                         ^^ source.hydra
+#               ^^^^ source.hydra variable.other.hydra
+#                   ^^ source.hydra
 >  ## A reference to a term definition, by name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `term`: model.Name,
+>  `term`: Name,
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >  ## A reference to a type definition, by name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  `type`: model.Name}
+>  `type`: Name}
 #^^ source.hydra
 #  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #   ^^^^ source.hydra variable.other.escaped.hydra
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                    ^^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >
 >## The scope in which a package dependency is required. Relevant mainly to dependencies on third-party (non-Hydra) artifacts, where build systems distinguish compile-time, runtime, test-only, and build-tool-only dependencies. Hydra inter-package dependencies normally leave the scope unspecified.
 #^^ source.hydra comment.block.documentation.hydra
@@ -645,13 +637,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  name: model.Name,
+>  name: Name,
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >  ## Optional documentation and lifecycle metadata for the primitive.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -670,13 +662,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  signature: typing.TermSignature,
+>  signature: TermSignature,
 #^^ source.hydra
 #  ^^^^^^^^^ source.hydra variable.other.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                 ^^ source.hydra
+#             ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                          ^^ source.hydra
 >  ## Whether the primitive is pure (referentially transparent, no observable side effects). Normally true.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -703,16 +695,16 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  defaultImplementation: optional<model.Term>}
+>  defaultImplementation: optional<Term>}
 #^^ source.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
 #                         ^^^^^^^^ source.hydra support.type.hydra
 #                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                  ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                             ^^ source.hydra
+#                                  ^^^^ source.hydra variable.other.hydra
+#                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                       ^^ source.hydra
 >
 >## A named normative statement concerning an entity: a single falsifiable condition a conforming implementation is measured against. Tests reference provisions by name.
 #^^ source.hydra comment.block.documentation.hydra
@@ -730,13 +722,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  name: model.Name,
+>  name: Name,
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >  ## Whether this provision is a requirement or a recommendation.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -811,13 +803,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  name: model.Name,
+>  name: Name,
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >  ## Optional documentation and lifecycle metadata for the term definition
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -836,27 +828,27 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  signature: optional<typing.TermSignature>,
+>  signature: optional<TermSignature>,
 #^^ source.hydra
 #  ^^^^^^^^^ source.hydra variable.other.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
 #             ^^^^^^^^ source.hydra support.type.hydra
 #                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                      ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                           ^^ source.hydra
+#                      ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                    ^^ source.hydra
 >  ## The term being defined
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  body: model.Term}
+>  body: Term}
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >
 >## A type-level definition, including a name and the type scheme
 #^^ source.hydra comment.block.documentation.hydra
@@ -874,13 +866,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  name: model.Name,
+>  name: Name,
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                  ^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
 >  ## Optional documentation and lifecycle metadata for the type definition
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -899,13 +891,13 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  body: model.TypeScheme}
+>  body: TypeScheme}
 #^^ source.hydra
 #  ^^^^ source.hydra variable.other.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                        ^^ source.hydra
+#        ^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^ source.hydra
 >
 >## A version string, e.g. "0.15" or "1.0.0".
 #^^ source.hydra comment.block.documentation.hydra

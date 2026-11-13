@@ -1,86 +1,200 @@
 ## JSON parser using Hydra parser combinators
 module hydra.core.json.parser
 
-import hydra.core.json.model as model
-import hydra.core.lib.equality as equality
-import hydra.core.lib.functions as functions
-import hydra.core.lib.lists as lists
-import hydra.core.lib.literals as literals
-import hydra.core.lib.logic as logic
-import hydra.core.lib.math as math
-import hydra.core.lib.optionals as optionals
-import hydra.core.lib.ordering as ordering
+import hydra.core.json.model
+import hydra.core.lib.equality
+import hydra.core.lib.functions
+import hydra.core.lib.lists
+import hydra.core.lib.literals
+import hydra.core.lib.logic
+import hydra.core.lib.math
+import hydra.core.lib.optionals
+import hydra.core.lib.ordering
 import hydra.core.lib.strings as strings
 import hydra.core.parsers as parsers
 
 ## Parse a single digit (0-9)
-term digit = parsers.satisfy (λc.logic.and (ordering.gte c 48:int32) (ordering.lte c 57:int32))
+term digit = parsers.satisfy (λc.and (gte c 48:int32) (lte c 57:int32))
 
 ## Parse one or more digits as a string
 term digits = parsers.map strings.fromList (parsers.some digit)
 
 ## Parse a JSON array
-term jsonArray = parsers.map (λx.model.Value{array = x}) (parsers.between (token (parsers.char 91:int32)) (token (parsers.char 93:int32)) (parsers.sepBy (parsers.lazy (λ`_`.jsonValue)) (token (parsers.char 44:int32))))
+term jsonArray =
+  parsers.map
+    (λx.Value{array = x})
+    (parsers.between
+      (token (parsers.char 91:int32))
+      (token (parsers.char 93:int32))
+      (parsers.sepBy (parsers.lazy (λ`_`.jsonValue)) (token (parsers.char 44:int32))))
 
 ## Parse JSON boolean (true or false)
-term jsonBool = parsers.alt (parsers.map (λ`_`.model.Value{`boolean` = true}) (token (parsers.string "true"))) (parsers.map (λ`_`.model.Value{`boolean` = false}) (token (parsers.string "false")))
+term jsonBool =
+  parsers.alt
+    (parsers.map (λ`_`.Value{`boolean` = true}) (token (parsers.string "true")))
+    (parsers.map (λ`_`.Value{`boolean` = false}) (token (parsers.string "false")))
 
 ## Parse a JSON escape sequence after the backslash
-term jsonEscapeChar = parsers.choice [parsers.map (λ`_`.34:int32) (parsers.char 34:int32), parsers.map (λ`_`.92:int32) (parsers.char 92:int32), parsers.map (λ`_`.47:int32) (parsers.char 47:int32), parsers.map (λ`_`.8:int32) (parsers.char 98:int32), parsers.map (λ`_`.12:int32) (parsers.char 102:int32), parsers.map (λ`_`.10:int32) (parsers.char 110:int32), parsers.map (λ`_`.13:int32) (parsers.char 114:int32), parsers.map (λ`_`.9:int32) (parsers.char 116:int32), parsers.bind (parsers.char 117:int32) (λ`_`.jsonHex4)]
+term jsonEscapeChar =
+  parsers.choice
+    [
+      parsers.map (λ`_`.34:int32) (parsers.char 34:int32),
+      parsers.map (λ`_`.92:int32) (parsers.char 92:int32),
+      parsers.map (λ`_`.47:int32) (parsers.char 47:int32),
+      parsers.map (λ`_`.8:int32) (parsers.char 98:int32),
+      parsers.map (λ`_`.12:int32) (parsers.char 102:int32),
+      parsers.map (λ`_`.10:int32) (parsers.char 110:int32),
+      parsers.map (λ`_`.13:int32) (parsers.char 114:int32),
+      parsers.map (λ`_`.9:int32) (parsers.char 116:int32),
+      parsers.bind (parsers.char 117:int32) (λ`_`.jsonHex4)]
 
 ## Parse a JSON escape sequence after the backslash, combining surrogate pairs
-term jsonEscapedChar = parsers.bind (parsers.char 92:int32) (λ`_`.parsers.bind jsonEscapeChar (λu1.logic.ifElse (jsonIsHighSurrogate u1) (parsers.bind (parsers.char 92:int32) (λ`_`.parsers.bind (parsers.char 117:int32) (λ`_`.parsers.bind jsonHex4 (λu2.logic.ifElse (jsonIsLowSurrogate u2) (parsers.pure (math.add 65536:int32 (math.add (math.mul (math.sub u1 55296:int32) 1024:int32) (math.sub u2 56320:int32)))) (parsers.fail "invalid low surrogate in escaped surrogate pair"))))) (logic.ifElse (jsonIsLowSurrogate u1) (parsers.fail "lone low surrogate in escape sequence") (parsers.pure u1))))
+term jsonEscapedChar =
+  parsers.bind
+    (parsers.char 92:int32)
+    (λ`_`.parsers.bind
+        jsonEscapeChar
+        (λu1.ifElse
+            (jsonIsHighSurrogate u1)
+            (parsers.bind
+              (parsers.char 92:int32)
+              (λ`_`.parsers.bind
+                  (parsers.char 117:int32)
+                  (λ`_`.parsers.bind
+                      jsonHex4
+                      (λu2.ifElse
+                          (jsonIsLowSurrogate u2)
+                          (parsers.pure (add 65536:int32 (add (mul (sub u1 55296:int32) 1024:int32) (sub u2 56320:int32))))
+                          (parsers.fail "invalid low surrogate in escaped surrogate pair")))))
+            (ifElse (jsonIsLowSurrogate u1) (parsers.fail "lone low surrogate in escape sequence") (parsers.pure u1))))
 
 ## Parse the optional exponent part of a JSON number
-term jsonExponentPart = parsers.optional (parsers.bind (parsers.satisfy (λc.logic.or (equality.equal c 101:int32) (equality.equal c 69:int32))) (λ`_`.parsers.bind (parsers.optional (parsers.satisfy (λc.logic.or (equality.equal c 43:int32) (equality.equal c 45:int32)))) (λsign.parsers.map (λdigits.strings.concat2 (strings.concat2 "e" (optionals.match sign "" (λ`arg_`.strings.fromList (lists.singleton `arg_`)))) digits) digits)))
+term jsonExponentPart =
+  parsers.optional
+    (parsers.bind
+      (parsers.satisfy (λc.or (equal c 101:int32) (equal c 69:int32)))
+      (λ`_`.parsers.bind
+          (parsers.optional (parsers.satisfy (λc.or (equal c 43:int32) (equal c 45:int32))))
+          (λsign.parsers.map
+              (λdigits.strings.concat2
+                  (strings.concat2 "e" (match sign "" (λ`arg_`.strings.fromList (singleton `arg_`))))
+                  digits)
+              digits)))
 
 ## Parse the optional fractional part of a JSON number
-term jsonFractionPart = parsers.optional (parsers.bind (parsers.char 46:int32) (λ`_`.parsers.map (λd.strings.concat2 "." d) digits))
+term jsonFractionPart =
+  parsers.optional (parsers.bind (parsers.char 46:int32) (λ`_`.parsers.map (λd.strings.concat2 "." d) digits))
 
 ## Parse exactly four hex digits as a 16-bit code unit
-term jsonHex4 = parsers.bind jsonHexDigit (λd1.parsers.bind jsonHexDigit (λd2.parsers.bind jsonHexDigit (λd3.parsers.bind jsonHexDigit (λd4.parsers.pure (math.add (math.mul d1 4096:int32) (math.add (math.mul d2 256:int32) (math.add (math.mul d3 16:int32) d4)))))))
+term jsonHex4 =
+  parsers.bind
+    jsonHexDigit
+    (λd1.parsers.bind
+        jsonHexDigit
+        (λd2.parsers.bind
+            jsonHexDigit
+            (λd3.parsers.bind
+                jsonHexDigit
+                (λd4.parsers.pure (add (mul d1 4096:int32) (add (mul d2 256:int32) (add (mul d3 16:int32) d4)))))))
 
 ## Parse a single hex digit character, yielding its numeric value (0-15)
-term jsonHexDigit = parsers.bind parsers.anyChar (λc.optionals.match (jsonHexDigitValue c) (parsers.fail "expected a hex digit") (λv.parsers.pure v))
+term jsonHexDigit =
+  parsers.bind
+    parsers.anyChar
+    (λc.match (jsonHexDigitValue c) (parsers.fail "expected a hex digit") (λv.parsers.pure v))
 
 ## Compute the numeric value of a hex digit character code (0-15), or Nothing if not a hex digit
-term jsonHexDigitValue = λc.logic.ifElse (logic.and (ordering.gte c 48:int32) (ordering.lte c 57:int32)) given(math.sub c 48:int32) (logic.ifElse (logic.and (ordering.gte c 97:int32) (ordering.lte c 102:int32)) given(math.add 10:int32 (math.sub c 97:int32)) (logic.ifElse (logic.and (ordering.gte c 65:int32) (ordering.lte c 70:int32)) given(math.add 10:int32 (math.sub c 65:int32)) none))
+term jsonHexDigitValue =
+  λc.ifElse
+      (and (gte c 48:int32) (lte c 57:int32))
+      given(sub c 48:int32)
+      (ifElse
+        (and (gte c 97:int32) (lte c 102:int32))
+        given(add 10:int32 (sub c 97:int32))
+        (ifElse (and (gte c 65:int32) (lte c 70:int32)) given(add 10:int32 (sub c 65:int32)) none))
 
 ## Parse the integer part of a JSON number (optional minus, then digits)
-term jsonIntegerPart = parsers.bind (parsers.optional (parsers.char 45:int32)) (λsign.parsers.bind digits (λdigits.parsers.pure (optionals.match sign digits (λ`_`.strings.concat2 "-" digits))))
+term jsonIntegerPart =
+  parsers.bind
+    (parsers.optional (parsers.char 45:int32))
+    (λsign.parsers.bind digits (λdigits.parsers.pure (match sign digits (λ`_`.strings.concat2 "-" digits))))
 
 ## Check whether a code unit is a UTF-16 high surrogate (0xD800-0xDBFF)
-term jsonIsHighSurrogate = λc.logic.and (ordering.gte c 55296:int32) (ordering.lte c 56319:int32)
+term jsonIsHighSurrogate = λc.and (gte c 55296:int32) (lte c 56319:int32)
 
 ## Check whether a code unit is a UTF-16 low surrogate (0xDC00-0xDFFF)
-term jsonIsLowSurrogate = λc.logic.and (ordering.gte c 56320:int32) (ordering.lte c 57343:int32)
+term jsonIsLowSurrogate = λc.and (gte c 56320:int32) (lte c 57343:int32)
 
 ## Parse a JSON object key-value pair
-term jsonKeyValue = parsers.bind (token (parsers.bind (parsers.char 34:int32) (λ`_`.parsers.bind (parsers.many jsonStringChar) (λchars.parsers.bind (parsers.char 34:int32) (λ`_`.parsers.pure (strings.fromList chars)))))) (λkey.parsers.bind (token (parsers.char 58:int32)) (λ`_`.parsers.map (λv.(key, v)) (parsers.lazy (λ`_`.jsonValue))))
+term jsonKeyValue =
+  parsers.bind
+    (token
+      (parsers.bind
+        (parsers.char 34:int32)
+        (λ`_`.parsers.bind
+            (parsers.many jsonStringChar)
+            (λchars.parsers.bind (parsers.char 34:int32) (λ`_`.parsers.pure (strings.fromList chars))))))
+    (λkey.parsers.bind (token (parsers.char 58:int32)) (λ`_`.parsers.map (λv.(key, v)) (parsers.lazy (λ`_`.jsonValue))))
 
 ## Parse JSON null value
-term jsonNull = parsers.map (λ`_`.model.Value{null}) (token (parsers.string "null"))
+term jsonNull = parsers.map (λ`_`.Value{null}) (token (parsers.string "null"))
 
 ## Parse a JSON number (integer, decimal, or scientific notation)
-term jsonNumber = token (parsers.bind jsonIntegerPart (λintPart.parsers.bind jsonFractionPart (λfracPart.parsers.bind jsonExponentPart (λexpPart.let numStr := strings.concat2 (strings.concat2 intPart (optionals.match fracPart "" functions.identity)) (optionals.match expPart "" functions.identity) in parsers.pure model.Value{number = optionals.match (literals.parseDecimal numStr) 0 functions.identity}))))
+term jsonNumber =
+  token
+    (parsers.bind
+      jsonIntegerPart
+      (λintPart.parsers.bind
+          jsonFractionPart
+          (λfracPart.parsers.bind
+              jsonExponentPart
+              (λexpPart.
+                let numStr := strings.concat2
+                    (strings.concat2 intPart (match fracPart "" identity))
+                    (match expPart "" identity)
+                in parsers.pure Value{number = match (parseDecimal numStr) 0 identity}))))
 
 ## Parse a JSON object
-term jsonObject = parsers.map (λx.model.Value{object = x}) (parsers.between (token (parsers.char 123:int32)) (token (parsers.char 125:int32)) (parsers.sepBy jsonKeyValue (token (parsers.char 44:int32))))
+term jsonObject =
+  parsers.map
+    (λx.Value{object = x})
+    (parsers.between
+      (token (parsers.char 123:int32))
+      (token (parsers.char 125:int32))
+      (parsers.sepBy jsonKeyValue (token (parsers.char 44:int32))))
 
 ## Parse a JSON string value
-term jsonString = token (parsers.bind (parsers.char 34:int32) (λ`_`.parsers.bind (parsers.many jsonStringChar) (λchars.parsers.bind (parsers.char 34:int32) (λ`_`.parsers.pure model.Value{`string` = strings.fromList chars}))))
+term jsonString =
+  token
+    (parsers.bind
+      (parsers.char 34:int32)
+      (λ`_`.parsers.bind
+          (parsers.many jsonStringChar)
+          (λchars.parsers.bind (parsers.char 34:int32) (λ`_`.parsers.pure Value{`string` = strings.fromList chars}))))
 
 ## Parse a single character in a JSON string (handling escapes)
-term jsonStringChar = parsers.alt jsonEscapedChar (parsers.satisfy (λc.logic.and (logic.not (equality.equal c 34:int32)) (logic.not (equality.equal c 92:int32))))
+term jsonStringChar =
+  parsers.alt jsonEscapedChar (parsers.satisfy (λc.and (not (equal c 34:int32)) (not (equal c 92:int32))))
 
 ## Parse any JSON value
 term jsonValue = parsers.choice [jsonNull, jsonBool, jsonNumber, jsonString, jsonArray, jsonObject]
 
 ## Parse a JSON document from a string
-term parseJson = λinput.parsers.runParser (parsers.bind whitespace (λ`_`.parsers.bind jsonValue (λv.parsers.bind whitespace (λ`_`.parsers.bind parsers.eof (λ`_`.parsers.pure v))))) input
+term parseJson =
+  λinput.parsers.runParser
+      (parsers.bind
+        whitespace
+        (λ`_`.parsers.bind
+            jsonValue
+            (λv.parsers.bind whitespace (λ`_`.parsers.bind parsers.eof (λ`_`.parsers.pure v)))))
+      input
 
 ## Parse a token followed by optional whitespace
 term token = λp.parsers.bind p (λx.parsers.bind whitespace (λ`_`.parsers.pure x))
 
 ## Parse zero or more JSON whitespace characters (space, tab, newline, carriage return)
-term whitespace = parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.lists.foldl logic.or false [equality.equal c 32:int32, equality.equal c 9:int32, equality.equal c 10:int32, equality.equal c 13:int32])))
+term whitespace =
+  parsers.map
+    (λ`_`.unit)
+    (parsers.many
+      (parsers.satisfy (λc.foldl or false [equal c 32:int32, equal c 9:int32, equal c 10:int32, equal c 13:int32])))

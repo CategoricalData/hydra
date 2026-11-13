@@ -1,8 +1,6 @@
 ## A generic, domain-agnostic framework for diffs, patches, and migrations over any 'type'/'value' grammar (hydra.core.model.Type/Term, property-graph types, RDF shapes, ...). Fully parameterized: no Type/Term/Name/step type is hardcoded. Type parameters: a = the thing being edited (a type or a value); t = a 'type' type; v = a value/instance type; s = a step into a value; n = a name/key. Fill and Migrator hold host functions and are runtime-only (not serialized).
 module hydra.core.diff
 
-
-
 ## A base-relative edit (delta) transforming a value into a new value. Applied forward against a base; a symmetric before/after 'diff' is derived from (base, Edit), not stored here. Canonical by construction: descend carries single-step StepEdits, so there is exactly one encoding of any change.
 type Edit = forall a, s. union{
   ## Leave this position unchanged

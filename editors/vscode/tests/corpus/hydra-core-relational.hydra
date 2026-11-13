@@ -1,8 +1,6 @@
 ## An interpretation of Codd's Relational Model, as described in 'A Relational Model of Data for Large Shared Data Banks' (1970). Types ('domains') and values are parameterized so as to allow for application-specific implementations. No special support is provided for 'nonsimple' domains; i.e. relations are assumed to be normalized.
 module hydra.core.relational
 
-
-
 ## A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd
 type ColumnName = wrap(string)
 
@@ -17,7 +15,9 @@ type ColumnSchema = forall t. record{
 type ForeignKey = record{
   ## The name of the target relation
   foreignRelation: RelationName,
-  keys: map<ColumnName, ColumnName>@{description="The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation.", minLength=1:int32}}
+  keys: map<ColumnName, ColumnName>@{
+    description="The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation.",
+    minLength=1:int32}}
 
 ## A primary key of a relation, specified either as a single column, or as a list of columns
 type PrimaryKey = wrap(list<ColumnName>@{minLength=1:int32})

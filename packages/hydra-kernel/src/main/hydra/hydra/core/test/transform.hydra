@@ -1,0 +1,110 @@
+## Transform test cases for code generation, filtering to tests that can be compiled to target languages
+module hydra.core.test.transform
+
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.lists as lists
+import hydra.core.lib.logic
+import hydra.core.lib.optionals
+import hydra.core.lib.pairs
+import hydra.core.lib.strings as strings
+import hydra.core.model
+import hydra.core.packaging
+import hydra.core.testing
+import hydra.core.util
+
+## Add generation namespace prefix
+term addGenerationPrefix = λ`ns_`.ModuleName{strings.concat2 "generation." (ModuleName[] `ns_`)}
+
+## Build a Term representing a convertCase function call
+term buildConvertCaseCall =
+  λfromConv,toConv,`input_`.Term{
+      application = Application{
+        function = Term{
+          application = Application{
+            function = Term{
+              application = Application{
+                function = Term{
+                  variable = Name{"hydra.core.formatting.convertCase"}},
+                argument = encodeCaseConvention fromConv}},
+            argument = encodeCaseConvention toConv}},
+        argument = Term{literal = Literal{`string` = `input_`}}}}
+
+## Build a Term representing a topologicalSort function call
+term buildTopologicalSortCall =
+  λadjList.Term{
+      application = Application{
+        function = Term{variable = Name{"hydra.core.sorting.topologicalSort"}},
+        argument = encodeAdjacencyList adjList}}
+
+## Build a Term representing a topologicalSortComponents function call
+term buildTopologicalSortSCCCall =
+  λadjList.Term{
+      application = Application{
+        function = Term{
+          variable = Name{"hydra.core.sorting.topologicalSortComponents"}},
+        argument = encodeAdjacencyList adjList}}
+
+## Collect all test cases from a test group (flattening hierarchy)
+term collectTestCases =
+  λtg.lists.concat2
+      (TestGroup[`cases`] tg)
+      (lists.concat (lists.map (λsg.collectTestCases sg) (TestGroup[subgroups] tg)))
+
+## Encode an adjacency list as a Term
+term encodeAdjacencyList =
+  λpairs.Term{
+      `list` = lists.map
+          (λp.Term{pair = (encodeInt (first p), Term{`list` = lists.map (λd.encodeInt d) (second p)})})
+          pairs}
+
+## Encode CaseConvention as a Term (unit variant)
+term encodeCaseConvention =
+  λconv.Term{
+      `inject` = Injection{
+        typeName = Name{"hydra.core.util.CaseConvention"},
+        field = Field{
+          name = cases(CaseConvention){
+              lowerSnake=λ`_`.Name{"lowerSnake"},
+              upperSnake=λ`_`.Name{"upperSnake"},
+              camel=λ`_`.Name{"camel"},
+              pascal=λ`_`.Name{"pascal"},
+              upperDashed=λ`_`.Name{"upperDashed"}}
+              conv,
+          `term` = Term{`unit`}}}}
+
+## Encode Either [[Int]] [Int] as a Term
+term encodeEitherListList =
+  λe.Term{`either` = eithers.bimap (λcycles.encodeListList cycles) (λsorted.encodeIntList sorted) e}
+
+## Encode an Int as a Term
+term encodeInt = λn.Term{literal = Literal{integer = IntegerValue{`int32` = n}}}
+
+## Encode [Int] as a Term
+term encodeIntList = λints.Term{`list` = lists.map (λn.encodeInt n) ints}
+
+## Encode [[Int]] as a Term
+term encodeListList = λlists.Term{`list` = lists.map (λl.encodeIntList l) lists}
+
+## Transform module with generation namespace
+term transformModule =
+  λm.Module{
+      name = addGenerationPrefix (Module[name] m),
+      metadata = Module[metadata] m,
+      dependencies = Module[dependencies] m,
+      definitions = Module[definitions] m}
+
+## Pass through test cases unchanged
+term transformTestCase = λtcm.given(tcm)
+
+## Transform test group hierarchy to only include delegated evaluation tests
+term transformToCompiledTests =
+  λtg.
+    let `name_` := TestGroup[name] tg, desc := TestGroup[description] tg, subgroups := TestGroup[subgroups] tg, `cases_` := TestGroup[`cases`] tg, transformedCases := givens (lists.map (λtc.transformTestCase tc) `cases_`), transformedSubgroups := givens (lists.map (λsg.transformToCompiledTests sg) subgroups)
+    in ifElse
+      (and (lists.isEmpty transformedCases) (lists.isEmpty transformedSubgroups))
+      none
+      given(TestGroup{
+        name = `name_`,
+        description = desc,
+        subgroups = transformedSubgroups,
+        `cases` = transformedCases})

@@ -5,8 +5,6 @@
 ## The bare foldl and foldr are the plain, non-monadic folds.
 module hydra.core.lib.lists
 
-
-
 ## Apply a list of functions to a list of values (applicative style).
 ##
 ## apply(fs, xs) returns the list of all f x for f in fs and x in xs, in order: for each f in fs (outer loop), for each x in xs (inner loop).
@@ -282,7 +280,9 @@ primitive mapOptional : ∀x,y.(x → list<y>) → optional<x> → list<optional
 ## Requires 'ordering' constraints on both element types (the set type contract).
 ##
 ## @availableSince 0.17.6
-primitive mapSet : ∀x,y.(ordering x, ordering y) ⇒ (x → list<y>) → set<x> → list<set<y>> = λf,s.`map` (λys.hydra.core.lib.sets.fromList ys) (foldr (λx,acc.bind (f x) (λy.bind acc (λys.[cons y ys]))) [[]] (hydra.core.lib.sets.toList s))
+primitive mapSet : ∀x,y.(ordering x, ordering y) ⇒ (x → list<y>) → set<x> → list<set<y>> = λf,s.`map`
+    (λys.hydra.core.lib.sets.fromList ys)
+    (foldr (λx,acc.bind (f x) (λy.bind acc (λys.[cons y ys]))) [[]] (hydra.core.lib.sets.toList s))
 
 ## Test whether an element is in a list.
 ##
@@ -304,7 +304,13 @@ primitive member : ∀x.(equality x) ⇒ x → list<x> → boolean
 ## @availableSince 0.15
 ## @requirement splitsBySatisfaction: partition returns a pair of (elements satisfying the predicate, elements not satisfying it), each sublist preserving the original relative order of its members.
 ## @requirement boundaryCases: partition degrades correctly at the boundaries: a predicate matching every element yields (whole list, empty); matching none yields (empty, whole list); an empty input list yields (empty, empty).
-primitive partition : ∀x.(x → boolean) → list<x> → (list<x>, list<x>) = λp,xs.foldr (λx,acc.hydra.core.lib.logic.ifElse (p x) (cons x (hydra.core.lib.pairs.first acc), hydra.core.lib.pairs.second acc) (hydra.core.lib.pairs.first acc, cons x (hydra.core.lib.pairs.second acc))) ([], []) xs
+primitive partition : ∀x.(x → boolean) → list<x> → (list<x>, list<x>) = λp,xs.foldr
+    (λx,acc.hydra.core.lib.logic.ifElse
+        (p x)
+        (cons x (hydra.core.lib.pairs.first acc), hydra.core.lib.pairs.second acc)
+        (hydra.core.lib.pairs.first acc, cons x (hydra.core.lib.pairs.second acc)))
+    ([], [])
+    xs
 
 ## Build a list of n copies of a value.
 ##
@@ -363,7 +369,13 @@ primitive sortBy : ∀x,y.(ordering y) ⇒ (x → y) → list<x> → list<x>
 ##
 ## @availableSince 0.15
 ## @requirement splitsAtFirstNonMatch: span returns a pair of (longest prefix for which the predicate holds, the remaining suffix), degrading correctly when the predicate matches every element (whole list, empty), no elements (empty, whole list), or the input is empty (empty, empty).
-primitive span : ∀x.(x → boolean) → list<x> → (list<x>, list<x>) = λp,xs.foldl (λacc,x.hydra.core.lib.logic.ifElse (hydra.core.lib.logic.and (isEmpty (hydra.core.lib.pairs.second acc)) (p x)) (concat2 (hydra.core.lib.pairs.first acc) [x], hydra.core.lib.pairs.second acc) (hydra.core.lib.pairs.first acc, concat2 (hydra.core.lib.pairs.second acc) [x])) ([], []) xs
+primitive span : ∀x.(x → boolean) → list<x> → (list<x>, list<x>) = λp,xs.foldl
+    (λacc,x.hydra.core.lib.logic.ifElse
+        (hydra.core.lib.logic.and (isEmpty (hydra.core.lib.pairs.second acc)) (p x))
+        (concat2 (hydra.core.lib.pairs.first acc) [x], hydra.core.lib.pairs.second acc)
+        (hydra.core.lib.pairs.first acc, concat2 (hydra.core.lib.pairs.second acc) [x]))
+    ([], [])
+    xs
 
 ## Return all elements except the first, or Nothing if the list is empty.
 ##

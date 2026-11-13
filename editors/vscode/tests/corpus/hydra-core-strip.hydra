@@ -1,42 +1,125 @@
 ## Annotation and type stripping and normalization
 module hydra.core.strip
 
-import hydra.core.lib.lists as lists
-import hydra.core.model as model
-import hydra.core.rewriting as rewriting
+import hydra.core.lib.lists
+import hydra.core.model
+import hydra.core.rewriting
 
 ## Strip type annotations from the top levels of a term
-term deannotateAndDetypeTerm = λt.cases(model.Term){annotated=λat.deannotateAndDetypeTerm (model.AnnotatedTerm[body] at), typeApplication=λtt.deannotateAndDetypeTerm (model.TypeApplicationTerm[body] tt), typeLambda=λta.deannotateAndDetypeTerm (model.TypeLambda[body] ta), `_`=t} t
+term deannotateAndDetypeTerm =
+  λt.cases(Term){
+      annotated=λat.deannotateAndDetypeTerm (AnnotatedTerm[body] at),
+      typeApplication=λtt.deannotateAndDetypeTerm (TypeApplicationTerm[body] tt),
+      typeLambda=λta.deannotateAndDetypeTerm (TypeLambda[body] ta),
+      `_`=t}
+      t
 
 ## Strip all annotations (including System F type annotations) from the top levels of a term
-term deannotateTerm = λt.cases(model.Term){annotated=λat.deannotateTerm (model.AnnotatedTerm[body] at), `_`=t} t
+term deannotateTerm = λt.cases(Term){annotated=λat.deannotateTerm (AnnotatedTerm[body] at), `_`=t} t
 
 ## Strip all annotations from a term
-term deannotateType = λt.cases(model.Type){annotated=λ`arg_`.deannotateType (model.AnnotatedType[body] `arg_`), `_`=t} t
+term deannotateType = λt.cases(Type){annotated=λ`arg_`.deannotateType (AnnotatedType[body] `arg_`), `_`=t} t
 
 ## Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
-term deannotateTypeParameters = λt.cases(model.Type){`forall`=λlt.deannotateTypeParameters (model.ForallType[body] lt), `_`=t} (deannotateType t)
+term deannotateTypeParameters =
+  λt.cases(Type){`forall`=λlt.deannotateTypeParameters (ForallType[body] lt), `_`=t} (deannotateType t)
 
 ## Recursively strip all annotations from a type
-term deannotateTypeRecursive = λtyp.let strip := λrecurse,typ.let rewritten := recurse typ in cases(model.Type){annotated=λat.model.AnnotatedType[body] at, `_`=rewritten} rewritten in rewriting.rewriteType strip typ
+term deannotateTypeRecursive =
+  λtyp.
+    let strip := λrecurse,typ.
+        let rewritten := recurse typ
+        in cases(Type){annotated=λat.AnnotatedType[body] at, `_`=rewritten} rewritten
+    in rewriteType strip typ
 
 ## Recursively strip all annotations from a type scheme
-term deannotateTypeSchemeRecursive = λts.let vars := model.TypeScheme[variables] ts in let typ := model.TypeScheme[body] ts in let constraints := model.TypeScheme[constraints] ts in model.TypeScheme{variables = vars, body = deannotateTypeRecursive typ, constraints = constraints}
+term deannotateTypeSchemeRecursive =
+  λts.
+    let vars := TypeScheme[variables] ts in
+    let typ := TypeScheme[body] ts in
+    let constraints := TypeScheme[constraints] ts in
+    TypeScheme{variables = vars, body = deannotateTypeRecursive typ, constraints = constraints}
 
 ## Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact
-term detypeTerm = λt.cases(model.Term){annotated=λat.let subj := model.AnnotatedTerm[body] at in let ann := model.AnnotatedTerm[annotation] at in model.Term{annotated = model.AnnotatedTerm{body = detypeTerm subj, annotation = ann}}, typeApplication=λtt.deannotateAndDetypeTerm (model.TypeApplicationTerm[body] tt), typeLambda=λta.deannotateAndDetypeTerm (model.TypeLambda[body] ta), `_`=t} t
+term detypeTerm =
+  λt.cases(Term){
+      annotated=λat.
+          let subj := AnnotatedTerm[body] at in
+          let ann := AnnotatedTerm[annotation] at in
+          Term{annotated = AnnotatedTerm{body = detypeTerm subj, annotation = ann}},
+      typeApplication=λtt.deannotateAndDetypeTerm (TypeApplicationTerm[body] tt),
+      typeLambda=λta.deannotateAndDetypeTerm (TypeLambda[body] ta),
+      `_`=t}
+      t
 
 ## Recursively remove term annotations, including within subterms
-term removeTermAnnotations = λ`term`.let remove := λrecurse,`term`.let rewritten := recurse `term` in cases(model.Term){annotated=λat.model.AnnotatedTerm[body] at, `_`=rewritten} `term` in rewriting.rewriteTerm remove `term`
+term removeTermAnnotations =
+  λ`term`.
+    let remove := λrecurse,`term`.
+        let rewritten := recurse `term`
+        in cases(Term){annotated=λat.AnnotatedTerm[body] at, `_`=rewritten} `term`
+    in rewriteTerm remove `term`
 
 ## Recursively remove type annotations, including within subtypes
-term removeTypeAnnotations = λtyp.let remove := λrecurse,typ.let rewritten := recurse typ in cases(model.Type){annotated=λat.model.AnnotatedType[body] at, `_`=rewritten} rewritten in rewriting.rewriteType remove typ
+term removeTypeAnnotations =
+  λtyp.
+    let remove := λrecurse,typ.
+        let rewritten := recurse typ
+        in cases(Type){annotated=λat.AnnotatedType[body] at, `_`=rewritten} rewritten
+    in rewriteType remove typ
 
 ## Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations
-term removeTypeAnnotationsFromTerm = λ`term`.let strip := λrecurse,`term`.let rewritten := recurse `term` in let stripBinding := λb.model.Binding{name = model.Binding[name] b, `term` = model.Binding[`term`] b, typeScheme = none} in cases(model.Term){`let`=λlt.model.Term{`let` = model.Let{bindings = lists.map stripBinding (model.Let[bindings] lt), body = model.Let[body] lt}}, typeApplication=λtt.model.TypeApplicationTerm[body] tt, typeLambda=λta.model.TypeLambda[body] ta, `_`=rewritten} rewritten in rewriting.rewriteTerm strip `term`
+term removeTypeAnnotationsFromTerm =
+  λ`term`.
+    let strip := λrecurse,`term`.
+        let rewritten := recurse `term` in
+        let stripBinding := λb.Binding{
+              name = Binding[name] b,
+              `term` = Binding[`term`] b,
+              typeScheme = none} in
+        cases(Term){
+          `let`=λlt.Term{
+                `let` = Let{
+                  bindings = `map` stripBinding (Let[bindings] lt),
+                  body = Let[body] lt}},
+          typeApplication=λtt.TypeApplicationTerm[body] tt,
+          typeLambda=λta.TypeLambda[body] ta,
+          `_`=rewritten}
+          rewritten
+    in rewriteTerm strip `term`
 
 ## Strip type annotations from terms while preserving other annotations
-term removeTypesFromTerm = λ`term`.let strip := λrecurse,`term`.let rewritten := recurse `term` in let stripBinding := λb.model.Binding{name = model.Binding[name] b, `term` = model.Binding[`term`] b, typeScheme = none} in cases(model.Term){lambda=λl.model.Term{lambda = model.Lambda{parameter = model.Lambda[parameter] l, domain = none, body = model.Lambda[body] l}}, `let`=λlt.model.Term{`let` = model.Let{bindings = lists.map stripBinding (model.Let[bindings] lt), body = model.Let[body] lt}}, typeApplication=λtt.model.TypeApplicationTerm[body] tt, typeLambda=λta.model.TypeLambda[body] ta, `_`=rewritten} rewritten in rewriting.rewriteTerm strip `term`
+term removeTypesFromTerm =
+  λ`term`.
+    let strip := λrecurse,`term`.
+        let rewritten := recurse `term` in
+        let stripBinding := λb.Binding{
+              name = Binding[name] b,
+              `term` = Binding[`term`] b,
+              typeScheme = none} in
+        cases(Term){
+          lambda=λl.Term{
+                lambda = Lambda{
+                  parameter = Lambda[parameter] l,
+                  domain = none,
+                  body = Lambda[body] l}},
+          `let`=λlt.Term{
+                `let` = Let{
+                  bindings = `map` stripBinding (Let[bindings] lt),
+                  body = Let[body] lt}},
+          typeApplication=λtt.TypeApplicationTerm[body] tt,
+          typeLambda=λta.TypeLambda[body] ta,
+          `_`=rewritten}
+          rewritten
+    in rewriteTerm strip `term`
 
 ## Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations
-term stripTypeLambdas = λt.cases(model.Term){annotated=λat.let subj := model.AnnotatedTerm[body] at in let ann := model.AnnotatedTerm[annotation] at in model.Term{annotated = model.AnnotatedTerm{body = stripTypeLambdas subj, annotation = ann}}, typeLambda=λta.stripTypeLambdas (model.TypeLambda[body] ta), `_`=t} t
+term stripTypeLambdas =
+  λt.cases(Term){
+      annotated=λat.
+          let subj := AnnotatedTerm[body] at in
+          let ann := AnnotatedTerm[annotation] at in
+          Term{annotated = AnnotatedTerm{body = stripTypeLambdas subj, annotation = ann}},
+      typeLambda=λta.stripTypeLambdas (TypeLambda[body] ta),
+      `_`=t}
+      t

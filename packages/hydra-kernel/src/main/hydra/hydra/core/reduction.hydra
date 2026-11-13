@@ -1,68 +1,1005 @@
 ## Functions for reducing terms and types, i.e. performing computations.
 module hydra.core.reduction
 
-import hydra.core.annotations as annotations
-import hydra.core.arity as arity
-import hydra.core.checking as checking
-import hydra.core.encode.model as encode.model
-import hydra.core.errors as errors
-import hydra.core.extract.model as extract.model
-import hydra.core.graph as graph
-import hydra.core.lexical as lexical
+import hydra.core.annotations
+import hydra.core.arity
+import hydra.core.checking
+import hydra.core.encode.model as model
+import hydra.core.errors
+import hydra.core.extract.model
+import hydra.core.graph
+import hydra.core.lexical
 import hydra.core.lib.eithers as eithers
-import hydra.core.lib.equality as equality
+import hydra.core.lib.equality
 import hydra.core.lib.lists as lists
-import hydra.core.lib.literals as literals
-import hydra.core.lib.logic as logic
+import hydra.core.lib.literals
+import hydra.core.lib.logic
 import hydra.core.lib.maps as maps
-import hydra.core.lib.math as math
+import hydra.core.lib.math
 import hydra.core.lib.optionals as optionals
-import hydra.core.lib.ordering as ordering
-import hydra.core.lib.pairs as pairs
+import hydra.core.lib.ordering
+import hydra.core.lib.pairs
 import hydra.core.lib.sets as sets
 import hydra.core.lib.strings as strings
-import hydra.core.model as model
-import hydra.core.packaging as packaging
-import hydra.core.print.errors as print.errors
-import hydra.core.resolution as resolution
-import hydra.core.rewriting as rewriting
-import hydra.core.scoping as scoping
-import hydra.core.strip as strip
-import hydra.core.variables as variables
+import hydra.core.model
+import hydra.core.packaging
+import hydra.core.print.errors
+import hydra.core.resolution
+import hydra.core.rewriting
+import hydra.core.scoping
+import hydra.core.strip
+import hydra.core.variables
 
 ## Alpha convert a variable in a term
-term alphaConvert = λvold,vnew,`term`.variables.replaceFreeTermVariable vold model.Term{variable = vnew} `term`
+term alphaConvert = λvold,vnew,`term`.replaceFreeTermVariable vold Term{variable = vnew} `term`
 
 ## Eagerly beta-reduce a type by substituting type arguments into type lambdas
-term betaReduceType = λcx,graph,typ.let reduceApp := λapp.let lhs := model.ApplicationType[function] app in let rhs := model.ApplicationType[argument] app in cases(model.Type){annotated=λat.eithers.bind (reduceApp model.ApplicationType{function = model.AnnotatedType[body] at, argument = rhs}) (λa.right(model.Type{annotated = model.AnnotatedType{body = a, annotation = model.AnnotatedType[annotation] at}})), `forall`=λft.betaReduceType cx graph (variables.replaceFreeTypeVariable (model.ForallType[parameter] ft) rhs (model.ForallType[body] ft)), variable=λname.eithers.bind (resolution.requireType cx graph name) (λ`t'`.betaReduceType cx graph model.Type{application = model.ApplicationType{function = `t'`, argument = rhs}})} lhs in let mapExpr := λrecurse,t.let findApp := λr.cases(model.Type){application=λa.reduceApp a, `_`=right(r)} r in eithers.bind (recurse t) (λr.findApp r) in rewriting.rewriteTypeM mapExpr typ
+term betaReduceType =
+  λcx,graph,typ.
+    let reduceApp := λapp.
+        let lhs := ApplicationType[function] app in
+        let rhs := ApplicationType[argument] app in
+        cases(Type){
+          annotated=λat.eithers.bind
+                (reduceApp
+                  ApplicationType{
+                    function = AnnotatedType[body] at,
+                    argument = rhs})
+                (λa.right(Type{
+                    annotated = AnnotatedType{
+                      body = a,
+                      annotation = AnnotatedType[annotation] at}})),
+          `forall`=λft.betaReduceType
+                cx
+                graph
+                (replaceFreeTypeVariable
+                  (ForallType[parameter] ft)
+                  rhs
+                  (ForallType[body] ft)),
+          variable=λname.eithers.bind
+                (requireType cx graph name)
+                (λ`t'`.betaReduceType
+                    cx
+                    graph
+                    Type{
+                      application = ApplicationType{
+                        function = `t'`,
+                        argument = rhs}})}
+          lhs in
+    let mapExpr := λrecurse,t.
+        let findApp := λr.cases(Type){application=λa.reduceApp a, `_`=right(r)} r
+        in eithers.bind (recurse t) (λr.findApp r) in
+    rewriteTypeM mapExpr typ
 
 ## Apply the special rules:
 ##     ((\x.e1) e2) == e1, where x does not appear free in e1
 ##   and
 ##      ((\x.e1) e2) = e1[x/e2]
 ## These are both limited forms of beta reduction which help to "clean up" a term without fully evaluating it.
-term contractTerm = λ`term`.let rewrite := λrecurse,t.let rec := recurse t in cases(model.Term){application=λapp.let lhs := model.Application[function] app in let rhs := model.Application[argument] app in cases(model.Term){lambda=λl.let v := model.Lambda[parameter] l in let body := model.Lambda[body] l in logic.ifElse (variables.isFreeVariableInTerm v body) body (variables.replaceFreeTermVariable v rhs body), `_`=rec} (strip.deannotateTerm lhs), `_`=rec} rec in rewriting.rewriteTerm rewrite `term`
+term contractTerm =
+  λ`term`.
+    let rewrite := λrecurse,t.
+        let rec := recurse t
+        in cases(Term){
+          application=λapp.
+              let lhs := Application[function] app in
+              let rhs := Application[argument] app in
+              cases(Term){
+                lambda=λl.
+                    let v := Lambda[parameter] l in
+                    let body := Lambda[body] l in
+                    ifElse
+                      (isFreeVariableInTerm v body)
+                      body
+                      (replaceFreeTermVariable v rhs body),
+                `_`=rec}
+                (deannotateTerm lhs),
+          `_`=rec}
+          rec
+    in rewriteTerm rewrite `term`
 
 ## Compile-time flag controlling whether primitive invocations are counted during evaluation. For demo and instrumentation purposes.
 term countPrimitiveInvocations = true
 
 ## Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the Graph to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the Graph through nested scopes.
-term etaExpandTerm = λtx0,term0.let primTypes := maps.fromList (lists.map (λ`_gpt_p`.(packaging.PrimitiveDefinition[name] (graph.Primitive[definition] `_gpt_p`), scoping.termSignatureToTypeScheme (packaging.PrimitiveDefinition[signature] (graph.Primitive[definition] `_gpt_p`)))) (maps.elems (graph.Graph[primitives] tx0))) in let termArityWithContext := λtx,`term`.cases(model.Term){annotated=λat.termArityWithContext tx (model.AnnotatedTerm[body] at), application=λapp.math.sub (termArityWithContext tx (model.Application[function] app)) 1:int32, `cases`=λ`_`.1:int32, lambda=λ`_`.0:int32, `project`=λ`_`.1:int32, `unwrap`=λ`_`.1:int32, `let`=λl.termArityWithContext (scoping.extendGraphForLet (λ`_`,`_`.none) tx l) (model.Let[body] l), typeLambda=λtl.termArityWithContext (scoping.extendGraphForTypeLambda tx tl) (model.TypeLambda[body] tl), typeApplication=λtat.termArityWithContext tx (model.TypeApplicationTerm[body] tat), variable=λname.optionals.match (optionals.map scoping.typeSchemeToFType (maps.lookup name (graph.Graph[boundTypes] tx))) (optionals.match (maps.lookup name primTypes) 0:int32 arity.typeSchemeArity) arity.typeArity, `_`=0:int32} `term` in let domainTypes := λn,mt.logic.ifElse (ordering.lte n 0:int32) [] (optionals.match mt (lists.map (λ`_`.none) (math.range 0:int32 n)) (λtyp.cases(model.Type){function=λftyp.lists.cons given(model.FunctionType[domain] ftyp) (domainTypes (math.sub n 1:int32) given(model.FunctionType[codomain] ftyp)), annotated=λat.domainTypes n given(model.AnnotatedType[body] at), application=λatyp.domainTypes n given(model.ApplicationType[function] atyp), `forall`=λ`_`.lists.map (λ`_`.none) (math.range 0:int32 n), `_`=lists.map (λ`_`.none) (math.range 0:int32 n)} typ)) in let peelFunctionDomains := λmtyp,n.logic.ifElse (ordering.lte n 0:int32) mtyp (optionals.match mtyp none (λtyp.cases(model.Type){function=λftyp.peelFunctionDomains given(model.FunctionType[codomain] ftyp) (math.sub n 1:int32), annotated=λat.peelFunctionDomains given(model.AnnotatedType[body] at) n, application=λatyp.peelFunctionDomains given(model.ApplicationType[function] atyp) n, `forall`=λ`_`.none, `_`=none} typ)) in let expand := λalwaysPad,args,arity,headTyp,head.let applied := lists.foldl (λlhs,arg.model.Term{application = model.Application{function = lhs, argument = arg}}) head args in let numArgs := lists.length args in let needed := math.sub arity numArgs in logic.ifElse (logic.and (ordering.gt needed 0:int32) (logic.or alwaysPad (ordering.gt numArgs 0:int32))) (let indices := math.range 1:int32 (math.add needed 1:int32) in let remainingType := peelFunctionDomains headTyp numArgs in let domains := domainTypes needed remainingType in let codomainType := peelFunctionDomains remainingType needed in let fullyAppliedRaw := lists.foldl (λbody,i.let vn := model.Name{strings.concat2 "v" (literals.printInt32 i)} in model.Term{application = model.Application{function = body, argument = model.Term{variable = vn}}}) applied indices in let fullyApplied := optionals.match codomainType fullyAppliedRaw (λct.model.Term{annotated = model.AnnotatedTerm{body = fullyAppliedRaw, annotation = annotations.wrapAnnotationMap (maps.singleton model.Name{"type"} (encode.model.type ct))}}) in let indexedDomains := lists.zip indices domains in lists.foldl (λbody,idPair.let i := pairs.first idPair in let dom := pairs.second idPair in let vn := model.Name{strings.concat2 "v" (literals.printInt32 i)} in model.Term{lambda = model.Lambda{parameter = vn, domain = dom, body = body}}) fullyApplied (lists.reverse indexedDomains)) applied in let rewriteWithArgs := λargs,tx,`term`.let recurse := λtx1,term1.rewriteWithArgs [] tx1 term1 in let termHeadType := λtx2,trm2.cases(model.Term){annotated=λat2.termHeadType tx2 (model.AnnotatedTerm[body] at2), lambda=λ`_`.none, `cases`=λ`_`.none, `project`=λ`_`.none, `unwrap`=λ`_`.none, `let`=λl2.termHeadType (scoping.extendGraphForLet (λ`_`,`_`.none) tx2 l2) (model.Let[body] l2), typeLambda=λtl2.termHeadType (scoping.extendGraphForTypeLambda tx2 tl2) (model.TypeLambda[body] tl2), typeApplication=λtat2.optionals.bind (termHeadType tx2 (model.TypeApplicationTerm[body] tat2)) (λhtyp2.cases(model.Type){`forall`=λft2.given(variables.replaceFreeTypeVariable (model.ForallType[parameter] ft2) (model.TypeApplicationTerm[`type`] tat2) (model.ForallType[body] ft2)), `_`=given(htyp2)} htyp2), variable=λvn2.optionals.map scoping.typeSchemeToFType (maps.lookup vn2 (graph.Graph[boundTypes] tx2)), `_`=none} trm2 in let afterRecursion := λtrm.let arity := termArityWithContext tx trm in let hType := termHeadType tx trm in expand false args arity hType trm in let forField := λf.model.Field{name = model.Field[name] f, `term` = recurse tx (model.Field[`term`] f)} in let forCaseBranch := λf.let branchBody := recurse tx (model.CaseAlternative[handler] f) in let arty := termArityWithContext tx branchBody in let branchHType := termHeadType tx branchBody in model.CaseAlternative{name = model.CaseAlternative[name] f, handler = expand true [] arty branchHType branchBody} in let forMap := λmp.let forPair := λpr.(recurse tx (pairs.first pr), recurse tx (pairs.second pr)) in maps.fromList (lists.map forPair (maps.toList mp)) in cases(model.Term){annotated=λat.afterRecursion model.Term{annotated = model.AnnotatedTerm{body = recurse tx (model.AnnotatedTerm[body] at), annotation = model.AnnotatedTerm[annotation] at}}, application=λapp.let rhs := rewriteWithArgs [] tx (model.Application[argument] app) in rewriteWithArgs (lists.cons rhs args) tx (model.Application[function] app), `either`=λe.afterRecursion model.Term{`either` = eithers.either (λl.left(recurse tx l)) (λr.right(recurse tx r)) e}, `cases`=λcs.let newCs := model.CaseStatement{typeName = model.CaseStatement[typeName] cs, default = optionals.map (λt1.recurse tx t1) (model.CaseStatement[default] cs), `cases` = lists.map forCaseBranch (model.CaseStatement[`cases`] cs)} in let elimTerm := model.Term{`cases` = newCs} in let elimHeadType := given(model.Type{function = model.FunctionType{domain = model.Type{variable = model.CaseStatement[typeName] cs}, codomain = model.Type{`unit`}}}) in expand true args 1:int32 elimHeadType elimTerm, `project`=λp.expand false args 1:int32 none model.Term{`project` = p}, `unwrap`=λnm.expand false args 1:int32 none model.Term{`unwrap` = nm}, lambda=λlm.let tx1 := scoping.extendGraphForLambda tx lm in let body := rewriteWithArgs [] tx1 (model.Lambda[body] lm) in let result := model.Term{lambda = model.Lambda{parameter = model.Lambda[parameter] lm, domain = model.Lambda[domain] lm, body = body}} in let arty := termArityWithContext tx result in expand false args arty none result, `let`=λlt.let tx1 := scoping.extendGraphForLet (λ`_`,`_`.none) tx lt in let mapBinding := λb.model.Binding{name = model.Binding[name] b, `term` = rewriteWithArgs [] tx1 (model.Binding[`term`] b), typeScheme = model.Binding[typeScheme] b} in let result := model.Term{`let` = model.Let{bindings = lists.map mapBinding (model.Let[bindings] lt), body = rewriteWithArgs [] tx1 (model.Let[body] lt)}} in afterRecursion result, `list`=λels.afterRecursion model.Term{`list` = lists.map (λel.recurse tx el) els}, literal=λv.model.Term{literal = v}, `map`=λmp.afterRecursion model.Term{`map` = forMap mp}, `optional`=λmb.afterRecursion model.Term{`optional` = optionals.map (λv.recurse tx v) mb}, pair=λpr.afterRecursion model.Term{pair = (recurse tx (pairs.first pr), recurse tx (pairs.second pr))}, `record`=λrc.afterRecursion model.Term{`record` = model.Record{typeName = model.Record[typeName] rc, fields = lists.map forField (model.Record[fields] rc)}}, `set`=λst.afterRecursion model.Term{`set` = sets.fromList (lists.map (λel.recurse tx el) (sets.toList st))}, typeApplication=λtt.let gatherTypeApps := λacc,trm.cases(model.Term){typeApplication=λtt2.gatherTypeApps (lists.cons (model.TypeApplicationTerm[`type`] tt2) acc) (model.TypeApplicationTerm[body] tt2), `_`=(trm, acc)} (strip.deannotateTerm trm) in let gathered := gatherTypeApps [model.TypeApplicationTerm[`type`] tt] (model.TypeApplicationTerm[body] tt) in let innermost := pairs.first gathered in let tApps := pairs.second gathered in cases(model.Term){`cases`=λcs.let newCs := model.CaseStatement{typeName = model.CaseStatement[typeName] cs, default = optionals.map (λt1.recurse tx t1) (model.CaseStatement[default] cs), `cases` = lists.map forCaseBranch (model.CaseStatement[`cases`] cs)} in let casesWithTypeApps := lists.foldl (λtrm,t.model.Term{typeApplication = model.TypeApplicationTerm{body = trm, `type` = t}}) model.Term{`cases` = newCs} tApps in let elimHeadTypeTyped := given(model.Type{function = model.FunctionType{domain = resolution.nominalApplication (model.CaseStatement[typeName] cs) tApps, codomain = model.Type{`unit`}}}) in expand true args 1:int32 elimHeadTypeTyped casesWithTypeApps, `_`=afterRecursion model.Term{typeApplication = model.TypeApplicationTerm{body = recurse tx (model.TypeApplicationTerm[body] tt), `type` = model.TypeApplicationTerm[`type`] tt}}} (strip.deannotateTerm innermost), typeLambda=λtl.let tx1 := scoping.extendGraphForTypeLambda tx tl in let result := model.Term{typeLambda = model.TypeLambda{parameter = model.TypeLambda[parameter] tl, body = rewriteWithArgs [] tx1 (model.TypeLambda[body] tl)}} in afterRecursion result, `inject`=λinj.afterRecursion model.Term{`inject` = model.Injection{typeName = model.Injection[typeName] inj, field = forField (model.Injection[field] inj)}}, `unit`=λ`_`.model.Term{`unit`}, variable=λvn.let arty := termArityWithContext tx `term` in let varType := optionals.map scoping.typeSchemeToFType (maps.lookup vn (graph.Graph[boundTypes] tx)) in expand false args arty varType `term`, `wrap`=λwt.afterRecursion model.Term{`wrap` = model.WrappedTerm{typeName = model.WrappedTerm[typeName] wt, body = recurse tx (model.WrappedTerm[body] wt)}}} `term` in contractTerm (rewriteWithArgs [] tx0 term0)
+term etaExpandTerm =
+  λtx0,term0.
+    let primTypes := maps.fromList
+        (lists.map
+          (λ`_gpt_p`.(
+              PrimitiveDefinition[name] (Primitive[definition] `_gpt_p`),
+              termSignatureToTypeScheme (PrimitiveDefinition[signature] (Primitive[definition] `_gpt_p`))))
+          (maps.elems (Graph[primitives] tx0))) in
+    let termArityWithContext := λtx,`term`.cases(Term){
+          annotated=λat.termArityWithContext
+                tx
+                (AnnotatedTerm[body] at),
+          application=λapp.sub
+                (termArityWithContext
+                  tx
+                  (Application[function] app))
+                1:int32,
+          `cases`=λ`_`.1:int32,
+          lambda=λ`_`.0:int32,
+          `project`=λ`_`.1:int32,
+          `unwrap`=λ`_`.1:int32,
+          `let`=λl.termArityWithContext
+                (extendGraphForLet (λ`_`,`_`.none) tx l)
+                (Let[body] l),
+          typeLambda=λtl.termArityWithContext
+                (extendGraphForTypeLambda tx tl)
+                (TypeLambda[body] tl),
+          typeApplication=λtat.termArityWithContext
+                tx
+                (TypeApplicationTerm[body] tat),
+          variable=λname.optionals.match
+                (optionals.map
+                  typeSchemeToFType
+                  (maps.lookup name (Graph[boundTypes] tx)))
+                (optionals.match
+                  (maps.lookup name primTypes)
+                  0:int32
+                  typeSchemeArity)
+                typeArity,
+          `_`=0:int32}
+          `term` in
+    let domainTypes := λn,mt.ifElse
+          (lte n 0:int32)
+          []
+          (optionals.match
+            mt
+            (lists.map (λ`_`.none) (range 0:int32 n))
+            (λtyp.cases(Type){
+                function=λftyp.lists.cons
+                      given(FunctionType[domain] ftyp)
+                      (domainTypes
+                        (sub n 1:int32)
+                        given(FunctionType[codomain] ftyp)),
+                annotated=λat.domainTypes n given(AnnotatedType[body] at),
+                application=λatyp.domainTypes
+                      n
+                      given(ApplicationType[function] atyp),
+                `forall`=λ`_`.lists.map (λ`_`.none) (range 0:int32 n),
+                `_`=lists.map (λ`_`.none) (range 0:int32 n)}
+                typ)) in
+    let peelFunctionDomains := λmtyp,n.ifElse
+          (lte n 0:int32)
+          mtyp
+          (optionals.match
+            mtyp
+            none
+            (λtyp.cases(Type){
+                function=λftyp.peelFunctionDomains
+                      given(FunctionType[codomain] ftyp)
+                      (sub n 1:int32),
+                annotated=λat.peelFunctionDomains
+                      given(AnnotatedType[body] at)
+                      n,
+                application=λatyp.peelFunctionDomains
+                      given(ApplicationType[function] atyp)
+                      n,
+                `forall`=λ`_`.none,
+                `_`=none}
+                typ)) in
+    let expand := λalwaysPad,args,arity,headTyp,head.
+        let applied := lists.foldl
+            (λlhs,arg.Term{
+                application = Application{
+                  function = lhs,
+                  argument = arg}})
+            head
+            args in
+        let numArgs := lists.length args in
+        let needed := sub arity numArgs in
+        ifElse
+          (and (gt needed 0:int32) (or alwaysPad (gt numArgs 0:int32)))
+          (let indices := range 1:int32 (add needed 1:int32) in
+          let remainingType := peelFunctionDomains headTyp numArgs in
+          let domains := domainTypes needed remainingType in
+          let codomainType := peelFunctionDomains remainingType needed in
+          let fullyAppliedRaw := lists.foldl
+              (λbody,i.
+                let vn := Name{strings.concat2 "v" (printInt32 i)}
+                in Term{
+                  application = Application{
+                    function = body,
+                    argument = Term{
+                      variable = vn}}})
+              applied
+              indices in
+          let fullyApplied := optionals.match
+              codomainType
+              fullyAppliedRaw
+              (λct.Term{
+                  annotated = AnnotatedTerm{
+                    body = fullyAppliedRaw,
+                    annotation = wrapAnnotationMap
+                        (maps.singleton
+                          Name{"type"}
+                          (model.type ct))}}) in
+          let indexedDomains := lists.zip indices domains in
+          lists.foldl
+            (λbody,idPair.
+              let i := first idPair in
+              let dom := second idPair in
+              let vn := Name{strings.concat2 "v" (printInt32 i)} in
+              Term{
+                lambda = Lambda{
+                  parameter = vn,
+                  domain = dom,
+                  body = body}})
+            fullyApplied
+            (lists.reverse indexedDomains))
+          applied in
+    let rewriteWithArgs := λargs,tx,`term`.
+        let recurse := λtx1,term1.rewriteWithArgs [] tx1 term1 in
+        let termHeadType := λtx2,trm2.cases(Term){
+              annotated=λat2.termHeadType
+                    tx2
+                    (AnnotatedTerm[body] at2),
+              lambda=λ`_`.none,
+              `cases`=λ`_`.none,
+              `project`=λ`_`.none,
+              `unwrap`=λ`_`.none,
+              `let`=λl2.termHeadType
+                    (extendGraphForLet
+                      (λ`_`,`_`.none)
+                      tx2
+                      l2)
+                    (Let[body] l2),
+              typeLambda=λtl2.termHeadType
+                    (extendGraphForTypeLambda tx2 tl2)
+                    (TypeLambda[body] tl2),
+              typeApplication=λtat2.optionals.bind
+                    (termHeadType
+                      tx2
+                      (TypeApplicationTerm[body] tat2))
+                    (λhtyp2.cases(Type){
+                        `forall`=λft2.given(replaceFreeTypeVariable
+                              (ForallType[parameter] ft2)
+                              (TypeApplicationTerm[`type`] tat2)
+                              (ForallType[body] ft2)),
+                        `_`=given(htyp2)}
+                        htyp2),
+              variable=λvn2.optionals.map
+                    typeSchemeToFType
+                    (maps.lookup vn2 (Graph[boundTypes] tx2)),
+              `_`=none}
+              trm2 in
+        let afterRecursion := λtrm.
+            let arity := termArityWithContext tx trm in
+            let hType := termHeadType tx trm in
+            expand false args arity hType trm in
+        let forField := λf.Field{
+              name = Field[name] f,
+              `term` = recurse tx (Field[`term`] f)} in
+        let forCaseBranch := λf.
+            let branchBody := recurse tx (CaseAlternative[handler] f) in
+            let arty := termArityWithContext tx branchBody in
+            let branchHType := termHeadType tx branchBody in
+            CaseAlternative{
+              name = CaseAlternative[name] f,
+              handler = expand
+                  true
+                  []
+                  arty
+                  branchHType
+                  branchBody} in
+        let forMap := λmp.
+            let forPair := λpr.(recurse tx (first pr), recurse tx (second pr))
+            in maps.fromList (lists.map forPair (maps.toList mp)) in
+        cases(Term){
+          annotated=λat.afterRecursion
+                Term{
+                  annotated = AnnotatedTerm{
+                    body = recurse tx (AnnotatedTerm[body] at),
+                    annotation = AnnotatedTerm[annotation] at}},
+          application=λapp.
+              let rhs := rewriteWithArgs
+                  []
+                  tx
+                  (Application[argument] app)
+              in rewriteWithArgs
+                (lists.cons rhs args)
+                tx
+                (Application[function] app),
+          `either`=λe.afterRecursion
+                Term{
+                  `either` = eithers.either
+                      (λl.left(recurse tx l))
+                      (λr.right(recurse tx r))
+                      e},
+          `cases`=λcs.
+              let newCs := CaseStatement{
+                typeName = CaseStatement[typeName] cs,
+                default = optionals.map
+                    (λt1.recurse tx t1)
+                    (CaseStatement[default] cs),
+                `cases` = lists.map
+                    forCaseBranch
+                    (CaseStatement[`cases`] cs)} in
+              let elimTerm := Term{`cases` = newCs} in
+              let elimHeadType := given(Type{
+                  function = FunctionType{
+                    domain = Type{
+                      variable = CaseStatement[typeName] cs},
+                    codomain = Type{
+                      `unit`}}}) in
+              expand
+                true
+                args
+                1:int32
+                elimHeadType
+                elimTerm,
+          `project`=λp.expand
+                false
+                args
+                1:int32
+                none
+                Term{`project` = p},
+          `unwrap`=λnm.expand
+                false
+                args
+                1:int32
+                none
+                Term{`unwrap` = nm},
+          lambda=λlm.
+              let tx1 := extendGraphForLambda tx lm in
+              let body := rewriteWithArgs [] tx1 (Lambda[body] lm) in
+              let result := Term{
+                lambda = Lambda{
+                  parameter = Lambda[parameter] lm,
+                  domain = Lambda[domain] lm,
+                  body = body}} in
+              let arty := termArityWithContext tx result in
+              expand false args arty none result,
+          `let`=λlt.
+              let tx1 := extendGraphForLet
+                  (λ`_`,`_`.none)
+                  tx
+                  lt in
+              let mapBinding := λb.Binding{
+                    name = Binding[name] b,
+                    `term` = rewriteWithArgs
+                        []
+                        tx1
+                        (Binding[`term`] b),
+                    typeScheme = Binding[typeScheme] b} in
+              let result := Term{
+                `let` = Let{
+                  bindings = lists.map mapBinding (Let[bindings] lt),
+                  body = rewriteWithArgs [] tx1 (Let[body] lt)}} in
+              afterRecursion result,
+          `list`=λels.afterRecursion
+                Term{
+                  `list` = lists.map (λel.recurse tx el) els},
+          literal=λv.Term{literal = v},
+          `map`=λmp.afterRecursion Term{`map` = forMap mp},
+          `optional`=λmb.afterRecursion
+                Term{
+                  `optional` = optionals.map (λv.recurse tx v) mb},
+          pair=λpr.afterRecursion
+                Term{
+                  pair = (recurse tx (first pr), recurse tx (second pr))},
+          `record`=λrc.afterRecursion
+                Term{
+                  `record` = Record{
+                    typeName = Record[typeName] rc,
+                    fields = lists.map forField (Record[fields] rc)}},
+          `set`=λst.afterRecursion
+                Term{
+                  `set` = sets.fromList
+                      (lists.map
+                        (λel.recurse tx el)
+                        (sets.toList st))},
+          typeApplication=λtt.
+              let gatherTypeApps := λacc,trm.cases(Term){
+                    typeApplication=λtt2.gatherTypeApps
+                          (lists.cons
+                            (TypeApplicationTerm[`type`] tt2)
+                            acc)
+                          (TypeApplicationTerm[body] tt2),
+                    `_`=(trm, acc)}
+                    (deannotateTerm trm) in
+              let gathered := gatherTypeApps
+                  [TypeApplicationTerm[`type`] tt]
+                  (TypeApplicationTerm[body] tt) in
+              let innermost := first gathered in
+              let tApps := second gathered in
+              cases(Term){
+                `cases`=λcs.
+                    let newCs := CaseStatement{
+                      typeName = CaseStatement[typeName] cs,
+                      default = optionals.map
+                          (λt1.recurse tx t1)
+                          (CaseStatement[default] cs),
+                      `cases` = lists.map
+                          forCaseBranch
+                          (CaseStatement[`cases`] cs)} in
+                    let casesWithTypeApps := lists.foldl
+                        (λtrm,t.Term{
+                            typeApplication = TypeApplicationTerm{
+                              body = trm,
+                              `type` = t}})
+                        Term{
+                          `cases` = newCs}
+                        tApps in
+                    let elimHeadTypeTyped := given(Type{
+                        function = FunctionType{
+                          domain = nominalApplication
+                              (CaseStatement[typeName] cs)
+                              tApps,
+                          codomain = Type{
+                            `unit`}}}) in
+                    expand
+                      true
+                      args
+                      1:int32
+                      elimHeadTypeTyped
+                      casesWithTypeApps,
+                `_`=afterRecursion
+                    Term{
+                      typeApplication = TypeApplicationTerm{
+                        body = recurse
+                            tx
+                            (TypeApplicationTerm[body] tt),
+                        `type` = TypeApplicationTerm[`type`] tt}}}
+                (deannotateTerm innermost),
+          typeLambda=λtl.
+              let tx1 := extendGraphForTypeLambda tx tl in
+              let result := Term{
+                typeLambda = TypeLambda{
+                  parameter = TypeLambda[parameter] tl,
+                  body = rewriteWithArgs
+                      []
+                      tx1
+                      (TypeLambda[body] tl)}} in
+              afterRecursion result,
+          `inject`=λinj.afterRecursion
+                Term{
+                  `inject` = Injection{
+                    typeName = Injection[typeName] inj,
+                    field = forField (Injection[field] inj)}},
+          `unit`=λ`_`.Term{`unit`},
+          variable=λvn.
+              let arty := termArityWithContext tx `term` in
+              let varType := optionals.map
+                  typeSchemeToFType
+                  (maps.lookup vn (Graph[boundTypes] tx)) in
+              expand false args arty varType `term`,
+          `wrap`=λwt.afterRecursion
+                Term{
+                  `wrap` = WrappedTerm{
+                    typeName = WrappedTerm[typeName] wt,
+                    body = recurse tx (WrappedTerm[body] wt)}}}
+          `term` in
+    contractTerm (rewriteWithArgs [] tx0 term0)
 
 ## Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added.
-term etaExpandTypedTerm = λcx,tx0,term0.let rewrite := λtopLevel,forced,typeArgs,recurse,tx,`term`.let rewriteSpine := λ`term`.cases(model.Term){annotated=λat.eithers.bind (rewriteSpine (model.AnnotatedTerm[body] at)) (λbody.let ann := model.AnnotatedTerm[annotation] at in right(model.Term{annotated = model.AnnotatedTerm{body = body, annotation = ann}})), application=λa.let l := logic.ifElse false [model.Type{literal = model.LiteralType{`string`}}] [] in eithers.bind (rewriteSpine (model.Application[function] a)) (λlhs.eithers.bind (rewrite true false l recurse tx (model.Application[argument] a)) (λrhs.right(model.Term{application = model.Application{function = lhs, argument = rhs}}))), typeApplication=λtat.eithers.bind (rewriteSpine (model.TypeApplicationTerm[body] tat)) (λbody.let typ := model.TypeApplicationTerm[`type`] tat in right(model.Term{typeApplication = model.TypeApplicationTerm{body = body, `type` = typ}})), `_`=rewrite false false [] recurse tx `term`} `term` in let arityOf := λtx,`term`.let dflt := eithers.map (λ`_tc`.arity.typeArity (pairs.first `_tc`)) (checking.typeOf cx tx [] `term`) in cases(model.Term){annotated=λat.arityOf tx (model.AnnotatedTerm[body] at), `cases`=λ`_`.right(1:int32), `project`=λ`_`.right(1:int32), `unwrap`=λ`_`.right(1:int32), lambda=λl.let txl := scoping.extendGraphForLambda tx l in arityOf txl (model.Lambda[body] l), `let`=λl.let txl := scoping.extendGraphForLet (λ`_`,`_`.none) tx l in arityOf txl (model.Let[body] l), typeApplication=λtat.arityOf tx (model.TypeApplicationTerm[body] tat), typeLambda=λtl.let txt := scoping.extendGraphForTypeLambda tx tl in arityOf txt (model.TypeLambda[body] tl), variable=λname.optionals.match (optionals.map scoping.typeSchemeToFType (maps.lookup name (graph.Graph[boundTypes] tx))) (eithers.map (λ`_tc`.arity.typeArity (pairs.first `_tc`)) (checking.typeOf cx tx [] model.Term{variable = name})) (λt.right(arity.typeArity t)), `_`=dflt} `term` in let extraVariables := λn.lists.map (λi.model.Name{strings.concat2 "v" (literals.printInt32 i)}) (math.range 1:int32 (math.add n 1:int32)) in let pad := λvars,body.optionals.match (lists.uncons vars) body (λuc.let v0 := pairs.first uc in let vrest := pairs.second uc in model.Term{lambda = model.Lambda{parameter = v0, domain = none, body = pad vrest model.Term{application = model.Application{function = body, argument = model.Term{variable = v0}}}}}) in let padn := λn,body.pad (extraVariables n) body in let unwind := λ`term`.lists.foldl (λe,t.model.Term{typeApplication = model.TypeApplicationTerm{body = e, `type` = t}}) `term` typeArgs in let forceExpansion := λt.eithers.bind (checking.typeOf cx tx [] t) (λtypCx.let arity := arity.typeArity (pairs.first typCx) in right(padn arity (unwind t))) in let recurseOrForce := λ`term`.logic.ifElse forced (forceExpansion `term`) (recurse tx (unwind `term`)) in let forCase := λf.eithers.bind (rewrite false true [] recurse tx (model.CaseAlternative[handler] f)) (λr.right(model.CaseAlternative{name = model.CaseAlternative[name] f, handler = r})) in let forCaseStatement := λcs.let tname := model.CaseStatement[typeName] cs in let dflt := model.CaseStatement[default] cs in let csCases := model.CaseStatement[`cases`] cs in eithers.bind (eithers.mapOptional (rewrite false false [] recurse tx) dflt) (λrdflt.eithers.bind (eithers.mapList forCase csCases) (λrcases.right(model.Term{`cases` = model.CaseStatement{typeName = tname, default = rdflt, `cases` = rcases}}))) in let forCases := λcs.eithers.bind (eithers.map unwind (forCaseStatement cs)) (λbase.right(logic.ifElse (logic.or topLevel forced) (padn 1:int32 base) base)) in let forNullaryElim := λelimTerm.let base := unwind elimTerm in logic.ifElse (logic.or topLevel forced) (padn 1:int32 base) base in cases(model.Term){application=λa.let lhs := model.Application[function] a in let rhs := model.Application[argument] a in eithers.bind (rewrite true false [] recurse tx rhs) (λrhs2.eithers.bind (arityOf tx lhs) (λlhsarity.eithers.bind (rewriteSpine lhs) (λlhs2.let a2 := model.Term{application = model.Application{function = lhs2, argument = rhs2}} in right(logic.ifElse (ordering.gt lhsarity 1:int32) (padn (math.sub lhsarity 1:int32) a2) a2)))), `cases`=λcs.forCases cs, `project`=λp.right(forNullaryElim model.Term{`project` = p}), `unwrap`=λn.right(forNullaryElim model.Term{`unwrap` = n}), lambda=λl.let txl := scoping.extendGraphForLambda tx l in eithers.map unwind (recurse txl `term`), `let`=λl.let txlt := scoping.extendGraphForLet (λ`_`,`_`.none) tx l in recurse txlt `term`, typeApplication=λtat.rewrite topLevel forced (lists.cons (model.TypeApplicationTerm[`type`] tat) typeArgs) recurse tx (model.TypeApplicationTerm[body] tat), typeLambda=λtl.let txt := scoping.extendGraphForTypeLambda tx tl in recurse txt `term`, `_`=recurseOrForce `term`} `term` in rewriting.rewriteTermWithContextM (rewrite true false []) tx0 term0
+term etaExpandTypedTerm =
+  λcx,tx0,term0.
+    let rewrite := λtopLevel,forced,typeArgs,recurse,tx,`term`.
+        let rewriteSpine := λ`term`.cases(Term){
+              annotated=λat.eithers.bind
+                    (rewriteSpine (AnnotatedTerm[body] at))
+                    (λbody.
+                      let ann := AnnotatedTerm[annotation] at
+                      in right(Term{
+                        annotated = AnnotatedTerm{
+                          body = body,
+                          annotation = ann}})),
+              application=λa.
+                  let l := ifElse
+                      false
+                      [Type{literal = LiteralType{`string`}}]
+                      []
+                  in eithers.bind
+                    (rewriteSpine (Application[function] a))
+                    (λlhs.eithers.bind
+                        (rewrite
+                          true
+                          false
+                          l
+                          recurse
+                          tx
+                          (Application[argument] a))
+                        (λrhs.right(Term{
+                            application = Application{
+                              function = lhs,
+                              argument = rhs}}))),
+              typeApplication=λtat.eithers.bind
+                    (rewriteSpine
+                      (TypeApplicationTerm[body] tat))
+                    (λbody.
+                      let typ := TypeApplicationTerm[`type`] tat
+                      in right(Term{
+                        typeApplication = TypeApplicationTerm{
+                          body = body,
+                          `type` = typ}})),
+              `_`=rewrite false false [] recurse tx `term`}
+              `term` in
+        let arityOf := λtx,`term`.
+            let dflt := eithers.map
+                (λ`_tc`.typeArity (first `_tc`))
+                (typeOf cx tx [] `term`)
+            in cases(Term){
+              annotated=λat.arityOf tx (AnnotatedTerm[body] at),
+              `cases`=λ`_`.right(1:int32),
+              `project`=λ`_`.right(1:int32),
+              `unwrap`=λ`_`.right(1:int32),
+              lambda=λl.
+                  let txl := extendGraphForLambda tx l
+                  in arityOf txl (Lambda[body] l),
+              `let`=λl.
+                  let txl := extendGraphForLet (λ`_`,`_`.none) tx l
+                  in arityOf txl (Let[body] l),
+              typeApplication=λtat.arityOf
+                    tx
+                    (TypeApplicationTerm[body] tat),
+              typeLambda=λtl.
+                  let txt := extendGraphForTypeLambda tx tl
+                  in arityOf txt (TypeLambda[body] tl),
+              variable=λname.optionals.match
+                    (optionals.map
+                      typeSchemeToFType
+                      (maps.lookup name (Graph[boundTypes] tx)))
+                    (eithers.map
+                      (λ`_tc`.typeArity (first `_tc`))
+                      (typeOf
+                        cx
+                        tx
+                        []
+                        Term{
+                          variable = name}))
+                    (λt.right(typeArity t)),
+              `_`=dflt}
+              `term` in
+        let extraVariables := λn.lists.map
+              (λi.Name{strings.concat2 "v" (printInt32 i)})
+              (range 1:int32 (add n 1:int32)) in
+        let pad := λvars,body.optionals.match
+              (lists.uncons vars)
+              body
+              (λuc.
+                let v0 := first uc in
+                let vrest := second uc in
+                Term{
+                  lambda = Lambda{
+                    parameter = v0,
+                    domain = none,
+                    body = pad
+                        vrest
+                        Term{
+                          application = Application{
+                            function = body,
+                            argument = Term{
+                              variable = v0}}}}}) in
+        let padn := λn,body.pad (extraVariables n) body in
+        let unwind := λ`term`.lists.foldl
+              (λe,t.Term{
+                  typeApplication = TypeApplicationTerm{
+                    body = e,
+                    `type` = t}})
+              `term`
+              typeArgs in
+        let forceExpansion := λt.eithers.bind
+              (typeOf cx tx [] t)
+              (λtypCx.
+                let arity := typeArity (first typCx)
+                in right(padn arity (unwind t))) in
+        let recurseOrForce := λ`term`.ifElse
+              forced
+              (forceExpansion `term`)
+              (recurse tx (unwind `term`)) in
+        let forCase := λf.eithers.bind
+              (rewrite
+                false
+                true
+                []
+                recurse
+                tx
+                (CaseAlternative[handler] f))
+              (λr.right(CaseAlternative{
+                  name = CaseAlternative[name] f,
+                  handler = r})) in
+        let forCaseStatement := λcs.
+            let tname := CaseStatement[typeName] cs in
+            let dflt := CaseStatement[default] cs in
+            let csCases := CaseStatement[`cases`] cs in
+            eithers.bind
+              (eithers.mapOptional
+                (rewrite false false [] recurse tx)
+                dflt)
+              (λrdflt.eithers.bind
+                  (eithers.mapList forCase csCases)
+                  (λrcases.right(Term{
+                      `cases` = CaseStatement{
+                        typeName = tname,
+                        default = rdflt,
+                        `cases` = rcases}}))) in
+        let forCases := λcs.eithers.bind
+              (eithers.map unwind (forCaseStatement cs))
+              (λbase.right(ifElse
+                  (or topLevel forced)
+                  (padn 1:int32 base)
+                  base)) in
+        let forNullaryElim := λelimTerm.
+            let base := unwind elimTerm
+            in ifElse
+              (or topLevel forced)
+              (padn 1:int32 base)
+              base in
+        cases(Term){
+          application=λa.
+              let lhs := Application[function] a in
+              let rhs := Application[argument] a in
+              eithers.bind
+                (rewrite true false [] recurse tx rhs)
+                (λrhs2.eithers.bind
+                    (arityOf tx lhs)
+                    (λlhsarity.eithers.bind
+                        (rewriteSpine lhs)
+                        (λlhs2.
+                          let a2 := Term{
+                            application = Application{
+                              function = lhs2,
+                              argument = rhs2}}
+                          in right(ifElse
+                            (gt lhsarity 1:int32)
+                            (padn (sub lhsarity 1:int32) a2)
+                            a2)))),
+          `cases`=λcs.forCases cs,
+          `project`=λp.right(forNullaryElim Term{
+                `project` = p}),
+          `unwrap`=λn.right(forNullaryElim Term{
+                `unwrap` = n}),
+          lambda=λl.
+              let txl := extendGraphForLambda tx l
+              in eithers.map unwind (recurse txl `term`),
+          `let`=λl.
+              let txlt := extendGraphForLet (λ`_`,`_`.none) tx l
+              in recurse txlt `term`,
+          typeApplication=λtat.rewrite
+                topLevel
+                forced
+                (lists.cons
+                  (TypeApplicationTerm[`type`] tat)
+                  typeArgs)
+                recurse
+                tx
+                (TypeApplicationTerm[body] tat),
+          typeLambda=λtl.
+              let txt := extendGraphForTypeLambda tx tl
+              in recurse txt `term`,
+          `_`=recurseOrForce `term`}
+          `term`
+    in rewriteTermWithContextM (rewrite true false []) tx0 term0
 
 ## Calculate the arity for eta expansion Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
-term etaExpansionArity = λgraph,`term`.cases(model.Term){annotated=λat.etaExpansionArity graph (model.AnnotatedTerm[body] at), application=λapp.math.sub (etaExpansionArity graph (model.Application[function] app)) 1:int32, `cases`=λ`_`.1:int32, lambda=λ`_`.0:int32, `project`=λ`_`.1:int32, `unwrap`=λ`_`.1:int32, typeLambda=λta.etaExpansionArity graph (model.TypeLambda[body] ta), typeApplication=λtt.etaExpansionArity graph (model.TypeApplicationTerm[body] tt), variable=λname.optionals.match (optionals.bind (lexical.lookupBinding graph name) (λb.model.Binding[typeScheme] b)) 0:int32 (λts.arity.typeArity (model.TypeScheme[body] ts)), `_`=0:int32} `term`
+term etaExpansionArity =
+  λgraph,`term`.cases(Term){
+      annotated=λat.etaExpansionArity graph (AnnotatedTerm[body] at),
+      application=λapp.sub (etaExpansionArity graph (Application[function] app)) 1:int32,
+      `cases`=λ`_`.1:int32,
+      lambda=λ`_`.0:int32,
+      `project`=λ`_`.1:int32,
+      `unwrap`=λ`_`.1:int32,
+      typeLambda=λta.etaExpansionArity graph (TypeLambda[body] ta),
+      typeApplication=λtt.etaExpansionArity graph (TypeApplicationTerm[body] tt),
+      variable=λname.optionals.match
+            (optionals.bind (lookupBinding graph name) (λb.Binding[typeScheme] b))
+            0:int32
+            (λts.typeArity (TypeScheme[body] ts)),
+      `_`=0:int32}
+      `term`
 
 ## Eta-reduce a term by removing redundant lambda abstractions
-term etaReduceTerm = λ`term`.let noChange := `term` in let reduceLambda := λl.let v := model.Lambda[parameter] l in let d := model.Lambda[domain] l in let body := model.Lambda[body] l in cases(model.Term){annotated=λat.reduceLambda model.Lambda{parameter = v, domain = d, body = model.AnnotatedTerm[body] at}, application=λapp.let lhs := model.Application[function] app in let rhs := model.Application[argument] app in cases(model.Term){annotated=λat.reduceLambda model.Lambda{parameter = v, domain = d, body = model.Term{application = model.Application{function = lhs, argument = model.AnnotatedTerm[body] at}}}, variable=λv1.logic.ifElse (logic.and (equality.equal (model.Name[] v) (model.Name[] v1)) (logic.not (variables.isFreeVariableInTerm v lhs))) (etaReduceTerm lhs) noChange, `_`=noChange} (etaReduceTerm rhs), `_`=noChange} (etaReduceTerm body) in cases(model.Term){annotated=λat.model.Term{annotated = model.AnnotatedTerm{body = etaReduceTerm (model.AnnotatedTerm[body] at), annotation = model.AnnotatedTerm[annotation] at}}, lambda=λl.reduceLambda l, `_`=noChange} `term`
+term etaReduceTerm =
+  λ`term`.
+    let noChange := `term` in
+    let reduceLambda := λl.
+        let v := Lambda[parameter] l in
+        let d := Lambda[domain] l in
+        let body := Lambda[body] l in
+        cases(Term){
+          annotated=λat.reduceLambda
+                Lambda{
+                  parameter = v,
+                  domain = d,
+                  body = AnnotatedTerm[body] at},
+          application=λapp.
+              let lhs := Application[function] app in
+              let rhs := Application[argument] app in
+              cases(Term){
+                annotated=λat.reduceLambda
+                      Lambda{
+                        parameter = v,
+                        domain = d,
+                        body = Term{
+                          application = Application{
+                            function = lhs,
+                            argument = AnnotatedTerm[body] at}}},
+                variable=λv1.ifElse
+                      (and
+                        (equal (Name[] v) (Name[] v1))
+                        (not (isFreeVariableInTerm v lhs)))
+                      (etaReduceTerm lhs)
+                      noChange,
+                `_`=noChange}
+                (etaReduceTerm rhs),
+          `_`=noChange}
+          (etaReduceTerm body) in
+    cases(Term){
+      annotated=λat.Term{
+            annotated = AnnotatedTerm{
+              body = etaReduceTerm (AnnotatedTerm[body] at),
+              annotation = AnnotatedTerm[annotation] at}},
+      lambda=λl.reduceLambda l,
+      `_`=noChange}
+      `term`
 
 ## A term evaluation function which is alternatively lazy or eager
-term reduceTerm = λcx,graph,eager,`term`.let reduce := λeager.reduceTerm cx graph eager in let doRecurse := λeager,`term`.let isNonLambdaTerm := cases(model.Term){lambda=λ`_`.false, `let`=λ`_`.false, `_`=true} `term` in logic.and eager isNonLambdaTerm in let reduceArg := λeager,arg.logic.ifElse eager right(arg) (reduce false arg) in let applyToArguments := λfun,args.optionals.match (lists.uncons args) fun (λuc.applyToArguments model.Term{application = model.Application{function = fun, argument = pairs.first uc}} (pairs.second uc)) in let mapErrorToString := λe.errors.Error{other = errors.OtherError{print.errors.error e}} in let applyProjection := λproj,reducedArg.eithers.bind (extract.model.record (model.Projection[typeName] proj) graph (strip.deannotateTerm reducedArg)) (λfields.let matching := lists.find (λf.equality.equal (model.Field[name] f) (model.Projection[fieldName] proj)) fields in optionals.match matching left(errors.Error{resolution = errors.ResolutionError{noMatchingField = errors.NoMatchingFieldError{fieldName = model.Projection[fieldName] proj}}}) (λmf.right(model.Field[`term`] mf))) in let applyCases := λcs,reducedArg.eithers.bind (extract.model.injection (model.CaseStatement[typeName] cs) graph reducedArg) (λfield.let matching := lists.find (λf.equality.equal (model.CaseAlternative[name] f) (model.Field[name] field)) (model.CaseStatement[`cases`] cs) in optionals.match matching (optionals.match (model.CaseStatement[default] cs) left(errors.Error{resolution = errors.ResolutionError{noMatchingField = errors.NoMatchingFieldError{fieldName = model.Field[name] field}}}) (λx.right(x))) (λmf.right(model.Term{application = model.Application{function = model.CaseAlternative[handler] mf, argument = model.Field[`term`] field}}))) in let applyIfNullary := λeager,original,args.let stripped := strip.deannotateTerm original in let forProjection := λproj,args.optionals.match (lists.uncons args) right(original) (λuc.let arg := pairs.first uc in let remainingArgs := pairs.second uc in eithers.bind (reduceArg eager (strip.deannotateTerm arg)) (λreducedArg.eithers.bind (eithers.bind (applyProjection proj reducedArg) (reduce eager)) (λreducedResult.applyIfNullary eager reducedResult remainingArgs))) in let forCases := λcs,args.optionals.match (lists.uncons args) right(original) (λuc.let arg := pairs.first uc in let remainingArgs := pairs.second uc in eithers.bind (reduceArg eager (strip.deannotateTerm arg)) (λreducedArg.eithers.bind (eithers.bind (applyCases cs reducedArg) (reduce eager)) (λreducedResult.applyIfNullary eager reducedResult remainingArgs))) in let forUnwrap := λname,args.optionals.match (lists.uncons args) right(original) (λuc.let arg := pairs.first uc in let remainingArgs := pairs.second uc in eithers.bind (reduceArg eager (strip.deannotateTerm arg)) (λreducedArg.eithers.bind (eithers.bind (extract.model.wrap name graph reducedArg) (reduce eager)) (λreducedResult.applyIfNullary eager reducedResult remainingArgs))) in let forLambda := λl,args.let param := model.Lambda[parameter] l in let body := model.Lambda[body] l in optionals.match (lists.uncons args) right(original) (λuc.let arg := pairs.first uc in let remainingArgs := pairs.second uc in eithers.bind (reduce eager (strip.deannotateTerm arg)) (λreducedArg.eithers.bind (reduce eager (variables.replaceFreeTermVariable param reducedArg body)) (λreducedResult.applyIfNullary eager reducedResult remainingArgs))) in let forPrimitive := λprim,arity,args.let argList := lists.take arity args in let remainingArgs := lists.drop arity args in eithers.bind (eithers.mapList (reduceArg eager) argList) (λreducedArgs.let strippedArgs := lists.map strip.deannotateTerm reducedArgs in eithers.bind (eithers.bimap mapErrorToString (λx.x) (graph.Primitive[implementation] prim graph strippedArgs)) (λprimResult.eithers.bind (reduce eager primResult) (λreducedResult.applyIfNullary eager reducedResult remainingArgs))) in cases(model.Term){application=λapp.applyIfNullary eager (model.Application[function] app) (lists.cons (model.Application[argument] app) args), `cases`=λcs.logic.ifElse (lists.isEmpty args) right(original) (forCases cs args), `project`=λp.logic.ifElse (lists.isEmpty args) right(original) (forProjection p args), `unwrap`=λn.logic.ifElse (lists.isEmpty args) right(original) (forUnwrap n args), lambda=λl.logic.ifElse (lists.isEmpty args) right(original) (forLambda l args), variable=λv.let mBinding := lexical.lookupBinding graph v in optionals.match mBinding (let mPrim := lexical.lookupPrimitive graph v in optionals.match mPrim right(applyToArguments original args) (λprim.let arity := arity.primitiveArity prim in logic.ifElse (ordering.gt arity (lists.length args)) right(applyToArguments original args) (forPrimitive prim arity args))) (λbinding.applyIfNullary eager (model.Binding[`term`] binding) args), `let`=λlt.let bindings := model.Let[bindings] lt in let body := model.Let[body] lt in let letExpr := λb.model.Term{`let` = model.Let{bindings = [b], body = model.Term{variable = model.Binding[name] b}}} in let expandBinding := λb.model.Binding{name = model.Binding[name] b, `term` = variables.replaceFreeTermVariable (model.Binding[name] b) (letExpr b) (model.Binding[`term`] b), typeScheme = model.Binding[typeScheme] b} in let expandedBindings := lists.map expandBinding bindings in let substituteBinding := λ`term`,b.variables.replaceFreeTermVariable (model.Binding[name] b) (model.Binding[`term`] b) `term` in let substituteAll := λbs,`term`.lists.foldl substituteBinding `term` bs in let expandedBody := substituteAll expandedBindings body in eithers.bind (reduce eager expandedBody) (λreducedBody.applyIfNullary eager reducedBody args), `_`=right(applyToArguments original args)} stripped in let mapping := λrecurse,mid.eithers.bind (logic.ifElse (doRecurse eager mid) (recurse mid) right(mid)) (λinner.applyIfNullary eager inner []) in rewriting.rewriteTermM mapping `term`
+term reduceTerm =
+  λcx,graph,eager,`term`.
+    let reduce := λeager.reduceTerm cx graph eager in
+    let doRecurse := λeager,`term`.
+        let isNonLambdaTerm := cases(Term){
+            lambda=λ`_`.false,
+            `let`=λ`_`.false,
+            `_`=true}
+            `term`
+        in and eager isNonLambdaTerm in
+    let reduceArg := λeager,arg.ifElse eager right(arg) (reduce false arg) in
+    let applyToArguments := λfun,args.optionals.match
+          (lists.uncons args)
+          fun
+          (λuc.applyToArguments
+              Term{
+                application = Application{
+                  function = fun,
+                  argument = first uc}}
+              (second uc)) in
+    let mapErrorToString := λe.Error{other = OtherError{error e}} in
+    let applyProjection := λproj,reducedArg.eithers.bind
+          (`record`
+            (Projection[typeName] proj)
+            graph
+            (deannotateTerm reducedArg))
+          (λfields.
+            let matching := lists.find
+                (λf.equal
+                    (Field[name] f)
+                    (Projection[fieldName] proj))
+                fields
+            in optionals.match
+              matching
+              left(Error{
+                resolution = ResolutionError{
+                  noMatchingField = NoMatchingFieldError{
+                    fieldName = Projection[fieldName] proj}}})
+              (λmf.right(Field[`term`] mf))) in
+    let applyCases := λcs,reducedArg.eithers.bind
+          (injection (CaseStatement[typeName] cs) graph reducedArg)
+          (λfield.
+            let matching := lists.find
+                (λf.equal
+                    (CaseAlternative[name] f)
+                    (Field[name] field))
+                (CaseStatement[`cases`] cs)
+            in optionals.match
+              matching
+              (optionals.match
+                (CaseStatement[default] cs)
+                left(Error{
+                  resolution = ResolutionError{
+                    noMatchingField = NoMatchingFieldError{
+                      fieldName = Field[name] field}}})
+                (λx.right(x)))
+              (λmf.right(Term{
+                  application = Application{
+                    function = CaseAlternative[handler] mf,
+                    argument = Field[`term`] field}}))) in
+    let applyIfNullary := λeager,original,args.
+        let stripped := deannotateTerm original in
+        let forProjection := λproj,args.optionals.match
+              (lists.uncons args)
+              right(original)
+              (λuc.
+                let arg := first uc in
+                let remainingArgs := second uc in
+                eithers.bind
+                  (reduceArg eager (deannotateTerm arg))
+                  (λreducedArg.eithers.bind
+                      (eithers.bind
+                        (applyProjection proj reducedArg)
+                        (reduce eager))
+                      (λreducedResult.applyIfNullary
+                          eager
+                          reducedResult
+                          remainingArgs))) in
+        let forCases := λcs,args.optionals.match
+              (lists.uncons args)
+              right(original)
+              (λuc.
+                let arg := first uc in
+                let remainingArgs := second uc in
+                eithers.bind
+                  (reduceArg eager (deannotateTerm arg))
+                  (λreducedArg.eithers.bind
+                      (eithers.bind
+                        (applyCases cs reducedArg)
+                        (reduce eager))
+                      (λreducedResult.applyIfNullary
+                          eager
+                          reducedResult
+                          remainingArgs))) in
+        let forUnwrap := λname,args.optionals.match
+              (lists.uncons args)
+              right(original)
+              (λuc.
+                let arg := first uc in
+                let remainingArgs := second uc in
+                eithers.bind
+                  (reduceArg eager (deannotateTerm arg))
+                  (λreducedArg.eithers.bind
+                      (eithers.bind
+                        (`wrap` name graph reducedArg)
+                        (reduce eager))
+                      (λreducedResult.applyIfNullary
+                          eager
+                          reducedResult
+                          remainingArgs))) in
+        let forLambda := λl,args.
+            let param := Lambda[parameter] l in
+            let body := Lambda[body] l in
+            optionals.match
+              (lists.uncons args)
+              right(original)
+              (λuc.
+                let arg := first uc in
+                let remainingArgs := second uc in
+                eithers.bind
+                  (reduce eager (deannotateTerm arg))
+                  (λreducedArg.eithers.bind
+                      (reduce
+                        eager
+                        (replaceFreeTermVariable
+                          param
+                          reducedArg
+                          body))
+                      (λreducedResult.applyIfNullary
+                          eager
+                          reducedResult
+                          remainingArgs))) in
+        let forPrimitive := λprim,arity,args.
+            let argList := lists.take arity args in
+            let remainingArgs := lists.drop arity args in
+            eithers.bind
+              (eithers.mapList
+                (reduceArg eager)
+                argList)
+              (λreducedArgs.
+                let strippedArgs := lists.map deannotateTerm reducedArgs
+                in eithers.bind
+                  (eithers.bimap
+                    mapErrorToString
+                    (λx.x)
+                    (Primitive[implementation]
+                      prim
+                      graph
+                      strippedArgs))
+                  (λprimResult.eithers.bind
+                      (reduce eager primResult)
+                      (λreducedResult.applyIfNullary
+                          eager
+                          reducedResult
+                          remainingArgs))) in
+        cases(Term){
+          application=λapp.applyIfNullary
+                eager
+                (Application[function] app)
+                (lists.cons
+                  (Application[argument] app)
+                  args),
+          `cases`=λcs.ifElse
+                (lists.isEmpty args)
+                right(original)
+                (forCases cs args),
+          `project`=λp.ifElse
+                (lists.isEmpty args)
+                right(original)
+                (forProjection p args),
+          `unwrap`=λn.ifElse
+                (lists.isEmpty args)
+                right(original)
+                (forUnwrap n args),
+          lambda=λl.ifElse
+                (lists.isEmpty args)
+                right(original)
+                (forLambda l args),
+          variable=λv.
+              let mBinding := lookupBinding graph v
+              in optionals.match
+                mBinding
+                (let mPrim := lookupPrimitive graph v
+                in optionals.match
+                  mPrim
+                  right(applyToArguments original args)
+                  (λprim.
+                    let arity := primitiveArity prim
+                    in ifElse
+                      (gt arity (lists.length args))
+                      right(applyToArguments original args)
+                      (forPrimitive prim arity args)))
+                (λbinding.applyIfNullary
+                    eager
+                    (Binding[`term`] binding)
+                    args),
+          `let`=λlt.
+              let bindings := Let[bindings] lt in
+              let body := Let[body] lt in
+              let letExpr := λb.Term{
+                    `let` = Let{
+                      bindings = [b],
+                      body = Term{
+                        variable = Binding[name] b}}} in
+              let expandBinding := λb.Binding{
+                    name = Binding[name] b,
+                    `term` = replaceFreeTermVariable
+                        (Binding[name] b)
+                        (letExpr b)
+                        (Binding[`term`] b),
+                    typeScheme = Binding[typeScheme] b} in
+              let expandedBindings := lists.map expandBinding bindings in
+              let substituteBinding := λ`term`,b.replaceFreeTermVariable
+                    (Binding[name] b)
+                    (Binding[`term`] b)
+                    `term` in
+              let substituteAll := λbs,`term`.lists.foldl substituteBinding `term` bs in
+              let expandedBody := substituteAll expandedBindings body in
+              eithers.bind
+                (reduce eager expandedBody)
+                (λreducedBody.applyIfNullary eager reducedBody args),
+          `_`=right(applyToArguments original args)}
+          stripped in
+    let mapping := λrecurse,mid.eithers.bind
+          (ifElse (doRecurse eager mid) (recurse mid) right(mid))
+          (λinner.applyIfNullary eager inner []) in
+    rewriteTermM mapping `term`
 
 ## Whether a term is closed, i.e. represents a complete program
-term termIsClosed = λ`term`.sets.isEmpty (variables.freeVariablesInTerm `term`)
+term termIsClosed = λ`term`.sets.isEmpty (freeVariablesInTerm `term`)
 
 ## Whether a term has been fully reduced to a value
-term termIsValue = λ`term`.let forList := λels.lists.foldl (λb,t.logic.and b (termIsValue t)) true els in let checkField := λf.termIsValue (model.Field[`term`] f) in let checkFields := λfields.lists.foldl (λb,f.logic.and b (checkField f)) true fields in let checkCaseAlternatives := λalts.lists.foldl (λb,a.logic.and b (termIsValue (model.CaseAlternative[handler] a))) true alts in cases(model.Term){application=λ`_`.false, `cases`=λcs.logic.and (checkCaseAlternatives (model.CaseStatement[`cases`] cs)) (optionals.match (model.CaseStatement[default] cs) true termIsValue), `either`=λe.eithers.either (λl.termIsValue l) (λr.termIsValue r) e, lambda=λl.termIsValue (model.Lambda[body] l), literal=λ`_`.true, `project`=λ`_`.true, `unwrap`=λ`_`.true, `list`=λels.forList els, `map`=λm.lists.foldl (λb,kv.logic.and b (logic.and (termIsValue (pairs.first kv)) (termIsValue (pairs.second kv)))) true (maps.toList m), `optional`=λm.optionals.match m true termIsValue, `record`=λr.checkFields (model.Record[fields] r), `set`=λs.forList (sets.toList s), `inject`=λi.checkField (model.Injection[field] i), `unit`=λ`_`.true, variable=λ`_`.false, `_`=false} (strip.deannotateTerm `term`)
+term termIsValue =
+  λ`term`.
+    let forList := λels.lists.foldl (λb,t.and b (termIsValue t)) true els in
+    let checkField := λf.termIsValue (Field[`term`] f) in
+    let checkFields := λfields.lists.foldl (λb,f.and b (checkField f)) true fields in
+    let checkCaseAlternatives := λalts.lists.foldl
+          (λb,a.and b (termIsValue (CaseAlternative[handler] a)))
+          true
+          alts in
+    cases(Term){
+      application=λ`_`.false,
+      `cases`=λcs.and
+            (checkCaseAlternatives (CaseStatement[`cases`] cs))
+            (optionals.match (CaseStatement[default] cs) true termIsValue),
+      `either`=λe.eithers.either (λl.termIsValue l) (λr.termIsValue r) e,
+      lambda=λl.termIsValue (Lambda[body] l),
+      literal=λ`_`.true,
+      `project`=λ`_`.true,
+      `unwrap`=λ`_`.true,
+      `list`=λels.forList els,
+      `map`=λm.lists.foldl
+            (λb,kv.and b (and (termIsValue (first kv)) (termIsValue (second kv))))
+            true
+            (maps.toList m),
+      `optional`=λm.optionals.match m true termIsValue,
+      `record`=λr.checkFields (Record[fields] r),
+      `set`=λs.forList (sets.toList s),
+      `inject`=λi.checkField (Injection[field] i),
+      `unit`=λ`_`.true,
+      variable=λ`_`.false,
+      `_`=false}
+      (deannotateTerm `term`)

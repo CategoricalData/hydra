@@ -6,8 +6,6 @@
 ## Only range remains int32-typed.
 module hydra.core.lib.math
 
-
-
 ## Numeric absolute value.
 ##
 ## Constraint-polymorphic absolute value over any type with a 'numeric' instance. The per-type semantics live in the instance: for fixed-width signed integers the result is total but not injective at the boundary (abs(minBound) = minBound, e.g. abs(-2147483648) = -2147483648 for int32, because +2147483648 is not representable); for unsigned integers and bigint the result is the input itself or its arithmetic negation, whichever is non-negative; for floating-point it clears the sign bit per IEEE 754 ੵ.5.1 (abs(ଐ) = +0, abs(NaN) is NaN).

@@ -6,22 +6,14 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
 >
->import hydra.core.lib.lists as lists
+>import hydra.core.lib.lists
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                           ^ source.hydra
-#                            ^^ source.hydra keyword.control.import.hydra
-#                              ^ source.hydra
-#                               ^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.lib.logic as logic
+>import hydra.core.lib.logic
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                           ^ source.hydra
-#                            ^^ source.hydra keyword.control.import.hydra
-#                              ^ source.hydra
-#                               ^^^^^ source.hydra entity.name.namespace.hydra
 >import hydra.core.lib.optionals as optionals
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
@@ -30,321 +22,362 @@
 #                                ^^ source.hydra keyword.control.import.hydra
 #                                  ^ source.hydra
 #                                   ^^^^^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.lib.pairs as pairs
+>import hydra.core.lib.pairs
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                           ^ source.hydra
-#                            ^^ source.hydra keyword.control.import.hydra
-#                              ^ source.hydra
-#                               ^^^^^ source.hydra entity.name.namespace.hydra
->import hydra.core.paths as paths
+>import hydra.core.paths
 #^^^^^^ source.hydra keyword.control.import.hydra
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
-#                       ^ source.hydra
-#                        ^^ source.hydra keyword.control.import.hydra
-#                          ^ source.hydra
-#                           ^^^^^ source.hydra entity.name.namespace.hydra
 >
 >## Erase a subterm path to the subtype path of its type, if wholly within the data fragment
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->term eraseSubtermPath = λpath.let steps := paths.SubtermPath[] path in let go := λacc,step.optionals.match acc none (λstateP.let out := pairs.first stateP in let pendingEntry := pairs.second stateP in logic.ifElse pendingEntry (cases(paths.SubtermStep){pairFirst=λ`_`.given((lists.concat2 out [paths.SubtypeStep{mapKeys}], false)), pairSecond=λ`_`.given((lists.concat2 out [paths.SubtypeStep{mapValues}], false)), `_`=none} step) (cases(paths.SubtermStep){mapEntry=λ`_`.given((out, true)), `_`=optionals.map (λst.(lists.concat2 out [st], false)) (eraseSubtermStep step)} step)) in let result := lists.foldl go given(([], false)) steps in optionals.bind result (λstateP.logic.ifElse (pairs.second stateP) none given(paths.SubtypePath{pairs.first stateP}))
+>term eraseSubtermPath =
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra keyword.operator.lambda.hydra
-#                         ^^^^ source.hydra variable.parameter.hydra
+>  λpath.
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^^^^ source.hydra variable.parameter.hydra
+#       ^ source.hydra punctuation.separator.binder.hydra
+>    let steps := SubtermPath[] path in
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra
+#              ^^ source.hydra keyword.operator.assignment.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                            ^^^ source.hydra
+#                               ^^^^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^^ source.hydra keyword.control.hydra
+>    let go := λacc,step.optionals.match
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^ source.hydra variable.other.hydra
+#          ^ source.hydra
+#           ^^ source.hydra keyword.operator.assignment.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.lambda.hydra
+#               ^^^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^^^^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+>          acc
+#^^^^^^^^^^ source.hydra
+#          ^^^ source.hydra variable.other.hydra
+>          none
+#^^^^^^^^^^ source.hydra
+#          ^^^^ source.hydra keyword.control.hydra
+>          (λstateP.
+#^^^^^^^^^^^ source.hydra
+#           ^ source.hydra keyword.operator.lambda.hydra
+#            ^^^^^^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+>            let out := first stateP in
+#^^^^^^^^^^^^ source.hydra
+#            ^^^ source.hydra keyword.control.hydra
+#               ^ source.hydra
+#                ^^^ source.hydra variable.other.hydra
+#                   ^ source.hydra
+#                    ^^ source.hydra keyword.operator.assignment.hydra
+#                      ^ source.hydra
+#                       ^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^^^^^^ source.hydra variable.other.hydra
+#                                   ^ source.hydra
+#                                    ^^ source.hydra keyword.control.hydra
+>            let pendingEntry := second stateP in
+#^^^^^^^^^^^^ source.hydra
+#            ^^^ source.hydra keyword.control.hydra
+#               ^ source.hydra
+#                ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^^ source.hydra keyword.operator.assignment.hydra
+#                               ^ source.hydra
+#                                ^^^^^^ source.hydra variable.other.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^ source.hydra variable.other.hydra
+#                                             ^ source.hydra
+#                                              ^^ source.hydra keyword.control.hydra
+>            ifElse
+#^^^^^^^^^^^^ source.hydra
+#            ^^^^^^ source.hydra variable.other.hydra
+>              pendingEntry
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^^^^^^^^ source.hydra variable.other.hydra
+>              (cases(SubtermStep){
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^^^^ source.hydra keyword.control.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                ^^^ source.hydra
+>                pairFirst=λ`_`.given((concat2 out [SubtypeStep{mapKeys}], false)),
+#^^^^^^^^^^^^^^^^ source.hydra
+#                ^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^ source.hydra keyword.operator.equals.hydra
+#                          ^ source.hydra keyword.operator.lambda.hydra
+#                           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                            ^ source.hydra variable.other.escaped.hydra
+#                             ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                              ^ source.hydra punctuation.separator.binder.hydra
+#                               ^^^^^ source.hydra keyword.control.hydra
+#                                    ^^ source.hydra
+#                                      ^^^^^^^ source.hydra variable.other.hydra
+#                                             ^ source.hydra
+#                                              ^^^ source.hydra variable.other.hydra
+#                                                 ^^ source.hydra
+#                                                   ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                              ^ source.hydra
+#                                                               ^^^^^^^ source.hydra variable.other.hydra
+#                                                                      ^^^^ source.hydra
+#                                                                          ^^^^^ source.hydra constant.language.boolean.hydra
+#                                                                               ^^^^ source.hydra
+>                pairSecond=λ`_`.given((concat2 out [SubtypeStep{mapValues}], false)),
+#^^^^^^^^^^^^^^^^ source.hydra
+#                ^^^^^^^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra keyword.operator.equals.hydra
+#                           ^ source.hydra keyword.operator.lambda.hydra
+#                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                             ^ source.hydra variable.other.escaped.hydra
+#                              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                               ^ source.hydra punctuation.separator.binder.hydra
+#                                ^^^^^ source.hydra keyword.control.hydra
+#                                     ^^ source.hydra
+#                                       ^^^^^^^ source.hydra variable.other.hydra
+#                                              ^ source.hydra
+#                                               ^^^ source.hydra variable.other.hydra
+#                                                  ^^ source.hydra
+#                                                    ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                               ^ source.hydra
+#                                                                ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                         ^^^^ source.hydra
+#                                                                             ^^^^^ source.hydra constant.language.boolean.hydra
+#                                                                                  ^^^^ source.hydra
+>                `_`=none}
+#^^^^^^^^^^^^^^^^ source.hydra
+#                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                 ^ source.hydra variable.other.escaped.hydra
+#                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^^^^ source.hydra keyword.control.hydra
+#                        ^^ source.hydra
+>                step)
+#^^^^^^^^^^^^^^^^ source.hydra
+#                ^^^^ source.hydra variable.other.hydra
+#                    ^^ source.hydra
+>              (cases(SubtermStep){
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^^^^ source.hydra keyword.control.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                ^^^ source.hydra
+>                mapEntry=λ`_`.given((out, true)),
+#^^^^^^^^^^^^^^^^ source.hydra
+#                ^^^^^^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra keyword.operator.equals.hydra
+#                         ^ source.hydra keyword.operator.lambda.hydra
+#                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                           ^ source.hydra variable.other.escaped.hydra
+#                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                             ^ source.hydra punctuation.separator.binder.hydra
-#                              ^^^ source.hydra keyword.control.hydra
+#                              ^^^^^ source.hydra keyword.control.hydra
+#                                   ^^ source.hydra
+#                                     ^^^ source.hydra variable.other.hydra
+#                                        ^^ source.hydra
+#                                          ^^^^ source.hydra constant.language.boolean.hydra
+#                                              ^^^^ source.hydra
+>                `_`=optionals.map
+#^^^^^^^^^^^^^^^^ source.hydra
+#                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                 ^ source.hydra variable.other.escaped.hydra
+#                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+>                    (λst.(concat2 out [st], false))
+#^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                     ^ source.hydra keyword.operator.lambda.hydra
+#                      ^^ source.hydra variable.parameter.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^ source.hydra
+#                          ^^^^^^^ source.hydra variable.other.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^ source.hydra variable.other.hydra
-#                                       ^ source.hydra
-#                                        ^^ source.hydra keyword.operator.assignment.hydra
-#                                          ^ source.hydra
-#                                           ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                            ^^^ source.hydra
-#                                                               ^^^^ source.hydra variable.other.hydra
-#                                                                   ^ source.hydra
-#                                                                    ^^ source.hydra keyword.control.hydra
-#                                                                      ^ source.hydra
-#                                                                       ^^^ source.hydra keyword.control.hydra
-#                                                                          ^ source.hydra
-#                                                                           ^^ source.hydra variable.other.hydra
-#                                                                             ^ source.hydra
-#                                                                              ^^ source.hydra keyword.operator.assignment.hydra
+#                                  ^^^ source.hydra variable.other.hydra
+#                                     ^^ source.hydra
+#                                       ^^ source.hydra variable.other.hydra
+#                                         ^^^ source.hydra
+#                                            ^^^^^ source.hydra constant.language.boolean.hydra
+#                                                 ^^^ source.hydra
+>                    (eraseSubtermStep step)}
+#^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                     ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^ source.hydra
+#                                      ^^^^ source.hydra variable.other.hydra
+#                                          ^^^ source.hydra
+>                step)) in
+#^^^^^^^^^^^^^^^^ source.hydra
+#                ^^^^ source.hydra variable.other.hydra
+#                    ^^^ source.hydra
+#                       ^^ source.hydra keyword.control.hydra
+>    let result := foldl go given(([], false)) steps in
+#^^^^ source.hydra
+#    ^^^ source.hydra keyword.control.hydra
+#       ^ source.hydra
+#        ^^^^^^ source.hydra variable.other.hydra
+#              ^ source.hydra
+#               ^^ source.hydra keyword.operator.assignment.hydra
+#                 ^ source.hydra
+#                  ^^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra
+#                        ^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^^^^^ source.hydra keyword.control.hydra
+#                                ^^^^^^ source.hydra
+#                                      ^^^^^ source.hydra constant.language.boolean.hydra
+#                                           ^^^ source.hydra
+#                                              ^^^^^ source.hydra variable.other.hydra
+#                                                   ^ source.hydra
+#                                                    ^^ source.hydra keyword.control.hydra
+>    optionals.bind result (λstateP.ifElse (second stateP) none given(SubtypePath{first stateP}))
+#^^^^ source.hydra
+#    ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                  ^ source.hydra
+#                   ^^^^^^ source.hydra variable.other.hydra
+#                         ^^ source.hydra
+#                           ^ source.hydra keyword.operator.lambda.hydra
+#                            ^^^^^^ source.hydra variable.parameter.hydra
+#                                  ^ source.hydra punctuation.separator.binder.hydra
+#                                   ^^^^^^ source.hydra variable.other.hydra
+#                                         ^^ source.hydra
+#                                           ^^^^^^ source.hydra variable.other.hydra
+#                                                 ^ source.hydra
+#                                                  ^^^^^^ source.hydra variable.other.hydra
+#                                                        ^^ source.hydra
+#                                                          ^^^^ source.hydra keyword.control.hydra
+#                                                              ^ source.hydra
+#                                                               ^^^^^ source.hydra keyword.control.hydra
+#                                                                    ^ source.hydra
+#                                                                     ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                                ^ source.hydra
-#                                                                                 ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                  ^^^ source.hydra variable.parameter.hydra
-#                                                                                     ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                      ^^^^ source.hydra variable.parameter.hydra
-#                                                                                          ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                           ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                          ^ source.hydra
-#                                                                                                           ^^^ source.hydra variable.other.hydra
-#                                                                                                              ^ source.hydra
-#                                                                                                               ^^^^ source.hydra keyword.control.hydra
-#                                                                                                                   ^^ source.hydra
-#                                                                                                                     ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                                                      ^^^^^^ source.hydra variable.parameter.hydra
-#                                                                                                                            ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                                                             ^^^ source.hydra keyword.control.hydra
-#                                                                                                                                ^ source.hydra
-#                                                                                                                                 ^^^ source.hydra variable.other.hydra
-#                                                                                                                                    ^ source.hydra
-#                                                                                                                                     ^^ source.hydra keyword.operator.assignment.hydra
-#                                                                                                                                       ^ source.hydra
-#                                                                                                                                        ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                   ^ source.hydra
-#                                                                                                                                                    ^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                          ^ source.hydra
-#                                                                                                                                                           ^^ source.hydra keyword.control.hydra
-#                                                                                                                                                             ^ source.hydra
-#                                                                                                                                                              ^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                 ^ source.hydra
-#                                                                                                                                                                  ^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                              ^ source.hydra
-#                                                                                                                                                                               ^^ source.hydra keyword.operator.assignment.hydra
-#                                                                                                                                                                                 ^ source.hydra
-#                                                                                                                                                                                  ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                              ^ source.hydra
-#                                                                                                                                                                                               ^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                     ^ source.hydra
-#                                                                                                                                                                                                      ^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                        ^ source.hydra
-#                                                                                                                                                                                                         ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                     ^ source.hydra
-#                                                                                                                                                                                                                      ^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                  ^^ source.hydra
-#                                                                                                                                                                                                                                    ^^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                         ^ source.hydra
-#                                                                                                                                                                                                                                          ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                                                           ^^ source.hydra
-#                                                                                                                                                                                                                                                             ^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                      ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                                                                                                                                                                                       ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                                                                                                                                                                                                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                                                                                                                                                                                                                                                                         ^ source.hydra variable.other.escaped.hydra
-#                                                                                                                                                                                                                                                                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                                                                                                                                                                                                                                                           ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                                                                                                                                                                                                            ^^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                                                                 ^^ source.hydra
-#                                                                                                                                                                                                                                                                                   ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                                                                                                ^ source.hydra
-#                                                                                                                                                                                                                                                                                                 ^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                    ^^ source.hydra
-#                                                                                                                                                                                                                                                                                                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                                                                                                                                                                                                                                                       ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                        ^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                               ^^^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                   ^^^^^ source.hydra constant.language.boolean.hydra
-#                                                                                                                                                                                                                                                                                                                                        ^^^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                            ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                      ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                                                                                                                                                                                                                                                                       ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                                                                                                                                                                                                                                                                                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                                                                                                                                                                                                                                                                                                                                                         ^ source.hydra variable.other.escaped.hydra
-#                                                                                                                                                                                                                                                                                                                                                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                                                                                                                                                                                                                                                                                                                                           ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                                                                                                                                                                                                                                                                                            ^^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                                                                                                                                                 ^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                   ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                 ^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                    ^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                       ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                        ^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                 ^^^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                     ^^^^^ source.hydra constant.language.boolean.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                          ^^^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                               ^ source.hydra variable.other.escaped.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                 ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                  ^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                      ^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                        ^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                            ^^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                               ^^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                    ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                     ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ^ source.hydra variable.other.escaped.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ^^^^ source.hydra constant.language.boolean.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^^^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^ source.hydra variable.other.escaped.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ^^ source.hydra variable.parameter.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ^^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ^^^^^ source.hydra constant.language.boolean.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^^^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ^^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ^^ source.hydra keyword.operator.assignment.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ^^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ^^^^^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ^^^^^ source.hydra constant.language.boolean.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ^^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^^^^^^ source.hydra variable.parameter.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ^^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^^^^ source.hydra
+#                                                                                 ^^^^^ source.hydra variable.other.hydra
+#                                                                                      ^ source.hydra
+#                                                                                       ^^^^^^ source.hydra variable.other.hydra
+#                                                                                             ^^^^ source.hydra
 >
 >## The subtype-side analog of a subterm step on the data fragment, or nothing on the computation fragment
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->term eraseSubtermStep = λstep.cases(paths.SubtermStep){listElement=λ`_`.given(paths.SubtypeStep{listElement}), setElement=λ`_`.given(paths.SubtypeStep{setElement}), optionalGiven=λ`_`.given(paths.SubtypeStep{optionalElement}), injectField=λn.given(paths.SubtypeStep{unionField = n}), recordField=λn.given(paths.SubtypeStep{recordField = n}), `_`=none} step
+>term eraseSubtermStep =
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
 #     ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra keyword.operator.lambda.hydra
-#                         ^^^^ source.hydra variable.parameter.hydra
-#                             ^ source.hydra punctuation.separator.binder.hydra
-#                              ^^^^^ source.hydra keyword.control.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                     ^^ source.hydra
-#                                                       ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                  ^ source.hydra keyword.operator.equals.hydra
-#                                                                   ^ source.hydra keyword.operator.lambda.hydra
-#                                                                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                                                                     ^ source.hydra variable.other.escaped.hydra
-#                                                                      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                                                       ^ source.hydra punctuation.separator.binder.hydra
-#                                                                        ^^^^^ source.hydra keyword.control.hydra
-#                                                                             ^ source.hydra
-#                                                                              ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                               ^ source.hydra
-#                                                                                                ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                           ^^^^ source.hydra
-#                                                                                                               ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                         ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                                          ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                                                           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                                                                                                                            ^ source.hydra variable.other.escaped.hydra
-#                                                                                                                             ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                                                                                                              ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                                                               ^^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                    ^ source.hydra
-#                                                                                                                                     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                                                                                      ^ source.hydra
-#                                                                                                                                                       ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                 ^^^^ source.hydra
-#                                                                                                                                                                     ^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                  ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                                                                                                   ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                                                                                                                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                                                                                                                                                                                     ^ source.hydra variable.other.escaped.hydra
-#                                                                                                                                                                                      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                                                                                                                                                                       ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                                                                                                                        ^^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                             ^ source.hydra
-#                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                                                                                                                                               ^ source.hydra
-#                                                                                                                                                                                                                ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                               ^^^^ source.hydra
-#                                                                                                                                                                                                                                   ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                              ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                                                                                                                                                               ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                                                                                                                                                                                ^ source.hydra variable.parameter.hydra
-#                                                                                                                                                                                                                                                 ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                                                                                                                                                                                  ^^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                                       ^ source.hydra
-#                                                                                                                                                                                                                                                        ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                                                                                                                                                                                                         ^ source.hydra
-#                                                                                                                                                                                                                                                                          ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                    ^ source.hydra
-#                                                                                                                                                                                                                                                                                     ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                                                                                                                                                                                                      ^ source.hydra
-#                                                                                                                                                                                                                                                                                       ^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                        ^^^^ source.hydra
-#                                                                                                                                                                                                                                                                                            ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                       ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                                                                                                                                                                                                                        ^ source.hydra keyword.operator.lambda.hydra
-#                                                                                                                                                                                                                                                                                                         ^ source.hydra variable.parameter.hydra
-#                                                                                                                                                                                                                                                                                                          ^ source.hydra punctuation.separator.binder.hydra
-#                                                                                                                                                                                                                                                                                                           ^^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                                                                                                ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                 ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                                                                                                                                                                                                                                                                  ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                   ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                              ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                               ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                                                                                                                                                                                                                                                                ^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                 ^ source.hydra variable.other.hydra
-#                                                                                                                                                                                                                                                                                                                                                  ^^^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                                                                                                                                                                                                                                                                                                                                                       ^ source.hydra variable.other.escaped.hydra
-#                                                                                                                                                                                                                                                                                                                                                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                                                                                                                                                                                                                                                                                                                                         ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                                                                                                                                                                                                                                                                          ^^^^ source.hydra keyword.control.hydra
-#                                                                                                                                                                                                                                                                                                                                                              ^^ source.hydra
-#                                                                                                                                                                                                                                                                                                                                                                ^^^^ source.hydra variable.other.hydra
+>  λstep.cases(SubtermStep){
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^^^^ source.hydra variable.parameter.hydra
+#       ^ source.hydra punctuation.separator.binder.hydra
+#        ^^^^^ source.hydra keyword.control.hydra
+#             ^ source.hydra
+#              ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^^ source.hydra
+>      listElement=λ`_`.given(SubtypeStep{listElement}),
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra keyword.operator.equals.hydra
+#                  ^ source.hydra keyword.operator.lambda.hydra
+#                   ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                    ^ source.hydra variable.other.escaped.hydra
+#                     ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                      ^ source.hydra punctuation.separator.binder.hydra
+#                       ^^^^^ source.hydra keyword.control.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                    ^^^^ source.hydra
+>      setElement=λ`_`.given(SubtypeStep{setElement}),
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^ source.hydra keyword.operator.equals.hydra
+#                 ^ source.hydra keyword.operator.lambda.hydra
+#                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                   ^ source.hydra variable.other.escaped.hydra
+#                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
+#                      ^^^^^ source.hydra keyword.control.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                       ^ source.hydra
+#                                        ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^^^^ source.hydra
+>      optionalGiven=λ`_`.given(SubtypeStep{optionalElement}),
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra keyword.operator.lambda.hydra
+#                     ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                      ^ source.hydra variable.other.escaped.hydra
+#                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^^^^^ source.hydra keyword.control.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                          ^ source.hydra
+#                                           ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^^^^ source.hydra
+>      injectField=λn.given(SubtypeStep{unionField = n}),
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra keyword.operator.equals.hydra
+#                  ^ source.hydra keyword.operator.lambda.hydra
+#                   ^ source.hydra variable.parameter.hydra
+#                    ^ source.hydra punctuation.separator.binder.hydra
+#                     ^^^^^ source.hydra keyword.control.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                 ^ source.hydra
+#                                                  ^ source.hydra keyword.operator.equals.hydra
+#                                                   ^ source.hydra
+#                                                    ^ source.hydra variable.other.hydra
+#                                                     ^^^^ source.hydra
+>      recordField=λn.given(SubtypeStep{recordField = n}),
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra keyword.operator.equals.hydra
+#                  ^ source.hydra keyword.operator.lambda.hydra
+#                   ^ source.hydra variable.parameter.hydra
+#                    ^ source.hydra punctuation.separator.binder.hydra
+#                     ^^^^^ source.hydra keyword.control.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^ source.hydra
+#                                                   ^ source.hydra keyword.operator.equals.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra variable.other.hydra
+#                                                      ^^^^ source.hydra
+>      `_`=none}
+#^^^^^^ source.hydra
+#      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#       ^ source.hydra variable.other.escaped.hydra
+#        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#         ^ source.hydra keyword.operator.equals.hydra
+#          ^^^^ source.hydra keyword.control.hydra
+#              ^^ source.hydra
+>      step
+#^^^^^^ source.hydra
+#      ^^^^ source.hydra variable.other.hydra

@@ -1,76 +1,218 @@
 ## String representations of hydra.core.error types
 module hydra.core.print.errors
 
-import hydra.core.error.checking as checking
-import hydra.core.errors as errors
-import hydra.core.formatting as formatting
+import hydra.core.error.checking
+import hydra.core.errors
+import hydra.core.formatting
 import hydra.core.lib.lists as lists
-import hydra.core.lib.literals as literals
+import hydra.core.lib.literals
 import hydra.core.lib.sets as sets
 import hydra.core.lib.strings as strings
-import hydra.core.model as model
-import hydra.core.paths as paths
-import hydra.core.print.error.model as error.model
-import hydra.core.print.model as print.model
-import hydra.core.print.typing as typing
-import hydra.core.print.variants as variants
+import hydra.core.model
+import hydra.core.paths
+import hydra.core.print.error.model
+import hydra.core.print.model
+import hydra.core.print.typing
+import hydra.core.print.variants
 
 ## Show a checking error as a string
-term checkingError = λce.cases(checking.CheckingError){incorrectUnification=incorrectUnificationError, notAForallType=notAForallTypeError, notAFunctionType=notAFunctionTypeError, typeArityMismatch=typeArityMismatchError, typeMismatch=typeMismatchError, unboundTypeVariables=unboundTypeVariablesError, unequalTypes=unequalTypesError, unsupportedTermVariant=unsupportedTermVariantError, untypedLambda=untypedLambdaError, untypedLetBinding=untypedLetBindingError} ce
+term checkingError =
+  λce.cases(CheckingError){
+      incorrectUnification=incorrectUnificationError,
+      notAForallType=notAForallTypeError,
+      notAFunctionType=notAFunctionTypeError,
+      typeArityMismatch=typeArityMismatchError,
+      typeMismatch=typeMismatchError,
+      unboundTypeVariables=unboundTypeVariablesError,
+      unequalTypes=unequalTypesError,
+      unsupportedTermVariant=unsupportedTermVariantError,
+      untypedLambda=untypedLambdaError,
+      untypedLetBinding=untypedLetBindingError}
+      ce
 
 ## Show a decoding error as a string
-term decodingError = λde.strings.concat2 "decoding error: " (errors.DecodingError[] de)
+term decodingError = λde.strings.concat2 "decoding error: " (DecodingError[] de)
 
 ## Show an error as a string
-term error = λe.cases(errors.Error){checking=checkingError, decoding=decodingError, duplicateBinding=error.model.duplicateBindingError, duplicateField=error.model.duplicateFieldError, extraction=extractionError, inference=inferenceError, other=otherError, resolution=resolutionError, undefinedField=error.model.undefinedFieldError, undefinedTermVariable=error.model.undefinedTermVariableError, untypedTermVariable=error.model.untypedTermVariableError, unexpectedTermVariant=error.model.unexpectedTermVariantError, unexpectedTypeVariant=error.model.unexpectedTypeVariantError, unification=unificationError} e
+term error =
+  λe.cases(Error){
+      checking=checkingError,
+      decoding=decodingError,
+      duplicateBinding=duplicateBindingError,
+      duplicateField=duplicateFieldError,
+      extraction=extractionError,
+      inference=inferenceError,
+      other=otherError,
+      resolution=resolutionError,
+      undefinedField=undefinedFieldError,
+      undefinedTermVariable=undefinedTermVariableError,
+      untypedTermVariable=untypedTermVariableError,
+      unexpectedTermVariant=unexpectedTermVariantError,
+      unexpectedTypeVariant=unexpectedTypeVariantError,
+      unification=unificationError}
+      e
 
 ## Show an extraction error as a string
-term extractionError = λe.cases(errors.ExtractionError){emptyList=λ`_`."empty list", multipleBindings=λe.strings.concat2 "multiple bindings with name: " (model.Name[] (errors.MultipleBindingsError[name] e)), multipleFields=λe.strings.concat2 "multiple fields with name: " (model.Name[] (errors.MultipleFieldsError[fieldName] e)), noMatchingField=λe.strings.concat2 "no matching field: " (model.Name[] (errors.NoMatchingFieldError[fieldName] e)), noSuchBinding=λe.strings.concat2 "no such binding: " (model.Name[] (errors.NoSuchBindingError[name] e)), notEnoughCases=λ`_`."not enough cases", unexpectedShape=λe.strings.concat ["unexpected shape: expected ", errors.UnexpectedShapeError[expected] e, " but got ", errors.UnexpectedShapeError[actual] e]} e
+term extractionError =
+  λe.cases(ExtractionError){
+      emptyList=λ`_`."empty list",
+      multipleBindings=λe.strings.concat2
+            "multiple bindings with name: "
+            (Name[] (MultipleBindingsError[name] e)),
+      multipleFields=λe.strings.concat2
+            "multiple fields with name: "
+            (Name[] (MultipleFieldsError[fieldName] e)),
+      noMatchingField=λe.strings.concat2
+            "no matching field: "
+            (Name[] (NoMatchingFieldError[fieldName] e)),
+      noSuchBinding=λe.strings.concat2 "no such binding: " (Name[] (NoSuchBindingError[name] e)),
+      notEnoughCases=λ`_`."not enough cases",
+      unexpectedShape=λe.strings.concat
+            ["unexpected shape: expected ", UnexpectedShapeError[expected] e, " but got ", UnexpectedShapeError[actual] e]}
+      e
 
 ## Show an incorrect unification error as a string
-term incorrectUnificationError = λe.let subst := checking.IncorrectUnificationError[substitution] e in strings.concat2 "incorrect unification: " (typing.typeSubst subst)
+term incorrectUnificationError =
+  λe.
+    let subst := IncorrectUnificationError[substitution] e
+    in strings.concat2 "incorrect unification: " (typeSubst subst)
 
 ## Show an inference error as a string, including the subterm path where applicable
-term inferenceError = λe.cases(errors.InferenceError){checking=checkingError, other=λe.let path := errors.OtherInferenceError[path] e in let msg := errors.OtherInferenceError[message] e in strings.concat ["inference error at ", subtermPath path, ": ", msg], unification=λe.let path := errors.UnificationInferenceError[path] e in let cause := errors.UnificationInferenceError[cause] e in strings.concat ["inference error at ", subtermPath path, ": ", unificationError cause]} e
+term inferenceError =
+  λe.cases(InferenceError){
+      checking=checkingError,
+      other=λe.
+          let path := OtherInferenceError[path] e in
+          let msg := OtherInferenceError[message] e in
+          strings.concat ["inference error at ", subtermPath path, ": ", msg],
+      unification=λe.
+          let path := UnificationInferenceError[path] e in
+          let cause := UnificationInferenceError[cause] e in
+          strings.concat
+            ["inference error at ", subtermPath path, ": ", unificationError cause]}
+      e
 
 ## Show a not-a-forall-type error as a string
-term notAForallTypeError = λe.let typ := checking.NotAForallTypeError[`type`] e in let args := checking.NotAForallTypeError[typeArguments] e in strings.concat ["not a forall type: ", print.model.type typ, ". Trying to apply ", literals.printInt32 (lists.length args), " type argument(s): ", formatting.showList print.model.type args]
+term notAForallTypeError =
+  λe.
+    let typ := NotAForallTypeError[`type`] e in
+    let args := NotAForallTypeError[typeArguments] e in
+    strings.concat
+      [
+        "not a forall type: ",
+        `type` typ,
+        ". Trying to apply ",
+        printInt32 (lists.length args),
+        " type argument(s): ",
+        showList `type` args]
 
 ## Show a not-a-function-type error as a string
-term notAFunctionTypeError = λe.let typ := checking.NotAFunctionTypeError[`type`] e in strings.concat2 "not a function type: " (print.model.type typ)
+term notAFunctionTypeError =
+  λe.let typ := NotAFunctionTypeError[`type`] e in strings.concat2 "not a function type: " (`type` typ)
 
 ## Show an other error as a string
-term otherError = λoe.errors.OtherError[] oe
+term otherError = λoe.OtherError[] oe
 
 ## Show a resolution error as a string, including the offending name or shape
-term resolutionError = λre.cases(errors.ResolutionError){noSuchBinding=λe.strings.concat2 "no such binding: " (model.Name[] (errors.NoSuchBindingError[name] e)), noSuchPrimitive=λe.strings.concat2 "no such primitive: " (model.Name[] (errors.NoSuchPrimitiveError[name] e)), noMatchingField=λe.strings.concat2 "no matching field: " (model.Name[] (errors.NoMatchingFieldError[fieldName] e)), other=λe.strings.concat2 "resolution error: " (errors.OtherResolutionError[] e), unexpectedShape=λe.strings.concat ["unexpected shape: expected ", errors.UnexpectedShapeError[expected] e, " but got ", errors.UnexpectedShapeError[actual] e]} re
+term resolutionError =
+  λre.cases(ResolutionError){
+      noSuchBinding=λe.strings.concat2 "no such binding: " (Name[] (NoSuchBindingError[name] e)),
+      noSuchPrimitive=λe.strings.concat2
+            "no such primitive: "
+            (Name[] (NoSuchPrimitiveError[name] e)),
+      noMatchingField=λe.strings.concat2
+            "no matching field: "
+            (Name[] (NoMatchingFieldError[fieldName] e)),
+      other=λe.strings.concat2 "resolution error: " (OtherResolutionError[] e),
+      unexpectedShape=λe.strings.concat
+            ["unexpected shape: expected ", UnexpectedShapeError[expected] e, " but got ", UnexpectedShapeError[actual] e]}
+      re
 
 ## Print a subterm path as its steps joined by '/'
-term subtermPath = λpath.strings.join "/" (lists.map subtermStep (paths.SubtermPath[] path))
+term subtermPath = λpath.strings.join "/" (lists.map subtermStep (SubtermPath[] path))
 
 ## Print a subterm step in its round-trippable notation
-term subtermStep = λstep.cases(paths.SubtermStep){annotatedAnnotation=λ`_`."annotatedAnnotation", annotatedBody=λ`_`."annotatedBody", applicationArgument=λ`_`."applicationArgument", applicationFunction=λ`_`."applicationFunction", casesCase=λname.strings.concat2 "casesCase:" (model.Name[] name), casesDefault=λ`_`."casesDefault", eitherLeft=λ`_`."eitherLeft", eitherRight=λ`_`."eitherRight", injectField=λname.strings.concat2 "injectField:" (model.Name[] name), lambdaBody=λ`_`."lambdaBody", letBinding=λname.strings.concat2 "letBinding:" (model.Name[] name), letBody=λ`_`."letBody", listElement=λi.strings.concat2 "listElement:" (literals.printInt32 i), mapEntry=λi.strings.concat2 "mapEntry:" (literals.printInt32 i), optionalGiven=λ`_`."optionalGiven", pairFirst=λ`_`."pairFirst", pairSecond=λ`_`."pairSecond", recordField=λname.strings.concat2 "recordField:" (model.Name[] name), setElement=λi.strings.concat2 "setElement:" (literals.printInt32 i), typeApplicationBody=λ`_`."typeApplicationBody", typeLambdaBody=λ`_`."typeLambdaBody", wrapBody=λ`_`."wrapBody"} step
+term subtermStep =
+  λstep.cases(SubtermStep){
+      annotatedAnnotation=λ`_`."annotatedAnnotation",
+      annotatedBody=λ`_`."annotatedBody",
+      applicationArgument=λ`_`."applicationArgument",
+      applicationFunction=λ`_`."applicationFunction",
+      casesCase=λname.strings.concat2 "casesCase:" (Name[] name),
+      casesDefault=λ`_`."casesDefault",
+      eitherLeft=λ`_`."eitherLeft",
+      eitherRight=λ`_`."eitherRight",
+      injectField=λname.strings.concat2 "injectField:" (Name[] name),
+      lambdaBody=λ`_`."lambdaBody",
+      letBinding=λname.strings.concat2 "letBinding:" (Name[] name),
+      letBody=λ`_`."letBody",
+      listElement=λi.strings.concat2 "listElement:" (printInt32 i),
+      mapEntry=λi.strings.concat2 "mapEntry:" (printInt32 i),
+      optionalGiven=λ`_`."optionalGiven",
+      pairFirst=λ`_`."pairFirst",
+      pairSecond=λ`_`."pairSecond",
+      recordField=λname.strings.concat2 "recordField:" (Name[] name),
+      setElement=λi.strings.concat2 "setElement:" (printInt32 i),
+      typeApplicationBody=λ`_`."typeApplicationBody",
+      typeLambdaBody=λ`_`."typeLambdaBody",
+      wrapBody=λ`_`."wrapBody"}
+      step
 
 ## Show a type arity mismatch error as a string
-term typeArityMismatchError = λe.let typ := checking.TypeArityMismatchError[`type`] e in let expected := checking.TypeArityMismatchError[expectedArity] e in let actual := checking.TypeArityMismatchError[actualArity] e in let args := checking.TypeArityMismatchError[typeArguments] e in strings.concat ["type ", print.model.type typ, " applied to the wrong number of type arguments (expected ", literals.printInt32 expected, ", got ", literals.printInt32 actual, "): ", formatting.showList print.model.type args]
+term typeArityMismatchError =
+  λe.
+    let typ := TypeArityMismatchError[`type`] e in
+    let expected := TypeArityMismatchError[expectedArity] e in
+    let actual := TypeArityMismatchError[actualArity] e in
+    let args := TypeArityMismatchError[typeArguments] e in
+    strings.concat
+      [
+        "type ",
+        `type` typ,
+        " applied to the wrong number of type arguments (expected ",
+        printInt32 expected,
+        ", got ",
+        printInt32 actual,
+        "): ",
+        showList `type` args]
 
 ## Show a type mismatch error as a string
-term typeMismatchError = λe.let expected := checking.TypeMismatchError[expectedType] e in let actual := checking.TypeMismatchError[actualType] e in strings.concat ["type mismatch: expected ", print.model.type expected, " but found ", print.model.type actual]
+term typeMismatchError =
+  λe.
+    let expected := TypeMismatchError[expectedType] e in
+    let actual := TypeMismatchError[actualType] e in
+    strings.concat ["type mismatch: expected ", `type` expected, " but found ", `type` actual]
 
 ## Show an unbound type variables error as a string
-term unboundTypeVariablesError = λe.let vars := checking.UnboundTypeVariablesError[variables] e in let typ := checking.UnboundTypeVariablesError[`type`] e in strings.concat ["unbound type variables: {", strings.join ", " (lists.map model.Name[] (sets.toList vars)), "} in type ", print.model.type typ]
+term unboundTypeVariablesError =
+  λe.
+    let vars := UnboundTypeVariablesError[variables] e in
+    let typ := UnboundTypeVariablesError[`type`] e in
+    strings.concat
+      ["unbound type variables: {", strings.join ", " (lists.map Name[] (sets.toList vars)), "} in type ", `type` typ]
 
 ## Show an unequal types error as a string
-term unequalTypesError = λe.let types := checking.UnequalTypesError[types] e in let desc := checking.UnequalTypesError[description] e in strings.concat ["unequal types ", formatting.showList print.model.type types, " in ", desc]
+term unequalTypesError =
+  λe.
+    let types := UnequalTypesError[types] e in
+    let desc := UnequalTypesError[description] e in
+    strings.concat ["unequal types ", showList `type` types, " in ", desc]
 
 ## Show a unification error as a string
-term unificationError = λe.let lt := errors.UnificationError[leftType] e in let rt := errors.UnificationError[rightType] e in let msg := errors.UnificationError[message] e in strings.concat ["unification error: cannot unify ", print.model.type lt, " with ", print.model.type rt, ": ", msg]
+term unificationError =
+  λe.
+    let lt := UnificationError[leftType] e in
+    let rt := UnificationError[rightType] e in
+    let msg := UnificationError[message] e in
+    strings.concat ["unification error: cannot unify ", `type` lt, " with ", `type` rt, ": ", msg]
 
 ## Show an unsupported term variant error as a string
-term unsupportedTermVariantError = λe.strings.concat2 "unsupported term variant: " (variants.termVariant (checking.UnsupportedTermVariantError[termVariant] e))
+term unsupportedTermVariantError =
+  λe.strings.concat2 "unsupported term variant: " (termVariant (UnsupportedTermVariantError[termVariant] e))
 
 ## Show an untyped lambda error as a string
 term untypedLambdaError = λ`_`."untyped lambda"
 
 ## Show an untyped let binding error as a string
-term untypedLetBindingError = λe.let b := checking.UntypedLetBindingError[binding] e in strings.concat2 "untyped let binding: " (print.model.binding b)
+term untypedLetBindingError =
+  λe.let b := UntypedLetBindingError[binding] e in strings.concat2 "untyped let binding: " (binding b)

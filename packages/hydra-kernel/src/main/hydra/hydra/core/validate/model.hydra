@@ -1,26 +1,26 @@
 ## Validation functions for core terms and types
 module hydra.core.validate.model
 
-import hydra.core.annotations as annotations
-import hydra.core.error.model as error.model
-import hydra.core.graph as graph
-import hydra.core.lib.equality as equality
+import hydra.core.annotations
+import hydra.core.error.model
+import hydra.core.graph
+import hydra.core.lib.equality
 import hydra.core.lib.lists as lists
-import hydra.core.lib.logic as logic
+import hydra.core.lib.logic
 import hydra.core.lib.maps as maps
 import hydra.core.lib.optionals as optionals
 import hydra.core.lib.ordering as ordering
-import hydra.core.lib.pairs as pairs
+import hydra.core.lib.pairs
 import hydra.core.lib.sets as sets
-import hydra.core.model as model
-import hydra.core.names as names
-import hydra.core.paths as paths
-import hydra.core.reflect as reflect
-import hydra.core.rewriting as rewriting
-import hydra.core.strip as strip
-import hydra.core.validation as validation
-import hydra.core.variables as variables
-import hydra.core.variants as variants
+import hydra.core.model
+import hydra.core.names
+import hydra.core.paths
+import hydra.core.reflect
+import hydra.core.rewriting
+import hydra.core.strip
+import hydra.core.validation
+import hydra.core.variables
+import hydra.core.variants
 
 ## Append a rule-tagged InvalidTermError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
 term appendFinding =
@@ -28,25 +28,21 @@ term appendFinding =
       finding
       acc
       (λrp.
-        let ruleName := pairs.first rp in
-        let payload := pairs.second rp in
-        let errs := validation.ValidationResult[errors] acc in
-        let wrns := validation.ValidationResult[warnings] acc in
-        logic.ifElse
-          (sets.member ruleName (validation.ValidationProfile[errorRules] p))
-          (logic.ifElse
-            (ordering.lt (lists.length errs) (validation.ValidationProfile[maxErrors] p))
-            validation.ValidationResult{
-              errors = lists.concat2 errs (lists.singleton payload),
-              warnings = wrns}
+        let ruleName := first rp in
+        let payload := second rp in
+        let errs := ValidationResult[errors] acc in
+        let wrns := ValidationResult[warnings] acc in
+        ifElse
+          (sets.member ruleName (ValidationProfile[errorRules] p))
+          (ifElse
+            (ordering.lt (lists.length errs) (ValidationProfile[maxErrors] p))
+            ValidationResult{errors = lists.concat2 errs (lists.singleton payload), warnings = wrns}
             acc)
-          (logic.ifElse
-            (sets.member ruleName (validation.ValidationProfile[warningRules] p))
-            (logic.ifElse
-              (ordering.lt (lists.length wrns) (validation.ValidationProfile[maxWarnings] p))
-              validation.ValidationResult{
-                errors = errs,
-                warnings = lists.concat2 wrns (lists.singleton payload)}
+          (ifElse
+            (sets.member ruleName (ValidationProfile[warningRules] p))
+            (ifElse
+              (ordering.lt (lists.length wrns) (ValidationProfile[maxWarnings] p))
+              ValidationResult{errors = errs, warnings = lists.concat2 wrns (lists.singleton payload)}
               acc)
             acc))
 
@@ -56,44 +52,37 @@ term appendFindingType =
       finding
       acc
       (λrp.
-        let ruleName := pairs.first rp in
-        let payload := pairs.second rp in
-        let errs := validation.ValidationResult[errors] acc in
-        let wrns := validation.ValidationResult[warnings] acc in
-        logic.ifElse
-          (sets.member ruleName (validation.ValidationProfile[errorRules] p))
-          (logic.ifElse
-            (ordering.lt (lists.length errs) (validation.ValidationProfile[maxErrors] p))
-            validation.ValidationResult{
-              errors = lists.concat2 errs (lists.singleton payload),
-              warnings = wrns}
+        let ruleName := first rp in
+        let payload := second rp in
+        let errs := ValidationResult[errors] acc in
+        let wrns := ValidationResult[warnings] acc in
+        ifElse
+          (sets.member ruleName (ValidationProfile[errorRules] p))
+          (ifElse
+            (ordering.lt (lists.length errs) (ValidationProfile[maxErrors] p))
+            ValidationResult{errors = lists.concat2 errs (lists.singleton payload), warnings = wrns}
             acc)
-          (logic.ifElse
-            (sets.member ruleName (validation.ValidationProfile[warningRules] p))
-            (logic.ifElse
-              (ordering.lt (lists.length wrns) (validation.ValidationProfile[maxWarnings] p))
-              validation.ValidationResult{
-                errors = errs,
-                warnings = lists.concat2 wrns (lists.singleton payload)}
+          (ifElse
+            (sets.member ruleName (ValidationProfile[warningRules] p))
+            (ifElse
+              (ordering.lt (lists.length wrns) (ValidationProfile[maxWarnings] p))
+              ValidationResult{errors = errs, warnings = lists.concat2 wrns (lists.singleton payload)}
               acc)
             acc))
 
 ## Check for duplicate binding names in a list of bindings
 term checkDuplicateBindings =
   λpath,bindings.
-    let names := lists.map model.Binding[name] bindings in
+    let names := lists.map Binding[name] bindings in
     let dup := findDuplicate names in
     optionals.map
-      (λname.error.model.InvalidTermError{
-          duplicateBinding = error.model.DuplicateBindingError{
-            location = path,
-            name = name}})
+      (λname.InvalidTermError{duplicateBinding = DuplicateBindingError{location = path, name = name}})
       dup
 
 ## Check for duplicate field names in a list of field types
 term checkDuplicateFieldTypes =
   λfields,mkError.
-    let names := lists.map model.FieldType[name] fields in
+    let names := lists.map FieldType[name] fields in
     let dup := findDuplicateFieldType names in
     optionals.match dup none (λname.mkError name)
 
@@ -102,21 +91,18 @@ term checkDuplicateFields =
   λpath,names.
     let dup := findDuplicate names
     in optionals.map
-      (λname.error.model.InvalidTermError{
-          duplicateField = error.model.DuplicateFieldError{
-            location = path,
-            name = name}})
+      (λname.InvalidTermError{duplicateField = DuplicateFieldError{location = path, name = name}})
       dup
 
 ## Check that a literal value's type matches an expected literal type
 term checkLiteral =
   λexpected,value.
-    let actual := reflect.literalType value
-    in logic.ifElse
-      (equality.equal expected actual)
+    let actual := literalType value
+    in ifElse
+      (equal expected actual)
       none
-      given(error.model.InvalidLiteralError{
-        typeMismatch = error.model.LiteralTypeMismatchError{
+      given(InvalidLiteralError{
+        typeMismatch = LiteralTypeMismatchError{
           expectedType = expected,
           actualType = actual}})
 
@@ -126,12 +112,12 @@ term checkShadowing =
     let result := lists.foldl
         (λacc,name.optionals.match
             acc
-            (logic.ifElse
-              (logic.or
-                (optionals.isGiven (maps.lookup name (graph.Graph[boundTerms] cx)))
-                (sets.member name (graph.Graph[lambdaVariables] cx)))
-              given(error.model.InvalidTermError{
-                termVariableShadowing = error.model.TermVariableShadowingError{
+            (ifElse
+              (or
+                (optionals.isGiven (maps.lookup name (Graph[boundTerms] cx)))
+                (sets.member name (Graph[lambdaVariables] cx)))
+              given(InvalidTermError{
+                termVariableShadowing = TermVariableShadowingError{
                   location = path,
                   name = name}})
               none)
@@ -142,49 +128,46 @@ term checkShadowing =
 
 ## Check a single term node for validation errors. Rules disabled by the profile are not evaluated.
 term checkTerm =
-  λp,typed,path,cx,`term`.cases(model.Term){
+  λp,typed,path,cx,`term`.cases(Term){
       annotated=λann.
-          let body := model.AnnotatedTerm[body] ann in
-          let annMap := annotations.getAnnotationMap
-              (model.AnnotatedTerm[annotation] ann) in
+          let body := AnnotatedTerm[body] ann in
+          let annMap := getAnnotationMap (AnnotatedTerm[annotation] ann) in
           firstFinding
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.emptyTermAnnotation"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.emptyTermAnnotation"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.emptyTermAnnotation"}, f))
-                  (logic.ifElse
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.emptyTermAnnotation"}, f))
+                  (ifElse
                     (maps.isEmpty annMap)
-                    given(error.model.InvalidTermError{emptyTermAnnotation = error.model.EmptyTermAnnotationError{location = path}})
+                    given(InvalidTermError{emptyTermAnnotation = EmptyTermAnnotationError{location = path}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.nestedTermAnnotation"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.nestedTermAnnotation"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.nestedTermAnnotation"}, f))
-                  (cases(model.Term){
-                    annotated=λ`_`.given(error.model.InvalidTermError{
-                          nestedTermAnnotation = error.model.NestedTermAnnotationError{
-                            location = path}}),
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.nestedTermAnnotation"}, f))
+                  (cases(Term){
+                    annotated=λ`_`.given(InvalidTermError{nestedTermAnnotation = NestedTermAnnotationError{location = path}}),
                     `_`=none}
                     body))
                 none],
       application=λapp.
-          let fun := model.Application[function] app in
-          let arg := model.Application[argument] app in
+          let fun := Application[function] app in
+          let arg := Application[argument] app in
           firstFinding
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.constantCondition"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.constantCondition"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.constantCondition"}, f))
-                  (cases(model.Term){
-                    variable=λprimName.logic.ifElse
-                          (equality.equal (model.Name[] primName) "hydra.core.lib.logic.ifElse")
-                          (cases(model.Term){
-                            literal=λlit.cases(model.Literal){
-                                  `boolean`=λboolVal.given(error.model.InvalidTermError{
-                                        constantCondition = error.model.ConstantConditionError{
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.constantCondition"}, f))
+                  (cases(Term){
+                    variable=λprimName.ifElse
+                          (equal (Name[] primName) "hydra.core.lib.logic.ifElse")
+                          (cases(Term){
+                            literal=λlit.cases(Literal){
+                                  `boolean`=λboolVal.given(InvalidTermError{
+                                        constantCondition = ConstantConditionError{
                                           location = path,
                                           value = boolVal}}),
                                   `_`=none}
@@ -195,16 +178,16 @@ term checkTerm =
                     `_`=none}
                     fun))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.selfApplication"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.selfApplication"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.selfApplication"}, f))
-                  (cases(model.Term){
-                    variable=λfunName.cases(model.Term){
-                          variable=λargName.logic.ifElse
-                                (equality.equal funName argName)
-                                given(error.model.InvalidTermError{
-                                  selfApplication = error.model.SelfApplicationError{
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.selfApplication"}, f))
+                  (cases(Term){
+                    variable=λfunName.cases(Term){
+                          variable=λargName.ifElse
+                                (equal funName argName)
+                                given(InvalidTermError{
+                                  selfApplication = SelfApplicationError{
                                     location = path,
                                     name = funName}})
                                 none,
@@ -213,19 +196,19 @@ term checkTerm =
                     `_`=none}
                     fun))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.unnecessaryIdentityApplication"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.unnecessaryIdentityApplication"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.unnecessaryIdentityApplication"}, f))
-                  (cases(model.Term){
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.unnecessaryIdentityApplication"}, f))
+                  (cases(Term){
                     lambda=λlam.
-                        let param := model.Lambda[parameter] lam in
-                        let body := model.Lambda[body] lam in
-                        cases(model.Term){
-                          variable=λbodyVar.logic.ifElse
-                                (equality.equal param bodyVar)
-                                given(error.model.InvalidTermError{
-                                  unnecessaryIdentityApplication = error.model.UnnecessaryIdentityApplicationError{
+                        let param := Lambda[parameter] lam in
+                        let body := Lambda[body] lam in
+                        cases(Term){
+                          variable=λbodyVar.ifElse
+                                (equal param bodyVar)
+                                given(InvalidTermError{
+                                  unnecessaryIdentityApplication = UnnecessaryIdentityApplicationError{
                                     location = path}})
                                 none,
                           `_`=none}
@@ -233,18 +216,18 @@ term checkTerm =
                     `_`=none}
                     fun))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.redundantWrapUnwrap"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.redundantWrapUnwrap"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.redundantWrapUnwrap"}, f))
-                  (cases(model.Term){
-                    `unwrap`=λunwrapName.cases(model.Term){
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.redundantWrapUnwrap"}, f))
+                  (cases(Term){
+                    `unwrap`=λunwrapName.cases(Term){
                           `wrap`=λwt.
-                              let wrapName := model.WrappedTerm[typeName] wt
-                              in logic.ifElse
-                                (equality.equal unwrapName wrapName)
-                                given(error.model.InvalidTermError{
-                                  redundantWrapUnwrap = error.model.RedundantWrapUnwrapError{
+                              let wrapName := WrappedTerm[typeName] wt
+                              in ifElse
+                                (equal unwrapName wrapName)
+                                given(InvalidTermError{
+                                  redundantWrapUnwrap = RedundantWrapUnwrapError{
                                     location = path,
                                     typeName = unwrapName}})
                                 none,
@@ -254,613 +237,567 @@ term checkTerm =
                     fun))
                 none],
       `record`=λrec.
-          let tname := model.Record[typeName] rec in
-          let flds := model.Record[fields] rec in
-          let suppliedNames := sets.fromList
-              (lists.map model.Field[name] flds) in
+          let tname := Record[typeName] rec in
+          let flds := Record[fields] rec in
+          let suppliedNames := sets.fromList (lists.map Field[name] flds) in
           let resolved := resolveNominalType cx tname in
           firstFinding
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"}, f))
-                  (logic.ifElse
-                    (equality.equal (model.Name[] tname) "")
-                    given(error.model.InvalidTermError{emptyTypeNameInTerm = error.model.EmptyTypeNameInTermError{location = path}})
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"}, f))
+                  (ifElse
+                    (equal (Name[] tname) "")
+                    given(InvalidTermError{emptyTypeNameInTerm = EmptyTypeNameInTermError{location = path}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.duplicateField"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.duplicateField"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.duplicateField"}, f))
-                  (checkDuplicateFields path (lists.map model.Field[name] flds)))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.duplicateField"}, f))
+                  (checkDuplicateFields path (lists.map Field[name] flds)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"}, f))
                   (optionals.match
                     resolved
-                    given(error.model.InvalidTermError{
-                      unresolvedNominalType = error.model.UnresolvedNominalTypeError{
-                        location = path,
-                        typeName = tname}})
+                    given(InvalidTermError{unresolvedNominalType = UnresolvedNominalTypeError{location = path, typeName = tname}})
                     (λ`_`.none)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"}, f))
                   (optionals.match
                     resolved
                     none
-                    (λtyp.cases(model.Type){
+                    (λtyp.cases(Type){
                         `record`=λ`_`.none,
-                        `_`=given(error.model.InvalidTermError{
-                            nominalTypeKindMismatch = error.model.NominalTypeKindMismatchError{
+                        `_`=given(InvalidTermError{
+                            nominalTypeKindMismatch = NominalTypeKindMismatchError{
                               location = path,
                               typeName = tname,
-                              expectedVariant = variants.TypeVariant{
+                              expectedVariant = TypeVariant{
                                 `record`},
-                              actualVariant = reflect.typeVariant typ}})}
+                              actualVariant = typeVariant typ}})}
                         typ)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.missingRecordFields"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.missingRecordFields"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.missingRecordFields"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.missingRecordFields"}, f))
                   (optionals.match
                     (resolveRecordFields cx tname)
                     none
                     (λdeclFields.
-                      let declNames := sets.fromList (lists.map model.FieldType[name] declFields) in
+                      let declNames := sets.fromList (lists.map FieldType[name] declFields) in
                       let missing := sets.difference declNames suppliedNames in
-                      logic.ifElse
+                      ifElse
                         (sets.isEmpty missing)
                         none
-                        given(error.model.InvalidTermError{
-                          missingRecordFields = error.model.MissingRecordFieldsError{
+                        given(InvalidTermError{
+                          missingRecordFields = MissingRecordFieldsError{
                             location = path,
                             typeName = tname,
                             fieldNames = sets.toList missing}}))))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.extraRecordFields"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.extraRecordFields"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.extraRecordFields"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.extraRecordFields"}, f))
                   (optionals.match
                     (resolveRecordFields cx tname)
                     none
                     (λdeclFields.
-                      let declNames := sets.fromList (lists.map model.FieldType[name] declFields) in
+                      let declNames := sets.fromList (lists.map FieldType[name] declFields) in
                       let extra := sets.difference suppliedNames declNames in
-                      logic.ifElse
+                      ifElse
                         (sets.isEmpty extra)
                         none
-                        given(error.model.InvalidTermError{
-                          extraRecordFields = error.model.ExtraRecordFieldsError{
+                        given(InvalidTermError{
+                          extraRecordFields = ExtraRecordFieldsError{
                             location = path,
                             typeName = tname,
                             fieldNames = sets.toList extra}}))))
                 none],
       `let`=λlt.
-          let bindings := model.Let[bindings] lt in
-          let names := lists.map model.Binding[name] bindings in
+          let bindings := Let[bindings] lt in
+          let names := lists.map Binding[name] bindings in
           firstFinding
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.emptyLetBindings"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.emptyLetBindings"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.emptyLetBindings"}, f))
-                  (logic.ifElse
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.emptyLetBindings"}, f))
+                  (ifElse
                     (lists.isEmpty bindings)
-                    given(error.model.InvalidTermError{emptyLetBindings = error.model.EmptyLetBindingsError{location = path}})
+                    given(InvalidTermError{emptyLetBindings = EmptyLetBindingsError{location = path}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.duplicateBinding"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.duplicateBinding"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.duplicateBinding"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.duplicateBinding"}, f))
                   (checkDuplicateBindings path bindings))
                 none,
               none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.invalidLetBindingName"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.invalidLetBindingName"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.invalidLetBindingName"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.invalidLetBindingName"}, f))
                   (firstError
                     (lists.map
-                      (λbname.logic.ifElse
+                      (λbname.ifElse
                           (isValidName bname)
                           none
-                          given(error.model.InvalidTermError{
-                            invalidLetBindingName = error.model.InvalidLetBindingNameError{
-                              location = path,
-                              name = bname}}))
+                          given(InvalidTermError{invalidLetBindingName = InvalidLetBindingNameError{location = path, name = bname}}))
                       names)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInBindingType"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInBindingType"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInBindingType"}, f))
-                  (logic.ifElse
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInBindingType"}, f))
+                  (ifElse
                     typed
                     (firstError
                       (lists.map
                         (λb.optionals.match
-                            (model.Binding[typeScheme] b)
+                            (Binding[typeScheme] b)
                             none
                             (λts.checkUndefinedTypeVariablesInTypeScheme
                                 path
                                 cx
                                 ts
-                                (λuvName.given(error.model.InvalidTermError{
-                                    undefinedTypeVariableInBindingType = error.model.UndefinedTypeVariableInBindingTypeError{
+                                (λuvName.given(InvalidTermError{
+                                    undefinedTypeVariableInBindingType = UndefinedTypeVariableInBindingTypeError{
                                       location = path,
                                       name = uvName}}))))
                         bindings))
                     none))
                 none],
       `inject`=λinj.
-          let tname := model.Injection[typeName] inj in
-          let variantName := model.Field[name]
-              (model.Injection[field] inj) in
+          let tname := Injection[typeName] inj in
+          let variantName := Field[name] (Injection[field] inj) in
           let resolved := resolveNominalType cx tname in
           firstFinding
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"}, f))
-                  (logic.ifElse
-                    (equality.equal (model.Name[] tname) "")
-                    given(error.model.InvalidTermError{emptyTypeNameInTerm = error.model.EmptyTypeNameInTermError{location = path}})
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"}, f))
+                  (ifElse
+                    (equal (Name[] tname) "")
+                    given(InvalidTermError{emptyTypeNameInTerm = EmptyTypeNameInTermError{location = path}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"}, f))
                   (optionals.match
                     resolved
-                    given(error.model.InvalidTermError{
-                      unresolvedNominalType = error.model.UnresolvedNominalTypeError{
-                        location = path,
-                        typeName = tname}})
+                    given(InvalidTermError{unresolvedNominalType = UnresolvedNominalTypeError{location = path, typeName = tname}})
                     (λ`_`.none)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"}, f))
                   (optionals.match
                     resolved
                     none
-                    (λtyp.cases(model.Type){
+                    (λtyp.cases(Type){
                         `union`=λ`_`.none,
-                        `_`=given(error.model.InvalidTermError{
-                            nominalTypeKindMismatch = error.model.NominalTypeKindMismatchError{
+                        `_`=given(InvalidTermError{
+                            nominalTypeKindMismatch = NominalTypeKindMismatchError{
                               location = path,
                               typeName = tname,
-                              expectedVariant = variants.TypeVariant{
+                              expectedVariant = TypeVariant{
                                 `union`},
-                              actualVariant = reflect.typeVariant typ}})}
+                              actualVariant = typeVariant typ}})}
                         typ)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.undeclaredVariant"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.undeclaredVariant"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.undeclaredVariant"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.undeclaredVariant"}, f))
                   (optionals.match
                     (resolveUnionFields cx tname)
                     none
                     (λdeclFields.
-                      let declNames := sets.fromList (lists.map model.FieldType[name] declFields)
-                      in logic.ifElse
+                      let declNames := sets.fromList (lists.map FieldType[name] declFields)
+                      in ifElse
                         (sets.member variantName declNames)
                         none
-                        given(error.model.InvalidTermError{
-                          undeclaredVariant = error.model.UndeclaredVariantError{
+                        given(InvalidTermError{
+                          undeclaredVariant = UndeclaredVariantError{
                             location = path,
                             typeName = tname,
                             variantName = variantName}}))))
                 none],
       lambda=λlam.
-          let paramName := model.Lambda[parameter] lam
+          let paramName := Lambda[parameter] lam
           in firstFinding
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.termVariableShadowing"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.termVariableShadowing"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.termVariableShadowing"}, f))
-                  (logic.ifElse
-                    (optionals.isGiven (maps.lookup paramName (graph.Graph[boundTerms] cx)))
-                    given(error.model.InvalidTermError{
-                      termVariableShadowing = error.model.TermVariableShadowingError{
-                        location = path,
-                        name = paramName}})
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.termVariableShadowing"}, f))
+                  (ifElse
+                    (optionals.isGiven (maps.lookup paramName (Graph[boundTerms] cx)))
+                    given(InvalidTermError{termVariableShadowing = TermVariableShadowingError{location = path, name = paramName}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.invalidLambdaParameterName"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.invalidLambdaParameterName"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.invalidLambdaParameterName"}, f))
-                  (logic.ifElse
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.invalidLambdaParameterName"}, f))
+                  (ifElse
                     (isValidName paramName)
                     none
-                    given(error.model.InvalidTermError{
-                      invalidLambdaParameterName = error.model.InvalidLambdaParameterNameError{
+                    given(InvalidTermError{
+                      invalidLambdaParameterName = InvalidLambdaParameterNameError{
                         location = path,
                         name = paramName}})))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInLambdaDomain"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInLambdaDomain"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInLambdaDomain"}, f))
-                  (logic.ifElse
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInLambdaDomain"}, f))
+                  (ifElse
                     typed
                     (optionals.match
-                      (model.Lambda[domain] lam)
+                      (Lambda[domain] lam)
                       none
                       (λdom.checkUndefinedTypeVariablesInType
                           path
                           cx
                           dom
-                          (λuvName.given(error.model.InvalidTermError{
-                              undefinedTypeVariableInLambdaDomain = error.model.UndefinedTypeVariableInLambdaDomainError{
+                          (λuvName.given(InvalidTermError{
+                              undefinedTypeVariableInLambdaDomain = UndefinedTypeVariableInLambdaDomainError{
                                 location = path,
                                 name = uvName}}))))
                     none))
                 none],
       `project`=λproj.
-          let tname := model.Projection[typeName] proj in
-          let fname := model.Projection[fieldName] proj in
+          let tname := Projection[typeName] proj in
+          let fname := Projection[fieldName] proj in
           let resolved := resolveNominalType cx tname in
           firstFinding
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"}, f))
-                  (logic.ifElse
-                    (equality.equal (model.Name[] tname) "")
-                    given(error.model.InvalidTermError{emptyTypeNameInTerm = error.model.EmptyTypeNameInTermError{location = path}})
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"}, f))
+                  (ifElse
+                    (equal (Name[] tname) "")
+                    given(InvalidTermError{emptyTypeNameInTerm = EmptyTypeNameInTermError{location = path}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"}, f))
                   (optionals.match
                     resolved
-                    given(error.model.InvalidTermError{
-                      unresolvedNominalType = error.model.UnresolvedNominalTypeError{
-                        location = path,
-                        typeName = tname}})
+                    given(InvalidTermError{unresolvedNominalType = UnresolvedNominalTypeError{location = path, typeName = tname}})
                     (λ`_`.none)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"}, f))
                   (optionals.match
                     resolved
                     none
-                    (λtyp.cases(model.Type){
+                    (λtyp.cases(Type){
                         `record`=λ`_`.none,
-                        `_`=given(error.model.InvalidTermError{
-                            nominalTypeKindMismatch = error.model.NominalTypeKindMismatchError{
+                        `_`=given(InvalidTermError{
+                            nominalTypeKindMismatch = NominalTypeKindMismatchError{
                               location = path,
                               typeName = tname,
-                              expectedVariant = variants.TypeVariant{
+                              expectedVariant = TypeVariant{
                                 `record`},
-                              actualVariant = reflect.typeVariant typ}})}
+                              actualVariant = typeVariant typ}})}
                         typ)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.unknownProjectedField"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.unknownProjectedField"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.unknownProjectedField"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.unknownProjectedField"}, f))
                   (optionals.match
                     (resolveRecordFields cx tname)
                     none
                     (λdeclFields.
-                      let declNames := sets.fromList (lists.map model.FieldType[name] declFields)
-                      in logic.ifElse
+                      let declNames := sets.fromList (lists.map FieldType[name] declFields)
+                      in ifElse
                         (sets.member fname declNames)
                         none
-                        given(error.model.InvalidTermError{
-                          unknownProjectedField = error.model.UnknownProjectedFieldError{
+                        given(InvalidTermError{
+                          unknownProjectedField = UnknownProjectedFieldError{
                             location = path,
                             typeName = tname,
                             fieldName = fname}}))))
                 none],
       `cases`=λcs.
-          let tname := model.CaseStatement[typeName] cs in
-          let csDefault := model.CaseStatement[default] cs in
-          let csCases := model.CaseStatement[`cases`] cs in
-          let altNames := sets.fromList
-              (lists.map model.CaseAlternative[name] csCases) in
+          let tname := CaseStatement[typeName] cs in
+          let csDefault := CaseStatement[default] cs in
+          let csCases := CaseStatement[`cases`] cs in
+          let altNames := sets.fromList (lists.map CaseAlternative[name] csCases) in
           let unionFields := resolveUnionFields cx tname in
           let resolved := resolveNominalType cx tname in
           firstFinding
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"}, f))
-                  (logic.ifElse
-                    (equality.equal (model.Name[] tname) "")
-                    given(error.model.InvalidTermError{emptyTypeNameInTerm = error.model.EmptyTypeNameInTermError{location = path}})
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"}, f))
+                  (ifElse
+                    (equal (Name[] tname) "")
+                    given(InvalidTermError{emptyTypeNameInTerm = EmptyTypeNameInTermError{location = path}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"}, f))
                   (optionals.match
                     resolved
-                    given(error.model.InvalidTermError{
-                      unresolvedNominalType = error.model.UnresolvedNominalTypeError{
-                        location = path,
-                        typeName = tname}})
+                    given(InvalidTermError{unresolvedNominalType = UnresolvedNominalTypeError{location = path, typeName = tname}})
                     (λ`_`.none)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"}, f))
                   (optionals.match
                     resolved
                     none
-                    (λtyp.cases(model.Type){
+                    (λtyp.cases(Type){
                         `union`=λ`_`.none,
-                        `_`=given(error.model.InvalidTermError{
-                            nominalTypeKindMismatch = error.model.NominalTypeKindMismatchError{
+                        `_`=given(InvalidTermError{
+                            nominalTypeKindMismatch = NominalTypeKindMismatchError{
                               location = path,
                               typeName = tname,
-                              expectedVariant = variants.TypeVariant{
+                              expectedVariant = TypeVariant{
                                 `union`},
-                              actualVariant = reflect.typeVariant typ}})}
+                              actualVariant = typeVariant typ}})}
                         typ)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.emptyCaseStatement"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.emptyCaseStatement"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.emptyCaseStatement"}, f))
-                  (logic.ifElse
-                    (logic.and (lists.isEmpty csCases) (optionals.isNone csDefault))
-                    given(error.model.InvalidTermError{
-                      emptyCaseStatement = error.model.EmptyCaseStatementError{
-                        location = path,
-                        typeName = tname}})
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.emptyCaseStatement"}, f))
+                  (ifElse
+                    (and (lists.isEmpty csCases) (optionals.isNone csDefault))
+                    given(InvalidTermError{emptyCaseStatement = EmptyCaseStatementError{location = path, typeName = tname}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.duplicateField"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.duplicateField"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.duplicateField"}, f))
-                  (checkDuplicateFields path (lists.map model.CaseAlternative[name] csCases)))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.duplicateField"}, f))
+                  (checkDuplicateFields path (lists.map CaseAlternative[name] csCases)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.missingCaseBranches"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.missingCaseBranches"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.missingCaseBranches"}, f))
-                  (logic.ifElse
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.missingCaseBranches"}, f))
+                  (ifElse
                     (optionals.isNone csDefault)
                     (optionals.match
                       unionFields
                       none
                       (λfields.
-                        let variantNames := sets.fromList (lists.map model.FieldType[name] fields) in
+                        let variantNames := sets.fromList (lists.map FieldType[name] fields) in
                         let uncovered := sets.difference variantNames altNames in
-                        logic.ifElse
+                        ifElse
                           (sets.isEmpty uncovered)
                           none
-                          given(error.model.InvalidTermError{
-                            missingCaseBranches = error.model.MissingCaseBranchesError{
+                          given(InvalidTermError{
+                            missingCaseBranches = MissingCaseBranchesError{
                               location = path,
                               typeName = tname,
                               variantNames = sets.toList uncovered}})))
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.unknownCaseAlternative"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.unknownCaseAlternative"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.unknownCaseAlternative"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.unknownCaseAlternative"}, f))
                   (optionals.match
                     unionFields
                     none
                     (λfields.
-                      let variantNames := sets.fromList (lists.map model.FieldType[name] fields) in
+                      let variantNames := sets.fromList (lists.map FieldType[name] fields) in
                       let unknown := sets.difference altNames variantNames in
                       optionals.match
                         (lists.head (sets.toList unknown))
                         none
-                        (λfirstUnknown.given(error.model.InvalidTermError{
-                            unknownCaseAlternative = error.model.UnknownCaseAlternativeError{
+                        (λfirstUnknown.given(InvalidTermError{
+                            unknownCaseAlternative = UnknownCaseAlternativeError{
                               location = path,
                               typeName = tname,
                               name = firstUnknown}})))))
                 none],
-      typeApplication=λta.logic.ifElse
+      typeApplication=λta.ifElse
             (enabled
               p
-              model.Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInTypeApplication"})
+              Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInTypeApplication"})
             (optionals.map
-              (λf.(model.Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInTypeApplication"}, f))
-              (logic.ifElse
+              (λf.(Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInTypeApplication"}, f))
+              (ifElse
                 typed
                 (checkUndefinedTypeVariablesInType
                   path
                   cx
-                  (model.TypeApplicationTerm[`type`] ta)
-                  (λuvName.given(error.model.InvalidTermError{
-                      undefinedTypeVariableInTypeApplication = error.model.UndefinedTypeVariableInTypeApplicationError{
+                  (TypeApplicationTerm[`type`] ta)
+                  (λuvName.given(InvalidTermError{
+                      undefinedTypeVariableInTypeApplication = UndefinedTypeVariableInTypeApplicationError{
                         location = path,
                         name = uvName}})))
                 none))
             none,
       typeLambda=λtl.
-          let tvName := model.TypeLambda[parameter] tl
+          let tvName := TypeLambda[parameter] tl
           in firstFinding
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.typeVariableShadowingInTypeLambda"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.typeVariableShadowingInTypeLambda"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.typeVariableShadowingInTypeLambda"}, f))
-                  (logic.ifElse
-                    (sets.member tvName (sets.delete tvName (graph.Graph[typeVariables] cx)))
-                    given(error.model.InvalidTermError{
-                      typeVariableShadowingInTypeLambda = error.model.TypeVariableShadowingInTypeLambdaError{
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.typeVariableShadowingInTypeLambda"}, f))
+                  (ifElse
+                    (sets.member tvName (sets.delete tvName (Graph[typeVariables] cx)))
+                    given(InvalidTermError{
+                      typeVariableShadowingInTypeLambda = TypeVariableShadowingInTypeLambdaError{
                         location = path,
                         name = tvName}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.invalidTypeLambdaParameterName"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.invalidTypeLambdaParameterName"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.invalidTypeLambdaParameterName"}, f))
-                  (logic.ifElse
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.invalidTypeLambdaParameterName"}, f))
+                  (ifElse
                     (isValidName tvName)
                     none
-                    given(error.model.InvalidTermError{
-                      invalidTypeLambdaParameterName = error.model.InvalidTypeLambdaParameterNameError{
+                    given(InvalidTermError{
+                      invalidTypeLambdaParameterName = InvalidTypeLambdaParameterNameError{
                         location = path,
                         name = tvName}})))
                 none],
       variable=λvarName.
-          let looksQualified := optionals.isGiven
-              (names.moduleNameOf varName) in
+          let looksQualified := optionals.isGiven (moduleNameOf varName) in
           let isBoundTerm := optionals.isGiven
-              (maps.lookup
-                varName
-                (graph.Graph[boundTerms] cx)) in
+              (maps.lookup varName (Graph[boundTerms] cx)) in
           let isPrimitive := optionals.isGiven
-              (maps.lookup
-                varName
-                (graph.Graph[primitives] cx)) in
+              (maps.lookup varName (Graph[primitives] cx)) in
           firstFinding
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.undefinedTermVariable"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.undefinedTermVariable"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.undefinedTermVariable"}, f))
-                  (logic.ifElse
-                    (logic.or
-                      looksQualified
-                      (logic.or isBoundTerm (logic.or (sets.member varName (graph.Graph[lambdaVariables] cx)) isPrimitive)))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.undefinedTermVariable"}, f))
+                  (ifElse
+                    (or looksQualified (or isBoundTerm (or (sets.member varName (Graph[lambdaVariables] cx)) isPrimitive)))
                     none
-                    given(error.model.InvalidTermError{
-                      undefinedTermVariable = error.model.UndefinedTermVariableError{
-                        location = path,
-                        name = varName}})))
+                    given(InvalidTermError{undefinedTermVariable = UndefinedTermVariableError{location = path, name = varName}})))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.unknownPrimitiveName"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.unknownPrimitiveName"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.unknownPrimitiveName"}, f))
-                  (logic.ifElse
-                    (logic.and looksQualified (logic.and (logic.not isPrimitive) (logic.not isBoundTerm)))
-                    given(error.model.InvalidTermError{
-                      unknownPrimitiveName = error.model.UnknownPrimitiveNameError{
-                        location = path,
-                        name = varName}})
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.unknownPrimitiveName"}, f))
+                  (ifElse
+                    (and looksQualified (and (not isPrimitive) (not isBoundTerm)))
+                    given(InvalidTermError{unknownPrimitiveName = UnknownPrimitiveNameError{location = path, name = varName}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.untypedTermVariable"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.untypedTermVariable"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.untypedTermVariable"}, f))
-                  (logic.ifElse
-                    (logic.and
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.untypedTermVariable"}, f))
+                  (ifElse
+                    (and
                       typed
-                      (logic.and
-                        (sets.member varName (graph.Graph[lambdaVariables] cx))
-                        (logic.not (optionals.isGiven (maps.lookup varName (graph.Graph[boundTypes] cx))))))
-                    given(error.model.InvalidTermError{
-                      untypedTermVariable = error.model.UntypedTermVariableError{
-                        location = path,
-                        name = varName}})
+                      (and
+                        (sets.member varName (Graph[lambdaVariables] cx))
+                        (not (optionals.isGiven (maps.lookup varName (Graph[boundTypes] cx))))))
+                    given(InvalidTermError{untypedTermVariable = UntypedTermVariableError{location = path, name = varName}})
                     none))
                 none],
       `wrap`=λwt.
-          let tname := model.WrappedTerm[typeName] wt in
+          let tname := WrappedTerm[typeName] wt in
           let resolved := resolveNominalType cx tname in
           firstFinding
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"}, f))
-                  (logic.ifElse
-                    (equality.equal (model.Name[] tname) "")
-                    given(error.model.InvalidTermError{emptyTypeNameInTerm = error.model.EmptyTypeNameInTermError{location = path}})
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"}, f))
+                  (ifElse
+                    (equal (Name[] tname) "")
+                    given(InvalidTermError{emptyTypeNameInTerm = EmptyTypeNameInTermError{location = path}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"}, f))
                   (optionals.match
                     resolved
-                    given(error.model.InvalidTermError{
-                      unresolvedNominalType = error.model.UnresolvedNominalTypeError{
-                        location = path,
-                        typeName = tname}})
+                    given(InvalidTermError{unresolvedNominalType = UnresolvedNominalTypeError{location = path, typeName = tname}})
                     (λ`_`.none)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"}, f))
                   (optionals.match
                     resolved
                     none
-                    (λtyp.cases(model.Type){
+                    (λtyp.cases(Type){
                         `wrap`=λ`_`.none,
-                        `_`=given(error.model.InvalidTermError{
-                            nominalTypeKindMismatch = error.model.NominalTypeKindMismatchError{
+                        `_`=given(InvalidTermError{
+                            nominalTypeKindMismatch = NominalTypeKindMismatchError{
                               location = path,
                               typeName = tname,
-                              expectedVariant = variants.TypeVariant{
+                              expectedVariant = TypeVariant{
                                 `wrap`},
-                              actualVariant = reflect.typeVariant typ}})}
+                              actualVariant = typeVariant typ}})}
                         typ)))
                 none],
       `unwrap`=λtname.
           let resolved := resolveNominalType cx tname
           in firstFinding
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"}, f))
                   (optionals.match
                     resolved
-                    given(error.model.InvalidTermError{
-                      unresolvedNominalType = error.model.UnresolvedNominalTypeError{
-                        location = path,
-                        typeName = tname}})
+                    given(InvalidTermError{unresolvedNominalType = UnresolvedNominalTypeError{location = path, typeName = tname}})
                     (λ`_`.none)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"}, f))
                   (optionals.match
                     resolved
                     none
-                    (λtyp.cases(model.Type){
+                    (λtyp.cases(Type){
                         `wrap`=λ`_`.none,
-                        `_`=given(error.model.InvalidTermError{
-                            nominalTypeKindMismatch = error.model.NominalTypeKindMismatchError{
+                        `_`=given(InvalidTermError{
+                            nominalTypeKindMismatch = NominalTypeKindMismatchError{
                               location = path,
                               typeName = tname,
-                              expectedVariant = variants.TypeVariant{
+                              expectedVariant = TypeVariant{
                                 `wrap`},
-                              actualVariant = reflect.typeVariant typ}})}
+                              actualVariant = typeVariant typ}})}
                         typ)))
                 none],
       `_`=none}
@@ -869,10 +806,10 @@ term checkTerm =
 ## Check a type for type variables not bound in the current scope
 term checkUndefinedTypeVariablesInType =
   λpath,cx,typ,mkError.
-    let freeVars := variables.freeVariablesInType typ in
+    let freeVars := freeVariablesInType typ in
     let resolvedNames := sets.union
-        (graph.Graph[typeVariables] cx)
-        (sets.fromList (maps.keys (graph.Graph[schemaTypes] cx))) in
+        (Graph[typeVariables] cx)
+        (sets.fromList (maps.keys (Graph[schemaTypes] cx))) in
     let undefined := sets.difference freeVars resolvedNames in
     optionals.match
       (lists.head (sets.toList undefined))
@@ -882,57 +819,57 @@ term checkUndefinedTypeVariablesInType =
 ## Check a type scheme for type variables not bound by the scheme or the current scope
 term checkUndefinedTypeVariablesInTypeScheme =
   λpath,cx,ts,mkError.
-    let freeVars := variables.freeVariablesInTypeScheme ts in
+    let freeVars := freeVariablesInTypeScheme ts in
     let resolvedNames := sets.union
-        (graph.Graph[typeVariables] cx)
-        (sets.fromList (maps.keys (graph.Graph[schemaTypes] cx))) in
+        (Graph[typeVariables] cx)
+        (sets.fromList (maps.keys (Graph[schemaTypes] cx))) in
     let undefined := sets.difference freeVars resolvedNames in
     optionals.match (lists.head (sets.toList undefined)) none (λfirstUndefined.mkError firstUndefined)
 
 ## Return an error if the given type is TypeVoid
 term checkVoid =
-  λtyp.cases(model.Type){
-      `void`=λ`_`.given(error.model.InvalidTypeError{
-            voidInNonBottomPosition = error.model.VoidInNonBottomPositionError{
-              location = paths.SubtermPath{[]}}}),
+  λtyp.cases(Type){
+      `void`=λ`_`.given(InvalidTypeError{
+            voidInNonBottomPosition = VoidInNonBottomPositionError{
+              location = SubtermPath{[]}}}),
       `_`=none}
       typ
 
 ## True iff the given rule name appears in the profile's errorRules or warningRules.
 term enabled =
-  λp,ruleName.logic.or
-      (sets.member ruleName (validation.ValidationProfile[errorRules] p))
-      (sets.member ruleName (validation.ValidationProfile[warningRules] p))
+  λp,ruleName.or
+      (sets.member ruleName (ValidationProfile[errorRules] p))
+      (sets.member ruleName (ValidationProfile[warningRules] p))
 
 ## Find the first duplicate name in a list
 term findDuplicate =
   λnames.
     let result := lists.foldl
         (λacc,name.
-          let seen := pairs.first acc in
-          let dup := pairs.second acc in
+          let seen := first acc in
+          let dup := second acc in
           optionals.match
             dup
-            (logic.ifElse (sets.member name seen) (seen, given(name)) (sets.insert name seen, none))
+            (ifElse (sets.member name seen) (seen, given(name)) (sets.insert name seen, none))
             (λ`_`.acc))
         (sets.empty, none)
         names
-    in pairs.second result
+    in second result
 
 ## Find the first duplicate name in a list (for field type validation)
 term findDuplicateFieldType =
   λnames.
     let result := lists.foldl
         (λacc,name.
-          let seen := pairs.first acc in
-          let dup := pairs.second acc in
+          let seen := first acc in
+          let dup := second acc in
           optionals.match
             dup
-            (logic.ifElse (sets.member name seen) (seen, given(name)) (sets.insert name seen, none))
+            (ifElse (sets.member name seen) (seen, given(name)) (sets.insert name seen, none))
             (λ`_`.acc))
         (sets.empty, none)
         names
-    in pairs.second result
+    in second result
 
 ## Return the first error from a list of optional errors, or nothing if all are valid
 term firstError = λchecks.lists.foldl (λacc,check.optionals.match acc check (λ`_`.acc)) none checks
@@ -947,69 +884,69 @@ term firstFindingType = λchecks.lists.foldl (λacc,check.optionals.match acc ch
 term firstTypeError = λchecks.lists.foldl (λacc,check.optionals.match acc check (λ`_`.acc)) none checks
 
 ## Check whether a name is valid at an introduction site. Currently rejects empty strings.
-term isValidName = λname.logic.not (equality.equal (model.Name[] name) "")
+term isValidName = λname.not (equal (Name[] name) "")
 
 ## The default validation profile for term and type validation, with every check classified as an error except InvalidTypeError.singleVariantUnion and InvalidTypeError.emptyRecordType (warnings); maxErrors=1, maxWarnings=20.
 term kernelDefaultCoreProfile =
-  validation.ValidationProfile{
+  ValidationProfile{
     errorRules = sets.fromList
         [
-          model.Name{"hydra.core.error.model.InvalidTermError.constantCondition"},
-          model.Name{"hydra.core.error.model.InvalidTermError.duplicateBinding"},
-          model.Name{"hydra.core.error.model.InvalidTermError.duplicateField"},
-          model.Name{"hydra.core.error.model.InvalidTermError.emptyCaseStatement"},
-          model.Name{"hydra.core.error.model.InvalidTermError.emptyLetBindings"},
-          model.Name{"hydra.core.error.model.InvalidTermError.emptyTermAnnotation"},
-          model.Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"},
-          model.Name{"hydra.core.error.model.InvalidTermError.extraRecordFields"},
-          model.Name{"hydra.core.error.model.InvalidTermError.invalidLambdaParameterName"},
-          model.Name{"hydra.core.error.model.InvalidTermError.invalidLetBindingName"},
-          model.Name{"hydra.core.error.model.InvalidTermError.invalidTypeLambdaParameterName"},
-          model.Name{"hydra.core.error.model.InvalidTermError.missingCaseBranches"},
-          model.Name{"hydra.core.error.model.InvalidTermError.missingRecordFields"},
-          model.Name{"hydra.core.error.model.InvalidTermError.nestedTermAnnotation"},
-          model.Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"},
-          model.Name{"hydra.core.error.model.InvalidTermError.redundantWrapUnwrap"},
-          model.Name{"hydra.core.error.model.InvalidTermError.selfApplication"},
-          model.Name{"hydra.core.error.model.InvalidTermError.termVariableShadowing"},
-          model.Name{"hydra.core.error.model.InvalidTermError.typeVariableShadowingInTypeLambda"},
-          model.Name{"hydra.core.error.model.InvalidTermError.undeclaredVariant"},
-          model.Name{"hydra.core.error.model.InvalidTermError.undefinedTermVariable"},
-          model.Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInBindingType"},
-          model.Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInLambdaDomain"},
-          model.Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInTypeApplication"},
-          model.Name{"hydra.core.error.model.InvalidTermError.unknownCaseAlternative"},
-          model.Name{"hydra.core.error.model.InvalidTermError.unknownPrimitiveName"},
-          model.Name{"hydra.core.error.model.InvalidTermError.unknownProjectedField"},
-          model.Name{"hydra.core.error.model.InvalidTermError.unnecessaryIdentityApplication"},
-          model.Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"},
-          model.Name{"hydra.core.error.model.InvalidTermError.untypedTermVariable"},
-          model.Name{"hydra.core.error.model.InvalidTypeError.duplicateRecordTypeFieldNames"},
-          model.Name{"hydra.core.error.model.InvalidTypeError.duplicateUnionTypeFieldNames"},
-          model.Name{"hydra.core.error.model.InvalidTypeError.emptyTypeAnnotation"},
-          model.Name{"hydra.core.error.model.InvalidTypeError.emptyUnionType"},
-          model.Name{"hydra.core.error.model.InvalidTypeError.invalidForallParameterName"},
-          model.Name{"hydra.core.error.model.InvalidTypeError.invalidTypeSchemeVariableName"},
-          model.Name{"hydra.core.error.model.InvalidTypeError.nestedTypeAnnotation"},
-          model.Name{"hydra.core.error.model.InvalidTypeError.nonComparableMapKeyType"},
-          model.Name{"hydra.core.error.model.InvalidTypeError.nonComparableSetElementType"},
-          model.Name{"hydra.core.error.model.InvalidTypeError.typeVariableShadowingInForall"},
-          model.Name{"hydra.core.error.model.InvalidTypeError.undefinedTypeVariable"},
-          model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}],
+          Name{"hydra.core.error.model.InvalidTermError.constantCondition"},
+          Name{"hydra.core.error.model.InvalidTermError.duplicateBinding"},
+          Name{"hydra.core.error.model.InvalidTermError.duplicateField"},
+          Name{"hydra.core.error.model.InvalidTermError.emptyCaseStatement"},
+          Name{"hydra.core.error.model.InvalidTermError.emptyLetBindings"},
+          Name{"hydra.core.error.model.InvalidTermError.emptyTermAnnotation"},
+          Name{"hydra.core.error.model.InvalidTermError.emptyTypeNameInTerm"},
+          Name{"hydra.core.error.model.InvalidTermError.extraRecordFields"},
+          Name{"hydra.core.error.model.InvalidTermError.invalidLambdaParameterName"},
+          Name{"hydra.core.error.model.InvalidTermError.invalidLetBindingName"},
+          Name{"hydra.core.error.model.InvalidTermError.invalidTypeLambdaParameterName"},
+          Name{"hydra.core.error.model.InvalidTermError.missingCaseBranches"},
+          Name{"hydra.core.error.model.InvalidTermError.missingRecordFields"},
+          Name{"hydra.core.error.model.InvalidTermError.nestedTermAnnotation"},
+          Name{"hydra.core.error.model.InvalidTermError.nominalTypeKindMismatch"},
+          Name{"hydra.core.error.model.InvalidTermError.redundantWrapUnwrap"},
+          Name{"hydra.core.error.model.InvalidTermError.selfApplication"},
+          Name{"hydra.core.error.model.InvalidTermError.termVariableShadowing"},
+          Name{"hydra.core.error.model.InvalidTermError.typeVariableShadowingInTypeLambda"},
+          Name{"hydra.core.error.model.InvalidTermError.undeclaredVariant"},
+          Name{"hydra.core.error.model.InvalidTermError.undefinedTermVariable"},
+          Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInBindingType"},
+          Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInLambdaDomain"},
+          Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInTypeApplication"},
+          Name{"hydra.core.error.model.InvalidTermError.unknownCaseAlternative"},
+          Name{"hydra.core.error.model.InvalidTermError.unknownPrimitiveName"},
+          Name{"hydra.core.error.model.InvalidTermError.unknownProjectedField"},
+          Name{"hydra.core.error.model.InvalidTermError.unnecessaryIdentityApplication"},
+          Name{"hydra.core.error.model.InvalidTermError.unresolvedNominalType"},
+          Name{"hydra.core.error.model.InvalidTermError.untypedTermVariable"},
+          Name{"hydra.core.error.model.InvalidTypeError.duplicateRecordTypeFieldNames"},
+          Name{"hydra.core.error.model.InvalidTypeError.duplicateUnionTypeFieldNames"},
+          Name{"hydra.core.error.model.InvalidTypeError.emptyTypeAnnotation"},
+          Name{"hydra.core.error.model.InvalidTypeError.emptyUnionType"},
+          Name{"hydra.core.error.model.InvalidTypeError.invalidForallParameterName"},
+          Name{"hydra.core.error.model.InvalidTypeError.invalidTypeSchemeVariableName"},
+          Name{"hydra.core.error.model.InvalidTypeError.nestedTypeAnnotation"},
+          Name{"hydra.core.error.model.InvalidTypeError.nonComparableMapKeyType"},
+          Name{"hydra.core.error.model.InvalidTypeError.nonComparableSetElementType"},
+          Name{"hydra.core.error.model.InvalidTypeError.typeVariableShadowingInForall"},
+          Name{"hydra.core.error.model.InvalidTypeError.undefinedTypeVariable"},
+          Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}],
     warningRules = sets.fromList
         [
-          model.Name{"hydra.core.error.model.InvalidTypeError.emptyRecordType"},
-          model.Name{"hydra.core.error.model.InvalidTypeError.singleVariantUnion"}],
+          Name{"hydra.core.error.model.InvalidTypeError.emptyRecordType"},
+          Name{"hydra.core.error.model.InvalidTypeError.singleVariantUnion"}],
     maxErrors = 1:int32,
     maxWarnings = 20:int32}
 
 ## Resolve a type name to the annotation-stripped type it names in the current graph scope, or Nothing if it does not resolve.
 term resolveNominalType =
   λcx,tname.
-    let toType := λts.given(strip.deannotateType (model.TypeScheme[body] ts))
+    let toType := λts.given(deannotateType (TypeScheme[body] ts))
     in optionals.match
-      (maps.lookup tname (graph.Graph[schemaTypes] cx))
-      (optionals.match (maps.lookup tname (graph.Graph[boundTypes] cx)) none toType)
+      (maps.lookup tname (Graph[schemaTypes] cx))
+      (optionals.match (maps.lookup tname (Graph[boundTypes] cx)) none toType)
       toType
 
 ## Resolve a type name to the field list of the record type it names, or Nothing if it does not resolve to a record type.
@@ -1017,90 +954,77 @@ term resolveRecordFields =
   λcx,tname.optionals.match
       (resolveNominalType cx tname)
       none
-      (λtyp.cases(model.Type){`record`=λfields.given(fields), `_`=none} typ)
+      (λtyp.cases(Type){`record`=λfields.given(fields), `_`=none} typ)
 
 ## Resolve a type name to the field list of the union type it names, or Nothing if it does not resolve to a union type.
 term resolveUnionFields =
   λcx,tname.
     let toFields := λts.
-        let stripped := strip.deannotateType (model.TypeScheme[body] ts)
-        in cases(model.Type){`union`=λfields.given(fields), `_`=none} stripped
+        let stripped := deannotateType (TypeScheme[body] ts)
+        in cases(Type){`union`=λfields.given(fields), `_`=none} stripped
     in optionals.match
-      (maps.lookup tname (graph.Graph[schemaTypes] cx))
-      (optionals.match (maps.lookup tname (graph.Graph[boundTypes] cx)) none toFields)
+      (maps.lookup tname (Graph[schemaTypes] cx))
+      (optionals.match (maps.lookup tname (Graph[boundTypes] cx)) none toFields)
       toFields
 
 ## Validate a term against the given ValidationProfile, returning a ValidationResult. Errors hard-stop traversal once maxErrors is reached; warnings are bounded by maxWarnings without causing termination.
 term term =
-  λp,typed,g,t.rewriting.foldTermWithGraphAndPath
-      (λrecurse,path,cx,acc,trm.logic.ifElse
+  λp,typed,g,t.foldTermWithGraphAndPath
+      (λrecurse,path,cx,acc,trm.ifElse
           (ordering.gte
-            (lists.length (validation.ValidationResult[errors] acc))
-            (validation.ValidationProfile[maxErrors] p))
+            (lists.length (ValidationResult[errors] acc))
+            (ValidationProfile[maxErrors] p))
           acc
-          (let acc1 := appendFinding
-              p
-              acc
-              (checkTerm p typed wrap(paths.SubtermPath){path} cx trm)
-          in logic.ifElse
+          (let acc1 := appendFinding p acc (checkTerm p typed wrap(SubtermPath){path} cx trm)
+          in ifElse
             (ordering.gte
-              (lists.length (validation.ValidationResult[errors] acc1))
-              (validation.ValidationProfile[maxErrors] p))
+              (lists.length (ValidationResult[errors] acc1))
+              (ValidationProfile[maxErrors] p))
             acc1
             (recurse acc1 trm)))
       g
-      validation.ValidationResult{errors = [], warnings = []}
+      ValidationResult{errors = [], warnings = []}
       t
 
 ## Validate a type against the given ValidationProfile, threading a ValidationResult accumulator through subtypes. Errors hard-stop traversal once maxErrors is reached.
 term type =
-  λp,acc,boundVars,typ.logic.ifElse
-      (ordering.gte
-        (lists.length (validation.ValidationResult[errors] acc))
-        (validation.ValidationProfile[maxErrors] p))
+  λp,acc,boundVars,typ.ifElse
+      (ordering.gte (lists.length (ValidationResult[errors] acc)) (ValidationProfile[maxErrors] p))
       acc
       (let acc1 := appendFindingType p acc (validateTypeNode p boundVars typ)
-      in logic.ifElse
-        (ordering.gte
-          (lists.length (validation.ValidationResult[errors] acc1))
-          (validation.ValidationProfile[maxErrors] p))
+      in ifElse
+        (ordering.gte (lists.length (ValidationResult[errors] acc1)) (ValidationProfile[maxErrors] p))
         acc1
-        (cases(model.Type){
+        (cases(Type){
           `forall`=λft.
-              let newBound := sets.insert
-                  (model.ForallType[parameter] ft)
-                  boundVars
-              in `type` p acc1 newBound (model.ForallType[body] ft),
-          annotated=λann.`type` p acc1 boundVars (model.AnnotatedType[body] ann),
+              let newBound := sets.insert (ForallType[parameter] ft) boundVars
+              in `type` p acc1 newBound (ForallType[body] ft),
+          annotated=λann.`type` p acc1 boundVars (AnnotatedType[body] ann),
           application=λat.
-              let acc2 := `type`
-                  p
-                  acc1
-                  boundVars
-                  (model.ApplicationType[function] at)
-              in `type` p acc2 boundVars (model.ApplicationType[argument] at),
+              let acc2 := `type` p acc1 boundVars (ApplicationType[function] at)
+              in `type` p acc2 boundVars (ApplicationType[argument] at),
           `effect`=λet.`type` p acc1 boundVars et,
           `either`=λet.
-              let acc2 := `type` p acc1 boundVars (model.EitherType[`left`] et)
-              in `type` p acc2 boundVars (model.EitherType[`right`] et),
+              let acc2 := `type` p acc1 boundVars (EitherType[`left`] et)
+              in `type` p acc2 boundVars (EitherType[`right`] et),
           function=λft.
-              let acc2 := `type` p acc1 boundVars (model.FunctionType[domain] ft)
-              in `type` p acc2 boundVars (model.FunctionType[codomain] ft),
+              let acc2 := `type` p acc1 boundVars (FunctionType[domain] ft)
+              in `type` p acc2 boundVars (FunctionType[codomain] ft),
           `list`=λlt.`type` p acc1 boundVars lt,
           `map`=λmt.
-              let acc2 := `type` p acc1 boundVars (model.MapType[keys] mt)
-              in `type` p acc2 boundVars (model.MapType[values] mt),
+              let acc2 := `type` p acc1 boundVars (MapType[keys] mt)
+              in `type` p acc2 boundVars (MapType[values] mt),
           `optional`=λmt.`type` p acc1 boundVars mt,
           pair=λpt.
-              let acc2 := `type` p acc1 boundVars (model.PairType[first] pt)
-              in `type` p acc2 boundVars (model.PairType[second] pt),
+              let acc2 := `type` p acc1 boundVars (PairType[first] pt)
+              in `type` p acc2 boundVars (PairType[second] pt),
           `record`=λfields.lists.foldl
-                (λa,f.`type` p a boundVars (model.FieldType[`type`] f))
+                (λa,f.`type` p a boundVars (FieldType[`type`] f))
                 acc1
                 fields,
           `set`=λst.`type` p acc1 boundVars st,
           `union`=λfields.lists.foldl
-                (λa,f.`type` p a boundVars (model.FieldType[`type`] f))
+                (λa,f.`type` p a boundVars (FieldType[`type`] f))
                 acc1
                 fields,
           `wrap`=λwt.`type` p acc1 boundVars wt,
@@ -1109,246 +1033,239 @@ term type =
 
 ## Check a single type node for validation errors. Rules disabled by the profile are not evaluated.
 term validateTypeNode =
-  λp,boundVars,typ.cases(model.Type){
+  λp,boundVars,typ.cases(Type){
       annotated=λann.
-          let body := model.AnnotatedType[body] ann in
-          let annMap := annotations.getAnnotationMap
-              (model.AnnotatedType[annotation] ann) in
+          let body := AnnotatedType[body] ann in
+          let annMap := getAnnotationMap (AnnotatedType[annotation] ann) in
           firstFindingType
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.emptyTypeAnnotation"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.emptyTypeAnnotation"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.emptyTypeAnnotation"}, f))
-                  (logic.ifElse
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.emptyTypeAnnotation"}, f))
+                  (ifElse
                     (maps.isEmpty annMap)
-                    given(error.model.InvalidTypeError{
-                      emptyTypeAnnotation = error.model.EmptyTypeAnnotationError{
-                        location = paths.SubtermPath{[]}}})
+                    given(InvalidTypeError{emptyTypeAnnotation = EmptyTypeAnnotationError{location = SubtermPath{[]}}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.nestedTypeAnnotation"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.nestedTypeAnnotation"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.nestedTypeAnnotation"}, f))
-                  (cases(model.Type){
-                    annotated=λ`_`.given(error.model.InvalidTypeError{
-                          nestedTypeAnnotation = error.model.NestedTypeAnnotationError{
-                            location = paths.SubtermPath{[]}}}),
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.nestedTypeAnnotation"}, f))
+                  (cases(Type){
+                    annotated=λ`_`.given(InvalidTypeError{
+                          nestedTypeAnnotation = NestedTypeAnnotationError{
+                            location = SubtermPath{[]}}}),
                     `_`=none}
                     body))
                 none],
       `either`=λet.firstFindingType
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-                  (checkVoid (model.EitherType[`left`] et)))
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
+                  (checkVoid (EitherType[`left`] et)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-                  (checkVoid (model.EitherType[`right`] et)))
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
+                  (checkVoid (EitherType[`right`] et)))
                 none],
-      `effect`=λet.logic.ifElse
+      `effect`=λet.ifElse
             (enabled
               p
-              model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
+              Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
             (optionals.map
-              (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
+              (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
               (checkVoid et))
             none,
       `forall`=λft.
-          let paramName := model.ForallType[parameter] ft
+          let paramName := ForallType[parameter] ft
           in firstFindingType
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.typeVariableShadowingInForall"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.typeVariableShadowingInForall"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.typeVariableShadowingInForall"}, f))
-                  (logic.ifElse
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.typeVariableShadowingInForall"}, f))
+                  (ifElse
                     (sets.member paramName boundVars)
-                    given(error.model.InvalidTypeError{
-                      typeVariableShadowingInForall = error.model.TypeVariableShadowingInForallError{
-                        location = paths.SubtermPath{[]},
+                    given(InvalidTypeError{
+                      typeVariableShadowingInForall = TypeVariableShadowingInForallError{
+                        location = SubtermPath{[]},
                         name = paramName}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.invalidForallParameterName"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.invalidForallParameterName"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.invalidForallParameterName"}, f))
-                  (logic.ifElse
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.invalidForallParameterName"}, f))
+                  (ifElse
                     (isValidName paramName)
                     none
-                    given(error.model.InvalidTypeError{
-                      invalidForallParameterName = error.model.InvalidForallParameterNameError{
-                        location = paths.SubtermPath{[]},
+                    given(InvalidTypeError{
+                      invalidForallParameterName = InvalidForallParameterNameError{
+                        location = SubtermPath{[]},
                         name = paramName}})))
                 none],
-      function=λft.logic.ifElse
+      function=λft.ifElse
             (enabled
               p
-              model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
+              Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
             (optionals.map
-              (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-              (checkVoid (model.FunctionType[codomain] ft)))
+              (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
+              (checkVoid (FunctionType[codomain] ft)))
             none,
-      `list`=λlt.logic.ifElse
+      `list`=λlt.ifElse
             (enabled
               p
-              model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
+              Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
             (optionals.map
-              (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
+              (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
               (checkVoid lt))
             none,
       `map`=λmt.
-          let keyType := model.MapType[keys] mt
+          let keyType := MapType[keys] mt
           in firstFindingType
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.nonComparableMapKeyType"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.nonComparableMapKeyType"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.nonComparableMapKeyType"}, f))
-                  (cases(model.Type){
-                    function=λ`_`.given(error.model.InvalidTypeError{
-                          nonComparableMapKeyType = error.model.NonComparableMapKeyTypeError{
-                            location = paths.SubtermPath{[]},
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.nonComparableMapKeyType"}, f))
+                  (cases(Type){
+                    function=λ`_`.given(InvalidTypeError{
+                          nonComparableMapKeyType = NonComparableMapKeyTypeError{
+                            location = SubtermPath{[]},
                             keyType = keyType}}),
                     `_`=none}
                     keyType))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
-                (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-                  (checkVoid keyType))
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
+                (optionals.map (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f)) (checkVoid keyType))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-                  (checkVoid (model.MapType[values] mt)))
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
+                  (checkVoid (MapType[values] mt)))
                 none],
       pair=λpt.firstFindingType
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-                  (checkVoid (model.PairType[first] pt)))
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
+                  (checkVoid (PairType[first] pt)))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-                  (checkVoid (model.PairType[second] pt)))
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
+                  (checkVoid (PairType[second] pt)))
                 none],
       `record`=λfields.firstFindingType
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.emptyRecordType"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.emptyRecordType"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.emptyRecordType"}, f))
-                  (logic.ifElse
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.emptyRecordType"}, f))
+                  (ifElse
                     (lists.isEmpty fields)
-                    given(error.model.InvalidTypeError{emptyRecordType = error.model.EmptyRecordTypeError{location = paths.SubtermPath{[]}}})
+                    given(InvalidTypeError{emptyRecordType = EmptyRecordTypeError{location = SubtermPath{[]}}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.duplicateRecordTypeFieldNames"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.duplicateRecordTypeFieldNames"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.duplicateRecordTypeFieldNames"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.duplicateRecordTypeFieldNames"}, f))
                   (checkDuplicateFieldTypes
                     fields
-                    (λdupName.given(error.model.InvalidTypeError{
-                        duplicateRecordTypeFieldNames = error.model.DuplicateRecordTypeFieldNamesError{
-                          location = paths.SubtermPath{[]},
+                    (λdupName.given(InvalidTypeError{
+                        duplicateRecordTypeFieldNames = DuplicateRecordTypeFieldNamesError{
+                          location = SubtermPath{[]},
                           name = dupName}}))))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-                  (firstTypeError (lists.map (λf.checkVoid (model.FieldType[`type`] f)) fields)))
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
+                  (firstTypeError (lists.map (λf.checkVoid (FieldType[`type`] f)) fields)))
                 none],
       `set`=λelemType.firstFindingType
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.nonComparableSetElementType"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.nonComparableSetElementType"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.nonComparableSetElementType"}, f))
-                  (cases(model.Type){
-                    function=λ`_`.given(error.model.InvalidTypeError{
-                          nonComparableSetElementType = error.model.NonComparableSetElementTypeError{
-                            location = paths.SubtermPath{[]},
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.nonComparableSetElementType"}, f))
+                  (cases(Type){
+                    function=λ`_`.given(InvalidTypeError{
+                          nonComparableSetElementType = NonComparableSetElementTypeError{
+                            location = SubtermPath{[]},
                             elementType = elemType}}),
                     `_`=none}
                     elemType))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
-                (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-                  (checkVoid elemType))
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
+                (optionals.map (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f)) (checkVoid elemType))
                 none],
       `union`=λfields.firstFindingType
             [
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.emptyUnionType"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.emptyUnionType"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.emptyUnionType"}, f))
-                  (logic.ifElse
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.emptyUnionType"}, f))
+                  (ifElse
                     (lists.isEmpty fields)
-                    given(error.model.InvalidTypeError{emptyUnionType = error.model.EmptyUnionTypeError{location = paths.SubtermPath{[]}}})
+                    given(InvalidTypeError{emptyUnionType = EmptyUnionTypeError{location = SubtermPath{[]}}})
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.singleVariantUnion"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.singleVariantUnion"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.singleVariantUnion"}, f))
-                  (logic.ifElse
-                    (equality.equal (lists.length fields) 1:int32)
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.singleVariantUnion"}, f))
+                  (ifElse
+                    (equal (lists.length fields) 1:int32)
                     (optionals.match
                       (lists.head fields)
                       none
-                      (λsingleField.given(error.model.InvalidTypeError{
-                          singleVariantUnion = error.model.SingleVariantUnionError{
-                            location = paths.SubtermPath{[]},
-                            fieldName = model.FieldType[name] singleField}})))
+                      (λsingleField.given(InvalidTypeError{
+                          singleVariantUnion = SingleVariantUnionError{
+                            location = SubtermPath{[]},
+                            fieldName = FieldType[name] singleField}})))
                     none))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.duplicateUnionTypeFieldNames"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.duplicateUnionTypeFieldNames"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.duplicateUnionTypeFieldNames"}, f))
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.duplicateUnionTypeFieldNames"}, f))
                   (checkDuplicateFieldTypes
                     fields
-                    (λdupName.given(error.model.InvalidTypeError{
-                        duplicateUnionTypeFieldNames = error.model.DuplicateUnionTypeFieldNamesError{
-                          location = paths.SubtermPath{[]},
+                    (λdupName.given(InvalidTypeError{
+                        duplicateUnionTypeFieldNames = DuplicateUnionTypeFieldNamesError{
+                          location = SubtermPath{[]},
                           name = dupName}}))))
                 none,
-              logic.ifElse
-                (enabled p model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
+              ifElse
+                (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
                 (optionals.map
-                  (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-                  (firstTypeError (lists.map (λf.checkVoid (model.FieldType[`type`] f)) fields)))
+                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
+                  (firstTypeError (lists.map (λf.checkVoid (FieldType[`type`] f)) fields)))
                 none],
-      variable=λvarName.logic.ifElse
+      variable=λvarName.ifElse
             (enabled
               p
-              model.Name{"hydra.core.error.model.InvalidTypeError.undefinedTypeVariable"})
+              Name{"hydra.core.error.model.InvalidTypeError.undefinedTypeVariable"})
             (optionals.map
-              (λf.(model.Name{"hydra.core.error.model.InvalidTypeError.undefinedTypeVariable"}, f))
-              (logic.ifElse
+              (λf.(Name{"hydra.core.error.model.InvalidTypeError.undefinedTypeVariable"}, f))
+              (ifElse
                 (sets.member varName boundVars)
                 none
-                given(error.model.InvalidTypeError{
-                  undefinedTypeVariable = error.model.UndefinedTypeVariableError{
-                    location = paths.SubtermPath{[]},
+                given(InvalidTypeError{
+                  undefinedTypeVariable = UndefinedTypeVariableError{
+                    location = SubtermPath{[]},
                     name = varName}})))
             none,
       `_`=none}

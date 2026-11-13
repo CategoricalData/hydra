@@ -1,12 +1,12 @@
 ## Abstractions for paired transformations between languages
 module hydra.core.coders
 
-import hydra.core.errors as errors
-import hydra.core.file as file
-import hydra.core.graph as graph
-import hydra.core.model as model
-import hydra.core.util as util
-import hydra.core.variants as variants
+import hydra.core.errors
+import hydra.core.file
+import hydra.core.graph
+import hydra.core.model
+import hydra.core.util
+import hydra.core.variants
 
 ## A two-level bidirectional encoder which adapts types to types and terms to terms
 type Adapter = forall t1, t2, v1, v2, e. record{
@@ -22,11 +22,11 @@ type Adapter = forall t1, t2, v1, v2, e. record{
 ## An evaluation context together with a source language and a target language
 type AdapterContext = record{
   ## The underlying graph of elements and primitives
-  graph: graph.Graph,
+  graph: Graph,
   ## The language being encoded or decoded
   language: Language,
   ## A map of type names to adapters for those types
-  adapters: map<model.Name, Adapter model.Type model.Type model.Term model.Term errors.Error>}
+  adapters: map<Name, Adapter Type Type Term Term Error>}
 
 ## A two-level encoder and decoder, operating both at a type level and an instance (data) level
 type Bicoder = forall t1, t2, v1, v2, e. record{
@@ -38,25 +38,25 @@ type Bicoder = forall t1, t2, v1, v2, e. record{
 ## Per-target case conventions for name forms that vary across emission targets
 type CaseConventions = record{
   ## Convention for compile-time constant names
-  constant: util.CaseConvention,
+  constant: CaseConvention,
   ## Convention for each directory level in the emitted source tree
-  directory: util.CaseConvention,
+  directory: CaseConvention,
   ## Convention for enum-variant value names
-  enumValue: util.CaseConvention,
+  enumValue: CaseConvention,
   ## Convention for record field names
-  field: util.CaseConvention,
+  field: CaseConvention,
   ## Convention for the source-file basename
-  file: util.CaseConvention,
+  file: CaseConvention,
   ## Convention for a single segment of a module name
-  `module`: util.CaseConvention,
+  `module`: CaseConvention,
   ## Convention for top-level term definitions (functions, module-level values)
-  `term`: util.CaseConvention,
+  `term`: CaseConvention,
   ## Convention for locally-bound term names (lambda parameters, let-bindings)
-  termVariable: util.CaseConvention,
+  termVariable: CaseConvention,
   ## Convention for type names
-  `type`: util.CaseConvention,
+  `type`: CaseConvention,
   ## Convention for type-level variable names
-  typeVariable: util.CaseConvention}
+  typeVariable: CaseConvention}
 
 ## An encoder and decoder; a pair of partial functions between two types
 type Coder = forall v1, v2, e. record{
@@ -81,22 +81,22 @@ type Language = record{
   ## Per-target case conventions for the various kinds of identifiers emitted by the coder
   caseConventions: CaseConventions,
   ## Conventional file extension for emitted source files, without the leading dot (e.g. "scala", "py")
-  defaultFileExtension: file.FileExtension}
+  defaultFileExtension: FileExtension}
 
 ## A set of constraints on valid type and term expressions, characterizing a language
 type LanguageConstraints = record{
   ## All supported literal variants
-  literalVariants: set<variants.LiteralVariant>,
+  literalVariants: set<LiteralVariant>,
   ## All supported float types
-  floatTypes: set<model.FloatType>,
+  floatTypes: set<FloatType>,
   ## All supported integer types
-  integerTypes: set<model.IntegerType>,
+  integerTypes: set<IntegerType>,
   ## All supported term variants
-  termVariants: set<variants.TermVariant>,
+  termVariants: set<TermVariant>,
   ## All supported type variants
-  typeVariants: set<variants.TypeVariant>,
+  typeVariants: set<TypeVariant>,
   ## A logical set of types, as a predicate which tests a type for inclusion
-  types: model.Type → boolean}
+  types: Type → boolean}
 
 ## A target-language or target-runtime capability the coder may rely on. Absence from a Language's supportedFeatures set means the emitter must work around the missing capability.
 type LanguageFeature = union{
@@ -121,4 +121,4 @@ type TraversalOrder = union{
   post: unit}
 
 ## A function which maps a Hydra type to a symmetric adapter between types and terms
-type TypeAdapter = AdapterContext → model.Type → either<string, SymmetricAdapter model.Type model.Term string>
+type TypeAdapter = AdapterContext → Type → either<string, SymmetricAdapter Type Term string>

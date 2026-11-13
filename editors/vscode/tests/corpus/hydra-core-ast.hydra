@@ -1,8 +1,6 @@
 ## A model which provides a common syntax tree for Hydra serializers
 module hydra.core.ast
 
-
-
 ## Operator associativity
 type Associativity = union{
   `none`: unit,

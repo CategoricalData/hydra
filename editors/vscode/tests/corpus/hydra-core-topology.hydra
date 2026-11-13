@@ -1,8 +1,6 @@
 ## A model for simple graphs as adjacency lists
 module hydra.core.topology
 
-
-
 ## A directed graph represented as an adjacency list mapping vertices to their outgoing neighbors
 type Graph = map<Vertex, list<Vertex>>
 

@@ -1,14 +1,14 @@
 ## Framework types for configurable validation: profiles classify checks as errors or warnings, and results accumulate findings up to caller-specified bounds.
 module hydra.core.validation
 
-import hydra.core.model as model
+import hydra.core.model
 
 ## Configuration for a validation pass: which check rules are active, how each is classified, and the upper bounds on collected findings. A check whose rule name appears in neither set is never evaluated. Errors hard-stop the traversal once maxErrors is reached; warnings only stop being collected once maxWarnings is reached, never causing termination.
 type ValidationProfile = record{
   ## The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.core.error.<package>.<UnionType>.<variant>', e.g. 'hydra.core.error.model.InvalidTermError.duplicateBinding'.
-  errorRules: set<model.Name>,
+  errorRules: set<Name>,
   ## The set of fully qualified rule names whose findings are treated as warnings. Same name format as errorRules.
-  warningRules: set<model.Name>,
+  warningRules: set<Name>,
   ## Hard upper bound on collected errors. Validation terminates as soon as the errors list reaches this length. A value of 1 reproduces the legacy 'first error wins' behaviour.
   maxErrors: int32,
   ## Soft upper bound on collected warnings. Once the warnings list reaches this length, further warning matches are silently dropped, but validation does not terminate; it continues until maxErrors is reached or the traversal completes.

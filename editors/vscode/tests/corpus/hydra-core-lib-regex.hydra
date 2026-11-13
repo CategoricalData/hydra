@@ -5,8 +5,6 @@
 ## findAll, replaceAll, and split operate on non-overlapping matches, found left to right.
 module hydra.core.lib.regex
 
-
-
 ## Find the first regex match within a string, returning the matched substring if any.
 ##
 ## find(pat, s) returns Just(t) where t is the leftmost-longest substring of s matching pat, or Nothing if pat does not match anywhere in s.

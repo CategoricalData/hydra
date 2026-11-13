@@ -1,38 +1,186 @@
 ## Graph context extension and type scheme conversion
 module hydra.core.scoping
 
-import hydra.core.graph as graph
+import hydra.core.graph
 import hydra.core.lib.lists as lists
-import hydra.core.lib.literals as literals
+import hydra.core.lib.literals
 import hydra.core.lib.maps as maps
-import hydra.core.lib.math as math
+import hydra.core.lib.math
 import hydra.core.lib.optionals as optionals
-import hydra.core.lib.pairs as pairs
+import hydra.core.lib.pairs
 import hydra.core.lib.sets as sets
 import hydra.core.lib.strings as strings
-import hydra.core.model as model
-import hydra.core.typing as typing
+import hydra.core.model
+import hydra.core.typing
 
 ## Extend a graph by descending into a lambda body
-term extendGraphForLambda = λg,lam.let var := model.Lambda[parameter] lam in graph.Graph{boundTerms = graph.Graph[boundTerms] g, boundTypes = optionals.match (model.Lambda[domain] lam) (graph.Graph[boundTypes] g) (λdom.maps.insert var (fTypeToTypeScheme dom) (graph.Graph[boundTypes] g)), classConstraints = graph.Graph[classConstraints] g, lambdaVariables = sets.insert var (graph.Graph[lambdaVariables] g), metadata = maps.delete var (graph.Graph[metadata] g), primitives = graph.Graph[primitives] g, schemaTypes = graph.Graph[schemaTypes] g, typeVariables = graph.Graph[typeVariables] g}
+term extendGraphForLambda =
+  λg,lam.
+    let var := Lambda[parameter] lam
+    in Graph{
+      boundTerms = Graph[boundTerms] g,
+      boundTypes = optionals.match
+          (Lambda[domain] lam)
+          (Graph[boundTypes] g)
+          (λdom.maps.insert var (fTypeToTypeScheme dom) (Graph[boundTypes] g)),
+      classConstraints = Graph[classConstraints] g,
+      lambdaVariables = sets.insert var (Graph[lambdaVariables] g),
+      metadata = maps.delete var (Graph[metadata] g),
+      primitives = Graph[primitives] g,
+      schemaTypes = Graph[schemaTypes] g,
+      typeVariables = Graph[typeVariables] g}
 
 ## Extend a graph by descending into a let body
-term extendGraphForLet = λforBinding,g,letrec.let bindings := model.Let[bindings] letrec in let g2 := extendGraphWithBindings bindings g in graph.Graph{boundTerms = maps.union (maps.fromList (lists.map (λb.(model.Binding[name] b, model.Binding[`term`] b)) bindings)) (graph.Graph[boundTerms] g), boundTypes = maps.union (maps.fromList (optionals.givens (lists.map (λb.optionals.map (λts.(model.Binding[name] b, ts)) (model.Binding[typeScheme] b)) bindings))) (graph.Graph[boundTypes] g), classConstraints = graph.Graph[classConstraints] g, lambdaVariables = lists.foldl (λs,b.sets.delete (model.Binding[name] b) s) (graph.Graph[lambdaVariables] g) bindings, metadata = graph.Graph[metadata] (lists.foldl (λgAcc,b.let m := graph.Graph[metadata] gAcc in let newMeta := optionals.match (forBinding gAcc b) (maps.delete (model.Binding[name] b) m) (λt.maps.insert (model.Binding[name] b) t m) in graph.Graph{boundTerms = graph.Graph[boundTerms] gAcc, boundTypes = graph.Graph[boundTypes] gAcc, classConstraints = graph.Graph[classConstraints] gAcc, lambdaVariables = graph.Graph[lambdaVariables] gAcc, metadata = newMeta, primitives = graph.Graph[primitives] gAcc, schemaTypes = graph.Graph[schemaTypes] gAcc, typeVariables = graph.Graph[typeVariables] gAcc}) g2 bindings), primitives = graph.Graph[primitives] g, schemaTypes = graph.Graph[schemaTypes] g, typeVariables = graph.Graph[typeVariables] g}
+term extendGraphForLet =
+  λforBinding,g,letrec.
+    let bindings := Let[bindings] letrec in
+    let g2 := extendGraphWithBindings bindings g in
+    Graph{
+      boundTerms = maps.union
+          (maps.fromList (lists.map (λb.(Binding[name] b, Binding[`term`] b)) bindings))
+          (Graph[boundTerms] g),
+      boundTypes = maps.union
+          (maps.fromList
+            (optionals.givens
+              (lists.map
+                (λb.optionals.map (λts.(Binding[name] b, ts)) (Binding[typeScheme] b))
+                bindings)))
+          (Graph[boundTypes] g),
+      classConstraints = Graph[classConstraints] g,
+      lambdaVariables = lists.foldl
+          (λs,b.sets.delete (Binding[name] b) s)
+          (Graph[lambdaVariables] g)
+          bindings,
+      metadata = Graph[metadata]
+          (lists.foldl
+            (λgAcc,b.
+              let m := Graph[metadata] gAcc in
+              let newMeta := optionals.match
+                  (forBinding gAcc b)
+                  (maps.delete (Binding[name] b) m)
+                  (λt.maps.insert (Binding[name] b) t m) in
+              Graph{
+                boundTerms = Graph[boundTerms] gAcc,
+                boundTypes = Graph[boundTypes] gAcc,
+                classConstraints = Graph[classConstraints] gAcc,
+                lambdaVariables = Graph[lambdaVariables] gAcc,
+                metadata = newMeta,
+                primitives = Graph[primitives] gAcc,
+                schemaTypes = Graph[schemaTypes] gAcc,
+                typeVariables = Graph[typeVariables] gAcc})
+            g2
+            bindings),
+      primitives = Graph[primitives] g,
+      schemaTypes = Graph[schemaTypes] g,
+      typeVariables = Graph[typeVariables] g}
 
 ## Extend a graph by descending into a type lambda body
-term extendGraphForTypeLambda = λg,tlam.let name := model.TypeLambda[parameter] tlam in graph.Graph{boundTerms = graph.Graph[boundTerms] g, boundTypes = graph.Graph[boundTypes] g, classConstraints = graph.Graph[classConstraints] g, lambdaVariables = graph.Graph[lambdaVariables] g, metadata = graph.Graph[metadata] g, primitives = graph.Graph[primitives] g, schemaTypes = graph.Graph[schemaTypes] g, typeVariables = sets.insert name (graph.Graph[typeVariables] g)}
+term extendGraphForTypeLambda =
+  λg,tlam.
+    let name := TypeLambda[parameter] tlam
+    in Graph{
+      boundTerms = Graph[boundTerms] g,
+      boundTypes = Graph[boundTypes] g,
+      classConstraints = Graph[classConstraints] g,
+      lambdaVariables = Graph[lambdaVariables] g,
+      metadata = Graph[metadata] g,
+      primitives = Graph[primitives] g,
+      schemaTypes = Graph[schemaTypes] g,
+      typeVariables = sets.insert name (Graph[typeVariables] g)}
 
 ## Add bindings to an existing graph
-term extendGraphWithBindings = λbindings,g.let newTerms := maps.fromList (lists.map (λb.(model.Binding[name] b, model.Binding[`term`] b)) bindings) in let newTypes := maps.fromList (optionals.givens (lists.map (λb.optionals.map (λts.(model.Binding[name] b, ts)) (model.Binding[typeScheme] b)) bindings)) in graph.Graph{boundTerms = maps.union newTerms (graph.Graph[boundTerms] g), boundTypes = maps.union newTypes (graph.Graph[boundTypes] g), classConstraints = graph.Graph[classConstraints] g, lambdaVariables = graph.Graph[lambdaVariables] g, metadata = graph.Graph[metadata] g, primitives = graph.Graph[primitives] g, schemaTypes = graph.Graph[schemaTypes] g, typeVariables = graph.Graph[typeVariables] g}
+term extendGraphWithBindings =
+  λbindings,g.
+    let newTerms := maps.fromList (lists.map (λb.(Binding[name] b, Binding[`term`] b)) bindings) in
+    let newTypes := maps.fromList
+        (optionals.givens
+          (lists.map
+            (λb.optionals.map (λts.(Binding[name] b, ts)) (Binding[typeScheme] b))
+            bindings)) in
+    Graph{
+      boundTerms = maps.union newTerms (Graph[boundTerms] g),
+      boundTypes = maps.union newTypes (Graph[boundTypes] g),
+      classConstraints = Graph[classConstraints] g,
+      lambdaVariables = Graph[lambdaVariables] g,
+      metadata = Graph[metadata] g,
+      primitives = Graph[primitives] g,
+      schemaTypes = Graph[schemaTypes] g,
+      typeVariables = Graph[typeVariables] g}
 
 ## Convert a forall type to a type scheme
-term fTypeToTypeScheme = λtyp.let stripAnnotations := λt.cases(model.Type){annotated=λat.stripAnnotations (model.AnnotatedType[body] at), `_`=t} t in let gatherForall := λvars,typ.cases(model.Type){`forall`=λft.gatherForall (lists.cons (model.ForallType[parameter] ft) vars) (model.ForallType[body] ft), `_`=model.TypeScheme{variables = lists.reverse vars, body = typ, constraints = maps.empty}} (stripAnnotations typ) in gatherForall [] typ
+term fTypeToTypeScheme =
+  λtyp.
+    let stripAnnotations := λt.cases(Type){annotated=λat.stripAnnotations (AnnotatedType[body] at), `_`=t} t in
+    let gatherForall := λvars,typ.cases(Type){
+          `forall`=λft.gatherForall
+                (lists.cons (ForallType[parameter] ft) vars)
+                (ForallType[body] ft),
+          `_`=TypeScheme{
+            variables = lists.reverse vars,
+            body = typ,
+            constraints = maps.empty}}
+          (stripAnnotations typ) in
+    gatherForall [] typ
 
 ## Convert a TermSignature to a TypeScheme, erasing parameter names, descriptions, and laziness flags.
-term termSignatureToTypeScheme = λsig.let typeParams := typing.TermSignature[typeParameters] sig in let params := typing.TermSignature[parameters] sig in let result := typing.TermSignature[result] sig in let variables := lists.map (λtp.typing.TypeParameter[name] tp) typeParams in let body := lists.foldl (λacc,p.model.Type{function = model.FunctionType{domain = typing.Parameter[`type`] p, codomain = acc}}) (typing.Result[`type`] result) (lists.reverse params) in let constraints := maps.fromList (lists.map (λtp.(typing.TypeParameter[name] tp, model.TypeVariableConstraints{classes = sets.fromList (typing.TypeParameter[constraints] tp)})) typeParams) in model.TypeScheme{variables = variables, body = body, constraints = constraints}
+term termSignatureToTypeScheme =
+  λsig.
+    let typeParams := TermSignature[typeParameters] sig in
+    let params := TermSignature[parameters] sig in
+    let result := TermSignature[result] sig in
+    let variables := lists.map (λtp.TypeParameter[name] tp) typeParams in
+    let body := lists.foldl
+        (λacc,p.Type{function = FunctionType{domain = Parameter[`type`] p, codomain = acc}})
+        (Result[`type`] result)
+        (lists.reverse params) in
+    let constraints := maps.fromList
+        (lists.map
+          (λtp.(TypeParameter[name] tp, TypeVariableConstraints{classes = sets.fromList (TypeParameter[constraints] tp)}))
+          typeParams) in
+    TypeScheme{variables = variables, body = body, constraints = constraints}
 
 ## Convert a type scheme to a forall type
-term typeSchemeToFType = λts.let vars := model.TypeScheme[variables] ts in let body := model.TypeScheme[body] ts in lists.foldl (λt,v.model.Type{`forall` = model.ForallType{parameter = v, body = t}}) body (lists.reverse vars)
+term typeSchemeToFType =
+  λts.
+    let vars := TypeScheme[variables] ts in
+    let body := TypeScheme[body] ts in
+    lists.foldl (λt,v.Type{`forall` = ForallType{parameter = v, body = t}}) body (lists.reverse vars)
 
 ## Convert a TypeScheme to a TermSignature. Type variables and class constraints are preserved exactly. Value-parameter names are synthesized as arg0, arg1, .... Per-parameter descriptions are nothing and isLazy defaults to false.
-term typeSchemeToTermSignature = λts.let variables := model.TypeScheme[variables] ts in let body := model.TypeScheme[body] ts in let constraintsMap := model.TypeScheme[constraints] ts in let typeParams := lists.map (λv.typing.TypeParameter{name = v, constraints = optionals.match (maps.lookup v constraintsMap) [] (λtvm.sets.toList (model.TypeVariableConstraints[classes] tvm))}) variables in let peel := λacc,t.cases(model.Type){function=λft.peel (lists.cons (model.FunctionType[domain] ft) acc) (model.FunctionType[codomain] ft), `_`=(lists.reverse acc, t)} t in let peeled := peel [] body in let paramTypes := pairs.first peeled in let resultType := pairs.second peeled in let params := lists.reverse (pairs.first (lists.foldl (λacc,ty.let pairAcc := pairs.first acc in let i := pairs.second acc in (lists.cons typing.Parameter{name = model.Name{strings.concat ["arg", literals.printInt32 i]}, description = none, `type` = ty, isLazy = false} pairAcc, math.add i 1:int32)) ([], 0:int32) paramTypes)) in let result := typing.Result{description = none, `type` = resultType} in typing.TermSignature{typeParameters = typeParams, parameters = params, result = result}
+term typeSchemeToTermSignature =
+  λts.
+    let variables := TypeScheme[variables] ts in
+    let body := TypeScheme[body] ts in
+    let constraintsMap := TypeScheme[constraints] ts in
+    let typeParams := lists.map
+        (λv.TypeParameter{
+            name = v,
+            constraints = optionals.match
+                (maps.lookup v constraintsMap)
+                []
+                (λtvm.sets.toList (TypeVariableConstraints[classes] tvm))})
+        variables in
+    let peel := λacc,t.cases(Type){
+          function=λft.peel
+                (lists.cons (FunctionType[domain] ft) acc)
+                (FunctionType[codomain] ft),
+          `_`=(lists.reverse acc, t)}
+          t in
+    let peeled := peel [] body in
+    let paramTypes := first peeled in
+    let resultType := second peeled in
+    let params := lists.reverse
+        (first
+          (lists.foldl
+            (λacc,ty.
+              let pairAcc := first acc in
+              let i := second acc in
+              (
+                lists.cons
+                  Parameter{name = Name{strings.concat ["arg", printInt32 i]}, description = none, `type` = ty, isLazy = false}
+                  pairAcc,
+                add i 1:int32))
+            ([], 0:int32)
+            paramTypes)) in
+    let result := Result{description = none, `type` = resultType} in
+    TermSignature{typeParameters = typeParams, parameters = params, result = result}

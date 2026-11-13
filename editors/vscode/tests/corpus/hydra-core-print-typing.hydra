@@ -3,14 +3,22 @@ module hydra.core.print.typing
 
 import hydra.core.lib.lists as lists
 import hydra.core.lib.maps as maps
-import hydra.core.lib.pairs as pairs
+import hydra.core.lib.pairs
 import hydra.core.lib.strings as strings
-import hydra.core.model as model
-import hydra.core.print.model as print.model
-import hydra.core.typing as typing
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.typing
 
 ## Show a type constraint as a string
-term typeConstraint = λtc.let ltyp := typing.TypeConstraint[`left`] tc, rtyp := typing.TypeConstraint[`right`] tc in strings.concat [print.model.type ltyp, "≡", print.model.type rtyp]
+term typeConstraint =
+  λtc.
+    let ltyp := TypeConstraint[`left`] tc, rtyp := TypeConstraint[`right`] tc
+    in strings.concat [`type` ltyp, "≡", `type` rtyp]
 
 ## Show a type substitution as a string
-term typeSubst = λts.let subst := typing.TypeSubst[] ts, pairs := maps.toList subst, showPair := λpair.let name := model.Name[] (pairs.first pair), typ := pairs.second pair in strings.concat [name, "↦", print.model.type typ], pairStrs := lists.map showPair pairs in strings.concat ["{", strings.join "," pairStrs, "}"]
+term typeSubst =
+  λts.
+    let subst := TypeSubst[] ts, pairs := maps.toList subst, showPair := λpair.
+        let name := Name[] (first pair), typ := second pair
+        in strings.concat [name, "↦", `type` typ], pairStrs := lists.map showPair pairs
+    in strings.concat ["{", strings.join "," pairStrs, "}"]

@@ -1,8 +1,6 @@
 ## Parser combinator types for text parsing
 module hydra.core.parsing
 
-
-
 ## An error which occurred while parsing
 type ParseError = record{
   ## An error message
