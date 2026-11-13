@@ -1,0 +1,769 @@
+## Test cases for hydra.core.lib.eithers primitives
+module hydra.core.test.lib.eithers
+
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.equality
+import hydra.core.lib.literals
+import hydra.core.lib.logic
+import hydra.core.lib.math
+import hydra.core.lib.strings
+import hydra.core.model
+import hydra.core.print.model as model
+import hydra.core.testing
+
+## Test cases for hydra.core.lib.eithers primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.eithers primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "chainsOnRightShortCircuitsOnLeft",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "bind Right with success",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      (eithers.bind
+                        right("ab")
+                        (λs.ifElse
+                            (isEmpty s)
+                            left(0:int32)
+                            right(length s))),
+                expected = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      right(2:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.bind.chainsOnRightShortCircuitsOnLeft"}]},
+          TestCaseWithMetadata{
+            name = "bind Right with failure",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      (eithers.bind
+                        right("")
+                        (λs.ifElse
+                            (isEmpty s)
+                            left(0:int32)
+                            right(length s))),
+                expected = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      left(0:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.bind.chainsOnRightShortCircuitsOnLeft"}]},
+          TestCaseWithMetadata{
+            name = "bind Left returns Left unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      (eithers.bind
+                        left(42:int32)
+                        (λs.ifElse
+                            (isEmpty s)
+                            left(0:int32)
+                            right(length s))),
+                expected = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      left(42:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.bind.chainsOnRightShortCircuitsOnLeft"}]}]},
+      TestGroup{
+        name = "mapsBothSidesIndependently",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "map left value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      (eithers.bimap
+                        (λx.mul x 2:int32)
+                        (λs.length s)
+                        left(5:int32)),
+                expected = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      left(10:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.bimap.mapsBothSidesIndependently"}]},
+          TestCaseWithMetadata{
+            name = "map right value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      (eithers.bimap
+                        (λx.mul x 2:int32)
+                        (λs.length s)
+                        right("ab")),
+                expected = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      right(2:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.bimap.mapsBothSidesIndependently"}]}]},
+      TestGroup{
+        name = "testsLeftVariant",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "left value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (eithers.isLeft left(42:int32)),
+                expected = λ`_`.(λb.printBoolean b) true}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.isLeft.testsLeftVariant"}]},
+          TestCaseWithMetadata{
+            name = "right value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (eithers.isLeft right("test")),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.isLeft.testsLeftVariant"}]}]},
+      TestGroup{
+        name = "testsRightVariant",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "right value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (eithers.isRight right("test")),
+                expected = λ`_`.(λb.printBoolean b) true}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.isRight.testsRightVariant"}]},
+          TestCaseWithMetadata{
+            name = "left value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (eithers.isRight left(42:int32)),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.isRight.testsRightVariant"}]}]},
+      TestGroup{
+        name = "eliminatesByVariant",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "apply left function",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (eithers.either
+                        (λx.mul x 2:int32)
+                        (λs.length s)
+                        left(5:int32)),
+                expected = λ`_`.(λn.printInt32 n) 10:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.either.eliminatesByVariant"}]},
+          TestCaseWithMetadata{
+            name = "apply right function",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (eithers.either
+                        (λx.mul x 2:int32)
+                        (λs.length s)
+                        right("ab")),
+                expected = λ`_`.(λn.printInt32 n) 2:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.either.eliminatesByVariant"}]}]},
+      TestGroup{
+        name = "foldsLeftShortCircuitingOnLeft",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "fold succeeds on all elements",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λn.printInt32 n)
+                        e)
+                      (eithers.foldList
+                        (λacc,el.ifElse
+                            (equal el 0:int32)
+                            left("zero")
+                            right(add acc el))
+                        0:int32
+                        [1:int32, 2:int32, 3:int32]),
+                expected = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λn.printInt32 n)
+                        e)
+                      right(6:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.foldList.foldsLeftShortCircuitingOnLeft"}]},
+          TestCaseWithMetadata{
+            name = "fold short-circuits on failure",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λn.printInt32 n)
+                        e)
+                      (eithers.foldList
+                        (λacc,el.ifElse
+                            (equal el 0:int32)
+                            left("zero")
+                            right(add acc el))
+                        0:int32
+                        [1:int32, 0:int32, 3:int32]),
+                expected = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λn.printInt32 n)
+                        e)
+                      left("zero")}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.foldList.foldsLeftShortCircuitingOnLeft"}]},
+          TestCaseWithMetadata{
+            name = "fold empty list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λn.printInt32 n)
+                        e)
+                      (eithers.foldList
+                        (λacc,el.ifElse
+                            (equal el 0:int32)
+                            left("zero")
+                            right(add acc el))
+                        0:int32
+                        []),
+                expected = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λn.printInt32 n)
+                        e)
+                      right(0:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.foldList.foldsLeftShortCircuitingOnLeft"}]}]},
+      TestGroup{
+        name = "constructsLeftVariant",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "wrap a value as left",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      (eithers.left 5:int32),
+                expected = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      left(5:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.left.constructsLeftVariant"}]}]},
+      TestGroup{
+        name = "extractsLeftValuesPreservingOrder",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "filter left values",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
+                      (eithers.lefts
+                        [left(1:int32), right("a"), left(2:int32), right("b")]),
+                expected = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
+                      [1:int32, 2:int32]}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.lefts.extractsLeftValuesPreservingOrder"}]},
+          TestCaseWithMetadata{
+            name = "all lefts",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
+                      (eithers.lefts
+                        [left(1:int32), left(2:int32)]),
+                expected = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
+                      [1:int32, 2:int32]}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.lefts.extractsLeftValuesPreservingOrder"}]},
+          TestCaseWithMetadata{
+            name = "all rights",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
+                      (eithers.lefts [right("a"), right("b")]),
+                expected = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
+                      []}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.lefts.extractsLeftValuesPreservingOrder"}]},
+          TestCaseWithMetadata{
+            name = "empty list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
+                      (eithers.lefts []),
+                expected = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
+                      []}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.lefts.extractsLeftValuesPreservingOrder"}]}]},
+      TestGroup{
+        name = "constructsRightVariant",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "wrap a value as right",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      (eithers.right 5:int32),
+                expected = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      right(5:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.right.constructsRightVariant"}]}]},
+      TestGroup{
+        name = "extractsRightValuesPreservingOrder",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "filter right values",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.model.list (λs.printString s) xs)
+                      (eithers.rights
+                        [left(1:int32), right("a"), left(2:int32), right("b")]),
+                expected = λ`_`.(λxs.model.list (λs.printString s) xs)
+                      ["a", "b"]}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.rights.extractsRightValuesPreservingOrder"}]},
+          TestCaseWithMetadata{
+            name = "all rights",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.model.list (λs.printString s) xs)
+                      (eithers.rights [right("a"), right("b")]),
+                expected = λ`_`.(λxs.model.list (λs.printString s) xs)
+                      ["a", "b"]}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.rights.extractsRightValuesPreservingOrder"}]},
+          TestCaseWithMetadata{
+            name = "all lefts",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.model.list (λs.printString s) xs)
+                      (eithers.rights
+                        [left(1:int32), left(2:int32)]),
+                expected = λ`_`.(λxs.model.list (λs.printString s) xs)
+                      []}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.rights.extractsRightValuesPreservingOrder"}]},
+          TestCaseWithMetadata{
+            name = "empty list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.model.list (λs.printString s) xs)
+                      (eithers.rights []),
+                expected = λ`_`.(λxs.model.list (λs.printString s) xs)
+                      []}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.rights.extractsRightValuesPreservingOrder"}]}]},
+      TestGroup{
+        name = "splitsIntoLeftsAndRights",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "partition mixed",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λp.model.pair
+                        (λxs.model.list (λn.printInt32 n) xs)
+                        (λxs.model.list (λs.printString s) xs)
+                        p)
+                      (eithers.partition
+                        [left(1:int32), right("a"), left(2:int32), right("b")]),
+                expected = λ`_`.(λp.model.pair
+                        (λxs.model.list (λn.printInt32 n) xs)
+                        (λxs.model.list (λs.printString s) xs)
+                        p)
+                      ([1:int32, 2:int32], ["a", "b"])}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.partition.splitsIntoLeftsAndRights"}]},
+          TestCaseWithMetadata{
+            name = "all lefts",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λp.model.pair
+                        (λxs.model.list (λn.printInt32 n) xs)
+                        (λxs.model.list (λs.printString s) xs)
+                        p)
+                      (eithers.partition
+                        [left(1:int32), left(2:int32)]),
+                expected = λ`_`.(λp.model.pair
+                        (λxs.model.list (λn.printInt32 n) xs)
+                        (λxs.model.list (λs.printString s) xs)
+                        p)
+                      ([1:int32, 2:int32], [])}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.partition.splitsIntoLeftsAndRights"}]},
+          TestCaseWithMetadata{
+            name = "all rights",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λp.model.pair
+                        (λxs.model.list (λn.printInt32 n) xs)
+                        (λxs.model.list (λs.printString s) xs)
+                        p)
+                      (eithers.partition
+                        [right("a"), right("b")]),
+                expected = λ`_`.(λp.model.pair
+                        (λxs.model.list (λn.printInt32 n) xs)
+                        (λxs.model.list (λs.printString s) xs)
+                        p)
+                      ([], ["a", "b"])}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.partition.splitsIntoLeftsAndRights"}]},
+          TestCaseWithMetadata{
+            name = "empty list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λp.model.pair
+                        (λxs.model.list (λn.printInt32 n) xs)
+                        (λxs.model.list (λs.printString s) xs)
+                        p)
+                      (eithers.partition []),
+                expected = λ`_`.(λp.model.pair
+                        (λxs.model.list (λn.printInt32 n) xs)
+                        (λxs.model.list (λs.printString s) xs)
+                        p)
+                      ([], [])}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.partition.splitsIntoLeftsAndRights"}]}]},
+      TestGroup{
+        name = "mapsRightPreservesLeft",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "map right value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      (eithers.map
+                        (λx.mul x 2:int32)
+                        right(5:int32)),
+                expected = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      right(10:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.map.mapsRightPreservesLeft"}]},
+          TestCaseWithMetadata{
+            name = "preserve left",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      (eithers.map
+                        (λx.mul x 2:int32)
+                        left(99:int32)),
+                expected = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λn.printInt32 n)
+                        e)
+                      left(99:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.map.mapsRightPreservesLeft"}]}]},
+      TestGroup{
+        name = "traversesCollectingOrShortCircuiting",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "all succeed",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λxs.model.list (λn.printInt32 n) xs)
+                        e)
+                      (eithers.mapList
+                        (λx.ifElse
+                            (equal x 0:int32)
+                            left("zero")
+                            right(mul x 2:int32))
+                        [1:int32, 2:int32, 3:int32]),
+                expected = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λxs.model.list (λn.printInt32 n) xs)
+                        e)
+                      right([2:int32, 4:int32, 6:int32])}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.mapList.traversesCollectingOrShortCircuiting"}]},
+          TestCaseWithMetadata{
+            name = "first fails",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λxs.model.list (λn.printInt32 n) xs)
+                        e)
+                      (eithers.mapList
+                        (λx.ifElse
+                            (equal x 0:int32)
+                            left("zero")
+                            right(mul x 2:int32))
+                        [1:int32, 0:int32, 3:int32]),
+                expected = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λxs.model.list (λn.printInt32 n) xs)
+                        e)
+                      left("zero")}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.mapList.traversesCollectingOrShortCircuiting"}]},
+          TestCaseWithMetadata{
+            name = "empty list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λxs.model.list (λn.printInt32 n) xs)
+                        e)
+                      (eithers.mapList
+                        (λx.ifElse
+                            (equal x 0:int32)
+                            left("zero")
+                            right(mul x 2:int32))
+                        []),
+                expected = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λxs.model.list (λn.printInt32 n) xs)
+                        e)
+                      right([])}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.mapList.traversesCollectingOrShortCircuiting"}]}]},
+      TestGroup{
+        name = "traversesOptionalCollectingOrShortCircuiting",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "given succeeds",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λmx.model.optional (λn.printInt32 n) mx)
+                        e)
+                      (eithers.mapOptional
+                        (λx.ifElse
+                            (equal x 0:int32)
+                            left("zero")
+                            right(mul x 2:int32))
+                        given(5:int32)),
+                expected = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λmx.model.optional (λn.printInt32 n) mx)
+                        e)
+                      right(given(10:int32))}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.mapOptional.traversesOptionalCollectingOrShortCircuiting"}]},
+          TestCaseWithMetadata{
+            name = "given fails",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λmx.model.optional (λn.printInt32 n) mx)
+                        e)
+                      (eithers.mapOptional
+                        (λx.ifElse
+                            (equal x 0:int32)
+                            left("zero")
+                            right(mul x 2:int32))
+                        given(0:int32)),
+                expected = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λmx.model.optional (λn.printInt32 n) mx)
+                        e)
+                      left("zero")}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.mapOptional.traversesOptionalCollectingOrShortCircuiting"}]},
+          TestCaseWithMetadata{
+            name = "none",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λmx.model.optional (λn.printInt32 n) mx)
+                        e)
+                      (eithers.mapOptional
+                        (λx.ifElse
+                            (equal x 0:int32)
+                            left("zero")
+                            right(mul x 2:int32))
+                        none),
+                expected = λ`_`.(λe.model.either
+                        (λs.printString s)
+                        (λmx.model.optional (λn.printInt32 n) mx)
+                        e)
+                      right(none)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.mapOptional.traversesOptionalCollectingOrShortCircuiting"}]}]},
+      TestGroup{
+        name = "traversesSetCollectingOrShortCircuiting",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "all succeed",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λs.model.set (λn.printInt32 n) s)
+                        e)
+                      (eithers.mapSet
+                        (λx.ifElse
+                            (equal x 0:int32)
+                            left(-1:int32)
+                            right(mul x 2:int32))
+                        {1:int32, 2:int32, 3:int32}),
+                expected = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λs.model.set (λn.printInt32 n) s)
+                        e)
+                      right({2:int32, 4:int32, 6:int32})}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.mapSet.traversesSetCollectingOrShortCircuiting"}]},
+          TestCaseWithMetadata{
+            name = "one fails",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λs.model.set (λn.printInt32 n) s)
+                        e)
+                      (eithers.mapSet
+                        (λx.ifElse
+                            (equal x 0:int32)
+                            left(-1:int32)
+                            right(mul x 2:int32))
+                        {0:int32, 1:int32, 3:int32}),
+                expected = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λs.model.set (λn.printInt32 n) s)
+                        e)
+                      left(-1:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.mapSet.traversesSetCollectingOrShortCircuiting"}]},
+          TestCaseWithMetadata{
+            name = "empty set",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λs.model.set (λn.printInt32 n) s)
+                        e)
+                      (eithers.mapSet
+                        (λx.ifElse
+                            (equal x 0:int32)
+                            left(-1:int32)
+                            right(mul x 2:int32))
+                        {}),
+                expected = λ`_`.(λe.model.either
+                        (λn.printInt32 n)
+                        (λs.model.set (λn.printInt32 n) s)
+                        e)
+                      right({})}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.eithers.mapSet.traversesSetCollectingOrShortCircuiting"}]}]}],
+    `cases` = []}

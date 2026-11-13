@@ -1,0 +1,330 @@
+## Effectful test cases for hydra.core.lib.effects primitives
+module hydra.core.test.lib.effects
+
+import hydra.core.file
+import hydra.core.lib.effects as effects
+import hydra.core.lib.eithers
+import hydra.core.lib.files
+import hydra.core.lib.optionals
+import hydra.core.lib.strings
+import hydra.core.lib.text
+import hydra.core.model
+import hydra.core.testing
+
+## Effectful test cases for hydra.core.lib.effects primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.effects primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "appliesEffectfulFunctionToEffectfulArgument",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "apply applies an effectful function to an effectful argument",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.apply
+                      (effects.pure (λs.concat2 ">" s))
+                      (effects.pure "y"),
+                expected = λ`_`.">y"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.effects.apply.appliesEffectfulFunctionToEffectfulArgument"}]}]},
+      TestGroup{
+        name = "threadsResultIntoNextEffect",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "bind threads a pure value into the next effect",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.bind
+                      (effects.pure "abc")
+                      (λs.effects.pure (concat2 s "!")),
+                expected = λ`_`."abc!"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.effects.bind.threadsResultIntoNextEffect"}]}]},
+      TestGroup{
+        name = "performsEffectsInOrderExactlyOnce",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "bind performs the first effect before the second, each once",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.bind
+                      (writeFile
+                        FilePath{"/tmp/hydra-testing/bind-order.txt"}
+                        "":binary)
+                      (λ`_w`.effects.bind
+                          (appendFile
+                            FilePath{"/tmp/hydra-testing/bind-order.txt"}
+                            "QQ==":binary)
+                          (λ`_a`.effects.bind
+                              (appendFile
+                                FilePath{"/tmp/hydra-testing/bind-order.txt"}
+                                "Qg==":binary)
+                              (λ`_b`.effects.map
+                                  (λr.`either`
+                                      (λ`_e`."ERR")
+                                      (λb.`either`
+                                          (λ`_e`."<decode error>")
+                                          (λs.s)
+                                          (decodeUtf8 b))
+                                      r)
+                                  (readFile
+                                    FilePath{"/tmp/hydra-testing/bind-order.txt"})))),
+                expected = λ`_`."AB"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.effects.bind.performsEffectsInOrderExactlyOnce"}]}]},
+      TestGroup{
+        name = "sequencesTwoKleisliArrows",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "compose runs two Kleisli arrows in sequence",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.compose
+                      (λa.effects.pure (concat2 a "1"))
+                      (λb.effects.pure (concat2 b "2"))
+                      "n",
+                expected = λ`_`."n12"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.effects.compose.sequencesTwoKleisliArrows"}]}]},
+      TestGroup{
+        name = "sequencesEffectReturningStepOverList",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "foldl sequences an effect-returning step over a list",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.foldList
+                      (λacc,x.effects.pure (concat2 acc x))
+                      ""
+                      ["a", "b", "c"],
+                expected = λ`_`."abc"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.effects.foldList.sequencesEffectReturningStepOverList"}]}]},
+      TestGroup{
+        name = "performsElementEffectsLeftToRightExactlyOnce",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "foldList performs element effects left-to-right, each once",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.bind
+                      (writeFile
+                        FilePath{"/tmp/hydra-testing/fold-order.txt"}
+                        "":binary)
+                      (λ`_w`.effects.bind
+                          (effects.foldList
+                            (λacc,x.effects.bind
+                                (appendFile
+                                  FilePath{"/tmp/hydra-testing/fold-order.txt"}
+                                  x)
+                                (λ`_a`.effects.pure acc))
+                            ""
+                            ["QQ==":binary, "Qg==":binary, "Qw==":binary])
+                          (λ`_f`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λb.`either`
+                                      (λ`_e`."<decode error>")
+                                      (λs.s)
+                                      (decodeUtf8 b))
+                                  r)
+                              (readFile
+                                FilePath{"/tmp/hydra-testing/fold-order.txt"}))),
+                expected = λ`_`."ABC"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.effects.foldList.performsElementEffectsLeftToRightExactlyOnce"}]}]},
+      TestGroup{
+        name = "appliesPureFunctionToEffectResult",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "map applies a pure function to an effect result",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.map
+                      (λs.concat2 s "-mapped")
+                      (effects.pure "x"),
+                expected = λ`_`."x-mapped"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.effects.map.appliesPureFunctionToEffectResult"}]}]},
+      TestGroup{
+        name = "appliesEffectReturningFunctionAndCollectsResults",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "mapList applies an effect-returning function across a list and collects results",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.map
+                      (λxs.concat xs)
+                      (effects.mapList
+                        (λx.effects.pure (concat2 x "."))
+                        ["a", "b"]),
+                expected = λ`_`."a.b."}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.effects.mapList.appliesEffectReturningFunctionAndCollectsResults"}]}]},
+      TestGroup{
+        name = "performsElementEffectsLeftToRightExactlyOnce",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "mapList performs element effects left-to-right, each once",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.bind
+                      (writeFile
+                        FilePath{"/tmp/hydra-testing/maplist-order.txt"}
+                        "":binary)
+                      (λ`_w`.effects.bind
+                          (effects.mapList
+                            (λx.appendFile
+                                FilePath{"/tmp/hydra-testing/maplist-order.txt"}
+                                x)
+                            ["QQ==":binary, "Qg==":binary, "Qw==":binary])
+                          (λ`_m`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λb.`either`
+                                      (λ`_e`."<decode error>")
+                                      (λs.s)
+                                      (decodeUtf8 b))
+                                  r)
+                              (readFile
+                                FilePath{"/tmp/hydra-testing/maplist-order.txt"}))),
+                expected = λ`_`."ABC"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.effects.mapList.performsElementEffectsLeftToRightExactlyOnce"}]}]},
+      TestGroup{
+        name = "appliesFunctionWhenPresentPassesThroughNoneWhenAbsent",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "mapOptional over a given value applies the function",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.map
+                      (λm.withDefault "<none>" m)
+                      (effects.mapOptional
+                        (λx.effects.pure (concat2 x "!"))
+                        given("present")),
+                expected = λ`_`."present!"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.effects.mapOptional.appliesFunctionWhenPresentPassesThroughNoneWhenAbsent"}]},
+          TestCaseWithMetadata{
+            name = "mapOptional over none yields none",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.map
+                      (λm.withDefault "<none>" m)
+                      (effects.mapOptional
+                        (λx.effects.pure x)
+                        none),
+                expected = λ`_`."<none>"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.effects.mapOptional.appliesFunctionWhenPresentPassesThroughNoneWhenAbsent"}]}]},
+      TestGroup{
+        name = "performsExactlyZeroOrOneEffect",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "mapOptional over none performs no effect",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.bind
+                      (writeFile
+                        FilePath{"/tmp/hydra-testing/mapopt-none.txt"}
+                        "c2VlZA==":binary)
+                      (λ`_w`.effects.bind
+                          (effects.mapOptional
+                            (λ`_x`.appendFile
+                                FilePath{"/tmp/hydra-testing/mapopt-none.txt"}
+                                "WA==":binary)
+                            none)
+                          (λ`_m`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λb.`either`
+                                      (λ`_e`."<decode error>")
+                                      (λs.s)
+                                      (decodeUtf8 b))
+                                  r)
+                              (readFile
+                                FilePath{"/tmp/hydra-testing/mapopt-none.txt"}))),
+                expected = λ`_`."seed"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.effects.mapOptional.performsExactlyZeroOrOneEffect"}]},
+          TestCaseWithMetadata{
+            name = "mapOptional over a given value performs exactly one effect",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.bind
+                      (writeFile
+                        FilePath{"/tmp/hydra-testing/mapopt-given.txt"}
+                        "c2VlZA==":binary)
+                      (λ`_w`.effects.bind
+                          (effects.mapOptional
+                            (λ`_x`.appendFile
+                                FilePath{"/tmp/hydra-testing/mapopt-given.txt"}
+                                "WA==":binary)
+                            given("YW55dGhpbmc=":binary))
+                          (λ`_m`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λb.`either`
+                                      (λ`_e`."<decode error>")
+                                      (λs.s)
+                                      (decodeUtf8 b))
+                                  r)
+                              (readFile
+                                FilePath{"/tmp/hydra-testing/mapopt-given.txt"}))),
+                expected = λ`_`."seedX"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.effects.mapOptional.performsExactlyZeroOrOneEffect"}]}]},
+      TestGroup{
+        name = "liftsValueWithoutHostInteraction",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "pure of a string yields the string",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.pure "hello",
+                expected = λ`_`."hello"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.effects.pure.liftsValueWithoutHostInteraction"}]}]}],
+    `cases` = []}

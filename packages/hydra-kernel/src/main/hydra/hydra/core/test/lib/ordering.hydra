@@ -1,0 +1,3322 @@
+## Test cases for hydra.core.lib.ordering primitives
+module hydra.core.test.lib.ordering
+
+import hydra.core.lib.eithers as eithers
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.reduction
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## Test cases for hydra.core.lib.ordering primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.ordering primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "compare",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "threeWayClassification",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "less than (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 3:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "equal (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"equalTo"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "greater than (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 3:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"greaterThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]}]},
+          TestGroup{
+            name = "threeWayClassification",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "less than (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 1.5:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 2.5:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "equal (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 3.14:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.14:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"equalTo"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "greater than (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 5.0:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.0:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"greaterThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "negative vs positive",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = -1.0:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.0:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]}]},
+          TestGroup{
+            name = "decimalScaleTiebreak",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "different value",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.1}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.2}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.decimalScaleTiebreak"}]},
+              TestCaseWithMetadata{
+                name = "same value, same scale",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.1}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.1}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"equalTo"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.decimalScaleTiebreak"}]},
+              TestCaseWithMetadata{
+                name = "same value, scale tiebreak",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.1}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.10}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [Tag{"scaleDistinct"}],
+                provisions = [Name{"hydra.core.lib.ordering.compare.decimalScaleTiebreak"}]},
+              TestCaseWithMetadata{
+                name = "same value, scale tiebreak (larger scale)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.10}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.100}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [Tag{"scaleDistinct"}],
+                provisions = [Name{"hydra.core.lib.ordering.compare.decimalScaleTiebreak"}]},
+              TestCaseWithMetadata{
+                name = "same value, scale tiebreak (transitively)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.1}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.100}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [Tag{"scaleDistinct"}],
+                provisions = [Name{"hydra.core.lib.ordering.compare.decimalScaleTiebreak"}]}]},
+          TestGroup{
+            name = "threeWayClassification",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "less than (lexicographic)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "apple"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "banana"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "equal (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "hello"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"equalTo"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "greater than (lexicographic)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "zebra"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "apple"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"greaterThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "empty vs non-empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = ""}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "prefix vs longer",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "ab"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abc"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "astral character greater than BMP private-use character",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "🌍"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = ""}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"greaterThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]}]},
+          TestGroup{
+            name = "threeWayClassification",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "less than (elementwise)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `list` = [
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]}}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "less than (shorter prefix)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `list` = [
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]}}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "equal (list)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `list` = [
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"equalTo"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "greater than (list)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `list` = [
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"greaterThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]}]},
+          TestGroup{
+            name = "threeWayClassification",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "equal, same construction order",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `set` = {
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}},
+                                argument = Term{
+                                  `set` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"equalTo"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "equal, different construction order",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `set` = {
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}},
+                                argument = Term{
+                                  `set` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"equalTo"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "less than (canonical order)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `set` = {
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}}}}},
+                                argument = Term{
+                                  `set` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "greater than (canonical order)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `set` = {
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}},
+                                argument = Term{
+                                  `set` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"greaterThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]}]},
+          TestGroup{
+            name = "threeWayClassification",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "equal, same insertion order",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `map` = {
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"equalTo"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "equal, different insertion order",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `map` = {
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"equalTo"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "less than (by key)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `map` = {
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]},
+              TestCaseWithMetadata{
+                name = "less than (by value, same key)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `map` = {
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.compare.threeWayClassification"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "gt",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "strictGreaterThan",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "greater (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 3:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gt.strictGreaterThan"}]},
+              TestCaseWithMetadata{
+                name = "equal (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gt.strictGreaterThan"}]},
+              TestCaseWithMetadata{
+                name = "less (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 3:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gt.strictGreaterThan"}]}]},
+          TestGroup{
+            name = "strictGreaterThan",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "greater (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 5.0:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.0:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gt.strictGreaterThan"}]},
+              TestCaseWithMetadata{
+                name = "equal (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 3.14:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.14:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gt.strictGreaterThan"}]},
+              TestCaseWithMetadata{
+                name = "less (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 1.5:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 2.5:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gt.strictGreaterThan"}]}]},
+          TestGroup{
+            name = "strictGreaterThan",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "greater (lexicographic)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "zebra"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "apple"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gt.strictGreaterThan"}]},
+              TestCaseWithMetadata{
+                name = "equal (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "hello"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gt.strictGreaterThan"}]},
+              TestCaseWithMetadata{
+                name = "less (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "apple"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "banana"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gt.strictGreaterThan"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "gte",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "greaterThanOrEqual",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "greater (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 3:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gte.greaterThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "equal (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gte.greaterThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "less (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 3:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gte.greaterThanOrEqual"}]}]},
+          TestGroup{
+            name = "greaterThanOrEqual",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "greater (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 5.0:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.0:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gte.greaterThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "equal (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 3.14:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.14:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gte.greaterThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "less (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 1.5:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 2.5:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gte.greaterThanOrEqual"}]}]},
+          TestGroup{
+            name = "greaterThanOrEqual",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "greater (lexicographic)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "zebra"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "apple"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gte.greaterThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "equal (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "hello"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gte.greaterThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "less (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "apple"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "banana"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gte.greaterThanOrEqual"}]}]},
+          TestGroup{
+            name = "greaterThanOrEqual",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "greater (decimal)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.2}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.1}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gte.greaterThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "equal, same scale",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.1}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.1}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gte.greaterThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "equal value, scale tiebreak (smaller scale wins)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.10}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.1}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gte.greaterThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "less (decimal)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.gte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.1}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.2}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.gte.greaterThanOrEqual"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "lt",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "strictLessThan",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "less (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 3:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lt.strictLessThan"}]},
+              TestCaseWithMetadata{
+                name = "equal (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lt.strictLessThan"}]},
+              TestCaseWithMetadata{
+                name = "greater (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 3:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lt.strictLessThan"}]}]},
+          TestGroup{
+            name = "strictLessThan",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "less (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 1.5:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 2.5:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lt.strictLessThan"}]},
+              TestCaseWithMetadata{
+                name = "equal (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 3.14:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.14:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lt.strictLessThan"}]},
+              TestCaseWithMetadata{
+                name = "greater (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 5.0:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.0:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lt.strictLessThan"}]}]},
+          TestGroup{
+            name = "strictLessThan",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "less (lexicographic)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "apple"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "banana"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lt.strictLessThan"}]},
+              TestCaseWithMetadata{
+                name = "equal (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "hello"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lt.strictLessThan"}]},
+              TestCaseWithMetadata{
+                name = "greater (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "zebra"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "apple"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lt.strictLessThan"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "lte",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "lessThanOrEqual",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "less (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 3:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lte.lessThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "equal (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lte.lessThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "greater (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 3:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lte.lessThanOrEqual"}]}]},
+          TestGroup{
+            name = "lessThanOrEqual",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "less (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 1.5:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 2.5:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lte.lessThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "equal (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 3.14:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.14:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lte.lessThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "greater (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 5.0:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.0:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lte.lessThanOrEqual"}]}]},
+          TestGroup{
+            name = "lessThanOrEqual",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "less (lexicographic)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "apple"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "banana"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lte.lessThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "equal (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "hello"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lte.lessThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "greater (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "zebra"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "apple"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lte.lessThanOrEqual"}]}]},
+          TestGroup{
+            name = "lessThanOrEqual",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "less (decimal)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.1}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.2}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lte.lessThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "equal, same scale",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.1}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.1}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lte.lessThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "equal value, scale tiebreak (smaller scale wins)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.1}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.10}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lte.lessThanOrEqual"}]},
+              TestCaseWithMetadata{
+                name = "greater (decimal)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.lte"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.2}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.1}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.lte.lessThanOrEqual"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "max",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "returnsLargerOperand",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "first greater (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.max"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 3:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 5:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.max.returnsLargerOperand"}]},
+              TestCaseWithMetadata{
+                name = "second greater (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.max"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 3:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 5:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.max.returnsLargerOperand"}]},
+              TestCaseWithMetadata{
+                name = "equal (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.max"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 5:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.max.returnsLargerOperand"}]}]},
+          TestGroup{
+            name = "returnsLargerOperand",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "first greater (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.max"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "zebra"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "apple"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "zebra"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.max.returnsLargerOperand"}]},
+              TestCaseWithMetadata{
+                name = "second greater (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.max"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "apple"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "zebra"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "zebra"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.max.returnsLargerOperand"}]},
+              TestCaseWithMetadata{
+                name = "equal (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.max"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "hello"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "hello"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.max.returnsLargerOperand"}]}]},
+          TestGroup{
+            name = "returnsLargerOperand",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "first greater (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.max"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 5.0:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.0:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 5.0:float64}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.max.returnsLargerOperand"}]},
+              TestCaseWithMetadata{
+                name = "second greater (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.max"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 3.0:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 5.0:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 5.0:float64}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.max.returnsLargerOperand"}]},
+              TestCaseWithMetadata{
+                name = "equal (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.max"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 3.14:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.14:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 3.14:float64}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.max.returnsLargerOperand"}]}]},
+          TestGroup{
+            name = "returnsLargerOperand",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "first greater (decimal)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.max"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.2}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.1}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `decimal` = 1.2}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.max.returnsLargerOperand"}]},
+              TestCaseWithMetadata{
+                name = "second greater (decimal)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.max"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.1}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.2}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `decimal` = 1.2}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.max.returnsLargerOperand"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "min",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "returnsSmallerOperand",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "first less (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.min"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 3:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 3:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.min.returnsSmallerOperand"}]},
+              TestCaseWithMetadata{
+                name = "second less (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.min"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 3:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 3:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.min.returnsSmallerOperand"}]},
+              TestCaseWithMetadata{
+                name = "equal (int32)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.min"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 5:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.min.returnsSmallerOperand"}]}]},
+          TestGroup{
+            name = "returnsSmallerOperand",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "first less (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.min"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "apple"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "zebra"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "apple"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.min.returnsSmallerOperand"}]},
+              TestCaseWithMetadata{
+                name = "second less (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.min"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "zebra"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "apple"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "apple"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.min.returnsSmallerOperand"}]},
+              TestCaseWithMetadata{
+                name = "equal (string)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.min"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "hello"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "hello"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.min.returnsSmallerOperand"}]}]},
+          TestGroup{
+            name = "returnsSmallerOperand",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "first less (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.min"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 1.5:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 2.5:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 1.5:float64}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.min.returnsSmallerOperand"}]},
+              TestCaseWithMetadata{
+                name = "second less (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.min"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 2.5:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.5:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 1.5:float64}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.min.returnsSmallerOperand"}]},
+              TestCaseWithMetadata{
+                name = "equal (float64)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.min"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 3.14:float64}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.14:float64}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 3.14:float64}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.min.returnsSmallerOperand"}]}]},
+          TestGroup{
+            name = "returnsSmallerOperand",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "first less (decimal)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.min"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.1}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.2}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `decimal` = 1.1}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.min.returnsSmallerOperand"}]},
+              TestCaseWithMetadata{
+                name = "second less (decimal)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.min"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `decimal` = 1.2}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.1}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `decimal` = 1.1}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.ordering.min.returnsSmallerOperand"}]}]}],
+        `cases` = []}],
+    `cases` = []}

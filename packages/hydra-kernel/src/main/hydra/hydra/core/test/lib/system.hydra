@@ -1,0 +1,456 @@
+## Effectful test cases for hydra.core.lib.system primitives
+module hydra.core.test.lib.system
+
+import hydra.core.error.system
+import hydra.core.file
+import hydra.core.lib.effects as effects
+import hydra.core.lib.eithers
+import hydra.core.lib.equality
+import hydra.core.lib.literals
+import hydra.core.lib.logic
+import hydra.core.lib.maps
+import hydra.core.lib.optionals
+import hydra.core.lib.ordering
+import hydra.core.lib.strings as strings
+import hydra.core.lib.system
+import hydra.core.lib.text
+import hydra.core.model
+import hydra.core.system
+import hydra.core.testing
+import hydra.core.time
+
+## Effectful test cases for hydra.core.lib.system primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.system primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "execute",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "capturesStdoutByteExactly",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "captures stdout",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λr.`either`
+                                  (λ`_e`."<decode error>")
+                                  (λs.s)
+                                  (decodeUtf8 (ProcessResult[stdout] r)))
+                              r)
+                          (execute
+                            Command{
+                              program = FilePath{"/bin/echo"},
+                              arguments = ["hydra"],
+                              workingDirectory = none,
+                              environment = none}),
+                    expected = λ`_`."hydra\n"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.system.execute.capturesStdoutByteExactly"}]},
+              TestCaseWithMetadata{
+                name = "passes multiple arguments through to stdout",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λr.`either`
+                                  (λ`_e`."<decode error>")
+                                  (λs.s)
+                                  (decodeUtf8 (ProcessResult[stdout] r)))
+                              r)
+                          (execute
+                            Command{
+                              program = FilePath{"/bin/echo"},
+                              arguments = ["a", "b", "c"],
+                              workingDirectory = none,
+                              environment = none}),
+                    expected = λ`_`."a b c\n"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.system.execute.capturesStdoutByteExactly"}]},
+              TestCaseWithMetadata{
+                name = "captures stdout byte-exactly (no newline translation)",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λr.`either`
+                                  (λ`_e`."<decode error>")
+                                  (λs.s)
+                                  (decodeUtf8 (ProcessResult[stdout] r)))
+                              r)
+                          (execute
+                            Command{
+                              program = FilePath{"/usr/bin/printf"},
+                              arguments = ["abc"],
+                              workingDirectory = none,
+                              environment = none}),
+                    expected = λ`_`."abc"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.system.execute.capturesStdoutByteExactly"}]}]},
+          TestGroup{
+            name = "reportsExitStatusAsRight",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "reports exit status zero for a successful program",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λr.printInt32
+                                  (StatusCode[] (ProcessResult[exitCode] r)))
+                              r)
+                          (execute
+                            Command{
+                              program = FilePath{"/usr/bin/true"},
+                              arguments = [],
+                              workingDirectory = none,
+                              environment = none}),
+                    expected = λ`_`."0"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.system.execute.reportsExitStatusAsRight"}]},
+              TestCaseWithMetadata{
+                name = "reports a non-zero exit status as right (not an error)",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λr.printBoolean
+                                  (gt
+                                    (StatusCode[] (ProcessResult[exitCode] r))
+                                    0:int32))
+                              r)
+                          (execute
+                            Command{
+                              program = FilePath{"/usr/bin/false"},
+                              arguments = [],
+                              workingDirectory = none,
+                              environment = none}),
+                    expected = λ`_`."true"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.system.execute.reportsExitStatusAsRight"}]}]},
+          TestGroup{
+            name = "capturesStderrSeparately",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "captures stderr separately from stdout",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λr.printBoolean
+                                  (not
+                                    (strings.isEmpty
+                                      (`either`
+                                        (λ`_e`."<decode error>")
+                                        (λs.s)
+                                        (decodeUtf8 (ProcessResult[stderr] r))))))
+                              r)
+                          (execute
+                            Command{
+                              program = FilePath{"/bin/ls"},
+                              arguments = ["/hydra-nonexistent-498"],
+                              workingDirectory = none,
+                              environment = none}),
+                    expected = λ`_`."true"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.system.execute.capturesStderrSeparately"}]},
+              TestCaseWithMetadata{
+                name = "leaves stdout empty when a program writes only to stderr",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λr.`either`
+                                  (λ`_e`."<decode error>")
+                                  (λs.s)
+                                  (decodeUtf8 (ProcessResult[stdout] r)))
+                              r)
+                          (execute
+                            Command{
+                              program = FilePath{"/bin/ls"},
+                              arguments = ["/hydra-nonexistent-498"],
+                              workingDirectory = none,
+                              environment = none}),
+                    expected = λ`_`.""}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.system.execute.capturesStderrSeparately"}]}]},
+          TestGroup{
+            name = "honorsWorkingDirectoryAndEnvironmentFields",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "honors the workingDirectory field",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λr.`either`
+                                  (λ`_e`."<decode error>")
+                                  (λs.s)
+                                  (decodeUtf8 (ProcessResult[stdout] r)))
+                              r)
+                          (execute
+                            Command{
+                              program = FilePath{"/bin/pwd"},
+                              arguments = [],
+                              workingDirectory = given(FilePath{"/"}),
+                              environment = none}),
+                    expected = λ`_`."/\n"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.system.execute.honorsWorkingDirectoryAndEnvironmentFields"}]},
+              TestCaseWithMetadata{
+                name = "honors the environment field (replacing the child environment)",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λr.`either`
+                                  (λ`_e`."<decode error>")
+                                  (λs.s)
+                                  (decodeUtf8 (ProcessResult[stdout] r)))
+                              r)
+                          (execute
+                            Command{
+                              program = FilePath{"/usr/bin/env"},
+                              arguments = [],
+                              workingDirectory = none,
+                              environment = given({
+                                  EnvironmentVariable{"HYDRA_X"}="hydra-value"})}),
+                    expected = λ`_`."HYDRA_X=hydra-value\n"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.system.execute.honorsWorkingDirectoryAndEnvironmentFields"}]}]},
+          TestGroup{
+            name = "leftCommandNotFoundOnMissingProgram",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "yields left(commandNotFound) for a missing program",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λr.`either`
+                              (λe.cases(SystemError){
+                                  commandNotFound=λ`_p`."commandNotFound",
+                                  permissionDenied=λ`_p`."permissionDenied",
+                                  invalidWorkingDirectory=λ`_p`."invalidWorkingDirectory",
+                                  interrupted=λ`_u`."interrupted",
+                                  other=λ`_m`."other"}
+                                  e)
+                              (λ`_r`."<ran>")
+                              r)
+                          (execute
+                            Command{
+                              program = FilePath{"/hydra/no/such/program-498"},
+                              arguments = [],
+                              workingDirectory = none,
+                              environment = none}),
+                    expected = λ`_`."commandNotFound"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.system.execute.leftCommandNotFoundOnMissingProgram"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "returnsExactEnvironmentContents",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "does not contain a guaranteed-absent variable",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.map
+                      (λm.printBoolean
+                          (member
+                            EnvironmentVariable{"HYDRA_DEFINITELY_NOT_SET_498"}
+                            m))
+                      getEnvironment,
+                expected = λ`_`."false"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.system.getEnvironment.returnsExactEnvironmentContents"}]}]},
+      TestGroup{
+        name = "noneForAbsentVariable",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "yields none for a guaranteed-absent variable",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.map
+                      (λm.withDefault "absent" m)
+                      (getEnvironmentVariable
+                        EnvironmentVariable{"HYDRA_DEFINITELY_NOT_SET_498"}),
+                expected = λ`_`."absent"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.system.getEnvironmentVariable.noneForAbsentVariable"}]}]},
+      TestGroup{
+        name = "getTime",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "returnsPositiveEpochSeconds",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "returns a positive number of seconds since the epoch",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λt.printBoolean
+                              (gt (Timespec[seconds] t) 0:int64))
+                          getTime,
+                    expected = λ`_`."true"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.system.getTime.returnsPositiveEpochSeconds"}]}]},
+          TestGroup{
+            name = "returnsNanosecondsInValidRange",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "returns nanoseconds within the range [0, 1000000000)",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λt.printBoolean
+                              (and
+                                (gte (Timespec[nanoseconds] t) 0:uint32)
+                                (lt
+                                  (Timespec[nanoseconds] t)
+                                  1000000000:uint32)))
+                          getTime,
+                    expected = λ`_`."true"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.system.getTime.returnsNanosecondsInValidRange"}]}]},
+          TestGroup{
+            name = "readsTheClockWhenRun",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "a read after a pause is later than a read before it",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          getTime
+                          (λt1.effects.bind
+                              (execute
+                                Command{
+                                  program = FilePath{"/bin/sleep"},
+                                  arguments = ["0.05"],
+                                  workingDirectory = none,
+                                  environment = none})
+                              (λ`_r`.effects.map
+                                  (λt2.printBoolean
+                                      (or
+                                        (gt
+                                          (Timespec[seconds] t2)
+                                          (Timespec[seconds] t1))
+                                        (and
+                                          (equal
+                                            (Timespec[seconds] t2)
+                                            (Timespec[seconds] t1))
+                                          (gt
+                                            (Timespec[nanoseconds] t2)
+                                            (Timespec[nanoseconds] t1)))))
+                                  getTime)),
+                    expected = λ`_`."true"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.system.getTime.readsTheClockWhenRun"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "returnsNonEmptyPath",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "returns a non-empty path",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.map
+                      (λr.`either`
+                          (λ`_e`."ERR")
+                          (λp.printBoolean
+                              (not (strings.isEmpty (FilePath[] p))))
+                          r)
+                      getWorkingDirectory,
+                expected = λ`_`."true"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.system.getWorkingDirectory.returnsNonEmptyPath"}]}]},
+      TestGroup{
+        name = "writeStderr",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "succeeds when writing an empty byte string",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.map
+                      (λr.`either`
+                          (λ`_e`."ERR")
+                          (λ`_u`."OK")
+                          r)
+                      (writeStderr (encodeUtf8 "")),
+                expected = λ`_`."OK"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "writeStdout",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "succeeds when writing an empty byte string",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.map
+                      (λr.`either`
+                          (λ`_e`."ERR")
+                          (λ`_u`."OK")
+                          r)
+                      (writeStdout (encodeUtf8 "")),
+                expected = λ`_`."OK"}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}
