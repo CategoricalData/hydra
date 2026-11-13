@@ -30,9 +30,11 @@ on:
 #     jobs below can run tests against them without needing to install
 #     Stack + GHC or rebuild the Hydra library themselves.
 #
-#   * The haskell-tests job (#824) runs stack test and the distribution
-#     self-containment check against the haskell job's dist-haskell artifact,
-#     in parallel with the host jobs.
+#   * The haskell-ondemand job (#824) continues from the haskell job's dist/ tree
+#     (dist-all artifact): it regenerates the on-demand packages, re-checks dist/json,
+#     and publishes dist-java/dist-python/dist-haskell. The java and python jobs and
+#     haskell-tests (stack test + distribution self-containment) consume those, in
+#     parallel with the other host jobs, which consume the haskell job's artifacts.
 #
 #   * Every other target job downloads its dist artifact and runs its
 #     native test suite. They do not run Phase 1 (DSL -> JSON) or
@@ -118,9 +120,11 @@ jobs:
     # 2026-11-03: run 41668202231 hit 300 at 5h01m. Regeneration alone took 3h51m (now
     # including the sbt-backed Scala native pass), and the job was cut off in stack tests.
     # Raised to 360 (GitHub's ceiling for hosted runners) as a stopgap.
-    # #824: Stack tests and the self-containment gate have since moved to the haskell-tests
-    # job (fed by the dist-haskell artifact). Remaining cost is dominated by regeneration;
-    # next step is cutting or parallelizing the host-native DSL -> JSON passes.
+    # #824: Stack tests and the self-containment gate moved to haskell-tests, and the
+    # on-demand package regeneration (~104 min in run 43451071778) moved to haskell-ondemand.
+    # What remains is the sync (~245 min in that run: Phase 0 35, Phase 1 72, Phase 1.5 48,
+    # Phases 3/4/5 the rest; see the [timing] lines). Cut or parallelize those before
+    # raising this limit.
     timeout-minutes: 360
     steps:
       # #617: fetch-depth: 0 (full history) so the #617 Check 2 step below can
@@ -199,41 +203,11 @@ jobs:
       - name: Regenerate JSON and all target dists from DSL sources
         run: |
           bin/sync.sh --hosts all --targets all --no-tests
-      # The bootstrapping matrix above intentionally skips the "on-
-      # demand" packages (hydra-pg, hydra-rdf, hydra-ext). The Java
-      # host's checked-in sources (packages/hydra-java/src/main/java/
-      # hydra/pg/**, hydra/rdf/**) import from these dist/java subtrees,
-      # so the Java CI job below can't compile without them. Generate
-      # them into the target languages that need them. Python's
-      # pythonpath also references these trees, though Python silently
-      # skips missing entries; generating for hygiene.
-      - name: Regenerate on-demand packages (hydra-pg, hydra-rdf, hydra-ext)
-        run: |
-          for pkg in hydra-pg hydra-rdf hydra-ext; do
-            for tgt in java python; do
-              bin/sync-packages.sh "$pkg" --targets "$tgt" --no-tests
-            done
-          done
-      # hydra-rust (#382) is also an on-demand package, outside the bootstrapping
-      # matrix like the ones above, but its targetLanguages is haskell-only (its
-      # DSL sources are self-targeting, unlike hydra-pg/hydra-rdf which target
-      # java/python). The manifest-emitted check below requires it, so generate
-      # it here rather than leaving it to the same java/python loop, which would
-      # be a no-op for this package.
-      - name: Regenerate on-demand packages (hydra-rust)
-        run: |
-          bin/sync-packages.sh hydra-rust --targets haskell --no-tests
-      # 0.17.2 hydra-build defect guard: assert every module a package's
-      # manifest.json declares in mainModules is actually EMITTED into the
-      # assembled dist/haskell tree. The 0.17.2 hydra-build sdist shipped 3 of
-      # its 8 declared modules — the manifest + JSON were complete (so #541's
-      # check passed) but the assembled output the sdist was built from was
-      # truncated, and no existing gate caught it. Runs against the dist/haskell
-      # populated by the sync step above (Phase 3 assembles hydra-kernel /
-      # hydra-build / hydra-pg / hydra-rdf into each language); the check skips
-      # any package with no dist/haskell/<pkg> tree, so it needs no re-assembly.
-      - name: Check manifest mainModules are all emitted into dist/haskell
-        run: python3 bin/check-emitted-modules-complete.py
+      # #824: the on-demand package regeneration (hydra-pg/rdf/ext for java+python,
+      # hydra-rust for haskell) and the manifest-emitted check that needs it now run in
+      # the downstream haskell-ondemand job, which consumes the dist-all artifact
+      # uploaded below. Together with the regeneration above they exceeded GitHub's
+      # 360-minute ceiling (run 43451071778: 245 + 104 min).
       # #469/#376: pointed guard for the native-coder JSON->Haskell render gate.
       # Forces a cache miss by deleting the per-package output digest, re-runs
       # the assembler against committed JSON, and fails on any diff FROM A
@@ -291,32 +265,21 @@ jobs:
       # independent from-dist/json seed that must build + stack test), and (c) the
       # committed-dist/json diff. If a broader per-package determinism sweep is
       # wanted later, do it WITHOUT a second all-target sync (see #592 follow-up).
-      # #824: Stack tests and the distribution self-containment gate now run in the
-      # downstream haskell-tests job, which consumes this artifact. dist/json is tracked
-      # in git (and verified identical to the regenerated tree above), so only the
-      # untracked dist/haskell needs to travel. Hidden files are included so nothing
-      # under the per-package trees is silently dropped.
-      - name: Upload dist/haskell
+      # #824: hand the whole dist/ tree (generated, gitignored dist/<lang>/ trees plus the
+      # build/ digest caches the assemblers consult, and the regenerated dist/json) to
+      # the haskell-ondemand job, which continues from exactly this state. Hidden files
+      # are included and compression is minimal (speed over size). dist-java, dist-python
+      # and dist-haskell are uploaded by haskell-ondemand instead, AFTER the on-demand
+      # packages have been added to them; the other per-target artifacts below are not
+      # affected by on-demand packages and are uploaded here so their jobs start early.
+      - name: Upload dist/ for the on-demand job
         uses: actions/upload-artifact@v4
         with:
-          name: dist-haskell
-          path: dist/haskell/
+          name: dist-all
+          path: dist/
           include-hidden-files: true
+          compression-level: 1
           if-no-files-found: error
-          retention-days: 1
-      # Upload dist/<lang>/ trees for downstream target jobs. One
-      # artifact per target so each job only pays for its own download.
-      - name: Upload dist/java
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-java
-          path: dist/java/
-          retention-days: 1
-      - name: Upload dist/python
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-python
-          path: dist/python/
           retention-days: 1
       - name: Upload dist/scala
         uses: actions/upload-artifact@v4
@@ -358,6 +321,104 @@ jobs:
           name: dist-typescript
           path: dist/typescript/
           retention-days: 1
+  # #824: second stage of the former monolithic haskell job. Regenerates the on-demand
+  # packages (outside the bootstrapping matrix) on top of the haskell job's dist/ tree
+  # (artifact dist-all), re-checks that the committed dist/json is still what the
+  # regeneration yields (now including the on-demand packages' JSON), then publishes the
+  # artifacts that contain on-demand output: dist-java and dist-python (consumed by the
+  # java/python jobs, pages.yml) and dist-haskell (hydra-rust, consumed by haskell-tests).
+  haskell-ondemand:
+    name: Haskell on-demand packages (hydra-pg, hydra-rdf, hydra-ext, hydra-rust)
+    needs: haskell
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: haskell-actions/setup@v2
+        with:
+          ghc-version: '9.10.2'
+          enable-stack: true
+          stack-version: latest
+      - uses: astral-sh/setup-uv@v5
+      # Same JDK pin as the haskell job (Gradle 7.6.4 runs only on JDKs up to 19).
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11.0.19'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.stack
+          key: stack-${{ hashFiles('heads/haskell/stack.yaml', 'heads/haskell/package.yaml') }}
+          restore-keys: stack-
+      - name: Download dist/ built by Haskell job
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-all
+          path: dist/
+      # The bootstrapping matrix above intentionally skips the "on-
+      # demand" packages (hydra-pg, hydra-rdf, hydra-ext). The Java
+      # host's checked-in sources (packages/hydra-java/src/main/java/
+      # hydra/pg/**, hydra/rdf/**) import from these dist/java subtrees,
+      # so the Java CI job below can't compile without them. Generate
+      # them into the target languages that need them. Python's
+      # pythonpath also references these trees, though Python silently
+      # skips missing entries; generating for hygiene.
+      - name: Regenerate on-demand packages (hydra-pg, hydra-rdf, hydra-ext)
+        run: |
+          for pkg in hydra-pg hydra-rdf hydra-ext; do
+            for tgt in java python; do
+              bin/sync-packages.sh "$pkg" --targets "$tgt" --no-tests
+            done
+          done
+      # hydra-rust (#382) is also an on-demand package, outside the bootstrapping
+      # matrix like the ones above, but its targetLanguages is haskell-only (its
+      # DSL sources are self-targeting, unlike hydra-pg/hydra-rdf which target
+      # java/python). The manifest-emitted check below requires it, so generate
+      # it here rather than leaving it to the same java/python loop, which would
+      # be a no-op for this package.
+      - name: Regenerate on-demand packages (hydra-rust)
+        run: |
+          bin/sync-packages.sh hydra-rust --targets haskell --no-tests
+      # 0.17.2 hydra-build defect guard: assert every module a package's
+      # manifest.json declares in mainModules is actually EMITTED into the
+      # assembled dist/haskell tree. The 0.17.2 hydra-build sdist shipped 3 of
+      # its 8 declared modules — the manifest + JSON were complete (so #541's
+      # check passed) but the assembled output the sdist was built from was
+      # truncated, and no existing gate caught it. Runs against the dist/haskell
+      # populated by the sync step above (Phase 3 assembles hydra-kernel /
+      # hydra-build / hydra-pg / hydra-rdf into each language); the check skips
+      # any package with no dist/haskell/<pkg> tree, so it needs no re-assembly.
+      - name: Check manifest mainModules are all emitted into dist/haskell
+        run: python3 bin/check-emitted-modules-complete.py
+      - name: Fail if committed dist/json differs from regenerated (incl. on-demand packages)
+        run: |
+          if ! git diff --quiet dist/json/; then
+            echo "::error::Generated dist/json/ differs from the committed tree."
+            echo "::error::Run bin/sync.sh and bin/sync-packages.sh locally and commit the result."
+            git diff --stat dist/json/
+            exit 1
+          fi
+      - name: Upload dist/haskell
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-haskell
+          path: dist/haskell/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
+      - name: Upload dist/java
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-java
+          path: dist/java/
+          retention-days: 1
+      - name: Upload dist/python
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-python
+          path: dist/python/
+          retention-days: 1
+
   # #824: the tail of the former monolithic haskell job. Stack tests and the
   # self-containment gate need only the dist-haskell artifact plus the tracked tree, so
   # they run in parallel with the host jobs instead of extending the haskell job, which
@@ -366,7 +427,7 @@ jobs:
   # rather than one masking the other.
   haskell-tests:
     name: Haskell stack tests + distribution self-containment
-    needs: haskell
+    needs: haskell-ondemand
     runs-on: ubuntu-latest
     timeout-minutes: 240
     steps:
@@ -599,7 +660,7 @@ jobs:
 
   java:
     name: Java tests
-    needs: haskell
+    needs: haskell-ondemand
     runs-on: ubuntu-latest
     # Downstream per-host jobs download the Haskell job's dist artifacts and run
     # that host's tests — normally minutes. 45min is generous but bounds a hang.
@@ -654,7 +715,7 @@ jobs:
 
   python:
     name: Python tests
-    needs: haskell
+    needs: haskell-ondemand
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
