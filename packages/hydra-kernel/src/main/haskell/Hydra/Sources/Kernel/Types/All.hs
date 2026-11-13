@@ -2,6 +2,7 @@
 module Hydra.Sources.Kernel.Types.All where
 
 import Hydra.Kernel
+import Hydra.Sources.Kernel.AlignDependencies (alignDependencies)
 
 import qualified Hydra.Sources.Kernel.Types.Paths        as Paths
 import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
@@ -37,7 +38,7 @@ import qualified Hydra.Sources.Kernel.Types.Validation  as Validation
 
 
 kernelTypesModules :: [Module]
-kernelTypesModules = [
+kernelTypesModules = fmap alignDependencies [
   Paths.module_,
   Ast.module_,
   Coders.module_,

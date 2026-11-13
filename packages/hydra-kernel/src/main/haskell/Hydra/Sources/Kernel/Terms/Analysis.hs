@@ -14,6 +14,7 @@ import Hydra.Kernel hiding (
   analyzeFunctionTermWithGather,
   definitionDependencyModuleNames,
   definitionDependencyNamesByModule,
+  definitionReferencedNames,
   dependencyModuleNames,
   gatherApplications,
   gatherArgs,
@@ -111,6 +112,7 @@ module_ = Module {
       toDefinition analyzeFunctionTermWithGather,
       toDefinition definitionDependencyModuleNames,
       toDefinition definitionDependencyNamesByModule,
+      toDefinition definitionReferencedNames,
       toDefinition dependencyModuleNames,
       toDefinition gatherApplications,
       toDefinition gatherArgs,
@@ -293,23 +295,7 @@ definitionDependencyModuleNames :: TypedTermDefinition ([Definition] -> S.Set Mo
 definitionDependencyModuleNames = define "definitionDependencyModuleNames" $
   doc "Get dependency module names from definitions" $
   "defs" ~>
-  "defNames" <~ ("def" ~> match _Definition (var "def")
-    Nothing [
-    _Definition_type>>: "typeDef" ~>
-      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "typeDef")),
-    _Definition_term>>: "termDef" ~>
-      Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionBody (var "termDef"),
-    _Definition_primitive>>: "primDef" ~>
-      -- A primitive's referenced modules come from its signature AND its optional
-      -- defaultImplementation term, if present -- the latter is easy to miss (see
-      -- checkUndeclaredDependencies's own note on this exact gap) since most of a
-      -- primitive's module dependencies are visible in the signature alone.
-      Sets.union
-        (Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "primDef")))
-        (Optionals.match (Packaging.primitiveDefinitionDefaultImplementation $ var "primDef")
-          (Sets.empty :: TypedTerm (S.Set Name))
-          ("impl" ~> Dependencies.termDependencyNames @@ true @@ true @@ true @@ var "impl"))]) $
-  "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs") :: TypedTerm [S.Set Name]) $
+  "allNames" <~ Sets.unions (Lists.map (asTerm definitionReferencedNames) (var "defs") :: TypedTerm [S.Set Name]) $
   Sets.fromList (Optionals.givens (Lists.map (asTerm Names.moduleNameOf) (Sets.toList (var "allNames"))))
 
 -- | Like 'definitionDependencyModuleNames', but instead of collapsing to a flat set of module
@@ -332,14 +318,6 @@ definitionDependencyNamesByModule :: TypedTermDefinition ([Definition] -> M.Map 
 definitionDependencyNamesByModule = define "definitionDependencyNamesByModule" $
   doc "Get, per dependency module, the counted multiset of its local names referenced by the definitions" $
   "defs" ~>
-  "defNames" <~ ("def" ~> match _Definition (var "def")
-    Nothing [
-    _Definition_type>>: "typeDef" ~>
-      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "typeDef")),
-    _Definition_term>>: "termDef" ~>
-      Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionBody (var "termDef"),
-    _Definition_primitive>>: "primDef" ~>
-      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "primDef"))]) $
   -- One (ModuleName, localName) pair per (definition, referenced-name-with-a-module) hit; a name
   -- referenced in several definitions appears once per definition, which is exactly the count we want.
   "pairs" <~ Lists.concat (Lists.map
@@ -347,7 +325,7 @@ definitionDependencyNamesByModule = define "definitionDependencyNamesByModule" $
       ("nm" ~> Optionals.map
         ("mn" ~> pair (var "mn") (Names.localNameOf @@ var "nm"))
         (Names.moduleNameOf @@ var "nm"))
-      (Sets.toList (var "defNames" @@ var "def"))))
+      (Sets.toList (definitionReferencedNames @@ var "def"))))
     (var "defs")) $
   -- Fold the pairs into a nested map ModuleName -> (localName -> count), incrementing on each hit.
   Lists.foldl
@@ -359,6 +337,34 @@ definitionDependencyNamesByModule = define "definitionDependencyNamesByModule" $
       Maps.insert (var "mn") (Maps.insert (var "local") (var "newCount") (var "inner" :: TypedTerm (M.Map String Int))) (var "acc" :: TypedTerm (M.Map ModuleName (M.Map String Int))))
     (Maps.empty :: TypedTerm (M.Map ModuleName (M.Map String Int)))
     (var "pairs")
+
+-- | Get the names a definition references, for dependency analysis: a type definition's referenced type
+-- names, a term definition's referenced names, and for a primitive its signature's and optional
+-- defaultImplementation's names (the latter is easy to miss; see checkUndeclaredDependencies's note).
+-- A primitive additionally references the modules declaring the types that describe a primitive itself
+-- (its definition record, term signature, and the types in the signature): no name inside the definition
+-- mentions them, but generated code must import them (#837). This is the single source for both
+-- 'definitionDependencyModuleNames' and 'definitionDependencyNamesByModule'.
+definitionReferencedNames :: TypedTermDefinition (Definition -> S.Set Name)
+definitionReferencedNames = define "definitionReferencedNames" $
+  doc "Get the names referenced by a definition, including the primitive-shape names for a primitive" $
+  "def" ~> match _Definition (var "def")
+    Nothing [
+    _Definition_type>>: "typeDef" ~>
+      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "typeDef")),
+    _Definition_term>>: "termDef" ~>
+      Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionBody (var "termDef"),
+    _Definition_primitive>>: "primDef" ~>
+      Sets.union
+        (Sets.fromList (list [
+          Core.name (string "hydra.core.model.Type"),
+          Core.name (string "hydra.core.packaging.PrimitiveDefinition"),
+          Core.name (string "hydra.core.typing.TermSignature")]))
+        (Sets.union
+          (Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "primDef")))
+          (Optionals.match (Packaging.primitiveDefinitionDefaultImplementation $ var "primDef")
+            (Sets.empty :: TypedTerm (S.Set Name))
+            ("impl" ~> Dependencies.termDependencyNames @@ true @@ true @@ true @@ var "impl")))]
 
 -- | Collect every local name bound by a lambda, let-binding, or forall anywhere within a term
 -- (lambda/let parameters) or type (forall parameters), including under nested binders. Used by

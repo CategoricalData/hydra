@@ -23,6 +23,7 @@ module Hydra.Sources.Kernel.Manifest (
 ) where
 
 import Hydra.Kernel
+import Hydra.Sources.Kernel.AlignDependencies (alignDependencies)
 import Hydra.Sources.Kernel.Types.All (kernelTypesModules)
 import Hydra.Sources.Kernel.Terms.All (kernelTermsModules, kernelLibModules)
 
@@ -62,7 +63,7 @@ import qualified Hydra.Sources.Yaml.Model as YamlModel
 import qualified Hydra.Sources.Test.All as Test
 
 jsonModules :: [Module]
-jsonModules = [
+jsonModules = fmap alignDependencies [
   JsonDecode.module_,
   JsonDecoding.module_,
   JsonEncode.module_,
@@ -72,7 +73,7 @@ jsonModules = [
 
 -- | otherModules: yaml support, test transform helpers, json/yaml bridges.
 otherModules :: [Module]
-otherModules = [
+otherModules = fmap alignDependencies [
   TestTransform.module_,
   TestUtils.module_,
   YamlModel.module_,

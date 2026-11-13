@@ -2,6 +2,7 @@
 module Hydra.Sources.Kernel.Terms.All where
 
 import Hydra.Kernel
+import Hydra.Sources.Kernel.AlignDependencies (alignDependencies)
 
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.Analysis        as Analysis
@@ -92,7 +93,7 @@ import qualified Hydra.Sources.Kernel.Terms.Validate.Paths  as ValidatePaths
 
 
 kernelTermsModules :: [Module]
-kernelTermsModules = kernelPrimaryTermsModules
+kernelTermsModules = fmap alignDependencies kernelPrimaryTermsModules
 
 kernelPrimaryTermsModules :: [Module]
 kernelPrimaryTermsModules = [
