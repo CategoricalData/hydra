@@ -531,17 +531,52 @@ jobs:
       - name: Restore overlay kernel runtime
         run: heads/haskell/bin/overlay-kernel-runtime.sh
       - name: Run regression harnesses
-        # #700/#795: HYDRA_INFERENCE_COST_ORACLE deliberately left OFF here.
-        # Turning it on would make this job fail on every run: the only real
-        # measurement on record (~7.32GB peak) already exceeds the committed
-        # budget.max_mem_in_use_bytes (6GB) in
-        # docs/history/data/bench-records/inference-cost-guard-baseline.json.
-        # That gap is a flagged, open finding (possibly #700-relevant: the
-        # margin to the ~7GB GitHub Actions runner ceiling may already be
-        # thin or negative) pending a clean, isolated re-measurement -- not
-        # something to silently paper over by picking a workable budget.
-        # Re-enable once that's resolved (tracked as a fast-follow issue).
+        # #700/#795/#821: the live inference-cost oracle is NOT enabled here (it would fail
+        # the blocking job: clean peak 6.94GB > 6GiB budget). It runs non-blockingly in the
+        # two steps below instead.
         run: bin/test-regressions.sh
+      # #821: print the runner's real memory so the ~7GB figure in bin/lib/common.sh is a number.
+      - name: Probe runner memory
+        run: |
+          free -m
+          cat /proc/meminfo
+          nproc
+      # #821: non-blocking live oracle. continue-on-error: a budget breach or a heap overflow
+      # under the runner-sized cap shows up as a failed step but does not fail the job.
+      # The raw result (peak + time) is recorded per run in the step summary and an artifact.
+      - name: Inference-cost oracle (non-blocking)
+        id: inference_cost_oracle
+        continue-on-error: true
+        env:
+          HYDRA_INFERENCE_COST_ORACLE: "1"
+          HYDRA_INFERENCE_COST_RESULT_OUT: ${{ runner.temp }}/inference-cost-result.json
+        run: |
+          # Heap cap = what the runner can hold: MemTotal minus 768MB for the OS and stack.
+          total_mb=$(awk '/^MemTotal:/ { print int($2/1024) }' /proc/meminfo)
+          cap_mb=$(( total_mb - 768 ))
+          echo "runner MemTotal=${total_mb}MB; heap cap -M${cap_mb}M"
+          export HYDRA_INFERENCE_COST_HEAP_CAP="${cap_mb}M"
+          bin/test-inference-cost-guard.sh
+      - name: Record inference-cost result
+        if: always()
+        run: |
+          f="${{ runner.temp }}/inference-cost-result.json"
+          {
+            echo "### Inference-cost oracle (#821, non-blocking)"
+            echo "outcome: ${{ steps.inference_cost_oracle.outcome }}"
+            if [ -f "$f" ]; then
+              echo '```json'; cat "$f"; echo; echo '```'
+            else
+              echo "no result produced (heap cap hit or build failed)"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload inference-cost result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inference-cost-result
+          path: ${{ runner.temp }}/inference-cost-result.json
+          if-no-files-found: ignore
 
   # #376/#703: durable cold-clone gate. dist/haskell/ is untracked (gitignored) —
   # this is the job that actually proves a genuinely fresh checkout (no
