@@ -1,0 +1,2236 @@
+## Inference tests for algebraic data types
+module hydra.core.test.inference.algebraicTypes
+
+import hydra.core.inference
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.pairs
+import hydra.core.lib.strings
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## Algebraic data type tests
+term allTests =
+  TestGroup{
+    name = "Algebraic terms",
+    description = none,
+    subgroups = [
+      testGroupForCollectionPrimitives,
+      testGroupForEithers,
+      testGroupForFolds,
+      testGroupForLists,
+      testGroupForMaps,
+      testGroupForOptionals,
+      testGroupForPairs,
+      testGroupForSets],
+    `cases` = []}
+
+term testGroupForCollectionPrimitives =
+  TestGroup{
+    name = "Collection primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "maps.map applied to a function",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.maps.map"}},
+                            argument = Term{
+                              variable = Name{"hydra.core.lib.math.negate"}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}, Name{"t1"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  variable = Name{"t0"}},
+                                values = Type{
+                                  variable = Name{"t1"}}}},
+                            codomain = Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  variable = Name{"t0"}},
+                                values = Type{
+                                  variable = Name{"t1"}}}}}},
+                        constraints = {
+                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
+                          Name{"t1"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.maps.map"}},
+                            argument = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  `list` = [Term{variable = Name{"x"}}]}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}, Name{"t1"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  variable = Name{"t0"}},
+                                values = Type{
+                                  variable = Name{"t1"}}}},
+                            codomain = Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  variable = Name{"t0"}},
+                                values = Type{
+                                  `list` = Type{
+                                    variable = Name{"t1"}}}}}}},
+                        constraints = {
+                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#3",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.maps.map"}},
+                            argument = Term{
+                              variable = Name{"hydra.core.lib.sets.fromList"}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}, Name{"t1"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  variable = Name{"t0"}},
+                                values = Type{
+                                  `list` = Type{
+                                    variable = Name{"t1"}}}}},
+                            codomain = Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  variable = Name{"t0"}},
+                                values = Type{
+                                  `set` = Type{
+                                    variable = Name{"t1"}}}}}}},
+                        constraints = {
+                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
+                          Name{"t1"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "sets.map applied to a function",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.sets.map"}},
+                            argument = Term{
+                              variable = Name{"hydra.core.lib.math.negate"}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              `set` = Type{
+                                variable = Name{"t0"}}},
+                            codomain = Type{
+                              `set` = Type{
+                                variable = Name{"t0"}}}}},
+                        constraints = {
+                          Name{"t0"}=TypeVariableConstraints{
+                            classes = {
+                              TypeClassConstraint{simple = Name{"numeric"}},
+                              TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.sets.map"}},
+                            argument = Term{
+                              variable = Name{"hydra.core.lib.lists.length"}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              `set` = Type{
+                                `list` = Type{
+                                  variable = Name{"t0"}}}},
+                            codomain = Type{
+                              `set` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}}},
+                        constraints = {
+                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Composing collection primitives in let",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"f"},
+                                `term` = Term{
+                                  application = Application{
+                                    function = Term{variable = Name{"hydra.core.lib.maps.map"}},
+                                    argument = Term{variable = Name{"hydra.core.lib.sets.fromList"}}}},
+                                typeScheme = none}],
+                            body = Term{
+                              variable = Name{"f"}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}, Name{"t1"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  variable = Name{"t0"}},
+                                values = Type{
+                                  `list` = Type{
+                                    variable = Name{"t1"}}}}},
+                            codomain = Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  variable = Name{"t0"}},
+                                values = Type{
+                                  `set` = Type{
+                                    variable = Name{"t1"}}}}}}},
+                        constraints = {
+                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
+                          Name{"t1"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"f"},
+                                `term` = Term{
+                                  application = Application{
+                                    function = Term{variable = Name{"hydra.core.lib.maps.map"}},
+                                    argument = Term{variable = Name{"hydra.core.lib.sets.fromList"}}}},
+                                typeScheme = none},
+                              Binding{
+                                name = Name{"g"},
+                                `term` = Term{
+                                  application = Application{
+                                    function = Term{variable = Name{"f"}},
+                                    argument = Term{
+                                      `map` = {
+                                        Term{literal = Literal{`string` = "a"}}=Term{
+                                          `list` = [
+                                            Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                            Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]}}}}},
+                                typeScheme = none}],
+                            body = Term{
+                              variable = Name{"g"}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            values = Type{
+                              `set` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Map operations in lambdas",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"m"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.maps.map"}},
+                                    argument = Term{
+                                      variable = Name{"hydra.core.lib.lists.length"}}}},
+                                argument = Term{
+                                  variable = Name{"m"}}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}, Name{"t1"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  variable = Name{"t0"}},
+                                values = Type{
+                                  `list` = Type{
+                                    variable = Name{"t1"}}}}},
+                            codomain = Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  variable = Name{"t0"}},
+                                values = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}}}},
+                        constraints = {
+                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"f"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"m"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.maps.map"}},
+                                        argument = Term{
+                                          variable = Name{"f"}}}},
+                                    argument = Term{
+                                      variable = Name{"m"}}}}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}, Name{"t1"}, Name{"t2"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  variable = Name{"t0"}},
+                                codomain = Type{
+                                  variable = Name{"t1"}}}},
+                            codomain = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  `map` = MapType{
+                                    keys = Type{
+                                      variable = Name{"t2"}},
+                                    values = Type{
+                                      variable = Name{"t0"}}}},
+                                codomain = Type{
+                                  `map` = MapType{
+                                    keys = Type{
+                                      variable = Name{"t2"}},
+                                    values = Type{
+                                      variable = Name{"t1"}}}}}}}},
+                        constraints = {
+                          Name{"t2"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Fully applied collection conversions",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.sets.fromList"}},
+                            argument = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          `set` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.maps.map"}},
+                                argument = Term{
+                                  variable = Name{"hydra.core.lib.math.negate"}}}},
+                            argument = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.maps.fromList"}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{
+                                      pair = (
+                                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}})}]}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#3",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.maps.map"}},
+                                argument = Term{
+                                  variable = Name{"hydra.core.lib.sets.fromList"}}}},
+                            argument = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.maps.fromList"}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{
+                                      pair = (
+                                          Term{literal = Literal{`string` = "a"}},
+                                          Term{
+                                            `list` = [
+                                              Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                              Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]})}]}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            values = Type{
+                              `set` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}
+
+term testGroupForEithers =
+  TestGroup{
+    name = "Either terms",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "Left values",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `list` = [
+                            Term{`either` = left(Term{literal = Literal{`string` = "error"}})},
+                            Term{`either` = right(Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}})}]}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          `list` = Type{
+                            `either` = EitherType{
+                              `left` = Type{
+                                literal = LiteralType{
+                                  `string`}},
+                              `right` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `either` = left(Term{
+                              literal = Literal{
+                                `string` = "error"}})}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            `right` = Type{
+                              variable = Name{"t0"}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Right values",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `list` = [
+                            Term{`either` = right(Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}})},
+                            Term{`either` = left(Term{literal = Literal{`string` = "error"}})}]}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          `list` = Type{
+                            `either` = EitherType{
+                              `left` = Type{
+                                literal = LiteralType{
+                                  `string`}},
+                              `right` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `either` = right(Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}})}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              variable = Name{"t0"}},
+                            `right` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Polymorphic either values",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `either` = left(Term{
+                              `list` = []})}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}, Name{"t1"}],
+                        body = Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              `list` = Type{
+                                variable = Name{"t0"}}},
+                            `right` = Type{
+                              variable = Name{"t1"}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `either` = right(Term{
+                              `list` = []})}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}, Name{"t1"}],
+                        body = Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              variable = Name{"t0"}},
+                            `right` = Type{
+                              `list` = Type{
+                                variable = Name{"t1"}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Nested either values",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `list` = [
+                            Term{`either` = left(Term{`either` = left(Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})})},
+                            Term{`either` = left(Term{`either` = right(Term{literal = Literal{`string` = "nested"}})})},
+                            Term{`either` = right(Term{literal = Literal{`boolean` = true}})}]}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          `list` = Type{
+                            `either` = EitherType{
+                              `left` = Type{
+                                `either` = EitherType{
+                                  `left` = Type{
+                                    literal = LiteralType{
+                                      integer = IntegerType{
+                                        `int32`}}},
+                                  `right` = Type{
+                                    literal = LiteralType{
+                                      `string`}}}},
+                              `right` = Type{
+                                literal = LiteralType{
+                                  `boolean`}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `list` = [
+                            Term{`either` = right(Term{`either` = left(Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}})})},
+                            Term{`either` = right(Term{`either` = right(Term{literal = Literal{`boolean` = true}})})},
+                            Term{`either` = left(Term{literal = Literal{`string` = "foo"}})}]}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          `list` = Type{
+                            `either` = EitherType{
+                              `left` = Type{
+                                literal = LiteralType{
+                                  `string`}},
+                              `right` = Type{
+                                `either` = EitherType{
+                                  `left` = Type{
+                                    literal = LiteralType{
+                                      integer = IntegerType{
+                                        `int32`}}},
+                                  `right` = Type{
+                                    literal = LiteralType{
+                                      `boolean`}}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Either in lambda",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `either` = left(Term{
+                                  variable = Name{"x"}})}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}, Name{"t1"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"t0"}},
+                            codomain = Type{
+                              `either` = EitherType{
+                                `left` = Type{
+                                  variable = Name{"t0"}},
+                                `right` = Type{
+                                  variable = Name{"t1"}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `either` = right(Term{
+                                  variable = Name{"x"}})}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}, Name{"t1"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"t0"}},
+                            codomain = Type{
+                              `either` = EitherType{
+                                `left` = Type{
+                                  variable = Name{"t1"}},
+                                `right` = Type{
+                                  variable = Name{"t0"}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Either in data structures",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `list` = [
+                            Term{`either` = left(Term{literal = Literal{`string` = "error"}})},
+                            Term{`either` = right(Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}})}]}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          `list` = Type{
+                            `either` = EitherType{
+                              `left` = Type{
+                                literal = LiteralType{
+                                  `string`}},
+                              `right` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          pair = (
+                              Term{
+                                `list` = [
+                                  Term{`either` = left(Term{literal = Literal{`string` = "error"}})},
+                                  Term{`either` = right(Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}})}]},
+                              Term{`list` = []})}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          pair = PairType{
+                            first = Type{
+                              `list` = Type{
+                                `either` = EitherType{
+                                  `left` = Type{
+                                    literal = LiteralType{
+                                      `string`}},
+                                  `right` = Type{
+                                    literal = LiteralType{
+                                      integer = IntegerType{
+                                        `int32`}}}}}},
+                            second = Type{
+                              `list` = Type{
+                                variable = Name{"t0"}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}
+
+term testGroupForFolds =
+  TestGroup{
+    name = "Eliminations",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "List eliminations (folds)",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.lists.foldl"}},
+                            argument = Term{
+                              variable = Name{"hydra.core.lib.math.add"}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"t0"}},
+                            codomain = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  `list` = Type{
+                                    variable = Name{"t0"}}},
+                                codomain = Type{
+                                  variable = Name{"t0"}}}}}},
+                        constraints = {
+                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.lists.foldl"}},
+                                argument = Term{
+                                  variable = Name{"hydra.core.lib.math.add"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 0:int32}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              `list` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}},
+                            codomain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#3",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.lists.foldl"}},
+                                    argument = Term{
+                                      variable = Name{"hydra.core.lib.math.add"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 0:int32}}}}},
+                            argument = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 4:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 5:int32}}}]}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Optional eliminations",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"m"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.optionals.match"}},
+                                        argument = Term{
+                                          variable = Name{"m"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 42:int32}}}}},
+                                argument = Term{
+                                  variable = Name{"hydra.core.lib.math.negate"}}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              `optional` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}},
+                            codomain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.optionals.match"}},
+                                    argument = Term{
+                                      `optional` = given(Term{
+                                          literal = Literal{
+                                            integer = IntegerValue{
+                                              `int32` = 137:int32}}})}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}}}},
+                            argument = Term{
+                              variable = Name{"hydra.core.lib.math.negate"}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#3",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.optionals.match"}},
+                                    argument = Term{
+                                      `optional` = none}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}}}},
+                            argument = Term{
+                              variable = Name{"hydra.core.lib.math.negate"}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#4",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.optionals.match"}},
+                                        argument = Term{
+                                          variable = Name{"x"}}}},
+                                    argument = Term{
+                                      variable = Name{"x"}}}},
+                                argument = Term{
+                                  variable = Name{"hydra.core.lib.optionals.given"}}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              `optional` = Type{
+                                variable = Name{"t0"}}},
+                            codomain = Type{
+                              `optional` = Type{
+                                variable = Name{"t0"}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#5",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"m"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.optionals.match"}},
+                                        argument = Term{
+                                          variable = Name{"m"}}}},
+                                    argument = Term{
+                                      `list` = []}}},
+                                argument = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      `list` = [Term{variable = Name{"x"}}]}}}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              `optional` = Type{
+                                variable = Name{"t0"}}},
+                            codomain = Type{
+                              `list` = Type{
+                                variable = Name{"t0"}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}
+
+term testGroupForLists =
+  TestGroup{
+    name = "List terms",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "List of strings",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `list` = [Term{literal = Literal{`string` = "foo"}}, Term{literal = Literal{`string` = "bar"}}]}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          `list` = Type{
+                            literal = LiteralType{
+                              `string`}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "List of lists of strings",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `list` = [Term{`list` = [Term{literal = Literal{`string` = "foo"}}]}, Term{`list` = []}]}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          `list` = Type{
+                            `list` = Type{
+                              literal = LiteralType{
+                                `string`}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Empty list",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{`list` = []}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          `list` = Type{
+                            variable = Name{"t0"}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "List containing an empty list",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{`list` = [Term{`list` = []}]}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          `list` = Type{
+                            `list` = Type{
+                              variable = Name{"t0"}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Lambda producing a polymorphic list",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `list` = [Term{variable = Name{"x"}}]}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"t0"}},
+                            codomain = Type{
+                              `list` = Type{
+                                variable = Name{"t0"}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Lambda producing a list of integers",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `list` = [Term{variable = Name{"x"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}]}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              `list` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "List with repeated variables",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `list` = [Term{variable = Name{"x"}}, Term{literal = Literal{`string` = "foo"}}, Term{variable = Name{"x"}}]}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            codomain = Type{
+                              `list` = Type{
+                                literal = LiteralType{
+                                  `string`}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}
+
+term testGroupForMaps =
+  TestGroup{
+    name = "Map terms",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "#1",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `map` = {
+                        Term{literal = Literal{`string` = "firstName"}}=Term{literal = Literal{`string` = "Arthur"}},
+                        Term{literal = Literal{`string` = "lastName"}}=Term{literal = Literal{`string` = "Dent"}}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [],
+                    body = Type{
+                      `map` = MapType{
+                        keys = Type{
+                          literal = LiteralType{
+                            `string`}},
+                        values = Type{
+                          literal = LiteralType{
+                            `string`}}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#2",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{`map` = {}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [Name{"t0"}, Name{"t1"}],
+                    body = Type{
+                      `map` = MapType{
+                        keys = Type{
+                          variable = Name{"t0"}},
+                        values = Type{
+                          variable = Name{"t1"}}}},
+                    constraints = {
+                      Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#3",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"y"},
+                            domain = none,
+                            body = Term{
+                              `map` = {
+                                Term{variable = Name{"x"}}=Term{literal = Literal{float = FloatValue{`float64` = 0.1:float64}}},
+                                Term{variable = Name{"y"}}=Term{literal = Literal{float = FloatValue{`float64` = 0.2:float64}}}}}}}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [Name{"t0"}],
+                    body = Type{
+                      function = FunctionType{
+                        domain = Type{
+                          variable = Name{"t0"}},
+                        codomain = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"t0"}},
+                            codomain = Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  variable = Name{"t0"}},
+                                values = Type{
+                                  literal = LiteralType{
+                                    float = FloatType{
+                                      `float64`}}}}}}}}},
+                    constraints = {
+                      Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term testGroupForOptionals =
+  TestGroup{
+    name = "Optional terms",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "#1",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `optional` = given(Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}})}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [],
+                    body = Type{
+                      `optional` = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#2",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{`optional` = none}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [Name{"t0"}],
+                    body = Type{
+                      `optional` = Type{
+                        variable = Name{"t0"}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term testGroupForPairs =
+  TestGroup{
+    name = "Pair terms",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "Monotyped pairs",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          pair = (Term{literal = Literal{`string` = "foo"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}})}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          pair = PairType{
+                            first = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            second = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          pair = (
+                              Term{literal = Literal{`string` = "foo"}},
+                              Term{
+                                `list` = [
+                                  Term{literal = Literal{float = FloatValue{`float32` = 42.0:float32}}},
+                                  Term{literal = Literal{float = FloatValue{`float32` = 137.0:float32}}}]})}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          pair = PairType{
+                            first = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            second = Type{
+                              `list` = Type{
+                                literal = LiteralType{
+                                  float = FloatType{
+                                    `float32`}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Polytyped pairs",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          pair = (Term{`list` = []}, Term{literal = Literal{`string` = "foo"}})}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          pair = PairType{
+                            first = Type{
+                              `list` = Type{
+                                variable = Name{"t0"}}},
+                            second = Type{
+                              literal = LiteralType{
+                                `string`}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          pair = (Term{`list` = []}, Term{`list` = []})}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}, Name{"t1"}],
+                        body = Type{
+                          pair = PairType{
+                            first = Type{
+                              `list` = Type{
+                                variable = Name{"t0"}}},
+                            second = Type{
+                              `list` = Type{
+                                variable = Name{"t1"}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Nested pairs",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          pair = (
+                              Term{
+                                pair = (Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}, Term{literal = Literal{`string` = "nested"}})},
+                              Term{literal = Literal{`boolean` = true}})}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          pair = PairType{
+                            first = Type{
+                              pair = PairType{
+                                first = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}},
+                                second = Type{
+                                  literal = LiteralType{
+                                    `string`}}}},
+                            second = Type{
+                              literal = LiteralType{
+                                `boolean`}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          pair = (
+                              Term{literal = Literal{`string` = "foo"}},
+                              Term{
+                                pair = (
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                    Term{`list` = [Term{literal = Literal{float = FloatValue{`float32` = 42.0:float32}}}]})})}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          pair = PairType{
+                            first = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            second = Type{
+                              pair = PairType{
+                                first = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}},
+                                second = Type{
+                                  `list` = Type{
+                                    literal = LiteralType{
+                                      float = FloatType{
+                                        `float32`}}}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Pairs in lambda",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              pair = (Term{variable = Name{"x"}}, Term{literal = Literal{`string` = "constant"}})}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"t0"}},
+                            codomain = Type{
+                              pair = PairType{
+                                first = Type{
+                                  variable = Name{"t0"}},
+                                second = Type{
+                                  literal = LiteralType{
+                                    `string`}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"p"},
+                            domain = none,
+                            body = Term{
+                              pair = (Term{variable = Name{"p"}}, Term{variable = Name{"p"}})}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"t0"}},
+                            codomain = Type{
+                              pair = PairType{
+                                first = Type{
+                                  variable = Name{"t0"}},
+                                second = Type{
+                                  variable = Name{"t0"}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Pairs in data structures",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `list` = [
+                            Term{
+                              pair = (Term{literal = Literal{`string` = "a"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})},
+                            Term{
+                              pair = (Term{literal = Literal{`string` = "b"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}})}]}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          `list` = Type{
+                            pair = PairType{
+                              first = Type{
+                                literal = LiteralType{
+                                  `string`}},
+                              second = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          `list` = [Term{pair = (Term{`list` = []}, Term{literal = Literal{`string` = "foo"}})}]}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          `list` = Type{
+                            pair = PairType{
+                              first = Type{
+                                `list` = Type{
+                                  variable = Name{"t0"}}},
+                              second = Type{
+                                literal = LiteralType{
+                                  `string`}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Additional cases",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          pair = (Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}, Term{literal = Literal{`string` = "foo"}})}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          pair = PairType{
+                            first = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            second = Type{
+                              literal = LiteralType{
+                                `string`}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          pair = (Term{`list` = []}, Term{literal = Literal{`string` = "foo"}})}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          pair = PairType{
+                            first = Type{
+                              `list` = Type{
+                                variable = Name{"t0"}}},
+                            second = Type{
+                              literal = LiteralType{
+                                `string`}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#3",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          pair = (Term{`list` = []}, Term{`list` = []})}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}, Name{"t1"}],
+                        body = Type{
+                          pair = PairType{
+                            first = Type{
+                              `list` = Type{
+                                variable = Name{"t0"}}},
+                            second = Type{
+                              `list` = Type{
+                                variable = Name{"t1"}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}
+
+term testGroupForSets =
+  TestGroup{
+    name = "Set terms",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "#1",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `set` = {
+                        Term{literal = Literal{`boolean` = true}}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [],
+                    body = Type{
+                      `set` = Type{
+                        literal = LiteralType{
+                          `boolean`}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#2",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{`set` = {Term{`set` = {}}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [Name{"t0"}],
+                    body = Type{
+                      `set` = Type{
+                        `set` = Type{
+                          variable = Name{"t0"}}}},
+                    constraints = {
+                      Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
