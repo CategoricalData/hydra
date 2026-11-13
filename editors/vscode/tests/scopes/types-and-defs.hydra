@@ -34,6 +34,25 @@ type Pair2 = ∀.map<string, int32>
 #              ^^^ support.type.hydra
 #                  ^^^^^^ support.type.hydra
 
+# A USER type name inside type-arg brackets is a type reference (entity.name.type),
+# not variable.other — determined by position (inside <...>), no uppercase heuristic.
+type ListOfExpr = ∀.list<Expr>
+#                        ^^^^ entity.name.type.hydra
+
+type Pairing = ∀.map<Name, Term>
+#                    ^^^^ entity.name.type.hydra
+#                          ^^^^ entity.name.type.hydra
+
+# Nested type-arg brackets and a qualified type name both scope as types.
+type Nested = ∀.optional<list<hydra.core.model.Term>>
+#                             ^^^^^^^^^^^^^^^^^^^^^ entity.name.type.hydra
+
+# A function type inside type-arg brackets: arrow stays an arrow, names are types.
+type EffFn = ∀x,y.effect<x → y>
+#                        ^ entity.name.type.hydra
+#                          ^ keyword.operator.arrow.hydra
+#                            ^ entity.name.type.hydra
+
 impure partial primitive risky : ∀.unit → effect<unit>
 #^^^^^ storage.modifier.impure.hydra
 #      ^^^^^^^ storage.modifier.partial.hydra

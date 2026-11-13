@@ -102,7 +102,7 @@
 #      ^ source.hydra
 #       ^^^^^^^^ source.hydra support.type.hydra
 #               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra entity.name.type.hydra
 #                    ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                     ^^ source.hydra
 >  ## The field representing the in-projection of the edge. Defaults to 'in'.
@@ -118,7 +118,7 @@
 #       ^ source.hydra
 #        ^^^^^^^^ source.hydra support.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                 ^^^^ source.hydra variable.other.hydra
+#                 ^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                      ^^ source.hydra
 >
@@ -156,7 +156,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                 ^^^^^^^ source.hydra variable.other.hydra
+#                 ^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                         ^^ source.hydra
 >
@@ -338,7 +338,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
 #                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                    ^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                            ^^ source.hydra
 >  ## The disjunction (inclusive 'or') of several other patterns
@@ -352,7 +352,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
 #                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                    ^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                            ^^ source.hydra
 >  ## A pattern which matches within a named subgraph
@@ -425,7 +425,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
 #                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                           ^^ source.hydra
 >  ## The patterns to be matched
@@ -439,7 +439,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                 ^^^^^^^ source.hydra variable.other.hydra
+#                 ^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                         ^^ source.hydra
 >

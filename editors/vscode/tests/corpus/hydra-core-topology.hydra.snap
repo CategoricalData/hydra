@@ -18,11 +18,12 @@
 #            ^ source.hydra
 #             ^^^ source.hydra support.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                 ^^^^^^ source.hydra variable.other.hydra
-#                       ^^ source.hydra
+#                 ^^^^^^ source.hydra entity.name.type.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
 #                         ^^^^ source.hydra support.type.hydra
 #                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                              ^^^^^^ source.hydra variable.other.hydra
+#                              ^^^^^^ source.hydra entity.name.type.hydra
 #                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
@@ -54,14 +55,14 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#               ^ source.hydra variable.other.hydra
+#               ^ source.hydra entity.name.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                 ^ source.hydra
 #                  ^ source.hydra keyword.operator.arrow.hydra
 #                   ^ source.hydra
 #                    ^^^^ source.hydra support.type.hydra
 #                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                         ^ source.hydra variable.other.hydra
+#                         ^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                           ^^ source.hydra
 >  ## Mapping from target ordering to source ordering
@@ -75,14 +76,14 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#               ^ source.hydra variable.other.hydra
+#               ^ source.hydra entity.name.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                 ^ source.hydra
 #                  ^ source.hydra keyword.operator.arrow.hydra
 #                   ^ source.hydra
 #                    ^^^^ source.hydra support.type.hydra
 #                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                         ^ source.hydra variable.other.hydra
+#                         ^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                           ^^ source.hydra
 >
@@ -120,8 +121,9 @@
 #          ^ source.hydra
 #           ^^^ source.hydra support.type.hydra
 #              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#               ^^^^^^ source.hydra variable.other.hydra
-#                     ^^ source.hydra
+#               ^^^^^^ source.hydra entity.name.type.hydra
+#                     ^ source.hydra punctuation.separator.type.hydra
+#                      ^ source.hydra
 #                       ^^^^^ source.hydra support.type.hydra
 #                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                             ^^ source.hydra
@@ -136,8 +138,9 @@
 #           ^ source.hydra
 #            ^^^ source.hydra support.type.hydra
 #               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                ^^^^^^ source.hydra variable.other.hydra
-#                      ^^ source.hydra
+#                ^^^^^^ source.hydra entity.name.type.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
 #                        ^^^^^ source.hydra support.type.hydra
 #                             ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                              ^^ source.hydra
@@ -152,7 +155,7 @@
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
 #             ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#              ^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^ source.hydra entity.name.type.hydra
 #                    ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                     ^^ source.hydra
 >  ## Set of vertices currently on the stack, for quick lookup
@@ -166,7 +169,7 @@
 #          ^ source.hydra
 #           ^^^ source.hydra support.type.hydra
 #              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#               ^^^^^^ source.hydra variable.other.hydra
+#               ^^^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                      ^^ source.hydra
 >  ## Accumulated strongly connected components, each a list of vertices
@@ -182,7 +185,7 @@
 #            ^ source.hydra punctuation.definition.typeargs.begin.hydra
 #             ^^^^ source.hydra support.type.hydra
 #                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                  ^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                          ^^ source.hydra

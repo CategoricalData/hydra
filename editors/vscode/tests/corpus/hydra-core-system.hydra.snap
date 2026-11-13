@@ -59,7 +59,7 @@
 #                   ^ source.hydra
 #                    ^^^^^^^^ source.hydra support.type.hydra
 #                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                             ^^^^^^^^ source.hydra variable.other.hydra
+#                             ^^^^^^^^ source.hydra entity.name.type.hydra
 #                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                      ^^ source.hydra
 >  ## The complete environment for the child (POSIX environ). None inherits the parent's environment; given(m) replaces it entirely, as execve's envp argument does. There is no partial-merge form; merge in pure code before calling
@@ -75,8 +75,9 @@
 #                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
 #                        ^^^ source.hydra support.type.hydra
 #                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                            ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                               ^^ source.hydra
+#                            ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
+#                                               ^ source.hydra punctuation.separator.type.hydra
+#                                                ^ source.hydra
 #                                                 ^^^^^^ source.hydra support.type.hydra
 #                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                        ^ source.hydra punctuation.definition.typeargs.end.hydra

@@ -239,7 +239,7 @@
 #                ^ source.hydra
 #                 ^^^^ source.hydra support.type.hydra
 #                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                      ^^^^ source.hydra variable.other.hydra
+#                      ^^^^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                           ^^ source.hydra
 >
@@ -362,7 +362,7 @@
 #                ^ source.hydra
 #                 ^^^^ source.hydra support.type.hydra
 #                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                      ^^^^ source.hydra variable.other.hydra
+#                      ^^^^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                           ^^ source.hydra
 >
@@ -424,7 +424,7 @@
 #            ^ source.hydra
 #             ^^^ source.hydra support.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                 ^^^^ source.hydra variable.other.hydra
+#                 ^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                      ^^ source.hydra
 >  ## The type containing the unbound variables
@@ -499,7 +499,7 @@
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
 #             ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#              ^^^^ source.hydra variable.other.hydra
+#              ^^^^ source.hydra entity.name.type.hydra
 #                  ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                   ^^ source.hydra
 >  ## A description of the context in which the types were expected to be equal

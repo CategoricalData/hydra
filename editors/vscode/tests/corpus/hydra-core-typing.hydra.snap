@@ -43,7 +43,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                   ^^^^ source.hydra variable.other.hydra
+#                   ^^^^ source.hydra entity.name.type.hydra
 #                       ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                        ^^ source.hydra
 >  ## Value parameters (from lambdas)
@@ -57,7 +57,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#               ^^^^ source.hydra variable.other.hydra
+#               ^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                    ^^ source.hydra
 >  ## Let bindings accumulated from the term
@@ -71,7 +71,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                 ^^^^^^^ source.hydra variable.other.hydra
+#                 ^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                         ^^ source.hydra
 >  ## The body term after removing all lambdas, lets, etc.
@@ -96,7 +96,7 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra entity.name.type.hydra
 #                    ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                     ^^ source.hydra
 >  ## The return type of the function (if type inference succeeded)
@@ -110,7 +110,7 @@
 #           ^ source.hydra
 #            ^^^^^^^^ source.hydra support.type.hydra
 #                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                     ^^^^ source.hydra variable.other.hydra
+#                     ^^^^ source.hydra entity.name.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                          ^^ source.hydra
 >  ## Updated environment after processing all bindings
@@ -159,7 +159,7 @@
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
 #             ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#              ^^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                          ^^ source.hydra
 >
@@ -223,9 +223,10 @@
 #                   ^ source.hydra
 #                    ^^^ source.hydra support.type.hydra
 #                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                        ^^^^ source.hydra variable.other.hydra
-#                            ^^ source.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                        ^^^^ source.hydra entity.name.type.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                      ^^ source.hydra
 >  ## The updated InferenceContext after inference (carries fresh-variable counter and trace)
@@ -365,7 +366,7 @@
 #                 ^ source.hydra
 #                  ^^^^ source.hydra support.type.hydra
 #                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                       ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                       ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                     ^^ source.hydra
 >  ## The value parameters of the term, in order
@@ -379,7 +380,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                   ^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^ source.hydra entity.name.type.hydra
 #                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                             ^^ source.hydra
 >  ## The result of the term
@@ -408,9 +409,10 @@
 #                     ^ source.hydra
 #                      ^^^ source.hydra support.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                          ^^^^ source.hydra variable.other.hydra
-#                              ^^ source.hydra
-#                                ^^^^ source.hydra variable.other.hydra
+#                          ^^^^ source.hydra entity.name.type.hydra
+#                              ^ source.hydra punctuation.separator.type.hydra
+#                               ^ source.hydra
+#                                ^^^^ source.hydra entity.name.type.hydra
 #                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                     ^^ source.hydra
 >
@@ -522,7 +524,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
 #                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                    ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                        ^^ source.hydra
 >
@@ -540,8 +542,9 @@
 #                     ^ source.hydra
 #                      ^^^ source.hydra support.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                          ^^^^ source.hydra variable.other.hydra
-#                              ^^ source.hydra
-#                                ^^^^ source.hydra variable.other.hydra
+#                          ^^^^ source.hydra entity.name.type.hydra
+#                              ^ source.hydra punctuation.separator.type.hydra
+#                               ^ source.hydra
+#                                ^^^^ source.hydra entity.name.type.hydra
 #                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                     ^^ source.hydra

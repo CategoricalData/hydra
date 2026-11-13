@@ -67,14 +67,14 @@
 #                                     ^^ source.hydra
 #                                       ^^^^^^^^ source.hydra support.type.hydra
 #                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                ^ source.hydra variable.other.hydra
+#                                                ^ source.hydra entity.name.type.hydra
 #                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                  ^ source.hydra
 #                                                   ^ source.hydra keyword.operator.arrow.hydra
 #                                                    ^ source.hydra
 #                                                     ^^^^^^^^ source.hydra support.type.hydra
 #                                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                              ^ source.hydra variable.other.hydra
+#                                                              ^ source.hydra entity.name.type.hydra
 #                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                ^^ source.hydra
 #                                                                  ^ source.hydra keyword.operator.arrow.hydra
@@ -85,18 +85,20 @@
 #                                                                       ^ source.hydra
 #                                                                        ^^^ source.hydra support.type.hydra
 #                                                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                            ^ source.hydra variable.other.hydra
-#                                                                             ^^ source.hydra
-#                                                                               ^ source.hydra variable.other.hydra
+#                                                                            ^ source.hydra entity.name.type.hydra
+#                                                                             ^ source.hydra punctuation.separator.type.hydra
+#                                                                              ^ source.hydra
+#                                                                               ^ source.hydra entity.name.type.hydra
 #                                                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                                 ^ source.hydra
 #                                                                                  ^ source.hydra keyword.operator.arrow.hydra
 #                                                                                   ^ source.hydra
 #                                                                                    ^^^ source.hydra support.type.hydra
 #                                                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                                        ^ source.hydra variable.other.hydra
-#                                                                                         ^^ source.hydra
-#                                                                                           ^ source.hydra variable.other.hydra
+#                                                                                        ^ source.hydra entity.name.type.hydra
+#                                                                                         ^ source.hydra punctuation.separator.type.hydra
+#                                                                                          ^ source.hydra
+#                                                                                           ^ source.hydra entity.name.type.hydra
 #                                                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                                             ^ source.hydra
 #                                                                                              ^ source.hydra keyword.operator.equals.hydra
@@ -215,18 +217,20 @@
 #                                                                                   ^ source.hydra
 #                                                                                    ^^^ source.hydra support.type.hydra
 #                                                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                                        ^^ source.hydra variable.other.hydra
-#                                                                                          ^^ source.hydra
-#                                                                                            ^^ source.hydra variable.other.hydra
+#                                                                                        ^^ source.hydra entity.name.type.hydra
+#                                                                                          ^ source.hydra punctuation.separator.type.hydra
+#                                                                                           ^ source.hydra
+#                                                                                            ^^ source.hydra entity.name.type.hydra
 #                                                                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                                               ^ source.hydra
 #                                                                                                ^ source.hydra keyword.operator.arrow.hydra
 #                                                                                                 ^ source.hydra
 #                                                                                                  ^^^ source.hydra support.type.hydra
 #                                                                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                                                      ^^ source.hydra variable.other.hydra
-#                                                                                                        ^^ source.hydra
-#                                                                                                          ^^ source.hydra variable.other.hydra
+#                                                                                                      ^^ source.hydra entity.name.type.hydra
+#                                                                                                        ^ source.hydra punctuation.separator.type.hydra
+#                                                                                                         ^ source.hydra
+#                                                                                                          ^^ source.hydra entity.name.type.hydra
 #                                                                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                                                             ^ source.hydra
 #                                                                                                              ^ source.hydra keyword.operator.equals.hydra
@@ -323,18 +327,20 @@
 #                                          ^ source.hydra
 #                                           ^^^ source.hydra support.type.hydra
 #                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                               ^ source.hydra variable.other.hydra
-#                                                ^^ source.hydra
-#                                                  ^ source.hydra variable.other.hydra
+#                                               ^ source.hydra entity.name.type.hydra
+#                                                ^ source.hydra punctuation.separator.type.hydra
+#                                                 ^ source.hydra
+#                                                  ^ source.hydra entity.name.type.hydra
 #                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                    ^ source.hydra
 #                                                     ^ source.hydra keyword.operator.arrow.hydra
 #                                                      ^ source.hydra
 #                                                       ^^^ source.hydra support.type.hydra
 #                                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                           ^ source.hydra variable.other.hydra
-#                                                            ^^ source.hydra
-#                                                              ^ source.hydra variable.other.hydra
+#                                                           ^ source.hydra entity.name.type.hydra
+#                                                            ^ source.hydra punctuation.separator.type.hydra
+#                                                             ^ source.hydra
+#                                                              ^ source.hydra entity.name.type.hydra
 #                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Compute the difference of two maps by key.
@@ -392,27 +398,30 @@
 #                                          ^ source.hydra
 #                                           ^^^ source.hydra support.type.hydra
 #                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                               ^ source.hydra variable.other.hydra
-#                                                ^^ source.hydra
-#                                                  ^ source.hydra variable.other.hydra
+#                                               ^ source.hydra entity.name.type.hydra
+#                                                ^ source.hydra punctuation.separator.type.hydra
+#                                                 ^ source.hydra
+#                                                  ^ source.hydra entity.name.type.hydra
 #                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                    ^ source.hydra
 #                                                     ^ source.hydra keyword.operator.arrow.hydra
 #                                                      ^ source.hydra
 #                                                       ^^^ source.hydra support.type.hydra
 #                                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                           ^ source.hydra variable.other.hydra
-#                                                            ^^ source.hydra
-#                                                              ^ source.hydra variable.other.hydra
+#                                                           ^ source.hydra entity.name.type.hydra
+#                                                            ^ source.hydra punctuation.separator.type.hydra
+#                                                             ^ source.hydra
+#                                                              ^ source.hydra entity.name.type.hydra
 #                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                ^ source.hydra
 #                                                                 ^ source.hydra keyword.operator.arrow.hydra
 #                                                                  ^ source.hydra
 #                                                                   ^^^ source.hydra support.type.hydra
 #                                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                       ^ source.hydra variable.other.hydra
-#                                                                        ^^ source.hydra
-#                                                                          ^ source.hydra variable.other.hydra
+#                                                                       ^ source.hydra entity.name.type.hydra
+#                                                                        ^ source.hydra punctuation.separator.type.hydra
+#                                                                         ^ source.hydra
+#                                                                          ^ source.hydra entity.name.type.hydra
 #                                                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Return the values of a map (in key order).
@@ -467,16 +476,17 @@
 #                                     ^ source.hydra
 #                                      ^^^ source.hydra support.type.hydra
 #                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                          ^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
-#                                             ^ source.hydra variable.other.hydra
+#                                          ^ source.hydra entity.name.type.hydra
+#                                           ^ source.hydra punctuation.separator.type.hydra
+#                                            ^ source.hydra
+#                                             ^ source.hydra entity.name.type.hydra
 #                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                               ^ source.hydra
 #                                                ^ source.hydra keyword.operator.arrow.hydra
 #                                                 ^ source.hydra
 #                                                  ^^^^ source.hydra support.type.hydra
 #                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                       ^ source.hydra variable.other.hydra
+#                                                       ^ source.hydra entity.name.type.hydra
 #                                                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## The empty map.
@@ -526,9 +536,10 @@
 #                                     ^ source.hydra
 #                                      ^^^ source.hydra support.type.hydra
 #                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                          ^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
-#                                             ^ source.hydra variable.other.hydra
+#                                          ^ source.hydra entity.name.type.hydra
+#                                           ^ source.hydra punctuation.separator.type.hydra
+#                                            ^ source.hydra
+#                                             ^ source.hydra entity.name.type.hydra
 #                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Filter a map by value.
@@ -591,18 +602,20 @@
 #                                                      ^ source.hydra
 #                                                       ^^^ source.hydra support.type.hydra
 #                                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                           ^ source.hydra variable.other.hydra
-#                                                            ^^ source.hydra
-#                                                              ^ source.hydra variable.other.hydra
+#                                                           ^ source.hydra entity.name.type.hydra
+#                                                            ^ source.hydra punctuation.separator.type.hydra
+#                                                             ^ source.hydra
+#                                                              ^ source.hydra entity.name.type.hydra
 #                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                ^ source.hydra
 #                                                                 ^ source.hydra keyword.operator.arrow.hydra
 #                                                                  ^ source.hydra
 #                                                                   ^^^ source.hydra support.type.hydra
 #                                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                       ^ source.hydra variable.other.hydra
-#                                                                        ^^ source.hydra
-#                                                                          ^ source.hydra variable.other.hydra
+#                                                                       ^ source.hydra entity.name.type.hydra
+#                                                                        ^ source.hydra punctuation.separator.type.hydra
+#                                                                         ^ source.hydra
+#                                                                          ^ source.hydra entity.name.type.hydra
 #                                                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                            ^ source.hydra
 #                                                                             ^ source.hydra keyword.operator.equals.hydra
@@ -694,18 +707,20 @@
 #                                                                 ^ source.hydra
 #                                                                  ^^^ source.hydra support.type.hydra
 #                                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                      ^ source.hydra variable.other.hydra
-#                                                                       ^^ source.hydra
-#                                                                         ^ source.hydra variable.other.hydra
+#                                                                      ^ source.hydra entity.name.type.hydra
+#                                                                       ^ source.hydra punctuation.separator.type.hydra
+#                                                                        ^ source.hydra
+#                                                                         ^ source.hydra entity.name.type.hydra
 #                                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                           ^ source.hydra
 #                                                                            ^ source.hydra keyword.operator.arrow.hydra
 #                                                                             ^ source.hydra
 #                                                                              ^^^ source.hydra support.type.hydra
 #                                                                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                                  ^ source.hydra variable.other.hydra
-#                                                                                   ^^ source.hydra
-#                                                                                     ^ source.hydra variable.other.hydra
+#                                                                                  ^ source.hydra entity.name.type.hydra
+#                                                                                   ^ source.hydra punctuation.separator.type.hydra
+#                                                                                    ^ source.hydra
+#                                                                                     ^ source.hydra entity.name.type.hydra
 #                                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                                       ^ source.hydra
 #                                                                                        ^ source.hydra keyword.operator.equals.hydra
@@ -795,9 +810,10 @@
 #                                                            ^ source.hydra
 #                                                             ^^^ source.hydra support.type.hydra
 #                                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                 ^ source.hydra variable.other.hydra
-#                                                                  ^^ source.hydra
-#                                                                    ^ source.hydra variable.other.hydra
+#                                                                 ^ source.hydra entity.name.type.hydra
+#                                                                  ^ source.hydra punctuation.separator.type.hydra
+#                                                                   ^ source.hydra
+#                                                                    ^ source.hydra entity.name.type.hydra
 #                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                      ^ source.hydra
 #                                                                       ^ source.hydra keyword.operator.arrow.hydra
@@ -892,9 +908,10 @@
 #                                                       ^ source.hydra
 #                                                        ^^^ source.hydra support.type.hydra
 #                                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                            ^ source.hydra variable.other.hydra
-#                                                             ^^ source.hydra
-#                                                               ^ source.hydra variable.other.hydra
+#                                                            ^ source.hydra entity.name.type.hydra
+#                                                             ^ source.hydra punctuation.separator.type.hydra
+#                                                              ^ source.hydra
+#                                                               ^ source.hydra entity.name.type.hydra
 #                                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Insert a key-value pair into a map.
@@ -952,18 +969,20 @@
 #                                              ^ source.hydra
 #                                               ^^^ source.hydra support.type.hydra
 #                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                   ^ source.hydra variable.other.hydra
-#                                                    ^^ source.hydra
-#                                                      ^ source.hydra variable.other.hydra
+#                                                   ^ source.hydra entity.name.type.hydra
+#                                                    ^ source.hydra punctuation.separator.type.hydra
+#                                                     ^ source.hydra
+#                                                      ^ source.hydra entity.name.type.hydra
 #                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                        ^ source.hydra
 #                                                         ^ source.hydra keyword.operator.arrow.hydra
 #                                                          ^ source.hydra
 #                                                           ^^^ source.hydra support.type.hydra
 #                                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                               ^ source.hydra variable.other.hydra
-#                                                                ^^ source.hydra
-#                                                                  ^ source.hydra variable.other.hydra
+#                                                               ^ source.hydra entity.name.type.hydra
+#                                                                ^ source.hydra punctuation.separator.type.hydra
+#                                                                 ^ source.hydra
+#                                                                  ^ source.hydra entity.name.type.hydra
 #                                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Compute the intersection of two maps by key.
@@ -1021,27 +1040,30 @@
 #                                            ^ source.hydra
 #                                             ^^^ source.hydra support.type.hydra
 #                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                 ^ source.hydra variable.other.hydra
-#                                                  ^^ source.hydra
-#                                                    ^ source.hydra variable.other.hydra
+#                                                 ^ source.hydra entity.name.type.hydra
+#                                                  ^ source.hydra punctuation.separator.type.hydra
+#                                                   ^ source.hydra
+#                                                    ^ source.hydra entity.name.type.hydra
 #                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                      ^ source.hydra
 #                                                       ^ source.hydra keyword.operator.arrow.hydra
 #                                                        ^ source.hydra
 #                                                         ^^^ source.hydra support.type.hydra
 #                                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                             ^ source.hydra variable.other.hydra
-#                                                              ^^ source.hydra
-#                                                                ^ source.hydra variable.other.hydra
+#                                                             ^ source.hydra entity.name.type.hydra
+#                                                              ^ source.hydra punctuation.separator.type.hydra
+#                                                               ^ source.hydra
+#                                                                ^ source.hydra entity.name.type.hydra
 #                                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                  ^ source.hydra
 #                                                                   ^ source.hydra keyword.operator.arrow.hydra
 #                                                                    ^ source.hydra
 #                                                                     ^^^ source.hydra support.type.hydra
 #                                                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                         ^ source.hydra variable.other.hydra
-#                                                                          ^^ source.hydra
-#                                                                            ^ source.hydra variable.other.hydra
+#                                                                         ^ source.hydra entity.name.type.hydra
+#                                                                          ^ source.hydra punctuation.separator.type.hydra
+#                                                                           ^ source.hydra
+#                                                                            ^ source.hydra entity.name.type.hydra
 #                                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Test whether a map is empty.
@@ -1091,9 +1113,10 @@
 #                                       ^ source.hydra
 #                                        ^^^ source.hydra support.type.hydra
 #                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                            ^ source.hydra variable.other.hydra
-#                                             ^^ source.hydra
-#                                               ^ source.hydra variable.other.hydra
+#                                            ^ source.hydra entity.name.type.hydra
+#                                             ^ source.hydra punctuation.separator.type.hydra
+#                                              ^ source.hydra
+#                                               ^ source.hydra entity.name.type.hydra
 #                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                 ^ source.hydra
 #                                                  ^ source.hydra keyword.operator.arrow.hydra
@@ -1152,16 +1175,17 @@
 #                                    ^ source.hydra
 #                                     ^^^ source.hydra support.type.hydra
 #                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                         ^ source.hydra variable.other.hydra
-#                                          ^^ source.hydra
-#                                            ^ source.hydra variable.other.hydra
+#                                         ^ source.hydra entity.name.type.hydra
+#                                          ^ source.hydra punctuation.separator.type.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra entity.name.type.hydra
 #                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                              ^ source.hydra
 #                                               ^ source.hydra keyword.operator.arrow.hydra
 #                                                ^ source.hydra
 #                                                 ^^^^ source.hydra support.type.hydra
 #                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                      ^ source.hydra variable.other.hydra
+#                                                      ^ source.hydra entity.name.type.hydra
 #                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Look up a value in a map by key, returning Nothing if absent.
@@ -1220,16 +1244,17 @@
 #                                          ^ source.hydra
 #                                           ^^^ source.hydra support.type.hydra
 #                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                               ^ source.hydra variable.other.hydra
-#                                                ^^ source.hydra
-#                                                  ^ source.hydra variable.other.hydra
+#                                               ^ source.hydra entity.name.type.hydra
+#                                                ^ source.hydra punctuation.separator.type.hydra
+#                                                 ^ source.hydra
+#                                                  ^ source.hydra entity.name.type.hydra
 #                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                    ^ source.hydra
 #                                                     ^ source.hydra keyword.operator.arrow.hydra
 #                                                      ^ source.hydra
 #                                                       ^^^^^^^^ source.hydra support.type.hydra
 #                                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                ^ source.hydra variable.other.hydra
+#                                                                ^ source.hydra entity.name.type.hydra
 #                                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Map a function over the values of a map.
@@ -1294,18 +1319,20 @@
 #                                                   ^ source.hydra
 #                                                    ^^^ source.hydra support.type.hydra
 #                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                        ^ source.hydra variable.other.hydra
-#                                                         ^^ source.hydra
-#                                                           ^^ source.hydra variable.other.hydra
+#                                                        ^ source.hydra entity.name.type.hydra
+#                                                         ^ source.hydra punctuation.separator.type.hydra
+#                                                          ^ source.hydra
+#                                                           ^^ source.hydra entity.name.type.hydra
 #                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                              ^ source.hydra
 #                                                               ^ source.hydra keyword.operator.arrow.hydra
 #                                                                ^ source.hydra
 #                                                                 ^^^ source.hydra support.type.hydra
 #                                                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                     ^ source.hydra variable.other.hydra
-#                                                                      ^^ source.hydra
-#                                                                        ^^ source.hydra variable.other.hydra
+#                                                                     ^ source.hydra entity.name.type.hydra
+#                                                                      ^ source.hydra punctuation.separator.type.hydra
+#                                                                       ^ source.hydra
+#                                                                        ^^ source.hydra entity.name.type.hydra
 #                                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                           ^ source.hydra
 #                                                                            ^ source.hydra keyword.operator.equals.hydra
@@ -1405,18 +1432,20 @@
 #                                                                     ^ source.hydra
 #                                                                      ^^^ source.hydra support.type.hydra
 #                                                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                          ^^ source.hydra variable.other.hydra
-#                                                                            ^^ source.hydra
-#                                                                              ^ source.hydra variable.other.hydra
+#                                                                          ^^ source.hydra entity.name.type.hydra
+#                                                                            ^ source.hydra punctuation.separator.type.hydra
+#                                                                             ^ source.hydra
+#                                                                              ^ source.hydra entity.name.type.hydra
 #                                                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                                ^ source.hydra
 #                                                                                 ^ source.hydra keyword.operator.arrow.hydra
 #                                                                                  ^ source.hydra
 #                                                                                   ^^^ source.hydra support.type.hydra
 #                                                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                                       ^^ source.hydra variable.other.hydra
-#                                                                                         ^^ source.hydra
-#                                                                                           ^ source.hydra variable.other.hydra
+#                                                                                       ^^ source.hydra entity.name.type.hydra
+#                                                                                         ^ source.hydra punctuation.separator.type.hydra
+#                                                                                          ^ source.hydra
+#                                                                                           ^ source.hydra entity.name.type.hydra
 #                                                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                                             ^ source.hydra
 #                                                                                              ^ source.hydra keyword.operator.equals.hydra
@@ -1506,9 +1535,10 @@
 #                                          ^ source.hydra
 #                                           ^^^ source.hydra support.type.hydra
 #                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                               ^ source.hydra variable.other.hydra
-#                                                ^^ source.hydra
-#                                                  ^ source.hydra variable.other.hydra
+#                                               ^ source.hydra entity.name.type.hydra
+#                                                ^ source.hydra punctuation.separator.type.hydra
+#                                                 ^ source.hydra
+#                                                  ^ source.hydra entity.name.type.hydra
 #                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                    ^ source.hydra
 #                                                     ^ source.hydra keyword.operator.arrow.hydra
@@ -1570,9 +1600,10 @@
 #                                                 ^ source.hydra
 #                                                  ^^^ source.hydra support.type.hydra
 #                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                      ^ source.hydra variable.other.hydra
-#                                                       ^^ source.hydra
-#                                                         ^ source.hydra variable.other.hydra
+#                                                      ^ source.hydra entity.name.type.hydra
+#                                                       ^ source.hydra punctuation.separator.type.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra entity.name.type.hydra
 #                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Return the number of key-value pairs in a map.
@@ -1622,9 +1653,10 @@
 #                                    ^ source.hydra
 #                                     ^^^ source.hydra support.type.hydra
 #                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                         ^ source.hydra variable.other.hydra
-#                                          ^^ source.hydra
-#                                            ^ source.hydra variable.other.hydra
+#                                         ^ source.hydra entity.name.type.hydra
+#                                          ^ source.hydra punctuation.separator.type.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra entity.name.type.hydra
 #                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                              ^ source.hydra
 #                                               ^ source.hydra keyword.operator.arrow.hydra
@@ -1683,9 +1715,10 @@
 #                                      ^ source.hydra
 #                                       ^^^ source.hydra support.type.hydra
 #                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                           ^ source.hydra variable.other.hydra
-#                                            ^^ source.hydra
-#                                              ^ source.hydra variable.other.hydra
+#                                           ^ source.hydra entity.name.type.hydra
+#                                            ^ source.hydra punctuation.separator.type.hydra
+#                                             ^ source.hydra
+#                                              ^ source.hydra entity.name.type.hydra
 #                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                ^ source.hydra
 #                                                 ^ source.hydra keyword.operator.arrow.hydra
@@ -1751,27 +1784,30 @@
 #                                     ^ source.hydra
 #                                      ^^^ source.hydra support.type.hydra
 #                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                          ^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
-#                                             ^ source.hydra variable.other.hydra
+#                                          ^ source.hydra entity.name.type.hydra
+#                                           ^ source.hydra punctuation.separator.type.hydra
+#                                            ^ source.hydra
+#                                             ^ source.hydra entity.name.type.hydra
 #                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                               ^ source.hydra
 #                                                ^ source.hydra keyword.operator.arrow.hydra
 #                                                 ^ source.hydra
 #                                                  ^^^ source.hydra support.type.hydra
 #                                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                      ^ source.hydra variable.other.hydra
-#                                                       ^^ source.hydra
-#                                                         ^ source.hydra variable.other.hydra
+#                                                      ^ source.hydra entity.name.type.hydra
+#                                                       ^ source.hydra punctuation.separator.type.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra entity.name.type.hydra
 #                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                           ^ source.hydra
 #                                                            ^ source.hydra keyword.operator.arrow.hydra
 #                                                             ^ source.hydra
 #                                                              ^^^ source.hydra support.type.hydra
 #                                                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                  ^ source.hydra variable.other.hydra
-#                                                                   ^^ source.hydra
-#                                                                     ^ source.hydra variable.other.hydra
+#                                                                  ^ source.hydra entity.name.type.hydra
+#                                                                   ^ source.hydra punctuation.separator.type.hydra
+#                                                                    ^ source.hydra
+#                                                                     ^ source.hydra entity.name.type.hydra
 #                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Compute the left-biased union of a list of maps.
@@ -1831,9 +1867,10 @@
 #                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
 #                                            ^^^ source.hydra support.type.hydra
 #                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                ^ source.hydra variable.other.hydra
-#                                                 ^^ source.hydra
-#                                                   ^ source.hydra variable.other.hydra
+#                                                ^ source.hydra entity.name.type.hydra
+#                                                 ^ source.hydra punctuation.separator.type.hydra
+#                                                  ^ source.hydra
+#                                                   ^ source.hydra entity.name.type.hydra
 #                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                      ^ source.hydra
@@ -1841,7 +1878,8 @@
 #                                                        ^ source.hydra
 #                                                         ^^^ source.hydra support.type.hydra
 #                                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                             ^ source.hydra variable.other.hydra
-#                                                              ^^ source.hydra
-#                                                                ^ source.hydra variable.other.hydra
+#                                                             ^ source.hydra entity.name.type.hydra
+#                                                              ^ source.hydra punctuation.separator.type.hydra
+#                                                               ^ source.hydra
+#                                                                ^ source.hydra entity.name.type.hydra
 #                                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra

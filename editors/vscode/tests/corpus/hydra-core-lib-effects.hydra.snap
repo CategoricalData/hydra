@@ -59,25 +59,25 @@
 #                             ^ source.hydra punctuation.separator.binder.hydra
 #                              ^^^^^^ source.hydra support.type.hydra
 #                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                     ^ source.hydra variable.other.hydra
+#                                     ^ source.hydra entity.name.type.hydra
 #                                      ^ source.hydra
 #                                       ^ source.hydra keyword.operator.arrow.hydra
 #                                        ^ source.hydra
-#                                         ^ source.hydra variable.other.hydra
+#                                         ^ source.hydra entity.name.type.hydra
 #                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                           ^ source.hydra
 #                                            ^ source.hydra keyword.operator.arrow.hydra
 #                                             ^ source.hydra
 #                                              ^^^^^^ source.hydra support.type.hydra
 #                                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                     ^ source.hydra variable.other.hydra
+#                                                     ^ source.hydra entity.name.type.hydra
 #                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                       ^ source.hydra
 #                                                        ^ source.hydra keyword.operator.arrow.hydra
 #                                                         ^ source.hydra
 #                                                          ^^^^^^ source.hydra support.type.hydra
 #                                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                 ^ source.hydra variable.other.hydra
+#                                                                 ^ source.hydra entity.name.type.hydra
 #                                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Sequence two effectful computations.
@@ -124,7 +124,7 @@
 #                            ^ source.hydra punctuation.separator.binder.hydra
 #                             ^^^^^^ source.hydra support.type.hydra
 #                                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                    ^ source.hydra variable.other.hydra
+#                                    ^ source.hydra entity.name.type.hydra
 #                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                      ^ source.hydra
 #                                       ^ source.hydra keyword.operator.arrow.hydra
@@ -135,14 +135,14 @@
 #                                             ^ source.hydra
 #                                              ^^^^^^ source.hydra support.type.hydra
 #                                                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                     ^ source.hydra variable.other.hydra
+#                                                     ^ source.hydra entity.name.type.hydra
 #                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                       ^^ source.hydra
 #                                                         ^ source.hydra keyword.operator.arrow.hydra
 #                                                          ^ source.hydra
 #                                                           ^^^^^^ source.hydra support.type.hydra
 #                                                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                  ^ source.hydra variable.other.hydra
+#                                                                  ^ source.hydra entity.name.type.hydra
 #                                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Kleisli composition for effects.
@@ -188,7 +188,7 @@
 #                                      ^ source.hydra
 #                                       ^^^^^^ source.hydra support.type.hydra
 #                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                              ^ source.hydra variable.other.hydra
+#                                              ^ source.hydra entity.name.type.hydra
 #                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                ^^ source.hydra
 #                                                  ^ source.hydra keyword.operator.arrow.hydra
@@ -199,7 +199,7 @@
 #                                                        ^ source.hydra
 #                                                         ^^^^^^ source.hydra support.type.hydra
 #                                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                ^ source.hydra variable.other.hydra
+#                                                                ^ source.hydra entity.name.type.hydra
 #                                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                  ^^ source.hydra
 #                                                                    ^ source.hydra keyword.operator.arrow.hydra
@@ -210,7 +210,7 @@
 #                                                                         ^ source.hydra
 #                                                                          ^^^^^^ source.hydra support.type.hydra
 #                                                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                                 ^ source.hydra variable.other.hydra
+#                                                                                 ^ source.hydra entity.name.type.hydra
 #                                                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Left-fold over a list with an effect-returning function.
@@ -266,7 +266,7 @@
 #                                         ^ source.hydra
 #                                          ^^^^^^ source.hydra support.type.hydra
 #                                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                 ^ source.hydra variable.other.hydra
+#                                                 ^ source.hydra entity.name.type.hydra
 #                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                   ^^ source.hydra
 #                                                     ^ source.hydra keyword.operator.arrow.hydra
@@ -277,14 +277,14 @@
 #                                                          ^ source.hydra
 #                                                           ^^^^ source.hydra support.type.hydra
 #                                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                ^ source.hydra variable.other.hydra
+#                                                                ^ source.hydra entity.name.type.hydra
 #                                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                  ^ source.hydra
 #                                                                   ^ source.hydra keyword.operator.arrow.hydra
 #                                                                    ^ source.hydra
 #                                                                     ^^^^^^ source.hydra support.type.hydra
 #                                                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                            ^ source.hydra variable.other.hydra
+#                                                                            ^ source.hydra entity.name.type.hydra
 #                                                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Map a pure function over the result of an effect.
@@ -335,14 +335,14 @@
 #                                     ^ source.hydra
 #                                      ^^^^^^ source.hydra support.type.hydra
 #                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                             ^ source.hydra variable.other.hydra
+#                                             ^ source.hydra entity.name.type.hydra
 #                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                               ^ source.hydra
 #                                                ^ source.hydra keyword.operator.arrow.hydra
 #                                                 ^ source.hydra
 #                                                  ^^^^^^ source.hydra support.type.hydra
 #                                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                         ^ source.hydra variable.other.hydra
+#                                                         ^ source.hydra entity.name.type.hydra
 #                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Map an effect-returning function over a list.
@@ -391,14 +391,14 @@
 #                                    ^ source.hydra
 #                                     ^^^^^^ source.hydra support.type.hydra
 #                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                            ^ source.hydra variable.other.hydra
+#                                            ^ source.hydra entity.name.type.hydra
 #                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                              ^^ source.hydra
 #                                                ^ source.hydra keyword.operator.arrow.hydra
 #                                                 ^ source.hydra
 #                                                  ^^^^ source.hydra support.type.hydra
 #                                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                       ^ source.hydra variable.other.hydra
+#                                                       ^ source.hydra entity.name.type.hydra
 #                                                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                         ^ source.hydra
 #                                                          ^ source.hydra keyword.operator.arrow.hydra
@@ -407,7 +407,7 @@
 #                                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
 #                                                                   ^^^^ source.hydra support.type.hydra
 #                                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                        ^ source.hydra variable.other.hydra
+#                                                                        ^ source.hydra entity.name.type.hydra
 #                                                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
@@ -457,14 +457,14 @@
 #                                        ^ source.hydra
 #                                         ^^^^^^ source.hydra support.type.hydra
 #                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                ^ source.hydra variable.other.hydra
+#                                                ^ source.hydra entity.name.type.hydra
 #                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                  ^^ source.hydra
 #                                                    ^ source.hydra keyword.operator.arrow.hydra
 #                                                     ^ source.hydra
 #                                                      ^^^^^^^^ source.hydra support.type.hydra
 #                                                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                               ^ source.hydra variable.other.hydra
+#                                                               ^ source.hydra entity.name.type.hydra
 #                                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                 ^ source.hydra
 #                                                                  ^ source.hydra keyword.operator.arrow.hydra
@@ -473,7 +473,7 @@
 #                                                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
 #                                                                           ^^^^^^^^ source.hydra support.type.hydra
 #                                                                                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                                                    ^ source.hydra variable.other.hydra
+#                                                                                    ^ source.hydra entity.name.type.hydra
 #                                                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
@@ -515,5 +515,5 @@
 #                              ^ source.hydra
 #                               ^^^^^^ source.hydra support.type.hydra
 #                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                      ^ source.hydra variable.other.hydra
+#                                      ^ source.hydra entity.name.type.hydra
 #                                       ^ source.hydra punctuation.definition.typeargs.end.hydra

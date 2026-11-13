@@ -72,11 +72,11 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                ^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
-#                         ^ source.hydra variable.other.hydra
+#                         ^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra
-#                           ^ source.hydra variable.other.hydra
+#                           ^ source.hydra entity.name.type.hydra
 #                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                             ^^ source.hydra
 >
@@ -155,7 +155,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra support.type.hydra
 #            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#             ^ source.hydra variable.other.hydra
+#             ^ source.hydra entity.name.type.hydra
 #              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #               ^^ source.hydra
 >  ## The 'type' a fill must produce at this hole
@@ -203,7 +203,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra support.type.hydra
 #            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#             ^ source.hydra variable.other.hydra
+#             ^ source.hydra entity.name.type.hydra
 #              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #               ^^ source.hydra
 >  ## The value supplied for that hole
@@ -404,13 +404,14 @@
 #        ^ source.hydra
 #         ^^^ source.hydra support.type.hydra
 #            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#             ^ source.hydra variable.other.hydra
-#              ^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra entity.name.type.hydra
+#              ^ source.hydra punctuation.separator.type.hydra
+#               ^ source.hydra
+#                ^^^^ source.hydra entity.name.type.hydra
 #                    ^ source.hydra
-#                     ^ source.hydra variable.other.hydra
+#                     ^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra
-#                       ^ source.hydra variable.other.hydra
+#                       ^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                         ^^ source.hydra
 >  ## The ordered holes across all changed types, for the user to answer
@@ -424,13 +425,13 @@
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
 #             ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#              ^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
-#                         ^ source.hydra variable.other.hydra
+#                         ^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra
-#                           ^ source.hydra variable.other.hydra
+#                           ^ source.hydra entity.name.type.hydra
 #                            ^ source.hydra
-#                             ^ source.hydra variable.other.hydra
+#                             ^ source.hydra entity.name.type.hydra
 #                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                               ^^ source.hydra
 >
@@ -468,11 +469,11 @@
 #                ^ source.hydra
 #                 ^^^^ source.hydra support.type.hydra
 #                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                      ^^^^ source.hydra variable.other.hydra
+#                      ^^^^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra
-#                           ^ source.hydra variable.other.hydra
+#                           ^ source.hydra entity.name.type.hydra
 #                            ^ source.hydra
-#                             ^ source.hydra variable.other.hydra
+#                             ^ source.hydra entity.name.type.hydra
 #                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                               ^^ source.hydra
 >  ## Migrate a value, given values for the residual holes; fails with a MigrationError per instance
@@ -486,11 +487,11 @@
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
 #             ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#              ^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
-#                         ^ source.hydra variable.other.hydra
+#                         ^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra
-#                           ^ source.hydra variable.other.hydra
+#                           ^ source.hydra entity.name.type.hydra
 #                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.arrow.hydra
@@ -501,15 +502,16 @@
 #                                   ^ source.hydra
 #                                    ^^^^^^ source.hydra support.type.hydra
 #                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                           ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                           ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                         ^ source.hydra
-#                                                          ^ source.hydra variable.other.hydra
+#                                                          ^ source.hydra entity.name.type.hydra
 #                                                           ^ source.hydra
-#                                                            ^ source.hydra variable.other.hydra
+#                                                            ^ source.hydra entity.name.type.hydra
 #                                                             ^ source.hydra
-#                                                              ^ source.hydra variable.other.hydra
-#                                                               ^^ source.hydra
-#                                                                 ^ source.hydra variable.other.hydra
+#                                                              ^ source.hydra entity.name.type.hydra
+#                                                               ^ source.hydra punctuation.separator.type.hydra
+#                                                                ^ source.hydra
+#                                                                 ^ source.hydra entity.name.type.hydra
 #                                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                                   ^^ source.hydra
 >

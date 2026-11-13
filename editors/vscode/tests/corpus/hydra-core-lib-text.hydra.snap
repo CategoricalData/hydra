@@ -59,7 +59,8 @@
 #                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
 #                                       ^^^^^^ source.hydra support.type.hydra
-#                                             ^^ source.hydra
+#                                             ^ source.hydra punctuation.separator.type.hydra
+#                                              ^ source.hydra
 #                                               ^^^^^^ source.hydra support.type.hydra
 #                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 >

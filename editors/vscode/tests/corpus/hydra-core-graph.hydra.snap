@@ -46,9 +46,10 @@
 #             ^ source.hydra
 #              ^^^ source.hydra support.type.hydra
 #                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                  ^^^^ source.hydra variable.other.hydra
-#                      ^^ source.hydra
-#                        ^^^^ source.hydra variable.other.hydra
+#                  ^^^^ source.hydra entity.name.type.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
+#                        ^^^^ source.hydra entity.name.type.hydra
 #                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                             ^^ source.hydra
 >  ## The type schemes of all term variables in scope
@@ -62,9 +63,10 @@
 #             ^ source.hydra
 #              ^^^ source.hydra support.type.hydra
 #                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                  ^^^^ source.hydra variable.other.hydra
-#                      ^^ source.hydra
-#                        ^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^ source.hydra entity.name.type.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
+#                        ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                   ^^ source.hydra
 >  ## A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered.
@@ -78,9 +80,10 @@
 #                   ^ source.hydra
 #                    ^^^ source.hydra support.type.hydra
 #                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                        ^^^^ source.hydra variable.other.hydra
-#                            ^^ source.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                        ^^^^ source.hydra entity.name.type.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                      ^^ source.hydra
 >  ## The set of term variables introduced by specifically by lambdas
@@ -94,7 +97,7 @@
 #                  ^ source.hydra
 #                   ^^^ source.hydra support.type.hydra
 #                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                       ^^^^ source.hydra variable.other.hydra
+#                       ^^^^ source.hydra entity.name.type.hydra
 #                           ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                            ^^ source.hydra
 >  ## Any additional metadata bound to term variables in scope
@@ -108,9 +111,10 @@
 #           ^ source.hydra
 #            ^^^ source.hydra support.type.hydra
 #               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                ^^^^ source.hydra variable.other.hydra
-#                    ^^ source.hydra
-#                      ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra entity.name.type.hydra
+#                    ^ source.hydra punctuation.separator.type.hydra
+#                     ^ source.hydra
+#                      ^^^^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                           ^^ source.hydra
 >  ## All primitive functions and constants by name
@@ -124,9 +128,10 @@
 #             ^ source.hydra
 #              ^^^ source.hydra support.type.hydra
 #                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                  ^^^^ source.hydra variable.other.hydra
-#                      ^^ source.hydra
-#                        ^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^ source.hydra entity.name.type.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
+#                        ^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                  ^^ source.hydra
 >  ## All schema types (type schemes) in scope
@@ -140,9 +145,10 @@
 #              ^ source.hydra
 #               ^^^ source.hydra support.type.hydra
 #                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                   ^^^^ source.hydra variable.other.hydra
-#                       ^^ source.hydra
-#                         ^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^ source.hydra entity.name.type.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                    ^^ source.hydra
 >  ## The set of type variables introduced specifically by type lambdas
@@ -156,7 +162,7 @@
 #                ^ source.hydra
 #                 ^^^ source.hydra support.type.hydra
 #                    ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                     ^^^^ source.hydra variable.other.hydra
+#                     ^^^^ source.hydra entity.name.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                          ^^ source.hydra
 >
@@ -205,7 +211,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                   ^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^ source.hydra entity.name.type.hydra
 #                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                             ^^ source.hydra
 >
@@ -247,16 +253,17 @@
 #                         ^ source.hydra
 #                          ^^^^ source.hydra support.type.hydra
 #                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                               ^^^^ source.hydra variable.other.hydra
+#                               ^^^^ source.hydra entity.name.type.hydra
 #                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                    ^ source.hydra
 #                                     ^ source.hydra keyword.operator.arrow.hydra
 #                                      ^ source.hydra
 #                                       ^^^^^^ source.hydra support.type.hydra
 #                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                              ^^^^^ source.hydra variable.other.hydra
-#                                                   ^^ source.hydra
-#                                                     ^^^^ source.hydra variable.other.hydra
+#                                              ^^^^^ source.hydra entity.name.type.hydra
+#                                                   ^ source.hydra punctuation.separator.type.hydra
+#                                                    ^ source.hydra
+#                                                     ^^^^ source.hydra entity.name.type.hydra
 #                                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                          ^^ source.hydra
 >
@@ -313,9 +320,10 @@
 #                                           ^ source.hydra
 #                                            ^^^^^^ source.hydra support.type.hydra
 #                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                   ^^^^^ source.hydra variable.other.hydra
-#                                                        ^^ source.hydra
-#                                                          ^ source.hydra variable.other.hydra
+#                                                   ^^^^^ source.hydra entity.name.type.hydra
+#                                                        ^ source.hydra punctuation.separator.type.hydra
+#                                                         ^ source.hydra
+#                                                          ^ source.hydra entity.name.type.hydra
 #                                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                            ^^ source.hydra
 >  ## A decode function from native values to terms
@@ -337,8 +345,9 @@
 #                                ^ source.hydra
 #                                 ^^^^^^ source.hydra support.type.hydra
 #                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                        ^^^^^ source.hydra variable.other.hydra
-#                                             ^^ source.hydra
-#                                               ^^^^ source.hydra variable.other.hydra
+#                                        ^^^^^ source.hydra entity.name.type.hydra
+#                                             ^ source.hydra punctuation.separator.type.hydra
+#                                              ^ source.hydra
+#                                               ^^^^ source.hydra entity.name.type.hydra
 #                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                    ^^ source.hydra

@@ -91,9 +91,10 @@
 #       ^ source.hydra
 #        ^^^ source.hydra support.type.hydra
 #           ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#            ^^^^^^^^^^ source.hydra variable.other.hydra
-#                      ^^ source.hydra
-#                        ^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^ source.hydra entity.name.type.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
+#                        ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                   ^ source.hydra keyword.operator.annotation.hydra
 #                                    ^^ source.hydra
@@ -128,7 +129,7 @@
 #                      ^ source.hydra
 #                       ^^^^ source.hydra support.type.hydra
 #                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                            ^^^^^^^^^^ source.hydra variable.other.hydra
+#                            ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                       ^ source.hydra keyword.operator.annotation.hydra
 #                                        ^ source.hydra
@@ -158,9 +159,9 @@
 #                              ^ source.hydra
 #                               ^^^^ source.hydra support.type.hydra
 #                                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                    ^^^ source.hydra variable.other.hydra
+#                                    ^^^ source.hydra entity.name.type.hydra
 #                                       ^ source.hydra
-#                                        ^ source.hydra variable.other.hydra
+#                                        ^ source.hydra entity.name.type.hydra
 #                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                          ^^ source.hydra
 >
@@ -214,9 +215,9 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                            ^ source.hydra
-#                             ^ source.hydra variable.other.hydra
+#                             ^ source.hydra entity.name.type.hydra
 #                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                               ^ source.hydra keyword.operator.annotation.hydra
 #                                ^ source.hydra
@@ -243,7 +244,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
 #                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                    ^^^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                               ^^ source.hydra
 >  ## Any number of foreign keys, each of which must be valid for both this relation and the target relation
@@ -257,7 +258,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
 #                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                    ^^^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                               ^^ source.hydra
 >
@@ -282,9 +283,10 @@
 #                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
 #                                       ^^^ source.hydra support.type.hydra
 #                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                           ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                     ^^ source.hydra
-#                                                       ^ source.hydra variable.other.hydra
+#                                           ^^^^^^^^^^ source.hydra entity.name.type.hydra
+#                                                     ^ source.hydra punctuation.separator.type.hydra
+#                                                      ^ source.hydra
+#                                                       ^ source.hydra entity.name.type.hydra
 #                                                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                          ^^ source.hydra
@@ -308,7 +310,7 @@
 #                         ^ source.hydra
 #                          ^^^^ source.hydra support.type.hydra
 #                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                               ^ source.hydra variable.other.hydra
+#                               ^ source.hydra entity.name.type.hydra
 #                                ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                 ^ source.hydra keyword.operator.annotation.hydra
 #                                  ^ source.hydra

@@ -65,7 +65,7 @@
 #                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
 #                                   ^^^^^^^^ source.hydra support.type.hydra
 #                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                            ^ source.hydra variable.other.hydra
+#                                            ^ source.hydra entity.name.type.hydra
 #                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                               ^^ source.hydra
@@ -116,7 +116,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^ source.hydra support.type.hydra
 #                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                   ^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^ source.hydra entity.name.type.hydra
 #                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                             ^^ source.hydra
 >  ## The data rows of the table. Each row must have the same number of cells.
@@ -130,9 +130,9 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra support.type.hydra
 #            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#             ^^^^^^^ source.hydra variable.other.hydra
+#             ^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^ source.hydra
-#                     ^ source.hydra variable.other.hydra
+#                     ^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                       ^^ source.hydra
 >
@@ -162,6 +162,6 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                ^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                           ^^ source.hydra

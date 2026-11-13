@@ -97,7 +97,7 @@
 #             ^ source.hydra
 #              ^^^^^^^^ source.hydra support.type.hydra
 #                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                       ^^^^^^^^ source.hydra variable.other.hydra
+#                       ^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                ^^ source.hydra
 >  ## st_ctim / the time of last file status change, if available. Optional, as this POSIX-specific notion does not map onto all platforms
@@ -111,7 +111,7 @@
 #                   ^ source.hydra
 #                    ^^^^^^^^ source.hydra support.type.hydra
 #                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                             ^^^^^^^^ source.hydra variable.other.hydra
+#                             ^^^^^^^^ source.hydra entity.name.type.hydra
 #                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                      ^^ source.hydra
 >

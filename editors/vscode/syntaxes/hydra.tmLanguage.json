@@ -285,10 +285,38 @@
     },
 
     "type-brackets": {
-      "comment": "§3: '<' '>' are type-argument delimiters (list<t>, map<k,v>, either<a,b>, effect<t>, optional<t>, set<t>) — structural punctuation, NOT operators. The #811 comparison operators share the '<'/'>' glyphs but are forward-looking and parse-only; the pervasive landed role is the delimiter, so single '<'/'>' tokenize as brackets here. The unambiguous 2-char comparison tokens ('<=' '>=' '==') are still tagged as reserved comparison operators in #operators-reserved (matched before this rule).",
+      "comment": "§3: '<' '>' are type-argument delimiters (list<t>, map<k,v>, either<a,b>, effect<t>, optional<t>, set<t>) — structural punctuation, NOT operators. The #811 comparison operators share the '<'/'>' glyphs but are forward-looking and parse-only; the pervasive landed role is the delimiter, so single '<'/'>' tokenize as brackets here. The unambiguous 2-char comparison tokens ('<=' '>=' '==') are still tagged as reserved comparison operators in #operators-reserved (which is included before this rule). This is a begin/end block so the CONTENT between the brackets is tokenized in TYPE context (#type-args-content): a bare name there is unambiguously a type reference (there is no term position inside type-argument brackets), so it scopes as entity.name.type rather than falling through to the term-oriented variable.other catch-all. Nested '<...>' recurse.",
+      "begin": "<",
+      "end": ">",
+      "beginCaptures": { "0": { "name": "punctuation.definition.typeargs.begin.hydra" } },
+      "endCaptures": { "0": { "name": "punctuation.definition.typeargs.end.hydra" } },
+      "patterns": [ { "include": "#type-args-content" } ]
+    },
+
+    "type-args-content": {
+      "comment": "Tokens valid inside type-argument brackets '<...>' (a pure type context, §3). Reserved type-constructor keywords (list/map/record/int32/etc.) still win via #keywords-reserved; arrows via #operators-unicode; nested '<...>' recurse via #type-brackets; '(...)' grouping and pair types recurse into the full #expression; ',' separates args. A bare dotted-or-single name that reaches the final rule is a TYPE reference and scopes as entity.name.type (NOT the term-oriented variable.other). No uppercase heuristic is used: position alone (inside type-arg brackets) determines the type scope.",
       "patterns": [
-        { "match": "<", "name": "punctuation.definition.typeargs.begin.hydra" },
-        { "match": ">", "name": "punctuation.definition.typeargs.end.hydra" }
+        { "include": "#comments" },
+        { "include": "#backtick-name" },
+        { "include": "#keywords-reserved" },
+        { "include": "#operators-unicode" },
+        { "include": "#type-brackets" },
+        {
+          "comment": "Parenthesized type (grouping or a pair type, §3 pairType) inside a type-arg; recurse into the full expression grammar.",
+          "begin": "\\(",
+          "end": "\\)",
+          "patterns": [ { "include": "#expression" } ]
+        },
+        {
+          "comment": "Type-argument separator.",
+          "match": ",",
+          "name": "punctuation.separator.type.hydra"
+        },
+        {
+          "comment": "A bare type reference (qualified or single-segment) in type-argument position → type scope.",
+          "match": "[A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*",
+          "name": "entity.name.type.hydra"
+        }
       ]
     },
 

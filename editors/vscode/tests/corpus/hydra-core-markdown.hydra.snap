@@ -159,7 +159,7 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                ^^^^^ source.hydra variable.other.hydra
+#                ^^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                      ^^ source.hydra
 >
@@ -197,7 +197,7 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                ^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                       ^^ source.hydra
 >  ## An optional explicit anchor identifier for linking directly to this heading. Headings can usually derive an anchor from their rendered text, but an explicit anchor is provided for cases (e.g. renderer-specific slug rules) where that derivation is ambiguous or undesired.
@@ -249,7 +249,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                 ^^^^^^ source.hydra variable.other.hydra
+#                 ^^^^^^ source.hydra entity.name.type.hydra
 #                       ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                        ^^ source.hydra
 >  ## A hyperlink
@@ -274,7 +274,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#               ^^^^^^ source.hydra variable.other.hydra
+#               ^^^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                      ^^ source.hydra
 >  ## A raw text fragment
@@ -312,7 +312,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra support.type.hydra
 #            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#             ^^^^^^ source.hydra variable.other.hydra
+#             ^^^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                    ^^ source.hydra
 >  ## The link target, either a URL or a relative path
@@ -361,7 +361,7 @@
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
 #             ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#              ^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                       ^^ source.hydra
 >
@@ -379,7 +379,7 @@
 #                    ^ source.hydra
 #                     ^^^^ source.hydra support.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                          ^^^^^ source.hydra variable.other.hydra
+#                          ^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                ^^ source.hydra
 >
@@ -406,7 +406,7 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                ^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                       ^^ source.hydra
 >  ## An optional explicit anchor identifier for linking directly to this paragraph. Needed for elements such as rendered provisions, which are bold-led prose within a paragraph rather than a heading, so they carry no heading-derived anchor of their own.
@@ -458,7 +458,7 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                ^^^^^ source.hydra variable.other.hydra
+#                ^^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                      ^^ source.hydra
 >  ## An optional explicit anchor identifier for linking directly to this section, distinct from the heading's own anchor (a section's anchor identifies the section as a whole; a heading's identifies the heading line specifically).
@@ -510,7 +510,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra support.type.hydra
 #            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#             ^^^^^^^^ source.hydra variable.other.hydra
+#             ^^^^^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                      ^^ source.hydra
 >
@@ -528,7 +528,7 @@
 #                     ^ source.hydra
 #                      ^^^^ source.hydra support.type.hydra
 #                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                           ^^^^^^ source.hydra variable.other.hydra
+#                           ^^^^^^ source.hydra entity.name.type.hydra
 #                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                  ^^ source.hydra
 >
@@ -546,6 +546,6 @@
 #                    ^ source.hydra
 #                     ^^^^ source.hydra support.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                          ^^^^^^^^^ source.hydra variable.other.hydra
+#                          ^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                    ^^ source.hydra
