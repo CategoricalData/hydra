@@ -1,0 +1,10 @@
+## Hydra's validation test suite
+module hydra.core.test.validate.all
+
+import hydra.core.test.validate.model as model
+import hydra.core.test.validate.packaging as packaging
+import hydra.core.testing
+
+## The group of all validation tests
+term allTests =
+  TestGroup{name = "validation", description = none, subgroups = [model.allTests, packaging.allTests], `cases` = []}

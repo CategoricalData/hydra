@@ -1,0 +1,3336 @@
+## Test cases for module and package validation
+module hydra.core.test.validate.packaging
+
+import hydra.core.annotations
+import hydra.core.error.packaging
+import hydra.core.lib.lists as lists
+import hydra.core.lib.maps as maps
+import hydra.core.lib.optionals
+import hydra.core.lib.sets as sets
+import hydra.core.lib.strings as strings
+import hydra.core.model
+import hydra.core.packaging
+import hydra.core.print.error.packaging
+import hydra.core.testing
+import hydra.core.util
+import hydra.core.validate.packaging
+import hydra.core.validation
+
+## All test cases for hydra.core.validate.packaging
+term allTests =
+  TestGroup{
+    name = "validate.packaging",
+    description = none,
+    subgroups = [
+      checkConflictingModuleNamesTests,
+      checkConflictingVariantNamesTests,
+      checkDefinitionDocumentationTests,
+      checkDefinitionNameConventionTests,
+      checkDefinitionModuleNamesTests,
+      checkDefinitionOrderingTests,
+      checkDuplicateDefinitionNamesTests,
+      checkDuplicateModuleNamesTests,
+      checkModuleNameConventionTests,
+      checkModulePartitionTests,
+      checkNestedModuleNamesTests,
+      checkPackageNameConventionTests,
+      checkUndeclaredDependenciesTests,
+      kernelModuleTests,
+      kernelPackageTests,
+      profileBehaviourTests],
+    `cases` = []}
+
+term checkConflictingModuleNamesTests =
+  TestGroup{
+    name = "checkConflictingModuleNames",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "empty package: no conflicts",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkConflictingModuleNames
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = []})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "single module: no conflicts",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkConflictingModuleNames
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.foo"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.foo"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "distinct lowercase namespaces: no conflicts",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkConflictingModuleNames
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.foo"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.foo"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []},
+                        Module{
+                          name = ModuleName{"hydra.bar"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.bar"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "case-insensitive collision: hydra.fooBar vs hydra.foobar",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkConflictingModuleNames
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.fooBar"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.fooBar"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []},
+                        Module{
+                          name = ModuleName{"hydra.foobar"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.foobar"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  given(InvalidPackageError{
+                    conflictingModuleName = ConflictingModuleNameError{
+                      first = ModuleName{"hydra.fooBar"},
+                      second = ModuleName{"hydra.foobar"}}})
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term checkConflictingVariantNamesTests =
+  TestGroup{
+    name = "checkConflictingVariantNames",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "empty module: no conflicts",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkConflictingVariantNames
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = []})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term checkDefinitionDocumentationTests =
+  TestGroup{
+    name = "checkDefinitionDocumentation",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "empty module: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionDocumentation
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = []})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "documented term def: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionDocumentation
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.bar"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "undocumented term def: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionDocumentation
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.bar"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{literal = Literal{`string` = "value"}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  given(InvalidModuleError{
+                    missingDocumentation = MissingDocumentationError{
+                      moduleName = ModuleName{"hydra.foo"},
+                      name = Name{"hydra.foo.bar"}}})
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term checkDefinitionNameConventionTests =
+  TestGroup{
+    name = "checkDefinitionNameConvention",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "empty module: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionNameConvention
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = []})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "valid camelCase term def: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionNameConvention
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.someName"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "valid single-letter term def: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionNameConvention
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.x"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "underscore in term def name: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionNameConvention
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.bad_name"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  given(InvalidModuleError{
+                    invalidDefinitionName = InvalidDefinitionNameError{
+                      moduleName = ModuleName{"hydra.foo"},
+                      name = Name{"hydra.foo.bad_name"},
+                      expectedConvention = CaseConvention{
+                        camel}}})
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "uppercase-first term def name: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionNameConvention
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.BadName"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  given(InvalidModuleError{
+                    invalidDefinitionName = InvalidDefinitionNameError{
+                      moduleName = ModuleName{"hydra.foo"},
+                      name = Name{"hydra.foo.BadName"},
+                      expectedConvention = CaseConvention{
+                        camel}}})
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term checkDefinitionModuleNamesTests =
+  TestGroup{
+    name = "checkDefinitionModuleNames",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "empty module: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionModuleNames
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = []})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "definition with matching namespace: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionModuleNames
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.bar"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "definition outside namespace: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionModuleNames
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.baz.qux"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  given(InvalidModuleError{
+                    definitionNotInModuleName = DefinitionNotInModuleNameError{
+                      moduleName = ModuleName{"hydra.foo"},
+                      name = Name{"hydra.baz.qux"}}})
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term checkDefinitionOrderingTests =
+  TestGroup{
+    name = "checkDefinitionOrdering",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "empty module: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionOrdering
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = []})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "single definition: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionOrdering
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.aaa"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "two definitions in order: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionOrdering
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.aaa"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}},
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.bbb"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "two definitions out of order: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionOrdering
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.bbb"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}},
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.aaa"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  given(InvalidModuleError{
+                    definitionsOutOfOrder = DefinitionsOutOfOrderError{
+                      moduleName = ModuleName{"hydra.foo"},
+                      precedingName = Name{"hydra.foo.bbb"},
+                      followingName = Name{"hydra.foo.aaa"}}})
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "case-sensitive ASCII order (uppercase before lowercase)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDefinitionOrdering
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.IndentedExpression"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}},
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.IndentStyle"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  given(InvalidModuleError{
+                    definitionsOutOfOrder = DefinitionsOutOfOrderError{
+                      moduleName = ModuleName{"hydra.foo"},
+                      precedingName = Name{"hydra.foo.IndentedExpression"},
+                      followingName = Name{"hydra.foo.IndentStyle"}}})
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term checkDuplicateDefinitionNamesTests =
+  TestGroup{
+    name = "checkDuplicateDefinitionNames",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "empty module: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDuplicateDefinitionNames
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = []})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "distinct names: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDuplicateDefinitionNames
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.aaa"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}},
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.bbb"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "duplicate names: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDuplicateDefinitionNames
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.aaa"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}},
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.aaa"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  given(InvalidModuleError{
+                    duplicateDefinitionName = DuplicateDefinitionNameError{
+                      moduleName = ModuleName{"hydra.foo"},
+                      name = Name{"hydra.foo.aaa"}}})
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term checkDuplicateModuleNamesTests =
+  TestGroup{
+    name = "checkDuplicateModuleNames",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "empty package: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDuplicateModuleNames
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = []})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "distinct namespaces: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDuplicateModuleNames
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.foo"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.foo"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []},
+                        Module{
+                          name = ModuleName{"hydra.bar"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.bar"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "duplicate namespaces: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkDuplicateModuleNames
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.foo"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.foo"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []},
+                        Module{
+                          name = ModuleName{"hydra.foo"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.foo"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  given(InvalidPackageError{
+                    duplicateModuleName = DuplicateModuleNameError{
+                      moduleName = ModuleName{"hydra.foo"}}})
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term checkModuleNameConventionTests =
+  TestGroup{
+    name = "checkModuleNameConvention",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "single segment lowercase: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkModuleNameConvention
+                    Module{
+                      name = ModuleName{"hydra"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = []})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "dotted lowercase: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkModuleNameConvention
+                    Module{
+                      name = ModuleName{"hydra.foo.bar"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo.bar"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = []})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "dotted camelCase segments: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkModuleNameConvention
+                    Module{
+                      name = ModuleName{"hydra.core.test.testGraph"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.core.test.testGraph"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = []})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "uppercase first letter of segment: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkModuleNameConvention
+                    Module{
+                      name = ModuleName{"hydra.Foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.Foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = []})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  given(InvalidModuleError{
+                    invalidModuleNameConvention = InvalidModuleNameConventionError{
+                      moduleName = ModuleName{"hydra.Foo"}}})
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "underscore in segment: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkModuleNameConvention
+                    Module{
+                      name = ModuleName{"hydra.foo_bar"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo_bar"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = []})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  given(InvalidModuleError{
+                    invalidModuleNameConvention = InvalidModuleNameConventionError{
+                      moduleName = ModuleName{"hydra.foo_bar"}}})
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term checkModulePartitionTests =
+  TestGroup{
+    name = "checkModulePartition",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "empty universe: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        (checkModulePartition [])))
+                    "]"),
+            expected = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        []))
+                    "]")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "single package, distinct namespaces: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        (checkModulePartition
+                          [("hydra-kernel", [ModuleName{"hydra.foo"}, ModuleName{"hydra.bar"}])])))
+                    "]"),
+            expected = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        []))
+                    "]")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "two packages, distinct namespaces: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        (checkModulePartition
+                          [("hydra-kernel", [ModuleName{"hydra.foo"}]), ("hydra-java", [ModuleName{"hydra.java.coder"}])])))
+                    "]"),
+            expected = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        []))
+                    "]")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "same package repeats a namespace: not this check's concern, no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        (checkModulePartition
+                          [("hydra-kernel", [ModuleName{"hydra.foo"}, ModuleName{"hydra.foo"}])])))
+                    "]"),
+            expected = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        []))
+                    "]")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "two packages declare the same namespace: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        (checkModulePartition
+                          [("hydra-kernel", [ModuleName{"hydra.foo"}]), ("hydra-java", [ModuleName{"hydra.foo"}])])))
+                    "]"),
+            expected = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        [
+                          InvalidPackageError{
+                            moduleInMultiplePackages = ModuleInMultiplePackagesError{
+                              moduleName = ModuleName{"hydra.foo"},
+                              firstPackage = PackageName{"hydra-kernel"},
+                              secondPackage = PackageName{"hydra-java"}}}]))
+                    "]")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "three packages, one namespace collides between the first two: single finding",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        (checkModulePartition
+                          [
+                            ("hydra-kernel", [ModuleName{"hydra.foo"}]),
+                            ("hydra-java", [ModuleName{"hydra.foo"}]),
+                            ("hydra-python", [ModuleName{"hydra.bar"}])])))
+                    "]"),
+            expected = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        [
+                          InvalidPackageError{
+                            moduleInMultiplePackages = ModuleInMultiplePackagesError{
+                              moduleName = ModuleName{"hydra.foo"},
+                              firstPackage = PackageName{"hydra-kernel"},
+                              secondPackage = PackageName{"hydra-java"}}}]))
+                    "]")}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term checkNestedModuleNamesTests =
+  TestGroup{
+    name = "checkNestedModuleNames",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "empty package: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkNestedModuleNames
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = []})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "single module: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkNestedModuleNames
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.foo"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.foo"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "unrelated namespaces: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkNestedModuleNames
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.foo"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.foo"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []},
+                        Module{
+                          name = ModuleName{"hydra.bar"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.bar"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "sibling namespaces sharing a common (non-module) prefix, no nesting: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkNestedModuleNames
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.build.assembly"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.build.assembly"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []},
+                        Module{
+                          name = ModuleName{"hydra.build.modules"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.build.modules"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "string-prefix but not dotted: no error (hydra.foo is not a prefix of hydra.foobar)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkNestedModuleNames
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.foo"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.foo"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []},
+                        Module{
+                          name = ModuleName{"hydra.foobar"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.foobar"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "dotted-prefix nesting: error (outer defined before inner)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkNestedModuleNames
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.core.codegen"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.core.codegen"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []},
+                        Module{
+                          name = ModuleName{"hydra.core.codegen.docs"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.core.codegen.docs"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  given(InvalidPackageError{
+                    nestedModuleName = NestedModuleNameError{
+                      outer = ModuleName{"hydra.core.codegen"},
+                      inner = ModuleName{"hydra.core.codegen.docs"}}})
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "dotted-prefix nesting: error (inner defined before outer)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkNestedModuleNames
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.core.codegen.docs"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.core.codegen.docs"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []},
+                        Module{
+                          name = ModuleName{"hydra.core.codegen"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.core.codegen"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  given(InvalidPackageError{
+                    nestedModuleName = NestedModuleNameError{
+                      outer = ModuleName{"hydra.core.codegen"},
+                      inner = ModuleName{"hydra.core.codegen.docs"}}})
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term checkPackageNameConventionTests =
+  TestGroup{
+    name = "checkPackageNameConvention",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "single lowercase segment: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkPackageNameConvention
+                    Package{
+                      name = PackageName{"hydra"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package hydra"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = []})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "hyphen-separated lowercase: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkPackageNameConvention
+                    Package{
+                      name = PackageName{"hydra-kernel"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package hydra-kernel"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = []})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "uppercase first letter: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkPackageNameConvention
+                    Package{
+                      name = PackageName{"Hydra-kernel"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package Hydra-kernel"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = []})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  given(InvalidPackageError{
+                    invalidPackageName = InvalidPackageNameError{
+                      packageName = PackageName{"Hydra-kernel"}}})
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "underscore separator: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkPackageNameConvention
+                    Package{
+                      name = PackageName{"hydra_kernel"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package hydra_kernel"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = []})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  given(InvalidPackageError{
+                    invalidPackageName = InvalidPackageNameError{
+                      packageName = PackageName{"hydra_kernel"}}})
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "dot separator: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (checkPackageNameConvention
+                    Package{
+                      name = PackageName{"hydra.kernel"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package hydra.kernel"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = []})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  given(InvalidPackageError{
+                    invalidPackageName = InvalidPackageNameError{
+                      packageName = PackageName{"hydra.kernel"}}})
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term checkUndeclaredDependenciesTests =
+  TestGroup{
+    name = "checkUndeclaredDependencies",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "single module, no references: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        (checkUndeclaredDependencies
+                          (undeclaredDependencyOwners
+                            [
+                              Module{
+                                name = ModuleName{"hydra.foo"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.foo"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.a"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{
+                                        annotated = AnnotatedTerm{
+                                          body = Term{
+                                            literal = Literal{
+                                              `string` = "value"}},
+                                          annotation = wrapAnnotationMap
+                                              (maps.fromList
+                                                [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]}])
+                          sets.empty
+                          Module{
+                            name = ModuleName{"hydra.foo"},
+                            metadata = given(EntityMetadata{
+                                description = given("Test module hydra.foo"),
+                                comments = [],
+                                seeAlso = [],
+                                lifecycle = none,
+                                provisions = []}),
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.foo.a"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    annotated = AnnotatedTerm{
+                                      body = Term{
+                                        literal = Literal{
+                                          `string` = "value"}},
+                                      annotation = wrapAnnotationMap
+                                          (maps.fromList
+                                            [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})))
+                    "]"),
+            expected = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        []))
+                    "]")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "declared dependency covers the reference: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        (checkUndeclaredDependencies
+                          (undeclaredDependencyOwners
+                            [
+                              Module{
+                                name = ModuleName{"hydra.bar"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.bar"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.bar.b"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{
+                                        annotated = AnnotatedTerm{
+                                          body = Term{
+                                            literal = Literal{
+                                              `string` = "value"}},
+                                          annotation = wrapAnnotationMap
+                                              (maps.fromList
+                                                [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]},
+                              Module{
+                                name = ModuleName{"hydra.foo"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.foo"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [ModuleDependency{`module` = ModuleName{"hydra.bar"}, package = none}],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.a"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{variable = Name{"hydra.bar.b"}}}}]}])
+                          sets.empty
+                          Module{
+                            name = ModuleName{"hydra.foo"},
+                            metadata = given(EntityMetadata{
+                                description = given("Test module hydra.foo"),
+                                comments = [],
+                                seeAlso = [],
+                                lifecycle = none,
+                                provisions = []}),
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.bar"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.foo.a"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{variable = Name{"hydra.bar.b"}}}}]})))
+                    "]"),
+            expected = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        []))
+                    "]")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#555 regression: reference to another module's symbol with no declared dependency: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        (checkUndeclaredDependencies
+                          (undeclaredDependencyOwners
+                            [
+                              Module{
+                                name = ModuleName{"hydra.core.dsls"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.core.dsls"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.core.dsls.dslModuleName"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{
+                                        annotated = AnnotatedTerm{
+                                          body = Term{
+                                            literal = Literal{
+                                              `string` = "value"}},
+                                          annotation = wrapAnnotationMap
+                                              (maps.fromList
+                                                [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]},
+                              Module{
+                                name = ModuleName{"hydra.build.routing"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.build.routing"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.build.routing.route"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{variable = Name{"hydra.core.dsls.dslModuleName"}}}}]}])
+                          sets.empty
+                          Module{
+                            name = ModuleName{"hydra.build.routing"},
+                            metadata = given(EntityMetadata{
+                                description = given("Test module hydra.build.routing"),
+                                comments = [],
+                                seeAlso = [],
+                                lifecycle = none,
+                                provisions = []}),
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.build.routing.route"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{variable = Name{"hydra.core.dsls.dslModuleName"}}}}]})))
+                    "]"),
+            expected = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        [
+                          InvalidPackageError{
+                            undeclaredDependency = UndeclaredDependencyError{
+                              moduleName = ModuleName{"hydra.build.routing"},
+                              referencedName = Name{"hydra.core.dsls.dslModuleName"},
+                              owningModuleName = ModuleName{"hydra.core.dsls"}}}]))
+                    "]")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "transitive-only dependency does not satisfy one-hop: error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        (checkUndeclaredDependencies
+                          (undeclaredDependencyOwners
+                            [
+                              Module{
+                                name = ModuleName{"hydra.baz"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.baz"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.baz.c"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{
+                                        annotated = AnnotatedTerm{
+                                          body = Term{
+                                            literal = Literal{
+                                              `string` = "value"}},
+                                          annotation = wrapAnnotationMap
+                                              (maps.fromList
+                                                [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]},
+                              Module{
+                                name = ModuleName{"hydra.bar"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.bar"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [ModuleDependency{`module` = ModuleName{"hydra.baz"}, package = none}],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.bar.b"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{
+                                        annotated = AnnotatedTerm{
+                                          body = Term{
+                                            literal = Literal{
+                                              `string` = "value"}},
+                                          annotation = wrapAnnotationMap
+                                              (maps.fromList
+                                                [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]},
+                              Module{
+                                name = ModuleName{"hydra.foo"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.foo"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [ModuleDependency{`module` = ModuleName{"hydra.bar"}, package = none}],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.a"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{variable = Name{"hydra.baz.c"}}}}]}])
+                          sets.empty
+                          Module{
+                            name = ModuleName{"hydra.foo"},
+                            metadata = given(EntityMetadata{
+                                description = given("Test module hydra.foo"),
+                                comments = [],
+                                seeAlso = [],
+                                lifecycle = none,
+                                provisions = []}),
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.bar"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.foo.a"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{variable = Name{"hydra.baz.c"}}}}]})))
+                    "]"),
+            expected = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        [
+                          InvalidPackageError{
+                            undeclaredDependency = UndeclaredDependencyError{
+                              moduleName = ModuleName{"hydra.foo"},
+                              referencedName = Name{"hydra.baz.c"},
+                              owningModuleName = ModuleName{"hydra.baz"}}}]))
+                    "]")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "reference to a name with no known owner (e.g. a typo): no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        (checkUndeclaredDependencies
+                          (undeclaredDependencyOwners
+                            [
+                              Module{
+                                name = ModuleName{"hydra.foo"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.foo"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.a"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{variable = Name{"hydra.nonexistent.thing"}}}}]}])
+                          sets.empty
+                          Module{
+                            name = ModuleName{"hydra.foo"},
+                            metadata = given(EntityMetadata{
+                                description = given("Test module hydra.foo"),
+                                comments = [],
+                                seeAlso = [],
+                                lifecycle = none,
+                                provisions = []}),
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.foo.a"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{variable = Name{"hydra.nonexistent.thing"}}}}]})))
+                    "]"),
+            expected = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        []))
+                    "]")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "reference to a primitive name: excluded, no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        (checkUndeclaredDependencies
+                          (undeclaredDependencyOwners
+                            [
+                              Module{
+                                name = ModuleName{"hydra.core.lib.lists"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.core.lib.lists"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.core.lib.lists.map"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{
+                                        annotated = AnnotatedTerm{
+                                          body = Term{
+                                            literal = Literal{
+                                              `string` = "value"}},
+                                          annotation = wrapAnnotationMap
+                                              (maps.fromList
+                                                [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]},
+                              Module{
+                                name = ModuleName{"hydra.foo"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.foo"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.a"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{variable = Name{"hydra.core.lib.lists.map"}}}}]}])
+                          (sets.fromList
+                            [Name{"hydra.core.lib.lists.map"}])
+                          Module{
+                            name = ModuleName{"hydra.foo"},
+                            metadata = given(EntityMetadata{
+                                description = given("Test module hydra.foo"),
+                                comments = [],
+                                seeAlso = [],
+                                lifecycle = none,
+                                provisions = []}),
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.foo.a"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{variable = Name{"hydra.core.lib.lists.map"}}}}]})))
+                    "]"),
+            expected = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        []))
+                    "]")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "self-reference within the same module: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        (checkUndeclaredDependencies
+                          (undeclaredDependencyOwners
+                            [
+                              Module{
+                                name = ModuleName{"hydra.foo"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.foo"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.a"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{
+                                        annotated = AnnotatedTerm{
+                                          body = Term{
+                                            literal = Literal{
+                                              `string` = "value"}},
+                                          annotation = wrapAnnotationMap
+                                              (maps.fromList
+                                                [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}},
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.b"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{variable = Name{"hydra.foo.a"}}}}]}])
+                          sets.empty
+                          Module{
+                            name = ModuleName{"hydra.foo"},
+                            metadata = given(EntityMetadata{
+                                description = given("Test module hydra.foo"),
+                                comments = [],
+                                seeAlso = [],
+                                lifecycle = none,
+                                provisions = []}),
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.foo.a"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    annotated = AnnotatedTerm{
+                                      body = Term{
+                                        literal = Literal{
+                                          `string` = "value"}},
+                                      annotation = wrapAnnotationMap
+                                          (maps.fromList
+                                            [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}},
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.foo.b"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{variable = Name{"hydra.foo.a"}}}}]})))
+                    "]"),
+            expected = λ`_`.strings.concat2
+                  "["
+                  (strings.concat2
+                    (strings.join
+                      ";"
+                      (lists.map
+                        (λe.invalidPackageError e)
+                        []))
+                    "]")}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term kernelModuleTests =
+  TestGroup{
+    name = "kernelModule (orchestrator)",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "valid module: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (kernelModule
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.bar"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "missing documentation surfaces",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (kernelModule
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.bar"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{literal = Literal{`string` = "value"}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  given(InvalidModuleError{
+                    missingDocumentation = MissingDocumentationError{
+                      moduleName = ModuleName{"hydra.foo"},
+                      name = Name{"hydra.foo.bar"}}})
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "out-of-order definitions surface",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (kernelModule
+                    Module{
+                      name = ModuleName{"hydra.foo"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test module hydra.foo"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      definitions = [
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.bbb"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}},
+                        Definition{
+                          `term` = TermDefinition{
+                            name = Name{"hydra.foo.aaa"},
+                            metadata = none,
+                            signature = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "value"}},
+                                annotation = wrapAnnotationMap
+                                    (maps.fromList
+                                      [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]})
+                  "valid"
+                  (λe.invalidModuleError e),
+            expected = λ`_`.match
+                  given(InvalidModuleError{
+                    definitionsOutOfOrder = DefinitionsOutOfOrderError{
+                      moduleName = ModuleName{"hydra.foo"},
+                      precedingName = Name{"hydra.foo.bbb"},
+                      followingName = Name{"hydra.foo.aaa"}}})
+                  "valid"
+                  (λe.invalidModuleError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term kernelPackageTests =
+  TestGroup{
+    name = "kernelPackage (orchestrator)",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "valid package: no error",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (kernelPackage
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.foo"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.foo"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = [
+                            Definition{
+                              `term` = TermDefinition{
+                                name = Name{"hydra.foo.bar"},
+                                metadata = none,
+                                signature = none,
+                                body = Term{
+                                  annotated = AnnotatedTerm{
+                                    body = Term{
+                                      literal = Literal{
+                                        `string` = "value"}},
+                                    annotation = wrapAnnotationMap
+                                        (maps.fromList
+                                          [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "invalid package name surfaces first",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (kernelPackage
+                    Package{
+                      name = PackageName{"BadName"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package BadName"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.foo"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.foo"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = [
+                            Definition{
+                              `term` = TermDefinition{
+                                name = Name{"hydra.foo.bar"},
+                                metadata = none,
+                                signature = none,
+                                body = Term{
+                                  annotated = AnnotatedTerm{
+                                    body = Term{
+                                      literal = Literal{
+                                        `string` = "value"}},
+                                    annotation = wrapAnnotationMap
+                                        (maps.fromList
+                                          [(Name{"description"}, Term{literal = Literal{`string` = "test description"}})])}}}}]}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  given(InvalidPackageError{
+                    invalidPackageName = InvalidPackageNameError{
+                      packageName = PackageName{"BadName"}}})
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "conflicting module namespace surfaces",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (kernelPackage
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.foo"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.foo"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []},
+                        Module{
+                          name = ModuleName{"hydra.foo"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.foo"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  given(InvalidPackageError{
+                    conflictingModuleName = ConflictingModuleNameError{
+                      first = ModuleName{"hydra.foo"},
+                      second = ModuleName{"hydra.foo"}}})
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "nested module namespace surfaces",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (kernelPackage
+                    Package{
+                      name = PackageName{"test-pkg"},
+                      metadata = given(EntityMetadata{
+                          description = given("Test package test-pkg"),
+                          comments = [],
+                          seeAlso = [],
+                          lifecycle = none,
+                          provisions = []}),
+                      dependencies = [],
+                      modules = [
+                        Module{
+                          name = ModuleName{"hydra.core.codegen"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.core.codegen"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []},
+                        Module{
+                          name = ModuleName{"hydra.core.codegen.docs"},
+                          metadata = given(EntityMetadata{
+                              description = given("Test module hydra.core.codegen.docs"),
+                              comments = [],
+                              seeAlso = [],
+                              lifecycle = none,
+                              provisions = []}),
+                          dependencies = [],
+                          definitions = []}]})
+                  "valid"
+                  (λe.invalidPackageError e),
+            expected = λ`_`.match
+                  given(InvalidPackageError{
+                    nestedModuleName = NestedModuleNameError{
+                      outer = ModuleName{"hydra.core.codegen"},
+                      inner = ModuleName{"hydra.core.codegen.docs"}}})
+                  "valid"
+                  (λe.invalidPackageError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term profileBehaviourTests =
+  TestGroup{
+    name = "profile-aware behaviour",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "multi-error accumulation: two distinct rules produce two findings",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidModuleError e)
+                          (ValidationResult[errors]
+                            (`module`
+                              ValidationProfile{
+                                errorRules = sets.fromList
+                                    [
+                                      Name{"hydra.core.error.packaging.InvalidModuleError.missingDocumentation"},
+                                      Name{"hydra.core.error.packaging.InvalidModuleError.duplicateDefinitionName"}],
+                                warningRules = sets.fromList [],
+                                maxErrors = 5:int32,
+                                maxWarnings = 5:int32}
+                              ValidationResult{
+                                errors = [],
+                                warnings = []}
+                              Module{
+                                name = ModuleName{"hydra.foo"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.foo"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}},
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}}]}))))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidModuleError w)
+                          (ValidationResult[warnings]
+                            (`module`
+                              ValidationProfile{
+                                errorRules = sets.fromList
+                                    [
+                                      Name{"hydra.core.error.packaging.InvalidModuleError.missingDocumentation"},
+                                      Name{"hydra.core.error.packaging.InvalidModuleError.duplicateDefinitionName"}],
+                                warningRules = sets.fromList [],
+                                maxErrors = 5:int32,
+                                maxWarnings = 5:int32}
+                              ValidationResult{
+                                errors = [],
+                                warnings = []}
+                              Module{
+                                name = ModuleName{"hydra.foo"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.foo"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}},
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}}]}))))
+                      "]")),
+            expected = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidModuleError e)
+                          (ValidationResult[errors]
+                            ValidationResult{
+                              errors = [
+                                InvalidModuleError{
+                                  missingDocumentation = MissingDocumentationError{
+                                    moduleName = ModuleName{"hydra.foo"},
+                                    name = Name{"hydra.foo.aaa"}}},
+                                InvalidModuleError{
+                                  duplicateDefinitionName = DuplicateDefinitionNameError{
+                                    moduleName = ModuleName{"hydra.foo"},
+                                    name = Name{"hydra.foo.aaa"}}}],
+                              warnings = []})))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidModuleError w)
+                          (ValidationResult[warnings]
+                            ValidationResult{
+                              errors = [
+                                InvalidModuleError{
+                                  missingDocumentation = MissingDocumentationError{
+                                    moduleName = ModuleName{"hydra.foo"},
+                                    name = Name{"hydra.foo.aaa"}}},
+                                InvalidModuleError{
+                                  duplicateDefinitionName = DuplicateDefinitionNameError{
+                                    moduleName = ModuleName{"hydra.foo"},
+                                    name = Name{"hydra.foo.aaa"}}}],
+                              warnings = []})))
+                      "]"))}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "warning classification: both rules demoted to warnings",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidModuleError e)
+                          (ValidationResult[errors]
+                            (`module`
+                              ValidationProfile{
+                                errorRules = sets.fromList [],
+                                warningRules = sets.fromList
+                                    [
+                                      Name{"hydra.core.error.packaging.InvalidModuleError.missingDocumentation"},
+                                      Name{"hydra.core.error.packaging.InvalidModuleError.duplicateDefinitionName"}],
+                                maxErrors = 5:int32,
+                                maxWarnings = 5:int32}
+                              ValidationResult{
+                                errors = [],
+                                warnings = []}
+                              Module{
+                                name = ModuleName{"hydra.foo"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.foo"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}},
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}}]}))))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidModuleError w)
+                          (ValidationResult[warnings]
+                            (`module`
+                              ValidationProfile{
+                                errorRules = sets.fromList [],
+                                warningRules = sets.fromList
+                                    [
+                                      Name{"hydra.core.error.packaging.InvalidModuleError.missingDocumentation"},
+                                      Name{"hydra.core.error.packaging.InvalidModuleError.duplicateDefinitionName"}],
+                                maxErrors = 5:int32,
+                                maxWarnings = 5:int32}
+                              ValidationResult{
+                                errors = [],
+                                warnings = []}
+                              Module{
+                                name = ModuleName{"hydra.foo"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.foo"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}},
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}}]}))))
+                      "]")),
+            expected = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidModuleError e)
+                          (ValidationResult[errors]
+                            ValidationResult{
+                              errors = [],
+                              warnings = [
+                                InvalidModuleError{
+                                  missingDocumentation = MissingDocumentationError{
+                                    moduleName = ModuleName{"hydra.foo"},
+                                    name = Name{"hydra.foo.aaa"}}},
+                                InvalidModuleError{
+                                  duplicateDefinitionName = DuplicateDefinitionNameError{
+                                    moduleName = ModuleName{"hydra.foo"},
+                                    name = Name{"hydra.foo.aaa"}}}]})))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidModuleError w)
+                          (ValidationResult[warnings]
+                            ValidationResult{
+                              errors = [],
+                              warnings = [
+                                InvalidModuleError{
+                                  missingDocumentation = MissingDocumentationError{
+                                    moduleName = ModuleName{"hydra.foo"},
+                                    name = Name{"hydra.foo.aaa"}}},
+                                InvalidModuleError{
+                                  duplicateDefinitionName = DuplicateDefinitionNameError{
+                                    moduleName = ModuleName{"hydra.foo"},
+                                    name = Name{"hydra.foo.aaa"}}}]})))
+                      "]"))}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "rule disabling: duplicate-name rule omitted from profile",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidModuleError e)
+                          (ValidationResult[errors]
+                            (`module`
+                              ValidationProfile{
+                                errorRules = sets.fromList
+                                    [Name{"hydra.core.error.packaging.InvalidModuleError.missingDocumentation"}],
+                                warningRules = sets.fromList [],
+                                maxErrors = 5:int32,
+                                maxWarnings = 5:int32}
+                              ValidationResult{
+                                errors = [],
+                                warnings = []}
+                              Module{
+                                name = ModuleName{"hydra.foo"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.foo"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}},
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}}]}))))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidModuleError w)
+                          (ValidationResult[warnings]
+                            (`module`
+                              ValidationProfile{
+                                errorRules = sets.fromList
+                                    [Name{"hydra.core.error.packaging.InvalidModuleError.missingDocumentation"}],
+                                warningRules = sets.fromList [],
+                                maxErrors = 5:int32,
+                                maxWarnings = 5:int32}
+                              ValidationResult{
+                                errors = [],
+                                warnings = []}
+                              Module{
+                                name = ModuleName{"hydra.foo"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.foo"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}},
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}}]}))))
+                      "]")),
+            expected = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidModuleError e)
+                          (ValidationResult[errors]
+                            ValidationResult{
+                              errors = [
+                                InvalidModuleError{
+                                  missingDocumentation = MissingDocumentationError{
+                                    moduleName = ModuleName{"hydra.foo"},
+                                    name = Name{"hydra.foo.aaa"}}}],
+                              warnings = []})))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidModuleError w)
+                          (ValidationResult[warnings]
+                            ValidationResult{
+                              errors = [
+                                InvalidModuleError{
+                                  missingDocumentation = MissingDocumentationError{
+                                    moduleName = ModuleName{"hydra.foo"},
+                                    name = Name{"hydra.foo.aaa"}}}],
+                              warnings = []})))
+                      "]"))}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "maxErrors bound: only first rule collected when maxErrors=1",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidModuleError e)
+                          (ValidationResult[errors]
+                            (`module`
+                              ValidationProfile{
+                                errorRules = sets.fromList
+                                    [
+                                      Name{"hydra.core.error.packaging.InvalidModuleError.missingDocumentation"},
+                                      Name{"hydra.core.error.packaging.InvalidModuleError.duplicateDefinitionName"}],
+                                warningRules = sets.fromList [],
+                                maxErrors = 1:int32,
+                                maxWarnings = 5:int32}
+                              ValidationResult{
+                                errors = [],
+                                warnings = []}
+                              Module{
+                                name = ModuleName{"hydra.foo"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.foo"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}},
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}}]}))))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidModuleError w)
+                          (ValidationResult[warnings]
+                            (`module`
+                              ValidationProfile{
+                                errorRules = sets.fromList
+                                    [
+                                      Name{"hydra.core.error.packaging.InvalidModuleError.missingDocumentation"},
+                                      Name{"hydra.core.error.packaging.InvalidModuleError.duplicateDefinitionName"}],
+                                warningRules = sets.fromList [],
+                                maxErrors = 1:int32,
+                                maxWarnings = 5:int32}
+                              ValidationResult{
+                                errors = [],
+                                warnings = []}
+                              Module{
+                                name = ModuleName{"hydra.foo"},
+                                metadata = given(EntityMetadata{
+                                    description = given("Test module hydra.foo"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}},
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"hydra.foo.aaa"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{`string` = "value"}}}}]}))))
+                      "]")),
+            expected = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidModuleError e)
+                          (ValidationResult[errors]
+                            ValidationResult{
+                              errors = [
+                                InvalidModuleError{
+                                  missingDocumentation = MissingDocumentationError{
+                                    moduleName = ModuleName{"hydra.foo"},
+                                    name = Name{"hydra.foo.aaa"}}}],
+                              warnings = []})))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidModuleError w)
+                          (ValidationResult[warnings]
+                            ValidationResult{
+                              errors = [
+                                InvalidModuleError{
+                                  missingDocumentation = MissingDocumentationError{
+                                    moduleName = ModuleName{"hydra.foo"},
+                                    name = Name{"hydra.foo.aaa"}}}],
+                              warnings = []})))
+                      "]"))}},
+        description = none,
+        tags = [],
+        provisions = []}]}
