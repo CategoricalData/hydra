@@ -1,0 +1,2532 @@
+## Test cases for variable analysis and manipulation
+module hydra.core.test.variables
+
+import hydra.core.lib.lists as lists
+import hydra.core.lib.maps
+import hydra.core.lib.sets as sets
+import hydra.core.lib.strings as strings
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.testing
+import hydra.core.variables
+
+## Test cases for variable analysis and manipulation
+term allTests =
+  TestGroup{
+    name = "variables",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "eagerFreeVariables",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "string literal has no eager free variables",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map (λn.Name[] n) (sets.toList (eagerFreeVariablesInTerm Term{literal = Literal{`string` = "foo"}}))),
+                        "}"],
+                expected = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList {})), "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unapplied lambda body is deferred, not eager",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λn.Name[] n)
+                            (sets.toList
+                              (eagerFreeVariablesInTerm
+                                Term{lambda = Lambda{parameter = Name{"y"}, domain = none, body = Term{variable = Name{"dep"}}}}))),
+                        "}"],
+                expected = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList {})), "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "ordinary application: argument lambda stays deferred, function is eager",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λn.Name[] n)
+                            (sets.toList
+                              (eagerFreeVariablesInTerm
+                                Term{
+                                  application = Application{
+                                    function = Term{variable = Name{"bind"}},
+                                    argument = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"y"},
+                                        domain = none,
+                                        body = Term{variable = Name{"dep"}}}}}}))),
+                        "}"],
+                expected = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList {Name{"bind"}})), "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "single-argument beta-redex: body's eager reference is visible, not deferred",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λn.Name[] n)
+                            (sets.toList
+                              (eagerFreeVariablesInTerm
+                                Term{
+                                  application = Application{
+                                    function = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"vars"},
+                                        domain = none,
+                                        body = Term{variable = Name{"dep"}}}},
+                                    argument = Term{`list` = []}}}))),
+                        "}"],
+                expected = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList {Name{"dep"}})), "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "curried two-argument beta-redex: body's eager reference survives both layers",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λn.Name[] n)
+                            (sets.toList
+                              (eagerFreeVariablesInTerm
+                                Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          lambda = Lambda{
+                                            parameter = Name{"vars"},
+                                            domain = none,
+                                            body = Term{
+                                              lambda = Lambda{
+                                                parameter = Name{"mcs"},
+                                                domain = none,
+                                                body = Term{
+                                                  variable = Name{"dep"}}}}}},
+                                        argument = Term{`list` = []}}},
+                                    argument = Term{literal = Literal{`string` = "arg1"}}}}))),
+                        "}"],
+                expected = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList {Name{"dep"}})), "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "curried beta-redex: bound parameters are not themselves free",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λn.Name[] n)
+                            (sets.toList
+                              (eagerFreeVariablesInTerm
+                                Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          lambda = Lambda{
+                                            parameter = Name{"vars"},
+                                            domain = none,
+                                            body = Term{
+                                              lambda = Lambda{
+                                                parameter = Name{"mcs"},
+                                                domain = none,
+                                                body = Term{
+                                                  application = Application{
+                                                    function = Term{
+                                                      variable = Name{"vars"}},
+                                                    argument = Term{
+                                                      variable = Name{"mcs"}}}}}}}},
+                                        argument = Term{`list` = []}}},
+                                    argument = Term{literal = Literal{`string` = "arg1"}}}}))),
+                        "}"],
+                expected = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList {})), "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "partially-applied curried lambda: unapplied final layer stays deferred",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λn.Name[] n)
+                            (sets.toList
+                              (eagerFreeVariablesInTerm
+                                Term{
+                                  application = Application{
+                                    function = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"vars"},
+                                        domain = none,
+                                        body = Term{
+                                          lambda = Lambda{
+                                            parameter = Name{"mcs"},
+                                            domain = none,
+                                            body = Term{
+                                              variable = Name{"dep"}}}}}},
+                                    argument = Term{`list` = []}}}))),
+                        "}"],
+                expected = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList {})), "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "beta-redex argument is itself evaluated eagerly",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λn.Name[] n)
+                            (sets.toList
+                              (eagerFreeVariablesInTerm
+                                Term{
+                                  application = Application{
+                                    function = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"vars"},
+                                        domain = none,
+                                        body = Term{variable = Name{"vars"}}}},
+                                    argument = Term{variable = Name{"argDep"}}}}))),
+                        "}"],
+                expected = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList {Name{"argDep"}})), "}"]}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "freeVariables",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "string literal has no free variables",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map (λn.Name[] n) (sets.toList (freeVariablesInTerm Term{literal = Literal{`string` = "foo"}}))),
+                        "}"],
+                expected = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList {})), "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "single variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList (freeVariablesInTerm Term{variable = Name{"x"}}))), "}"],
+                expected = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList {Name{"x"}})), "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "bound variable is not free",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λn.Name[] n)
+                            (sets.toList
+                              (freeVariablesInTerm Term{lambda = Lambda{parameter = Name{"y"}, domain = none, body = Term{variable = Name{"y"}}}}))),
+                        "}"],
+                expected = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList {})), "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unbound variable in lambda body",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λn.Name[] n)
+                            (sets.toList
+                              (freeVariablesInTerm Term{lambda = Lambda{parameter = Name{"y"}, domain = none, body = Term{variable = Name{"x"}}}}))),
+                        "}"],
+                expected = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList {Name{"x"}})), "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mixed free and bound variables",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λn.Name[] n)
+                            (sets.toList
+                              (freeVariablesInTerm
+                                Term{
+                                  `list` = [
+                                    Term{variable = Name{"x"}},
+                                    Term{
+                                      application = Application{
+                                        function = Term{
+                                          lambda = Lambda{
+                                            parameter = Name{"y"},
+                                            domain = none,
+                                            body = Term{variable = Name{"y"}}}},
+                                        argument = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}}]}))),
+                        "}"],
+                expected = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList {Name{"x"}})), "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple free variables",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λn.Name[] n)
+                            (sets.toList
+                              (freeVariablesInTerm
+                                Term{
+                                  `list` = [
+                                    Term{variable = Name{"x"}},
+                                    Term{
+                                      application = Application{
+                                        function = Term{
+                                          lambda = Lambda{
+                                            parameter = Name{"y"},
+                                            domain = none,
+                                            body = Term{variable = Name{"y"}}}},
+                                        argument = Term{variable = Name{"y"}}}}]}))),
+                        "}"],
+                expected = λ`_`.strings.concat
+                      ["{", strings.join ", " (lists.map (λn.Name[] n) (sets.toList {Name{"x"}, Name{"y"}})), "}"]}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "normalizeTypeVariables",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "literal without type variables unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 42:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "simple let without type annotations unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          `let` = Let{
+                            bindings = [Binding{name = Name{"foo"}, `term` = Term{literal = Literal{`string` = "foo"}}, typeScheme = none}],
+                            body = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [Binding{name = Name{"foo"}, `term` = Term{literal = Literal{`string` = "foo"}}, typeScheme = none}],
+                          body = Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 42:int32}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let with monomorphic type scheme unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"foo"},
+                                `term` = Term{literal = Literal{`string` = "foo"}},
+                                typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {}})}],
+                            body = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"foo"},
+                              `term` = Term{literal = Literal{`string` = "foo"}},
+                              typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {}})}],
+                          body = Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 42:int32}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let with monomorphic binding referencing string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"foo"},
+                                `term` = Term{literal = Literal{`string` = "foo"}},
+                                typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {}})}],
+                            body = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"foo"},
+                              `term` = Term{literal = Literal{`string` = "foo"}},
+                              typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {}})}],
+                          body = Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 42:int32}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "polymorphic binding with free type variable unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"foo"},
+                                `term` = Term{variable = Name{"bar"}},
+                                typeScheme = given(TypeScheme{variables = [], body = Type{variable = Name{"a"}}, constraints = {}})}],
+                            body = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"foo"},
+                              `term` = Term{variable = Name{"bar"}},
+                              typeScheme = given(TypeScheme{variables = [], body = Type{variable = Name{"a"}}, constraints = {}})}],
+                          body = Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 42:int32}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "monomorphic binding with typed lambda unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"foo"},
+                                `term` = Term{literal = Literal{`string` = "foo"}},
+                                typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {}})}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = given(Type{
+                                    function = FunctionType{
+                                      domain = Type{
+                                        variable = Name{"a"}},
+                                      codomain = Type{
+                                        literal = LiteralType{
+                                          integer = IntegerType{
+                                            `int32`}}}}}),
+                                body = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"foo"},
+                              `term` = Term{literal = Literal{`string` = "foo"}},
+                              typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {}})}],
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"x"},
+                              domain = given(Type{
+                                  function = FunctionType{
+                                    domain = Type{
+                                      variable = Name{"a"}},
+                                    codomain = Type{
+                                      literal = LiteralType{
+                                        integer = IntegerType{
+                                          `int32`}}}}}),
+                              body = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 42:int32}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "polymorphic binding with typed lambda in body unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"foo"},
+                                `term` = Term{variable = Name{"bar"}},
+                                typeScheme = given(TypeScheme{variables = [], body = Type{variable = Name{"a"}}, constraints = {}})}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = given(Type{
+                                    function = FunctionType{
+                                      domain = Type{
+                                        variable = Name{"a"}},
+                                      codomain = Type{
+                                        literal = LiteralType{
+                                          integer = IntegerType{
+                                            `int32`}}}}}),
+                                body = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"foo"},
+                              `term` = Term{variable = Name{"bar"}},
+                              typeScheme = given(TypeScheme{variables = [], body = Type{variable = Name{"a"}}, constraints = {}})}],
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"x"},
+                              domain = given(Type{
+                                  function = FunctionType{
+                                    domain = Type{
+                                      variable = Name{"a"}},
+                                    codomain = Type{
+                                      literal = LiteralType{
+                                        integer = IntegerType{
+                                          `int32`}}}}}),
+                              body = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 42:int32}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "polymorphic identity function normalized",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"id"},
+                                `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                                typeScheme = given(TypeScheme{
+                                    variables = [Name{"a"}],
+                                    body = Type{
+                                      function = FunctionType{
+                                        domain = Type{variable = Name{"a"}},
+                                        codomain = Type{variable = Name{"a"}}}},
+                                    constraints = {}})}],
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"id"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"id"},
+                              `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                              typeScheme = given(TypeScheme{
+                                  variables = [Name{"t0"}],
+                                  body = Type{
+                                    function = FunctionType{
+                                      domain = Type{variable = Name{"t0"}},
+                                      codomain = Type{variable = Name{"t0"}}}},
+                                  constraints = {}})}],
+                          body = Term{
+                            application = Application{
+                              function = Term{
+                                variable = Name{"id"}},
+                              argument = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 42:int32}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "polymorphic const function normalized",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"const"},
+                                `term` = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"y"},
+                                        domain = none,
+                                        body = Term{variable = Name{"x"}}}}}},
+                                typeScheme = given(TypeScheme{
+                                    variables = [Name{"a"}, Name{"b"}],
+                                    body = Type{
+                                      function = FunctionType{
+                                        domain = Type{variable = Name{"a"}},
+                                        codomain = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"b"}},
+                                            codomain = Type{
+                                              variable = Name{"a"}}}}}},
+                                    constraints = {}})}],
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"const"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 42:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "foo"}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"const"},
+                              `term` = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"x"},
+                                  domain = none,
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"y"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}},
+                              typeScheme = given(TypeScheme{
+                                  variables = [Name{"t0"}, Name{"t1"}],
+                                  body = Type{
+                                    function = FunctionType{
+                                      domain = Type{variable = Name{"t0"}},
+                                      codomain = Type{
+                                        function = FunctionType{
+                                          domain = Type{
+                                            variable = Name{"t1"}},
+                                          codomain = Type{
+                                            variable = Name{"t0"}}}}}},
+                                  constraints = {}})}],
+                          body = Term{
+                            application = Application{
+                              function = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"const"}},
+                                  argument = Term{
+                                    literal = Literal{
+                                      integer = IntegerValue{
+                                        `int32` = 42:int32}}}}},
+                              argument = Term{
+                                literal = Literal{
+                                  `string` = "foo"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "binding rewriting does not affect body with typed lambda",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"id"},
+                                `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                                typeScheme = given(TypeScheme{
+                                    variables = [Name{"a"}],
+                                    body = Type{
+                                      function = FunctionType{
+                                        domain = Type{variable = Name{"a"}},
+                                        codomain = Type{variable = Name{"a"}}}},
+                                    constraints = {}})}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = given(Type{
+                                    function = FunctionType{
+                                      domain = Type{
+                                        variable = Name{"a"}},
+                                      codomain = Type{
+                                        literal = LiteralType{
+                                          integer = IntegerType{
+                                            `int32`}}}}}),
+                                body = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"id"},
+                              `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                              typeScheme = given(TypeScheme{
+                                  variables = [Name{"t0"}],
+                                  body = Type{
+                                    function = FunctionType{
+                                      domain = Type{variable = Name{"t0"}},
+                                      codomain = Type{variable = Name{"t0"}}}},
+                                  constraints = {}})}],
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"x"},
+                              domain = given(Type{
+                                  function = FunctionType{
+                                    domain = Type{
+                                      variable = Name{"a"}},
+                                    codomain = Type{
+                                      literal = LiteralType{
+                                        integer = IntegerType{
+                                          `int32`}}}}}),
+                              body = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 42:int32}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested polymorphic lets normalized",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"id"},
+                                `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                                typeScheme = given(TypeScheme{
+                                    variables = [Name{"a"}],
+                                    body = Type{
+                                      function = FunctionType{
+                                        domain = Type{variable = Name{"a"}},
+                                        codomain = Type{variable = Name{"a"}}}},
+                                    constraints = {}})}],
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"id2"},
+                                    `term` = Term{lambda = Lambda{parameter = Name{"y"}, domain = none, body = Term{variable = Name{"y"}}}},
+                                    typeScheme = given(TypeScheme{
+                                        variables = [Name{"b"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{variable = Name{"b"}},
+                                            codomain = Type{variable = Name{"b"}}}},
+                                        constraints = {}})}],
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"id"}},
+                                    argument = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"id2"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            integer = IntegerValue{
+                                              `int32` = 42:int32}}}}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"id"},
+                              `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                              typeScheme = given(TypeScheme{
+                                  variables = [Name{"t0"}],
+                                  body = Type{
+                                    function = FunctionType{
+                                      domain = Type{variable = Name{"t0"}},
+                                      codomain = Type{variable = Name{"t0"}}}},
+                                  constraints = {}})}],
+                          body = Term{
+                            `let` = Let{
+                              bindings = [
+                                Binding{
+                                  name = Name{"id2"},
+                                  `term` = Term{lambda = Lambda{parameter = Name{"y"}, domain = none, body = Term{variable = Name{"y"}}}},
+                                  typeScheme = given(TypeScheme{
+                                      variables = [Name{"t0"}],
+                                      body = Type{
+                                        function = FunctionType{
+                                          domain = Type{variable = Name{"t0"}},
+                                          codomain = Type{variable = Name{"t0"}}}},
+                                      constraints = {}})}],
+                              body = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"id"}},
+                                  argument = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"id2"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested same substitution in bindings and environment",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"id"},
+                                `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                                typeScheme = given(TypeScheme{
+                                    variables = [Name{"a"}],
+                                    body = Type{
+                                      function = FunctionType{
+                                        domain = Type{variable = Name{"a"}},
+                                        codomain = Type{variable = Name{"a"}}}},
+                                    constraints = {}})}],
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"id2"},
+                                    `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                                    typeScheme = given(TypeScheme{
+                                        variables = [Name{"a"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{variable = Name{"a"}},
+                                            codomain = Type{variable = Name{"a"}}}},
+                                        constraints = {}})}],
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"id"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 42:int32}}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"id"},
+                              `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                              typeScheme = given(TypeScheme{
+                                  variables = [Name{"t0"}],
+                                  body = Type{
+                                    function = FunctionType{
+                                      domain = Type{variable = Name{"t0"}},
+                                      codomain = Type{variable = Name{"t0"}}}},
+                                  constraints = {}})}],
+                          body = Term{
+                            `let` = Let{
+                              bindings = [
+                                Binding{
+                                  name = Name{"id2"},
+                                  `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                                  typeScheme = given(TypeScheme{
+                                      variables = [Name{"t0"}],
+                                      body = Type{
+                                        function = FunctionType{
+                                          domain = Type{variable = Name{"t0"}},
+                                          codomain = Type{variable = Name{"t0"}}}},
+                                      constraints = {}})}],
+                              body = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"id"}},
+                                  argument = Term{
+                                    literal = Literal{
+                                      integer = IntegerValue{
+                                        `int32` = 42:int32}}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "parent type variable shadows child variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"id"},
+                                `term` = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"id2"},
+                                        `term` = Term{
+                                          lambda = Lambda{
+                                            parameter = Name{"x"},
+                                            domain = given(Type{variable = Name{"a"}}),
+                                            body = Term{variable = Name{"x"}}}},
+                                        typeScheme = given(TypeScheme{
+                                            variables = [Name{"a"}],
+                                            body = Type{
+                                              function = FunctionType{
+                                                domain = Type{variable = Name{"a"}},
+                                                codomain = Type{variable = Name{"a"}}}},
+                                            constraints = {}})}],
+                                    body = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"y"},
+                                        domain = given(Type{variable = Name{"a"}}),
+                                        body = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"id2"}},
+                                            argument = Term{
+                                              variable = Name{"y"}}}}}}}},
+                                typeScheme = given(TypeScheme{
+                                    variables = [Name{"a"}],
+                                    body = Type{
+                                      function = FunctionType{
+                                        domain = Type{variable = Name{"a"}},
+                                        codomain = Type{variable = Name{"a"}}}},
+                                    constraints = {}})}],
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"id"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"id"},
+                              `term` = Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"id2"},
+                                      `term` = Term{
+                                        lambda = Lambda{
+                                          parameter = Name{"x"},
+                                          domain = given(Type{variable = Name{"t1"}}),
+                                          body = Term{variable = Name{"x"}}}},
+                                      typeScheme = given(TypeScheme{
+                                          variables = [Name{"t1"}],
+                                          body = Type{
+                                            function = FunctionType{
+                                              domain = Type{variable = Name{"t1"}},
+                                              codomain = Type{variable = Name{"t1"}}}},
+                                          constraints = {}})}],
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"y"},
+                                      domain = given(Type{variable = Name{"t0"}}),
+                                      body = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"id2"}},
+                                          argument = Term{
+                                            variable = Name{"y"}}}}}}}},
+                              typeScheme = given(TypeScheme{
+                                  variables = [Name{"t0"}],
+                                  body = Type{
+                                    function = FunctionType{
+                                      domain = Type{variable = Name{"t0"}},
+                                      codomain = Type{variable = Name{"t0"}}}},
+                                  constraints = {}})}],
+                          body = Term{
+                            application = Application{
+                              function = Term{
+                                variable = Name{"id"}},
+                              argument = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 42:int32}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "no shadowing distinct type variables",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"id"},
+                                `term` = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"id2"},
+                                        `term` = Term{
+                                          lambda = Lambda{
+                                            parameter = Name{"x"},
+                                            domain = given(Type{variable = Name{"b"}}),
+                                            body = Term{variable = Name{"x"}}}},
+                                        typeScheme = given(TypeScheme{
+                                            variables = [Name{"b"}],
+                                            body = Type{
+                                              function = FunctionType{
+                                                domain = Type{variable = Name{"b"}},
+                                                codomain = Type{variable = Name{"b"}}}},
+                                            constraints = {}})}],
+                                    body = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"y"},
+                                        domain = given(Type{variable = Name{"a"}}),
+                                        body = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"id2"}},
+                                            argument = Term{
+                                              variable = Name{"y"}}}}}}}},
+                                typeScheme = given(TypeScheme{
+                                    variables = [Name{"a"}],
+                                    body = Type{
+                                      function = FunctionType{
+                                        domain = Type{variable = Name{"a"}},
+                                        codomain = Type{variable = Name{"a"}}}},
+                                    constraints = {}})}],
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"id"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"id"},
+                              `term` = Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"id2"},
+                                      `term` = Term{
+                                        lambda = Lambda{
+                                          parameter = Name{"x"},
+                                          domain = given(Type{variable = Name{"t1"}}),
+                                          body = Term{variable = Name{"x"}}}},
+                                      typeScheme = given(TypeScheme{
+                                          variables = [Name{"t1"}],
+                                          body = Type{
+                                            function = FunctionType{
+                                              domain = Type{variable = Name{"t1"}},
+                                              codomain = Type{variable = Name{"t1"}}}},
+                                          constraints = {}})}],
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"y"},
+                                      domain = given(Type{variable = Name{"t0"}}),
+                                      body = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"id2"}},
+                                          argument = Term{
+                                            variable = Name{"y"}}}}}}}},
+                              typeScheme = given(TypeScheme{
+                                  variables = [Name{"t0"}],
+                                  body = Type{
+                                    function = FunctionType{
+                                      domain = Type{variable = Name{"t0"}},
+                                      codomain = Type{variable = Name{"t0"}}}},
+                                  constraints = {}})}],
+                          body = Term{
+                            application = Application{
+                              function = Term{
+                                variable = Name{"id"}},
+                              argument = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 42:int32}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "locally free type variable in nested binding",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (normalizeTypeVariablesInTerm
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"fun1"},
+                                `term` = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = given(Type{variable = Name{"a"}}),
+                                    body = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"y"},
+                                        domain = given(Type{variable = Name{"b"}}),
+                                        body = Term{
+                                          `let` = Let{
+                                            bindings = [
+                                              Binding{
+                                                name = Name{"fun2"},
+                                                `term` = Term{
+                                                  lambda = Lambda{
+                                                    parameter = Name{"z"},
+                                                    domain = given(Type{variable = Name{"c"}}),
+                                                    body = Term{pair = (Term{variable = Name{"z"}}, Term{variable = Name{"y"}})}}},
+                                                typeScheme = given(TypeScheme{
+                                                    variables = [Name{"c"}],
+                                                    body = Type{
+                                                      function = FunctionType{
+                                                        domain = Type{variable = Name{"c"}},
+                                                        codomain = Type{
+                                                          pair = PairType{
+                                                            first = Type{
+                                                              variable = Name{"c"}},
+                                                            second = Type{
+                                                              variable = Name{"b"}}}}}},
+                                                    constraints = {}})}],
+                                            body = Term{
+                                              application = Application{
+                                                function = Term{
+                                                  variable = Name{"fun2"}},
+                                                argument = Term{
+                                                  variable = Name{"x"}}}}}}}}}},
+                                typeScheme = given(TypeScheme{
+                                    variables = [Name{"a"}, Name{"b"}],
+                                    body = Type{
+                                      function = FunctionType{
+                                        domain = Type{variable = Name{"a"}},
+                                        codomain = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"b"}},
+                                            codomain = Type{
+                                              pair = PairType{
+                                                first = Type{
+                                                  variable = Name{"a"}},
+                                                second = Type{
+                                                  variable = Name{"b"}}}}}}}},
+                                    constraints = {}})}],
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"fun1"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "foo"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"fun1"},
+                              `term` = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"x"},
+                                  domain = given(Type{variable = Name{"t0"}}),
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"y"},
+                                      domain = given(Type{variable = Name{"t1"}}),
+                                      body = Term{
+                                        `let` = Let{
+                                          bindings = [
+                                            Binding{
+                                              name = Name{"fun2"},
+                                              `term` = Term{
+                                                lambda = Lambda{
+                                                  parameter = Name{"z"},
+                                                  domain = given(Type{variable = Name{"t2"}}),
+                                                  body = Term{pair = (Term{variable = Name{"z"}}, Term{variable = Name{"y"}})}}},
+                                              typeScheme = given(TypeScheme{
+                                                  variables = [Name{"t2"}],
+                                                  body = Type{
+                                                    function = FunctionType{
+                                                      domain = Type{variable = Name{"t2"}},
+                                                      codomain = Type{
+                                                        pair = PairType{
+                                                          first = Type{
+                                                            variable = Name{"t2"}},
+                                                          second = Type{
+                                                            variable = Name{"t1"}}}}}},
+                                                  constraints = {}})}],
+                                          body = Term{
+                                            application = Application{
+                                              function = Term{
+                                                variable = Name{"fun2"}},
+                                              argument = Term{
+                                                variable = Name{"x"}}}}}}}}}},
+                              typeScheme = given(TypeScheme{
+                                  variables = [Name{"t0"}, Name{"t1"}],
+                                  body = Type{
+                                    function = FunctionType{
+                                      domain = Type{variable = Name{"t0"}},
+                                      codomain = Type{
+                                        function = FunctionType{
+                                          domain = Type{
+                                            variable = Name{"t1"}},
+                                          codomain = Type{
+                                            pair = PairType{
+                                              first = Type{
+                                                variable = Name{"t0"}},
+                                              second = Type{
+                                                variable = Name{"t1"}}}}}}}},
+                                  constraints = {}})}],
+                          body = Term{
+                            application = Application{
+                              function = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"fun1"}},
+                                  argument = Term{
+                                    literal = Literal{
+                                      `string` = "foo"}}}},
+                              argument = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 42:int32}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "unshadowVariables",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "literal unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 42:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{variable = Name{"x"}}),
+                expected = λ`_`.`term` Term{variable = Name{"x"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "single lambda unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            variable = Name{"x"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "distinct lambda parameters unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  `list` = [Term{variable = Name{"x"}}, Term{variable = Name{"y"}}]}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"y"},
+                              domain = none,
+                              body = Term{
+                                `list` = [Term{variable = Name{"x"}}, Term{variable = Name{"y"}}]}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let with no shadowing unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none}],
+                          body = Term{
+                            variable = Name{"x"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let and lambda with distinct names unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  `list` = [Term{variable = Name{"x"}}, Term{variable = Name{"y"}}]}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none}],
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"y"},
+                              domain = none,
+                              body = Term{
+                                `list` = [Term{variable = Name{"x"}}, Term{variable = Name{"y"}}]}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "inner lambda shadows outer lambda",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  variable = Name{"x"}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"x2"},
+                              domain = none,
+                              body = Term{
+                                variable = Name{"x2"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "inner lambda shadows outer - body references both",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `list` = [
+                                Term{variable = Name{"x"}},
+                                Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            `list` = [
+                              Term{variable = Name{"x"}},
+                              Term{lambda = Lambda{parameter = Name{"x2"}, domain = none, body = Term{variable = Name{"x2"}}}}]}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "triple nested lambda same name",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x"}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"x2"},
+                              domain = none,
+                              body = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"x3"},
+                                  domain = none,
+                                  body = Term{
+                                    variable = Name{"x3"}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "two parameters shadow sequentially",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"y"},
+                                        domain = none,
+                                        body = Term{
+                                          `list` = [Term{variable = Name{"x"}}, Term{variable = Name{"y"}}]}}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"y"},
+                              domain = none,
+                              body = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"x2"},
+                                  domain = none,
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"y2"},
+                                      domain = none,
+                                      body = Term{
+                                        `list` = [Term{variable = Name{"x2"}}, Term{variable = Name{"y2"}}]}}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "lambda shadows let-bound variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  variable = Name{"x"}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none}],
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"x2"},
+                              domain = none,
+                              body = Term{
+                                variable = Name{"x2"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "lambda shadows one of multiple let bindings",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none},
+                              Binding{
+                                name = Name{"y"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  `list` = [Term{variable = Name{"x"}}, Term{variable = Name{"y"}}]}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none},
+                            Binding{
+                              name = Name{"y"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                              typeScheme = none}],
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"x2"},
+                              domain = none,
+                              body = Term{
+                                `list` = [Term{variable = Name{"x2"}}, Term{variable = Name{"y"}}]}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "inner let body with lambda shadowing outer let",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"y"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x"}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none}],
+                          body = Term{
+                            `let` = Let{
+                              bindings = [
+                                Binding{
+                                  name = Name{"y"},
+                                  `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                  typeScheme = none}],
+                              body = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"x2"},
+                                  domain = none,
+                                  body = Term{
+                                    variable = Name{"x2"}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "inner let shadows outer let - body references both",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              `list` = [
+                                Term{variable = Name{"x"}},
+                                Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"x"},
+                                        `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                        typeScheme = none}],
+                                    body = Term{variable = Name{"x"}}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none}],
+                          body = Term{
+                            `list` = [
+                              Term{variable = Name{"x"}},
+                              Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"x2"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{variable = Name{"x2"}}}}]}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "inner let shadows outer let, nested inside sibling lambdas (module-doc generation shape)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"mod"},
+                                domain = none,
+                                body = Term{
+                                  `list` = [
+                                    Term{variable = Name{"x"}},
+                                    Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"d"},
+                                        domain = none,
+                                        body = Term{
+                                          `let` = Let{
+                                            bindings = [Binding{name = Name{"x"}, `term` = Term{variable = Name{"d"}}, typeScheme = none}],
+                                            body = Term{variable = Name{"x"}}}}}}]}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none}],
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"mod"},
+                              domain = none,
+                              body = Term{
+                                `list` = [
+                                  Term{variable = Name{"x"}},
+                                  Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"d"},
+                                      domain = none,
+                                      body = Term{
+                                        `let` = Let{
+                                          bindings = [Binding{name = Name{"x2"}, `term` = Term{variable = Name{"d"}}, typeScheme = none}],
+                                          body = Term{variable = Name{"x2"}}}}}}]}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "self-recursive inner let-bound name resolves to its own renamed binding",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              `let` = Let{
+                                bindings = [Binding{name = Name{"x"}, `term` = Term{variable = Name{"x"}}, typeScheme = none}],
+                                body = Term{
+                                  variable = Name{"x"}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none}],
+                          body = Term{
+                            `let` = Let{
+                              bindings = [Binding{name = Name{"x2"}, `term` = Term{variable = Name{"x2"}}, typeScheme = none}],
+                              body = Term{
+                                variable = Name{"x2"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "shadowed lambda in function position of application",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"f"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"f"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"f"}}}},
+                                argument = Term{
+                                  variable = Name{"f"}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"f"},
+                          domain = none,
+                          body = Term{
+                            application = Application{
+                              function = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"f2"},
+                                  domain = none,
+                                  body = Term{
+                                    variable = Name{"f2"}}}},
+                              argument = Term{
+                                variable = Name{"f"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "shadowed lambdas in list elements",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `list` = [
+                                Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                                Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            `list` = [
+                              Term{lambda = Lambda{parameter = Name{"x2"}, domain = none, body = Term{variable = Name{"x2"}}}},
+                              Term{lambda = Lambda{parameter = Name{"x2"}, domain = none, body = Term{variable = Name{"x2"}}}}]}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "shadowed lambda in record field",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `record` = Record{
+                                typeName = Name{"Pair"},
+                                fields = [
+                                  Field{
+                                    name = Name{"fst"},
+                                    `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}}},
+                                  Field{name = Name{"snd"}, `term` = Term{variable = Name{"x"}}}]}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            `record` = Record{
+                              typeName = Name{"Pair"},
+                              fields = [
+                                Field{
+                                  name = Name{"fst"},
+                                  `term` = Term{lambda = Lambda{parameter = Name{"x2"}, domain = none, body = Term{variable = Name{"x2"}}}}},
+                                Field{name = Name{"snd"}, `term` = Term{variable = Name{"x"}}}]}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "shadowed lambda in case branch",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `cases` = CaseStatement{
+                                typeName = Name{"Maybe"},
+                                default = none,
+                                `cases` = [
+                                  CaseAlternative{name = Name{"nothing"}, handler = Term{literal = Literal{integer = IntegerValue{`int32` = 0:int32}}}},
+                                  CaseAlternative{
+                                    name = Name{"just"},
+                                    handler = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"x"},
+                                        domain = none,
+                                        body = Term{variable = Name{"x"}}}}}]}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            `cases` = CaseStatement{
+                              typeName = Name{"Maybe"},
+                              default = none,
+                              `cases` = [
+                                CaseAlternative{name = Name{"nothing"}, handler = Term{literal = Literal{integer = IntegerValue{`int32` = 0:int32}}}},
+                                CaseAlternative{
+                                  name = Name{"just"},
+                                  handler = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x2"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x2"}}}}}]}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "shadowed lambda in pair",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              pair = (
+                                  Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                                  Term{variable = Name{"x"}})}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            pair = (
+                                Term{lambda = Lambda{parameter = Name{"x2"}, domain = none, body = Term{variable = Name{"x2"}}}},
+                                Term{variable = Name{"x"}})}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "shadowed lambda inside optional",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `optional` = given(Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x"}}}})}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            `optional` = given(Term{
+                                lambda = Lambda{
+                                  parameter = Name{"x2"},
+                                  domain = none,
+                                  body = Term{
+                                    variable = Name{"x2"}}}})}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "shadowed lambda inside set element",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `set` = {
+                                Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            `set` = {
+                              Term{lambda = Lambda{parameter = Name{"x2"}, domain = none, body = Term{variable = Name{"x2"}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "shadowed lambda in union injection",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `inject` = Injection{
+                                typeName = Name{"Result"},
+                                field = Field{
+                                  name = Name{"ok"},
+                                  `term` = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{
+                                        variable = Name{"x"}}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            `inject` = Injection{
+                              typeName = Name{"Result"},
+                              field = Field{
+                                name = Name{"ok"},
+                                `term` = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x2"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x2"}}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "shadowed lambda inside wrapped term",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `wrap` = WrappedTerm{
+                                typeName = Name{"Age"},
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x"}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            `wrap` = WrappedTerm{
+                              typeName = Name{"Age"},
+                              body = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"x2"},
+                                  domain = none,
+                                  body = Term{
+                                    variable = Name{"x2"}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "shadowed lambda inside type lambda",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              typeLambda = TypeLambda{
+                                parameter = Name{"a"},
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x"}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            typeLambda = TypeLambda{
+                              parameter = Name{"a"},
+                              body = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"x2"},
+                                  domain = none,
+                                  body = Term{
+                                    variable = Name{"x2"}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "shadowed lambda inside type application",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              typeApplication = TypeApplicationTerm{
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x"}}}},
+                                `type` = Type{
+                                  literal = LiteralType{
+                                    `string`}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            typeApplication = TypeApplicationTerm{
+                              body = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"x2"},
+                                  domain = none,
+                                  body = Term{
+                                    variable = Name{"x2"}}}},
+                              `type` = Type{
+                                literal = LiteralType{
+                                  `string`}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "shadowed lambda inside annotated term",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x"}}}},
+                                annotation = Term{
+                                  `map` = mapKeys
+                                      (λn.Term{
+                                          variable = n})
+                                      {}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            annotated = AnnotatedTerm{
+                              body = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"x2"},
+                                  domain = none,
+                                  body = Term{
+                                    variable = Name{"x2"}}}},
+                              annotation = Term{
+                                `map` = mapKeys
+                                    (λn.Term{
+                                        variable = n})
+                                    {}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "shadowing at multiple depths",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"y"},
+                                        domain = none,
+                                        body = Term{
+                                          `list` = [Term{variable = Name{"x"}}, Term{variable = Name{"y"}}]}}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"y"},
+                              domain = none,
+                              body = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"x2"},
+                                  domain = none,
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"y2"},
+                                      domain = none,
+                                      body = Term{
+                                        `list` = [Term{variable = Name{"x2"}}, Term{variable = Name{"y2"}}]}}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let then lambda then lambda all same name",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x"}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none}],
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"x2"},
+                              domain = none,
+                              body = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"x3"},
+                                  domain = none,
+                                  body = Term{
+                                    variable = Name{"x3"}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "lambda with shadowing in let binding value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"y"},
+                                    `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"y"}},
+                                    argument = Term{
+                                      variable = Name{"x"}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            `let` = Let{
+                              bindings = [
+                                Binding{
+                                  name = Name{"y"},
+                                  `term` = Term{lambda = Lambda{parameter = Name{"x2"}, domain = none, body = Term{variable = Name{"x2"}}}},
+                                  typeScheme = none}],
+                              body = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"y"}},
+                                  argument = Term{
+                                    variable = Name{"x"}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "application without shadowing unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"f"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        application = Application{
+                          function = Term{
+                            variable = Name{"f"}},
+                          argument = Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 42:int32}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "list of literals unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          `list` = [
+                            Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                            Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                            Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested record unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (unshadowVariables
+                        Term{
+                          `record` = Record{
+                            typeName = Name{"Point"},
+                            fields = [
+                              Field{name = Name{"x"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}},
+                              Field{name = Name{"y"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}]}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"Point"},
+                          fields = [
+                            Field{name = Name{"x"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}},
+                            Field{name = Name{"y"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}

@@ -1,0 +1,2003 @@
+## Test cases for type unification operations
+module hydra.core.test.unification
+
+import hydra.core.lexical
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.lists as lists
+import hydra.core.lib.literals
+import hydra.core.lib.maps as maps
+import hydra.core.lib.pairs
+import hydra.core.lib.strings as strings
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.testing
+import hydra.core.typing
+import hydra.core.unification
+
+## Test cases for type unification operations
+term allTests =
+  TestGroup{
+    name = "unification",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "variableOccursInType",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "variable occurs in itself",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{variable = Name{"a"}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable does not occur in different variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{variable = Name{"b"}}),
+                expected = λ`_`.printBoolean false}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable does not occur in int32",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}),
+                expected = λ`_`.printBoolean false}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable does not occur in string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}),
+                expected = λ`_`.printBoolean false}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in list element type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          `list` = Type{
+                            variable = Name{"a"}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable does not occur in list of different type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          `list` = Type{
+                            variable = Name{"b"}}}),
+                expected = λ`_`.printBoolean false}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in function domain",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"a"}},
+                            codomain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in function codomain",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              variable = Name{"a"}}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable does not occur in function with different vars",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"b"}},
+                            codomain = Type{
+                              variable = Name{"c"}}}}),
+                expected = λ`_`.printBoolean false}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in optional type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          `optional` = Type{
+                            variable = Name{"a"}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in pair first",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          pair = PairType{
+                            first = Type{
+                              variable = Name{"a"}},
+                            second = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in pair second",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          pair = PairType{
+                            first = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            second = Type{
+                              variable = Name{"a"}}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in either left",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              variable = Name{"a"}},
+                            `right` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in either right",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            `right` = Type{
+                              variable = Name{"a"}}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in map key type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              variable = Name{"a"}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in map value type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            values = Type{
+                              variable = Name{"a"}}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in set type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          `set` = Type{
+                            variable = Name{"a"}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in nested list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          `list` = Type{
+                            `list` = Type{
+                              variable = Name{"a"}}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in list of functions",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          `list` = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}},
+                              codomain = Type{
+                                variable = Name{"a"}}}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable does not occur in complex type without it",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              `list` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}},
+                            codomain = Type{
+                              `optional` = Type{
+                                pair = PairType{
+                                  first = Type{
+                                    literal = LiteralType{
+                                      `string`}},
+                                  second = Type{
+                                    variable = Name{"b"}}}}}}}),
+                expected = λ`_`.printBoolean false}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs deep in complex type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              `list` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}},
+                            codomain = Type{
+                              `optional` = Type{
+                                pair = PairType{
+                                  first = Type{
+                                    literal = LiteralType{
+                                      `string`}},
+                                  second = Type{
+                                    variable = Name{"a"}}}}}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in forAll body",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          `forall` = ForallType{
+                            parameter = Name{"b"},
+                            body = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  variable = Name{"b"}},
+                                codomain = Type{
+                                  variable = Name{"a"}}}}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable occurs in forAll bound position",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printBoolean
+                      (variableOccursInType
+                        Name{"a"}
+                        Type{
+                          `forall` = ForallType{
+                            parameter = Name{"a"},
+                            body = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  variable = Name{"a"}},
+                                codomain = Type{
+                                  variable = Name{"a"}}}}}}),
+                expected = λ`_`.printBoolean true}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "unifyTypes",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "unify identical int32 types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify identical string types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify identical variable types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{variable = Name{"a"}}
+                        Type{variable = Name{"a"}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify variable with int32",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{variable = Name{"a"}}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify int32 with variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}
+                        Type{variable = Name{"a"}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify two different variables",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{variable = Name{"a"}}
+                        Type{variable = Name{"b"}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{variable = Name{"b"}}}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify list of variables with list of int32",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{
+                          `list` = Type{
+                            variable = Name{"a"}}}
+                        Type{
+                          `list` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify identical list types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{
+                          `list` = Type{
+                            literal = LiteralType{
+                              `string`}}}
+                        Type{
+                          `list` = Type{
+                            literal = LiteralType{
+                              `string`}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify function types with variables",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"a"}},
+                            codomain = Type{
+                              variable = Name{"b"}}}}
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
+                            (maps.toList
+                              (TypeSubst[]
+                                TypeSubst{{
+                                  Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}},
+                                  Name{"b"}=Type{literal = LiteralType{`string`}}}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify identical function types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify optional types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{
+                          `optional` = Type{
+                            variable = Name{"a"}}}
+                        Type{
+                          `optional` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify pair types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{
+                          pair = PairType{
+                            first = Type{
+                              variable = Name{"a"}},
+                            second = Type{
+                              variable = Name{"b"}}}}
+                        Type{
+                          pair = PairType{
+                            first = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            second = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
+                            (maps.toList
+                              (TypeSubst[]
+                                TypeSubst{{
+                                  Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}},
+                                  Name{"b"}=Type{literal = LiteralType{`string`}}}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify either types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              variable = Name{"a"}},
+                            `right` = Type{
+                              variable = Name{"b"}}}}
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            `right` = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
+                            (maps.toList
+                              (TypeSubst[]
+                                TypeSubst{{
+                                  Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}},
+                                  Name{"b"}=Type{literal = LiteralType{`string`}}}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify map types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              variable = Name{"k"}},
+                            values = Type{
+                              variable = Name{"v"}}}}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
+                            (maps.toList
+                              (TypeSubst[]
+                                TypeSubst{{
+                                  Name{"k"}=Type{literal = LiteralType{`string`}},
+                                  Name{"v"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify set types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{
+                          `set` = Type{
+                            variable = Name{"a"}}}
+                        Type{
+                          `set` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify unit types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{`unit`}
+                        Type{`unit`}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "fail to unify int32 with string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        "test"),
+                expected = λ`_`."failure"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "fail to unify list with function",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{
+                          `list` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        "test"),
+                expected = λ`_`."failure"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "occur check: variable with list containing it",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            []))
+                        Type{variable = Name{"a"}}
+                        Type{
+                          `list` = Type{
+                            variable = Name{"a"}}}
+                        "test"),
+                expected = λ`_`."failure"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify a schema name with itself",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            [Name{"Foo"}]))
+                        Type{variable = Name{"Foo"}}
+                        Type{variable = Name{"Foo"}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify a schema name (left) with a free variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            [Name{"Foo"}]))
+                        Type{variable = Name{"Foo"}}
+                        Type{variable = Name{"a"}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{variable = Name{"Foo"}}}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify a free variable with a schema name (right)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            [Name{"Foo"}]))
+                        Type{variable = Name{"a"}}
+                        Type{variable = Name{"Foo"}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{variable = Name{"Foo"}}}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "fail to unify a schema name (left) with an unrelated concrete type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{`record` = []}, constraints = {}}))
+                            [Name{"Foo"}]))
+                        Type{variable = Name{"Foo"}}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}
+                        "test"),
+                expected = λ`_`."failure"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "fail to unify an unrelated concrete type with a schema name (right)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{`record` = []}, constraints = {}}))
+                            [Name{"Foo"}]))
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}
+                        Type{variable = Name{"Foo"}}
+                        "test"),
+                expected = λ`_`."failure"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify a transparent schema name with a matching concrete type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            [Name{"Foo"}]))
+                        Type{variable = Name{"Foo"}}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"Foo"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unify a schema name nested in a list with itself",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            [Name{"Foo"}]))
+                        Type{
+                          `list` = Type{
+                            variable = Name{"Foo"}}}
+                        Type{
+                          `list` = Type{
+                            variable = Name{"Foo"}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "{",
+                        strings.join
+                          ", "
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                        "}"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "fail to unify two distinct schema names",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λts.strings.concat
+                          [
+                            "{",
+                            strings.join
+                              ", "
+                              (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] ts))),
+                            "}"])
+                      (unifyTypes
+                        emptyInferenceContext
+                        (maps.fromList
+                          (lists.map
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            [Name{"Foo"}, Name{"Bar"}]))
+                        Type{variable = Name{"Foo"}}
+                        Type{variable = Name{"Bar"}}
+                        "test"),
+                expected = λ`_`."failure"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "joinTypes",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "join identical int32",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λcs.strings.concat
+                          [
+                            "[",
+                            strings.join
+                              ", "
+                              (lists.map
+                                (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                                cs),
+                            "]"])
+                      (joinTypes
+                        emptyInferenceContext
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "[",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                            []),
+                        "]"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "join identical string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λcs.strings.concat
+                          [
+                            "[",
+                            strings.join
+                              ", "
+                              (lists.map
+                                (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                                cs),
+                            "]"])
+                      (joinTypes
+                        emptyInferenceContext
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "[",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                            []),
+                        "]"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "join list types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λcs.strings.concat
+                          [
+                            "[",
+                            strings.join
+                              ", "
+                              (lists.map
+                                (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                                cs),
+                            "]"])
+                      (joinTypes
+                        emptyInferenceContext
+                        Type{
+                          `list` = Type{
+                            variable = Name{"a"}}}
+                        Type{
+                          `list` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "[",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                            [
+                              TypeConstraint{
+                                `left` = Type{variable = Name{"a"}},
+                                `right` = Type{literal = LiteralType{integer = IntegerType{`int32`}}},
+                                comment = "join types; test"}]),
+                        "]"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "join function types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λcs.strings.concat
+                          [
+                            "[",
+                            strings.join
+                              ", "
+                              (lists.map
+                                (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                                cs),
+                            "]"])
+                      (joinTypes
+                        emptyInferenceContext
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"a"}},
+                            codomain = Type{
+                              variable = Name{"b"}}}}
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "[",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                            [
+                              TypeConstraint{
+                                `left` = Type{variable = Name{"a"}},
+                                `right` = Type{literal = LiteralType{integer = IntegerType{`int32`}}},
+                                comment = "join types; test"},
+                              TypeConstraint{
+                                `left` = Type{variable = Name{"b"}},
+                                `right` = Type{literal = LiteralType{`string`}},
+                                comment = "join types; test"}]),
+                        "]"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "join optional types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λcs.strings.concat
+                          [
+                            "[",
+                            strings.join
+                              ", "
+                              (lists.map
+                                (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                                cs),
+                            "]"])
+                      (joinTypes
+                        emptyInferenceContext
+                        Type{
+                          `optional` = Type{
+                            variable = Name{"a"}}}
+                        Type{
+                          `optional` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "[",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                            [
+                              TypeConstraint{
+                                `left` = Type{variable = Name{"a"}},
+                                `right` = Type{literal = LiteralType{integer = IntegerType{`int32`}}},
+                                comment = "join types; test"}]),
+                        "]"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "join pair types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λcs.strings.concat
+                          [
+                            "[",
+                            strings.join
+                              ", "
+                              (lists.map
+                                (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                                cs),
+                            "]"])
+                      (joinTypes
+                        emptyInferenceContext
+                        Type{
+                          pair = PairType{
+                            first = Type{
+                              variable = Name{"a"}},
+                            second = Type{
+                              variable = Name{"b"}}}}
+                        Type{
+                          pair = PairType{
+                            first = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            second = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "[",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                            [
+                              TypeConstraint{
+                                `left` = Type{variable = Name{"a"}},
+                                `right` = Type{literal = LiteralType{integer = IntegerType{`int32`}}},
+                                comment = "join types; test"},
+                              TypeConstraint{
+                                `left` = Type{variable = Name{"b"}},
+                                `right` = Type{literal = LiteralType{`string`}},
+                                comment = "join types; test"}]),
+                        "]"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "join either types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λcs.strings.concat
+                          [
+                            "[",
+                            strings.join
+                              ", "
+                              (lists.map
+                                (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                                cs),
+                            "]"])
+                      (joinTypes
+                        emptyInferenceContext
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              variable = Name{"a"}},
+                            `right` = Type{
+                              variable = Name{"b"}}}}
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            `right` = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "[",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                            [
+                              TypeConstraint{
+                                `left` = Type{variable = Name{"a"}},
+                                `right` = Type{literal = LiteralType{integer = IntegerType{`int32`}}},
+                                comment = "join types; test"},
+                              TypeConstraint{
+                                `left` = Type{variable = Name{"b"}},
+                                `right` = Type{literal = LiteralType{`string`}},
+                                comment = "join types; test"}]),
+                        "]"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "join map types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λcs.strings.concat
+                          [
+                            "[",
+                            strings.join
+                              ", "
+                              (lists.map
+                                (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                                cs),
+                            "]"])
+                      (joinTypes
+                        emptyInferenceContext
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              variable = Name{"k"}},
+                            values = Type{
+                              variable = Name{"v"}}}}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "[",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                            [
+                              TypeConstraint{
+                                `left` = Type{variable = Name{"k"}},
+                                `right` = Type{literal = LiteralType{`string`}},
+                                comment = "join types; test"},
+                              TypeConstraint{
+                                `left` = Type{variable = Name{"v"}},
+                                `right` = Type{literal = LiteralType{integer = IntegerType{`int32`}}},
+                                comment = "join types; test"}]),
+                        "]"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "join set types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λcs.strings.concat
+                          [
+                            "[",
+                            strings.join
+                              ", "
+                              (lists.map
+                                (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                                cs),
+                            "]"])
+                      (joinTypes
+                        emptyInferenceContext
+                        Type{
+                          `set` = Type{
+                            variable = Name{"a"}}}
+                        Type{
+                          `set` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "[",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                            [
+                              TypeConstraint{
+                                `left` = Type{variable = Name{"a"}},
+                                `right` = Type{literal = LiteralType{integer = IntegerType{`int32`}}},
+                                comment = "join types; test"}]),
+                        "]"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "join unit types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λcs.strings.concat
+                          [
+                            "[",
+                            strings.join
+                              ", "
+                              (lists.map
+                                (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                                cs),
+                            "]"])
+                      (joinTypes
+                        emptyInferenceContext
+                        Type{`unit`}
+                        Type{`unit`}
+                        "test"),
+                expected = λ`_`.strings.concat
+                      [
+                        "[",
+                        strings.join
+                          ", "
+                          (lists.map
+                            (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                            []),
+                        "]"]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "fail to join int32 with string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λcs.strings.concat
+                          [
+                            "[",
+                            strings.join
+                              ", "
+                              (lists.map
+                                (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                                cs),
+                            "]"])
+                      (joinTypes
+                        emptyInferenceContext
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        "test"),
+                expected = λ`_`."failure"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "fail to join list with function",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λcs.strings.concat
+                          [
+                            "[",
+                            strings.join
+                              ", "
+                              (lists.map
+                                (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                                cs),
+                            "]"])
+                      (joinTypes
+                        emptyInferenceContext
+                        Type{
+                          `list` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        "test"),
+                expected = λ`_`."failure"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "fail to join pair with either",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."failure")
+                      (λcs.strings.concat
+                          [
+                            "[",
+                            strings.join
+                              ", "
+                              (lists.map
+                                (λc.strings.concat ["(", `type` (TypeConstraint[`left`] c), " ~ ", `type` (TypeConstraint[`right`] c), ")"])
+                                cs),
+                            "]"])
+                      (joinTypes
+                        emptyInferenceContext
+                        Type{
+                          pair = PairType{
+                            first = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            second = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            `right` = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        "test"),
+                expected = λ`_`."failure"}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}
