@@ -1,0 +1,2017 @@
+## Test cases for automatic differentiation
+module hydra.core.test.differentiation
+
+import hydra.core.differentiation
+import hydra.core.lib.eithers as eithers
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.reduction
+import hydra.core.test.testGraph
+import hydra.core.testing
+import hydra.core.variables
+
+## Test cases for automatic differentiation
+term allTests =
+  TestGroup{
+    name = "differentiation",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "basic rules",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "variable wrt itself",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{variable = Name{"x"}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 1.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable wrt different variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{variable = Name{"y"}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 0.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "float64 literal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float64` = 42.0:float64}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 0.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "zero literal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float64` = 0.0:float64}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 0.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "identity function",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateFunction
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 1.0:float64}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "constant function",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateFunction
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float64` = 5.0:float64}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 0.0:float64}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "lambda binding different variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"y"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"y"},
+                          domain = none,
+                          body = Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 1.0:float64}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "lambda shadowing differentiation variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 0.0:float64}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "unary primitives",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "sin of variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.math.sin"}},
+                            argument = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        application = Application{
+                          function = Term{
+                            application = Application{
+                              function = Term{
+                                variable = Name{"hydra.core.lib.math.mulFloat64"}},
+                              argument = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"hydra.core.lib.math.cos"}},
+                                  argument = Term{
+                                    variable = Name{"x"}}}}}},
+                          argument = Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 1.0:float64}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "exp of variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.math.exp"}},
+                            argument = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        application = Application{
+                          function = Term{
+                            application = Application{
+                              function = Term{
+                                variable = Name{"hydra.core.lib.math.mulFloat64"}},
+                              argument = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"hydra.core.lib.math.exp"}},
+                                  argument = Term{
+                                    variable = Name{"x"}}}}}},
+                          argument = Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 1.0:float64}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "sin of different variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.math.sin"}},
+                            argument = Term{
+                              variable = Name{"y"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        application = Application{
+                          function = Term{
+                            application = Application{
+                              function = Term{
+                                variable = Name{"hydra.core.lib.math.mulFloat64"}},
+                              argument = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"hydra.core.lib.math.cos"}},
+                                  argument = Term{
+                                    variable = Name{"y"}}}}}},
+                          argument = Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 0.0:float64}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "binary primitives",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "add variable to itself",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.add"}},
+                                argument = Term{
+                                  variable = Name{"x"}}}},
+                            argument = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        application = Application{
+                          function = Term{
+                            application = Application{
+                              function = Term{
+                                variable = Name{"hydra.core.lib.math.addFloat64"}},
+                              argument = Term{
+                                literal = Literal{
+                                  float = FloatValue{
+                                    `float64` = 1.0:float64}}}}},
+                          argument = Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 1.0:float64}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiply variable by itself",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.mul"}},
+                                argument = Term{
+                                  variable = Name{"x"}}}},
+                            argument = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        application = Application{
+                          function = Term{
+                            application = Application{
+                              function = Term{
+                                variable = Name{"hydra.core.lib.math.addFloat64"}},
+                              argument = Term{
+                                application = Application{
+                                  function = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.mulFloat64"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}},
+                                  argument = Term{
+                                    literal = Literal{
+                                      float = FloatValue{
+                                        `float64` = 1.0:float64}}}}}}},
+                          argument = Term{
+                            application = Application{
+                              function = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"hydra.core.lib.math.mulFloat64"}},
+                                  argument = Term{
+                                    variable = Name{"x"}}}},
+                              argument = Term{
+                                literal = Literal{
+                                  float = FloatValue{
+                                    `float64` = 1.0:float64}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "subtract constant from variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.sub"}},
+                                argument = Term{
+                                  variable = Name{"x"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float64` = 5.0:float64}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        application = Application{
+                          function = Term{
+                            application = Application{
+                              function = Term{
+                                variable = Name{"hydra.core.lib.math.subFloat64"}},
+                              argument = Term{
+                                literal = Literal{
+                                  float = FloatValue{
+                                    `float64` = 1.0:float64}}}}},
+                          argument = Term{
+                            literal = Literal{
+                              float = FloatValue{
+                                `float64` = 0.0:float64}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "chain rule",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "nested sin(cos(x))",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.math.sin"}},
+                            argument = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.cos"}},
+                                argument = Term{
+                                  variable = Name{"x"}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        application = Application{
+                          function = Term{
+                            application = Application{
+                              function = Term{
+                                variable = Name{"hydra.core.lib.math.mulFloat64"}},
+                              argument = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"hydra.core.lib.math.cos"}},
+                                  argument = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.cos"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}}}}}},
+                          argument = Term{
+                            application = Application{
+                              function = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"hydra.core.lib.math.mulFloat64"}},
+                                  argument = Term{
+                                    application = Application{
+                                      function = Term{
+                                        lambda = Lambda{
+                                          parameter = Name{"_x"},
+                                          domain = none,
+                                          body = Term{
+                                            application = Application{
+                                              function = Term{
+                                                variable = Name{"hydra.core.lib.math.negateFloat64"}},
+                                              argument = Term{
+                                                application = Application{
+                                                  function = Term{
+                                                    variable = Name{"hydra.core.lib.math.sin"}},
+                                                  argument = Term{
+                                                    variable = Name{"_x"}}}}}}}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}}}},
+                              argument = Term{
+                                literal = Literal{
+                                  float = FloatValue{
+                                    `float64` = 1.0:float64}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "structural",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "list of terms",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{
+                          `list` = [Term{variable = Name{"x"}}, Term{literal = Literal{float = FloatValue{`float64` = 5.0:float64}}}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{float = FloatValue{`float64` = 1.0:float64}}},
+                          Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "pair of terms",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm
+                        Name{"x"}
+                        Term{
+                          pair = (Term{variable = Name{"x"}}, Term{literal = Literal{float = FloatValue{`float64` = 5.0:float64}}})}),
+                expected = λ`_`.`term`
+                      Term{
+                        pair = (
+                            Term{literal = Literal{float = FloatValue{`float64` = 1.0:float64}}},
+                            Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unit term",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (differentiateTerm Name{"x"} Term{`unit`}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 0.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "evaluate derivatives",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "d/dx(x) at 3.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    variable = Name{"x"}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 1.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(42.0) at 3.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    literal = Literal{
+                                      float = FloatValue{
+                                        `float64` = 42.0:float64}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 0.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(x+x) at 3.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.add"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 2.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(x*x) at 3.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.mul"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 6.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(x*x) at 5.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 5.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.mul"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 10.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(x-5) at 7.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 7.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.sub"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          float = FloatValue{
+                                            `float64` = 5.0:float64}}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 1.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(sin(x)) at 0.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 0.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.sin"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 1.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(sin(x)) at pi/2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.5707963267948966:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.sin"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 6.12323399574e-17:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(cos(x)) at 1.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.cos"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = -0.841470984808:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(cos(x)) at pi",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.141592653589793:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.cos"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = -1.22464679915e-16:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(exp(x)) at 0.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 0.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.exp"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 1.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(exp(x)) at 1.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.exp"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 2.71828182846:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(log(x)) at 1.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.log"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 1.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(log(x)) at e",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 2.718281828459045:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.log"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 0.367879441171:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(sqrt(x)) at 4.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 4.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.sqrt"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 0.25:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(x^3) at 2.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 2.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.pow"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          float = FloatValue{
+                                            `float64` = 3.0:float64}}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 12.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(sin(cos(x))) at 0.5",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 0.5:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.sin"}},
+                                      argument = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.cos"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = -0.30635890919:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(sin(cos(x))) at 1.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.sin"}},
+                                      argument = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.cos"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = -0.721606149063:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(exp(sin(x))) at 0.0",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 0.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.exp"}},
+                                      argument = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.sin"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 1.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "d/dx(x*sin(x)) at pi",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 12:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 3.141592653589793:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.mul"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}},
+                                      argument = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.sin"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = -3.14159265359:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "gradient check",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "x^2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 2.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.mul"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 4.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "sin(x)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.sin"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 0.5403:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "exp(x)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 0.5:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.exp"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 1.6487:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "x^3",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.5:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.pow"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          float = FloatValue{
+                                            `float64` = 3.0:float64}}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 6.75:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "log(x)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 2.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.log"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 0.5:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "cos(x)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.cos"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = -0.84147:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "sin(cos(x))",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.sin"}},
+                                      argument = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.cos"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = -0.72161:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "x*sin(x)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.roundFloat64"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}},
+                            argument = replaceFreeTermVariable
+                                Name{"x"}
+                                Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 2.0:float64}}}
+                                (differentiateTerm
+                                  Name{"x"}
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.mul"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}},
+                                      argument = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.sin"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}}}})}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 7.7004e-2:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "gradient",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "add two variables",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (gradient
+                        Name{"Gradient"}
+                        [Name{"x"}, Name{"y"}]
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.addFloat64"}},
+                                argument = Term{
+                                  variable = Name{"x"}}}},
+                            argument = Term{
+                              variable = Name{"y"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"Gradient"},
+                          fields = [
+                            Field{
+                              name = Name{"x"},
+                              `term` = Term{
+                                application = Application{
+                                  function = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.addFloat64"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          float = FloatValue{
+                                            `float64` = 1.0:float64}}}}},
+                                  argument = Term{
+                                    literal = Literal{
+                                      float = FloatValue{
+                                        `float64` = 0.0:float64}}}}}},
+                            Field{
+                              name = Name{"y"},
+                              `term` = Term{
+                                application = Application{
+                                  function = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.addFloat64"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          float = FloatValue{
+                                            `float64` = 0.0:float64}}}}},
+                                  argument = Term{
+                                    literal = Literal{
+                                      float = FloatValue{
+                                        `float64` = 1.0:float64}}}}}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "product of two variables",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (gradient
+                        Name{"Gradient"}
+                        [Name{"x"}, Name{"y"}]
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.mulFloat64"}},
+                                argument = Term{
+                                  variable = Name{"x"}}}},
+                            argument = Term{
+                              variable = Name{"y"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"Gradient"},
+                          fields = [
+                            Field{
+                              name = Name{"x"},
+                              `term` = Term{
+                                application = Application{
+                                  function = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.addFloat64"}},
+                                      argument = Term{
+                                        application = Application{
+                                          function = Term{
+                                            application = Application{
+                                              function = Term{
+                                                variable = Name{"hydra.core.lib.math.mulFloat64"}},
+                                              argument = Term{
+                                                variable = Name{"x"}}}},
+                                          argument = Term{
+                                            literal = Literal{
+                                              float = FloatValue{
+                                                `float64` = 0.0:float64}}}}}}},
+                                  argument = Term{
+                                    application = Application{
+                                      function = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.mulFloat64"}},
+                                          argument = Term{
+                                            variable = Name{"y"}}}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          float = FloatValue{
+                                            `float64` = 1.0:float64}}}}}}}},
+                            Field{
+                              name = Name{"y"},
+                              `term` = Term{
+                                application = Application{
+                                  function = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.math.addFloat64"}},
+                                      argument = Term{
+                                        application = Application{
+                                          function = Term{
+                                            application = Application{
+                                              function = Term{
+                                                variable = Name{"hydra.core.lib.math.mulFloat64"}},
+                                              argument = Term{
+                                                variable = Name{"x"}}}},
+                                          argument = Term{
+                                            literal = Literal{
+                                              float = FloatValue{
+                                                `float64` = 1.0:float64}}}}}}},
+                                  argument = Term{
+                                    application = Application{
+                                      function = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"hydra.core.lib.math.mulFloat64"}},
+                                          argument = Term{
+                                            variable = Name{"y"}}}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          float = FloatValue{
+                                            `float64` = 0.0:float64}}}}}}}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "single variable partial",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (gradient
+                        Name{"Gradient"}
+                        [Name{"x"}, Name{"y"}]
+                        Term{variable = Name{"x"}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"Gradient"},
+                          fields = [
+                            Field{name = Name{"x"}, `term` = Term{literal = Literal{float = FloatValue{`float64` = 1.0:float64}}}},
+                            Field{name = Name{"y"}, `term` = Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "constant",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (gradient
+                        Name{"Gradient"}
+                        [Name{"x"}, Name{"y"}]
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float64` = 7.0:float64}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"Gradient"},
+                          fields = [
+                            Field{name = Name{"x"}, `term` = Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}}},
+                            Field{name = Name{"y"}, `term` = Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}

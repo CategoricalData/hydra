@@ -1,0 +1,1500 @@
+## Test cases for dependency analysis and let-term transformations
+module hydra.core.test.dependencies
+
+import hydra.core.constants
+import hydra.core.dependencies
+import hydra.core.lib.maps as maps
+import hydra.core.lib.pairs
+import hydra.core.lib.strings
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.testing
+
+## Test cases for dependency analysis and let-term transformations
+term allTests =
+  TestGroup{
+    name = "dependencies",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "simplifyTerm",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "const application with literal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (simplifyTerm
+                        Term{
+                          application = Application{
+                            function = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "foo"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "foo"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "identity application",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (simplifyTerm
+                        Term{
+                          application = Application{
+                            function = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  `list` = [Term{variable = Name{"x"}}, Term{variable = Name{"x"}}]}}},
+                            argument = Term{
+                              variable = Name{"y"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [Term{variable = Name{"y"}}, Term{variable = Name{"y"}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unused parameter",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (simplifyTerm
+                        Term{
+                          application = Application{
+                            function = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "foo"}}}},
+                            argument = Term{
+                              variable = Name{"y"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "foo"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested lambda applications",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (simplifyTerm
+                        Term{
+                          application = Application{
+                            function = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"a"},
+                                        domain = none,
+                                        body = Term{
+                                          `list` = [Term{literal = Literal{`string` = "foo"}}, Term{variable = Name{"a"}}]}}},
+                                    argument = Term{
+                                      variable = Name{"x"}}}}}},
+                            argument = Term{
+                              variable = Name{"y"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [Term{literal = Literal{`string` = "foo"}}, Term{variable = Name{"y"}}]}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "flattenLetTerms",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "non-let term unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (flattenLetTerms
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 42:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "list term unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (flattenLetTerms
+                        Term{
+                          `list` = [Term{literal = Literal{`string` = "foo"}}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [Term{literal = Literal{`string` = "foo"}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "sequential lets in body are flattened",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (flattenLetTerms
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"y"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  `list` = [Term{variable = Name{"x"}}, Term{variable = Name{"y"}}]}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none},
+                            Binding{
+                              name = Name{"y"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                              typeScheme = none}],
+                          body = Term{
+                            `list` = [Term{variable = Name{"x"}}, Term{variable = Name{"y"}}]}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested binding in let value is flattened",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (flattenLetTerms
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"a"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none},
+                              Binding{
+                                name = Name{"b"},
+                                `term` = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"x"},
+                                        `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                        typeScheme = none},
+                                      Binding{
+                                        name = Name{"y"},
+                                        `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                        typeScheme = none}],
+                                    body = Term{`list` = [Term{variable = Name{"x"}}, Term{variable = Name{"y"}}]}}},
+                                typeScheme = none}],
+                            body = Term{
+                              `list` = [Term{variable = Name{"a"}}, Term{variable = Name{"b"}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"a"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none},
+                            Binding{
+                              name = Name{"b_x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none},
+                            Binding{
+                              name = Name{"b_y"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                              typeScheme = none},
+                            Binding{
+                              name = Name{"b"},
+                              `term` = Term{`list` = [Term{variable = Name{"b_x"}}, Term{variable = Name{"b_y"}}]},
+                              typeScheme = none}],
+                          body = Term{
+                            `list` = [Term{variable = Name{"a"}}, Term{variable = Name{"b"}}]}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple levels of nesting are flattened",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (flattenLetTerms
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"a"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none},
+                              Binding{
+                                name = Name{"b"},
+                                `term` = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"x"},
+                                        `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                        typeScheme = none},
+                                      Binding{
+                                        name = Name{"y"},
+                                        `term` = Term{
+                                          `let` = Let{
+                                            bindings = [
+                                              Binding{
+                                                name = Name{"p"},
+                                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 137:int32}}},
+                                                typeScheme = none},
+                                              Binding{
+                                                name = Name{"q"},
+                                                `term` = Term{
+                                                  `list` = [Term{variable = Name{"x"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 5:int32}}}]},
+                                                typeScheme = none}],
+                                            body = Term{`list` = [Term{variable = Name{"a"}}, Term{variable = Name{"q"}}]}}},
+                                        typeScheme = none}],
+                                    body = Term{`list` = [Term{variable = Name{"x"}}, Term{variable = Name{"y"}}]}}},
+                                typeScheme = none}],
+                            body = Term{
+                              `list` = [Term{variable = Name{"a"}}, Term{variable = Name{"b"}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"a"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none},
+                            Binding{
+                              name = Name{"b_x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none},
+                            Binding{
+                              name = Name{"b_y_p"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 137:int32}}},
+                              typeScheme = none},
+                            Binding{
+                              name = Name{"b_y_q"},
+                              `term` = Term{
+                                `list` = [Term{variable = Name{"b_x"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 5:int32}}}]},
+                              typeScheme = none},
+                            Binding{
+                              name = Name{"b_y"},
+                              `term` = Term{`list` = [Term{variable = Name{"a"}}, Term{variable = Name{"b_y_q"}}]},
+                              typeScheme = none},
+                            Binding{
+                              name = Name{"b"},
+                              `term` = Term{`list` = [Term{variable = Name{"b_x"}}, Term{variable = Name{"b_y"}}]},
+                              typeScheme = none}],
+                          body = Term{
+                            `list` = [Term{variable = Name{"a"}}, Term{variable = Name{"b"}}]}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "liftLambdaAboveLet",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "simple let with lambda in body",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  variable = Name{"x"}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"y"},
+                          domain = none,
+                          body = Term{
+                            `let` = Let{
+                              bindings = [
+                                Binding{
+                                  name = Name{"x"},
+                                  `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                  typeScheme = none}],
+                              body = Term{
+                                variable = Name{"x"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "bare lambda unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            variable = Name{"x"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "bare let unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                              typeScheme = none}],
+                          body = Term{
+                            variable = Name{"x"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "lambda with let in body unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"y"},
+                            domain = none,
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"x"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  variable = Name{"x"}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"y"},
+                          domain = none,
+                          body = Term{
+                            `let` = Let{
+                              bindings = [
+                                Binding{
+                                  name = Name{"x"},
+                                  `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                  typeScheme = none}],
+                              body = Term{
+                                variable = Name{"x"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let with two nested lambdas",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"z"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x"}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"y"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"z"},
+                              domain = none,
+                              body = Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"x"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{
+                                    variable = Name{"x"}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "lambda inside let body already above let",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"z"},
+                                        `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                        typeScheme = none}],
+                                    body = Term{
+                                      variable = Name{"z"}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"y"},
+                              domain = none,
+                              body = Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"z"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{
+                                    variable = Name{"z"}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let without lambda in body unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                typeScheme = none},
+                              Binding{name = Name{"y"}, `term` = Term{literal = Literal{`string` = "hello"}}, typeScheme = none}],
+                            body = Term{
+                              pair = (Term{variable = Name{"x"}}, Term{variable = Name{"y"}})}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                              typeScheme = none},
+                            Binding{name = Name{"y"}, `term` = Term{literal = Literal{`string` = "hello"}}, typeScheme = none}],
+                          body = Term{
+                            pair = (Term{variable = Name{"x"}}, Term{variable = Name{"y"}})}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple let bindings with lambda",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                typeScheme = none},
+                              Binding{name = Name{"y"}, `term` = Term{literal = Literal{`string` = "hello"}}, typeScheme = none}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"z"},
+                                domain = none,
+                                body = Term{
+                                  variable = Name{"x"}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"z"},
+                          domain = none,
+                          body = Term{
+                            `let` = Let{
+                              bindings = [
+                                Binding{
+                                  name = Name{"x"},
+                                  `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                  typeScheme = none},
+                                Binding{name = Name{"y"}, `term` = Term{literal = Literal{`string` = "hello"}}, typeScheme = none}],
+                              body = Term{
+                                variable = Name{"x"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested lets with lambda at innermost level",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              `let` = Let{
+                                bindings = [Binding{name = Name{"y"}, `term` = Term{literal = Literal{`string` = "hello"}}, typeScheme = none}],
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"z"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x"}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"z"},
+                          domain = none,
+                          body = Term{
+                            `let` = Let{
+                              bindings = [
+                                Binding{
+                                  name = Name{"x"},
+                                  `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                  typeScheme = none}],
+                              body = Term{
+                                `let` = Let{
+                                  bindings = [Binding{name = Name{"y"}, `term` = Term{literal = Literal{`string` = "hello"}}, typeScheme = none}],
+                                  body = Term{
+                                    variable = Name{"x"}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "lambda between two lets",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  `let` = Let{
+                                    bindings = [Binding{name = Name{"z"}, `term` = Term{literal = Literal{`string` = "hello"}}, typeScheme = none}],
+                                    body = Term{
+                                      variable = Name{"x"}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"y"},
+                          domain = none,
+                          body = Term{
+                            `let` = Let{
+                              bindings = [
+                                Binding{
+                                  name = Name{"x"},
+                                  `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                  typeScheme = none}],
+                              body = Term{
+                                `let` = Let{
+                                  bindings = [Binding{name = Name{"z"}, `term` = Term{literal = Literal{`string` = "hello"}}, typeScheme = none}],
+                                  body = Term{
+                                    variable = Name{"x"}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple lambdas between nested lets",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"a"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"y"},
+                                    domain = none,
+                                    body = Term{
+                                      `let` = Let{
+                                        bindings = [
+                                          Binding{
+                                            name = Name{"b"},
+                                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                            typeScheme = none}],
+                                        body = Term{
+                                          variable = Name{"a"}}}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"y"},
+                              domain = none,
+                              body = Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"a"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{
+                                    `let` = Let{
+                                      bindings = [
+                                        Binding{
+                                          name = Name{"b"},
+                                          `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                          typeScheme = none}],
+                                      body = Term{
+                                        variable = Name{"a"}}}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple lambdas already above let",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"z"},
+                                        `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                        typeScheme = none}],
+                                    body = Term{
+                                      variable = Name{"z"}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"y"},
+                              domain = none,
+                              body = Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"z"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{
+                                    variable = Name{"z"}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "annotation above let containing lambda",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"x"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"y"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x"}}}}}},
+                            annotation = Term{
+                              `map` = maps.mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        annotated = AnnotatedTerm{
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"y"},
+                              domain = none,
+                              body = Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"x"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{
+                                    variable = Name{"x"}}}}}},
+                          annotation = Term{
+                            `map` = maps.mapKeys
+                                (λn.Term{
+                                    variable = n})
+                                {}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "annotation above lambda in let body",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"y"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x"}}}},
+                                annotation = Term{
+                                  `map` = maps.mapKeys
+                                      (λn.Term{
+                                          variable = n})
+                                      {}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"y"},
+                          domain = none,
+                          body = Term{
+                            annotated = AnnotatedTerm{
+                              body = Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"x"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{
+                                    variable = Name{"x"}}}},
+                              annotation = Term{
+                                `map` = maps.mapKeys
+                                    (λn.Term{
+                                        variable = n})
+                                    {}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "annotation between two lambdas",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  annotated = AnnotatedTerm{
+                                    body = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"z"},
+                                        domain = none,
+                                        body = Term{
+                                          variable = Name{"x"}}}},
+                                    annotation = Term{
+                                      `map` = maps.mapKeys
+                                          (λn.Term{
+                                              variable = n})
+                                          {}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"y"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"z"},
+                              domain = none,
+                              body = Term{
+                                annotated = AnnotatedTerm{
+                                  body = Term{
+                                    `let` = Let{
+                                      bindings = [
+                                        Binding{
+                                          name = Name{"x"},
+                                          `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                          typeScheme = none}],
+                                      body = Term{
+                                        variable = Name{"x"}}}},
+                                  annotation = Term{
+                                    `map` = maps.mapKeys
+                                        (λn.Term{
+                                            variable = n})
+                                        {}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "annotation on the body of lambda in let",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  annotated = AnnotatedTerm{
+                                    body = Term{
+                                      variable = Name{"x"}},
+                                    annotation = Term{
+                                      `map` = maps.mapKeys
+                                          (λn.Term{
+                                              variable = n})
+                                          {}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"y"},
+                          domain = none,
+                          body = Term{
+                            `let` = Let{
+                              bindings = [
+                                Binding{
+                                  name = Name{"x"},
+                                  `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                  typeScheme = none}],
+                              body = Term{
+                                annotated = AnnotatedTerm{
+                                  body = Term{
+                                    variable = Name{"x"}},
+                                  annotation = Term{
+                                    `map` = maps.mapKeys
+                                        (λn.Term{
+                                            variable = n})
+                                        {}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "annotation on lambda already above let",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"x"},
+                                        `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                        typeScheme = none}],
+                                    body = Term{
+                                      variable = Name{"x"}}}}}},
+                            annotation = Term{
+                              `map` = maps.mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        annotated = AnnotatedTerm{
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"y"},
+                              domain = none,
+                              body = Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"x"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{
+                                    variable = Name{"x"}}}}}},
+                          annotation = Term{
+                            `map` = maps.mapKeys
+                                (λn.Term{
+                                    variable = n})
+                                {}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let-lambda inside a list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          `list` = [
+                            Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                            Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"x"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"y"},
+                                    domain = none,
+                                    body = Term{variable = Name{"x"}}}}}},
+                            Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                          Term{
+                            lambda = Lambda{
+                              parameter = Name{"y"},
+                              domain = none,
+                              body = Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"x"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{variable = Name{"x"}}}}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let-lambda in multiple list elements",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          `list` = [
+                            Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"x"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"y"},
+                                    domain = none,
+                                    body = Term{variable = Name{"x"}}}}}},
+                            Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"z"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"w"},
+                                    domain = none,
+                                    body = Term{variable = Name{"z"}}}}}}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [
+                          Term{
+                            lambda = Lambda{
+                              parameter = Name{"y"},
+                              domain = none,
+                              body = Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"x"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{variable = Name{"x"}}}}}},
+                          Term{
+                            lambda = Lambda{
+                              parameter = Name{"w"},
+                              domain = none,
+                              body = Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"z"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{variable = Name{"z"}}}}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let-lambda in a let binding value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"f"},
+                                `term` = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"x"},
+                                        `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                        typeScheme = none}],
+                                    body = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"y"},
+                                        domain = none,
+                                        body = Term{variable = Name{"x"}}}}}},
+                                typeScheme = none}],
+                            body = Term{
+                              variable = Name{"f"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"f"},
+                              `term` = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"y"},
+                                  domain = none,
+                                  body = Term{
+                                    `let` = Let{
+                                      bindings = [
+                                        Binding{
+                                          name = Name{"x"},
+                                          `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                          typeScheme = none}],
+                                      body = Term{variable = Name{"x"}}}}}},
+                              typeScheme = none}],
+                          body = Term{
+                            variable = Name{"f"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let-lambda inside a pair",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          pair = (
+                              Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"x"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"y"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}},
+                              Term{literal = Literal{`string` = "test"}})}),
+                expected = λ`_`.`term`
+                      Term{
+                        pair = (
+                            Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"x"},
+                                        `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                        typeScheme = none}],
+                                    body = Term{variable = Name{"x"}}}}}},
+                            Term{literal = Literal{`string` = "test"}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let-lambda in both elements of a pair",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          pair = (
+                              Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"x"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"y"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}},
+                              Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"z"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"w"},
+                                      domain = none,
+                                      body = Term{variable = Name{"z"}}}}}})}),
+                expected = λ`_`.`term`
+                      Term{
+                        pair = (
+                            Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"x"},
+                                        `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                        typeScheme = none}],
+                                    body = Term{variable = Name{"x"}}}}}},
+                            Term{
+                              lambda = Lambda{
+                                parameter = Name{"w"},
+                                domain = none,
+                                body = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"z"},
+                                        `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                        typeScheme = none}],
+                                    body = Term{variable = Name{"z"}}}}}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let-lambda inside lambda body",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (liftLambdaAboveLet
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"outer"},
+                            domain = none,
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"x"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"inner"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x"}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"outer"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"inner"},
+                              domain = none,
+                              body = Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"x"},
+                                      `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                      typeScheme = none}],
+                                  body = Term{
+                                    variable = Name{"x"}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "topologicalSortBindings",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "isolated bindings",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (λgroup.`list`
+                          (λpair.concat
+                              ["(", Name[] (first pair), ", ", `term` (second pair), ")"])
+                          group)
+                      (topologicalSortBindingMap
+                        (maps.fromList
+                          [(Name{"a"}, Term{literal = Literal{`string` = "foo"}}), (Name{"b"}, Term{literal = Literal{`string` = "bar"}})])),
+                expected = λ`_`.`list`
+                      (λgroup.`list`
+                          (λpair.concat
+                              ["(", Name[] (first pair), ", ", `term` (second pair), ")"])
+                          group)
+                      [[(Name{"a"}, Term{literal = Literal{`string` = "foo"}})], [(Name{"b"}, Term{literal = Literal{`string` = "bar"}})]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "single recursive binding",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (λgroup.`list`
+                          (λpair.concat
+                              ["(", Name[] (first pair), ", ", `term` (second pair), ")"])
+                          group)
+                      (topologicalSortBindingMap
+                        (maps.fromList
+                          [(Name{"a"}, Term{`list` = [Term{variable = Name{"a"}}]})])),
+                expected = λ`_`.`list`
+                      (λgroup.`list`
+                          (λpair.concat
+                              ["(", Name[] (first pair), ", ", `term` (second pair), ")"])
+                          group)
+                      [[(Name{"a"}, Term{`list` = [Term{variable = Name{"a"}}]})]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mutually recursive bindings",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (λgroup.`list`
+                          (λpair.concat
+                              ["(", Name[] (first pair), ", ", `term` (second pair), ")"])
+                          group)
+                      (topologicalSortBindingMap
+                        (maps.fromList
+                          [(Name{"a"}, Term{`list` = [Term{variable = Name{"b"}}]}), (Name{"b"}, Term{`list` = [Term{variable = Name{"a"}}]})])),
+                expected = λ`_`.`list`
+                      (λgroup.`list`
+                          (λpair.concat
+                              ["(", Name[] (first pair), ", ", `term` (second pair), ")"])
+                          group)
+                      [[(Name{"a"}, Term{`list` = [Term{variable = Name{"b"}}]}), (Name{"b"}, Term{`list` = [Term{variable = Name{"a"}}]})]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mixed bindings",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (λgroup.`list`
+                          (λpair.concat
+                              ["(", Name[] (first pair), ", ", `term` (second pair), ")"])
+                          group)
+                      (topologicalSortBindingMap
+                        (maps.fromList
+                          [
+                            (Name{"a"}, Term{variable = Name{"b"}}),
+                            (Name{"b"}, Term{`list` = [Term{variable = Name{"a"}}, Term{variable = Name{"c"}}]}),
+                            (Name{"c"}, Term{literal = Literal{`string` = "foo"}}),
+                            (Name{"d"}, Term{literal = Literal{`string` = "bar"}})])),
+                expected = λ`_`.`list`
+                      (λgroup.`list`
+                          (λpair.concat
+                              ["(", Name[] (first pair), ", ", `term` (second pair), ")"])
+                          group)
+                      [
+                        [(Name{"c"}, Term{literal = Literal{`string` = "foo"}})],
+                        [
+                          (Name{"a"}, Term{variable = Name{"b"}}),
+                          (Name{"b"}, Term{`list` = [Term{variable = Name{"a"}}, Term{variable = Name{"c"}}]})],
+                        [(Name{"d"}, Term{literal = Literal{`string` = "bar"}})]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "type-annotated binding is dependency-free",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (λgroup.`list`
+                          (λpair.concat
+                              ["(", Name[] (first pair), ", ", `term` (second pair), ")"])
+                          group)
+                      (topologicalSortBindingMap
+                        (maps.fromList
+                          [
+                            (
+                              Name{"a"},
+                              Term{
+                                annotated = AnnotatedTerm{
+                                  body = Term{variable = Name{"b"}},
+                                  annotation = Term{
+                                    `map` = maps.mapKeys
+                                        (λn.Term{variable = n})
+                                        {keyType=Term{literal = Literal{`string` = "someType"}}}}}}),
+                            (Name{"b"}, Term{literal = Literal{`string` = "bar"}})])),
+                expected = λ`_`.`list`
+                      (λgroup.`list`
+                          (λpair.concat
+                              ["(", Name[] (first pair), ", ", `term` (second pair), ")"])
+                          group)
+                      [
+                        [
+                          (
+                            Name{"a"},
+                            Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{variable = Name{"b"}},
+                                annotation = Term{
+                                  `map` = maps.mapKeys
+                                      (λn.Term{variable = n})
+                                      {keyType=Term{literal = Literal{`string` = "someType"}}}}}})],
+                        [(Name{"b"}, Term{literal = Literal{`string` = "bar"}})]]}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}
