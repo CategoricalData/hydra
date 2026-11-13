@@ -1,0 +1,67 @@
+## Test cases for qualified-name construction
+module hydra.core.test.names
+
+import hydra.core.model
+import hydra.core.names
+import hydra.core.testing
+
+## Test cases for hydra.core.names
+term allTests = TestGroup{name = "names", description = none, subgroups = [composeProvisionNameTests], `cases` = []}
+
+## Test cases for composeProvisionName
+term composeProvisionNameTests =
+  TestGroup{
+    name = "composeProvisionName",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "definition with namespace",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.Name[]
+                  (composeProvisionName
+                    Name{"hydra.core.lib.lists.concat"}
+                    "emptyLists"),
+            expected = λ`_`."hydra.core.lib.lists.concat.emptyLists"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "local name with no namespace",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.Name[]
+                  (composeProvisionName
+                    Name{"concat"}
+                    "emptyLists"),
+            expected = λ`_`."concat.emptyLists"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "module name as the enclosing entity",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.Name[]
+                  (composeProvisionName
+                    Name{"hydra.core.model"}
+                    "termOrdering"),
+            expected = λ`_`."hydra.core.model.termOrdering"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "composing onto an already-composed provision name (module > definition > provision)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.Name[]
+                  (composeProvisionName
+                    (composeProvisionName
+                      Name{"hydra.core.lib.lists"}
+                      "concat")
+                    "emptyLists"),
+            expected = λ`_`."hydra.core.lib.lists.concat.emptyLists"}},
+        description = none,
+        tags = [],
+        provisions = []}]}
