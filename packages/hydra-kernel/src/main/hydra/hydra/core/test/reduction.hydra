@@ -1,0 +1,2265 @@
+## Test cases for term reduction/evaluation mechanics
+module hydra.core.test.reduction
+
+import hydra.core.lib.eithers as eithers
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.reduction
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## Test cases for term reduction mechanics
+term allTests =
+  TestGroup{
+    name = "reduction",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "beta reduction",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "identity function applied to literal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  variable = Name{"x"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 42:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "constant function",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 1:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 1:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested application",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"y"},
+                                        domain = none,
+                                        body = Term{
+                                          variable = Name{"x"}}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 1:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 2:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 1:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "monomorphic primitives",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "toUpper on lowercase",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.strings.toUpper"}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "hello"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "HELLO"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "toUpper on mixed case",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.strings.toUpper"}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "Hello World"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "HELLO WORLD"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "toUpper on empty string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.strings.toUpper"}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = ""}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = ""}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "toLower on uppercase",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.strings.toLower"}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "HELLO"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "hello"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string length",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.strings.length"}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "hello"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 5:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string length of empty",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.strings.length"}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = ""}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 0:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "add two positive integers",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.add"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 3:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 5:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 8:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "add negative and positive",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.add"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = -10:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 3:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = -7:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "add with zero",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.add"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 0:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 42:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "subtract integers",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.sub"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 10:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 3:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 7:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiply integers",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.mul"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 6:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 7:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 42:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiply by zero",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.mul"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 100:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 0:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 0:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "divide integers",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.div"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 20:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 4:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `optional` = given(Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 5:int32}}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "modulo",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.mod"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 17:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 5:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `optional` = given(Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 2:int32}}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "splitOn basic",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.strings.splitOn"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = ","}}}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "a,b,c"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{`string` = "a"}},
+                          Term{literal = Literal{`string` = "b"}},
+                          Term{literal = Literal{`string` = "c"}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "cat2 strings",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.strings.concat2"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "world"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "helloworld"}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "polymorphic primitives",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "length of integer list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.lists.length"}},
+                            argument = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 3:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "length of string list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.lists.length"}},
+                            argument = Term{
+                              `list` = [Term{literal = Literal{`string` = "a"}}, Term{literal = Literal{`string` = "b"}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 2:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "length of empty list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.lists.length"}},
+                            argument = Term{
+                              `list` = []}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 0:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "length of single element list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.lists.length"}},
+                            argument = Term{
+                              `list` = [Term{literal = Literal{`boolean` = true}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 1:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "maybeHead of integer list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.lists.head"}},
+                            argument = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `optional` = given(Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 10:int32}}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "maybeHead of string list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.lists.head"}},
+                            argument = Term{
+                              `list` = [Term{literal = Literal{`string` = "first"}}, Term{literal = Literal{`string` = "second"}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `optional` = given(Term{
+                            literal = Literal{
+                              `string` = "first"}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "maybeLast of integer list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.lists.last"}},
+                            argument = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `optional` = given(Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 30:int32}}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "concat two integer lists",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.lists.concat2"}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]}}},
+                            argument = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 4:int32}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 4:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "concat with empty list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.lists.concat2"}},
+                                argument = Term{
+                                  `list` = []}}},
+                            argument = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "reverse integer list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.lists.reverse"}},
+                            argument = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "reverse empty list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.lists.reverse"}},
+                            argument = Term{
+                              `list` = []}}}),
+                expected = λ`_`.`term` Term{`list` = []}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "nullary primitives",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty set has size zero",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.sets.size"}},
+                            argument = Term{
+                              variable = Name{"hydra.core.lib.sets.empty"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 0:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "literals as values",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "integer literal is a value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 42:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "negative integer literal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = -17:int32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = -17:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "zero integer literal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 0:int32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 0:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string literal is a value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          literal = Literal{
+                            `string` = "hello"}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "hello"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "empty string literal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          literal = Literal{
+                            `string` = ""}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = ""}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string with special characters",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          literal = Literal{
+                            `string` = "hello\nworld\ttab"}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "hello\nworld\ttab"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "boolean true is a value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          literal = Literal{
+                            `boolean` = true}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "boolean false is a value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          literal = Literal{
+                            `boolean` = false}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "float literal is a value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float64` = 3.14:float64}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 3.14:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "negative float literal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float64` = -2.718:float64}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = -2.718:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "zero float literal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float64` = 0.0:float64}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 0.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "list reduction",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty list is a value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{`list` = []}),
+                expected = λ`_`.`term` Term{`list` = []}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "list of literals is a value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          `list` = [
+                            Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                            Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                            Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "list with reducible element",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          `list` = [
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{variable = Name{"x"}}}},
+                                argument = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "optional reduction",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "nothing is a value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{`optional` = none}),
+                expected = λ`_`.`term` Term{`optional` = none}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "just literal is a value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          `optional` = given(Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}})}),
+                expected = λ`_`.`term`
+                      Term{
+                        `optional` = given(Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 42:int32}}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "just with reducible content",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          `optional` = given(Term{
+                              application = Application{
+                                function = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      variable = Name{"x"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}}}})}),
+                expected = λ`_`.`term`
+                      Term{
+                        `optional` = given(Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 42:int32}}})}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "alpha conversion",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "variable at top level",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (alphaConvert
+                        Name{"x"}
+                        Name{"y"}
+                        Term{variable = Name{"x"}}),
+                expected = λ`_`.`term` Term{variable = Name{"y"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable in list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (alphaConvert
+                        Name{"x"}
+                        Name{"y"}
+                        Term{
+                          `list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}, Term{variable = Name{"x"}}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}, Term{variable = Name{"y"}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "lambda with different variable is transparent",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (alphaConvert
+                        Name{"x"}
+                        Name{"y"}
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"z"},
+                            domain = none,
+                            body = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                Term{variable = Name{"x"}},
+                                Term{variable = Name{"z"}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"z"},
+                          domain = none,
+                          body = Term{
+                            `list` = [
+                              Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                              Term{variable = Name{"y"}},
+                              Term{variable = Name{"z"}}]}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "lambda with same variable is opaque",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (alphaConvert
+                        Name{"x"}
+                        Name{"y"}
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                Term{variable = Name{"x"}},
+                                Term{variable = Name{"z"}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            `list` = [
+                              Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                              Term{variable = Name{"x"}},
+                              Term{variable = Name{"z"}}]}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested lambda outer variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (alphaConvert
+                        Name{"x"}
+                        Name{"y"}
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"a"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"b"},
+                                domain = none,
+                                body = Term{
+                                  variable = Name{"x"}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"a"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"b"},
+                              domain = none,
+                              body = Term{
+                                variable = Name{"y"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested lambda shadows outer",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (alphaConvert
+                        Name{"x"}
+                        Name{"z"}
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  variable = Name{"x"}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"y"},
+                              domain = none,
+                              body = Term{
+                                variable = Name{"x"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "application with variable",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (alphaConvert
+                        Name{"x"}
+                        Name{"y"}
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"f"}},
+                            argument = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        application = Application{
+                          function = Term{
+                            variable = Name{"f"}},
+                          argument = Term{
+                            variable = Name{"y"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "application with both variables same",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (alphaConvert
+                        Name{"x"}
+                        Name{"y"}
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"x"}},
+                            argument = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        application = Application{
+                          function = Term{
+                            variable = Name{"y"}},
+                          argument = Term{
+                            variable = Name{"y"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "type reduction",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "unit type unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<type reduction error>>")
+                      (λt.`type` t)
+                      (betaReduceType
+                        testContext
+                        testGraph
+                        Type{`unit`}),
+                expected = λ`_`.`type` Type{`unit`}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string type unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<type reduction error>>")
+                      (λt.`type` t)
+                      (betaReduceType
+                        testContext
+                        testGraph
+                        Type{
+                          literal = LiteralType{
+                            `string`}}),
+                expected = λ`_`.`type`
+                      Type{
+                        literal = LiteralType{
+                          `string`}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "int32 type unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<type reduction error>>")
+                      (λt.`type` t)
+                      (betaReduceType
+                        testContext
+                        testGraph
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "identity type applied to string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<type reduction error>>")
+                      (λt.`type` t)
+                      (betaReduceType
+                        testContext
+                        testGraph
+                        Type{
+                          application = ApplicationType{
+                            function = Type{
+                              `forall` = ForallType{
+                                parameter = Name{"t"},
+                                body = Type{
+                                  function = FunctionType{
+                                    domain = Type{
+                                      variable = Name{"t"}},
+                                    codomain = Type{
+                                      variable = Name{"t"}}}}}},
+                            argument = Type{
+                              literal = LiteralType{
+                                `string`}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        function = FunctionType{
+                          domain = Type{
+                            literal = LiteralType{
+                              `string`}},
+                          codomain = Type{
+                            literal = LiteralType{
+                              `string`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "constant type ignores argument",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<type reduction error>>")
+                      (λt.`type` t)
+                      (betaReduceType
+                        testContext
+                        testGraph
+                        Type{
+                          application = ApplicationType{
+                            function = Type{
+                              `forall` = ForallType{
+                                parameter = Name{"x"},
+                                body = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}},
+                            argument = Type{
+                              literal = LiteralType{
+                                `boolean`}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested forall first application",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<type reduction error>>")
+                      (λt.`type` t)
+                      (betaReduceType
+                        testContext
+                        testGraph
+                        Type{
+                          application = ApplicationType{
+                            function = Type{
+                              `forall` = ForallType{
+                                parameter = Name{"x"},
+                                body = Type{
+                                  `forall` = ForallType{
+                                    parameter = Name{"y"},
+                                    body = Type{
+                                      function = FunctionType{
+                                        domain = Type{
+                                          variable = Name{"x"}},
+                                        codomain = Type{
+                                          variable = Name{"y"}}}}}}}},
+                            argument = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `forall` = ForallType{
+                          parameter = Name{"y"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}},
+                              codomain = Type{
+                                variable = Name{"y"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested forall both applications",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<type reduction error>>")
+                      (λt.`type` t)
+                      (betaReduceType
+                        testContext
+                        testGraph
+                        Type{
+                          application = ApplicationType{
+                            function = Type{
+                              application = ApplicationType{
+                                function = Type{
+                                  `forall` = ForallType{
+                                    parameter = Name{"x"},
+                                    body = Type{
+                                      `forall` = ForallType{
+                                        parameter = Name{"y"},
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"x"}},
+                                            codomain = Type{
+                                              variable = Name{"y"}}}}}}}},
+                                argument = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}},
+                            argument = Type{
+                              literal = LiteralType{
+                                `string`}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        function = FunctionType{
+                          domain = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}},
+                          codomain = Type{
+                            literal = LiteralType{
+                              `string`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "list type applied",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<type reduction error>>")
+                      (λt.`type` t)
+                      (betaReduceType
+                        testContext
+                        testGraph
+                        Type{
+                          application = ApplicationType{
+                            function = Type{
+                              `forall` = ForallType{
+                                parameter = Name{"a"},
+                                body = Type{
+                                  `list` = Type{
+                                    variable = Name{"a"}}}}},
+                            argument = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `list` = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "optional type applied",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<type reduction error>>")
+                      (λt.`type` t)
+                      (betaReduceType
+                        testContext
+                        testGraph
+                        Type{
+                          application = ApplicationType{
+                            function = Type{
+                              `forall` = ForallType{
+                                parameter = Name{"a"},
+                                body = Type{
+                                  `optional` = Type{
+                                    variable = Name{"a"}}}}},
+                            argument = Type{
+                              literal = LiteralType{
+                                `string`}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `optional` = Type{
+                          literal = LiteralType{
+                            `string`}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "etaExpandTerm",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "integer literal unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."eta expansion failed")
+                      (λt.`term` t)
+                      (etaExpandTypedTerm
+                        testContext
+                        testGraph
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 42:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string list unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."eta expansion failed")
+                      (λt.`term` t)
+                      (etaExpandTypedTerm
+                        testContext
+                        testGraph
+                        Term{
+                          `list` = [Term{literal = Literal{`string` = "foo"}}, Term{literal = Literal{`string` = "bar"}}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [Term{literal = Literal{`string` = "foo"}}, Term{literal = Literal{`string` = "bar"}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "fully applied binary function unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."eta expansion failed")
+                      (λt.`term` t)
+                      (etaExpandTypedTerm
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.strings.splitOn"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "foo"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "bar"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        application = Application{
+                          function = Term{
+                            application = Application{
+                              function = Term{
+                                variable = Name{"hydra.core.lib.strings.splitOn"}},
+                              argument = Term{
+                                literal = Literal{
+                                  `string` = "foo"}}}},
+                          argument = Term{
+                            literal = Literal{
+                              `string` = "bar"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "lambda with fully applied primitive unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."eta expansion failed")
+                      (λt.`term` t)
+                      (etaExpandTypedTerm
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.strings.splitOn"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = ","}}}},
+                                argument = Term{
+                                  variable = Name{"x"}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            application = Application{
+                              function = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"hydra.core.lib.strings.splitOn"}},
+                                  argument = Term{
+                                    literal = Literal{
+                                      `string` = ","}}}},
+                              argument = Term{
+                                variable = Name{"x"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "lambda returning constant unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."eta expansion failed")
+                      (λt.`term` t)
+                      (etaExpandTypedTerm
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 42:int32}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "bare unary primitive unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."eta expansion failed")
+                      (λt.`term` t)
+                      (etaExpandTypedTerm
+                        testContext
+                        testGraph
+                        Term{
+                          variable = Name{"hydra.core.lib.strings.toLower"}}),
+                expected = λ`_`.`term`
+                      Term{
+                        variable = Name{"hydra.core.lib.strings.toLower"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "bare binary primitive unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."eta expansion failed")
+                      (λt.`term` t)
+                      (etaExpandTypedTerm
+                        testContext
+                        testGraph
+                        Term{
+                          variable = Name{"hydra.core.lib.strings.splitOn"}}),
+                expected = λ`_`.`term`
+                      Term{
+                        variable = Name{"hydra.core.lib.strings.splitOn"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "partially applied binary primitive expands to one lambda",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."eta expansion failed")
+                      (λt.`term` t)
+                      (etaExpandTypedTerm
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.strings.splitOn"}},
+                            argument = Term{
+                              variable = Name{"foo"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"v1"},
+                          domain = none,
+                          body = Term{
+                            application = Application{
+                              function = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"hydra.core.lib.strings.splitOn"}},
+                                  argument = Term{
+                                    variable = Name{"foo"}}}},
+                              argument = Term{
+                                variable = Name{"v1"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "projection expands to lambda",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."eta expansion failed")
+                      (λt.`term` t)
+                      (etaExpandTypedTerm
+                        testContext
+                        testGraph
+                        Term{
+                          `project` = Projection{
+                            typeName = Name{"Person"},
+                            fieldName = Name{"firstName"}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"v1"},
+                          domain = none,
+                          body = Term{
+                            application = Application{
+                              function = Term{
+                                `project` = Projection{
+                                  typeName = Name{"Person"},
+                                  fieldName = Name{"firstName"}}},
+                              argument = Term{
+                                variable = Name{"v1"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "partial application inside lambda expands",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."eta expansion failed")
+                      (λt.`term` t)
+                      (etaExpandTypedTerm
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.strings.splitOn"}},
+                                argument = Term{
+                                  variable = Name{"x"}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"v1"},
+                              domain = none,
+                              body = Term{
+                                application = Application{
+                                  function = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.strings.splitOn"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}},
+                                  argument = Term{
+                                    variable = Name{"v1"}}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let with constant body unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."eta expansion failed")
+                      (λt.`term` t)
+                      (etaExpandTypedTerm
+                        testContext
+                        testGraph
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"foo"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 137:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"foo"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 137:int32}}},
+                              typeScheme = none}],
+                          body = Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 42:int32}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "let with bare primitive value unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."eta expansion failed")
+                      (λt.`term` t)
+                      (etaExpandTypedTerm
+                        testContext
+                        testGraph
+                        Term{
+                          `let` = Let{
+                            bindings = [Binding{name = Name{"foo"}, `term` = Term{variable = Name{"hydra.core.lib.strings.splitOn"}}, typeScheme = none}],
+                            body = Term{
+                              variable = Name{"foo"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `let` = Let{
+                          bindings = [Binding{name = Name{"foo"}, `term` = Term{variable = Name{"hydra.core.lib.strings.splitOn"}}, typeScheme = none}],
+                          body = Term{
+                            variable = Name{"foo"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "fully applied unary unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."eta expansion failed")
+                      (λt.`term` t)
+                      (etaExpandTypedTerm
+                        testContext
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.strings.toLower"}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "FOO"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        application = Application{
+                          function = Term{
+                            variable = Name{"hydra.core.lib.strings.toLower"}},
+                          argument = Term{
+                            literal = Literal{
+                              `string` = "FOO"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "partial application in list expands",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λ`_`."eta expansion failed")
+                      (λt.`term` t)
+                      (etaExpandTypedTerm
+                        testContext
+                        testGraph
+                        Term{
+                          `list` = [
+                            Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{`list` = [Term{literal = Literal{`string` = "foo"}}]}}},
+                            Term{
+                              application = Application{
+                                function = Term{variable = Name{"hydra.core.lib.strings.splitOn"}},
+                                argument = Term{literal = Literal{`string` = "bar"}}}}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [
+                          Term{
+                            lambda = Lambda{
+                              parameter = Name{"x"},
+                              domain = none,
+                              body = Term{`list` = [Term{literal = Literal{`string` = "foo"}}]}}},
+                          Term{
+                            lambda = Lambda{
+                              parameter = Name{"v1"},
+                              domain = none,
+                              body = Term{
+                                application = Application{
+                                  function = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.core.lib.strings.splitOn"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          `string` = "bar"}}}},
+                                  argument = Term{variable = Name{"v1"}}}}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}

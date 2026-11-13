@@ -1,0 +1,2523 @@
+## Test cases for core rewrite/fold combinators
+module hydra.core.test.rewriting
+
+import hydra.core.coders
+import hydra.core.lib.equality
+import hydra.core.lib.lists as lists
+import hydra.core.lib.logic
+import hydra.core.lib.maps
+import hydra.core.lib.math
+import hydra.core.lib.pairs
+import hydra.core.lib.strings as strings
+import hydra.core.model
+import hydra.core.print.model as model
+import hydra.core.rewriting
+import hydra.core.testing
+
+## Test cases for core rewrite/fold combinators
+term allTests =
+  TestGroup{
+    name = "rewriting",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "foldOverTerm",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "collect labels from single node - pre-order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        `list` = lists.map
+                            (λlit.Term{
+                                literal = lit})
+                            (foldOverTerm
+                              TraversalOrder{pre}
+                              (λacc,`term`.lists.concat
+                                  [acc, cases(Term){pair=λp.cases(Term){literal=λlit.[lit], `_`=[]} (first p), `_`=[]} `term`])
+                              []
+                              Term{
+                                pair = (Term{literal = Literal{`string` = "a"}}, Term{`list` = []})})},
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [Term{literal = Literal{`string` = "a"}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "collect labels from tree - pre-order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        `list` = lists.map
+                            (λlit.Term{
+                                literal = lit})
+                            (foldOverTerm
+                              TraversalOrder{pre}
+                              (λacc,`term`.lists.concat
+                                  [acc, cases(Term){pair=λp.cases(Term){literal=λlit.[lit], `_`=[]} (first p), `_`=[]} `term`])
+                              []
+                              Term{
+                                pair = (
+                                    Term{literal = Literal{`string` = "a"}},
+                                    Term{
+                                      `list` = [
+                                        Term{pair = (Term{literal = Literal{`string` = "b"}}, Term{`list` = []})},
+                                        Term{
+                                          pair = (
+                                              Term{literal = Literal{`string` = "c"}},
+                                              Term{`list` = [Term{pair = (Term{literal = Literal{`string` = "d"}}, Term{`list` = []})}]})}]})})},
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{`string` = "a"}},
+                          Term{literal = Literal{`string` = "b"}},
+                          Term{literal = Literal{`string` = "c"}},
+                          Term{literal = Literal{`string` = "d"}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "collect labels from single node - post-order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        `list` = lists.map
+                            (λlit.Term{
+                                literal = lit})
+                            (foldOverTerm
+                              TraversalOrder{post}
+                              (λacc,`term`.lists.concat
+                                  [acc, cases(Term){pair=λp.cases(Term){literal=λlit.[lit], `_`=[]} (first p), `_`=[]} `term`])
+                              []
+                              Term{
+                                pair = (Term{literal = Literal{`string` = "a"}}, Term{`list` = []})})},
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [Term{literal = Literal{`string` = "a"}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "collect labels from tree - post-order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        `list` = lists.map
+                            (λlit.Term{
+                                literal = lit})
+                            (foldOverTerm
+                              TraversalOrder{post}
+                              (λacc,`term`.lists.concat
+                                  [acc, cases(Term){pair=λp.cases(Term){literal=λlit.[lit], `_`=[]} (first p), `_`=[]} `term`])
+                              []
+                              Term{
+                                pair = (
+                                    Term{literal = Literal{`string` = "a"}},
+                                    Term{
+                                      `list` = [
+                                        Term{pair = (Term{literal = Literal{`string` = "b"}}, Term{`list` = []})},
+                                        Term{
+                                          pair = (
+                                              Term{literal = Literal{`string` = "c"}},
+                                              Term{`list` = [Term{pair = (Term{literal = Literal{`string` = "d"}}, Term{`list` = []})}]})}]})})},
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{`string` = "b"}},
+                          Term{literal = Literal{`string` = "d"}},
+                          Term{literal = Literal{`string` = "c"}},
+                          Term{literal = Literal{`string` = "a"}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "sum int32 literals",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = foldOverTerm
+                                TraversalOrder{
+                                  pre}
+                                (λacc,`term`.add
+                                    acc
+                                    (cases(Term){
+                                      literal=λlit.cases(Literal){
+                                            integer=λintVal.cases(IntegerValue){
+                                                  `int32`=λn.n,
+                                                  `_`=0:int32}
+                                                  intVal,
+                                            `_`=0:int32}
+                                            lit,
+                                      `_`=0:int32}
+                                      `term`))
+                                0:int32
+                                Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                    Term{
+                                      application = Application{
+                                        function = Term{
+                                          lambda = Lambda{
+                                            parameter = Name{"x"},
+                                            domain = none,
+                                            body = Term{variable = Name{"x"}}}},
+                                        argument = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}]}}}},
+                expected = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 52:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "collect list lengths - pre-order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        `list` = lists.map
+                            (λn.Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = n}}})
+                            (foldOverTerm
+                              TraversalOrder{pre}
+                              (λacc,`term`.lists.concat
+                                  [acc, cases(Term){`list`=λelems.[lists.length elems], `_`=[]} `term`])
+                              []
+                              Term{
+                                `list` = [
+                                  Term{`list` = [Term{literal = Literal{`string` = "foo"}}, Term{literal = Literal{`string` = "bar"}}]},
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        lambda = Lambda{
+                                          parameter = Name{"x"},
+                                          domain = none,
+                                          body = Term{variable = Name{"x"}}}},
+                                      argument = Term{`list` = [Term{literal = Literal{`string` = "quux"}}]}}}]})},
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "collect list lengths - post-order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        `list` = lists.map
+                            (λn.Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = n}}})
+                            (foldOverTerm
+                              TraversalOrder{post}
+                              (λacc,`term`.lists.concat
+                                  [acc, cases(Term){`list`=λelems.[lists.length elems], `_`=[]} `term`])
+                              []
+                              Term{
+                                `list` = [
+                                  Term{`list` = [Term{literal = Literal{`string` = "foo"}}, Term{literal = Literal{`string` = "bar"}}]},
+                                  Term{
+                                    application = Application{
+                                      function = Term{
+                                        lambda = Lambda{
+                                          parameter = Name{"x"},
+                                          domain = none,
+                                          body = Term{variable = Name{"x"}}}},
+                                      argument = Term{`list` = [Term{literal = Literal{`string` = "quux"}}]}}}]})},
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "rewriteType",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "String type in left side of either is replaced",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.type
+                      (rewriteType
+                        (λrecurse,typ.ifElse
+                            (equal
+                              typ
+                              Type{
+                                literal = LiteralType{
+                                  `string`}})
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}
+                            (recurse typ))
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            `right` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.model.type
+                      Type{
+                        `either` = EitherType{
+                          `left` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}},
+                          `right` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "String type in right side of either is replaced",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.type
+                      (rewriteType
+                        (λrecurse,typ.ifElse
+                            (equal
+                              typ
+                              Type{
+                                literal = LiteralType{
+                                  `string`}})
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}
+                            (recurse typ))
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            `right` = Type{
+                              literal = LiteralType{
+                                `string`}}}}),
+                expected = λ`_`.model.type
+                      Type{
+                        `either` = EitherType{
+                          `left` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}},
+                          `right` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "String types in both sides of either are replaced",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.type
+                      (rewriteType
+                        (λrecurse,typ.ifElse
+                            (equal
+                              typ
+                              Type{
+                                literal = LiteralType{
+                                  `string`}})
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}
+                            (recurse typ))
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            `right` = Type{
+                              literal = LiteralType{
+                                `string`}}}}),
+                expected = λ`_`.model.type
+                      Type{
+                        `either` = EitherType{
+                          `left` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}},
+                          `right` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "String type in nested either (left of left) is replaced",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.type
+                      (rewriteType
+                        (λrecurse,typ.ifElse
+                            (equal
+                              typ
+                              Type{
+                                literal = LiteralType{
+                                  `string`}})
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}
+                            (recurse typ))
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              `either` = EitherType{
+                                `left` = Type{
+                                  literal = LiteralType{
+                                    `string`}},
+                                `right` = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}},
+                            `right` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int64`}}}}}),
+                expected = λ`_`.model.type
+                      Type{
+                        `either` = EitherType{
+                          `left` = Type{
+                            `either` = EitherType{
+                              `left` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}},
+                              `right` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}},
+                          `right` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int64`}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "String type in nested either (right of right) is replaced",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.type
+                      (rewriteType
+                        (λrecurse,typ.ifElse
+                            (equal
+                              typ
+                              Type{
+                                literal = LiteralType{
+                                  `string`}})
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}
+                            (recurse typ))
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int64`}}},
+                            `right` = Type{
+                              `either` = EitherType{
+                                `left` = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}},
+                                `right` = Type{
+                                  literal = LiteralType{
+                                    `string`}}}}}}),
+                expected = λ`_`.model.type
+                      Type{
+                        `either` = EitherType{
+                          `left` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int64`}}},
+                          `right` = Type{
+                            `either` = EitherType{
+                              `left` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}},
+                              `right` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "String types in complex nested either are all replaced",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.type
+                      (rewriteType
+                        (λrecurse,typ.ifElse
+                            (equal
+                              typ
+                              Type{
+                                literal = LiteralType{
+                                  `string`}})
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}
+                            (recurse typ))
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              `either` = EitherType{
+                                `left` = Type{
+                                  literal = LiteralType{
+                                    `string`}},
+                                `right` = Type{
+                                  literal = LiteralType{
+                                    `string`}}}},
+                            `right` = Type{
+                              `either` = EitherType{
+                                `left` = Type{
+                                  literal = LiteralType{
+                                    `string`}},
+                                `right` = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int64`}}}}}}}),
+                expected = λ`_`.model.type
+                      Type{
+                        `either` = EitherType{
+                          `left` = Type{
+                            `either` = EitherType{
+                              `left` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}},
+                              `right` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}},
+                          `right` = Type{
+                            `either` = EitherType{
+                              `left` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}},
+                              `right` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int64`}}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "String in list type is replaced",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.type
+                      (rewriteType
+                        (λrecurse,typ.ifElse
+                            (equal
+                              typ
+                              Type{
+                                literal = LiteralType{
+                                  `string`}})
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}
+                            (recurse typ))
+                        Type{
+                          `list` = Type{
+                            literal = LiteralType{
+                              `string`}}}),
+                expected = λ`_`.model.type
+                      Type{
+                        `list` = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "String in function domain is replaced",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.type
+                      (rewriteType
+                        (λrecurse,typ.ifElse
+                            (equal
+                              typ
+                              Type{
+                                literal = LiteralType{
+                                  `string`}})
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}
+                            (recurse typ))
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            codomain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int64`}}}}}),
+                expected = λ`_`.model.type
+                      Type{
+                        function = FunctionType{
+                          domain = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}},
+                          codomain = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int64`}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "String in function codomain is replaced",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.type
+                      (rewriteType
+                        (λrecurse,typ.ifElse
+                            (equal
+                              typ
+                              Type{
+                                literal = LiteralType{
+                                  `string`}})
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}
+                            (recurse typ))
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int64`}}},
+                            codomain = Type{
+                              literal = LiteralType{
+                                `string`}}}}),
+                expected = λ`_`.model.type
+                      Type{
+                        function = FunctionType{
+                          domain = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int64`}}},
+                          codomain = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "String in optional type is replaced",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.type
+                      (rewriteType
+                        (λrecurse,typ.ifElse
+                            (equal
+                              typ
+                              Type{
+                                literal = LiteralType{
+                                  `string`}})
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}
+                            (recurse typ))
+                        Type{
+                          `optional` = Type{
+                            literal = LiteralType{
+                              `string`}}}),
+                expected = λ`_`.model.type
+                      Type{
+                        `optional` = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "rewriteTerm",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "string literal foo replaced with bar",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          literal = Literal{
+                            `string` = "foo"}}),
+                expected = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          `string` = "bar"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in variable not changed",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{variable = Name{"x"}}),
+                expected = λ`_`.model.term Term{variable = Name{"x"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `list` = [Term{literal = Literal{`string` = "foo"}}, Term{literal = Literal{`string` = "baz"}}]}),
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [Term{literal = Literal{`string` = "bar"}}, Term{literal = Literal{`string` = "baz"}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple strings in list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `list` = [
+                            Term{literal = Literal{`string` = "foo"}},
+                            Term{literal = Literal{`string` = "foo"}},
+                            Term{literal = Literal{`string` = "baz"}}]}),
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{`string` = "bar"}},
+                          Term{literal = Literal{`string` = "bar"}},
+                          Term{literal = Literal{`string` = "baz"}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in optional (just)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `optional` = given(Term{
+                              literal = Literal{
+                                `string` = "foo"}})}),
+                expected = λ`_`.model.term
+                      Term{
+                        `optional` = given(Term{
+                            literal = Literal{
+                              `string` = "bar"}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in function application",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"print"}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "foo"}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        application = Application{
+                          function = Term{
+                            variable = Name{"print"}},
+                          argument = Term{
+                            literal = Literal{
+                              `string` = "bar"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in lambda body",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              literal = Literal{
+                                `string` = "foo"}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            literal = Literal{
+                              `string` = "bar"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in nested applications",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"f"}},
+                            argument = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"g"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "foo"}}}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        application = Application{
+                          function = Term{
+                            variable = Name{"f"}},
+                          argument = Term{
+                            application = Application{
+                              function = Term{
+                                variable = Name{"g"}},
+                              argument = Term{
+                                literal = Literal{
+                                  `string` = "bar"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in record field",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `record` = Record{
+                            typeName = Name{"Person"},
+                            fields = [Field{name = Name{"name"}, `term` = Term{literal = Literal{`string` = "foo"}}}]}}),
+                expected = λ`_`.model.term
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"Person"},
+                          fields = [Field{name = Name{"name"}, `term` = Term{literal = Literal{`string` = "bar"}}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "strings in multiple record fields",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `record` = Record{
+                            typeName = Name{"Data"},
+                            fields = [
+                              Field{name = Name{"a"}, `term` = Term{literal = Literal{`string` = "foo"}}},
+                              Field{name = Name{"b"}, `term` = Term{literal = Literal{`string` = "baz"}}},
+                              Field{name = Name{"c"}, `term` = Term{literal = Literal{`string` = "foo"}}}]}}),
+                expected = λ`_`.model.term
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"Data"},
+                          fields = [
+                            Field{name = Name{"a"}, `term` = Term{literal = Literal{`string` = "bar"}}},
+                            Field{name = Name{"b"}, `term` = Term{literal = Literal{`string` = "baz"}}},
+                            Field{name = Name{"c"}, `term` = Term{literal = Literal{`string` = "bar"}}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in pair",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          pair = (Term{literal = Literal{`string` = "foo"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}})}),
+                expected = λ`_`.model.term
+                      Term{
+                        pair = (Term{literal = Literal{`string` = "bar"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in let binding value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `let` = Let{
+                            bindings = [Binding{name = Name{"x"}, `term` = Term{literal = Literal{`string` = "foo"}}, typeScheme = none}],
+                            body = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        `let` = Let{
+                          bindings = [Binding{name = Name{"x"}, `term` = Term{literal = Literal{`string` = "bar"}}, typeScheme = none}],
+                          body = Term{
+                            variable = Name{"x"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in let body",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              literal = Literal{
+                                `string` = "foo"}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"x"},
+                              `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              typeScheme = none}],
+                          body = Term{
+                            literal = Literal{
+                              `string` = "bar"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in first case branch",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `cases` = CaseStatement{
+                            typeName = Name{"Result"},
+                            default = none,
+                            `cases` = [
+                              CaseAlternative{name = Name{"success"}, handler = Term{literal = Literal{`string` = "foo"}}},
+                              CaseAlternative{name = Name{"error"}, handler = Term{literal = Literal{`string` = "baz"}}}]}}),
+                expected = λ`_`.model.term
+                      Term{
+                        `cases` = CaseStatement{
+                          typeName = Name{"Result"},
+                          default = none,
+                          `cases` = [
+                            CaseAlternative{name = Name{"success"}, handler = Term{literal = Literal{`string` = "bar"}}},
+                            CaseAlternative{name = Name{"error"}, handler = Term{literal = Literal{`string` = "baz"}}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in second case branch",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `cases` = CaseStatement{
+                            typeName = Name{"Result"},
+                            default = none,
+                            `cases` = [
+                              CaseAlternative{name = Name{"success"}, handler = Term{literal = Literal{`string` = "baz"}}},
+                              CaseAlternative{name = Name{"error"}, handler = Term{literal = Literal{`string` = "foo"}}}]}}),
+                expected = λ`_`.model.term
+                      Term{
+                        `cases` = CaseStatement{
+                          typeName = Name{"Result"},
+                          default = none,
+                          `cases` = [
+                            CaseAlternative{name = Name{"success"}, handler = Term{literal = Literal{`string` = "baz"}}},
+                            CaseAlternative{name = Name{"error"}, handler = Term{literal = Literal{`string` = "bar"}}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in default branch",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `cases` = CaseStatement{
+                            typeName = Name{"Result"},
+                            default = given(Term{
+                                literal = Literal{
+                                  `string` = "foo"}}),
+                            `cases` = [
+                              CaseAlternative{name = Name{"success"}, handler = Term{literal = Literal{`string` = "baz"}}},
+                              CaseAlternative{name = Name{"error"}, handler = Term{literal = Literal{`string` = "baz"}}}]}}),
+                expected = λ`_`.model.term
+                      Term{
+                        `cases` = CaseStatement{
+                          typeName = Name{"Result"},
+                          default = given(Term{
+                              literal = Literal{
+                                `string` = "bar"}}),
+                          `cases` = [
+                            CaseAlternative{name = Name{"success"}, handler = Term{literal = Literal{`string` = "baz"}}},
+                            CaseAlternative{name = Name{"error"}, handler = Term{literal = Literal{`string` = "baz"}}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string deeply nested in record in list in application",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"process"}},
+                            argument = Term{
+                              `list` = [
+                                Term{
+                                  `record` = Record{
+                                    typeName = Name{"Item"},
+                                    fields = [Field{name = Name{"value"}, `term` = Term{literal = Literal{`string` = "foo"}}}]}}]}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        application = Application{
+                          function = Term{
+                            variable = Name{"process"}},
+                          argument = Term{
+                            `list` = [
+                              Term{
+                                `record` = Record{
+                                  typeName = Name{"Item"},
+                                  fields = [Field{name = Name{"value"}, `term` = Term{literal = Literal{`string` = "bar"}}}]}}]}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in union inject value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `inject` = Injection{
+                            typeName = Name{"Result"},
+                            field = Field{
+                              name = Name{"success"},
+                              `term` = Term{
+                                literal = Literal{
+                                  `string` = "foo"}}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        `inject` = Injection{
+                          typeName = Name{"Result"},
+                          field = Field{
+                            name = Name{"success"},
+                            `term` = Term{
+                              literal = Literal{
+                                `string` = "bar"}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in wrapped term",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"Email"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "foo"}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        `wrap` = WrappedTerm{
+                          typeName = Name{"Email"},
+                          body = Term{
+                            literal = Literal{
+                              `string` = "bar"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in annotated term body",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              literal = Literal{
+                                `string` = "foo"}},
+                            annotation = Term{
+                              `map` = mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        annotated = AnnotatedTerm{
+                          body = Term{
+                            literal = Literal{
+                              `string` = "bar"}},
+                          annotation = Term{
+                            `map` = mapKeys
+                                (λn.Term{
+                                    variable = n})
+                                {}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in first of multiple let bindings",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{name = Name{"x"}, `term` = Term{literal = Literal{`string` = "foo"}}, typeScheme = none},
+                              Binding{name = Name{"y"}, `term` = Term{literal = Literal{`string` = "baz"}}, typeScheme = none}],
+                            body = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{name = Name{"x"}, `term` = Term{literal = Literal{`string` = "bar"}}, typeScheme = none},
+                            Binding{name = Name{"y"}, `term` = Term{literal = Literal{`string` = "baz"}}, typeScheme = none}],
+                          body = Term{
+                            variable = Name{"x"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in second of multiple let bindings",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{name = Name{"x"}, `term` = Term{literal = Literal{`string` = "baz"}}, typeScheme = none},
+                              Binding{name = Name{"y"}, `term` = Term{literal = Literal{`string` = "foo"}}, typeScheme = none}],
+                            body = Term{
+                              variable = Name{"y"}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{name = Name{"x"}, `term` = Term{literal = Literal{`string` = "baz"}}, typeScheme = none},
+                            Binding{name = Name{"y"}, `term` = Term{literal = Literal{`string` = "bar"}}, typeScheme = none}],
+                          body = Term{
+                            variable = Name{"y"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in all let bindings and body",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{name = Name{"x"}, `term` = Term{literal = Literal{`string` = "foo"}}, typeScheme = none},
+                              Binding{name = Name{"y"}, `term` = Term{literal = Literal{`string` = "foo"}}, typeScheme = none}],
+                            body = Term{
+                              literal = Literal{
+                                `string` = "foo"}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{name = Name{"x"}, `term` = Term{literal = Literal{`string` = "bar"}}, typeScheme = none},
+                            Binding{name = Name{"y"}, `term` = Term{literal = Literal{`string` = "bar"}}, typeScheme = none}],
+                          body = Term{
+                            literal = Literal{
+                              `string` = "bar"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in set",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `set` = {
+                            Term{literal = Literal{`string` = "baz"}},
+                            Term{literal = Literal{`string` = "foo"}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        `set` = {
+                          Term{literal = Literal{`string` = "bar"}},
+                          Term{literal = Literal{`string` = "baz"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in type lambda body",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          typeLambda = TypeLambda{
+                            parameter = Name{"a"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "foo"}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        typeLambda = TypeLambda{
+                          parameter = Name{"a"},
+                          body = Term{
+                            literal = Literal{
+                              `string` = "bar"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in type application body",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              literal = Literal{
+                                `string` = "foo"}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                `string`}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        typeApplication = TypeApplicationTerm{
+                          body = Term{
+                            literal = Literal{
+                              `string` = "bar"}},
+                          `type` = Type{
+                            literal = LiteralType{
+                              `string`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in nested type lambdas",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          typeLambda = TypeLambda{
+                            parameter = Name{"a"},
+                            body = Term{
+                              typeLambda = TypeLambda{
+                                parameter = Name{"b"},
+                                body = Term{
+                                  literal = Literal{
+                                    `string` = "foo"}}}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        typeLambda = TypeLambda{
+                          parameter = Name{"a"},
+                          body = Term{
+                            typeLambda = TypeLambda{
+                              parameter = Name{"b"},
+                              body = Term{
+                                literal = Literal{
+                                  `string` = "bar"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in case branch within let binding",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"handler"},
+                                `term` = Term{
+                                  `cases` = CaseStatement{
+                                    typeName = Name{"Result"},
+                                    default = none,
+                                    `cases` = [
+                                      CaseAlternative{name = Name{"ok"}, handler = Term{literal = Literal{`string` = "foo"}}},
+                                      CaseAlternative{name = Name{"err"}, handler = Term{literal = Literal{`string` = "baz"}}}]}},
+                                typeScheme = none}],
+                            body = Term{
+                              variable = Name{"handler"}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        `let` = Let{
+                          bindings = [
+                            Binding{
+                              name = Name{"handler"},
+                              `term` = Term{
+                                `cases` = CaseStatement{
+                                  typeName = Name{"Result"},
+                                  default = none,
+                                  `cases` = [
+                                    CaseAlternative{name = Name{"ok"}, handler = Term{literal = Literal{`string` = "bar"}}},
+                                    CaseAlternative{name = Name{"err"}, handler = Term{literal = Literal{`string` = "baz"}}}]}},
+                              typeScheme = none}],
+                          body = Term{
+                            variable = Name{"handler"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string in annotated wrapped record field",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      (rewriteTerm
+                        (λrecurse,`term`.ifElse
+                            (equal
+                              `term`
+                              Term{
+                                literal = Literal{
+                                  `string` = "foo"}})
+                            Term{
+                              literal = Literal{
+                                `string` = "bar"}}
+                            (recurse `term`))
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              `wrap` = WrappedTerm{
+                                typeName = Name{"User"},
+                                body = Term{
+                                  `record` = Record{
+                                    typeName = Name{"UserData"},
+                                    fields = [Field{name = Name{"name"}, `term` = Term{literal = Literal{`string` = "foo"}}}]}}}},
+                            annotation = Term{
+                              `map` = mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}}),
+                expected = λ`_`.model.term
+                      Term{
+                        annotated = AnnotatedTerm{
+                          body = Term{
+                            `wrap` = WrappedTerm{
+                              typeName = Name{"User"},
+                              body = Term{
+                                `record` = Record{
+                                  typeName = Name{"UserData"},
+                                  fields = [Field{name = Name{"name"}, `term` = Term{literal = Literal{`string` = "bar"}}}]}}}},
+                          annotation = Term{
+                            `map` = mapKeys
+                                (λn.Term{
+                                    variable = n})
+                                {}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "rewriteAndFoldTermWithPath",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "path tracking through application - sum literals",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = foldOverTerm
+                                TraversalOrder{
+                                  pre}
+                                (λacc,`term`.add
+                                    acc
+                                    (cases(Term){
+                                      literal=λlit.cases(Literal){
+                                            integer=λintVal.cases(IntegerValue){
+                                                  `int32`=λn.n,
+                                                  `_`=0:int32}
+                                                  intVal,
+                                            `_`=0:int32}
+                                            lit,
+                                      `_`=0:int32}
+                                      `term`))
+                                0:int32
+                                Term{
+                                  application = Application{
+                                    function = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"x"},
+                                        domain = none,
+                                        body = Term{
+                                          variable = Name{"x"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 42:int32}}}}}}}},
+                expected = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 42:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "path tracking through nested applications",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = foldOverTerm
+                                TraversalOrder{
+                                  pre}
+                                (λacc,`term`.add
+                                    acc
+                                    (cases(Term){
+                                      literal=λlit.cases(Literal){
+                                            integer=λintVal.cases(IntegerValue){
+                                                  `int32`=λn.n,
+                                                  `_`=0:int32}
+                                                  intVal,
+                                            `_`=0:int32}
+                                            lit,
+                                      `_`=0:int32}
+                                      `term`))
+                                0:int32
+                                Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          lambda = Lambda{
+                                            parameter = Name{"x"},
+                                            domain = none,
+                                            body = Term{
+                                              lambda = Lambda{
+                                                parameter = Name{"y"},
+                                                domain = none,
+                                                body = Term{
+                                                  `list` = [Term{variable = Name{"x"}}, Term{variable = Name{"y"}}]}}}}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            integer = IntegerValue{
+                                              `int32` = 1:int32}}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 2:int32}}}}}}}},
+                expected = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 3:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "path tracking through let bindings",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = foldOverTerm
+                                TraversalOrder{
+                                  pre}
+                                (λacc,`term`.add
+                                    acc
+                                    (cases(Term){
+                                      literal=λlit.cases(Literal){
+                                            integer=λintVal.cases(IntegerValue){
+                                                  `int32`=λn.n,
+                                                  `_`=0:int32}
+                                                  intVal,
+                                            `_`=0:int32}
+                                            lit,
+                                      `_`=0:int32}
+                                      `term`))
+                                0:int32
+                                Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"x"},
+                                        `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                        typeScheme = none}],
+                                    body = Term{
+                                      `list` = [Term{variable = Name{"x"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 32:int32}}}]}}}}}},
+                expected = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 42:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "path tracking through record fields",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = foldOverTerm
+                                TraversalOrder{
+                                  pre}
+                                (λacc,`term`.add
+                                    acc
+                                    (cases(Term){
+                                      literal=λlit.cases(Literal){
+                                            integer=λintVal.cases(IntegerValue){
+                                                  `int32`=λn.n,
+                                                  `_`=0:int32}
+                                                  intVal,
+                                            `_`=0:int32}
+                                            lit,
+                                      `_`=0:int32}
+                                      `term`))
+                                0:int32
+                                Term{
+                                  `record` = Record{
+                                    typeName = Name{"Point"},
+                                    fields = [
+                                      Field{name = Name{"x"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}},
+                                      Field{name = Name{"y"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}]}}}}},
+                expected = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 30:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "path tracking through case branches",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = foldOverTerm
+                                TraversalOrder{
+                                  pre}
+                                (λacc,`term`.add
+                                    acc
+                                    (cases(Term){
+                                      literal=λlit.cases(Literal){
+                                            integer=λintVal.cases(IntegerValue){
+                                                  `int32`=λn.n,
+                                                  `_`=0:int32}
+                                                  intVal,
+                                            `_`=0:int32}
+                                            lit,
+                                      `_`=0:int32}
+                                      `term`))
+                                0:int32
+                                Term{
+                                  `cases` = CaseStatement{
+                                    typeName = Name{"Result"},
+                                    default = none,
+                                    `cases` = [
+                                      CaseAlternative{name = Name{"ok"}, handler = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}},
+                                      CaseAlternative{name = Name{"err"}, handler = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}}]}}}}},
+                expected = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 3:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "path tracking through pair",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = foldOverTerm
+                                TraversalOrder{
+                                  pre}
+                                (λacc,`term`.add
+                                    acc
+                                    (cases(Term){
+                                      literal=λlit.cases(Literal){
+                                            integer=λintVal.cases(IntegerValue){
+                                                  `int32`=λn.n,
+                                                  `_`=0:int32}
+                                                  intVal,
+                                            `_`=0:int32}
+                                            lit,
+                                      `_`=0:int32}
+                                      `term`))
+                                0:int32
+                                Term{
+                                  pair = (
+                                      Term{literal = Literal{integer = IntegerValue{`int32` = 5:int32}}},
+                                      Term{literal = Literal{integer = IntegerValue{`int32` = 7:int32}}})}}}},
+                expected = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 12:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "path tracking through optional",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = foldOverTerm
+                                TraversalOrder{
+                                  pre}
+                                (λacc,`term`.add
+                                    acc
+                                    (cases(Term){
+                                      literal=λlit.cases(Literal){
+                                            integer=λintVal.cases(IntegerValue){
+                                                  `int32`=λn.n,
+                                                  `_`=0:int32}
+                                                  intVal,
+                                            `_`=0:int32}
+                                            lit,
+                                      `_`=0:int32}
+                                      `term`))
+                                0:int32
+                                Term{
+                                  `optional` = given(Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 42:int32}}})}}}},
+                expected = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 42:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "path tracking through wrapped term",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = foldOverTerm
+                                TraversalOrder{
+                                  pre}
+                                (λacc,`term`.add
+                                    acc
+                                    (cases(Term){
+                                      literal=λlit.cases(Literal){
+                                            integer=λintVal.cases(IntegerValue){
+                                                  `int32`=λn.n,
+                                                  `_`=0:int32}
+                                                  intVal,
+                                            `_`=0:int32}
+                                            lit,
+                                      `_`=0:int32}
+                                      `term`))
+                                0:int32
+                                Term{
+                                  `wrap` = WrappedTerm{
+                                    typeName = Name{"Age"},
+                                    body = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 25:int32}}}}}}}},
+                expected = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 25:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "path tracking through type lambda",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = foldOverTerm
+                                TraversalOrder{
+                                  pre}
+                                (λacc,`term`.add
+                                    acc
+                                    (cases(Term){
+                                      literal=λlit.cases(Literal){
+                                            integer=λintVal.cases(IntegerValue){
+                                                  `int32`=λn.n,
+                                                  `_`=0:int32}
+                                                  intVal,
+                                            `_`=0:int32}
+                                            lit,
+                                      `_`=0:int32}
+                                      `term`))
+                                0:int32
+                                Term{
+                                  typeLambda = TypeLambda{
+                                    parameter = Name{"a"},
+                                    body = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 100:int32}}}}}}}},
+                expected = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 100:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "path tracking through type application",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = foldOverTerm
+                                TraversalOrder{
+                                  pre}
+                                (λacc,`term`.add
+                                    acc
+                                    (cases(Term){
+                                      literal=λlit.cases(Literal){
+                                            integer=λintVal.cases(IntegerValue){
+                                                  `int32`=λn.n,
+                                                  `_`=0:int32}
+                                                  intVal,
+                                            `_`=0:int32}
+                                            lit,
+                                      `_`=0:int32}
+                                      `term`))
+                                0:int32
+                                Term{
+                                  typeApplication = TypeApplicationTerm{
+                                    body = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 50:int32}}},
+                                    `type` = Type{
+                                      literal = LiteralType{
+                                        `string`}}}}}}},
+                expected = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 50:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "path tracking through set elements",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = foldOverTerm
+                                TraversalOrder{
+                                  pre}
+                                (λacc,`term`.add
+                                    acc
+                                    (cases(Term){
+                                      literal=λlit.cases(Literal){
+                                            integer=λintVal.cases(IntegerValue){
+                                                  `int32`=λn.n,
+                                                  `_`=0:int32}
+                                                  intVal,
+                                            `_`=0:int32}
+                                            lit,
+                                      `_`=0:int32}
+                                      `term`))
+                                0:int32
+                                Term{
+                                  `set` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}}},
+                expected = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 6:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "deep nesting - application in lambda in let",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = foldOverTerm
+                                TraversalOrder{
+                                  pre}
+                                (λacc,`term`.add
+                                    acc
+                                    (cases(Term){
+                                      literal=λlit.cases(Literal){
+                                            integer=λintVal.cases(IntegerValue){
+                                                  `int32`=λn.n,
+                                                  `_`=0:int32}
+                                                  intVal,
+                                            `_`=0:int32}
+                                            lit,
+                                      `_`=0:int32}
+                                      `term`))
+                                0:int32
+                                Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"f"},
+                                        `term` = Term{
+                                          lambda = Lambda{
+                                            parameter = Name{"x"},
+                                            domain = none,
+                                            body = Term{
+                                              application = Application{
+                                                function = Term{variable = Name{"x"}},
+                                                argument = Term{
+                                                  literal = Literal{
+                                                    integer = IntegerValue{
+                                                      `int32` = 5:int32}}}}}}},
+                                        typeScheme = none}],
+                                    body = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 10:int32}}}}}}}},
+                expected = λ`_`.model.term
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 15:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "collect list lengths in nested structure",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        `list` = lists.map
+                            (λn.Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = n}}})
+                            (foldOverTerm
+                              TraversalOrder{pre}
+                              (λacc,`term`.lists.concat
+                                  [acc, cases(Term){`list`=λelems.[lists.length elems], `_`=[]} `term`])
+                              []
+                              Term{
+                                `list` = [
+                                  Term{
+                                    `list` = [
+                                      Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                      Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]},
+                                  Term{`list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}]})},
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "collect list lengths in let body",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        `list` = lists.map
+                            (λn.Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = n}}})
+                            (foldOverTerm
+                              TraversalOrder{pre}
+                              (λacc,`term`.lists.concat
+                                  [acc, cases(Term){`list`=λelems.[lists.length elems], `_`=[]} `term`])
+                              []
+                              Term{
+                                `let` = Let{
+                                  bindings = [
+                                    Binding{
+                                      name = Name{"xs"},
+                                      `term` = Term{`list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}]},
+                                      typeScheme = none}],
+                                  body = Term{
+                                    `list` = [
+                                      Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                      Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}})},
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "subtermsWithSteps",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "either left child is found",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        `list` = lists.map
+                            (λst.second st)
+                            (subtermsWithSteps
+                              Term{
+                                `either` = left(Term{
+                                    literal = Literal{
+                                      integer = IntegerValue{
+                                        `int32` = 1:int32}}})})},
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "either right child is found",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        `list` = lists.map
+                            (λst.second st)
+                            (subtermsWithSteps
+                              Term{
+                                `either` = right(Term{
+                                    literal = Literal{
+                                      integer = IntegerValue{
+                                        `int32` = 2:int32}}})})},
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "pair children are found in order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        `list` = lists.map
+                            (λst.second st)
+                            (subtermsWithSteps
+                              Term{
+                                pair = (
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}})})},
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "list elements are found in order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        `list` = lists.map
+                            (λst.second st)
+                            (subtermsWithSteps
+                              Term{
+                                `list` = [
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]})},
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "set elements are all found",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        `list` = lists.map
+                            (λst.second st)
+                            (subtermsWithSteps
+                              Term{
+                                `set` = {
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}})},
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map entries are all found as pairs",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.model.term
+                      Term{
+                        `list` = lists.map
+                            (λst.second st)
+                            (subtermsWithSteps
+                              Term{
+                                `map` = {
+                                  Term{literal = Literal{`string` = "a"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                  Term{literal = Literal{`string` = "b"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}}})},
+                expected = λ`_`.model.term
+                      Term{
+                        `list` = [
+                          Term{
+                            pair = (Term{literal = Literal{`string` = "a"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})},
+                          Term{
+                            pair = (Term{literal = Literal{`string` = "b"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}})}]}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "subtypesWithSteps",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "either children are found in order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.join
+                      "/"
+                      (lists.map
+                        (λst.model.type (second st))
+                        (subtypesWithSteps
+                          Type{
+                            `either` = EitherType{
+                              `left` = Type{
+                                literal = LiteralType{
+                                  `string`}},
+                              `right` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}})),
+                expected = λ`_`."string/int32"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "pair children are found in order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.join
+                      "/"
+                      (lists.map
+                        (λst.model.type (second st))
+                        (subtypesWithSteps
+                          Type{
+                            pair = PairType{
+                              first = Type{
+                                literal = LiteralType{
+                                  `string`}},
+                              second = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}})),
+                expected = λ`_`."string/int32"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "function domain and codomain are found in order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.join
+                      "/"
+                      (lists.map
+                        (λst.model.type (second st))
+                        (subtypesWithSteps
+                          Type{
+                            function = FunctionType{
+                              domain = Type{
+                                literal = LiteralType{
+                                  `string`}},
+                              codomain = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}})),
+                expected = λ`_`."string/int32"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map keys and values are found in order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.join
+                      "/"
+                      (lists.map
+                        (λst.model.type (second st))
+                        (subtypesWithSteps
+                          Type{
+                            `map` = MapType{
+                              keys = Type{
+                                literal = LiteralType{
+                                  `string`}},
+                              values = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}})),
+                expected = λ`_`."string/int32"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "list element is found",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.join
+                      "/"
+                      (lists.map
+                        (λst.model.type (second st))
+                        (subtypesWithSteps
+                          Type{
+                            `list` = Type{
+                              literal = LiteralType{
+                                `string`}}})),
+                expected = λ`_`."string"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "optional element is found",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.join
+                      "/"
+                      (lists.map
+                        (λst.model.type (second st))
+                        (subtypesWithSteps
+                          Type{
+                            `optional` = Type{
+                              literal = LiteralType{
+                                `string`}}})),
+                expected = λ`_`."string"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "leaf types have no children",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.strings.join
+                      "/"
+                      (lists.map
+                        (λst.model.type (second st))
+                        (subtypesWithSteps
+                          Type{
+                            literal = LiteralType{
+                              `string`}})),
+                expected = λ`_`.""}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}
