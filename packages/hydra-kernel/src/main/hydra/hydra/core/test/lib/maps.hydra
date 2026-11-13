@@ -1,0 +1,1367 @@
+## Test cases for hydra.core.lib.maps primitives
+module hydra.core.test.lib.maps
+
+import hydra.core.lib.chars as chars
+import hydra.core.lib.equality
+import hydra.core.lib.literals
+import hydra.core.lib.maps as maps
+import hydra.core.lib.math
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.ordering
+import hydra.core.lib.strings as strings
+import hydra.core.model
+import hydra.core.print.model as model
+import hydra.core.testing
+
+## Test cases for hydra.core.lib.maps primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.maps primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "insertsUpdatesOrDeletes",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "insert new key",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      (maps.alter
+                        (λ`_`.given("new"))
+                        3:int32
+                        {1:int32="a", 2:int32="b"}),
+                expected = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      {
+                        1:int32="a",
+                        2:int32="b",
+                        3:int32="new"}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.alter.insertsUpdatesOrDeletes"}]},
+          TestCaseWithMetadata{
+            name = "update existing key",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      (maps.alter
+                        (λ`_`.given("updated"))
+                        2:int32
+                        {1:int32="a", 2:int32="b"}),
+                expected = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      {1:int32="a", 2:int32="updated"}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.alter.insertsUpdatesOrDeletes"}]},
+          TestCaseWithMetadata{
+            name = "delete key",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      (maps.alter
+                        (λ`_`.none)
+                        2:int32
+                        {1:int32="a", 2:int32="b"}),
+                expected = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      {1:int32="a"}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.alter.insertsUpdatesOrDeletes"}]}]},
+      TestGroup{
+        name = "bimap",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "transformsKeysAndValues",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "transform both",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.bimap
+                            (λk.mul k 2:int32)
+                            (λv.strings.toUpper v)
+                            {1:int32="a", 2:int32="b"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {2:int32="A", 4:int32="B"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.bimap.transformsKeysAndValues"}]}]},
+          TestGroup{
+            name = "emptyInput",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty map",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.bimap
+                            (λk.mul k 2:int32)
+                            (λv.strings.toUpper v)
+                            {}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.bimap.emptyInput"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "difference",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "removesBindingsWithKeysInSecondMap",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "remove bindings",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.difference
+                            {
+                              1:int32="a",
+                              2:int32="b",
+                              3:int32="c"}
+                            {2:int32="x", 4:int32="y"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {1:int32="a", 3:int32="c"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.difference.removesBindingsWithKeysInSecondMap"}]},
+              TestCaseWithMetadata{
+                name = "no overlap",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.difference
+                            {1:int32="a", 2:int32="b"}
+                            {3:int32="x", 4:int32="y"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {1:int32="a", 2:int32="b"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.difference.removesBindingsWithKeysInSecondMap"}]}]},
+          TestGroup{
+            name = "identityWhenSecondEmpty",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "difference with empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.difference
+                            {1:int32="a", 2:int32="b"}
+                            {}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {1:int32="a", 2:int32="b"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.difference.identityWhenSecondEmpty"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "elems",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "returnsValuesInKeyOrder",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "get all elements",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.model.list (λs.printString s) xs)
+                          (maps.elems {1:int32="a", 2:int32="b"}),
+                    expected = λ`_`.(λxs.model.list (λs.printString s) xs)
+                          ["a", "b"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.elems.returnsValuesInKeyOrder"}]},
+              TestCaseWithMetadata{
+                name = "unsorted keys",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.model.list (λs.printString s) xs)
+                          (maps.elems
+                            {
+                              1:int32="a",
+                              2:int32="b",
+                              3:int32="c"}),
+                    expected = λ`_`.(λxs.model.list (λs.printString s) xs)
+                          ["a", "b", "c"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.elems.returnsValuesInKeyOrder"}]}]},
+          TestGroup{
+            name = "emptyInput",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty map",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.model.list (λs.printString s) xs)
+                          (maps.elems {}),
+                    expected = λ`_`.(λxs.model.list (λs.printString s) xs)
+                          []}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.elems.emptyInput"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "hasNoBindings",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty map",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      maps.empty,
+                expected = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      {}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.empty.hasNoBindings"}]}]},
+      TestGroup{
+        name = "filter",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "keepsMatchingValues",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "filter values starting with a",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.filter
+                            (λv.equal
+                                (optionals.withDefault
+                                  0:int32
+                                  (optionals.map
+                                    (λc.chars.toLower c)
+                                    (strings.charAt 0:int32 v)))
+                                97:int32)
+                            {
+                              1:int32="a",
+                              2:int32="b",
+                              3:int32="ab"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {1:int32="a", 3:int32="ab"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.filter.keepsMatchingValues"}]}]},
+          TestGroup{
+            name = "boundaryCases",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "filter all",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.filter
+                            (λv.equal
+                                (optionals.withDefault
+                                  0:int32
+                                  (optionals.map
+                                    (λc.chars.toLower c)
+                                    (strings.charAt 0:int32 v)))
+                                97:int32)
+                            {1:int32="b", 2:int32="c"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.filter.boundaryCases"}]},
+              TestCaseWithMetadata{
+                name = "empty map",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.filter
+                            (λv.equal
+                                (optionals.withDefault
+                                  0:int32
+                                  (optionals.map
+                                    (λc.chars.toLower c)
+                                    (strings.charAt 0:int32 v)))
+                                97:int32)
+                            {}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.filter.boundaryCases"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "filterWithKey",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "keepsMatchingBindings",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "filter by key > 1",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.filterWithKey
+                            (λk,v.gt k 1:int32)
+                            {
+                              1:int32="a",
+                              2:int32="b",
+                              3:int32="c"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {2:int32="b", 3:int32="c"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.filterWithKey.keepsMatchingBindings"}]}]},
+          TestGroup{
+            name = "boundaryCases",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "filter all",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.filterWithKey
+                            (λk,v.gt k 1:int32)
+                            {1:int32="a"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.filterWithKey.boundaryCases"}]},
+              TestCaseWithMetadata{
+                name = "empty map",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.filterWithKey
+                            (λk,v.gt k 1:int32)
+                            {}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.filterWithKey.boundaryCases"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "returnsBoundValueOrDefault",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "find existing",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λs.s)
+                      (maps.findWithDefault
+                        "default"
+                        2:int32
+                        {1:int32="a", 2:int32="b"}),
+                expected = λ`_`.(λs.s) "b"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.findWithDefault.returnsBoundValueOrDefault"}]},
+          TestCaseWithMetadata{
+            name = "use default",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λs.s)
+                      (maps.findWithDefault
+                        "default"
+                        3:int32
+                        {1:int32="a", 2:int32="b"}),
+                expected = λ`_`.(λs.s) "default"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.findWithDefault.returnsBoundValueOrDefault"}]}]},
+      TestGroup{
+        name = "fromList",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "buildsMapFromPairs",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "create from pairs",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.fromList
+                            [(1:int32, "a"), (2:int32, "b")]),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {1:int32="a", 2:int32="b"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.fromList.buildsMapFromPairs"}]}]},
+          TestGroup{
+            name = "lastDuplicateWins",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "duplicate keys",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.fromList
+                            [(1:int32, "a"), (1:int32, "b")]),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {1:int32="b"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.fromList.lastDuplicateWins"}]}]},
+          TestGroup{
+            name = "emptyInput",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty list",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.fromList []),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.fromList.emptyInput"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "addsOrOverwritesBinding",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "insert new key",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      (maps.insert
+                        3:int32
+                        "c"
+                        {1:int32="a", 2:int32="b"}),
+                expected = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      {
+                        1:int32="a",
+                        2:int32="b",
+                        3:int32="c"}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.insert.addsOrOverwritesBinding"}]},
+          TestCaseWithMetadata{
+            name = "update existing",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      (maps.insert
+                        2:int32
+                        "updated"
+                        {1:int32="a", 2:int32="b"}),
+                expected = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      {1:int32="a", 2:int32="updated"}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.insert.addsOrOverwritesBinding"}]},
+          TestCaseWithMetadata{
+            name = "insert into empty",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      (maps.insert 1:int32 "x" {}),
+                expected = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      {1:int32="x"}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.insert.addsOrOverwritesBinding"}]}]},
+      TestGroup{
+        name = "intersection",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "keepsBindingsWithKeysInBoth",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "common keys",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.intersection
+                            {
+                              1:int32="a",
+                              2:int32="b",
+                              3:int32="c"}
+                            {
+                              2:int32="x",
+                              3:int32="y",
+                              4:int32="z"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {2:int32="b", 3:int32="c"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.intersection.keepsBindingsWithKeysInBoth"}]}]},
+          TestGroup{
+            name = "emptyWhenNoOverlapOrEitherEmpty",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "no common keys",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.intersection
+                            {1:int32="a", 2:int32="b"}
+                            {3:int32="x", 4:int32="y"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.intersection.emptyWhenNoOverlapOrEitherEmpty"}]},
+              TestCaseWithMetadata{
+                name = "intersection with empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.intersection
+                            {1:int32="a", 2:int32="b"}
+                            {}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.intersection.emptyWhenNoOverlapOrEitherEmpty"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "keys",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "returnsKeysInOrder",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "get all keys",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
+                          (maps.keys
+                            {
+                              1:int32="a",
+                              2:int32="b",
+                              3:int32="c"}),
+                    expected = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
+                          [1:int32, 2:int32, 3:int32]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.keys.returnsKeysInOrder"}]},
+              TestCaseWithMetadata{
+                name = "unsorted keys",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
+                          (maps.keys
+                            {
+                              1:int32="a",
+                              2:int32="b",
+                              3:int32="c"}),
+                    expected = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
+                          [1:int32, 2:int32, 3:int32]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.keys.returnsKeysInOrder"}]}]},
+          TestGroup{
+            name = "emptyInput",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty map",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
+                          (maps.keys {}),
+                    expected = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
+                          []}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.keys.emptyInput"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "lookup",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "returnsBoundValue",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "find existing key",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λmx.model.optional (λs.printString s) mx)
+                          (maps.lookup
+                            2:int32
+                            {1:int32="a", 2:int32="b"}),
+                    expected = λ`_`.(λmx.model.optional (λs.printString s) mx)
+                          given("b")}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.lookup.returnsBoundValue"}]}]},
+          TestGroup{
+            name = "noneWhenAbsentOrEmpty",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "key not found",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λmx.model.optional (λs.printString s) mx)
+                          (maps.lookup
+                            3:int32
+                            {1:int32="a", 2:int32="b"}),
+                    expected = λ`_`.(λmx.model.optional (λs.printString s) mx)
+                          none}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.lookup.noneWhenAbsentOrEmpty"}]},
+              TestCaseWithMetadata{
+                name = "lookup in empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λmx.model.optional (λs.printString s) mx)
+                          (maps.lookup 1:int32 {}),
+                    expected = λ`_`.(λmx.model.optional (λs.printString s) mx)
+                          none}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.lookup.noneWhenAbsentOrEmpty"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "map",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "appliesFunctionToValues",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "map over values",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.map
+                            (λs.strings.toUpper s)
+                            {1:int32="a", 2:int32="b"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {1:int32="A", 2:int32="B"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.map.appliesFunctionToValues"}]}]},
+          TestGroup{
+            name = "emptyInput",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "map empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.map (λs.strings.toUpper s) {}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.map.emptyInput"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "mapKeys",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "appliesFunctionToKeys",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "double keys",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.mapKeys
+                            (λk.mul k 2:int32)
+                            {1:int32="a", 2:int32="b"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {2:int32="a", 4:int32="b"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.mapKeys.appliesFunctionToKeys"}]}]},
+          TestGroup{
+            name = "emptyInput",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty map",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.mapKeys (λk.mul k 2:int32) {}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.mapKeys.emptyInput"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "member",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "testsKeyPresence",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "key exists",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λb.printBoolean b)
+                          (maps.member
+                            2:int32
+                            {1:int32="a", 2:int32="b"}),
+                    expected = λ`_`.(λb.printBoolean b) true}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.member.testsKeyPresence"}]}]},
+          TestGroup{
+            name = "falseWhenAbsentOrEmpty",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "key missing",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λb.printBoolean b)
+                          (maps.member
+                            3:int32
+                            {1:int32="a", 2:int32="b"}),
+                    expected = λ`_`.(λb.printBoolean b) false}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.member.falseWhenAbsentOrEmpty"}]},
+              TestCaseWithMetadata{
+                name = "empty map",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λb.printBoolean b)
+                          (maps.member 1:int32 {}),
+                    expected = λ`_`.(λb.printBoolean b) false}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.member.falseWhenAbsentOrEmpty"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "testsZeroBindings",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty map",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b) (maps.isEmpty {}),
+                expected = λ`_`.(λb.printBoolean b) true}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.isEmpty.testsZeroBindings"}]},
+          TestCaseWithMetadata{
+            name = "non-empty map",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (maps.isEmpty {1:int32="a"}),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.isEmpty.testsZeroBindings"}]}]},
+      TestGroup{
+        name = "remove",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "removesKeyIfPresent",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "remove existing",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.delete
+                            2:int32
+                            {
+                              1:int32="a",
+                              2:int32="b",
+                              3:int32="c"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {1:int32="a", 3:int32="c"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.delete.removesKeyIfPresent"}]}]},
+          TestGroup{
+            name = "noOpWhenAbsentOrEmpty",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "remove non-existing",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.delete
+                            4:int32
+                            {1:int32="a", 2:int32="b"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {1:int32="a", 2:int32="b"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.delete.noOpWhenAbsentOrEmpty"}]},
+              TestCaseWithMetadata{
+                name = "remove from empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.delete 1:int32 {}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.delete.noOpWhenAbsentOrEmpty"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "wrapsOneBinding",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "single entry",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      (maps.singleton 42:int32 "hello"),
+                expected = λ`_`.(λm.model.map
+                        (λn.printInt32 n)
+                        (λs.printString s)
+                        m)
+                      {42:int32="hello"}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.singleton.wrapsOneBinding"}]}]},
+      TestGroup{
+        name = "countsBindings",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "three entries",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (maps.size
+                        {
+                          1:int32="a",
+                          2:int32="b",
+                          3:int32="c"}),
+                expected = λ`_`.(λn.printInt32 n) 3:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.size.countsBindings"}]},
+          TestCaseWithMetadata{
+            name = "single entry",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (maps.size {42:int32="test"}),
+                expected = λ`_`.(λn.printInt32 n) 1:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.size.countsBindings"}]},
+          TestCaseWithMetadata{
+            name = "empty map",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n) (maps.size {}),
+                expected = λ`_`.(λn.printInt32 n) 0:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.maps.size.countsBindings"}]}]},
+      TestGroup{
+        name = "toList",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "returnsPairsInKeyOrder",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "convert to pairs",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.model.list
+                            (λp.model.pair
+                                (λn.printInt32 n)
+                                (λs.printString s)
+                                p)
+                            xs)
+                          (maps.toList {1:int32="a", 2:int32="b"}),
+                    expected = λ`_`.(λxs.model.list
+                            (λp.model.pair
+                                (λn.printInt32 n)
+                                (λs.printString s)
+                                p)
+                            xs)
+                          [(1:int32, "a"), (2:int32, "b")]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.toList.returnsPairsInKeyOrder"}]},
+              TestCaseWithMetadata{
+                name = "unsorted keys",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.model.list
+                            (λp.model.pair
+                                (λn.printInt32 n)
+                                (λs.printString s)
+                                p)
+                            xs)
+                          (maps.toList
+                            {
+                              1:int32="a",
+                              2:int32="b",
+                              3:int32="c"}),
+                    expected = λ`_`.(λxs.model.list
+                            (λp.model.pair
+                                (λn.printInt32 n)
+                                (λs.printString s)
+                                p)
+                            xs)
+                          [(1:int32, "a"), (2:int32, "b"), (3:int32, "c")]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.toList.returnsPairsInKeyOrder"}]}]},
+          TestGroup{
+            name = "emptyInput",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty map",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.model.list
+                            (λp.model.pair
+                                (λn.printInt32 n)
+                                (λs.printString s)
+                                p)
+                            xs)
+                          (maps.toList {}),
+                    expected = λ`_`.(λxs.model.list
+                            (λp.model.pair
+                                (λn.printInt32 n)
+                                (λs.printString s)
+                                p)
+                            xs)
+                          []}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.toList.emptyInput"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "union",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "firstMapTakesPrecedence",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "union two maps",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.union
+                            {1:int32="a", 2:int32="b"}
+                            {2:int32="x", 3:int32="c"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {
+                            1:int32="a",
+                            2:int32="b",
+                            3:int32="c"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.union.firstMapTakesPrecedence"}]}]},
+          TestGroup{
+            name = "identityWithEmpty",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "union with empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.union {1:int32="a"} {}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {1:int32="a"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.union.identityWithEmpty"}]},
+              TestCaseWithMetadata{
+                name = "empty with map",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.union {} {1:int32="a"}),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {1:int32="a"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.union.identityWithEmpty"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "unions",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "earliestMapTakesPrecedence",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "union of multiple maps",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.unions
+                            [{1:int32="a", 2:int32="b"}, {2:int32="x", 3:int32="c"}, {3:int32="y", 4:int32="d"}]),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {
+                            1:int32="a",
+                            2:int32="b",
+                            3:int32="c",
+                            4:int32="d"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.unions.earliestMapTakesPrecedence"}]},
+              TestCaseWithMetadata{
+                name = "union with empty maps",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.unions
+                            [{1:int32="a"}, {}, {2:int32="b"}]),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {1:int32="a", 2:int32="b"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.unions.earliestMapTakesPrecedence"}]},
+              TestCaseWithMetadata{
+                name = "single map",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.unions [{1:int32="a", 2:int32="b"}]),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {1:int32="a", 2:int32="b"}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.unions.earliestMapTakesPrecedence"}]}]},
+          TestGroup{
+            name = "emptyListOfMapsYieldsEmptyMap",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty list of maps",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          (maps.unions []),
+                    expected = λ`_`.(λm.model.map
+                            (λn.printInt32 n)
+                            (λs.printString s)
+                            m)
+                          {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.maps.unions.emptyListOfMapsYieldsEmptyMap"}]}]}],
+        `cases` = []}],
+    `cases` = []}

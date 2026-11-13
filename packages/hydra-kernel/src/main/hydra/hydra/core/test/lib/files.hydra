@@ -1,0 +1,890 @@
+## Effectful test cases for hydra.core.lib.files primitives
+module hydra.core.test.lib.files
+
+import hydra.core.file
+import hydra.core.lib.effects as effects
+import hydra.core.lib.eithers
+import hydra.core.lib.files
+import hydra.core.lib.lists
+import hydra.core.lib.literals
+import hydra.core.lib.text
+import hydra.core.model
+import hydra.core.testing
+
+## Effectful test cases for hydra.core.lib.files primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.files primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "preservesExistingContentsAndAppends",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "appendFile after writeFile preserves existing contents",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.bind
+                      (writeFile
+                        FilePath{"/tmp/hydra-testing/ap.txt"}
+                        "QUI=":binary)
+                      (λ`_w`.effects.bind
+                          (appendFile
+                            FilePath{"/tmp/hydra-testing/ap.txt"}
+                            "Q0Q=":binary)
+                          (λ`_a`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λb.`either`
+                                      (λ`_e`."<decode error>")
+                                      (λs.s)
+                                      (decodeUtf8 b))
+                                  r)
+                              (readFile
+                                FilePath{"/tmp/hydra-testing/ap.txt"}))),
+                expected = λ`_`."ABCD"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.files.appendFile.preservesExistingContentsAndAppends"}]}]},
+      TestGroup{
+        name = "copy",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "copiesSingleFile",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "copy duplicates a single file",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (writeFile
+                            FilePath{"/tmp/hydra-testing/cp-src.txt"}
+                            "Y29waWVk":binary)
+                          (λ`_w`.effects.bind
+                              (copy
+                                false
+                                FilePath{"/tmp/hydra-testing/cp-src.txt"}
+                                FilePath{"/tmp/hydra-testing/cp-dst.txt"})
+                              (λ`_c`.effects.map
+                                  (λr.`either`
+                                      (λ`_e`."ERR")
+                                      (λb.`either`
+                                          (λ`_e`."<decode error>")
+                                          (λs.s)
+                                          (decodeUtf8 b))
+                                      r)
+                                  (readFile
+                                    FilePath{"/tmp/hydra-testing/cp-dst.txt"}))),
+                    expected = λ`_`."copied"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.copy.copiesSingleFile"}]}]},
+          TestGroup{
+            name = "copiesDirectoryTreeWhenRecursive",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "copy with recursive=true duplicates a directory tree",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (createDirectory
+                            false
+                            FilePath{"/tmp/hydra-testing/cp-dir"})
+                          (λ`_d`.effects.bind
+                              (writeFile
+                                FilePath{"/tmp/hydra-testing/cp-dir/inner.txt"}
+                                "bmVzdGVk":binary)
+                              (λ`_w`.effects.bind
+                                  (copy
+                                    true
+                                    FilePath{"/tmp/hydra-testing/cp-dir"}
+                                    FilePath{"/tmp/hydra-testing/cp-dir-2"})
+                                  (λ`_c`.effects.map
+                                      (λr.`either`
+                                          (λ`_e`."ERR")
+                                          (λb.`either`
+                                              (λ`_e`."<decode error>")
+                                              (λs.s)
+                                              (decodeUtf8 b))
+                                          r)
+                                      (readFile
+                                        FilePath{"/tmp/hydra-testing/cp-dir-2/inner.txt"})))),
+                    expected = λ`_`."nested"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.copy.copiesDirectoryTreeWhenRecursive"}]},
+              TestCaseWithMetadata{
+                name = "copy with recursive=true into an already-existing destination directory succeeds",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (createDirectory
+                            false
+                            FilePath{"/tmp/hydra-testing/cp-dir3"})
+                          (λ`_d1`.effects.bind
+                              (writeFile
+                                FilePath{"/tmp/hydra-testing/cp-dir3/inner.txt"}
+                                "YWdhaW4=":binary)
+                              (λ`_w`.effects.bind
+                                  (createDirectory
+                                    false
+                                    FilePath{"/tmp/hydra-testing/cp-dir3-dst"})
+                                  (λ`_d2`.effects.bind
+                                      (copy
+                                        true
+                                        FilePath{"/tmp/hydra-testing/cp-dir3"}
+                                        FilePath{"/tmp/hydra-testing/cp-dir3-dst"})
+                                      (λ`_c`.effects.map
+                                          (λr.`either`
+                                              (λ`_e`."ERR")
+                                              (λb.`either`
+                                                  (λ`_e`."<decode error>")
+                                                  (λs.s)
+                                                  (decodeUtf8 b))
+                                              r)
+                                          (readFile
+                                            FilePath{"/tmp/hydra-testing/cp-dir3-dst/inner.txt"}))))),
+                    expected = λ`_`."again"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.copy.copiesDirectoryTreeWhenRecursive"}]}]},
+          TestGroup{
+            name = "errorsOnNonRecursiveDirectory",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "copy with recursive=false on a directory yields an error",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (createDirectory
+                            false
+                            FilePath{"/tmp/hydra-testing/cp-src-dir"})
+                          (λ`_d`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λb."unexpected success")
+                                  r)
+                              (copy
+                                false
+                                FilePath{"/tmp/hydra-testing/cp-src-dir"}
+                                FilePath{"/tmp/hydra-testing/cp-src-dir-copy"})),
+                    expected = λ`_`."ERR"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.copy.errorsOnNonRecursiveDirectory"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "createsDirectoryThatThenExists",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "createDirectory makes a directory that then exists",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.bind
+                      (createDirectory
+                        false
+                        FilePath{"/tmp/hydra-testing/sub"})
+                      (λ`_c`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λb.printBoolean b)
+                              r)
+                          (exists
+                            FilePath{"/tmp/hydra-testing/sub"})),
+                expected = λ`_`."true"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.files.createDirectory.createsDirectoryThatThenExists"}]}]},
+      TestGroup{
+        name = "exists",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "falseForMissingPath",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "exists is false for a missing path",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λb.printBoolean b)
+                              r)
+                          (exists
+                            FilePath{"/tmp/hydra-testing/nope.txt"}),
+                    expected = λ`_`."false"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.exists.falseForMissingPath"}]}]},
+          TestGroup{
+            name = "trueAfterCreation",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "exists is true after writeFile",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (writeFile
+                            FilePath{"/tmp/hydra-testing/there.txt"}
+                            "eA==":binary)
+                          (λ`_w`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λb.printBoolean b)
+                                  r)
+                              (exists
+                                FilePath{"/tmp/hydra-testing/there.txt"})),
+                    expected = λ`_`."true"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.exists.trueAfterCreation"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "listsImmediateEntries",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "listDirectory reports the number of entries",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.bind
+                      (writeFile
+                        FilePath{"/tmp/hydra-testing/only.txt"}
+                        "eA==":binary)
+                      (λ`_w`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λentries.printInt32 (length entries))
+                              r)
+                          (listDirectory
+                            FilePath{"/tmp/hydra-testing"})),
+                expected = λ`_`."1"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.files.listDirectory.listsImmediateEntries"}]}]},
+      TestGroup{
+        name = "roundTripsWithWriteFile",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "writeFile then readFile round-trips the contents",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.bind
+                      (writeFile
+                        FilePath{"/tmp/hydra-testing/rw.txt"}
+                        "aGVsbG8gd29ybGQ=":binary)
+                      (λ`_w`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λb.`either`
+                                  (λ`_e`."<decode error>")
+                                  (λs.s)
+                                  (decodeUtf8 b))
+                              r)
+                          (readFile
+                            FilePath{"/tmp/hydra-testing/rw.txt"})),
+                expected = λ`_`."hello world"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.files.readFile.roundTripsWithWriteFile"}]}]},
+      TestGroup{
+        name = "removeDirectory",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "removesEmptyDirectoryWhenNonRecursive",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "removeDirectory with recursive=false removes an empty directory",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (createDirectory
+                            false
+                            FilePath{"/tmp/hydra-testing/rmdir-empty"})
+                          (λ`_d`.effects.bind
+                              (removeDirectory
+                                false
+                                FilePath{"/tmp/hydra-testing/rmdir-empty"})
+                              (λ`_r`.effects.map
+                                  (λr.`either`
+                                      (λ`_e`."ERR")
+                                      (λb.printBoolean b)
+                                      r)
+                                  (exists
+                                    FilePath{"/tmp/hydra-testing/rmdir-empty"}))),
+                    expected = λ`_`."false"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.removeDirectory.removesEmptyDirectoryWhenNonRecursive"}]}]},
+          TestGroup{
+            name = "errorsOnNonEmptyDirectoryWhenNonRecursive",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "removeDirectory with recursive=false on a non-empty directory yields an error",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (createDirectory
+                            false
+                            FilePath{"/tmp/hydra-testing/rmdir-nonempty"})
+                          (λ`_d`.effects.bind
+                              (writeFile
+                                FilePath{"/tmp/hydra-testing/rmdir-nonempty/inner.txt"}
+                                "eA==":binary)
+                              (λ`_w`.effects.map
+                                  (λr.`either`
+                                      (λ`_e`."ERR")
+                                      (λb."unexpected success")
+                                      r)
+                                  (removeDirectory
+                                    false
+                                    FilePath{"/tmp/hydra-testing/rmdir-nonempty"}))),
+                    expected = λ`_`."ERR"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.removeDirectory.errorsOnNonEmptyDirectoryWhenNonRecursive"}]}]},
+          TestGroup{
+            name = "removesPopulatedDirectoryWhenRecursive",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "removeDirectory with recursive=true removes a populated directory",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (createDirectory
+                            false
+                            FilePath{"/tmp/hydra-testing/rmdir-full"})
+                          (λ`_d`.effects.bind
+                              (writeFile
+                                FilePath{"/tmp/hydra-testing/rmdir-full/inner.txt"}
+                                "eA==":binary)
+                              (λ`_w`.effects.bind
+                                  (removeDirectory
+                                    true
+                                    FilePath{"/tmp/hydra-testing/rmdir-full"})
+                                  (λ`_r`.effects.map
+                                      (λr.`either`
+                                          (λ`_e`."ERR")
+                                          (λb.printBoolean b)
+                                          r)
+                                      (exists
+                                        FilePath{"/tmp/hydra-testing/rmdir-full"})))),
+                    expected = λ`_`."false"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.removeDirectory.removesPopulatedDirectoryWhenRecursive"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "deletesFileSoItNoLongerExists",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "removeFile deletes a file so it no longer exists",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.bind
+                      (writeFile
+                        FilePath{"/tmp/hydra-testing/rm.txt"}
+                        "eA==":binary)
+                      (λ`_w`.effects.bind
+                          (removeFile
+                            FilePath{"/tmp/hydra-testing/rm.txt"})
+                          (λ`_r`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λb.printBoolean b)
+                                  r)
+                              (exists
+                                FilePath{"/tmp/hydra-testing/rm.txt"}))),
+                expected = λ`_`."false"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.files.removeFile.deletesFileSoItNoLongerExists"}]}]},
+      TestGroup{
+        name = "movesToNewPathPreservingContents",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "rename moves a file to a new path",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.bind
+                      (writeFile
+                        FilePath{"/tmp/hydra-testing/old.txt"}
+                        "bW92ZWQ=":binary)
+                      (λ`_w`.effects.bind
+                          (rename
+                            FilePath{"/tmp/hydra-testing/old.txt"}
+                            FilePath{"/tmp/hydra-testing/new.txt"})
+                          (λ`_r`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λb.`either`
+                                      (λ`_e`."<decode error>")
+                                      (λs.s)
+                                      (decodeUtf8 b))
+                                  r)
+                              (readFile
+                                FilePath{"/tmp/hydra-testing/new.txt"}))),
+                expected = λ`_`."moved"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.files.rename.movesToNewPathPreservingContents"}]}]},
+      TestGroup{
+        name = "status",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "reportsCorrectTypeAndSizeForRegularFileAndDirectory",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "status reports the type and size of a regular file",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (writeFile
+                            FilePath{"/tmp/hydra-testing/stat.txt"}
+                            "MTIzNDU=":binary)
+                          (λ`_w`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λs.printInt64 (FileStatus[size] s))
+                                  r)
+                              (status
+                                true
+                                FilePath{"/tmp/hydra-testing/stat.txt"})),
+                    expected = λ`_`."5"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.status.reportsCorrectTypeAndSizeForRegularFileAndDirectory"}]},
+              TestCaseWithMetadata{
+                name = "status reports directory as the file type",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (createDirectory
+                            false
+                            FilePath{"/tmp/hydra-testing/stat-dir"})
+                          (λ`_d`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λs.cases(FileType){
+                                      block=λ`_x`."block",
+                                      character=λ`_x`."character",
+                                      directory=λ`_x`."directory",
+                                      fifo=λ`_x`."fifo",
+                                      regular=λ`_x`."regular",
+                                      link=λ`_x`."link",
+                                      socket=λ`_x`."socket"}
+                                      (FileStatus[fileType] s))
+                                  r)
+                              (status
+                                true
+                                FilePath{"/tmp/hydra-testing/stat-dir"})),
+                    expected = λ`_`."directory"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.status.reportsCorrectTypeAndSizeForRegularFileAndDirectory"}]}]},
+          TestGroup{
+            name = "notFoundOnMissingOrDanglingTarget",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "status on a missing path yields an error",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λs."unexpected success")
+                              r)
+                          (status
+                            true
+                            FilePath{"/tmp/hydra-testing/stat-missing.txt"}),
+                    expected = λ`_`."ERR"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.status.notFoundOnMissingOrDanglingTarget"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "symlinks",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "createsLinkObservableAsLinkType",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "createSymlink then status(false) reports fileType link",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (writeFile
+                            FilePath{"/tmp/hydra-testing/link-target.txt"}
+                            "dGFyZ2V0IGNvbnRlbnRz":binary)
+                          (λ`_w`.effects.bind
+                              (createSymlink
+                                FilePath{"/tmp/hydra-testing/link-target.txt"}
+                                FilePath{"/tmp/hydra-testing/link-to-target"})
+                              (λ`_l`.effects.map
+                                  (λr.`either`
+                                      (λ`_e`."ERR")
+                                      (λs.cases(FileType){
+                                          block=λ`_x`."block",
+                                          character=λ`_x`."character",
+                                          directory=λ`_x`."directory",
+                                          fifo=λ`_x`."fifo",
+                                          regular=λ`_x`."regular",
+                                          link=λ`_x`."link",
+                                          socket=λ`_x`."socket"}
+                                          (FileStatus[fileType] s))
+                                      r)
+                                  (status
+                                    false
+                                    FilePath{"/tmp/hydra-testing/link-to-target"}))),
+                    expected = λ`_`."link"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.createSymlink.createsLinkObservableAsLinkType"}]}]},
+          TestGroup{
+            name = "followLinksControlsLinkResolution",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "status(false) on a symlink reports fileType link, not the target's type",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (writeFile
+                            FilePath{"/tmp/hydra-testing/link-target4.txt"}
+                            "NDMyMQ==":binary)
+                          (λ`_w`.effects.bind
+                              (createSymlink
+                                FilePath{"/tmp/hydra-testing/link-target4.txt"}
+                                FilePath{"/tmp/hydra-testing/link-to-target4"})
+                              (λ`_l`.effects.map
+                                  (λr.`either`
+                                      (λ`_e`."ERR")
+                                      (λs.cases(FileType){
+                                          block=λ`_x`."block",
+                                          character=λ`_x`."character",
+                                          directory=λ`_x`."directory",
+                                          fifo=λ`_x`."fifo",
+                                          regular=λ`_x`."regular",
+                                          link=λ`_x`."link",
+                                          socket=λ`_x`."socket"}
+                                          (FileStatus[fileType] s))
+                                      r)
+                                  (status
+                                    false
+                                    FilePath{"/tmp/hydra-testing/link-to-target4"}))),
+                    expected = λ`_`."link"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.status.followLinksControlsLinkResolution"}]},
+              TestCaseWithMetadata{
+                name = "status(true) on a symlink reports the target's status",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (writeFile
+                            FilePath{"/tmp/hydra-testing/link-target3.txt"}
+                            "MTIzNA==":binary)
+                          (λ`_w`.effects.bind
+                              (createSymlink
+                                FilePath{"/tmp/hydra-testing/link-target3.txt"}
+                                FilePath{"/tmp/hydra-testing/link-to-target3"})
+                              (λ`_l`.effects.map
+                                  (λr.`either`
+                                      (λ`_e`."ERR")
+                                      (λs.cases(FileType){
+                                          block=λ`_x`."block",
+                                          character=λ`_x`."character",
+                                          directory=λ`_x`."directory",
+                                          fifo=λ`_x`."fifo",
+                                          regular=λ`_x`."regular",
+                                          link=λ`_x`."link",
+                                          socket=λ`_x`."socket"}
+                                          (FileStatus[fileType] s))
+                                      r)
+                                  (status
+                                    true
+                                    FilePath{"/tmp/hydra-testing/link-to-target3"}))),
+                    expected = λ`_`."regular"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.status.followLinksControlsLinkResolution"}]}]},
+          TestGroup{
+            name = "allowsDanglingTargets",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "createSymlink to a nonexistent target then status(false) reports link, not an error",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (createSymlink
+                            FilePath{"/tmp/hydra-testing/does-not-exist.txt"}
+                            FilePath{"/tmp/hydra-testing/dangling-link"})
+                          (λ`_l`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λs.cases(FileType){
+                                      block=λ`_x`."block",
+                                      character=λ`_x`."character",
+                                      directory=λ`_x`."directory",
+                                      fifo=λ`_x`."fifo",
+                                      regular=λ`_x`."regular",
+                                      link=λ`_x`."link",
+                                      socket=λ`_x`."socket"}
+                                      (FileStatus[fileType] s))
+                                  r)
+                              (status
+                                false
+                                FilePath{"/tmp/hydra-testing/dangling-link"})),
+                    expected = λ`_`."link"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.createSymlink.allowsDanglingTargets"}]},
+              TestCaseWithMetadata{
+                name = "a dangling symlink is not found when followed with status(true)",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (createSymlink
+                            FilePath{"/tmp/hydra-testing/still-does-not-exist.txt"}
+                            FilePath{"/tmp/hydra-testing/dangling-link2"})
+                          (λ`_l`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λs."unexpected success")
+                                  r)
+                              (status
+                                true
+                                FilePath{"/tmp/hydra-testing/dangling-link2"})),
+                    expected = λ`_`."ERR"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.createSymlink.allowsDanglingTargets"}]},
+              TestCaseWithMetadata{
+                name = "a dangling symlink is reported absent by exists",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (createSymlink
+                            FilePath{"/tmp/hydra-testing/yet-another-missing.txt"}
+                            FilePath{"/tmp/hydra-testing/dangling-link3"})
+                          (λ`_l`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λb.printBoolean b)
+                                  r)
+                              (exists
+                                FilePath{"/tmp/hydra-testing/dangling-link3"})),
+                    expected = λ`_`."false"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.createSymlink.allowsDanglingTargets"}]}]},
+          TestGroup{
+            name = "preservesTargetVerbatim",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "createSymlink preserves a relative target verbatim",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (createSymlink
+                            FilePath{"relative-target.txt"}
+                            FilePath{"/tmp/hydra-testing/relative-link"})
+                          (λ`_l`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λt.FilePath[] t)
+                                  r)
+                              (readSymlink
+                                FilePath{"/tmp/hydra-testing/relative-link"})),
+                    expected = λ`_`."relative-target.txt"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.createSymlink.preservesTargetVerbatim"}]}]},
+          TestGroup{
+            name = "returnsStoredTargetVerbatim",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "readSymlink returns the target verbatim",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (writeFile
+                            FilePath{"/tmp/hydra-testing/link-target2.txt"}
+                            "eA==":binary)
+                          (λ`_w`.effects.bind
+                              (createSymlink
+                                FilePath{"/tmp/hydra-testing/link-target2.txt"}
+                                FilePath{"/tmp/hydra-testing/link-to-target2"})
+                              (λ`_l`.effects.map
+                                  (λr.`either`
+                                      (λ`_e`."ERR")
+                                      (λt.FilePath[] t)
+                                      r)
+                                  (readSymlink
+                                    FilePath{"/tmp/hydra-testing/link-to-target2"}))),
+                    expected = λ`_`."/tmp/hydra-testing/link-target2.txt"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.readSymlink.returnsStoredTargetVerbatim"}]}]},
+          TestGroup{
+            name = "errorsOnExistingLinkPath",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "createSymlink over an existing file yields alreadyExists",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (writeFile
+                            FilePath{"/tmp/hydra-testing/occupied.txt"}
+                            "eA==":binary)
+                          (λ`_w`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λ`_u`."unexpected success")
+                                  r)
+                              (createSymlink
+                                FilePath{"/tmp/hydra-testing/some-target"}
+                                FilePath{"/tmp/hydra-testing/occupied.txt"})),
+                    expected = λ`_`."ERR"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.createSymlink.errorsOnExistingLinkPath"}]},
+              TestCaseWithMetadata{
+                name = "createSymlink over an existing dangling symlink yields alreadyExists",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (createSymlink
+                            FilePath{"/tmp/hydra-testing/missing-target"}
+                            FilePath{"/tmp/hydra-testing/occupied-link"})
+                          (λ`_l`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λ`_u`."unexpected success")
+                                  r)
+                              (createSymlink
+                                FilePath{"/tmp/hydra-testing/another-target"}
+                                FilePath{"/tmp/hydra-testing/occupied-link"})),
+                    expected = λ`_`."ERR"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.createSymlink.errorsOnExistingLinkPath"}]}]},
+          TestGroup{
+            name = "errorsOnNonLinkOrMissingPath",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "readSymlink on a regular file yields invalidPath",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.bind
+                          (writeFile
+                            FilePath{"/tmp/hydra-testing/not-a-link.txt"}
+                            "eA==":binary)
+                          (λ`_w`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λt."unexpected success")
+                                  r)
+                              (readSymlink
+                                FilePath{"/tmp/hydra-testing/not-a-link.txt"})),
+                    expected = λ`_`."ERR"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.readSymlink.errorsOnNonLinkOrMissingPath"}]},
+              TestCaseWithMetadata{
+                name = "readSymlink on a missing path yields notFound",
+                case = TestCase{
+                  effectful = EffectfulTestCase{
+                    actual = λ`_`.effects.map
+                          (λr.`either`
+                              (λ`_e`."ERR")
+                              (λt."unexpected success")
+                              r)
+                          (readSymlink
+                            FilePath{"/tmp/hydra-testing/no-such-link"}),
+                    expected = λ`_`."ERR"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.files.readSymlink.errorsOnNonLinkOrMissingPath"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "replacesCompleteFileContents",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "writeFile replaces existing contents entirely, not appends",
+            case = TestCase{
+              effectful = EffectfulTestCase{
+                actual = λ`_`.effects.bind
+                      (writeFile
+                        FilePath{"/tmp/hydra-testing/overwrite.txt"}
+                        "YSBtdWNoIGxvbmdlciBvcmlnaW5hbCBzdHJpbmc=":binary)
+                      (λ`_w1`.effects.bind
+                          (writeFile
+                            FilePath{"/tmp/hydra-testing/overwrite.txt"}
+                            "c2hvcnQ=":binary)
+                          (λ`_w2`.effects.map
+                              (λr.`either`
+                                  (λ`_e`."ERR")
+                                  (λb.`either`
+                                      (λ`_e`."<decode error>")
+                                      (λs.s)
+                                      (decodeUtf8 b))
+                                  r)
+                              (readFile
+                                FilePath{"/tmp/hydra-testing/overwrite.txt"}))),
+                expected = λ`_`."short"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.files.writeFile.replacesCompleteFileContents"}]}]}],
+    `cases` = []}
