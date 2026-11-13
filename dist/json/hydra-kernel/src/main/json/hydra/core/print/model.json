@@ -2,6 +2,7 @@
   "name": "hydra.core.print.model",
   "metadata": {"description": "String representations of hydra.core.model types", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
+    {"module": "hydra.core.ast"},
     {"module": "hydra.core.lib.chars"},
     {"module": "hydra.core.lib.eithers"},
     {"module": "hydra.core.lib.equality"},
