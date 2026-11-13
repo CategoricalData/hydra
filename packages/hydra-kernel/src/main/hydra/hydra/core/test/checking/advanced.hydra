@@ -1,0 +1,448 @@
+## Advanced type checking test cases: annotated terms and flows
+module hydra.core.test.checking.advanced
+
+import hydra.core.inference
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.maps
+import hydra.core.lib.pairs
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.scoping
+import hydra.core.test.testGraph
+import hydra.core.test.testTypes
+import hydra.core.testing
+
+## Advanced type checking test cases
+term allTests = TestGroup{name = "Advanced", description = none, subgroups = [annotatedTermsTests], `cases` = []}
+
+term annotatedTermsTests =
+  TestGroup{
+    name = "Annotated terms",
+    description = none,
+    subgroups = [topLevelAnnotationsTests, nestedAnnotationsTests, annotationsInComplexContextsTests],
+    `cases` = []}
+
+term topLevelAnnotationsTests =
+  TestGroup{
+    name = "Top-level annotations",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "annotated literal",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      annotated = AnnotatedTerm{
+                        body = Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}},
+                        annotation = Term{
+                          `map` = mapKeys
+                              (λn.Term{
+                                  variable = n})
+                              {}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "annotated list",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      annotated = AnnotatedTerm{
+                        body = Term{
+                          `list` = [Term{literal = Literal{`string` = "a"}}, Term{literal = Literal{`string` = "b"}}]},
+                        annotation = Term{
+                          `map` = mapKeys
+                              (λn.Term{
+                                  variable = n})
+                              {}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `list` = Type{
+                      literal = LiteralType{
+                        `string`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "annotated record",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      annotated = AnnotatedTerm{
+                        body = Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "John"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Doe"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 25:int32}}}}]}},
+                        annotation = Term{
+                          `map` = mapKeys
+                              (λn.Term{
+                                  variable = n})
+                              {}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    variable = testTypePersonName}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "annotated lambda",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      annotated = AnnotatedTerm{
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}},
+                        annotation = Term{
+                          `map` = mapKeys
+                              (λn.Term{
+                                  variable = n})
+                              {}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            variable = Name{"t0"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term nestedAnnotationsTests =
+  TestGroup{
+    name = "Nested annotations",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "annotation within annotation",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      annotated = AnnotatedTerm{
+                        body = Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 100:int32}}},
+                            annotation = Term{
+                              `map` = mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}},
+                        annotation = Term{
+                          `map` = mapKeys
+                              (λn.Term{
+                                  variable = n})
+                              {}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "annotated terms in tuple",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      pair = (
+                          Term{
+                            annotated = AnnotatedTerm{
+                              body = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}},
+                          Term{
+                            annotated = AnnotatedTerm{
+                              body = Term{literal = Literal{`string` = "hello"}},
+                              annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}})}),
+            expected = λ`_`.`type`
+                  Type{
+                    pair = PairType{
+                      first = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}},
+                      second = Type{
+                        literal = LiteralType{
+                          `string`}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "annotated term in function application",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      application = Application{
+                        function = Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  variable = Name{"x"}}}},
+                            annotation = Term{
+                              `map` = mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}},
+                        argument = Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}},
+                            annotation = Term{
+                              `map` = mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term annotationsInComplexContextsTests =
+  TestGroup{
+    name = "Annotations in complex contexts",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "annotated let binding",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"x"},
+                            `term` = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}},
+                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"y"},
+                            `term` = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{literal = Literal{`string` = "world"}},
+                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              pair = (Term{variable = Name{"x"}}, Term{variable = Name{"y"}})},
+                            annotation = Term{
+                              `map` = mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    pair = PairType{
+                      first = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}},
+                      second = Type{
+                        literal = LiteralType{
+                          `string`}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "annotated record fields",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `record` = Record{
+                        typeName = testTypePersonName,
+                        fields = [
+                          Field{
+                            name = Name{"firstName"},
+                            `term` = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{literal = Literal{`string` = "Alice"}},
+                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}}},
+                          Field{
+                            name = Name{"lastName"},
+                            `term` = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{literal = Literal{`string` = "Smith"}},
+                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}}},
+                          Field{
+                            name = Name{"age"},
+                            `term` = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 30:int32}}},
+                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}}}]}}),
+            expected = λ`_`.`type`
+                  Type{
+                    variable = testTypePersonName}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "annotated function in application",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"add"},
+                            `term` = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{variable = Name{"hydra.core.lib.math.add"}},
+                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"add"}},
+                                argument = Term{
+                                  annotated = AnnotatedTerm{
+                                    body = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 10:int32}}},
+                                    annotation = Term{
+                                      `map` = mapKeys
+                                          (λn.Term{
+                                              variable = n})
+                                          {}}}}}},
+                            argument = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 20:int32}}},
+                                annotation = Term{
+                                  `map` = mapKeys
+                                      (λn.Term{
+                                          variable = n})
+                                      {}}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}

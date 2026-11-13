@@ -1,0 +1,24 @@
+## Hydra's type checking test suite
+module hydra.core.test.checking.all
+
+import hydra.core.test.checking.advanced as advanced
+import hydra.core.test.checking.algebraicTypes as algebraicTypes
+import hydra.core.test.checking.collections as collections
+import hydra.core.test.checking.failures as failures
+import hydra.core.test.checking.fundamentals as fundamentals
+import hydra.core.test.checking.nominalTypes as nominalTypes
+import hydra.core.testing
+
+## The group of all type checking tests
+term allTests =
+  TestGroup{
+    name = "checking",
+    description = none,
+    subgroups = [
+      advanced.allTests,
+      algebraicTypes.allTests,
+      collections.allTests,
+      failures.allTests,
+      fundamentals.allTests,
+      nominalTypes.allTests],
+    `cases` = []}

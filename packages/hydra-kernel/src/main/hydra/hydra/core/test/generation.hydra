@@ -1,0 +1,1165 @@
+## Test cases for code generation operations such as inferModules and inferModulesGiven
+module hydra.core.test.generation
+
+import hydra.core.codegen
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.lists as lists
+import hydra.core.lib.maps
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.strings as strings
+import hydra.core.model
+import hydra.core.packaging
+import hydra.core.print.markdown
+import hydra.core.print.model
+import hydra.core.scoping
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## Test cases for code generation operations
+term allTests =
+  TestGroup{
+    name = "generation",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "generateModuleDoc",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "generateModuleDoc renders a documented term definition's doc string and signature",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.document
+                      (generateModuleDoc
+                        Module{
+                          name = ModuleName{"hydra.testInput.doc"},
+                          metadata = none,
+                          dependencies = [],
+                          definitions = [
+                            Definition{
+                              `term` = TermDefinition{
+                                name = Name{"hydra.testInput.doc.identity"},
+                                metadata = given(EntityMetadata{
+                                    description = given("The identity function"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                signature = given(typeSchemeToTermSignature
+                                    TypeScheme{
+                                      variables = [Name{"a"}],
+                                      body = Type{
+                                        function = FunctionType{
+                                          domain = Type{
+                                            variable = Name{"a"}},
+                                          codomain = Type{
+                                            variable = Name{"a"}}}},
+                                      constraints = {}}),
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{variable = Name{"x"}}}}}}]}),
+                expected = λ`_`."# hydra.testInput.doc\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.doc.identity\n\nThe identity function\n\n`∀a.a → a`"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "generateModuleDoc renders multiple definitions as separate sections in declaration order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.document
+                      (generateModuleDoc
+                        Module{
+                          name = ModuleName{"hydra.testInput.doc"},
+                          metadata = none,
+                          dependencies = [],
+                          definitions = [
+                            Definition{
+                              `term` = TermDefinition{
+                                name = Name{"hydra.testInput.doc.identity"},
+                                metadata = given(EntityMetadata{
+                                    description = given("The identity function"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                signature = given(typeSchemeToTermSignature
+                                    TypeScheme{
+                                      variables = [Name{"a"}],
+                                      body = Type{
+                                        function = FunctionType{
+                                          domain = Type{
+                                            variable = Name{"a"}},
+                                          codomain = Type{
+                                            variable = Name{"a"}}}},
+                                      constraints = {}}),
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{variable = Name{"x"}}}}}},
+                            Definition{
+                              `term` = TermDefinition{
+                                name = Name{"hydra.testInput.doc.identity2"},
+                                metadata = none,
+                                signature = given(typeSchemeToTermSignature
+                                    TypeScheme{
+                                      variables = [Name{"a"}],
+                                      body = Type{
+                                        function = FunctionType{
+                                          domain = Type{
+                                            variable = Name{"a"}},
+                                          codomain = Type{
+                                            variable = Name{"a"}}}},
+                                      constraints = {}}),
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{variable = Name{"x"}}}}}}]}),
+                expected = λ`_`."# hydra.testInput.doc\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.doc.identity\n\nThe identity function\n\n`∀a.a → a`\n\n## hydra.testInput.doc.identity2\n\n*(undocumented)*\n\n`∀a.a → a`"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "generateModuleDoc renders a primitive's monomorphic signature (no forall clause) and its provision",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.document
+                      (generateModuleDoc
+                        Module{
+                          name = ModuleName{"hydra.testInput.prim"},
+                          metadata = none,
+                          dependencies = [],
+                          definitions = [
+                            Definition{
+                              `primitive` = PrimitiveDefinition{
+                                name = Name{"hydra.testInput.prim.example"},
+                                metadata = given(EntityMetadata{
+                                    description = given("A trivial constant primitive"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = [
+                                      Provision{
+                                        name = Name{"hydra.testInput.prim.example.constantValue"},
+                                        kind = ProvisionKind{requirement},
+                                        statement = "This primitive always returns the same string value."}]}),
+                                signature = typeSchemeToTermSignature
+                                    TypeScheme{
+                                      variables = [],
+                                      body = Type{literal = LiteralType{`string`}},
+                                      constraints = empty},
+                                isPure = true,
+                                isTotal = true,
+                                defaultImplementation = none}}]}),
+                expected = λ`_`."# hydra.testInput.prim\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.prim.example\n\nA trivial constant primitive\n\n`string`\n\n**[HYDRA-TEST-INPUT-PRIM-EXAMPLE-CONSTANT-VALUE] (requirement) **This primitive always returns the same string value."}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "generateModuleDoc renders a type definition's body directly, with no Optional unwrap",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.document
+                      (generateModuleDoc
+                        Module{
+                          name = ModuleName{"hydra.testInput.typ"},
+                          metadata = none,
+                          dependencies = [],
+                          definitions = [
+                            Definition{
+                              `type` = TypeDefinition{
+                                name = Name{"hydra.testInput.typ.Example"},
+                                metadata = given(EntityMetadata{
+                                    description = given("A type alias for string"),
+                                    comments = [],
+                                    seeAlso = [],
+                                    lifecycle = none,
+                                    provisions = []}),
+                                body = TypeScheme{
+                                  variables = [],
+                                  body = Type{literal = LiteralType{`string`}},
+                                  constraints = empty}}}]}),
+                expected = λ`_`."# hydra.testInput.typ\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.typ.Example\n\nA type alias for string\n\n`string`"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "generateModuleDoc renders the undocumented-marker placeholder when metadata is absent",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.document
+                      (generateModuleDoc
+                        Module{
+                          name = ModuleName{"hydra.testInput.undoc"},
+                          metadata = none,
+                          dependencies = [],
+                          definitions = [
+                            Definition{
+                              `term` = TermDefinition{
+                                name = Name{"hydra.testInput.undoc.identity"},
+                                metadata = none,
+                                signature = given(typeSchemeToTermSignature
+                                    TypeScheme{
+                                      variables = [Name{"a"}],
+                                      body = Type{
+                                        function = FunctionType{
+                                          domain = Type{
+                                            variable = Name{"a"}},
+                                          codomain = Type{
+                                            variable = Name{"a"}}}},
+                                      constraints = {}}),
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{variable = Name{"x"}}}}}}]}),
+                expected = λ`_`."# hydra.testInput.undoc\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.undoc.identity\n\n*(undocumented)*\n\n`∀a.a → a`"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "inferModulesGiven",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "incremental inference of subset matches full inference",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<inference error>>")
+                      (λms.strings.concat
+                          (lists.map
+                            (λm.strings.concat
+                                (lists.map
+                                  (λd.cases(Definition){
+                                      `type`=λtd."",
+                                      `term`=λtd.strings.concat
+                                            [
+                                              Name[] (TermDefinition[name] td),
+                                              " :: ",
+                                              optionals.match
+                                                (optionals.map termSignatureToTypeScheme (TermDefinition[signature] td))
+                                                "<no scheme>"
+                                                (λts.typeScheme ts),
+                                              " = ",
+                                              `term` (TermDefinition[body] td),
+                                              "\n"],
+                                      `primitive`=λpd.strings.concat
+                                            [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
+                                      d)
+                                  (Module[definitions] m)))
+                            ms))
+                      (inferModulesGiven
+                        testContext
+                        testGraph
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.a"},
+                            metadata = none,
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.a.idA"},
+                                  metadata = none,
+                                  signature = given(typeSchemeToTermSignature
+                                      TypeScheme{
+                                        variables = [Name{"a"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"a"}},
+                                            codomain = Type{
+                                              variable = Name{"a"}}}},
+                                        constraints = {}}),
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}}]},
+                          Module{
+                            name = ModuleName{"hydra.testInput.b"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.a"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.b.useId"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.testInput.a.idA"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}]}]
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.b"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.a"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.b.useId"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.testInput.a.idA"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}]}]),
+                expected = λ`_`.eithers.either
+                      (λe."<<inference error>>")
+                      (λms.strings.concat
+                          (lists.map
+                            (λm.strings.concat
+                                (lists.map
+                                  (λd.cases(Definition){
+                                      `type`=λtd."",
+                                      `term`=λtd.strings.concat
+                                            [
+                                              Name[] (TermDefinition[name] td),
+                                              " :: ",
+                                              optionals.match
+                                                (optionals.map termSignatureToTypeScheme (TermDefinition[signature] td))
+                                                "<no scheme>"
+                                                (λts.typeScheme ts),
+                                              " = ",
+                                              `term` (TermDefinition[body] td),
+                                              "\n"],
+                                      `primitive`=λpd.strings.concat
+                                            [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
+                                      d)
+                                  (Module[definitions] m)))
+                            ms))
+                      (inferModules
+                        testContext
+                        testGraph
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.a"},
+                            metadata = none,
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.a.idA"},
+                                  metadata = none,
+                                  signature = given(typeSchemeToTermSignature
+                                      TypeScheme{
+                                        variables = [Name{"a"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"a"}},
+                                            codomain = Type{
+                                              variable = Name{"a"}}}},
+                                        constraints = {}}),
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}}]},
+                          Module{
+                            name = ModuleName{"hydra.testInput.b"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.a"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.b.useId"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.testInput.a.idA"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}]}]
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.b"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.a"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.b.useId"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.testInput.a.idA"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}]}])}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "incremental inference of full universe matches full inference",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<inference error>>")
+                      (λms.strings.concat
+                          (lists.map
+                            (λm.strings.concat
+                                (lists.map
+                                  (λd.cases(Definition){
+                                      `type`=λtd."",
+                                      `term`=λtd.strings.concat
+                                            [
+                                              Name[] (TermDefinition[name] td),
+                                              " :: ",
+                                              optionals.match
+                                                (optionals.map termSignatureToTypeScheme (TermDefinition[signature] td))
+                                                "<no scheme>"
+                                                (λts.typeScheme ts),
+                                              " = ",
+                                              `term` (TermDefinition[body] td),
+                                              "\n"],
+                                      `primitive`=λpd.strings.concat
+                                            [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
+                                      d)
+                                  (Module[definitions] m)))
+                            ms))
+                      (inferModulesGiven
+                        testContext
+                        testGraph
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.a"},
+                            metadata = none,
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.a.idA"},
+                                  metadata = none,
+                                  signature = given(typeSchemeToTermSignature
+                                      TypeScheme{
+                                        variables = [Name{"a"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"a"}},
+                                            codomain = Type{
+                                              variable = Name{"a"}}}},
+                                        constraints = {}}),
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}}]},
+                          Module{
+                            name = ModuleName{"hydra.testInput.b"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.a"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.b.useId"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.testInput.a.idA"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}]}]
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.a"},
+                            metadata = none,
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.a.idA"},
+                                  metadata = none,
+                                  signature = given(typeSchemeToTermSignature
+                                      TypeScheme{
+                                        variables = [Name{"a"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"a"}},
+                                            codomain = Type{
+                                              variable = Name{"a"}}}},
+                                        constraints = {}}),
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}}]},
+                          Module{
+                            name = ModuleName{"hydra.testInput.b"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.a"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.b.useId"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.testInput.a.idA"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}]}]),
+                expected = λ`_`.eithers.either
+                      (λe."<<inference error>>")
+                      (λms.strings.concat
+                          (lists.map
+                            (λm.strings.concat
+                                (lists.map
+                                  (λd.cases(Definition){
+                                      `type`=λtd."",
+                                      `term`=λtd.strings.concat
+                                            [
+                                              Name[] (TermDefinition[name] td),
+                                              " :: ",
+                                              optionals.match
+                                                (optionals.map termSignatureToTypeScheme (TermDefinition[signature] td))
+                                                "<no scheme>"
+                                                (λts.typeScheme ts),
+                                              " = ",
+                                              `term` (TermDefinition[body] td),
+                                              "\n"],
+                                      `primitive`=λpd.strings.concat
+                                            [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
+                                      d)
+                                  (Module[definitions] m)))
+                            ms))
+                      (inferModules
+                        testContext
+                        testGraph
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.a"},
+                            metadata = none,
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.a.idA"},
+                                  metadata = none,
+                                  signature = given(typeSchemeToTermSignature
+                                      TypeScheme{
+                                        variables = [Name{"a"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"a"}},
+                                            codomain = Type{
+                                              variable = Name{"a"}}}},
+                                        constraints = {}}),
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}}]},
+                          Module{
+                            name = ModuleName{"hydra.testInput.b"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.a"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.b.useId"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.testInput.a.idA"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}]}]
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.a"},
+                            metadata = none,
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.a.idA"},
+                                  metadata = none,
+                                  signature = given(typeSchemeToTermSignature
+                                      TypeScheme{
+                                        variables = [Name{"a"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"a"}},
+                                            codomain = Type{
+                                              variable = Name{"a"}}}},
+                                        constraints = {}}),
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}}]},
+                          Module{
+                            name = ModuleName{"hydra.testInput.b"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.a"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.b.useId"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.testInput.a.idA"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}]}])}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "incremental inference uses cached scheme verbatim on vacuous-quantifier universe",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<inference error>>")
+                      (λms.strings.concat
+                          (lists.map
+                            (λm.strings.concat
+                                (lists.map
+                                  (λd.cases(Definition){
+                                      `type`=λtd."",
+                                      `term`=λtd.strings.concat
+                                            [
+                                              Name[] (TermDefinition[name] td),
+                                              " :: ",
+                                              optionals.match
+                                                (optionals.map termSignatureToTypeScheme (TermDefinition[signature] td))
+                                                "<no scheme>"
+                                                (λts.typeScheme ts),
+                                              " = ",
+                                              `term` (TermDefinition[body] td),
+                                              "\n"],
+                                      `primitive`=λpd.strings.concat
+                                            [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
+                                      d)
+                                  (Module[definitions] m)))
+                            ms))
+                      (inferModulesGiven
+                        testContext
+                        testGraph
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.v"},
+                            metadata = none,
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.v.funky"},
+                                  metadata = none,
+                                  signature = given(typeSchemeToTermSignature
+                                      TypeScheme{
+                                        variables = [Name{"t0"}, Name{"t1"}, Name{"t2"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"t0"}},
+                                            codomain = Type{
+                                              function = FunctionType{
+                                                domain = Type{
+                                                  variable = Name{"t1"}},
+                                                codomain = Type{
+                                                  function = FunctionType{
+                                                    domain = Type{
+                                                      variable = Name{"t2"}},
+                                                    codomain = Type{
+                                                      variable = Name{"t2"}}}}}}}},
+                                        constraints = {}}),
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{
+                                        lambda = Lambda{
+                                          parameter = Name{"y"},
+                                          domain = none,
+                                          body = Term{
+                                            lambda = Lambda{
+                                              parameter = Name{"z"},
+                                              domain = none,
+                                              body = Term{
+                                                variable = Name{"z"}}}}}}}}}}]},
+                          Module{
+                            name = ModuleName{"hydra.testInput.w"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.v"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.w.useFunky"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        application = Application{
+                                          function = Term{
+                                            application = Application{
+                                              function = Term{
+                                                variable = Name{"hydra.testInput.v.funky"}},
+                                              argument = Term{
+                                                literal = Literal{
+                                                  `string` = "foo"}}}},
+                                          argument = Term{
+                                            literal = Literal{
+                                              integer = IntegerValue{
+                                                `int32` = 7:int32}}}}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 100:int32}}}}}}}]}]
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.w"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.v"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.w.useFunky"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        application = Application{
+                                          function = Term{
+                                            application = Application{
+                                              function = Term{
+                                                variable = Name{"hydra.testInput.v.funky"}},
+                                              argument = Term{
+                                                literal = Literal{
+                                                  `string` = "foo"}}}},
+                                          argument = Term{
+                                            literal = Literal{
+                                              integer = IntegerValue{
+                                                `int32` = 7:int32}}}}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 100:int32}}}}}}}]}]),
+                expected = λ`_`."hydra.testInput.w.useFunky :: int32 = hydra.testInput.v.funky⟨string⟩⟨int32⟩⟨int32⟩ \"foo\" 7:int32 100:int32\n"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "inferModulesGiven infers a target module that is absent from universeMods, instead of dropping its term definitions",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<inference error>>")
+                      (λms.strings.concat
+                          (lists.map
+                            (λm.strings.concat
+                                (lists.map
+                                  (λd.cases(Definition){
+                                      `type`=λtd."",
+                                      `term`=λtd.strings.concat
+                                            [
+                                              Name[] (TermDefinition[name] td),
+                                              " :: ",
+                                              optionals.match
+                                                (optionals.map termSignatureToTypeScheme (TermDefinition[signature] td))
+                                                "<no scheme>"
+                                                (λts.typeScheme ts),
+                                              " = ",
+                                              `term` (TermDefinition[body] td),
+                                              "\n"],
+                                      `primitive`=λpd.strings.concat
+                                            [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
+                                      d)
+                                  (Module[definitions] m)))
+                            ms))
+                      (inferModulesGiven
+                        testContext
+                        testGraph
+                        []
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.a"},
+                            metadata = none,
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.a.idA"},
+                                  metadata = none,
+                                  signature = given(typeSchemeToTermSignature
+                                      TypeScheme{
+                                        variables = [Name{"a"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"a"}},
+                                            codomain = Type{
+                                              variable = Name{"a"}}}},
+                                        constraints = {}}),
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}}]},
+                          Module{
+                            name = ModuleName{"hydra.testInput.b"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.a"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.b.useId"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.testInput.a.idA"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}]}]),
+                expected = λ`_`.eithers.either
+                      (λe."<<inference error>>")
+                      (λms.strings.concat
+                          (lists.map
+                            (λm.strings.concat
+                                (lists.map
+                                  (λd.cases(Definition){
+                                      `type`=λtd."",
+                                      `term`=λtd.strings.concat
+                                            [
+                                              Name[] (TermDefinition[name] td),
+                                              " :: ",
+                                              optionals.match
+                                                (optionals.map termSignatureToTypeScheme (TermDefinition[signature] td))
+                                                "<no scheme>"
+                                                (λts.typeScheme ts),
+                                              " = ",
+                                              `term` (TermDefinition[body] td),
+                                              "\n"],
+                                      `primitive`=λpd.strings.concat
+                                            [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
+                                      d)
+                                  (Module[definitions] m)))
+                            ms))
+                      (inferModulesGiven
+                        testContext
+                        testGraph
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.a"},
+                            metadata = none,
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.a.idA"},
+                                  metadata = none,
+                                  signature = given(typeSchemeToTermSignature
+                                      TypeScheme{
+                                        variables = [Name{"a"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"a"}},
+                                            codomain = Type{
+                                              variable = Name{"a"}}}},
+                                        constraints = {}}),
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}}]},
+                          Module{
+                            name = ModuleName{"hydra.testInput.b"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.a"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.b.useId"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.testInput.a.idA"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}]}]
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.a"},
+                            metadata = none,
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.a.idA"},
+                                  metadata = none,
+                                  signature = given(typeSchemeToTermSignature
+                                      TypeScheme{
+                                        variables = [Name{"a"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"a"}},
+                                            codomain = Type{
+                                              variable = Name{"a"}}}},
+                                        constraints = {}}),
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}}]},
+                          Module{
+                            name = ModuleName{"hydra.testInput.b"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.a"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.b.useId"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.testInput.a.idA"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}]}])}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "inferModules infers a target module that is absent from universeMods, instead of dropping its term definitions",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<inference error>>")
+                      (λms.strings.concat
+                          (lists.map
+                            (λm.strings.concat
+                                (lists.map
+                                  (λd.cases(Definition){
+                                      `type`=λtd."",
+                                      `term`=λtd.strings.concat
+                                            [
+                                              Name[] (TermDefinition[name] td),
+                                              " :: ",
+                                              optionals.match
+                                                (optionals.map termSignatureToTypeScheme (TermDefinition[signature] td))
+                                                "<no scheme>"
+                                                (λts.typeScheme ts),
+                                              " = ",
+                                              `term` (TermDefinition[body] td),
+                                              "\n"],
+                                      `primitive`=λpd.strings.concat
+                                            [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
+                                      d)
+                                  (Module[definitions] m)))
+                            ms))
+                      (inferModules
+                        testContext
+                        testGraph
+                        []
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.a"},
+                            metadata = none,
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.a.idA"},
+                                  metadata = none,
+                                  signature = given(typeSchemeToTermSignature
+                                      TypeScheme{
+                                        variables = [Name{"a"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"a"}},
+                                            codomain = Type{
+                                              variable = Name{"a"}}}},
+                                        constraints = {}}),
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}}]},
+                          Module{
+                            name = ModuleName{"hydra.testInput.b"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.a"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.b.useId"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.testInput.a.idA"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}]}]),
+                expected = λ`_`.eithers.either
+                      (λe."<<inference error>>")
+                      (λms.strings.concat
+                          (lists.map
+                            (λm.strings.concat
+                                (lists.map
+                                  (λd.cases(Definition){
+                                      `type`=λtd."",
+                                      `term`=λtd.strings.concat
+                                            [
+                                              Name[] (TermDefinition[name] td),
+                                              " :: ",
+                                              optionals.match
+                                                (optionals.map termSignatureToTypeScheme (TermDefinition[signature] td))
+                                                "<no scheme>"
+                                                (λts.typeScheme ts),
+                                              " = ",
+                                              `term` (TermDefinition[body] td),
+                                              "\n"],
+                                      `primitive`=λpd.strings.concat
+                                            [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
+                                      d)
+                                  (Module[definitions] m)))
+                            ms))
+                      (inferModules
+                        testContext
+                        testGraph
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.a"},
+                            metadata = none,
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.a.idA"},
+                                  metadata = none,
+                                  signature = given(typeSchemeToTermSignature
+                                      TypeScheme{
+                                        variables = [Name{"a"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"a"}},
+                                            codomain = Type{
+                                              variable = Name{"a"}}}},
+                                        constraints = {}}),
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}}]},
+                          Module{
+                            name = ModuleName{"hydra.testInput.b"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.a"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.b.useId"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.testInput.a.idA"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}]}]
+                        [
+                          Module{
+                            name = ModuleName{"hydra.testInput.a"},
+                            metadata = none,
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.a.idA"},
+                                  metadata = none,
+                                  signature = given(typeSchemeToTermSignature
+                                      TypeScheme{
+                                        variables = [Name{"a"}],
+                                        body = Type{
+                                          function = FunctionType{
+                                            domain = Type{
+                                              variable = Name{"a"}},
+                                            codomain = Type{
+                                              variable = Name{"a"}}}},
+                                        constraints = {}}),
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{variable = Name{"x"}}}}}}]},
+                          Module{
+                            name = ModuleName{"hydra.testInput.b"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.testInput.a"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"hydra.testInput.b.useId"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"hydra.testInput.a.idA"}},
+                                      argument = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}}}}}}]}])}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}
