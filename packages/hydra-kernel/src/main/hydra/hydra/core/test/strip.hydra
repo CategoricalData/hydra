@@ -1,0 +1,371 @@
+## Test cases for annotation and type stripping operations
+module hydra.core.test.strip
+
+import hydra.core.lib.maps
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.strip
+import hydra.core.testing
+
+## Test cases for annotation and type stripping operations
+term allTests =
+  TestGroup{
+    name = "strip",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "deannotateTerm",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "unannotated literal unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (deannotateTerm
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 42:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unannotated variable unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (deannotateTerm
+                        Term{variable = Name{"x"}}),
+                expected = λ`_`.`term` Term{variable = Name{"x"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unannotated lambda unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (deannotateTerm
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            variable = Name{"x"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "single annotation stripped",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (deannotateTerm
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}},
+                            annotation = Term{
+                              `map` = mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 42:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested annotations stripped",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (deannotateTerm
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}},
+                                annotation = Term{
+                                  `map` = mapKeys
+                                      (λn.Term{
+                                          variable = n})
+                                      {}}}},
+                            annotation = Term{
+                              `map` = mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 42:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "annotated lambda stripped",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (deannotateTerm
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  variable = Name{"x"}}}},
+                            annotation = Term{
+                              `map` = mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            variable = Name{"x"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "annotated application stripped",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`term`
+                      (deannotateTerm
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"f"}},
+                                argument = Term{
+                                  variable = Name{"x"}}}},
+                            annotation = Term{
+                              `map` = mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        application = Application{
+                          function = Term{
+                            variable = Name{"f"}},
+                          argument = Term{
+                            variable = Name{"x"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "deannotateType",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "unannotated primitive type unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (deannotateType
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unannotated string type unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (deannotateType
+                        Type{
+                          literal = LiteralType{
+                            `string`}}),
+                expected = λ`_`.`type`
+                      Type{
+                        literal = LiteralType{
+                          `string`}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unannotated function type unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (deannotateType
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              literal = LiteralType{
+                                `string`}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        function = FunctionType{
+                          domain = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}},
+                          codomain = Type{
+                            literal = LiteralType{
+                              `string`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "single annotation stripped",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (deannotateType
+                        Type{
+                          annotated = AnnotatedType{
+                            body = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            annotation = Term{
+                              `map` = mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested annotations stripped",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (deannotateType
+                        Type{
+                          annotated = AnnotatedType{
+                            body = Type{
+                              annotated = AnnotatedType{
+                                body = Type{
+                                  literal = LiteralType{
+                                    `string`}},
+                                annotation = Term{
+                                  `map` = mapKeys
+                                      (λn.Term{
+                                          variable = n})
+                                      {}}}},
+                            annotation = Term{
+                              `map` = mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        literal = LiteralType{
+                          `string`}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "annotated list type stripped",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (deannotateType
+                        Type{
+                          annotated = AnnotatedType{
+                            body = Type{
+                              `list` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}},
+                            annotation = Term{
+                              `map` = mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `list` = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "annotated function type stripped",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (deannotateType
+                        Type{
+                          annotated = AnnotatedType{
+                            body = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}},
+                                codomain = Type{
+                                  literal = LiteralType{
+                                    `string`}}}},
+                            annotation = Term{
+                              `map` = mapKeys
+                                  (λn.Term{
+                                      variable = n})
+                                  {}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        function = FunctionType{
+                          domain = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}},
+                          codomain = Type{
+                            literal = LiteralType{
+                              `string`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}

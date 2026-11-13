@@ -1,0 +1,804 @@
+## Test cases for path serialization round-trips, term-graph paths, and path erasure
+module hydra.core.test.subterms
+
+import hydra.core.lib.optionals
+import hydra.core.model
+import hydra.core.paths
+import hydra.core.print.paths
+import hydra.core.testing
+import hydra.core.validate.paths
+
+## Test cases for path serialization, term-graph paths, and path erasure
+term allTests =
+  TestGroup{
+    name = "subterms",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "subtermStep round-trip",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "annotatedAnnotation",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep
+                            SubtermStep{annotatedAnnotation}))),
+                expected = λ`_`.subtermStep
+                      SubtermStep{annotatedAnnotation}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "annotatedBody",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep SubtermStep{annotatedBody}))),
+                expected = λ`_`.subtermStep SubtermStep{annotatedBody}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "applicationArgument",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep
+                            SubtermStep{applicationArgument}))),
+                expected = λ`_`.subtermStep
+                      SubtermStep{applicationArgument}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "applicationFunction",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep
+                            SubtermStep{applicationFunction}))),
+                expected = λ`_`.subtermStep
+                      SubtermStep{applicationFunction}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "casesCase (named)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep
+                            SubtermStep{casesCase = Name{"foo"}}))),
+                expected = λ`_`.subtermStep
+                      SubtermStep{
+                        casesCase = Name{"foo"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "casesDefault",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep SubtermStep{casesDefault}))),
+                expected = λ`_`.subtermStep SubtermStep{casesDefault}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "eitherLeft",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep SubtermStep{eitherLeft}))),
+                expected = λ`_`.subtermStep SubtermStep{eitherLeft}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "eitherRight",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep SubtermStep{eitherRight}))),
+                expected = λ`_`.subtermStep SubtermStep{eitherRight}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "injectField (named)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep
+                            SubtermStep{
+                              injectField = Name{"bar"}}))),
+                expected = λ`_`.subtermStep
+                      SubtermStep{
+                        injectField = Name{"bar"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "lambdaBody",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep SubtermStep{lambdaBody}))),
+                expected = λ`_`.subtermStep SubtermStep{lambdaBody}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "letBinding (named)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep
+                            SubtermStep{letBinding = Name{"x"}}))),
+                expected = λ`_`.subtermStep
+                      SubtermStep{
+                        letBinding = Name{"x"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "letBody",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep SubtermStep{letBody}))),
+                expected = λ`_`.subtermStep SubtermStep{letBody}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "listElement (indexed)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep
+                            SubtermStep{listElement = 3:int32}))),
+                expected = λ`_`.subtermStep
+                      SubtermStep{
+                        listElement = 3:int32}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mapEntry (indexed)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep
+                            SubtermStep{mapEntry = 0:int32}))),
+                expected = λ`_`.subtermStep
+                      SubtermStep{mapEntry = 0:int32}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "optionalGiven",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep SubtermStep{optionalGiven}))),
+                expected = λ`_`.subtermStep SubtermStep{optionalGiven}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "pairFirst",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep SubtermStep{pairFirst}))),
+                expected = λ`_`.subtermStep SubtermStep{pairFirst}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "pairSecond",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep SubtermStep{pairSecond}))),
+                expected = λ`_`.subtermStep SubtermStep{pairSecond}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "recordField (named)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep
+                            SubtermStep{
+                              recordField = Name{"field"}}))),
+                expected = λ`_`.subtermStep
+                      SubtermStep{
+                        recordField = Name{"field"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "setElement (indexed)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep
+                            SubtermStep{setElement = 2:int32}))),
+                expected = λ`_`.subtermStep
+                      SubtermStep{
+                        setElement = 2:int32}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "typeApplicationBody",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep
+                            SubtermStep{typeApplicationBody}))),
+                expected = λ`_`.subtermStep
+                      SubtermStep{typeApplicationBody}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "typeLambdaBody",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep SubtermStep{typeLambdaBody}))),
+                expected = λ`_`.subtermStep SubtermStep{typeLambdaBody}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "wrapBody",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtermStep s)
+                        (parseSubtermStep
+                          (subtermStep SubtermStep{wrapBody}))),
+                expected = λ`_`.subtermStep SubtermStep{wrapBody}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "subtypeStep round-trip",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "annotatedBody",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep SubtypeStep{annotatedBody}))),
+                expected = λ`_`.subtypeStep SubtypeStep{annotatedBody}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "applicationArgument",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep
+                            SubtypeStep{applicationArgument}))),
+                expected = λ`_`.subtypeStep
+                      SubtypeStep{applicationArgument}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "applicationFunction",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep
+                            SubtypeStep{applicationFunction}))),
+                expected = λ`_`.subtypeStep
+                      SubtypeStep{applicationFunction}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "effectValue",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep SubtypeStep{effectValue}))),
+                expected = λ`_`.subtypeStep SubtypeStep{effectValue}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "eitherLeft",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep SubtypeStep{eitherLeft}))),
+                expected = λ`_`.subtypeStep SubtypeStep{eitherLeft}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "eitherRight",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep SubtypeStep{eitherRight}))),
+                expected = λ`_`.subtypeStep SubtypeStep{eitherRight}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "forallBody",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep SubtypeStep{forallBody}))),
+                expected = λ`_`.subtypeStep SubtypeStep{forallBody}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "functionCodomain",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep
+                            SubtypeStep{functionCodomain}))),
+                expected = λ`_`.subtypeStep
+                      SubtypeStep{functionCodomain}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "functionDomain",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep SubtypeStep{functionDomain}))),
+                expected = λ`_`.subtypeStep SubtypeStep{functionDomain}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "listElement",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep SubtypeStep{listElement}))),
+                expected = λ`_`.subtypeStep SubtypeStep{listElement}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mapKeys",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep SubtypeStep{mapKeys}))),
+                expected = λ`_`.subtypeStep SubtypeStep{mapKeys}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mapValues",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep SubtypeStep{mapValues}))),
+                expected = λ`_`.subtypeStep SubtypeStep{mapValues}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "optionalElement",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep SubtypeStep{optionalElement}))),
+                expected = λ`_`.subtypeStep SubtypeStep{optionalElement}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "pairFirst",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep SubtypeStep{pairFirst}))),
+                expected = λ`_`.subtypeStep SubtypeStep{pairFirst}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "pairSecond",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep SubtypeStep{pairSecond}))),
+                expected = λ`_`.subtypeStep SubtypeStep{pairSecond}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "recordField (named)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep
+                            SubtypeStep{
+                              recordField = Name{"field"}}))),
+                expected = λ`_`.subtypeStep
+                      SubtypeStep{
+                        recordField = Name{"field"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "setElement",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep SubtypeStep{setElement}))),
+                expected = λ`_`.subtypeStep SubtypeStep{setElement}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unionField (named)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep
+                            SubtypeStep{
+                              unionField = Name{"variant"}}))),
+                expected = λ`_`.subtypeStep
+                      SubtypeStep{
+                        unionField = Name{"variant"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "wrapBody",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<parse failed>>"
+                      (`map`
+                        (λs.subtypeStep s)
+                        (parseSubtypeStep
+                          (subtypeStep SubtypeStep{wrapBody}))),
+                expected = λ`_`.subtypeStep SubtypeStep{wrapBody}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "path erasure (TermGraph : TypeGraph)",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "listElement -> listElement",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<no type-side position>>"
+                      (`map`
+                        (λsp.subtypePath sp)
+                        (eraseSubtermPath
+                          SubtermPath{[SubtermStep{listElement = 0:int32}]})),
+                expected = λ`_`."listElement"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "setElement -> setElement",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<no type-side position>>"
+                      (`map`
+                        (λsp.subtypePath sp)
+                        (eraseSubtermPath
+                          SubtermPath{[SubtermStep{setElement = 0:int32}]})),
+                expected = λ`_`."setElement"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "optionalGiven -> optionalElement",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<no type-side position>>"
+                      (`map`
+                        (λsp.subtypePath sp)
+                        (eraseSubtermPath
+                          SubtermPath{[SubtermStep{optionalGiven}]})),
+                expected = λ`_`."optionalElement"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "injectField -> unionField (name preserved)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<no type-side position>>"
+                      (`map`
+                        (λsp.subtypePath sp)
+                        (eraseSubtermPath
+                          SubtermPath{[SubtermStep{injectField = Name{"left"}}]})),
+                expected = λ`_`."unionField:left"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "recordField -> recordField (name preserved)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<no type-side position>>"
+                      (`map`
+                        (λsp.subtypePath sp)
+                        (eraseSubtermPath
+                          SubtermPath{[SubtermStep{recordField = Name{"age"}}]})),
+                expected = λ`_`."recordField:age"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mapEntry . pairFirst -> mapKeys",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<no type-side position>>"
+                      (`map`
+                        (λsp.subtypePath sp)
+                        (eraseSubtermPath
+                          SubtermPath{[SubtermStep{mapEntry = 2:int32}, SubtermStep{pairFirst}]})),
+                expected = λ`_`."mapKeys"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mapEntry . pairSecond -> mapValues",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<no type-side position>>"
+                      (`map`
+                        (λsp.subtypePath sp)
+                        (eraseSubtermPath
+                          SubtermPath{[SubtermStep{mapEntry = 2:int32}, SubtermStep{pairSecond}]})),
+                expected = λ`_`."mapValues"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested: listElement . recordField -> listElement . recordField (name preserved)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<no type-side position>>"
+                      (`map`
+                        (λsp.subtypePath sp)
+                        (eraseSubtermPath
+                          SubtermPath{[SubtermStep{listElement = 0:int32}, SubtermStep{recordField = Name{"x"}}]})),
+                expected = λ`_`."listElement/recordField:x"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "lambdaBody -> (none)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<no type-side position>>"
+                      (`map`
+                        (λsp.subtypePath sp)
+                        (eraseSubtermPath
+                          SubtermPath{[SubtermStep{lambdaBody}]})),
+                expected = λ`_`."<<no type-side position>>"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "applicationFunction -> (none)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<no type-side position>>"
+                      (`map`
+                        (λsp.subtypePath sp)
+                        (eraseSubtermPath
+                          SubtermPath{[SubtermStep{applicationFunction}]})),
+                expected = λ`_`."<<no type-side position>>"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mapEntry (unprojected) -> (none)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.withDefault
+                      "<<no type-side position>>"
+                      (`map`
+                        (λsp.subtypePath sp)
+                        (eraseSubtermPath
+                          SubtermPath{[SubtermStep{mapEntry = 0:int32}]})),
+                expected = λ`_`."<<no type-side position>>"}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}
