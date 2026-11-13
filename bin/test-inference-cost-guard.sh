@@ -45,6 +45,9 @@
 # the caller sets only while holding the Haskell build slot (staging-granted, or
 # bin/with-stack-slot.sh wraps this whole script when invoked standalone).
 #
+# Env knobs (#821, used by CI's non-blocking run): HYDRA_INFERENCE_COST_HEAP_CAP (RTS -M value, default 8G),
+# HYDRA_INFERENCE_COST_RESULT_OUT (path to copy the raw result JSON to, before budget assertions).
+#
 # Usage:
 #   bin/test-inference-cost-guard.sh                        # baseline-file sanity only (default)
 #   HYDRA_INFERENCE_COST_ORACLE=1 bin/test-inference-cost-guard.sh   # live measurement + threshold assert
@@ -121,8 +124,15 @@ echo "=== Running full-kernel inference (flat, cache-bypassing) ==="
 # exceeds the existing -M6G RTS_FLAGS cap in bin/lib/common.sh, since this
 # workload's real peak was still unknown as of the cap's introduction).
 # -T is required for GHC.Stats.getRTSStats to report real numbers.
-INFERENCE_COST_GUARD_RTS_FLAGS="+RTS -M8G -T -RTS"
+# HYDRA_INFERENCE_COST_HEAP_CAP (e.g. 6500M) overrides the cap; CI sets it from the
+# runner's MemTotal so a too-small runner fails the exec cleanly instead of being OOM-killed (#821).
+INFERENCE_COST_GUARD_RTS_FLAGS="+RTS -M${HYDRA_INFERENCE_COST_HEAP_CAP:-8G} -T -RTS"
 ( cd "$HYDRA_ROOT_DIR/heads/haskell" && stack exec inference-cost-guard -- --out "$RESULT_JSON" $INFERENCE_COST_GUARD_RTS_FLAGS )
+
+# #821: optionally keep the raw result (for CI to upload/summarize) before any assertion can fail the run.
+if [ -n "${HYDRA_INFERENCE_COST_RESULT_OUT:-}" ] && [ -f "$RESULT_JSON" ]; then
+    cp "$RESULT_JSON" "$HYDRA_INFERENCE_COST_RESULT_OUT"
+fi
 
 if ! jq empty "$RESULT_JSON" >/dev/null 2>&1; then
     report_fail "inference-cost-guard did not produce valid JSON at $RESULT_JSON"
