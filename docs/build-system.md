@@ -592,6 +592,13 @@ stamp(L) = hash(
 )
 ```
 
+`coder-copy-id` is also mixed in (#831): a hash of the generator host's *compiled* copy of the coder
+(`dist/<generator-host>/<coder-pkg>/src/main`; `absent` in published-host mode).
+The coder's authoring source (`coder-id`) is not what runs: for example the Java copy of the Python coder generates `dist/python`.
+A python-only sync after a `coder.py` edit regenerates with the stale Java copy; refreshing that copy later changes the stamp,
+so the next sync regenerates `dist/python` without manual digest deletion.
+`warn_if_generator_coder_stale` also warns when the copy is older than the coder's source.
+
 Each component is independent. A `hydra-kernel` change invalidates every target's stamp;
 a Java-coder change invalidates only Java; an edit to `heads/python/src/main/` invalidates
 only Python. This is the desired precision: the dependency graph determines the
