@@ -1,0 +1,774 @@
+## Algorithm W inference tests
+module hydra.core.test.inference.algorithmW
+
+import hydra.core.inference
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.pairs
+import hydra.core.lib.strings
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## Algorithm W test cases
+term allTests =
+  TestGroup{name = "Algorithm W test cases", description = none, subgroups = [testGroupForSystemF], `cases` = []}
+
+term testGroupForSystemF =
+  TestGroup{
+    name = "STLC to System F",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "#1",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          variable = Name{"x"}}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [Name{"t0"}],
+                    body = Type{
+                      function = FunctionType{
+                        domain = Type{
+                          variable = Name{"t0"}},
+                        codomain = Type{
+                          variable = Name{"t0"}}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#2",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"foo"},
+                            `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [],
+                    body = Type{
+                      literal = LiteralType{
+                        integer = IntegerType{
+                          `int32`}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#3",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"f"},
+                            `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"f"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 0:int32}}}}}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [],
+                    body = Type{
+                      literal = LiteralType{
+                        integer = IntegerType{
+                          `int32`}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#4",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"f"},
+                            `term` = Term{
+                              application = Application{
+                                function = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{variable = Name{"x"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 0:int32}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          variable = Name{"f"}}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [],
+                    body = Type{
+                      literal = LiteralType{
+                        integer = IntegerType{
+                          `int32`}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#5",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"sng"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{`list` = [Term{variable = Name{"x"}}]}}},
+                            typeScheme = none}],
+                        body = Term{
+                          variable = Name{"sng"}}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [Name{"t0"}],
+                    body = Type{
+                      function = FunctionType{
+                        domain = Type{
+                          variable = Name{"t0"}},
+                        codomain = Type{
+                          `list` = Type{
+                            variable = Name{"t0"}}}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#6",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"sng"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{`list` = [Term{variable = Name{"x"}}]}}},
+                            typeScheme = none}],
+                        body = Term{
+                          pair = (
+                              Term{
+                                application = Application{
+                                  function = Term{variable = Name{"sng"}},
+                                  argument = Term{literal = Literal{integer = IntegerValue{`int32` = 0:int32}}}}},
+                              Term{
+                                application = Application{
+                                  function = Term{variable = Name{"sng"}},
+                                  argument = Term{literal = Literal{`string` = "alice"}}}})}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [],
+                    body = Type{
+                      pair = PairType{
+                        first = Type{
+                          `list` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}},
+                        second = Type{
+                          `list` = Type{
+                            literal = LiteralType{
+                              `string`}}}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#7",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"+"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"y"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.math.negate"}},
+                                        argument = Term{
+                                          application = Application{
+                                            function = Term{
+                                              application = Application{
+                                                function = Term{
+                                                  variable = Name{"+"}},
+                                                argument = Term{
+                                                  application = Application{
+                                                    function = Term{
+                                                      variable = Name{"hydra.core.lib.math.negate"}},
+                                                    argument = Term{
+                                                      variable = Name{"x"}}}}}},
+                                            argument = Term{
+                                              variable = Name{"y"}}}}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"+"}},
+                                argument = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.math.negate"}},
+                                    argument = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.math.negate"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            integer = IntegerValue{
+                                              `int32` = 0:int32}}}}}}}}},
+                            argument = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.negate"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 0:int32}}}}}}}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [Name{"t0"}],
+                    body = Type{
+                      variable = Name{"t0"}},
+                    constraints = {
+                      Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#9",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"f"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"y"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"f"}},
+                                            argument = Term{
+                                              literal = Literal{
+                                                integer = IntegerValue{
+                                                  `int32` = 0:int32}}}}},
+                                        argument = Term{
+                                          variable = Name{"x"}}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          variable = Name{"f"}}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [Name{"t0"}],
+                    body = Type{
+                      function = FunctionType{
+                        domain = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}},
+                        codomain = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              variable = Name{"t0"}}}}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#10",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"f"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"y"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"f"}},
+                                            argument = Term{
+                                              literal = Literal{
+                                                integer = IntegerValue{
+                                                  `int32` = 0:int32}}}}},
+                                        argument = Term{
+                                          variable = Name{"x"}}}}}}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"g"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"xx"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"yy"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"g"}},
+                                            argument = Term{
+                                              literal = Literal{
+                                                integer = IntegerValue{
+                                                  `int32` = 0:int32}}}}},
+                                        argument = Term{
+                                          variable = Name{"xx"}}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          pair = (Term{variable = Name{"f"}}, Term{variable = Name{"g"}})}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [Name{"t0"}, Name{"t1"}],
+                    body = Type{
+                      pair = PairType{
+                        first = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}},
+                                codomain = Type{
+                                  variable = Name{"t0"}}}}}},
+                        second = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}},
+                                codomain = Type{
+                                  variable = Name{"t1"}}}}}}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#11",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"f"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"y"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"g"}},
+                                            argument = Term{
+                                              literal = Literal{
+                                                integer = IntegerValue{
+                                                  `int32` = 0:int32}}}}},
+                                        argument = Term{
+                                          variable = Name{"x"}}}}}}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"g"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"u"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"v"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"f"}},
+                                            argument = Term{
+                                              variable = Name{"v"}}}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            integer = IntegerValue{
+                                              `int32` = 0:int32}}}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          pair = (Term{variable = Name{"f"}}, Term{variable = Name{"g"}})}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [Name{"t0"}, Name{"t1"}, Name{"t2"}, Name{"t3"}],
+                    body = Type{
+                      pair = PairType{
+                        first = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"t0"}},
+                            codomain = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}},
+                                codomain = Type{
+                                  variable = Name{"t1"}}}}}},
+                        second = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  variable = Name{"t2"}},
+                                codomain = Type{
+                                  variable = Name{"t3"}}}}}}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#12",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"f"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"y"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"g"}},
+                                            argument = Term{
+                                              literal = Literal{
+                                                integer = IntegerValue{
+                                                  `int32` = 0:int32}}}}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            integer = IntegerValue{
+                                              `int32` = 0:int32}}}}}}}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"g"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"u"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"v"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"f"}},
+                                            argument = Term{
+                                              variable = Name{"v"}}}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            integer = IntegerValue{
+                                              `int32` = 0:int32}}}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          pair = (Term{variable = Name{"f"}}, Term{variable = Name{"g"}})}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [Name{"t0"}, Name{"t1"}],
+                    body = Type{
+                      pair = PairType{
+                        first = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}},
+                                codomain = Type{
+                                  variable = Name{"t0"}}}}}},
+                        second = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}},
+                                codomain = Type{
+                                  variable = Name{"t1"}}}}}}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#13",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2 "INFERENCE ERROR: " "failed")
+                  (λresult.typeScheme (second (first result)))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"f"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"y"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"g"}},
+                                            argument = Term{
+                                              literal = Literal{
+                                                integer = IntegerValue{
+                                                  `int32` = 0:int32}}}}},
+                                        argument = Term{
+                                          variable = Name{"x"}}}}}}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"g"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"u"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"v"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"f"}},
+                                            argument = Term{
+                                              literal = Literal{
+                                                integer = IntegerValue{
+                                                  `int32` = 0:int32}}}}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            integer = IntegerValue{
+                                              `int32` = 0:int32}}}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          pair = (Term{variable = Name{"f"}}, Term{variable = Name{"g"}})}}}),
+            expected = λ`_`.typeScheme
+                  TypeScheme{
+                    variables = [Name{"t0"}, Name{"t1"}],
+                    body = Type{
+                      pair = PairType{
+                        first = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}},
+                                codomain = Type{
+                                  variable = Name{"t0"}}}}}},
+                        second = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}},
+                                codomain = Type{
+                                  variable = Name{"t1"}}}}}}}},
+                    constraints = {}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}

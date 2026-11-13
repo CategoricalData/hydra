@@ -1,0 +1,466 @@
+## Inference tests for examples from the Hydra kernel
+module hydra.core.test.inference.kernelExamples
+
+import hydra.core.inference
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.pairs
+import hydra.core.lib.strings
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## Examples from the Hydra kernel
+term allTests =
+  TestGroup{
+    name = "Examples from the Hydra kernel",
+    description = none,
+    subgroups = [testGroupForNestedLet],
+    `cases` = []}
+
+term testGroupForNestedLet =
+  TestGroup{
+    name = "Nested let",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "hydra.core.formatting.mapFirstLetter",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"mapping"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"s"},
+                                domain = none,
+                                body = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"list"},
+                                        `term` = Term{
+                                          application = Application{
+                                            function = Term{variable = Name{"hydra.core.lib.strings.toList"}},
+                                            argument = Term{variable = Name{"s"}}}},
+                                        typeScheme = none},
+                                      Binding{
+                                        name = Name{"firstLetter"},
+                                        `term` = Term{
+                                          application = Application{
+                                            function = Term{variable = Name{"mapping"}},
+                                            argument = Term{
+                                              application = Application{
+                                                function = Term{
+                                                  variable = Name{"hydra.core.lib.strings.fromList"}},
+                                                argument = Term{
+                                                  application = Application{
+                                                    function = Term{
+                                                      variable = Name{"hydra.core.lib.optionals.givens"}},
+                                                    argument = Term{
+                                                      `list` = [
+                                                        Term{
+                                                          application = Application{
+                                                            function = Term{variable = Name{"hydra.core.lib.lists.head"}},
+                                                            argument = Term{variable = Name{"list"}}}}]}}}}}}},
+                                        typeScheme = none}],
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              application = Application{
+                                                function = Term{
+                                                  variable = Name{"hydra.core.lib.logic.ifElse"}},
+                                                argument = Term{
+                                                  application = Application{
+                                                    function = Term{
+                                                      variable = Name{"hydra.core.lib.strings.isEmpty"}},
+                                                    argument = Term{
+                                                      variable = Name{"s"}}}}}},
+                                            argument = Term{
+                                              variable = Name{"s"}}}},
+                                        argument = Term{
+                                          application = Application{
+                                            function = Term{
+                                              application = Application{
+                                                function = Term{
+                                                  variable = Name{"hydra.core.lib.strings.concat2"}},
+                                                argument = Term{
+                                                  variable = Name{"firstLetter"}}}},
+                                            argument = Term{
+                                              application = Application{
+                                                function = Term{
+                                                  variable = Name{"hydra.core.lib.strings.fromList"}},
+                                                argument = Term{
+                                                  application = Application{
+                                                    function = Term{
+                                                      application = Application{
+                                                        function = Term{
+                                                          variable = Name{"hydra.core.lib.lists.drop"}},
+                                                        argument = Term{
+                                                          literal = Literal{
+                                                            integer = IntegerValue{
+                                                              `int32` = 1:int32}}}}},
+                                                    argument = Term{
+                                                      variable = Name{"list"}}}}}}}}}}}}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  literal = LiteralType{
+                                    `string`}},
+                                codomain = Type{
+                                  literal = LiteralType{
+                                    `string`}}}},
+                            codomain = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  literal = LiteralType{
+                                    `string`}},
+                                codomain = Type{
+                                  literal = LiteralType{
+                                    `string`}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Recursive let with pair return (ifElse)",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"input"},
+                            domain = none,
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"go"},
+                                    `term` = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"depth"},
+                                        domain = none,
+                                        body = Term{
+                                          lambda = Lambda{
+                                            parameter = Name{"subst"},
+                                            domain = none,
+                                            body = Term{
+                                              lambda = Lambda{
+                                                parameter = Name{"s"},
+                                                domain = none,
+                                                body = Term{
+                                                  application = Application{
+                                                    function = Term{
+                                                      application = Application{
+                                                        function = Term{
+                                                          application = Application{
+                                                            function = Term{
+                                                              variable = Name{"hydra.core.lib.logic.ifElse"}},
+                                                            argument = Term{
+                                                              application = Application{
+                                                                function = Term{
+                                                                  variable = Name{"hydra.core.lib.strings.isEmpty"}},
+                                                                argument = Term{
+                                                                  variable = Name{"s"}}}}}},
+                                                        argument = Term{
+                                                          pair = (Term{variable = Name{"subst"}}, Term{variable = Name{"s"}})}}},
+                                                    argument = Term{
+                                                      application = Application{
+                                                        function = Term{
+                                                          application = Application{
+                                                            function = Term{
+                                                              application = Application{
+                                                                function = Term{
+                                                                  variable = Name{"go"}},
+                                                                argument = Term{
+                                                                  application = Application{
+                                                                    function = Term{
+                                                                      application = Application{
+                                                                        function = Term{
+                                                                          variable = Name{"hydra.core.lib.math.add"}},
+                                                                        argument = Term{
+                                                                          variable = Name{"depth"}}}},
+                                                                    argument = Term{
+                                                                      literal = Literal{
+                                                                        integer = IntegerValue{
+                                                                          `int32` = 1:int32}}}}}}},
+                                                            argument = Term{
+                                                              application = Application{
+                                                                function = Term{
+                                                                  application = Application{
+                                                                    function = Term{
+                                                                      application = Application{
+                                                                        function = Term{
+                                                                          variable = Name{"hydra.core.lib.maps.insert"}},
+                                                                        argument = Term{
+                                                                          literal = Literal{
+                                                                            `string` = "key"}}}},
+                                                                    argument = Term{
+                                                                      literal = Literal{
+                                                                        `string` = "val"}}}},
+                                                                argument = Term{
+                                                                  variable = Name{"subst"}}}}}},
+                                                        argument = Term{
+                                                          variable = Name{"s"}}}}}}}}}}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"result"},
+                                        `term` = Term{
+                                          application = Application{
+                                            function = Term{
+                                              application = Application{
+                                                function = Term{
+                                                  application = Application{
+                                                    function = Term{
+                                                      variable = Name{"go"}},
+                                                    argument = Term{
+                                                      literal = Literal{
+                                                        integer = IntegerValue{
+                                                          `int32` = 0:int32}}}}},
+                                                argument = Term{
+                                                  variable = Name{"hydra.core.lib.maps.empty"}}}},
+                                            argument = Term{variable = Name{"input"}}}},
+                                        typeScheme = none},
+                                      Binding{
+                                        name = Name{"subst"},
+                                        `term` = Term{
+                                          application = Application{
+                                            function = Term{variable = Name{"hydra.core.lib.pairs.first"}},
+                                            argument = Term{variable = Name{"result"}}}},
+                                        typeScheme = none},
+                                      Binding{
+                                        name = Name{"body"},
+                                        `term` = Term{
+                                          application = Application{
+                                            function = Term{variable = Name{"hydra.core.lib.pairs.second"}},
+                                            argument = Term{variable = Name{"result"}}}},
+                                        typeScheme = none}],
+                                    body = Term{
+                                      pair = (Term{variable = Name{"subst"}}, Term{variable = Name{"body"}})}}}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            codomain = Type{
+                              pair = PairType{
+                                first = Type{
+                                  `map` = MapType{
+                                    keys = Type{
+                                      literal = LiteralType{
+                                        `string`}},
+                                    values = Type{
+                                      literal = LiteralType{
+                                        `string`}}}},
+                                second = Type{
+                                  literal = LiteralType{
+                                    `string`}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Recursive let with pair return (case on Type)",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#3",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"typ"},
+                            domain = none,
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"go"},
+                                    `term` = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"depth"},
+                                        domain = none,
+                                        body = Term{
+                                          lambda = Lambda{
+                                            parameter = Name{"subst"},
+                                            domain = none,
+                                            body = Term{
+                                              lambda = Lambda{
+                                                parameter = Name{"t"},
+                                                domain = none,
+                                                body = Term{
+                                                  application = Application{
+                                                    function = Term{
+                                                      `cases` = CaseStatement{
+                                                        typeName = Name{"hydra.core.model.Type"},
+                                                        default = given(Term{
+                                                            pair = (Term{variable = Name{"subst"}}, Term{variable = Name{"t"}})}),
+                                                        `cases` = [
+                                                          CaseAlternative{
+                                                            name = Name{"forall"},
+                                                            handler = Term{
+                                                              lambda = Lambda{
+                                                                parameter = Name{"ft"},
+                                                                domain = none,
+                                                                body = Term{
+                                                                  application = Application{
+                                                                    function = Term{
+                                                                      application = Application{
+                                                                        function = Term{
+                                                                          application = Application{
+                                                                            function = Term{
+                                                                              variable = Name{"go"}},
+                                                                            argument = Term{
+                                                                              application = Application{
+                                                                                function = Term{
+                                                                                  application = Application{
+                                                                                    function = Term{
+                                                                                      variable = Name{"hydra.core.lib.math.add"}},
+                                                                                    argument = Term{
+                                                                                      variable = Name{"depth"}}}},
+                                                                                argument = Term{
+                                                                                  literal = Literal{
+                                                                                    integer = IntegerValue{
+                                                                                      `int32` = 1:int32}}}}}}},
+                                                                        argument = Term{
+                                                                          application = Application{
+                                                                            function = Term{
+                                                                              application = Application{
+                                                                                function = Term{
+                                                                                  application = Application{
+                                                                                    function = Term{
+                                                                                      variable = Name{"hydra.core.lib.maps.insert"}},
+                                                                                    argument = Term{
+                                                                                      application = Application{
+                                                                                        function = Term{
+                                                                                          `project` = Projection{
+                                                                                            typeName = Name{"hydra.core.model.ForallType"},
+                                                                                            fieldName = Name{"parameter"}}},
+                                                                                        argument = Term{
+                                                                                          variable = Name{"ft"}}}}}},
+                                                                                argument = Term{
+                                                                                  `wrap` = WrappedTerm{
+                                                                                    typeName = Name{"hydra.core.model.Name"},
+                                                                                    body = Term{
+                                                                                      application = Application{
+                                                                                        function = Term{
+                                                                                          application = Application{
+                                                                                            function = Term{
+                                                                                              variable = Name{"hydra.core.lib.strings.concat2"}},
+                                                                                            argument = Term{
+                                                                                              literal = Literal{
+                                                                                                `string` = "_"}}}},
+                                                                                        argument = Term{
+                                                                                          application = Application{
+                                                                                            function = Term{
+                                                                                              variable = Name{"hydra.core.lib.literals.printInt32"}},
+                                                                                            argument = Term{
+                                                                                              variable = Name{"depth"}}}}}}}}}},
+                                                                            argument = Term{
+                                                                              variable = Name{"subst"}}}}}},
+                                                                    argument = Term{
+                                                                      application = Application{
+                                                                        function = Term{
+                                                                          `project` = Projection{
+                                                                            typeName = Name{"hydra.core.model.ForallType"},
+                                                                            fieldName = Name{"body"}}},
+                                                                        argument = Term{
+                                                                          variable = Name{"ft"}}}}}}}}}]}},
+                                                    argument = Term{
+                                                      variable = Name{"t"}}}}}}}}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"result"},
+                                        `term` = Term{
+                                          application = Application{
+                                            function = Term{
+                                              application = Application{
+                                                function = Term{
+                                                  application = Application{
+                                                    function = Term{
+                                                      variable = Name{"go"}},
+                                                    argument = Term{
+                                                      literal = Literal{
+                                                        integer = IntegerValue{
+                                                          `int32` = 0:int32}}}}},
+                                                argument = Term{
+                                                  variable = Name{"hydra.core.lib.maps.empty"}}}},
+                                            argument = Term{variable = Name{"typ"}}}},
+                                        typeScheme = none}],
+                                    body = Term{
+                                      pair = (
+                                          Term{
+                                            application = Application{
+                                              function = Term{variable = Name{"hydra.core.lib.pairs.first"}},
+                                              argument = Term{variable = Name{"result"}}}},
+                                          Term{
+                                            application = Application{
+                                              function = Term{variable = Name{"hydra.core.lib.pairs.second"}},
+                                              argument = Term{variable = Name{"result"}}}})}}}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"hydra.core.model.Type"}},
+                            codomain = Type{
+                              pair = PairType{
+                                first = Type{
+                                  `map` = MapType{
+                                    keys = Type{
+                                      variable = Name{"hydra.core.model.Name"}},
+                                    values = Type{
+                                      variable = Name{"hydra.core.model.Name"}}}},
+                                second = Type{
+                                  variable = Name{"hydra.core.model.Type"}}}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}

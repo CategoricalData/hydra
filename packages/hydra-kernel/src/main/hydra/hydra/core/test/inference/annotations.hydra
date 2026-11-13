@@ -1,0 +1,305 @@
+## Inference tests for annotated terms
+module hydra.core.test.inference.annotations
+
+import hydra.core.inference
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.pairs
+import hydra.core.lib.strings
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## Inference tests for annotated terms
+term allTests =
+  TestGroup{name = "Annotated terms", description = none, subgroups = [transparencyTests, failureTests], `cases` = []}
+
+term transparencyTests =
+  TestGroup{
+    name = "Annotation is transparent to the inferred type",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "Arbitrary-term annotation",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}},
+                            annotation = Term{
+                              literal = Literal{
+                                `string` = "hello"}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              literal = Literal{
+                                `string` = "foo"}},
+                            annotation = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 0:int32}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          literal = LiteralType{
+                            `string`}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#3",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  variable = Name{"x"}}}},
+                            annotation = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 0:int32}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [Name{"t0"}],
+                        body = Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"t0"}},
+                            codomain = Type{
+                              variable = Name{"t0"}}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Map-term annotation (conventional form)",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}},
+                            annotation = Term{
+                              `map` = {}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}},
+                            annotation = Term{
+                              `map` = {
+                                Term{literal = Literal{`string` = "description"}}=Term{literal = Literal{`string` = "the answer"}}}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Nested annotations",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}},
+                                annotation = Term{
+                                  literal = Literal{
+                                    `string` = "inner"}}}},
+                            annotation = Term{
+                              literal = Literal{
+                                `string` = "outer"}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "#2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.concat2 "INFERENCE ERROR: " "failed")
+                      (λresult.typeScheme (second (first result)))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              annotated = AnnotatedTerm{
+                                body = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}},
+                                annotation = Term{
+                                  `map` = {}}}},
+                            annotation = Term{
+                              `map` = {}}}}),
+                expected = λ`_`.typeScheme
+                      TypeScheme{
+                        variables = [],
+                        body = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}},
+                        constraints = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}
+
+term failureTests =
+  TestGroup{
+    name = "Errors in the body propagate",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "Type error in body propagates",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "#1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."FAIL")
+                      (λresult.concat2
+                          "unexpected: "
+                          (typeScheme (second (first result))))
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.math.add"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 1:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "x"}}}},
+                            annotation = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 0:int32}}}}}),
+                expected = λ`_`."FAIL"}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}
