@@ -1,0 +1,3826 @@
+## Round-trip test cases for the textual syntax
+module hydra.core.test.syntax
+
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.lists as lists
+import hydra.core.lib.literals
+import hydra.core.lib.maps as maps
+import hydra.core.lib.optionals
+import hydra.core.lib.sets as sets
+import hydra.core.lib.strings as strings
+import hydra.core.model
+import hydra.core.packaging
+import hydra.core.parse.core
+import hydra.core.parse.packaging
+import hydra.core.parsing
+import hydra.core.paths
+import hydra.core.positions
+import hydra.core.print.model as model
+import hydra.core.print.packaging
+import hydra.core.test.testTerms
+import hydra.core.test.testTypes
+import hydra.core.testing
+import hydra.core.typing
+
+## Test cases for the textual syntax (#497/#710)
+term allTests =
+  TestGroup{
+    name = "textual syntax",
+    description = none,
+    subgroups = [
+      annotationRoundtripGroup,
+      corpusRoundtripGroup,
+      doSugarGroup,
+      forallMultiBinderGroup,
+      lambdaMultiBinderGroup,
+      lazyParameterRoundtripGroup,
+      moduleAliasGroup,
+      multiLineDocCommentGroup,
+      nominalSugarGroup,
+      sourceSpanGroup,
+      sourcePositionGroup,
+      termDocCommentGroup,
+      unqualifiedNamesGroup],
+    `cases` = []}
+
+## Annotation round-trip cases tied to syntax.md #1's HYDRA-SYN-ROUND-TRIP / HYDRA-SYN-PRINTER-FAITHFUL provisions (#497)
+term annotationRoundtripGroup =
+  TestGroup{
+    name = "annotation round-trips",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "annotated literal round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `inject` = Injection{
+                          typeName = Name{"hydra.core.model.Term"},
+                          field = Field{
+                            name = Name{"annotated"},
+                            `term` = Term{
+                              `record` = Record{
+                                typeName = Name{"hydra.core.model.AnnotatedTerm"},
+                                fields = [
+                                  Field{name = Name{"body"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}},
+                                  Field{
+                                    name = Name{"annotation"},
+                                    `term` = Term{
+                                      `map` = maps.mapKeys
+                                          (λn.Term{variable = n})
+                                          (maps.fromList [(Name{"description"}, Term{literal = Literal{`string` = "the answer"}})])}}]}}}}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `inject` = Injection{
+                      typeName = Name{"hydra.core.model.Term"},
+                      field = Field{
+                        name = Name{"annotated"},
+                        `term` = Term{
+                          `record` = Record{
+                            typeName = Name{"hydra.core.model.AnnotatedTerm"},
+                            fields = [
+                              Field{name = Name{"body"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}},
+                              Field{
+                                name = Name{"annotation"},
+                                `term` = Term{
+                                  `map` = maps.mapKeys
+                                      (λn.Term{variable = n})
+                                      (maps.fromList [(Name{"description"}, Term{literal = Literal{`string` = "the answer"}})])}}]}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "annotated variable round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `inject` = Injection{
+                          typeName = Name{"hydra.core.model.Term"},
+                          field = Field{
+                            name = Name{"annotated"},
+                            `term` = Term{
+                              `record` = Record{
+                                typeName = Name{"hydra.core.model.AnnotatedTerm"},
+                                fields = [
+                                  Field{name = Name{"body"}, `term` = Term{variable = Name{"x"}}},
+                                  Field{
+                                    name = Name{"annotation"},
+                                    `term` = Term{
+                                      `map` = maps.mapKeys
+                                          (λn.Term{variable = n})
+                                          (maps.fromList [(Name{"description"}, Term{literal = Literal{`string` = "a variable"}})])}}]}}}}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `inject` = Injection{
+                      typeName = Name{"hydra.core.model.Term"},
+                      field = Field{
+                        name = Name{"annotated"},
+                        `term` = Term{
+                          `record` = Record{
+                            typeName = Name{"hydra.core.model.AnnotatedTerm"},
+                            fields = [
+                              Field{name = Name{"body"}, `term` = Term{variable = Name{"x"}}},
+                              Field{
+                                name = Name{"annotation"},
+                                `term` = Term{
+                                  `map` = maps.mapKeys
+                                      (λn.Term{variable = n})
+                                      (maps.fromList [(Name{"description"}, Term{literal = Literal{`string` = "a variable"}})])}}]}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "annotated application round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `inject` = Injection{
+                          typeName = Name{"hydra.core.model.Term"},
+                          field = Field{
+                            name = Name{"annotated"},
+                            `term` = Term{
+                              `record` = Record{
+                                typeName = Name{"hydra.core.model.AnnotatedTerm"},
+                                fields = [
+                                  Field{
+                                    name = Name{"body"},
+                                    `term` = Term{
+                                      application = Application{
+                                        function = Term{variable = Name{"f"}},
+                                        argument = Term{variable = Name{"x"}}}}},
+                                  Field{
+                                    name = Name{"annotation"},
+                                    `term` = Term{
+                                      `map` = maps.mapKeys
+                                          (λn.Term{variable = n})
+                                          (maps.fromList [(Name{"description"}, Term{literal = Literal{`string` = "a call"}})])}}]}}}}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `inject` = Injection{
+                      typeName = Name{"hydra.core.model.Term"},
+                      field = Field{
+                        name = Name{"annotated"},
+                        `term` = Term{
+                          `record` = Record{
+                            typeName = Name{"hydra.core.model.AnnotatedTerm"},
+                            fields = [
+                              Field{
+                                name = Name{"body"},
+                                `term` = Term{
+                                  application = Application{
+                                    function = Term{variable = Name{"f"}},
+                                    argument = Term{variable = Name{"x"}}}}},
+                              Field{
+                                name = Name{"annotation"},
+                                `term` = Term{
+                                  `map` = maps.mapKeys
+                                      (λn.Term{variable = n})
+                                      (maps.fromList [(Name{"description"}, Term{literal = Literal{`string` = "a call"}})])}}]}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "stacked annotations round-trip (chains left)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `inject` = Injection{
+                          typeName = Name{"hydra.core.model.Term"},
+                          field = Field{
+                            name = Name{"annotated"},
+                            `term` = Term{
+                              `record` = Record{
+                                typeName = Name{"hydra.core.model.AnnotatedTerm"},
+                                fields = [
+                                  Field{
+                                    name = Name{"body"},
+                                    `term` = Term{
+                                      `inject` = Injection{
+                                        typeName = Name{"hydra.core.model.Term"},
+                                        field = Field{
+                                          name = Name{"annotated"},
+                                          `term` = Term{
+                                            `record` = Record{
+                                              typeName = Name{"hydra.core.model.AnnotatedTerm"},
+                                              fields = [
+                                                Field{name = Name{"body"}, `term` = Term{variable = Name{"x"}}},
+                                                Field{
+                                                  name = Name{"annotation"},
+                                                  `term` = Term{
+                                                    `map` = maps.mapKeys
+                                                        (λn.Term{variable = n})
+                                                        (maps.fromList [(Name{"description"}, Term{literal = Literal{`string` = "inner"}})])}}]}}}}}},
+                                  Field{
+                                    name = Name{"annotation"},
+                                    `term` = Term{
+                                      `map` = maps.mapKeys
+                                          (λn.Term{variable = n})
+                                          (maps.fromList [(Name{"description"}, Term{literal = Literal{`string` = "outer"}})])}}]}}}}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `inject` = Injection{
+                      typeName = Name{"hydra.core.model.Term"},
+                      field = Field{
+                        name = Name{"annotated"},
+                        `term` = Term{
+                          `record` = Record{
+                            typeName = Name{"hydra.core.model.AnnotatedTerm"},
+                            fields = [
+                              Field{
+                                name = Name{"body"},
+                                `term` = Term{
+                                  `inject` = Injection{
+                                    typeName = Name{"hydra.core.model.Term"},
+                                    field = Field{
+                                      name = Name{"annotated"},
+                                      `term` = Term{
+                                        `record` = Record{
+                                          typeName = Name{"hydra.core.model.AnnotatedTerm"},
+                                          fields = [
+                                            Field{name = Name{"body"}, `term` = Term{variable = Name{"x"}}},
+                                            Field{
+                                              name = Name{"annotation"},
+                                              `term` = Term{
+                                                `map` = maps.mapKeys
+                                                    (λn.Term{variable = n})
+                                                    (maps.fromList [(Name{"description"}, Term{literal = Literal{`string` = "inner"}})])}}]}}}}}},
+                              Field{
+                                name = Name{"annotation"},
+                                `term` = Term{
+                                  `map` = maps.mapKeys
+                                      (λn.Term{variable = n})
+                                      (maps.fromList [(Name{"description"}, Term{literal = Literal{`string` = "outer"}})])}}]}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "annotation with a compound (non-atomic) payload round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `inject` = Injection{
+                          typeName = Name{"hydra.core.model.Term"},
+                          field = Field{
+                            name = Name{"annotated"},
+                            `term` = Term{
+                              `record` = Record{
+                                typeName = Name{"hydra.core.model.AnnotatedTerm"},
+                                fields = [
+                                  Field{name = Name{"body"}, `term` = Term{variable = Name{"x"}}},
+                                  Field{
+                                    name = Name{"annotation"},
+                                    `term` = Term{
+                                      application = Application{
+                                        function = Term{variable = Name{"f"}},
+                                        argument = Term{variable = Name{"y"}}}}}]}}}}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `inject` = Injection{
+                      typeName = Name{"hydra.core.model.Term"},
+                      field = Field{
+                        name = Name{"annotated"},
+                        `term` = Term{
+                          `record` = Record{
+                            typeName = Name{"hydra.core.model.AnnotatedTerm"},
+                            fields = [
+                              Field{name = Name{"body"}, `term` = Term{variable = Name{"x"}}},
+                              Field{
+                                name = Name{"annotation"},
+                                `term` = Term{
+                                  application = Application{
+                                    function = Term{variable = Name{"f"}},
+                                    argument = Term{variable = Name{"y"}}}}}]}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "annotated type round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type
+                      Type{
+                        annotated = AnnotatedType{
+                          body = Type{
+                            literal = LiteralType{
+                              `string`}},
+                          annotation = Term{
+                            `map` = maps.mapKeys
+                                (λn.Term{
+                                    variable = n})
+                                (maps.fromList
+                                  [(Name{"description"}, Term{literal = Literal{`string` = "a type"}})])}}})),
+            expected = λ`_`.model.type
+                  Type{
+                    annotated = AnnotatedType{
+                      body = Type{
+                        literal = LiteralType{
+                          `string`}},
+                      annotation = Term{
+                        `map` = maps.mapKeys
+                            (λn.Term{
+                                variable = n})
+                            (maps.fromList
+                              [(Name{"description"}, Term{literal = Literal{`string` = "a type"}})])}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "stacked type annotations round-trip (chains left)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type
+                      Type{
+                        annotated = AnnotatedType{
+                          body = Type{
+                            annotated = AnnotatedType{
+                              body = Type{
+                                literal = LiteralType{
+                                  `string`}},
+                              annotation = Term{
+                                `map` = maps.mapKeys
+                                    (λn.Term{
+                                        variable = n})
+                                    (maps.fromList
+                                      [(Name{"inner"}, Term{literal = Literal{`string` = "i"}})])}}},
+                          annotation = Term{
+                            `map` = maps.mapKeys
+                                (λn.Term{
+                                    variable = n})
+                                (maps.fromList
+                                  [(Name{"outer"}, Term{literal = Literal{`string` = "o"}})])}}})),
+            expected = λ`_`.model.type
+                  Type{
+                    annotated = AnnotatedType{
+                      body = Type{
+                        annotated = AnnotatedType{
+                          body = Type{
+                            literal = LiteralType{
+                              `string`}},
+                          annotation = Term{
+                            `map` = maps.mapKeys
+                                (λn.Term{
+                                    variable = n})
+                                (maps.fromList
+                                  [(Name{"inner"}, Term{literal = Literal{`string` = "i"}})])}}},
+                      annotation = Term{
+                        `map` = maps.mapKeys
+                            (λn.Term{
+                                variable = n})
+                            (maps.fromList
+                              [(Name{"outer"}, Term{literal = Literal{`string` = "o"}})])}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## General print->parse->print round-trip sweep over the kernel test-fixture corpus (#497)
+term corpusRoundtripGroup =
+  TestGroup{
+    name = "fixture corpus round-trips",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "corpus: testDataArthur (nominal record)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm (model.term testDataArthur)),
+            expected = λ`_`.model.term testDataArthur}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: testTypePerson (record)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType (model.type testTypePerson)),
+            expected = λ`_`.model.type testTypePerson}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: testTypeUnionMonomorphic (monomorphic union)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type testTypeUnionMonomorphic)),
+            expected = λ`_`.model.type testTypeUnionMonomorphic}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: testTypeLatLonPoly (polymorphic record, single forall)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type testTypeLatLonPoly)),
+            expected = λ`_`.model.type testTypeLatLonPoly}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: testTypeTriple (triple forall)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType (model.type testTypeTriple)),
+            expected = λ`_`.model.type testTypeTriple}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: testTypeList (self-recursive polymorphic record)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType (model.type testTypeList)),
+            expected = λ`_`.model.type testTypeList}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: testTypeUnionPolymorphicRecursive (self-recursive polymorphic union)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type
+                      testTypeUnionPolymorphicRecursive)),
+            expected = λ`_`.model.type
+                  testTypeUnionPolymorphicRecursive}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: testTypeUnionPolymorphicRecursiveListWrapped (list-wrapped recursive union)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type
+                      testTypeUnionPolymorphicRecursiveListWrapped)),
+            expected = λ`_`.model.type
+                  testTypeUnionPolymorphicRecursiveListWrapped}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: testTypeStringAlias (wrap)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type testTypeStringAlias)),
+            expected = λ`_`.model.type testTypeStringAlias}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: testTypePolymorphicWrapper (forall + wrap + list)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type testTypePolymorphicWrapper)),
+            expected = λ`_`.model.type testTypePolymorphicWrapper}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: testTypeSymmetricTriple (two-variable forall + wrap + applied type)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type testTypeSymmetricTriple)),
+            expected = λ`_`.model.type testTypeSymmetricTriple}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: optionalStringType",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type optionalStringType)),
+            expected = λ`_`.model.type optionalStringType}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: listOfSetOfStringsType (nested containers)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type listOfSetOfStringsType)),
+            expected = λ`_`.model.type listOfSetOfStringsType}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: mapOfStringsToIntsType",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type mapOfStringsToIntsType)),
+            expected = λ`_`.model.type mapOfStringsToIntsType}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: eitherStringOrInt8Type",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type eitherStringOrInt8Type)),
+            expected = λ`_`.model.type eitherStringOrInt8Type}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: concatType (curried function type)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType (model.type concatType)),
+            expected = λ`_`.model.type concatType}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "corpus: testTypeTimestamp (union with a uint64 variant)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType (model.type testTypeTimestamp)),
+            expected = λ`_`.model.type testTypeTimestamp}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Monadic 'do' sugar (#811): parse-only; 'do <tag> { clauses }' desugars to <tag>s.bind chains
+term doSugarGroup =
+  TestGroup{
+    name = "monadic do sugar",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "do either: two binds + result",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    "do either { x := readFile path, y := decode x, y }"),
+            expected = λ`_`.model.term
+                  Term{
+                    application = Application{
+                      function = Term{
+                        application = Application{
+                          function = Term{
+                            variable = Name{"hydra.core.lib.eithers.bind"}},
+                          argument = Term{
+                            application = Application{
+                              function = Term{
+                                variable = Name{"readFile"}},
+                              argument = Term{
+                                variable = Name{"path"}}}}}},
+                      argument = Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            application = Application{
+                              function = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"hydra.core.lib.eithers.bind"}},
+                                  argument = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"decode"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}}}},
+                              argument = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"y"},
+                                  domain = none,
+                                  body = Term{
+                                    variable = Name{"y"}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "do either: multi-line (newlines insignificant)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    "do either {\n  x := readFile path,\n  y := decode x,\n  y\n}"),
+            expected = λ`_`.model.term
+                  Term{
+                    application = Application{
+                      function = Term{
+                        application = Application{
+                          function = Term{
+                            variable = Name{"hydra.core.lib.eithers.bind"}},
+                          argument = Term{
+                            application = Application{
+                              function = Term{
+                                variable = Name{"readFile"}},
+                              argument = Term{
+                                variable = Name{"path"}}}}}},
+                      argument = Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            application = Application{
+                              function = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"hydra.core.lib.eithers.bind"}},
+                                  argument = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"decode"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}}}},
+                              argument = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"y"},
+                                  domain = none,
+                                  body = Term{
+                                    variable = Name{"y"}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "do optional: single bind",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm "do optional { x := e, x }"),
+            expected = λ`_`.model.term
+                  Term{
+                    application = Application{
+                      function = Term{
+                        application = Application{
+                          function = Term{
+                            variable = Name{"hydra.core.lib.optionals.bind"}},
+                          argument = Term{
+                            variable = Name{"e"}}}},
+                      argument = Term{
+                        lambda = Lambda{
+                          parameter = Name{"x"},
+                          domain = none,
+                          body = Term{
+                            variable = Name{"x"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "do effect: bare non-final clause uses wildcard binder",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm "do effect { eff, r }"),
+            expected = λ`_`.model.term
+                  Term{
+                    application = Application{
+                      function = Term{
+                        application = Application{
+                          function = Term{
+                            variable = Name{"hydra.core.lib.effects.bind"}},
+                          argument = Term{
+                            variable = Name{"eff"}}}},
+                      argument = Term{
+                        lambda = Lambda{
+                          parameter = Name{"_"},
+                          domain = none,
+                          body = Term{
+                            variable = Name{"r"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "do list: single result clause (no bind)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm "do list { r }"),
+            expected = λ`_`.model.term Term{variable = Name{"r"}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Print/parse/round-trip cases for the multi-binder 'forall a, b.' syntax (#711)
+term forallMultiBinderGroup =
+  TestGroup{
+    name = "forall multi-binder syntax",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "single binder: prints as 'forall a.' (unaffected by collapsing)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.type
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"a"},
+                      body = Type{
+                        variable = Name{"a"}}}},
+            expected = λ`_`."forall a. a"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "single binder: round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type
+                      Type{
+                        `forall` = ForallType{
+                          parameter = Name{"a"},
+                          body = Type{
+                            variable = Name{"a"}}}})),
+            expected = λ`_`.model.type
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"a"},
+                      body = Type{
+                        variable = Name{"a"}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "three directly-nested foralls collapse into one 'forall a, b, c.'",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.type
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"a"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"b"},
+                          body = Type{
+                            `forall` = ForallType{
+                              parameter = Name{"c"},
+                              body = Type{
+                                variable = Name{"a"}}}}}}}},
+            expected = λ`_`."forall a, b, c. a"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "three directly-nested foralls round-trip",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type
+                      Type{
+                        `forall` = ForallType{
+                          parameter = Name{"a"},
+                          body = Type{
+                            `forall` = ForallType{
+                              parameter = Name{"b"},
+                              body = Type{
+                                `forall` = ForallType{
+                                  parameter = Name{"c"},
+                                  body = Type{
+                                    variable = Name{"a"}}}}}}}})),
+            expected = λ`_`.model.type
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"a"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"b"},
+                          body = Type{
+                            `forall` = ForallType{
+                              parameter = Name{"c"},
+                              body = Type{
+                                variable = Name{"a"}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "forall nested under an annotation does NOT collapse across the annotation",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.type
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"a"},
+                      body = Type{
+                        annotated = AnnotatedType{
+                          body = Type{
+                            `forall` = ForallType{
+                              parameter = Name{"b"},
+                              body = Type{
+                                variable = Name{"b"}}}},
+                          annotation = Term{
+                            `map` = maps.fromList
+                                [(Term{variable = Name{"tag"}}, Term{literal = Literal{`string` = "x"}})]}}}}},
+            expected = λ`_`."forall a. (forall b. b)@{tag=\"x\"}"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "forall nested under an annotation round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.type t2)
+                  (parseType
+                    (model.type
+                      Type{
+                        `forall` = ForallType{
+                          parameter = Name{"a"},
+                          body = Type{
+                            annotated = AnnotatedType{
+                              body = Type{
+                                `forall` = ForallType{
+                                  parameter = Name{"b"},
+                                  body = Type{
+                                    variable = Name{"b"}}}},
+                              annotation = Term{
+                                `map` = maps.fromList
+                                    [(Term{variable = Name{"tag"}}, Term{literal = Literal{`string` = "x"}})]}}}}})),
+            expected = λ`_`.model.type
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"a"},
+                      body = Type{
+                        annotated = AnnotatedType{
+                          body = Type{
+                            `forall` = ForallType{
+                              parameter = Name{"b"},
+                              body = Type{
+                                variable = Name{"b"}}}},
+                          annotation = Term{
+                            `map` = maps.fromList
+                                [(Term{variable = Name{"tag"}}, Term{literal = Literal{`string` = "x"}})]}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Print/parse/round-trip cases for multi-binder 'λa,b.'/'Λa,b.' syntax (#711)
+term lambdaMultiBinderGroup =
+  TestGroup{
+    name = "lambda/type-lambda multi-binder syntax",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "three directly-nested λ's collapse into one 'λa,b,c.'",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term
+                  Term{
+                    lambda = Lambda{
+                      parameter = Name{"a"},
+                      domain = none,
+                      body = Term{
+                        lambda = Lambda{
+                          parameter = Name{"b"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"c"},
+                              domain = none,
+                              body = Term{
+                                variable = Name{"a"}}}}}}}},
+            expected = λ`_`."λa,b,c.a"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "three directly-nested λ's round-trip",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"a"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"b"},
+                              domain = none,
+                              body = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"c"},
+                                  domain = none,
+                                  body = Term{
+                                    variable = Name{"a"}}}}}}}})),
+            expected = λ`_`.model.term
+                  Term{
+                    lambda = Lambda{
+                      parameter = Name{"a"},
+                      domain = none,
+                      body = Term{
+                        lambda = Lambda{
+                          parameter = Name{"b"},
+                          domain = none,
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"c"},
+                              domain = none,
+                              body = Term{
+                                variable = Name{"a"}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "typed binders collapse with each binder keeping its own domain type",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term
+                  Term{
+                    lambda = Lambda{
+                      parameter = Name{"a"},
+                      domain = given(Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}),
+                      body = Term{
+                        lambda = Lambda{
+                          parameter = Name{"b"},
+                          domain = given(Type{
+                              literal = LiteralType{
+                                `string`}}),
+                          body = Term{
+                            variable = Name{"a"}}}}}},
+            expected = λ`_`."λa:int32,b:string.a"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "typed binders round-trip",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"a"},
+                          domain = given(Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}),
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"b"},
+                              domain = given(Type{
+                                  literal = LiteralType{
+                                    `string`}}),
+                              body = Term{
+                                variable = Name{"a"}}}}}})),
+            expected = λ`_`.model.term
+                  Term{
+                    lambda = Lambda{
+                      parameter = Name{"a"},
+                      domain = given(Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}),
+                      body = Term{
+                        lambda = Lambda{
+                          parameter = Name{"b"},
+                          domain = given(Type{
+                              literal = LiteralType{
+                                `string`}}),
+                          body = Term{
+                            variable = Name{"a"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "λ nested under an annotation does NOT collapse across the annotation",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term
+                  Term{
+                    lambda = Lambda{
+                      parameter = Name{"a"},
+                      domain = none,
+                      body = Term{
+                        annotated = AnnotatedTerm{
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"b"},
+                              domain = none,
+                              body = Term{
+                                variable = Name{"b"}}}},
+                          annotation = Term{
+                            `map` = maps.fromList
+                                [(Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "inner"}})]}}}}},
+            expected = λ`_`."λa.(λb.b)@{description=\"inner\"}"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "λ nested under an annotation round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        lambda = Lambda{
+                          parameter = Name{"a"},
+                          domain = none,
+                          body = Term{
+                            annotated = AnnotatedTerm{
+                              body = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"b"},
+                                  domain = none,
+                                  body = Term{
+                                    variable = Name{"b"}}}},
+                              annotation = Term{
+                                `map` = maps.fromList
+                                    [(Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "inner"}})]}}}}})),
+            expected = λ`_`.model.term
+                  Term{
+                    lambda = Lambda{
+                      parameter = Name{"a"},
+                      domain = none,
+                      body = Term{
+                        annotated = AnnotatedTerm{
+                          body = Term{
+                            lambda = Lambda{
+                              parameter = Name{"b"},
+                              domain = none,
+                              body = Term{
+                                variable = Name{"b"}}}},
+                          annotation = Term{
+                            `map` = maps.fromList
+                                [(Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "inner"}})]}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "three directly-nested Λ's collapse into one 'Λa,b,c.'",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term
+                  Term{
+                    typeLambda = TypeLambda{
+                      parameter = Name{"a"},
+                      body = Term{
+                        typeLambda = TypeLambda{
+                          parameter = Name{"b"},
+                          body = Term{
+                            typeLambda = TypeLambda{
+                              parameter = Name{"c"},
+                              body = Term{
+                                variable = Name{"a"}}}}}}}},
+            expected = λ`_`."Λa,b,c.a"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "three directly-nested Λ's round-trip",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        typeLambda = TypeLambda{
+                          parameter = Name{"a"},
+                          body = Term{
+                            typeLambda = TypeLambda{
+                              parameter = Name{"b"},
+                              body = Term{
+                                typeLambda = TypeLambda{
+                                  parameter = Name{"c"},
+                                  body = Term{
+                                    variable = Name{"a"}}}}}}}})),
+            expected = λ`_`.model.term
+                  Term{
+                    typeLambda = TypeLambda{
+                      parameter = Name{"a"},
+                      body = Term{
+                        typeLambda = TypeLambda{
+                          parameter = Name{"b"},
+                          body = Term{
+                            typeLambda = TypeLambda{
+                              parameter = Name{"c"},
+                              body = Term{
+                                variable = Name{"a"}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Round-trip and exact-print test cases for lazy parameter syntax (#800)
+term lazyParameterRoundtripGroup =
+  TestGroup{
+    name = "lazy parameter syntax",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "ifElse: lazy then/else branches print with 'lazy' keyword",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.termSignature
+                  TermSignature{
+                    typeParameters = [TypeParameter{name = Name{"x"}, constraints = []}],
+                    parameters = [
+                      Parameter{name = Name{"p"}, description = none, `type` = Type{literal = LiteralType{`boolean`}}, isLazy = false},
+                      Parameter{name = Name{"t"}, description = none, `type` = Type{variable = Name{"x"}}, isLazy = true},
+                      Parameter{name = Name{"f"}, description = none, `type` = Type{variable = Name{"x"}}, isLazy = true}],
+                    result = Result{
+                      description = none,
+                      `type` = Type{
+                        variable = Name{"x"}}}},
+            expected = λ`_`."∀x.boolean → lazy x → lazy x → x"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "ifElse: lazy then/else branches round-trip",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λsig2.model.termSignature sig2)
+                  (parseTermSignature
+                    (model.termSignature
+                      TermSignature{
+                        typeParameters = [TypeParameter{name = Name{"x"}, constraints = []}],
+                        parameters = [
+                          Parameter{name = Name{"p"}, description = none, `type` = Type{literal = LiteralType{`boolean`}}, isLazy = false},
+                          Parameter{name = Name{"t"}, description = none, `type` = Type{variable = Name{"x"}}, isLazy = true},
+                          Parameter{name = Name{"f"}, description = none, `type` = Type{variable = Name{"x"}}, isLazy = true}],
+                        result = Result{
+                          description = none,
+                          `type` = Type{
+                            variable = Name{"x"}}}})),
+            expected = λ`_`.model.termSignature
+                  TermSignature{
+                    typeParameters = [TypeParameter{name = Name{"x"}, constraints = []}],
+                    parameters = [
+                      Parameter{name = Name{"p"}, description = none, `type` = Type{literal = LiteralType{`boolean`}}, isLazy = false},
+                      Parameter{name = Name{"t"}, description = none, `type` = Type{variable = Name{"x"}}, isLazy = true},
+                      Parameter{name = Name{"f"}, description = none, `type` = Type{variable = Name{"x"}}, isLazy = true}],
+                    result = Result{
+                      description = none,
+                      `type` = Type{
+                        variable = Name{"x"}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "findWithDefault: lazy default value prints with 'lazy' keyword",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.termSignature
+                  TermSignature{
+                    typeParameters = [TypeParameter{name = Name{"k"}, constraints = []}, TypeParameter{name = Name{"v"}, constraints = []}],
+                    parameters = [
+                      Parameter{name = Name{"def"}, description = none, `type` = Type{variable = Name{"v"}}, isLazy = true},
+                      Parameter{name = Name{"key"}, description = none, `type` = Type{variable = Name{"k"}}, isLazy = false},
+                      Parameter{
+                        name = Name{"m"},
+                        description = none,
+                        `type` = Type{
+                          application = ApplicationType{
+                            function = Type{
+                              application = ApplicationType{
+                                function = Type{
+                                  variable = Name{"Map"}},
+                                argument = Type{
+                                  variable = Name{"k"}}}},
+                            argument = Type{variable = Name{"v"}}}},
+                        isLazy = false}],
+                    result = Result{
+                      description = none,
+                      `type` = Type{
+                        variable = Name{"v"}}}},
+            expected = λ`_`."∀k,v.lazy v → k → Map k v → v"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "findWithDefault: lazy default value round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λsig2.model.termSignature sig2)
+                  (parseTermSignature
+                    (model.termSignature
+                      TermSignature{
+                        typeParameters = [TypeParameter{name = Name{"k"}, constraints = []}, TypeParameter{name = Name{"v"}, constraints = []}],
+                        parameters = [
+                          Parameter{name = Name{"def"}, description = none, `type` = Type{variable = Name{"v"}}, isLazy = true},
+                          Parameter{name = Name{"key"}, description = none, `type` = Type{variable = Name{"k"}}, isLazy = false},
+                          Parameter{
+                            name = Name{"m"},
+                            description = none,
+                            `type` = Type{
+                              application = ApplicationType{
+                                function = Type{
+                                  application = ApplicationType{
+                                    function = Type{
+                                      variable = Name{"Map"}},
+                                    argument = Type{
+                                      variable = Name{"k"}}}},
+                                argument = Type{variable = Name{"v"}}}},
+                            isLazy = false}],
+                        result = Result{
+                          description = none,
+                          `type` = Type{
+                            variable = Name{"v"}}}})),
+            expected = λ`_`.model.termSignature
+                  TermSignature{
+                    typeParameters = [TypeParameter{name = Name{"k"}, constraints = []}, TypeParameter{name = Name{"v"}, constraints = []}],
+                    parameters = [
+                      Parameter{name = Name{"def"}, description = none, `type` = Type{variable = Name{"v"}}, isLazy = true},
+                      Parameter{name = Name{"key"}, description = none, `type` = Type{variable = Name{"k"}}, isLazy = false},
+                      Parameter{
+                        name = Name{"m"},
+                        description = none,
+                        `type` = Type{
+                          application = ApplicationType{
+                            function = Type{
+                              application = ApplicationType{
+                                function = Type{
+                                  variable = Name{"Map"}},
+                                argument = Type{
+                                  variable = Name{"k"}}}},
+                            argument = Type{variable = Name{"v"}}}},
+                        isLazy = false}],
+                    result = Result{
+                      description = none,
+                      `type` = Type{
+                        variable = Name{"v"}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "optionals.match: lazy default value prints with 'lazy' keyword",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.termSignature
+                  TermSignature{
+                    typeParameters = [TypeParameter{name = Name{"x"}, constraints = []}, TypeParameter{name = Name{"y"}, constraints = []}],
+                    parameters = [
+                      Parameter{
+                        name = Name{"m"},
+                        description = none,
+                        `type` = Type{`optional` = Type{variable = Name{"x"}}},
+                        isLazy = false},
+                      Parameter{name = Name{"def"}, description = none, `type` = Type{variable = Name{"y"}}, isLazy = true},
+                      Parameter{
+                        name = Name{"f"},
+                        description = none,
+                        `type` = Type{
+                          function = FunctionType{
+                            domain = Type{variable = Name{"x"}},
+                            codomain = Type{variable = Name{"y"}}}},
+                        isLazy = false}],
+                    result = Result{
+                      description = none,
+                      `type` = Type{
+                        variable = Name{"y"}}}},
+            expected = λ`_`."∀x,y.optional<x> → lazy y → (x → y) → y"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "optionals.match: lazy default value round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λsig2.model.termSignature sig2)
+                  (parseTermSignature
+                    (model.termSignature
+                      TermSignature{
+                        typeParameters = [TypeParameter{name = Name{"x"}, constraints = []}, TypeParameter{name = Name{"y"}, constraints = []}],
+                        parameters = [
+                          Parameter{
+                            name = Name{"m"},
+                            description = none,
+                            `type` = Type{`optional` = Type{variable = Name{"x"}}},
+                            isLazy = false},
+                          Parameter{name = Name{"def"}, description = none, `type` = Type{variable = Name{"y"}}, isLazy = true},
+                          Parameter{
+                            name = Name{"f"},
+                            description = none,
+                            `type` = Type{
+                              function = FunctionType{
+                                domain = Type{variable = Name{"x"}},
+                                codomain = Type{variable = Name{"y"}}}},
+                            isLazy = false}],
+                        result = Result{
+                          description = none,
+                          `type` = Type{
+                            variable = Name{"y"}}}})),
+            expected = λ`_`.model.termSignature
+                  TermSignature{
+                    typeParameters = [TypeParameter{name = Name{"x"}, constraints = []}, TypeParameter{name = Name{"y"}, constraints = []}],
+                    parameters = [
+                      Parameter{
+                        name = Name{"m"},
+                        description = none,
+                        `type` = Type{`optional` = Type{variable = Name{"x"}}},
+                        isLazy = false},
+                      Parameter{name = Name{"def"}, description = none, `type` = Type{variable = Name{"y"}}, isLazy = true},
+                      Parameter{
+                        name = Name{"f"},
+                        description = none,
+                        `type` = Type{
+                          function = FunctionType{
+                            domain = Type{variable = Name{"x"}},
+                            codomain = Type{variable = Name{"y"}}}},
+                        isLazy = false}],
+                    result = Result{
+                      description = none,
+                      `type` = Type{
+                        variable = Name{"y"}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "no lazy parameters: no 'lazy' keyword appears",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.termSignature
+                  TermSignature{
+                    typeParameters = [TypeParameter{name = Name{"x"}, constraints = []}],
+                    parameters = [
+                      Parameter{name = Name{"p"}, description = none, `type` = Type{literal = LiteralType{`boolean`}}, isLazy = false},
+                      Parameter{name = Name{"q"}, description = none, `type` = Type{variable = Name{"x"}}, isLazy = false}],
+                    result = Result{
+                      description = none,
+                      `type` = Type{
+                        variable = Name{"x"}}}},
+            expected = λ`_`."∀x.boolean → x → x"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "no lazy parameters: round-trips cleanly",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λsig2.model.termSignature sig2)
+                  (parseTermSignature
+                    (model.termSignature
+                      TermSignature{
+                        typeParameters = [TypeParameter{name = Name{"x"}, constraints = []}],
+                        parameters = [
+                          Parameter{name = Name{"p"}, description = none, `type` = Type{literal = LiteralType{`boolean`}}, isLazy = false},
+                          Parameter{name = Name{"q"}, description = none, `type` = Type{variable = Name{"x"}}, isLazy = false}],
+                        result = Result{
+                          description = none,
+                          `type` = Type{
+                            variable = Name{"x"}}}})),
+            expected = λ`_`.model.termSignature
+                  TermSignature{
+                    typeParameters = [TypeParameter{name = Name{"x"}, constraints = []}],
+                    parameters = [
+                      Parameter{name = Name{"p"}, description = none, `type` = Type{literal = LiteralType{`boolean`}}, isLazy = false},
+                      Parameter{name = Name{"q"}, description = none, `type` = Type{variable = Name{"x"}}, isLazy = false}],
+                    result = Result{
+                      description = none,
+                      `type` = Type{
+                        variable = Name{"x"}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Import aliasing: every cross-module dependency is aliased, and module->print->parse round-trips to an identical module (#711, #804, #805)
+term moduleAliasGroup =
+  TestGroup{
+    name = "import aliases",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "no local-name collision: imports are still aliased (round-trip identity)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.moduleDefinition
+                  Module{
+                    name = ModuleName{"hydra.example.app"},
+                    metadata = none,
+                    dependencies = [
+                      ModuleDependency{`module` = ModuleName{"hydra.core.error.file"}, package = none},
+                      ModuleDependency{`module` = ModuleName{"hydra.core.file"}, package = none}],
+                    definitions = [
+                      Definition{
+                        `type` = TypeDefinition{
+                          name = Name{"hydra.example.app.Thing"},
+                          metadata = none,
+                          body = TypeScheme{
+                            variables = [],
+                            body = Type{
+                              pair = PairType{
+                                first = Type{
+                                  variable = Name{"hydra.core.file.FilePath"}},
+                                second = Type{
+                                  variable = Name{"hydra.core.error.file.FileError"}}}},
+                            constraints = maps.empty}}}]},
+            expected = λ`_`."module hydra.example.app\n\nimport hydra.core.error.file as error.file\nimport hydra.core.file as file\n\ntype Thing = (file.FilePath, error.file.FileError)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "local-name collision: both sides are aliased, never bare",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.moduleDefinition
+                  Module{
+                    name = ModuleName{"hydra.app"},
+                    metadata = none,
+                    dependencies = [
+                      ModuleDependency{`module` = ModuleName{"hydra.a"}, package = none},
+                      ModuleDependency{`module` = ModuleName{"hydra.b"}, package = none}],
+                    definitions = [
+                      Definition{
+                        `type` = TypeDefinition{
+                          name = Name{"hydra.app.T1"},
+                          metadata = none,
+                          body = TypeScheme{
+                            variables = [],
+                            body = Type{variable = Name{"hydra.a.Foo"}},
+                            constraints = maps.empty}}},
+                      Definition{
+                        `type` = TypeDefinition{
+                          name = Name{"hydra.app.T2"},
+                          metadata = none,
+                          body = TypeScheme{
+                            variables = [],
+                            body = Type{
+                              pair = PairType{
+                                first = Type{
+                                  variable = Name{"hydra.a.Foo"}},
+                                second = Type{
+                                  variable = Name{"hydra.b.Foo"}}}},
+                            constraints = maps.empty}}}]},
+            expected = λ`_`."module hydra.app\n\nimport hydra.a as a\nimport hydra.b as b\n\ntype T1 = a.Foo\n\ntype T2 = (a.Foo, b.Foo)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "three non-colliding dependencies: all three are still aliased",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.moduleDefinition
+                  Module{
+                    name = ModuleName{"hydra.app"},
+                    metadata = none,
+                    dependencies = [
+                      ModuleDependency{`module` = ModuleName{"hydra.aa"}, package = none},
+                      ModuleDependency{`module` = ModuleName{"hydra.bb"}, package = none},
+                      ModuleDependency{`module` = ModuleName{"hydra.cc"}, package = none}],
+                    definitions = [
+                      Definition{
+                        `type` = TypeDefinition{
+                          name = Name{"hydra.app.D1"},
+                          metadata = none,
+                          body = TypeScheme{
+                            variables = [],
+                            body = Type{
+                              pair = PairType{
+                                first = Type{
+                                  variable = Name{"hydra.aa.X"}},
+                                second = Type{
+                                  variable = Name{"hydra.bb.X"}}}},
+                            constraints = maps.empty}}},
+                      Definition{
+                        `type` = TypeDefinition{
+                          name = Name{"hydra.app.D2"},
+                          metadata = none,
+                          body = TypeScheme{
+                            variables = [],
+                            body = Type{
+                              pair = PairType{
+                                first = Type{
+                                  variable = Name{"hydra.bb.Y"}},
+                                second = Type{
+                                  variable = Name{"hydra.cc.Y"}}}},
+                            constraints = maps.empty}}},
+                      Definition{
+                        `type` = TypeDefinition{
+                          name = Name{"hydra.app.D3"},
+                          metadata = none,
+                          body = TypeScheme{
+                            variables = [],
+                            body = Type{variable = Name{"hydra.aa.X"}},
+                            constraints = maps.empty}}}]},
+            expected = λ`_`."module hydra.app\n\nimport hydra.aa as aa\nimport hydra.bb as bb\nimport hydra.cc as cc\n\ntype D1 = (aa.X, bb.X)\n\ntype D2 = (bb.Y, cc.Y)\n\ntype D3 = aa.X"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "no-collision module round-trips to an identical module (module->print->parse)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λmod2.strings.concat
+                      [
+                        ModuleName[] (Module[name] mod2),
+                        "\n",
+                        strings.join
+                          "\n"
+                          (lists.map
+                            (λd.cases(Definition){
+                                `type`=λtd.strings.concat
+                                      [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                                `term`=λtd.strings.concat
+                                      [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                                `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                d)
+                            (Module[definitions] mod2))])
+                  (parseModule
+                    (moduleDefinition
+                      Module{
+                        name = ModuleName{"hydra.example.app"},
+                        metadata = none,
+                        dependencies = [
+                          ModuleDependency{`module` = ModuleName{"hydra.core.error.file"}, package = none},
+                          ModuleDependency{`module` = ModuleName{"hydra.core.file"}, package = none}],
+                        definitions = [
+                          Definition{
+                            `type` = TypeDefinition{
+                              name = Name{"hydra.example.app.Thing"},
+                              metadata = none,
+                              body = TypeScheme{
+                                variables = [],
+                                body = Type{
+                                  pair = PairType{
+                                    first = Type{
+                                      variable = Name{"hydra.core.file.FilePath"}},
+                                    second = Type{
+                                      variable = Name{"hydra.core.error.file.FileError"}}}},
+                                constraints = maps.empty}}}]})),
+            expected = λ`_`.strings.concat
+                  [
+                    ModuleName[]
+                      (Module[name]
+                        Module{
+                          name = ModuleName{"hydra.example.app"},
+                          metadata = none,
+                          dependencies = [
+                            ModuleDependency{`module` = ModuleName{"hydra.core.error.file"}, package = none},
+                            ModuleDependency{`module` = ModuleName{"hydra.core.file"}, package = none}],
+                          definitions = [
+                            Definition{
+                              `type` = TypeDefinition{
+                                name = Name{"hydra.example.app.Thing"},
+                                metadata = none,
+                                body = TypeScheme{
+                                  variables = [],
+                                  body = Type{
+                                    pair = PairType{
+                                      first = Type{
+                                        variable = Name{"hydra.core.file.FilePath"}},
+                                      second = Type{
+                                        variable = Name{"hydra.core.error.file.FileError"}}}},
+                                  constraints = maps.empty}}}]}),
+                    "\n",
+                    strings.join
+                      "\n"
+                      (lists.map
+                        (λd.cases(Definition){
+                            `type`=λtd.strings.concat
+                                  [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                            `term`=λtd.strings.concat
+                                  [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                            `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                            d)
+                        (Module[definitions]
+                          Module{
+                            name = ModuleName{"hydra.example.app"},
+                            metadata = none,
+                            dependencies = [
+                              ModuleDependency{`module` = ModuleName{"hydra.core.error.file"}, package = none},
+                              ModuleDependency{`module` = ModuleName{"hydra.core.file"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `type` = TypeDefinition{
+                                  name = Name{"hydra.example.app.Thing"},
+                                  metadata = none,
+                                  body = TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      pair = PairType{
+                                        first = Type{
+                                          variable = Name{"hydra.core.file.FilePath"}},
+                                        second = Type{
+                                          variable = Name{"hydra.core.error.file.FileError"}}}},
+                                    constraints = maps.empty}}}]}))]}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "collision module round-trips to an identical module (module->print->parse, #805)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λmod2.strings.concat
+                      [
+                        ModuleName[] (Module[name] mod2),
+                        "\n",
+                        strings.join
+                          "\n"
+                          (lists.map
+                            (λd.cases(Definition){
+                                `type`=λtd.strings.concat
+                                      [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                                `term`=λtd.strings.concat
+                                      [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                                `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                d)
+                            (Module[definitions] mod2))])
+                  (parseModule
+                    (moduleDefinition
+                      Module{
+                        name = ModuleName{"hydra.app"},
+                        metadata = none,
+                        dependencies = [
+                          ModuleDependency{`module` = ModuleName{"hydra.a"}, package = none},
+                          ModuleDependency{`module` = ModuleName{"hydra.b"}, package = none}],
+                        definitions = [
+                          Definition{
+                            `type` = TypeDefinition{
+                              name = Name{"hydra.app.T1"},
+                              metadata = none,
+                              body = TypeScheme{
+                                variables = [],
+                                body = Type{variable = Name{"hydra.a.Foo"}},
+                                constraints = maps.empty}}},
+                          Definition{
+                            `type` = TypeDefinition{
+                              name = Name{"hydra.app.T2"},
+                              metadata = none,
+                              body = TypeScheme{
+                                variables = [],
+                                body = Type{
+                                  pair = PairType{
+                                    first = Type{
+                                      variable = Name{"hydra.a.Foo"}},
+                                    second = Type{
+                                      variable = Name{"hydra.b.Foo"}}}},
+                                constraints = maps.empty}}}]})),
+            expected = λ`_`.strings.concat
+                  [
+                    ModuleName[]
+                      (Module[name]
+                        Module{
+                          name = ModuleName{"hydra.app"},
+                          metadata = none,
+                          dependencies = [
+                            ModuleDependency{`module` = ModuleName{"hydra.a"}, package = none},
+                            ModuleDependency{`module` = ModuleName{"hydra.b"}, package = none}],
+                          definitions = [
+                            Definition{
+                              `type` = TypeDefinition{
+                                name = Name{"hydra.app.T1"},
+                                metadata = none,
+                                body = TypeScheme{
+                                  variables = [],
+                                  body = Type{variable = Name{"hydra.a.Foo"}},
+                                  constraints = maps.empty}}},
+                            Definition{
+                              `type` = TypeDefinition{
+                                name = Name{"hydra.app.T2"},
+                                metadata = none,
+                                body = TypeScheme{
+                                  variables = [],
+                                  body = Type{
+                                    pair = PairType{
+                                      first = Type{
+                                        variable = Name{"hydra.a.Foo"}},
+                                      second = Type{
+                                        variable = Name{"hydra.b.Foo"}}}},
+                                  constraints = maps.empty}}}]}),
+                    "\n",
+                    strings.join
+                      "\n"
+                      (lists.map
+                        (λd.cases(Definition){
+                            `type`=λtd.strings.concat
+                                  [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                            `term`=λtd.strings.concat
+                                  [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                            `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                            d)
+                        (Module[definitions]
+                          Module{
+                            name = ModuleName{"hydra.app"},
+                            metadata = none,
+                            dependencies = [
+                              ModuleDependency{`module` = ModuleName{"hydra.a"}, package = none},
+                              ModuleDependency{`module` = ModuleName{"hydra.b"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `type` = TypeDefinition{
+                                  name = Name{"hydra.app.T1"},
+                                  metadata = none,
+                                  body = TypeScheme{
+                                    variables = [],
+                                    body = Type{variable = Name{"hydra.a.Foo"}},
+                                    constraints = maps.empty}}},
+                              Definition{
+                                `type` = TypeDefinition{
+                                  name = Name{"hydra.app.T2"},
+                                  metadata = none,
+                                  body = TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      pair = PairType{
+                                        first = Type{
+                                          variable = Name{"hydra.a.Foo"}},
+                                        second = Type{
+                                          variable = Name{"hydra.b.Foo"}}}},
+                                    constraints = maps.empty}}}]}))]}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Print/parse/round-trip cases for multi-line '##' doc-comment descriptions (#711)
+term multiLineDocCommentGroup =
+  TestGroup{
+    name = "multi-line doc comments",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "multi-line term description hoists to one '##' line per source line",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.termDefinition
+                  maps.empty
+                  TermDefinition{
+                    name = Name{"unifyTypeConstraints"},
+                    metadata = none,
+                    signature = none,
+                    body = Term{
+                      annotated = AnnotatedTerm{
+                        body = Term{
+                          variable = Name{"impl"}},
+                        annotation = Term{
+                          `map` = maps.fromList
+                              [
+                                (
+                                  Term{variable = Name{"description"}},
+                                  Term{literal = Literal{`string` = "Robinson's algorithm.\nSee the reference."}})]}}}},
+            expected = λ`_`."## Robinson's algorithm.\n## See the reference.\nterm unifyTypeConstraints = impl"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "multi-line term description round-trips (whole module)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λm2.moduleDefinition m2)
+                  (parseModule
+                    (moduleDefinition
+                      Module{
+                        name = ModuleName{"test.multiline.term"},
+                        metadata = none,
+                        dependencies = [],
+                        definitions = [
+                          Definition{
+                            `term` = TermDefinition{
+                              name = Name{"impl"},
+                              metadata = none,
+                              signature = none,
+                              body = Term{
+                                annotated = AnnotatedTerm{
+                                  body = Term{variable = Name{"y"}},
+                                  annotation = Term{
+                                    `map` = maps.fromList
+                                        [
+                                          (
+                                            Term{variable = Name{"description"}},
+                                            Term{literal = Literal{`string` = "Robinson's algorithm.\nSee the reference."}})]}}}}}]})),
+            expected = λ`_`.moduleDefinition
+                  Module{
+                    name = ModuleName{"test.multiline.term"},
+                    metadata = none,
+                    dependencies = [],
+                    definitions = [
+                      Definition{
+                        `term` = TermDefinition{
+                          name = Name{"impl"},
+                          metadata = none,
+                          signature = none,
+                          body = Term{
+                            annotated = AnnotatedTerm{
+                              body = Term{variable = Name{"y"}},
+                              annotation = Term{
+                                `map` = maps.fromList
+                                    [
+                                      (
+                                        Term{variable = Name{"description"}},
+                                        Term{literal = Literal{`string` = "Robinson's algorithm.\nSee the reference."}})]}}}}}]}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "multi-line type description hoists to one '##' line per source line",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.typeDefinition
+                  maps.empty
+                  TypeDefinition{
+                    name = Name{"Config"},
+                    metadata = none,
+                    body = TypeScheme{
+                      variables = [],
+                      body = Type{
+                        annotated = AnnotatedType{
+                          body = Type{
+                            literal = LiteralType{
+                              `string`}},
+                          annotation = Term{
+                            `map` = maps.fromList
+                                [
+                                  (Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "Configuration options.\nSee the manual."}})]}}},
+                      constraints = maps.empty}},
+            expected = λ`_`."## Configuration options.\n## See the manual.\ntype Config = string"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "multi-line type description round-trips (whole module)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λm2.moduleDefinition m2)
+                  (parseModule
+                    (moduleDefinition
+                      Module{
+                        name = ModuleName{"test.multiline.type"},
+                        metadata = none,
+                        dependencies = [],
+                        definitions = [
+                          Definition{
+                            `type` = TypeDefinition{
+                              name = Name{"Config"},
+                              metadata = none,
+                              body = TypeScheme{
+                                variables = [],
+                                body = Type{
+                                  annotated = AnnotatedType{
+                                    body = Type{
+                                      literal = LiteralType{
+                                        `string`}},
+                                    annotation = Term{
+                                      `map` = maps.fromList
+                                          [
+                                            (Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "Configuration options.\nSee the manual."}})]}}},
+                                constraints = maps.empty}}}]})),
+            expected = λ`_`.moduleDefinition
+                  Module{
+                    name = ModuleName{"test.multiline.type"},
+                    metadata = none,
+                    dependencies = [],
+                    definitions = [
+                      Definition{
+                        `type` = TypeDefinition{
+                          name = Name{"Config"},
+                          metadata = none,
+                          body = TypeScheme{
+                            variables = [],
+                            body = Type{
+                              annotated = AnnotatedType{
+                                body = Type{
+                                  literal = LiteralType{
+                                    `string`}},
+                                annotation = Term{
+                                  `map` = maps.fromList
+                                      [
+                                        (Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "Configuration options.\nSee the manual."}})]}}},
+                            constraints = maps.empty}}}]}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "multi-line module description hoists to one '##' line per source line",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.moduleDefinition
+                  Module{
+                    name = ModuleName{"test.multiline"},
+                    metadata = given(EntityMetadata{
+                        description = given("Utilities for X.\nSee the reference."),
+                        comments = [],
+                        seeAlso = [],
+                        lifecycle = none,
+                        provisions = []}),
+                    dependencies = [],
+                    definitions = [
+                      Definition{
+                        `term` = TermDefinition{
+                          name = Name{"x"},
+                          metadata = none,
+                          signature = none,
+                          body = Term{variable = Name{"y"}}}}]},
+            expected = λ`_`."## Utilities for X.\n## See the reference.\nmodule test.multiline\n\nterm x = y"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "multi-line module description round-trips (whole module)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λm2.moduleDefinition m2)
+                  (parseModule
+                    (moduleDefinition
+                      Module{
+                        name = ModuleName{"test.multiline.module"},
+                        metadata = given(EntityMetadata{
+                            description = given("Utilities for X.\nSee the reference."),
+                            comments = [],
+                            seeAlso = [],
+                            lifecycle = none,
+                            provisions = []}),
+                        dependencies = [],
+                        definitions = [
+                          Definition{
+                            `term` = TermDefinition{
+                              name = Name{"x"},
+                              metadata = none,
+                              signature = none,
+                              body = Term{variable = Name{"y"}}}}]})),
+            expected = λ`_`.moduleDefinition
+                  Module{
+                    name = ModuleName{"test.multiline.module"},
+                    metadata = given(EntityMetadata{
+                        description = given("Utilities for X.\nSee the reference."),
+                        comments = [],
+                        seeAlso = [],
+                        lifecycle = none,
+                        provisions = []}),
+                    dependencies = [],
+                    definitions = [
+                      Definition{
+                        `term` = TermDefinition{
+                          name = Name{"x"},
+                          metadata = none,
+                          signature = none,
+                          body = Term{variable = Name{"y"}}}}]}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Nominal construction/elimination sugar: print + round-trip (#809)
+term nominalSugarGroup =
+  TestGroup{
+    name = "nominal sugar",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "record sugar: multi-field",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term
+                  Term{
+                    `record` = Record{
+                      typeName = Name{"example.Person"},
+                      fields = [
+                        Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                        Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}},
+            expected = λ`_`."example.Person{firstName = \"Alice\", age = 30:int32}"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "record sugar: multi-field round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"example.Person"},
+                          fields = [
+                            Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                            Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `record` = Record{
+                      typeName = Name{"example.Person"},
+                      fields = [
+                        Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                        Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "record sugar: bareword unit field",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term
+                  Term{
+                    `record` = Record{
+                      typeName = Name{"example.Person"},
+                      fields = [
+                        Field{name = Name{"contactInfo"}, `term` = Term{`unit`}},
+                        Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Arthur"}}}]}},
+            expected = λ`_`."example.Person{contactInfo, firstName = \"Arthur\"}"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "record sugar: bareword unit field round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"example.Person"},
+                          fields = [
+                            Field{name = Name{"contactInfo"}, `term` = Term{`unit`}},
+                            Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Arthur"}}}]}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `record` = Record{
+                      typeName = Name{"example.Person"},
+                      fields = [
+                        Field{name = Name{"contactInfo"}, `term` = Term{`unit`}},
+                        Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Arthur"}}}]}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "injection sugar: unit variant prints as bareword record-style construct",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term
+                  Term{
+                    `inject` = Injection{
+                      typeName = Name{"example.Color"},
+                      field = Field{
+                        name = Name{"red"},
+                        `term` = Term{
+                          `unit`}}}},
+            expected = λ`_`."example.Color{red}"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "injection sugar: unit variant string round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `inject` = Injection{
+                          typeName = Name{"example.Color"},
+                          field = Field{
+                            name = Name{"red"},
+                            `term` = Term{
+                              `unit`}}}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `inject` = Injection{
+                      typeName = Name{"example.Color"},
+                      field = Field{
+                        name = Name{"red"},
+                        `term` = Term{
+                          `unit`}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "injection sugar: data variant",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term
+                  Term{
+                    `inject` = Injection{
+                      typeName = Name{"example.Length"},
+                      field = Field{
+                        name = Name{"meters"},
+                        `term` = Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 1:int32}}}}}},
+            expected = λ`_`."example.Length{meters = 1:int32}"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "injection sugar: data variant string round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `inject` = Injection{
+                          typeName = Name{"example.Length"},
+                          field = Field{
+                            name = Name{"meters"},
+                            `term` = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 1:int32}}}}}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `inject` = Injection{
+                      typeName = Name{"example.Length"},
+                      field = Field{
+                        name = Name{"meters"},
+                        `term` = Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 1:int32}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "wrap sugar: literal body",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term
+                  Term{
+                    `wrap` = WrappedTerm{
+                      typeName = Name{"example.Meters"},
+                      body = Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 100:int32}}}}},
+            expected = λ`_`."example.Meters{100:int32}"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "wrap sugar: literal body round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `wrap` = WrappedTerm{
+                          typeName = Name{"example.Meters"},
+                          body = Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 100:int32}}}}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `wrap` = WrappedTerm{
+                      typeName = Name{"example.Meters"},
+                      body = Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 100:int32}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "wrap: variable body keeps keyword form (ambiguous as record field otherwise)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term
+                  Term{
+                    `wrap` = WrappedTerm{
+                      typeName = Name{"example.Meters"},
+                      body = Term{
+                        variable = Name{"x"}}}},
+            expected = λ`_`."wrap(example.Meters){x}"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "wrap: variable body keyword form round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `wrap` = WrappedTerm{
+                          typeName = Name{"example.Meters"},
+                          body = Term{
+                            variable = Name{"x"}}}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `wrap` = WrappedTerm{
+                      typeName = Name{"example.Meters"},
+                      body = Term{
+                        variable = Name{"x"}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "project sugar: Name[field]",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term
+                  Term{
+                    `project` = Projection{
+                      typeName = Name{"example.Person"},
+                      fieldName = Name{"firstName"}}},
+            expected = λ`_`."example.Person[firstName]"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "project sugar round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `project` = Projection{
+                          typeName = Name{"example.Person"},
+                          fieldName = Name{"firstName"}}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `project` = Projection{
+                      typeName = Name{"example.Person"},
+                      fieldName = Name{"firstName"}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "unwrap sugar: Name[]",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term
+                  Term{
+                    `unwrap` = Name{"example.Meters"}},
+            expected = λ`_`."example.Meters[]"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "unwrap sugar round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `unwrap` = Name{"example.Meters"}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `unwrap` = Name{"example.Meters"}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "cases: '_' default handler round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `cases` = CaseStatement{
+                          typeName = Name{"example.Color"},
+                          default = given(Term{
+                              literal = Literal{
+                                `string` = "caution"}}),
+                          `cases` = [
+                            CaseAlternative{
+                              name = Field[name] Field{name = Name{"red"}, `term` = Term{literal = Literal{`string` = "stop"}}},
+                              handler = Field[`term`]
+                                  Field{name = Name{"red"}, `term` = Term{literal = Literal{`string` = "stop"}}}},
+                            CaseAlternative{
+                              name = Field[name] Field{name = Name{"green"}, `term` = Term{literal = Literal{`string` = "go"}}},
+                              handler = Field[`term`]
+                                  Field{name = Name{"green"}, `term` = Term{literal = Literal{`string` = "go"}}}}]}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `cases` = CaseStatement{
+                      typeName = Name{"example.Color"},
+                      default = given(Term{
+                          literal = Literal{
+                            `string` = "caution"}}),
+                      `cases` = [
+                        CaseAlternative{
+                          name = Field[name] Field{name = Name{"red"}, `term` = Term{literal = Literal{`string` = "stop"}}},
+                          handler = Field[`term`]
+                              Field{name = Name{"red"}, `term` = Term{literal = Literal{`string` = "stop"}}}},
+                        CaseAlternative{
+                          name = Field[name] Field{name = Name{"green"}, `term` = Term{literal = Literal{`string` = "go"}}},
+                          handler = Field[`term`]
+                              Field{name = Name{"green"}, `term` = Term{literal = Literal{`string` = "go"}}}}]}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "cases: '_' default only round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `cases` = CaseStatement{
+                          typeName = Name{"example.Color"},
+                          default = given(Term{
+                              literal = Literal{
+                                `string` = "caution"}}),
+                          `cases` = []}})),
+            expected = λ`_`.model.term
+                  Term{
+                    `cases` = CaseStatement{
+                      typeName = Name{"example.Color"},
+                      default = given(Term{
+                          literal = Literal{
+                            `string` = "caution"}}),
+                      `cases` = []}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "case sugar: binder branch → λ-handler, nullary branch as-is, default",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    "case example.Color x { red y = \"r\", green = \"g\", _ = \"c\" }"),
+            expected = λ`_`.model.term
+                  Term{
+                    application = Application{
+                      function = Term{
+                        `cases` = CaseStatement{
+                          typeName = Name{"example.Color"},
+                          default = given(Term{
+                              literal = Literal{
+                                `string` = "c"}}),
+                          `cases` = [
+                            CaseAlternative{
+                              name = Field[name]
+                                  Field{
+                                    name = Name{"red"},
+                                    `term` = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"y"},
+                                        domain = none,
+                                        body = Term{literal = Literal{`string` = "r"}}}}},
+                              handler = Field[`term`]
+                                  Field{
+                                    name = Name{"red"},
+                                    `term` = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"y"},
+                                        domain = none,
+                                        body = Term{literal = Literal{`string` = "r"}}}}}},
+                            CaseAlternative{
+                              name = Field[name] Field{name = Name{"green"}, `term` = Term{literal = Literal{`string` = "g"}}},
+                              handler = Field[`term`] Field{name = Name{"green"}, `term` = Term{literal = Literal{`string` = "g"}}}}]}},
+                      argument = Term{
+                        variable = Name{"x"}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "case sugar: single nullary branch desugars to applied cases",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    "case example.Color x { red = \"stop\" }"),
+            expected = λ`_`.model.term
+                  Term{
+                    application = Application{
+                      function = Term{
+                        `cases` = CaseStatement{
+                          typeName = Name{"example.Color"},
+                          default = none,
+                          `cases` = [
+                            CaseAlternative{
+                              name = Field[name] Field{name = Name{"red"}, `term` = Term{literal = Literal{`string` = "stop"}}},
+                              handler = Field[`term`]
+                                  Field{name = Name{"red"}, `term` = Term{literal = Literal{`string` = "stop"}}}}]}},
+                      argument = Term{
+                        variable = Name{"x"}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "case sugar: binder branch desugars handler to a lambda over the payload",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    "case example.Length len { meters m = m }"),
+            expected = λ`_`.model.term
+                  Term{
+                    application = Application{
+                      function = Term{
+                        `cases` = CaseStatement{
+                          typeName = Name{"example.Length"},
+                          default = none,
+                          `cases` = [
+                            CaseAlternative{
+                              name = Field[name]
+                                  Field{
+                                    name = Name{"meters"},
+                                    `term` = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"m"},
+                                        domain = none,
+                                        body = Term{variable = Name{"m"}}}}},
+                              handler = Field[`term`]
+                                  Field{
+                                    name = Name{"meters"},
+                                    `term` = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"m"},
+                                        domain = none,
+                                        body = Term{variable = Name{"m"}}}}}}]}},
+                      argument = Term{
+                        variable = Name{"len"}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "case sugar: no-binder branch keeps handler as-is",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    "case example.Color c { red = \"r\", green = \"g\" }"),
+            expected = λ`_`.model.term
+                  Term{
+                    application = Application{
+                      function = Term{
+                        `cases` = CaseStatement{
+                          typeName = Name{"example.Color"},
+                          default = none,
+                          `cases` = [
+                            CaseAlternative{
+                              name = Field[name] Field{name = Name{"red"}, `term` = Term{literal = Literal{`string` = "r"}}},
+                              handler = Field[`term`] Field{name = Name{"red"}, `term` = Term{literal = Literal{`string` = "r"}}}},
+                            CaseAlternative{
+                              name = Field[name] Field{name = Name{"green"}, `term` = Term{literal = Literal{`string` = "g"}}},
+                              handler = Field[`term`] Field{name = Name{"green"}, `term` = Term{literal = Literal{`string` = "g"}}}}]}},
+                      argument = Term{
+                        variable = Name{"c"}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "case sugar: parenthesized compound scrutinee",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    "case example.Color (f y) { red = \"r\" }"),
+            expected = λ`_`.model.term
+                  Term{
+                    application = Application{
+                      function = Term{
+                        `cases` = CaseStatement{
+                          typeName = Name{"example.Color"},
+                          default = none,
+                          `cases` = [
+                            CaseAlternative{
+                              name = Field[name] Field{name = Name{"red"}, `term` = Term{literal = Literal{`string` = "r"}}},
+                              handler = Field[`term`] Field{name = Name{"red"}, `term` = Term{literal = Literal{`string` = "r"}}}}]}},
+                      argument = Term{
+                        application = Application{
+                          function = Term{
+                            variable = Name{"f"}},
+                          argument = Term{
+                            variable = Name{"y"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Conversion of codepoint offsets to (line, column) positions, with UTF-16 column accounting (#815)
+term sourcePositionGroup =
+  TestGroup{
+    name = "source positions",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "start of text",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "abc" 0:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "abc" 0:int32))],
+            expected = λ`_`."0:0"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "within first line",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "abc" 2:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "abc" 2:int32))],
+            expected = λ`_`."0:2"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "end of text",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "abc" 3:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "abc" 3:int32))],
+            expected = λ`_`."0:3"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "after LF",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "ab\ncd" 3:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "ab\ncd" 3:int32))],
+            expected = λ`_`."1:0"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "within second line",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "ab\ncd" 4:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "ab\ncd" 4:int32))],
+            expected = λ`_`."1:1"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "at the LF itself",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "ab\ncd" 2:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "ab\ncd" 2:int32))],
+            expected = λ`_`."0:2"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "after CR LF counts one line break",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "ab\r\ncd" 4:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "ab\r\ncd" 4:int32))],
+            expected = λ`_`."1:0"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "between CR and LF",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "ab\r\ncd" 3:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "ab\r\ncd" 3:int32))],
+            expected = λ`_`."0:3"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "lone CR is a line break",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "ab\rcd" 3:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "ab\rcd" 3:int32))],
+            expected = λ`_`."1:0"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "blank lines",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "a\n\n\nb" 4:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "a\n\n\nb" 4:int32))],
+            expected = λ`_`."3:0"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "BMP non-ASCII is one UTF-16 unit",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "éa" 2:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "éa" 2:int32))],
+            expected = λ`_`."0:2"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "astral codepoint is two UTF-16 units",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "😀a" 2:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "😀a" 2:int32))],
+            expected = λ`_`."0:3"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "astral codepoint then next line",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "😀\na" 2:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "😀\na" 2:int32))],
+            expected = λ`_`."1:0"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "offset beyond end is clamped",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "ab" 10:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "ab" 10:int32))],
+            expected = λ`_`."0:2"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "empty text",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat
+                  [
+                    printInt32 (SourcePosition[line] (offsetToPosition "" 0:int32)),
+                    ":",
+                    printInt32 (SourcePosition[column] (offsetToPosition "" 0:int32))],
+            expected = λ`_`."0:0"}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Source spans recorded by the term parser, and SubtermPath-to-span resolution (#815)
+term sourceSpanGroup =
+  TestGroup{
+    name = "source spans",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "literal",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath SubtermPath{[]} t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans "42:int32"),
+            expected = λ`_`."[0,8)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "span excludes leading whitespace",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath SubtermPath{[]} t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans "  x"),
+            expected = λ`_`."[2,3)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "span excludes trailing whitespace",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath SubtermPath{[]} t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans "x   "),
+            expected = λ`_`."[0,1)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "span excludes trailing comment",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath SubtermPath{[]} t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans "x # note\n"),
+            expected = λ`_`."[0,1)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "application spans function through argument",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath SubtermPath{[]} t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans "f x"),
+            expected = λ`_`."[0,3)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "chained application",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath SubtermPath{[]} t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans "f x y"),
+            expected = λ`_`."[0,5)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "application function",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath
+                        SubtermPath{[SubtermStep{applicationFunction}]}
+                        t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans "f x"),
+            expected = λ`_`."[0,1)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "application argument",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath
+                        SubtermPath{[SubtermStep{applicationArgument}]}
+                        t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans "f x"),
+            expected = λ`_`."[2,3)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "nested application argument",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath
+                        SubtermPath{[SubtermStep{applicationFunction}, SubtermStep{applicationArgument}]}
+                        t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans "f g x"),
+            expected = λ`_`."[2,3)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "list element",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath
+                        SubtermPath{[SubtermStep{listElement = 1:int32}]}
+                        t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans "[1:int32, 22:int32]"),
+            expected = λ`_`."[10,18)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "lambda body",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath
+                        SubtermPath{[SubtermStep{lambdaBody}]}
+                        t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans "λx . x"),
+            expected = λ`_`."[5,6)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "path that cannot be followed yields the last node reached",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath
+                        SubtermPath{[SubtermStep{lambdaBody}]}
+                        t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans "f x"),
+            expected = λ`_`."[0,3)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "parenthesized term",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath SubtermPath{[]} t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans "(x)"),
+            expected = λ`_`."[0,3)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "do block spans the whole construct",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath SubtermPath{[]} t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans
+                    "do either { x := f a, g x }"),
+            expected = λ`_`."[0,27)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "do clause expression keeps its own span",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath
+                        SubtermPath{[SubtermStep{applicationFunction}, SubtermStep{applicationArgument}]}
+                        t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans
+                    "do either { x := f a, g x }"),
+            expected = λ`_`."[17,20)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "do result expression keeps its own span",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath
+                        SubtermPath{[SubtermStep{applicationArgument}, SubtermStep{lambdaBody}]}
+                        t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans
+                    "do either { x := f a, g x }"),
+            expected = λ`_`."[22,25)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "do bind primitive falls back to the do block's span",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtPath
+                        SubtermPath{[SubtermStep{applicationFunction}, SubtermStep{applicationFunction}]}
+                        t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTermWithSpans
+                    "do either { x := f a, g x }"),
+            expected = λ`_`."[0,27)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "strip spans: do block",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term (stripSpans t))
+                  (parseTermWithSpans
+                    "do either { x := f a, g x }"),
+            expected = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term t)
+                  (parseTerm "do either { x := f a, g x }")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "strip spans: application",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term (stripSpans t))
+                  (parseTermWithSpans "f x y"),
+            expected = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term t)
+                  (parseTerm "f x y")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "strip spans: lambda",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term (stripSpans t))
+                  (parseTermWithSpans "λx . f x"),
+            expected = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term t)
+                  (parseTerm "λx . f x")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "strip spans: list",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term (stripSpans t))
+                  (parseTermWithSpans "[1:int32, 2:int32]"),
+            expected = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term t)
+                  (parseTerm "[1:int32, 2:int32]")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "plain parse records no spans",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (termSpan t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTerm "f x"),
+            expected = λ`_`."none"}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Print/parse/round-trip cases for term-definition '##' doc comments (#711)
+term termDocCommentGroup =
+  TestGroup{
+    name = "term doc comments",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "single-line description hoists to a leading '##'",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.termDefinition
+                  maps.empty
+                  TermDefinition{
+                    name = Name{"capitalize"},
+                    metadata = none,
+                    signature = none,
+                    body = Term{
+                      annotated = AnnotatedTerm{
+                        body = Term{
+                          variable = Name{"mapFirstLetter"}},
+                        annotation = Term{
+                          `map` = maps.fromList
+                              [
+                                (Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "Capitalize the first letter of a string"}})]}}}},
+            expected = λ`_`."## Capitalize the first letter of a string\nterm capitalize = mapFirstLetter"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "no description: no leading '##', body prints unchanged",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.termDefinition
+                  maps.empty
+                  TermDefinition{
+                    name = Name{"identity"},
+                    metadata = none,
+                    signature = none,
+                    body = Term{
+                      variable = Name{"x"}}},
+            expected = λ`_`."term identity = x"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "description plus another key: description hoists, other key stays trailing",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.termDefinition
+                  maps.empty
+                  TermDefinition{
+                    name = Name{"charAt"},
+                    metadata = none,
+                    signature = none,
+                    body = Term{
+                      annotated = AnnotatedTerm{
+                        body = Term{
+                          variable = Name{"impl"}},
+                        annotation = Term{
+                          `map` = maps.fromList
+                              [
+                                (Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "Get a character by index"}}),
+                                (Term{variable = Name{"availableSince"}}, Term{literal = Literal{`string` = "0.17.6"}})]}}}},
+            expected = λ`_`."## Get a character by index\nterm charAt = impl@{availableSince=\"0.17.6\"}"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "inner (non-outermost) description is NOT hoisted",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.termDefinition
+                  maps.empty
+                  TermDefinition{
+                    name = Name{"wrapped"},
+                    metadata = none,
+                    signature = none,
+                    body = Term{
+                      application = Application{
+                        function = Term{
+                          variable = Name{"f"}},
+                        argument = Term{
+                          annotated = AnnotatedTerm{
+                            body = Term{
+                              variable = Name{"x"}},
+                            annotation = Term{
+                              `map` = maps.fromList
+                                  [(Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "inner desc"}})]}}}}}},
+            expected = λ`_`."term wrapped = f x@{description=\"inner desc\"}"}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Unqualified (bare) cross-module name printing when provably safe, and the universe-aware parser resolution that makes it round-trip (#5/#711)
+term unqualifiedNamesGroup =
+  TestGroup{
+    name = "unqualified names",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "an UNREFERENCED import's declared name never forces qualification (collision scope = referenced modules only, 2026-11-12)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.moduleDefinitionWith
+                  (maps.fromList
+                    [
+                      (ModuleName{"hydra.logic"}, sets.fromList [Name{"hydra.logic.ifElse"}, Name{"hydra.logic.and"}, Name{"hydra.logic.or"}]),
+                      (ModuleName{"hydra.foo"}, sets.fromList [Name{"hydra.foo.ifElse"}, Name{"hydra.foo.bar"}])])
+                  Module{
+                    name = ModuleName{"hydra.example.ambiguous"},
+                    metadata = none,
+                    dependencies = [
+                      ModuleDependency{`module` = ModuleName{"hydra.logic"}, package = none},
+                      ModuleDependency{`module` = ModuleName{"hydra.foo"}, package = none}],
+                    definitions = [
+                      Definition{
+                        `type` = TypeDefinition{
+                          name = Name{"hydra.example.ambiguous.UsesIfElse"},
+                          metadata = none,
+                          body = TypeScheme{
+                            variables = [],
+                            body = Type{variable = Name{"hydra.logic.ifElse"}},
+                            constraints = maps.empty}}}]},
+            expected = λ`_`."module hydra.example.ambiguous\n\nimport hydra.logic\n\ntype UsesIfElse = ifElse"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "the unreferenced-import case round-trips (module->print->parse with the same universe)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λmod2.strings.concat
+                      [
+                        ModuleName[] (Module[name] mod2),
+                        "\n",
+                        strings.join
+                          "\n"
+                          (lists.map
+                            (λd.cases(Definition){
+                                `type`=λtd.strings.concat
+                                      [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                                `term`=λtd.strings.concat
+                                      [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                                `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                d)
+                            (Module[definitions] mod2))])
+                  (parseModuleWith
+                    (maps.fromList
+                      [
+                        (ModuleName{"hydra.logic"}, sets.fromList [Name{"hydra.logic.ifElse"}, Name{"hydra.logic.and"}, Name{"hydra.logic.or"}]),
+                        (ModuleName{"hydra.foo"}, sets.fromList [Name{"hydra.foo.ifElse"}, Name{"hydra.foo.bar"}])])
+                    sets.empty
+                    (moduleDefinitionWith
+                      (maps.fromList
+                        [
+                          (ModuleName{"hydra.logic"}, sets.fromList [Name{"hydra.logic.ifElse"}, Name{"hydra.logic.and"}, Name{"hydra.logic.or"}]),
+                          (ModuleName{"hydra.foo"}, sets.fromList [Name{"hydra.foo.ifElse"}, Name{"hydra.foo.bar"}])])
+                      Module{
+                        name = ModuleName{"hydra.example.ambiguous"},
+                        metadata = none,
+                        dependencies = [
+                          ModuleDependency{`module` = ModuleName{"hydra.logic"}, package = none},
+                          ModuleDependency{`module` = ModuleName{"hydra.foo"}, package = none}],
+                        definitions = [
+                          Definition{
+                            `type` = TypeDefinition{
+                              name = Name{"hydra.example.ambiguous.UsesIfElse"},
+                              metadata = none,
+                              body = TypeScheme{
+                                variables = [],
+                                body = Type{variable = Name{"hydra.logic.ifElse"}},
+                                constraints = maps.empty}}}]})),
+            expected = λ`_`.strings.concat
+                  [
+                    ModuleName[]
+                      (Module[name]
+                        Module{
+                          name = ModuleName{"hydra.example.ambiguous"},
+                          metadata = none,
+                          dependencies = [
+                            ModuleDependency{`module` = ModuleName{"hydra.logic"}, package = none},
+                            ModuleDependency{`module` = ModuleName{"hydra.foo"}, package = none}],
+                          definitions = [
+                            Definition{
+                              `type` = TypeDefinition{
+                                name = Name{"hydra.example.ambiguous.UsesIfElse"},
+                                metadata = none,
+                                body = TypeScheme{
+                                  variables = [],
+                                  body = Type{variable = Name{"hydra.logic.ifElse"}},
+                                  constraints = maps.empty}}}]}),
+                    "\n",
+                    strings.join
+                      "\n"
+                      (lists.map
+                        (λd.cases(Definition){
+                            `type`=λtd.strings.concat
+                                  [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                            `term`=λtd.strings.concat
+                                  [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                            `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                            d)
+                        (Module[definitions]
+                          Module{
+                            name = ModuleName{"hydra.example.ambiguous"},
+                            metadata = none,
+                            dependencies = [
+                              ModuleDependency{`module` = ModuleName{"hydra.logic"}, package = none},
+                              ModuleDependency{`module` = ModuleName{"hydra.foo"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `type` = TypeDefinition{
+                                  name = Name{"hydra.example.ambiguous.UsesIfElse"},
+                                  metadata = none,
+                                  body = TypeScheme{
+                                    variables = [],
+                                    body = Type{variable = Name{"hydra.logic.ifElse"}},
+                                    constraints = maps.empty}}}]}))]}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "a cross-module one-field construct over a KNOWN union type name parses as an injection, not a record (#5/#837)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λmod2.match
+                      (lists.head (Module[definitions] mod2))
+                      "no-definitions"
+                      (λd.cases(Definition){
+                          `term`=λtd.cases(Term){
+                                `record`=λ`_`."record",
+                                `inject`=λ`_`."inject",
+                                `_`="not-record-or-inject"}
+                                (TermDefinition[body] td),
+                          `_`="not-a-term"}
+                          d))
+                  (parseModuleWith
+                    (maps.fromList
+                      [(ModuleName{"hydra.shapes"}, sets.fromList [Name{"hydra.shapes.Shape"}])])
+                    (sets.fromList
+                      [Name{"hydra.shapes.Shape"}])
+                    (moduleDefinitionWith
+                      (maps.fromList
+                        [(ModuleName{"hydra.shapes"}, sets.fromList [Name{"hydra.shapes.Shape"}])])
+                      Module{
+                        name = ModuleName{"hydra.example.crossmoduleinject"},
+                        metadata = none,
+                        dependencies = [ModuleDependency{`module` = ModuleName{"hydra.shapes"}, package = none}],
+                        definitions = [
+                          Definition{
+                            `term` = TermDefinition{
+                              name = Name{"hydra.example.crossmoduleinject.makeCircle"},
+                              metadata = none,
+                              signature = none,
+                              body = Term{
+                                `record` = Record{
+                                  typeName = Name{"hydra.shapes.Shape"},
+                                  fields = [Field{name = Name{"circle"}, `term` = Term{`unit`}}]}}}}]})),
+            expected = λ`_`."inject"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "a declared-but-unreferenced dependency colliding with a referenced one does not break print->parse->print idempotence (2026-11-12)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λmod2.moduleDefinitionWith
+                      (maps.fromList
+                        [
+                          (ModuleName{"hydra.used"}, sets.fromList [Name{"hydra.used.shared"}, Name{"hydra.used.other"}]),
+                          (
+                            ModuleName{"hydra.unreferencedclash"},
+                            sets.fromList [Name{"hydra.unreferencedclash.shared"}, Name{"hydra.unreferencedclash.unrelated"}])])
+                      mod2)
+                  (parseModuleWith
+                    (maps.fromList
+                      [
+                        (ModuleName{"hydra.used"}, sets.fromList [Name{"hydra.used.shared"}, Name{"hydra.used.other"}]),
+                        (
+                          ModuleName{"hydra.unreferencedclash"},
+                          sets.fromList [Name{"hydra.unreferencedclash.shared"}, Name{"hydra.unreferencedclash.unrelated"}])])
+                    sets.empty
+                    (moduleDefinitionWith
+                      (maps.fromList
+                        [
+                          (ModuleName{"hydra.used"}, sets.fromList [Name{"hydra.used.shared"}, Name{"hydra.used.other"}]),
+                          (
+                            ModuleName{"hydra.unreferencedclash"},
+                            sets.fromList [Name{"hydra.unreferencedclash.shared"}, Name{"hydra.unreferencedclash.unrelated"}])])
+                      Module{
+                        name = ModuleName{"hydra.example.idempotenceclash"},
+                        metadata = none,
+                        dependencies = [
+                          ModuleDependency{`module` = ModuleName{"hydra.used"}, package = none},
+                          ModuleDependency{`module` = ModuleName{"hydra.unreferencedclash"}, package = none}],
+                        definitions = [
+                          Definition{
+                            `type` = TypeDefinition{
+                              name = Name{"hydra.example.idempotenceclash.UsesShared"},
+                              metadata = none,
+                              body = TypeScheme{
+                                variables = [],
+                                body = Type{variable = Name{"hydra.used.shared"}},
+                                constraints = maps.empty}}}]})),
+            expected = λ`_`.moduleDefinitionWith
+                  (maps.fromList
+                    [
+                      (ModuleName{"hydra.used"}, sets.fromList [Name{"hydra.used.shared"}, Name{"hydra.used.other"}]),
+                      (
+                        ModuleName{"hydra.unreferencedclash"},
+                        sets.fromList [Name{"hydra.unreferencedclash.shared"}, Name{"hydra.unreferencedclash.unrelated"}])])
+                  Module{
+                    name = ModuleName{"hydra.example.idempotenceclash"},
+                    metadata = none,
+                    dependencies = [
+                      ModuleDependency{`module` = ModuleName{"hydra.used"}, package = none},
+                      ModuleDependency{`module` = ModuleName{"hydra.unreferencedclash"}, package = none}],
+                    definitions = [
+                      Definition{
+                        `type` = TypeDefinition{
+                          name = Name{"hydra.example.idempotenceclash.UsesShared"},
+                          metadata = none,
+                          body = TypeScheme{
+                            variables = [],
+                            body = Type{variable = Name{"hydra.used.shared"}},
+                            constraints = maps.empty}}}]}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "an import's local name colliding with the module's OWN definition forces qualification",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.moduleDefinitionWith
+                  (maps.fromList
+                    [(ModuleName{"hydra.lib"}, sets.fromList [Name{"hydra.lib.Widget"}, Name{"hydra.lib.Thing"}])])
+                  Module{
+                    name = ModuleName{"hydra.example.ownclash"},
+                    metadata = none,
+                    dependencies = [ModuleDependency{`module` = ModuleName{"hydra.lib"}, package = none}],
+                    definitions = [
+                      Definition{
+                        `type` = TypeDefinition{
+                          name = Name{"hydra.example.ownclash.Widget"},
+                          metadata = none,
+                          body = TypeScheme{
+                            variables = [],
+                            body = Type{literal = LiteralType{`string`}},
+                            constraints = maps.empty}}},
+                      Definition{
+                        `type` = TypeDefinition{
+                          name = Name{"hydra.example.ownclash.UsesLibWidget"},
+                          metadata = none,
+                          body = TypeScheme{
+                            variables = [],
+                            body = Type{variable = Name{"hydra.lib.Widget"}},
+                            constraints = maps.empty}}}]},
+            expected = λ`_`."module hydra.example.ownclash\n\nimport hydra.lib as lib\n\ntype Widget = string\n\ntype UsesLibWidget = lib.Widget"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "own-definition/import local-name collision round-trips, resolving the bare name to the module's own definition",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λmod2.strings.concat
+                      [
+                        ModuleName[] (Module[name] mod2),
+                        "\n",
+                        strings.join
+                          "\n"
+                          (lists.map
+                            (λd.cases(Definition){
+                                `type`=λtd.strings.concat
+                                      [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                                `term`=λtd.strings.concat
+                                      [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                                `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                d)
+                            (Module[definitions] mod2))])
+                  (parseModuleWith
+                    (maps.fromList
+                      [(ModuleName{"hydra.lib"}, sets.fromList [Name{"hydra.lib.Widget"}, Name{"hydra.lib.Thing"}])])
+                    sets.empty
+                    (moduleDefinitionWith
+                      (maps.fromList
+                        [(ModuleName{"hydra.lib"}, sets.fromList [Name{"hydra.lib.Widget"}, Name{"hydra.lib.Thing"}])])
+                      Module{
+                        name = ModuleName{"hydra.example.ownclash"},
+                        metadata = none,
+                        dependencies = [ModuleDependency{`module` = ModuleName{"hydra.lib"}, package = none}],
+                        definitions = [
+                          Definition{
+                            `type` = TypeDefinition{
+                              name = Name{"hydra.example.ownclash.Widget"},
+                              metadata = none,
+                              body = TypeScheme{
+                                variables = [],
+                                body = Type{literal = LiteralType{`string`}},
+                                constraints = maps.empty}}},
+                          Definition{
+                            `type` = TypeDefinition{
+                              name = Name{"hydra.example.ownclash.UsesLibWidget"},
+                              metadata = none,
+                              body = TypeScheme{
+                                variables = [],
+                                body = Type{variable = Name{"hydra.lib.Widget"}},
+                                constraints = maps.empty}}}]})),
+            expected = λ`_`.strings.concat
+                  [
+                    ModuleName[]
+                      (Module[name]
+                        Module{
+                          name = ModuleName{"hydra.example.ownclash"},
+                          metadata = none,
+                          dependencies = [ModuleDependency{`module` = ModuleName{"hydra.lib"}, package = none}],
+                          definitions = [
+                            Definition{
+                              `type` = TypeDefinition{
+                                name = Name{"hydra.example.ownclash.Widget"},
+                                metadata = none,
+                                body = TypeScheme{
+                                  variables = [],
+                                  body = Type{literal = LiteralType{`string`}},
+                                  constraints = maps.empty}}},
+                            Definition{
+                              `type` = TypeDefinition{
+                                name = Name{"hydra.example.ownclash.UsesLibWidget"},
+                                metadata = none,
+                                body = TypeScheme{
+                                  variables = [],
+                                  body = Type{variable = Name{"hydra.lib.Widget"}},
+                                  constraints = maps.empty}}}]}),
+                    "\n",
+                    strings.join
+                      "\n"
+                      (lists.map
+                        (λd.cases(Definition){
+                            `type`=λtd.strings.concat
+                                  [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                            `term`=λtd.strings.concat
+                                  [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                            `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                            d)
+                        (Module[definitions]
+                          Module{
+                            name = ModuleName{"hydra.example.ownclash"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.lib"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `type` = TypeDefinition{
+                                  name = Name{"hydra.example.ownclash.Widget"},
+                                  metadata = none,
+                                  body = TypeScheme{
+                                    variables = [],
+                                    body = Type{literal = LiteralType{`string`}},
+                                    constraints = maps.empty}}},
+                              Definition{
+                                `type` = TypeDefinition{
+                                  name = Name{"hydra.example.ownclash.UsesLibWidget"},
+                                  metadata = none,
+                                  body = TypeScheme{
+                                    variables = [],
+                                    body = Type{variable = Name{"hydra.lib.Widget"}},
+                                    constraints = maps.empty}}}]}))]}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "a same-local-name module that is NOT imported does not block bareness (scoped collision check)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.moduleDefinitionWith
+                  (maps.fromList
+                    [
+                      (ModuleName{"hydra.logic"}, sets.fromList [Name{"hydra.logic.ifElse"}, Name{"hydra.logic.and"}, Name{"hydra.logic.or"}]),
+                      (ModuleName{"hydra.unrelated"}, sets.fromList [Name{"hydra.unrelated.ifElse"}, Name{"hydra.unrelated.somethingElse"}])])
+                  Module{
+                    name = ModuleName{"hydra.example.unimported"},
+                    metadata = none,
+                    dependencies = [ModuleDependency{`module` = ModuleName{"hydra.logic"}, package = none}],
+                    definitions = [
+                      Definition{
+                        `type` = TypeDefinition{
+                          name = Name{"hydra.example.unimported.UsesIfElse"},
+                          metadata = none,
+                          body = TypeScheme{
+                            variables = [],
+                            body = Type{variable = Name{"hydra.logic.ifElse"}},
+                            constraints = maps.empty}}}]},
+            expected = λ`_`."module hydra.example.unimported\n\nimport hydra.logic\n\ntype UsesIfElse = ifElse"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "scoped-collision bare module round-trips (module->print->parse with the same universe)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λmod2.strings.concat
+                      [
+                        ModuleName[] (Module[name] mod2),
+                        "\n",
+                        strings.join
+                          "\n"
+                          (lists.map
+                            (λd.cases(Definition){
+                                `type`=λtd.strings.concat
+                                      [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                                `term`=λtd.strings.concat
+                                      [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                                `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                d)
+                            (Module[definitions] mod2))])
+                  (parseModuleWith
+                    (maps.fromList
+                      [
+                        (ModuleName{"hydra.logic"}, sets.fromList [Name{"hydra.logic.ifElse"}, Name{"hydra.logic.and"}, Name{"hydra.logic.or"}]),
+                        (ModuleName{"hydra.unrelated"}, sets.fromList [Name{"hydra.unrelated.ifElse"}, Name{"hydra.unrelated.somethingElse"}])])
+                    sets.empty
+                    (moduleDefinitionWith
+                      (maps.fromList
+                        [
+                          (ModuleName{"hydra.logic"}, sets.fromList [Name{"hydra.logic.ifElse"}, Name{"hydra.logic.and"}, Name{"hydra.logic.or"}]),
+                          (ModuleName{"hydra.unrelated"}, sets.fromList [Name{"hydra.unrelated.ifElse"}, Name{"hydra.unrelated.somethingElse"}])])
+                      Module{
+                        name = ModuleName{"hydra.example.unimported"},
+                        metadata = none,
+                        dependencies = [ModuleDependency{`module` = ModuleName{"hydra.logic"}, package = none}],
+                        definitions = [
+                          Definition{
+                            `type` = TypeDefinition{
+                              name = Name{"hydra.example.unimported.UsesIfElse"},
+                              metadata = none,
+                              body = TypeScheme{
+                                variables = [],
+                                body = Type{variable = Name{"hydra.logic.ifElse"}},
+                                constraints = maps.empty}}}]})),
+            expected = λ`_`.strings.concat
+                  [
+                    ModuleName[]
+                      (Module[name]
+                        Module{
+                          name = ModuleName{"hydra.example.unimported"},
+                          metadata = none,
+                          dependencies = [ModuleDependency{`module` = ModuleName{"hydra.logic"}, package = none}],
+                          definitions = [
+                            Definition{
+                              `type` = TypeDefinition{
+                                name = Name{"hydra.example.unimported.UsesIfElse"},
+                                metadata = none,
+                                body = TypeScheme{
+                                  variables = [],
+                                  body = Type{variable = Name{"hydra.logic.ifElse"}},
+                                  constraints = maps.empty}}}]}),
+                    "\n",
+                    strings.join
+                      "\n"
+                      (lists.map
+                        (λd.cases(Definition){
+                            `type`=λtd.strings.concat
+                                  [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                            `term`=λtd.strings.concat
+                                  [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                            `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                            d)
+                        (Module[definitions]
+                          Module{
+                            name = ModuleName{"hydra.example.unimported"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"hydra.logic"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `type` = TypeDefinition{
+                                  name = Name{"hydra.example.unimported.UsesIfElse"},
+                                  metadata = none,
+                                  body = TypeScheme{
+                                    variables = [],
+                                    body = Type{variable = Name{"hydra.logic.ifElse"}},
+                                    constraints = maps.empty}}}]}))]}},
+        description = none,
+        tags = [],
+        provisions = []}]}
