@@ -57,6 +57,7 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Sources.Kernel.Terms.Analysis as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
+import qualified Hydra.Sources.Kernel.Terms.Serialization as Serialization
 
 
 -- NOTE: this module is a work-in-progress skeleton for #710. All syntax-design questions were
@@ -76,7 +77,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Analysis.ns, PrintCore.ns, Names.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Analysis.ns, PrintCore.ns, Names.ns, Serialization.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "String representations of hydra.core.packaging types")}
   where
    definitions = [
@@ -106,6 +107,18 @@ moduleNameString = define "moduleNameString" $
   doc "Show a module name as a string" $
   "n" ~> Packaging.unModuleName (var "n")
 
+-- | Split a (possibly multi-line, '\n'-separated) doc-comment string into its '## '-prefixed
+-- lines, one per embedded line -- the inverse of 'docCommentLinesToMetadata's own
+-- 'Strings.join "\n"' (#711): a description or comment that itself contains a newline (a
+-- multi-line DSL-authored 'doc' string, e.g. unifyTypeConstraints's Robinson's-algorithm note)
+-- must print as ONE '##' line per source line, not as a single '## ' line with a raw embedded
+-- newline -- the latter produces a bare (non-'##') continuation line that the parser's
+-- 'docCommentLines' cannot recognize as part of the comment block, breaking the round-trip.
+docCommentLinesOf :: TypedTermDefinition (String -> [String])
+docCommentLinesOf = define "docCommentLinesOf" $
+  doc "Split a (possibly multi-line) string into '## '-prefixed doc-comment lines, one per embedded newline" $
+  "s" ~> Lists.map ("ln" ~> Strings.concat2 (string "## ") (var "ln")) (Strings.splitOn (string "\n") (var "s"))
+
 -- | Show an EntityMetadata as a block of '##' doc-comment lines, per the §6.6 algorithm settled
 -- 2026-10-11 (draft-syntax-md-section6-modules.md). Printing is the easy direction of that
 -- algorithm -- no fixpoint/section-splitting is needed, since printing starts from the
@@ -121,18 +134,6 @@ moduleNameString = define "moduleNameString" $
 -- seeAlso, no lifecycle, no provisions) -- callers must handle whether/how to separate this
 -- (empty) block from the following declaration themselves; see 'definitionDoc' usage in
 -- typeDefinition/termDefinition/primitiveDefinition below.
--- | Split a (possibly multi-line, '\n'-separated) doc-comment string into its '## '-prefixed
--- lines, one per embedded line -- the inverse of 'docCommentLinesToMetadata's own
--- 'Strings.join "\n"' (#711): a description or comment that itself contains a newline (a
--- multi-line DSL-authored 'doc' string, e.g. unifyTypeConstraints's Robinson's-algorithm note)
--- must print as ONE '##' line per source line, not as a single '## ' line with a raw embedded
--- newline -- the latter produces a bare (non-'##') continuation line that the parser's
--- 'docCommentLines' cannot recognize as part of the comment block, breaking the round-trip.
-docCommentLinesOf :: TypedTermDefinition (String -> [String])
-docCommentLinesOf = define "docCommentLinesOf" $
-  doc "Split a (possibly multi-line) string into '## '-prefixed doc-comment lines, one per embedded newline" $
-  "s" ~> Lists.map ("ln" ~> Strings.concat2 (string "## ") (var "ln")) (Strings.splitOn (string "\n") (var "s"))
-
 entityMetadataDoc :: TypedTermDefinition (EntityMetadata -> String)
 entityMetadataDoc = define "entityMetadataDoc" $
   doc "Show an EntityMetadata as a block of '##' doc-comment lines" $
@@ -337,14 +338,29 @@ moduleAliasesWith = define "moduleAliasesWith" $
       _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
       _Definition_primitive>>: "pd" ~> Packaging.primitiveDefinitionName (var "pd")]))
     (var "defs")) $
-  -- Every DECLARED import module name (from 'moduleDependencies', NOT just the subset this
-  -- module's definitions happen to reference) -- the collision scope must include an imported-
-  -- but-unreferenced module, since 'parseModuleWith's resolution set comes from the whole
-  -- import list a real caller would load, not from what this module happens to use (staging's
-  -- counterexample, 2026-11-11: module A imports both 'logic' and 'foo' but only references
-  -- 'logic.ifElse' -- 'foo' declaring an unrelated 'ifElse' still makes a bare 'ifElse' ambiguous
-  -- on reparse, even though A never touches 'foo.ifElse').
-  "declaredImportNames" <~ Lists.map ("d" ~> Packaging.moduleDependencyModule $ var "d") (Packaging.moduleDependencies $ var "mod") $
+  -- The collision scope is 'nssAsList' (every ACTUALLY-REFERENCED module) alone -- NOT
+  -- 'moduleDependencies' (the module's DECLARED dependency list), and NOT a union of the two.
+  -- This has to be exactly the set of modules that will get a printed import line (see
+  -- 'moduleDefinitionWith's 'usedDeps', itself sourced from 'aliases'' keys, which trace back to
+  -- this same 'nssAsList'), because that is exactly what 'parseModuleWith' will see on reparse --
+  -- anything else is invisible to the parser and so cannot be a real collision risk for THIS
+  -- printed text. Using 'moduleDependencies' (even unioned with 'nssAsList') breaks
+  -- round-trip IDEMPOTENCE: the kernel's blanket per-module convention declares every kernel
+  -- TYPES module regardless of use, so an in-memory 'Module's 'moduleDependencies' is typically a
+  -- superset of what it actually references; printing from the ORIGINAL module could then see a
+  -- collision (and alias a dependency) that the REPARSED module -- whose 'moduleDependencies' is
+  -- reconstructed from the text's own import lines, i.e. exactly 'nssAsList' -- no longer sees,
+  -- making a second print differ from the first (confirmed via 14 real kernel modules, e.g.
+  -- 'hydra.core.adapt' aliasing 'graph' on the first print but printing it bare on reparse). A
+  -- declared-but-unreferenced dependency can never appear in a printed import line (per
+  -- 'usedDeps'), so it can never reach a reader of the text either -- it poses no actual collision
+  -- risk to resolve, by construction. (This narrows the 2026-11-11 staging counterexample test,
+  -- which relies on a hand-built fixture's EXPLICIT 'moduleDependencies' including an unreferenced
+  -- 'foo' -- flagged to staging as a deliberate, bare-module-shaped exception, not a silent
+  -- regression: real kernel modules' blanket convention makes this case moot in practice, since
+  -- the gap it worked around (lib modules referenced but not blanket-declared) is the opposite
+  -- direction from "declared but never referenced".)
+  "declaredImportNames" <~ var "nssAsList" $
   -- Every LOCAL name (bare, '.'-stripped) declared by every OTHER DECLARED import (excluding 'd'
   -- itself), unioned with the printed module's own names -- condition (c)'s full "is this local
   -- name claimed by anyone else" check for a given dependency 'd'. Compares by bare local-name
@@ -506,6 +522,12 @@ typeDefinition = define "typeDefinition" $
 -- printed as a leading '##' comment, instead of letting it ride through as a trailing
 -- '@{description=...}' suffix after the printed term. Unlike the type-level peel, the term-level
 -- one keeps any OTHER annotation keys inline in a (possibly still-present) trailing '@{...}'.
+-- | Show a term definition as a string, shortening nominal references via the given import-alias
+-- map (#803). Heuristic #1 (#711 line-layout pass): if the body does not fit inline after
+-- 'term name =', break right after '=' and print the body on the next line, indented one level,
+-- via 'PrintCore.termExprAtPrecBudget' at a full 'Serialization.maxLineWidth' budget (a fresh
+-- line resets the available width) -- otherwise keep the whole declaration on one line, with the
+-- body printed at a budget reduced by the declaration head's own width.
 termDefinition :: TypedTermDefinition (M.Map ModuleName String -> TermDefinition -> String)
 termDefinition = define "termDefinition" $
   doc "Show a term definition as a string, shortening nominal references via the given import-alias map (#803)" $
@@ -518,8 +540,17 @@ termDefinition = define "termDefinition" $
     ("sig" ~> Strings.concat $ list [string " : ", PrintCore.termSignatureAliased @@ var "aliases" @@ var "sig", string " "]) $
   "peeled" <~ PrintCore.peelTermDescriptionAnnotation @@ (Packaging.termDefinitionBody $ var "td") $
   "mdesc" <~ Pairs.first (var "peeled") $
-  "bodyStr" <~ (PrintCore.termAliased @@ var "aliases" @@ (Pairs.second $ var "peeled")) $
-  "declStr" <~ (Strings.concat $ list [string "term ", var "localName", var "sigStr", string "= ", var "bodyStr"]) $
+  "body" <~ Pairs.second (var "peeled") $
+  "headStr" <~ (Strings.concat $ list [string "term ", var "localName", var "sigStr", string "="]) $
+  "inlineBudget" <~ Math.sub (asTerm Serialization.maxLineWidth) (Math.add (Strings.length $ var "headStr") (int32 1)) $
+  "inlineBodyExpr" <~ PrintCore.termExprAtPrecBudget @@ var "inlineBudget" @@ var "aliases" @@ int32 0 @@ var "body" $
+  "declStr" <~ Logic.ifElse (Ordering.lte (Serialization.expressionLength @@ var "inlineBodyExpr") (var "inlineBudget"))
+    (Strings.concat $ list [var "headStr", string " ", Serialization.printExpr @@ var "inlineBodyExpr"])
+    ("blockBodyExpr" <~ PrintCore.termExprAtPrecBudget @@ Serialization.maxLineWidth @@ var "aliases" @@ int32 0 @@ var "body" $
+     Strings.concat $ list [
+       var "headStr",
+       string "\n",
+       Serialization.customIndent @@ Serialization.doubleSpace @@ (Serialization.printExpr @@ var "blockBodyExpr")]) $
   "withDescDoc" <~ Optionals.match (var "mdesc")
     (var "declStr")
     ("d" ~> Strings.concat $ list [Strings.join (string "\n") (docCommentLinesOf @@ var "d"), string "\n", var "declStr"]) $

@@ -71,11 +71,14 @@ module_ = Module {
    definitions = [
      toDefinition binding,
      toDefinition bindingAliased,
+     toDefinition bindingExprAliased,
      toDefinition caseStatement,
+     toDefinition caseStatementExprAliased,
      toDefinition either_,
      toDefinition escapeBacktickChar,
      toDefinition escapeStringChar,
      toDefinition field,
+     toDefinition fieldExprAliased,
      toDefinition fieldTermIsUnit,
      toDefinition fieldType,
      toDefinition fieldTypeExpr,
@@ -83,18 +86,24 @@ module_ = Module {
      toDefinition floatValue,
      toDefinition floatType,
      toDefinition gatherLambdaBinders,
+     toDefinition gatherLetChain,
      toDefinition gatherTypeLambdaBinders,
      toDefinition hexDigit,
      toDefinition injection,
+     toDefinition injectionExprAliased,
      toDefinition integerValue,
      toDefinition integerType,
      toDefinition isBareName,
      toDefinition isBareSegment,
+     toDefinition isBinderChainTerm,
+     toDefinition isBracketedTerm,
      toDefinition isReservedWord,
      toDefinition isVariableTerm,
      toDefinition lambda,
+     toDefinition lambdaExprAliased,
      toDefinition let_,
      toDefinition letAliased,
+     toDefinition letExprAliased,
      toDefinition list_,
      toDefinition literal,
      toDefinition literalType,
@@ -111,10 +120,15 @@ module_ = Module {
      toDefinition projection,
      toDefinition (set_ :: TypedTermDefinition ((Int -> String) -> S.Set Int -> String)),
      toDefinition sugarField,
+     toDefinition sugarFieldExprAliased,
      toDefinition sugarFields,
+     toDefinition sugarFieldsExprAliased,
      toDefinition term,
      toDefinition termAliased,
      toDefinition termAtPrec,
+     toDefinition termExprAliased,
+     toDefinition termExprAtPrec,
+     toDefinition termExprAtPrecBudget,
      toDefinition termSignature,
      toDefinition termSignatureAliased,
      toDefinition toHex2,
@@ -145,6 +159,13 @@ precApp = 2
 precArrow = 1
 precMin = 0
 
+-- | The flat-width floor below which an application spine always stays inline, even when the
+-- caller's available-width budget has been reduced below this by deep nesting (#711 line-layout
+-- pass, staging review point #3: a short call like 'f x' or 'ParseInput[offset] input' should
+-- not break just because the surrounding context is tight).
+minApplicationWidth :: Int
+minApplicationWidth = 40
+
 -- | Wrap a rendered construct in parentheses iff its own precedence is looser than the required
 -- context. `ownPrec` is a Haskell-level constant (known at DSL-authoring time, one of the
 -- `prec*` constants above); `ctx` is the DSL-level (TypedTerm) context precedence threaded
@@ -153,6 +174,14 @@ parenthesizeIfNeeded :: Int -> TypedTerm Int -> TypedTerm String -> TypedTerm St
 parenthesizeIfNeeded ownPrec ctx s = Logic.ifElse (Ordering.lt (int32 ownPrec) ctx)
   (Strings.concat $ list [string "(", s, string ")"])
   s
+
+-- | Like 'parenthesizeIfNeeded', but for the 'Expr'-based term printer (#711 line-layout pass):
+-- wraps in inline parentheses (never a block style, matching the string-based version's
+-- behavior) iff the construct's own precedence is looser than the required context.
+parenthesizeIfNeededExpr :: Int -> TypedTerm Int -> TypedTerm Expr -> TypedTerm Expr
+parenthesizeIfNeededExpr ownPrec ctx e = Logic.ifElse (Ordering.lt (int32 ownPrec) ctx)
+  (Serialization.parens @@ e)
+  e
 
 -- | The empty import-alias map: resolving any name against it falls through to the full dotted
 -- form (see 'printNameAliased'). Every public, no-module-context entry point ('term', 'type_',
@@ -179,6 +208,36 @@ bindingAliased = define "bindingAliased" $
     string " := ",
     termAliased @@ var "aliases" @@ var "t"]
 
+-- | Like 'bindingAliased', but builds an 'Expr' (#711 line-layout pass) so a long bound value can
+-- break onto following lines, indented, via 'Serialization.indentSubsequentLines'.
+-- | Like 'bindingAliased', but builds an 'Expr' (#711 line-layout pass) so a long bound value can
+-- break onto following lines, indented one level past the 'let' (heuristic #3): the binder
+-- ('name := ') stays on the 'let' line, and a value that does not fit prints on the following
+-- line(s), indented. 'budget' is the number of columns already consumed on the current line by
+-- the surrounding context (e.g. 'let ') before this binding's own text starts -- subtracted from
+-- 'Serialization.maxLineWidth' at each nested fit-or-break decision so a construct that measures
+-- as "fits" in isolation does not silently overflow once its real on-page column is accounted
+-- for (the limitation 'Serialization.chooseLayout' documents and asks callers to compensate for).
+bindingExprAliased :: TypedTermDefinition (Int -> M.Map ModuleName String -> Binding -> Expr)
+bindingExprAliased = define "bindingExprAliased" $
+  doc "Show a binding as a line-layout expression, shortening nominal references via the given import-alias map (#803)" $
+  "budget" ~> "aliases" ~> "el" ~>
+  "name" <~ printName @@ (Core.bindingName $ var "el") $
+  "t" <~ Core.bindingTerm (var "el") $
+  "typeStr" <~ Optionals.match (Core.bindingTypeScheme $ var "el") (string "") ("ts" ~> Strings.concat (list [string ":(", typeSchemeAliased @@ var "aliases" @@ var "ts", string ")"])) $
+  "headStr" <~ Strings.concat (list [var "name", var "typeStr", string " := "]) $
+  "valueBudget" <~ Math.sub (var "budget") (Strings.length $ var "headStr") $
+  "valueExpr" <~ termExprAtPrecBudget @@ var "valueBudget" @@ var "aliases" @@ int32 precMin @@ var "t" $
+  "headOp" <~ Ast.op
+    (Serialization.sym @@ string "")
+    (Ast.padding Ast.wsNone Ast.wsNone)
+    (Ast.precedence $ int32 0)
+    Ast.associativityNone $
+  Logic.ifElse (isBracketedTerm @@ var "t")
+    (Serialization.ifx @@ var "headOp" @@ (Serialization.cst @@ var "headStr") @@ var "valueExpr")
+    (Serialization.indentSubsequentLines @@ Serialization.doubleSpace @@
+      (Serialization.ifx @@ var "headOp" @@ (Serialization.cst @@ var "headStr") @@ var "valueExpr"))
+
 caseStatement :: TypedTermDefinition (M.Map ModuleName String -> CaseStatement -> String)
 caseStatement = define "caseStatement" $
   doc "Show a case statement as a string, shortening nominal references via the given import-alias map (#803)" $
@@ -197,6 +256,35 @@ caseStatement = define "caseStatement" $
     string ")",
     fields @@ var "aliases" @@ var "allFields"]
 
+-- | Like 'caseStatement', but builds an 'Expr' (#711 line-layout pass): the branch list breaks
+-- one branch per line, indented, when it does not fit inline (heuristic #7). 'budget' is the
+-- number of columns already consumed on the current line before this cases-statement's own text
+-- starts (see 'bindingExprAliased' for why this is threaded through).
+caseStatementExprAliased :: TypedTermDefinition (Int -> M.Map ModuleName String -> CaseStatement -> Expr)
+caseStatementExprAliased = define "caseStatementExprAliased" $
+  doc "Show a case statement as a line-layout expression, shortening nominal references via the given import-alias map (#803)" $
+  "budget" ~> "aliases" ~> "cs" ~>
+  "tname" <~ printNameAliased @@ var "aliases" @@ (Core.caseStatementTypeName $ var "cs") $
+  "mdef" <~ Core.caseStatementDefault (var "cs") $
+  "csCases" <~ Core.caseStatementCases (var "cs") $
+  "caseFields" <~ Lists.map
+    ("alt" ~> Core.field (Core.caseAlternativeName $ var "alt") (Core.caseAlternativeHandler $ var "alt"))
+    (var "csCases") $
+  "defaultField" <~ Optionals.match (var "mdef") (list ([] :: [TypedTerm Field])) ("d" ~> list [Core.field (Core.name $ string "_") (var "d")]) $
+  "allFields" <~ Lists.concat (list [var "caseFields", var "defaultField"]) $
+  "headStr" <~ Strings.concat (list [string "cases(", var "tname", string ")"]) $
+  "fieldBudget" <~ Math.sub (Math.sub (var "budget") (Strings.length $ var "headStr")) (int32 2) $
+  "fieldExprs" <~ Lists.map (fieldExprAliased @@ var "fieldBudget" @@ var "aliases") (var "allFields") $
+  "headExpr" <~ Serialization.cst @@ var "headStr" $
+  Serialization.ifx @@ (Ast.op
+    (Serialization.sym @@ string "")
+    (Ast.padding Ast.wsNone Ast.wsNone)
+    (Ast.precedence $ int32 0)
+    Ast.associativityNone) @@ var "headExpr" @@
+    (Serialization.chooseLayout @@ var "budget"
+      @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ var "fieldExprs")
+      @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ var "fieldExprs"))
+
 either_ :: TypedTermDefinition ((a -> String) -> (b -> String) -> Prelude.Either a b -> String)
 either_ = define "either" $
   doc "Show an Either value using given functions for left and right" $
@@ -213,6 +301,44 @@ field = define "field" $
   "fname" <~ printName @@ (Core.fieldName $ var "field") $
   "fterm" <~ Core.fieldTerm (var "field") $
   Strings.concat $ list [var "fname", string "=", termAliased @@ var "aliases" @@ var "fterm"]
+
+-- | Like 'field', but builds an 'Expr' (#711 line-layout pass) so a long term value can break
+-- onto following lines, indented. 'budget' is the number of columns already consumed on the
+-- current line before this field's own text starts (see 'bindingExprAliased').
+-- | True iff a term's own line-layout 'Expr' self-indents its continuation lines via a bracket's
+-- block style (records, lists, sets, maps), so a surrounding 'name = <value>'/'x := <value>'
+-- wrapper must NOT also apply 'Serialization.indentSubsequentLines' -- doing so would double the
+-- indent (#711 line-layout pass, staging review point #3: nested record fields were stepping +4
+-- instead of +2). Only terms whose OWN printed form is a flat multi-line chain with no
+-- self-indenting bracket (an application spine, a let/lambda) need the wrapper's extra indent.
+isBracketedTerm :: TypedTermDefinition (Term -> Bool)
+isBracketedTerm = define "isBracketedTerm" $
+  doc "True iff a term prints as a self-indenting bracketed construct (record/list/set/map), for #711 double-indent avoidance" $
+  "t" ~> match _Term (var "t") (Just false) [
+    _Term_record>>: constant true,
+    _Term_list>>: constant true,
+    _Term_set>>: constant true,
+    _Term_map>>: constant true,
+    _Term_inject>>: constant true,
+    _Term_wrap>>: constant true]
+
+fieldExprAliased :: TypedTermDefinition (Int -> M.Map ModuleName String -> Field -> Expr)
+fieldExprAliased = define "fieldExprAliased" $
+  doc "Show a field as a line-layout expression, shortening nominal references in its term via the given alias map (#803)" $
+  "budget" ~> "aliases" ~> "field" ~>
+  "fname" <~ printName @@ (Core.fieldName $ var "field") $
+  "fterm" <~ Core.fieldTerm (var "field") $
+  "valueBudget" <~ Math.sub (var "budget") (Math.add (Strings.length $ var "fname") (int32 1)) $
+  "valueExpr" <~ termExprAtPrecBudget @@ var "valueBudget" @@ var "aliases" @@ int32 precMin @@ var "fterm" $
+  "eqOp" <~ Ast.op
+    (Serialization.sym @@ string "=")
+    (Ast.padding Ast.wsNone Ast.wsNone)
+    (Ast.precedence $ int32 0)
+    Ast.associativityNone $
+  Logic.ifElse (isBracketedTerm @@ var "fterm")
+    (Serialization.ifx @@ var "eqOp" @@ (Serialization.cst @@ var "fname") @@ var "valueExpr")
+    (Serialization.indentSubsequentLines @@ Serialization.doubleSpace @@
+      (Serialization.ifx @@ var "eqOp" @@ (Serialization.cst @@ var "fname") @@ var "valueExpr"))
 
 -- | Peel a single '@{description = "..."}' annotation off the top of a type, if present, and
 -- return its description string. The annotation payload is checked directly (a one-entry TermMap
@@ -355,6 +481,19 @@ sugarFields = define "sugarFields" $
     Strings.join (string ", ") (var "fieldStrs"),
     string "}"]
 
+-- | Like 'sugarFields', but builds an 'Expr' (#711 line-layout pass): the field list breaks one
+-- field per line, indented, when it does not fit inline (heuristic #6). 'budget' is the number of
+-- columns already consumed on the current line before this field list's own text starts (see
+-- 'bindingExprAliased').
+sugarFieldsExprAliased :: TypedTermDefinition (Int -> M.Map ModuleName String -> [Field] -> Expr)
+sugarFieldsExprAliased = define "sugarFieldsExprAliased" $
+  doc "Show fields as a line-layout nominal-construction-sugar expression, abbreviating unit-valued fields bareword (#809)" $
+  "budget" ~> "aliases" ~> "flds" ~>
+  "fieldExprs" <~ Lists.map (sugarFieldExprAliased @@ (Math.sub (var "budget") (int32 2)) @@ var "aliases") (var "flds") $
+  Serialization.chooseLayout @@ var "budget"
+    @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ var "fieldExprs")
+    @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ var "fieldExprs")
+
 -- | Show a single field in sugar form: 'name' if its term is unit (bareword shorthand), else
 -- 'name = term' (#809).
 sugarField :: TypedTermDefinition (M.Map ModuleName String -> Field -> String)
@@ -366,6 +505,29 @@ sugarField = define "sugarField" $
   Logic.ifElse (fieldTermIsUnit @@ var "fterm")
     (var "fname")
     (Strings.concat $ list [var "fname", string " = ", termAliased @@ var "aliases" @@ var "fterm"])
+
+-- | Like 'sugarField', but builds an 'Expr' (#711 line-layout pass) so a long term value can
+-- break onto following lines, indented. 'budget' is the number of columns already consumed on
+-- the current line before this field's own text starts (see 'bindingExprAliased').
+sugarFieldExprAliased :: TypedTermDefinition (Int -> M.Map ModuleName String -> Field -> Expr)
+sugarFieldExprAliased = define "sugarFieldExprAliased" $
+  doc "Show a single field as a line-layout sugar expression: bareword 'name' for a unit value, else 'name = term' (#809)" $
+  "budget" ~> "aliases" ~> "field" ~>
+  "fname" <~ printName @@ (Core.fieldName $ var "field") $
+  "fterm" <~ Core.fieldTerm (var "field") $
+  Logic.ifElse (fieldTermIsUnit @@ var "fterm")
+    (Serialization.cst @@ var "fname")
+    ("valueBudget" <~ Math.sub (var "budget") (Math.add (Strings.length $ var "fname") (int32 3)) $
+     "valueExpr" <~ termExprAtPrecBudget @@ var "valueBudget" @@ var "aliases" @@ int32 precMin @@ var "fterm" $
+     "eqOp" <~ Ast.op
+       (Serialization.sym @@ string "=")
+       (Ast.padding Ast.wsSpace Ast.wsSpace)
+       (Ast.precedence $ int32 0)
+       Ast.associativityNone $
+     Logic.ifElse (isBracketedTerm @@ var "fterm")
+       (Serialization.ifx @@ var "eqOp" @@ (Serialization.cst @@ var "fname") @@ var "valueExpr")
+       (Serialization.indentSubsequentLines @@ Serialization.doubleSpace @@
+         (Serialization.ifx @@ var "eqOp" @@ (Serialization.cst @@ var "fname") @@ var "valueExpr")))
 
 floatValue :: TypedTermDefinition (FloatValue -> String)
 floatValue = define "float" $
@@ -393,6 +555,22 @@ injection = define "injection" $
   Strings.concat $ list [
     printNameAliased @@ var "aliases" @@ var "tname",
     sugarFields @@ var "aliases" @@ (list [var "f"])]
+
+-- | Like 'injection', but builds an 'Expr' (#711 line-layout pass).
+injectionExprAliased :: TypedTermDefinition (Int -> M.Map ModuleName String -> Injection -> Expr)
+injectionExprAliased = define "injectionExprAliased" $
+  doc "Show an injection as a line-layout expression, shortening the type name via the given import-alias map (#803)" $
+  "budget" ~> "aliases" ~> "inj" ~>
+  "tname" <~ Core.injectionTypeName (var "inj") $
+  "f" <~ Core.injectionField (var "inj") $
+  "tnameStr" <~ printNameAliased @@ var "aliases" @@ var "tname" $
+  Serialization.ifx @@ (Ast.op
+    (Serialization.sym @@ string "")
+    (Ast.padding Ast.wsNone Ast.wsNone)
+    (Ast.precedence $ int32 0)
+    Ast.associativityNone) @@
+    (Serialization.cst @@ var "tnameStr") @@
+    (sugarFieldsExprAliased @@ (Math.sub (var "budget") (Strings.length $ var "tnameStr")) @@ var "aliases" @@ (list [var "f"]))
 
 integerValue :: TypedTermDefinition (IntegerValue -> String)
 integerValue = define "integer" $
@@ -662,6 +840,64 @@ lambda = define "lambda" $
     string ".",
     termAliased @@ var "aliases" @@ var "body"]
 
+-- | Like 'lambda', but builds an 'Expr' (#711 line-layout pass): the binder list stays on the
+-- current line, and the body breaks onto the next line, indented, when it does not fit
+-- (heuristic #4).
+-- | Like 'lambda', but builds an 'Expr' (#711 line-layout pass): the binder list stays on the
+-- current line, and the body breaks onto the next line, indented, when it does not fit
+-- (heuristic #4). 'budget' is the number of columns already consumed on the current line before
+-- this lambda's own text starts (see 'bindingExprAliased').
+-- | True iff a term is itself a binder-introducing construct (let or lambda) whose own head
+-- would otherwise be appended directly after a PARENT binder's head on the same line (#711
+-- line-layout pass, staging review point #2). Used by 'lambdaExprAliased' to decide whether to
+-- force a break after its own binder list rather than relying on the nested construct's own
+-- (purely local) fit-or-break decision, which can leave three or more binder heads glued onto
+-- one line even though the overall chain does not fit.
+isBinderChainTerm :: TypedTermDefinition (Term -> Bool)
+isBinderChainTerm = define "isBinderChainTerm" $
+  doc "True iff a term is a let or lambda (a binder-introducing construct, for #711 chained-binder line breaking)" $
+  "t" ~> match _Term (var "t") (Just false) [
+    _Term_let>>: constant true,
+    _Term_lambda>>: constant true]
+
+lambdaExprAliased :: TypedTermDefinition (Int -> M.Map ModuleName String -> Lambda -> Expr)
+lambdaExprAliased = define "lambdaExprAliased" $
+  doc "Show a lambda as a line-layout expression, shortening nominal references in its domain/body via the given alias map (#803)" $
+  "budget" ~> "aliases" ~> "l" ~>
+  "gathered" <~ gatherLambdaBinders @@ (list ([] :: [TypedTerm (Name, Maybe Type)])) @@ (Core.termLambda $ var "l") $
+  "binders" <~ Pairs.first (var "gathered") $
+  "body" <~ Pairs.second (var "gathered") $
+  "binderStr" <~ ("b" ~>
+    "v" <~ printBinderName @@ (Pairs.first $ var "b") $
+    "mt" <~ Pairs.second (var "b") $
+    Optionals.match (var "mt") (var "v")
+      ("t" ~> Strings.concat $ list [var "v", string ":", typeAliased @@ var "aliases" @@ var "t"])) $
+  "headStr" <~ Strings.concat (list [
+    string "λ",
+    Strings.join (string ",") (Lists.map (var "binderStr") (var "binders")),
+    string "."]) $
+  "bodyBudget" <~ Math.sub (var "budget") (Strings.length $ var "headStr") $
+  "bodyExpr" <~ termExprAtPrecBudget @@ var "bodyBudget" @@ var "aliases" @@ int32 precMin @@ var "body" $
+  -- When the body is itself another binder chain (let/lambda) AND the chain as a whole does not
+  -- fit on one line, force a break right after this lambda's own '.' rather than gluing the next
+  -- binder's head onto the same line -- otherwise 'λpred.let parse := λinput.<body>' accumulates
+  -- three binder heads on one line before any of them actually breaks.
+  "forceBreak" <~ Logic.and
+    (isBinderChainTerm @@ var "body")
+    (Ordering.gt (Serialization.expressionLength @@ (Serialization.spaceSep @@ list [Serialization.cst @@ var "headStr", var "bodyExpr"])) (var "budget")) $
+  Logic.ifElse (var "forceBreak")
+    (Serialization.ifx @@ (Ast.op
+      (Serialization.sym @@ string "")
+      (Ast.padding Ast.wsNone (Ast.wsBreakAndIndent $ asTerm Serialization.doubleSpace))
+      (Ast.precedence $ int32 0)
+      Ast.associativityNone) @@ (Serialization.cst @@ var "headStr") @@ var "bodyExpr")
+    (Serialization.indentSubsequentLines @@ Serialization.doubleSpace @@
+      (Serialization.ifx @@ (Ast.op
+        (Serialization.sym @@ string "")
+        (Ast.padding Ast.wsNone Ast.wsNone)
+        (Ast.precedence $ int32 0)
+        Ast.associativityNone) @@ (Serialization.cst @@ var "headStr") @@ var "bodyExpr"))
+
 let_ :: TypedTermDefinition (Let -> String)
 let_ = define "let" $
   doc "Show a let expression as a string" $
@@ -679,6 +915,83 @@ letAliased = define "letAliased" $
     Strings.join (string ", ") (var "bindingStrs"),
     string " in ",
     termAliased @@ var "aliases" @@ var "env"]
+
+-- | Gather a chain of directly-nested single-binding 'Term.let_'s (the DSL's own idiom for a
+-- let-chain, #711 line-layout pass: each '"x" <~ e $' in the DSL desugars to a separate, nested
+-- 'Term.let_' with one binding), returning (bindings-in-order, innermost non-let body). A
+-- multi-binding 'Let' node (comma-separated bindings from a single surface 'let') is treated as
+-- one chain link whose "binding" is the whole comma-list, so it still participates in the chain
+-- if it is itself nested under or above other lets.
+gatherLetChain :: TypedTermDefinition ([[Binding]] -> Term -> ([[Binding]], Term))
+gatherLetChain = define "gatherLetChain" $
+  doc "Gather a chain of directly-nested Term.let_ links, returning (binding-groups, innermost body)" $
+  "prev" ~> "t" ~> match _Term (var "t")
+    (Just $ pair (Lists.reverse $ var "prev") (var "t")) [
+    _Term_let>>: "l" ~>
+      "bindings" <~ Core.letBindings (var "l") $
+      "body" <~ Core.letBody (var "l") $
+      gatherLetChain @@ (Lists.cons (var "bindings") (var "prev")) @@ var "body"]
+
+-- | Like 'letAliased', but builds an 'Expr' (#711 line-layout pass). 'budget' is the number of
+-- columns already consumed on the current line before this let-expression's own text starts
+-- (see 'bindingExprAliased'). Stays fully inline (the original 'let a := b in c' form) when the
+-- whole chain fits within budget; otherwise breaks per heuristic #3:
+--
+--   * A chain of two or more links: each link's 'let b1, b2 in' prints on its own line, at the
+--     same indent, and the final non-let body prints on its own line at that same indent.
+--   * A chain of exactly one link: 'let x := v' and 'in body' print as two lines at the SAME
+--     indent (no trailing ' in' glued onto the binding line) -- this is the common case (a
+--     single let whose value itself needs to break) and reads better without the redundant
+--     'in' crowding the binding line.
+--
+-- Either way, a binding whose own value does not fit breaks the value onto following lines,
+-- indented one further level (via 'bindingExprAliased', which receives this same 'budget').
+letExprAliased :: TypedTermDefinition (Int -> M.Map ModuleName String -> Let -> Expr)
+letExprAliased = define "letExprAliased" $
+  doc "Show a let expression as a line-layout expression, shortening nominal references via the given import-alias map (#803)" $
+  "budget" ~> "aliases" ~> "l" ~>
+  "gathered" <~ gatherLetChain @@ (list ([] :: [TypedTerm [Binding]])) @@ (Core.termLet $ var "l") $
+  "bindingGroups" <~ Pairs.first (var "gathered") $
+  "finalBody" <~ Pairs.second (var "gathered") $
+  "groupExprs" <~ Lists.map ("bs" ~> Lists.map (bindingExprAliased @@ (Math.sub (var "budget") (int32 4)) @@ var "aliases") (var "bs")) (var "bindingGroups") $
+  "groupInlineStrs" <~ Lists.map ("bes" ~> Serialization.commaSep @@ Serialization.inlineStyle @@ var "bes") (var "groupExprs") $
+  "bodyExpr" <~ termExprAtPrecBudget @@ var "budget" @@ var "aliases" @@ int32 precMin @@ var "finalBody" $
+  "inletOp" <~ Ast.op
+    (Serialization.sym @@ string " in ")
+    (Ast.padding Ast.wsNone Ast.wsNone)
+    (Ast.precedence $ int32 0)
+    Ast.associativityNone $
+  "letPrefixOp" <~ Ast.op
+    (Serialization.sym @@ string "let ")
+    (Ast.padding Ast.wsNone Ast.wsNone)
+    (Ast.precedence $ int32 0)
+    Ast.associativityNone $
+  "inlineForm" <~ Lists.foldr
+    ("ge" ~> "acc" ~> Serialization.ifx @@ var "inletOp" @@
+      (Serialization.ifx @@ var "letPrefixOp" @@ (Serialization.cst @@ string "") @@ var "ge") @@
+      var "acc")
+    (var "bodyExpr")
+    (var "groupInlineStrs") $
+  "letLineOp" <~ Ast.op
+    (Serialization.sym @@ string "let ")
+    (Ast.padding Ast.wsNone Ast.wsNone)
+    (Ast.precedence $ int32 0)
+    Ast.associativityNone $
+  "blockForm" <~ Logic.ifElse (Equality.equal (Lists.length $ var "groupInlineStrs") (int32 1))
+    -- Single link: 'let x := v' / 'in body', two lines at the same indent (no trailing ' in').
+    ("ge" <~ (Optionals.withDefault (Serialization.cst @@ string "") (Lists.head $ var "groupInlineStrs")) $
+     Serialization.newlineSep @@ list [
+       Serialization.ifx @@ var "letLineOp" @@ (Serialization.cst @@ string "") @@ var "ge",
+       Serialization.ifx @@ (Ast.op
+         (Serialization.sym @@ string "in ")
+         (Ast.padding Ast.wsNone Ast.wsNone)
+         (Ast.precedence $ int32 0)
+         Ast.associativityNone) @@ (Serialization.cst @@ string "") @@ var "bodyExpr"])
+    -- Multi-link chain: each 'let b1, b2 in' on its own line, then the final body.
+    ("letLines" <~ Lists.map ("ge" ~> Serialization.ifx @@ var "letLineOp" @@ (Serialization.cst @@ string "") @@
+        (Serialization.suffix @@ string " in" @@ var "ge")) (var "groupInlineStrs") $
+     Serialization.newlineSep @@ (Lists.concat (list [var "letLines", list [var "bodyExpr"]]))) $
+  Serialization.chooseLayout @@ var "budget" @@ var "inlineForm" @@ var "blockForm"
 
 list_ :: TypedTermDefinition ((a -> String) -> [a] -> String)
 list_ = define "list" $
@@ -782,19 +1095,70 @@ term = define "term" $
 
 -- | Like 'term', but shortening nominal references via the given import-alias map (#803). This is
 -- the module-context entry point used by 'Print/Packaging.hs' when printing a definition's body.
+-- Delegates to 'termExprAliased' (#711 line-layout pass) and renders the resulting 'Expr' with
+-- 'Serialization.printExpr', so every term definition gets the same fit-or-break layout as
+-- every other construct built on the shared 'Expr'/'chooseLayout' machinery.
 termAliased :: TypedTermDefinition (M.Map ModuleName String -> Term -> String)
 termAliased = define "termAliased" $
   doc "Show a term as a string, shortening nominal references via the given import-alias map (#803)" $
-  "aliases" ~> "t" ~> termAtPrec @@ var "aliases" @@ int32 precMin @@ var "t"
+  "aliases" ~> "t" ~> Serialization.printExpr @@ (termExprAliased @@ var "aliases" @@ var "t")
 
 -- | Show a term as a string in a given minimum-precedence context, wrapping in parentheses
--- exactly when the term's own construct is looser than that context (see the precedence
--- constants above, and docs/specification/syntax.md #3-4). The alias map (#803) is threaded
--- through every recursive call so nominal references inside the term are shortened consistently.
+-- exactly when the term's own construct is looser than that context. Thin 'String' wrapper over
+-- 'termExprAtPrec' (#711 line-layout pass); kept for callers (and tests) that still want a plain
+-- string at a given precedence without going through the top-level entry point.
 termAtPrec :: TypedTermDefinition (M.Map ModuleName String -> Int -> Term -> String)
 termAtPrec = define "termAtPrec" $
   doc "Show a term as a string at a given minimum context precedence, adding minimal parentheses" $
   "aliases" ~> "ctx" ~> "t" ~>
+    Serialization.printExpr @@ (termExprAtPrec @@ var "aliases" @@ var "ctx" @@ var "t")
+
+-- | Like 'termAliased', but builds an 'Expr' (#711 line-layout pass) instead of a 'String'
+-- directly. Entry point at the loosest (top-level) context, with a full 'Serialization.maxLineWidth'
+-- budget (nothing has consumed any columns yet).
+termExprAliased :: TypedTermDefinition (M.Map ModuleName String -> Term -> Expr)
+termExprAliased = define "termExprAliased" $
+  doc "Show a term as a line-layout expression at the top-level context, shortening nominal references via the given import-alias map (#803)" $
+  "aliases" ~> "t" ~> termExprAtPrecBudget @@ Serialization.maxLineWidth @@ var "aliases" @@ int32 precMin @@ var "t"
+
+-- | Like 'termExprAtPrecBudget', but with a full 'Serialization.maxLineWidth' budget. Kept for
+-- callers (and tests) that do not yet track an available-width budget of their own.
+termExprAtPrec :: TypedTermDefinition (M.Map ModuleName String -> Int -> Term -> Expr)
+termExprAtPrec = define "termExprAtPrec" $
+  doc "Show a term as a line-layout expression at a given minimum context precedence, with a full line-width budget" $
+  "aliases" ~> "ctx" ~> "t" ~> termExprAtPrecBudget @@ Serialization.maxLineWidth @@ var "aliases" @@ var "ctx" @@ var "t"
+
+-- | Show a term as an 'Expr' in a given minimum-precedence context, wrapping in parentheses
+-- exactly when the term's own construct is looser than that context (see the precedence
+-- constants above, and docs/specification/syntax.md #3-4). The alias map (#803) is threaded
+-- through every recursive call so nominal references inside the term are shortened consistently.
+--
+-- 'budget' is the number of columns still available on the CURRENT output line before this
+-- term's own text starts counting against 'Serialization.maxLineWidth' -- i.e. 'maxLineWidth'
+-- minus whatever fixed-width prefix the caller has already committed to printing on the same
+-- line (a binder name, 'let '/'in ', an application's head, a field name and '='). Every nested
+-- call below that adds such a prefix subtracts its width before passing 'budget' down, and every
+-- 'chooseLayout' call in this module uses 'budget' (or a further-reduced derivative of it)
+-- instead of the raw 'Serialization.maxLineWidth', which 'chooseLayout' on its own cannot see
+-- (its own doc comment: "surrounding indentation may push content beyond the threshold... callers
+-- that know they are nested can pass a smaller threshold to compensate" -- this is that
+-- compensation, applied systematically). A construct that BREAKS (prints on its own new line
+-- rather than continuing the current one) resets to a close-to-full budget for its own children,
+-- since a fresh line starts at the indent column, not at the parent's old column; this module
+-- approximates that reset by not threading a tighter budget into a block-form branch's own
+-- sub-expressions beyond the fixed indent cost, since 'printExpr' applies indentation uniformly
+-- per level rather than per dynamic column.
+--
+-- This is the #711 line-layout pass's core: every construct below builds a layout-aware 'Expr'
+-- (via the shared 'Serialization' combinators) rather than concatenating strings directly, so a
+-- long application spine, let chain, record, or case statement can break across lines, indented,
+-- when it does not fit within budget -- see 'letExprAliased' (let chains), 'lambdaExprAliased'
+-- (lambda bodies), the application branch below (argument spines), and
+-- 'sugarFieldsExprAliased'/'caseStatementExprAliased' (field/branch lists).
+termExprAtPrecBudget :: TypedTermDefinition (Int -> M.Map ModuleName String -> Int -> Term -> Expr)
+termExprAtPrecBudget = define "termExprAtPrecBudget" $
+  doc "Show a term as a line-layout expression at a given minimum context precedence and available-width budget, adding minimal parentheses" $
+  "budget" ~> "aliases" ~> "ctx" ~> "t" ~>
   "gatherTerms" <~ ("prev" ~> "app" ~>
     "lhs" <~ Core.applicationFunction (var "app") $
     "rhs" <~ Core.applicationArgument (var "app") $
@@ -803,102 +1167,125 @@ termAtPrec = define "termAtPrec" $
       _Term_application>>: "app2" ~> var "gatherTerms" @@ (Lists.cons (var "rhs") (var "prev")) @@ var "app2"]) $
   match _Term (var "t") Nothing [
     _Term_annotated>>: "at" ~>
-      "bodyStr" <~ termAtPrec @@ var "aliases" @@ int32 precPostfix @@ (Core.annotatedTermBody $ var "at") $
-      "annStr" <~ termAtPrec @@ var "aliases" @@ int32 precPostfix @@ (Core.annotatedTermAnnotation $ var "at") $
-      parenthesizeIfNeeded precPostfix (var "ctx") $
-        Strings.concat $ list [var "bodyStr", string "@", var "annStr"],
+      "bodyExpr" <~ termExprAtPrecBudget @@ var "budget" @@ var "aliases" @@ int32 precPostfix @@ (Core.annotatedTermBody $ var "at") $
+      "annExpr" <~ termExprAtPrecBudget @@ var "budget" @@ var "aliases" @@ int32 precPostfix @@ (Core.annotatedTermAnnotation $ var "at") $
+      parenthesizeIfNeededExpr precPostfix (var "ctx") $
+        Serialization.ifx @@ (Ast.op
+          (Serialization.sym @@ string "@")
+          (Ast.padding Ast.wsNone Ast.wsNone)
+          (Ast.precedence $ int32 0)
+          Ast.associativityNone) @@ var "bodyExpr" @@ var "annExpr",
+    -- Application spine (heuristic #5): the function and its arguments space-separate inline
+    -- when they fit; otherwise the function stays ALONE on the first line, and EVERY argument
+    -- (including what would have been the first inline argument) breaks onto its own line,
+    -- indented one level -- not just the arguments after the first, which would otherwise glue
+    -- the function and its first argument together on one (possibly still-too-long) line.
+    -- A short application (flat width <= minApplicationWidth) always stays inline even when the
+    -- caller's budget is tight -- a tight budget comes from deep nesting, not from THIS
+    -- application being genuinely too wide, and breaking a short call like 'f x' or
+    -- 'ParseInput[offset] input' needlessly (#711 line-layout pass, staging review point #3)
+    -- reads worse than a few extra columns on an otherwise-short line.
     _Term_application>>: "app" ~>
       "terms" <~ var "gatherTerms" @@ (list ([] :: [TypedTerm Term])) @@ var "app" $
-      "termStrs" <~ Lists.map ("e" ~> termAtPrec @@ var "aliases" @@ int32 precPostfix @@ var "e") (var "terms") $
-      parenthesizeIfNeeded precApp (var "ctx") $
-        Strings.join (string " ") (var "termStrs"),
-    _Term_cases>>: "cs" ~> caseStatement @@ var "aliases" @@ var "cs",
+      "termExprs" <~ Lists.map ("e" ~> termExprAtPrecBudget @@ var "budget" @@ var "aliases" @@ int32 precPostfix @@ var "e") (var "terms") $
+      parenthesizeIfNeededExpr precApp (var "ctx") $
+        "headExpr" <~ (Optionals.withDefault (Serialization.cst @@ string "") (Lists.head $ var "termExprs")) $
+        "argExprs" <~ Lists.drop (int32 1) (var "termExprs") $
+        "effectiveBudget" <~ Ordering.max (var "budget") (int32 minApplicationWidth) $
+        Logic.ifElse (Lists.isEmpty $ var "argExprs")
+          (var "headExpr")
+          (Serialization.chooseLayout @@ var "effectiveBudget"
+            @@ (Serialization.spaceSep @@ var "termExprs")
+            @@ (Serialization.ifx @@ (Ast.op
+                  (Serialization.sym @@ string "")
+                  (Ast.padding Ast.wsNone (Ast.wsBreakAndIndent $ asTerm Serialization.doubleSpace))
+                  (Ast.precedence $ int32 0)
+                  Ast.associativityNone) @@ var "headExpr" @@ (Serialization.newlineSep @@ var "argExprs"))),
+    _Term_cases>>: "cs" ~> caseStatementExprAliased @@ var "budget" @@ var "aliases" @@ var "cs",
     _Term_either>>: "e" ~> Eithers.either
-      ("l" ~> Strings.concat $ list [
-        string "left(",
-        termAliased @@ var "aliases" @@ var "l",
-        string ")"])
-      ("r" ~> Strings.concat $ list [
-        string "right(",
-        termAliased @@ var "aliases" @@ var "r",
-        string ")"])
+      ("l" ~> Serialization.suffix @@ string ")" @@ (Serialization.prefix @@ string "left(" @@ (termExprAtPrecBudget @@ (Math.sub (var "budget") (int32 5)) @@ var "aliases" @@ int32 precMin @@ var "l")))
+      ("r" ~> Serialization.suffix @@ string ")" @@ (Serialization.prefix @@ string "right(" @@ (termExprAtPrecBudget @@ (Math.sub (var "budget") (int32 6)) @@ var "aliases" @@ int32 precMin @@ var "r")))
       (var "e"),
     _Term_lambda>>: "l" ~>
-      parenthesizeIfNeeded precMin (var "ctx") $ lambda @@ var "aliases" @@ var "l",
+      parenthesizeIfNeededExpr precMin (var "ctx") $ lambdaExprAliased @@ var "budget" @@ var "aliases" @@ var "l",
     _Term_let>>: "l" ~>
-      parenthesizeIfNeeded precMin (var "ctx") $ letAliased @@ var "aliases" @@ var "l",
+      parenthesizeIfNeededExpr precMin (var "ctx") $ letExprAliased @@ var "budget" @@ var "aliases" @@ var "l",
     _Term_list>>: "els" ~>
-      "termStrs" <~ Lists.map (termAliased @@ var "aliases") (var "els") $
-      Strings.concat $ list [
-        string "[",
-        Strings.join (string ", ") (var "termStrs"),
-        string "]"],
-    _Term_literal>>: "lit" ~> literal @@ var "lit",
+      Serialization.bracketListAdaptive @@ Lists.map (termExprAliased @@ var "aliases") (var "els"),
+    _Term_literal>>: "lit" ~> Serialization.cst @@ (literal @@ var "lit"),
     _Term_map>>: "m" ~>
-      "entry" <~ ("p" ~> Strings.concat $ list [
-        termAliased @@ var "aliases" @@ (Pairs.first $ var "p"),
-        string "=",
-        termAliased @@ var "aliases" @@ (Pairs.second $ var "p")]) $
-      Strings.concat $ list [
-        string "{",
-        Strings.join (string ", ") $ Lists.map (var "entry") $
-          Lists.sortBy (reify Pairs.first) $ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)),
-        string "}"],
-    _Term_optional>>: "mt" ~> Optionals.match (var "mt") (string "none") ("t" ~> Strings.concat $ list [
-        string "given(",
-        termAliased @@ var "aliases" @@ var "t",
-        string ")"]),
-    _Term_pair>>: "p" ~> Strings.concat $ list [
-      string "(",
-      termAliased @@ var "aliases" @@ (Pairs.first $ var "p"),
-      string ", ",
-      termAliased @@ var "aliases" @@ (Pairs.second $ var "p"),
-      string ")"],
-    _Term_project>>: "proj" ~> projection @@ var "aliases" @@ var "proj",
+      "entryExpr" <~ ("p" ~> Serialization.ifx @@ (Ast.op
+          (Serialization.sym @@ string "=")
+          (Ast.padding Ast.wsNone Ast.wsNone)
+          (Ast.precedence $ int32 0)
+          Ast.associativityNone) @@
+          (termExprAliased @@ var "aliases" @@ (Pairs.first $ var "p")) @@
+          (termExprAliased @@ var "aliases" @@ (Pairs.second $ var "p"))) $
+      "entryExprs" <~ Lists.map (var "entryExpr") (Lists.sortBy (reify Pairs.first) (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) $
+      Serialization.chooseLayout @@ var "budget"
+        @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ var "entryExprs")
+        @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ var "entryExprs"),
+    _Term_optional>>: "mt" ~> Optionals.match (var "mt") (Serialization.cst @@ string "none")
+      ("t" ~> Serialization.suffix @@ string ")" @@ (Serialization.prefix @@ string "given(" @@ (termExprAtPrecBudget @@ (Math.sub (var "budget") (int32 6)) @@ var "aliases" @@ int32 precMin @@ var "t"))),
+    _Term_pair>>: "p" ~> Serialization.parenListAdaptive @@ list [
+      termExprAliased @@ var "aliases" @@ (Pairs.first $ var "p"),
+      termExprAliased @@ var "aliases" @@ (Pairs.second $ var "p")],
+    _Term_project>>: "proj" ~> Serialization.cst @@ (projection @@ var "aliases" @@ var "proj"),
     _Term_record>>: "rec" ~>
       -- #809: nominal construction sugar. A record always prints as 'Name{...}' (the record-style
-      -- construct), with unit-valued fields abbreviated bareword via 'sugarFields'. It reparses as a
-      -- record (and, for a one-field record over a union type, is corrected to an injection by the
-      -- packaging pass -- but a genuine record is never over a union, so it round-trips as a record).
+      -- construct), with unit-valued fields abbreviated bareword via 'sugarFieldsExprAliased'. It
+      -- reparses as a record (and, for a one-field record over a union type, is corrected to an
+      -- injection by the packaging pass -- but a genuine record is never over a union, so it
+      -- round-trips as a record).
       "tname" <~ printNameAliased @@ var "aliases" @@ (Core.recordTypeName $ var "rec") $
       "flds" <~ Core.recordFields (var "rec") $
-      Strings.concat $ list [
-        var "tname",
-        sugarFields @@ var "aliases" @@ var "flds"],
+      Serialization.ifx @@ (Ast.op
+        (Serialization.sym @@ string "")
+        (Ast.padding Ast.wsNone Ast.wsNone)
+        (Ast.precedence $ int32 0)
+        Ast.associativityNone) @@ (Serialization.cst @@ var "tname") @@
+        (sugarFieldsExprAliased @@ (Math.sub (var "budget") (Strings.length $ var "tname")) @@ var "aliases" @@ var "flds"),
     _Term_set>>: "s" ~>
-      Strings.concat $ list [
-        string "{",
-        Strings.join (string ", ") (Lists.map (termAliased @@ var "aliases") $ Lists.sort $ Sets.toList $ var "s"),
-        string "}"],
+      "elExprs" <~ Lists.map (termExprAliased @@ var "aliases") (Lists.sort (Sets.toList (var "s" :: TypedTerm (S.Set Term)))) $
+      Serialization.chooseLayout @@ var "budget"
+        @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ var "elExprs")
+        @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ var "elExprs"),
     _Term_typeLambda>>: "ta" ~>
       "gathered" <~ gatherTypeLambdaBinders @@ (list ([] :: [TypedTerm Name])) @@ (Core.termTypeLambda $ var "ta") $
       "vs" <~ Pairs.first (var "gathered") $
       "body" <~ Pairs.second (var "gathered") $
       "vNames" <~ Lists.map (asTerm printBinderName) (var "vs") $
-      parenthesizeIfNeeded precMin (var "ctx") $
-        Strings.concat $ list [
-          string "Λ",
-          Strings.join (string ",") (var "vNames"),
-          string ".",
-          termAliased @@ var "aliases" @@ var "body"],
+      "headStr" <~ Strings.concat (list [
+        string "Λ",
+        Strings.join (string ",") (var "vNames"),
+        string "."]) $
+      "bodyExpr" <~ termExprAtPrecBudget @@ (Math.sub (var "budget") (Strings.length $ var "headStr")) @@ var "aliases" @@ int32 precMin @@ var "body" $
+      parenthesizeIfNeededExpr precMin (var "ctx") $
+        Serialization.indentSubsequentLines @@ Serialization.doubleSpace @@
+          (Serialization.ifx @@ (Ast.op
+            (Serialization.sym @@ string "")
+            (Ast.padding Ast.wsNone Ast.wsNone)
+            (Ast.precedence $ int32 0)
+            Ast.associativityNone) @@ (Serialization.cst @@ var "headStr") @@ var "bodyExpr"),
     _Term_typeApplication>>: "tt" ~>
       "t2" <~ Core.typeApplicationTermBody (var "tt") $
       "typ" <~ Core.typeApplicationTermType (var "tt") $
-      "bodyStr" <~ termAtPrec @@ var "aliases" @@ int32 precPostfix @@ var "t2" $
-      parenthesizeIfNeeded precPostfix (var "ctx") $
-        Strings.concat $ list [
-          var "bodyStr",
-          string "⟨",
-          typeAliased @@ var "aliases" @@ var "typ",
-          string "⟩"],
-    _Term_inject>>: "inj" ~> injection @@ var "aliases" @@ var "inj",
-    _Term_unit>>: constant $ string "unit",
+      "bodyExpr" <~ termExprAtPrecBudget @@ var "budget" @@ var "aliases" @@ int32 precPostfix @@ var "t2" $
+      parenthesizeIfNeededExpr precPostfix (var "ctx") $
+        Serialization.suffix @@ string "⟩" @@
+          (Serialization.ifx @@ (Ast.op
+            (Serialization.sym @@ string "⟨")
+            (Ast.padding Ast.wsNone Ast.wsNone)
+            (Ast.precedence $ int32 0)
+            Ast.associativityNone) @@ var "bodyExpr" @@ (Serialization.cst @@ (typeAliased @@ var "aliases" @@ var "typ"))),
+    _Term_inject>>: "inj" ~> injectionExprAliased @@ var "budget" @@ var "aliases" @@ var "inj",
+    _Term_unit>>: constant $ Serialization.cst @@ string "unit",
     -- #809: unwrap elimination sugar 'Name[]' (empty brackets = eliminate the wrapper's anonymous
     -- field). Reparses directly to Term.unwrap -- no graph correction needed.
-    _Term_unwrap>>: "tname" ~> Strings.concat $ list [
+    _Term_unwrap>>: "tname" ~> Serialization.cst @@ (Strings.concat $ list [
       printNameAliased @@ var "aliases" @@ var "tname",
-      string "[]"],
-    _Term_variable>>: "name" ~> printNameAliased @@ var "aliases" @@ var "name",
+      string "[]"]),
+    _Term_variable>>: "name" ~> Serialization.cst @@ (printNameAliased @@ var "aliases" @@ var "name"),
     _Term_wrap>>: "wt" ~>
       -- #809: wrapper construction sugar 'Name{term}'. Safe ONLY when the wrapped body does NOT
       -- reparse as a record field -- i.e. not a bare variable (which would print as a lone name and
@@ -908,17 +1295,18 @@ termAtPrec = define "termAtPrec" $
       "tname" <~ printNameAliased @@ var "aliases" @@ (Core.wrappedTermTypeName $ var "wt") $
       "term1" <~ Core.wrappedTermBody (var "wt") $
       Logic.ifElse (isVariableTerm @@ var "term1")
-        (Strings.concat $ list [
-          string "wrap(",
-          var "tname",
-          string "){",
-          termAliased @@ var "aliases" @@ var "term1",
-          string "}"])
-        (Strings.concat $ list [
-          var "tname",
-          string "{",
-          termAliased @@ var "aliases" @@ var "term1",
-          string "}"])]
+        (Serialization.suffix @@ string "}" @@
+          (Serialization.ifx @@ (Ast.op
+            (Serialization.sym @@ string "){")
+            (Ast.padding Ast.wsNone Ast.wsNone)
+            (Ast.precedence $ int32 0)
+            Ast.associativityNone) @@ (Serialization.cst @@ (Strings.concat $ list [string "wrap(", var "tname"])) @@ (termExprAliased @@ var "aliases" @@ var "term1")))
+        (Serialization.suffix @@ string "}" @@
+          (Serialization.ifx @@ (Ast.op
+            (Serialization.sym @@ string "{")
+            (Ast.padding Ast.wsNone Ast.wsNone)
+            (Ast.precedence $ int32 0)
+            Ast.associativityNone) @@ (Serialization.cst @@ var "tname") @@ (termExprAtPrecBudget @@ (Math.sub (var "budget") (Math.add (Strings.length $ var "tname") (int32 1))) @@ var "aliases" @@ int32 precMin @@ var "term1")))]
 
 -- | Show a type as a string (the canonical, minimally-parenthesized rendering). Entry point at
 -- the loosest (top-level) context, with no import aliases (full dotted names everywhere).
