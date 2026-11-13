@@ -1,7 +1,7 @@
 {
   "name": "hydra.core.encode.diff",
   "metadata": {"description": "Term encoders for hydra.core.diff", "comments": [], "seeAlso": [], "provisions": []},
-  "dependencies": [{"module": "hydra.core.encode.model"}, {"module": "hydra.core.diff"}],
+  "dependencies": [{"module": "hydra.core.diff"}],
   "definitions": [
     {
       "term": {

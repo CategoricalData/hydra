@@ -5,9 +5,7 @@
     {"module": "hydra.core.relational"},
     {"module": "hydra.core.typed"},
     {"module": "hydra.core.encode.relational"},
-    {"module": "hydra.core.decode.relational"},
-    {"module": "hydra.core.model"},
-    {"module": "hydra.core.dsl.model"}],
+    {"module": "hydra.core.decode.relational"}],
   "definitions": [
     {
       "term": {

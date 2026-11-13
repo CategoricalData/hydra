@@ -1,7 +1,7 @@
 {
   "name": "hydra.core.encode.ast",
   "metadata": {"description": "Term encoders for hydra.core.ast", "comments": [], "seeAlso": [], "provisions": []},
-  "dependencies": [{"module": "hydra.core.encode.model"}, {"module": "hydra.core.ast"}],
+  "dependencies": [{"module": "hydra.core.ast"}],
   "definitions": [
     {
       "term": {

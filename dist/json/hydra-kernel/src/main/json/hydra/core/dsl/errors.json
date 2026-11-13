@@ -6,18 +6,14 @@
     {"module": "hydra.core.typed"},
     {"module": "hydra.core.encode.errors"},
     {"module": "hydra.core.decode.errors"},
-    {"module": "hydra.core.model"},
     {"module": "hydra.core.error.checking"},
     {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.model"},
     {"module": "hydra.core.paths"},
-    {"module": "hydra.core.typing"},
-    {"module": "hydra.core.variants"},
-    {"module": "hydra.core.dsl.model"},
     {"module": "hydra.core.dsl.error.checking"},
     {"module": "hydra.core.dsl.error.model"},
-    {"module": "hydra.core.dsl.paths"},
-    {"module": "hydra.core.dsl.typing"},
-    {"module": "hydra.core.dsl.variants"}],
+    {"module": "hydra.core.dsl.model"},
+    {"module": "hydra.core.dsl.paths"}],
   "definitions": [
     {
       "term": {

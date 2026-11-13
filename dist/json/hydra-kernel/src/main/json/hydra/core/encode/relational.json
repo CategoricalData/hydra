@@ -1,7 +1,7 @@
 {
   "name": "hydra.core.encode.relational",
   "metadata": {"description": "Term encoders for hydra.core.relational", "comments": [], "seeAlso": [], "provisions": []},
-  "dependencies": [{"module": "hydra.core.encode.model"}, {"module": "hydra.core.relational"}],
+  "dependencies": [{"module": "hydra.core.relational"}],
   "definitions": [
     {
       "term": {

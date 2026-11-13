@@ -5,9 +5,9 @@
     {"module": "hydra.core.encode.errors"},
     {"module": "hydra.core.encode.file"},
     {"module": "hydra.core.encode.graph"},
-    {"module": "hydra.core.encode.variants"},
     {"module": "hydra.core.encode.model"},
     {"module": "hydra.core.encode.util"},
+    {"module": "hydra.core.encode.variants"},
     {"module": "hydra.core.coders"}],
   "definitions": [
     {

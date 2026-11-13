@@ -2,12 +2,10 @@
   "name": "hydra.core.encode.errors",
   "metadata": {"description": "Term encoders for hydra.core.errors", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
-    {"module": "hydra.core.encode.model"},
     {"module": "hydra.core.encode.error.checking"},
     {"module": "hydra.core.encode.error.model"},
+    {"module": "hydra.core.encode.model"},
     {"module": "hydra.core.encode.paths"},
-    {"module": "hydra.core.encode.typing"},
-    {"module": "hydra.core.encode.variants"},
     {"module": "hydra.core.errors"}],
   "definitions": [
     {

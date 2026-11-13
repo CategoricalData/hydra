@@ -5,7 +5,7 @@
     "comments": [],
     "seeAlso": [],
     "provisions": []},
-  "dependencies": [{"module": "hydra.core.model"}, {"module": "hydra.core.time"}],
+  "dependencies": [{"module": "hydra.core.time"}],
   "definitions": [
     {
       "type": {

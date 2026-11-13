@@ -5,7 +5,7 @@
     "comments": [],
     "seeAlso": [],
     "provisions": []},
-  "dependencies": [{"module": "hydra.core.model"}, {"module": "hydra.core.file"}],
+  "dependencies": [{"module": "hydra.core.file"}],
   "definitions": [
     {
       "type": {

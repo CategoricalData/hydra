@@ -9,9 +9,9 @@
     {"module": "hydra.core.errors"},
     {"module": "hydra.core.file"},
     {"module": "hydra.core.graph"},
-    {"module": "hydra.core.variants"},
     {"module": "hydra.core.model"},
-    {"module": "hydra.core.util"}],
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.variants"}],
   "definitions": [
     {
       "type": {

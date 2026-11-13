@@ -5,9 +5,7 @@
     {"module": "hydra.core.ast"},
     {"module": "hydra.core.typed"},
     {"module": "hydra.core.encode.ast"},
-    {"module": "hydra.core.decode.ast"},
-    {"module": "hydra.core.model"},
-    {"module": "hydra.core.dsl.model"}],
+    {"module": "hydra.core.decode.ast"}],
   "definitions": [
     {
       "term": {

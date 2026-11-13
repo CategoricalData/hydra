@@ -6,8 +6,8 @@
     "seeAlso": [],
     "provisions": []},
   "dependencies": [
-    {"module": "hydra.core.model"},
     {"module": "hydra.core.errors"},
+    {"module": "hydra.core.model"},
     {"module": "hydra.core.packaging"},
     {"module": "hydra.core.typing"}],
   "definitions": [

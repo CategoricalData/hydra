@@ -5,18 +5,7 @@
     "comments": [],
     "seeAlso": [],
     "provisions": []},
-  "dependencies": [
-    {"module": "hydra.core.model"},
-    {"module": "hydra.core.lib.eithers"},
-    {"module": "hydra.core.lib.equality"},
-    {"module": "hydra.core.lib.functions"},
-    {"module": "hydra.core.lib.lists"},
-    {"module": "hydra.core.lib.logic"},
-    {"module": "hydra.core.lib.maps"},
-    {"module": "hydra.core.lib.math"},
-    {"module": "hydra.core.lib.optionals"},
-    {"module": "hydra.core.lib.pairs"},
-    {"module": "hydra.core.lib.sets"}],
+  "dependencies": [{"module": "hydra.core.model"}],
   "definitions": [
     {
       "term": {

@@ -9,15 +9,15 @@
     {"module": "hydra.core.errors"},
     {"module": "hydra.core.file"},
     {"module": "hydra.core.graph"},
-    {"module": "hydra.core.variants"},
     {"module": "hydra.core.model"},
     {"module": "hydra.core.util"},
+    {"module": "hydra.core.variants"},
     {"module": "hydra.core.dsl.errors"},
     {"module": "hydra.core.dsl.file"},
     {"module": "hydra.core.dsl.graph"},
-    {"module": "hydra.core.dsl.variants"},
     {"module": "hydra.core.dsl.model"},
-    {"module": "hydra.core.dsl.util"}],
+    {"module": "hydra.core.dsl.util"},
+    {"module": "hydra.core.dsl.variants"}],
   "definitions": [
     {
       "term": {

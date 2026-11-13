@@ -1,10 +1,7 @@
 {
   "name": "hydra.core.encode.validation",
   "metadata": {"description": "Term encoders for hydra.core.validation", "comments": [], "seeAlso": [], "provisions": []},
-  "dependencies": [
-    {"module": "hydra.core.encode.model"},
-    {"module": "hydra.core.encode.error.model"},
-    {"module": "hydra.core.validation"}],
+  "dependencies": [{"module": "hydra.core.encode.model"}, {"module": "hydra.core.validation"}],
   "definitions": [
     {
       "term": {

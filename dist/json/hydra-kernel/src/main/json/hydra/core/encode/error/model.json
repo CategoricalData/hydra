@@ -2,8 +2,8 @@
   "name": "hydra.core.encode.error.model",
   "metadata": {"description": "Term encoders for hydra.core.error.model", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
-    {"module": "hydra.core.encode.paths"},
     {"module": "hydra.core.encode.model"},
+    {"module": "hydra.core.encode.paths"},
     {"module": "hydra.core.encode.variants"},
     {"module": "hydra.core.error.model"}],
   "definitions": [

@@ -1,7 +1,7 @@
 {
   "name": "hydra.core.util",
   "metadata": {"description": "General-purpose utility types used across Hydra.", "comments": [], "seeAlso": [], "provisions": []},
-  "dependencies": [{"module": "hydra.core.model"}, {"module": "hydra.core.packaging"}],
+  "dependencies": [{"module": "hydra.core.packaging"}],
   "definitions": [
     {
       "type": {

@@ -1,7 +1,7 @@
 {
   "name": "hydra.core.error.model",
   "metadata": {"description": "Error types for core type and term validation", "comments": [], "seeAlso": [], "provisions": []},
-  "dependencies": [{"module": "hydra.core.paths"}, {"module": "hydra.core.model"}, {"module": "hydra.core.variants"}],
+  "dependencies": [{"module": "hydra.core.model"}, {"module": "hydra.core.paths"}, {"module": "hydra.core.variants"}],
   "definitions": [
     {
       "type": {

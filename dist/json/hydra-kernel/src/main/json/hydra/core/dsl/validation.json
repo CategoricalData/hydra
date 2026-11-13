@@ -7,9 +7,7 @@
     {"module": "hydra.core.encode.validation"},
     {"module": "hydra.core.decode.validation"},
     {"module": "hydra.core.model"},
-    {"module": "hydra.core.error.model"},
-    {"module": "hydra.core.dsl.model"},
-    {"module": "hydra.core.dsl.error.model"}],
+    {"module": "hydra.core.dsl.model"}],
   "definitions": [
     {
       "term": {

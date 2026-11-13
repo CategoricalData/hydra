@@ -5,9 +5,7 @@
     {"module": "hydra.core.variants"},
     {"module": "hydra.core.typed"},
     {"module": "hydra.core.encode.variants"},
-    {"module": "hydra.core.decode.variants"},
-    {"module": "hydra.core.model"},
-    {"module": "hydra.core.dsl.model"}],
+    {"module": "hydra.core.decode.variants"}],
   "definitions": [
     {
       "term": {

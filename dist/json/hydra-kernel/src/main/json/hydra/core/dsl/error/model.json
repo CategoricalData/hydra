@@ -6,11 +6,11 @@
     {"module": "hydra.core.typed"},
     {"module": "hydra.core.encode.error.model"},
     {"module": "hydra.core.decode.error.model"},
-    {"module": "hydra.core.paths"},
     {"module": "hydra.core.model"},
+    {"module": "hydra.core.paths"},
     {"module": "hydra.core.variants"},
-    {"module": "hydra.core.dsl.paths"},
     {"module": "hydra.core.dsl.model"},
+    {"module": "hydra.core.dsl.paths"},
     {"module": "hydra.core.dsl.variants"}],
   "definitions": [
     {

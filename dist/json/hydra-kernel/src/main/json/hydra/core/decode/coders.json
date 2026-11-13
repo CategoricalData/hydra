@@ -10,9 +10,9 @@
     {"module": "hydra.core.decode.errors"},
     {"module": "hydra.core.decode.file"},
     {"module": "hydra.core.decode.graph"},
-    {"module": "hydra.core.decode.variants"},
     {"module": "hydra.core.decode.model"},
-    {"module": "hydra.core.decode.util"}],
+    {"module": "hydra.core.decode.util"},
+    {"module": "hydra.core.decode.variants"}],
   "definitions": [
     {
       "term": {

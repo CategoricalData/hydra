@@ -7,7 +7,6 @@
     {"module": "hydra.core.rewriting"},
     {"module": "hydra.core.file"},
     {"module": "hydra.core.util"},
-    {"module": "hydra.core.decode.model"},
     {"module": "hydra.core.decode.time"}],
   "definitions": [
     {

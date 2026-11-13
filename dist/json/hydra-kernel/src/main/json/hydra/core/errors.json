@@ -2,12 +2,10 @@
   "name": "hydra.core.errors",
   "metadata": {"description": "Top-level error types for the Hydra kernel", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
-    {"module": "hydra.core.model"},
     {"module": "hydra.core.error.checking"},
     {"module": "hydra.core.error.model"},
-    {"module": "hydra.core.paths"},
-    {"module": "hydra.core.typing"},
-    {"module": "hydra.core.variants"}],
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.paths"}],
   "definitions": [
     {
       "type": {

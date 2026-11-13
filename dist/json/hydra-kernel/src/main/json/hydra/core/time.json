@@ -1,7 +1,7 @@
 {
   "name": "hydra.core.time",
   "metadata": {"description": "A model for points in time", "comments": [], "seeAlso": [], "provisions": []},
-  "dependencies": [{"module": "hydra.core.model"}],
+  "dependencies": [],
   "definitions": [
     {
       "type": {

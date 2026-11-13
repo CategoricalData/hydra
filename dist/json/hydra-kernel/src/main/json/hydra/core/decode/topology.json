@@ -6,8 +6,7 @@
     {"module": "hydra.core.lexical"},
     {"module": "hydra.core.rewriting"},
     {"module": "hydra.core.topology"},
-    {"module": "hydra.core.util"},
-    {"module": "hydra.core.decode.model"}],
+    {"module": "hydra.core.util"}],
   "definitions": [
     {
       "term": {

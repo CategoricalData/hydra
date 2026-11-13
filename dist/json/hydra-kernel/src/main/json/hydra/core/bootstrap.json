@@ -5,18 +5,7 @@
     "comments": [],
     "seeAlso": [],
     "provisions": []},
-  "dependencies": [
-    {"module": "hydra.core.coders"},
-    {"module": "hydra.core.model"},
-    {"module": "hydra.core.error.checking"},
-    {"module": "hydra.core.error.model"},
-    {"module": "hydra.core.errors"},
-    {"module": "hydra.core.graph"},
-    {"module": "hydra.core.packaging"},
-    {"module": "hydra.core.paths"},
-    {"module": "hydra.core.typing"},
-    {"module": "hydra.core.util"},
-    {"module": "hydra.core.variants"}],
+  "dependencies": [{"module": "hydra.core.model"}],
   "definitions": [
     {
       "term": {

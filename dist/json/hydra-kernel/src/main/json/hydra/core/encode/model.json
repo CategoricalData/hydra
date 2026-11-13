@@ -1,7 +1,7 @@
 {
   "name": "hydra.core.encode.model",
   "metadata": {"description": "Term encoders for hydra.core.model", "comments": [], "seeAlso": [], "provisions": []},
-  "dependencies": [{"module": "hydra.core.encode.model"}, {"module": "hydra.core.model"}],
+  "dependencies": [{"module": "hydra.core.model"}],
   "definitions": [
     {
       "term": {
