@@ -1,0 +1,2266 @@
+## Test cases for JSON parsing
+module hydra.core.test.json.parser
+
+import hydra.core.json.model
+import hydra.core.json.parser
+import hydra.core.json.writer
+import hydra.core.lib.strings
+import hydra.core.parsers
+import hydra.core.parsing
+import hydra.core.testing
+
+## Test cases for JSON parsing
+term allTests =
+  TestGroup{
+    name = "JSON parsing",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "primitives",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "null",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "null"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            null},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "true",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "true"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `boolean` = true},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "false",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "false"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `boolean` = false},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "zero",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "0"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            number = 0},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "positive integer",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "42"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            number = 42},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "negative integer",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "-17"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            number = -17},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "large integer",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "1000000"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            number = 1000000},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "decimal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "3.14"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            number = 3.14},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "negative decimal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "-2.5"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            number = -2.5},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "scientific notation",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "1e3"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            number = 1000},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "scientific with decimal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "1.5e2"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            number = 150},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "negative exponent",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "1e-2"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            number = 0.01},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "decimal precision",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "tiny exponent",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "1e-20"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            number = 1.0e-20},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [Tag{"scaleDistinct"}],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "huge exponent",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "1e20"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            number = 100000000000000000000},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [Tag{"scaleDistinct"}],
+            provisions = []}]},
+      TestGroup{
+        name = "strings",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"\""),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = ""},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "simple string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"hello\""),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = "hello"},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string with spaces",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"hello world\""),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = "hello world"},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "escaped double quote",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"say \\\"hi\\\"\""),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = "say \"hi\""},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "escaped backslash",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser
+                        jsonValue
+                        "\"path\\\\to\\\\file\""),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = "path\\to\\file"},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "escaped newline",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"line1\\nline2\""),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = "line1\nline2"},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "escaped carriage return",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"line1\\rline2\""),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = "line1\rline2"},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "escaped tab",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"col1\\tcol2\""),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = "col1\tcol2"},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "escaped forward slash",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"a\\/b\""),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = "a/b"},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unicode escape basic letter",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"\\u0041A\""),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = "AA"},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unicode escape non-ascii",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"\\u00e9\""),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = "é"},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unicode escape uppercase hex digits",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"\\u00E9\""),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = "é"},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unicode escape null control char",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"\\u0000\""),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = "\u0000"},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unicode escape surrogate pair",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"\\ud83c\\udf89\""),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = "🎉"},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unicode escape lone high surrogate",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"\\ud83c\""),
+                expected = λ`_`."failure(parse error)"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unicode escape lone low surrogate",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"\\udf89\""),
+                expected = λ`_`."failure(parse error)"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "unicode escape short (too few hex digits)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "\"\\u12\""),
+                expected = λ`_`."failure(parse error)"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "arrays",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty array",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "[]"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            array = []},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "single element",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "[1]"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            array = [Value{number = 1}]},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple numbers",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "[1, 2, 3]"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            array = [Value{number = 1}, Value{number = 2}, Value{number = 3}]},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple strings",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "[\"a\", \"b\"]"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            array = [Value{`string` = "a"}, Value{`string` = "b"}]},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mixed types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser
+                        jsonValue
+                        "[1, \"two\", true, null]"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            array = [Value{number = 1}, Value{`string` = "two"}, Value{`boolean` = true}, Value{null}]},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "objects",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty object",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "{}"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            object = []},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "single key-value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser
+                        jsonValue
+                        "{\"name\": \"Alice\"}"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            object = [("name", Value{`string` = "Alice"})]},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple keys",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser
+                        jsonValue
+                        "{\"a\": 1, \"b\": 2}"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            object = [("a", Value{number = 1}), ("b", Value{number = 2})]},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mixed value types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser
+                        jsonValue
+                        "{\"active\": true, \"count\": 42, \"name\": \"test\"}"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            object = [("active", Value{`boolean` = true}), ("count", Value{number = 42}), ("name", Value{`string` = "test"})]},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "nested structures",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "nested arrays",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "[[1, 2], [3, 4]]"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            array = [Value{array = [Value{number = 1}, Value{number = 2}]}, Value{array = [Value{number = 3}, Value{number = 4}]}]},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "object with array",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser
+                        jsonValue
+                        "{\"items\": [1, 2]}"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            object = [("items", Value{array = [Value{number = 1}, Value{number = 2}]})]},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "array of objects",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser
+                        jsonValue
+                        "[{\"id\": 1}, {\"id\": 2}]"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            array = [Value{object = [("id", Value{number = 1})]}, Value{object = [("id", Value{number = 2})]}]},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested object",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser
+                        jsonValue
+                        "{\"user\": {\"name\": \"Bob\"}}"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            object = [("user", Value{object = [("name", Value{`string` = "Bob"})]})]},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "whitespace handling",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "trailing whitespace",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "null  "),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            null},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "array with whitespace",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "[ 1 , 2 , 3 ]"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            array = [Value{number = 1}, Value{number = 2}, Value{number = 3}]},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "object with whitespace",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "{ \"a\" : 1 }"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            object = [("a", Value{number = 1})]},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiline array",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser jsonValue "[\n  1,\n  2\n]"),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            array = [Value{number = 1}, Value{number = 2}]},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "writer round-trip",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "parseJson (printJson v) == v for all C0 control characters",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      (runParser
+                        jsonValue
+                        (printJson
+                          Value{
+                            `string` = "\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000b\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001a\u001b\u001c\u001d\u001e\u001f"})),
+                expected = λ`_`.cases(ParseResult){
+                      success=λps.concat2
+                            "success("
+                            (concat2
+                              (printJson (ParseSuccess[value] ps))
+                              (concat2
+                                ", "
+                                (concat2
+                                  (fromList
+                                    (ParseInput[codepoints]
+                                      (ParseSuccess[remainder] ps)))
+                                  ")"))),
+                      failure=λpe.concat2
+                            "failure("
+                            (concat2 "parse error" ")")}
+                      ParseResult{
+                        success = ParseSuccess{
+                          value = Value{
+                            `string` = "\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000b\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001a\u001b\u001c\u001d\u001e\u001f"},
+                          remainder = ParseInput{
+                            offset = 0:int32,
+                            tokenEnd = 0:int32,
+                            codepoints = []}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}

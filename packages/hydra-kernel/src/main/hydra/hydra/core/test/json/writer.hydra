@@ -1,0 +1,548 @@
+## Test cases for JSON serialization
+module hydra.core.test.json.writer
+
+import hydra.core.json.model
+import hydra.core.json.writer
+import hydra.core.testing
+
+## Test cases for JSON serialization (writer)
+term allTests =
+  TestGroup{
+    name = "JSON serialization",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "primitives",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "null",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{null},
+                expected = λ`_`."null"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "true",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{`boolean` = true},
+                expected = λ`_`."true"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "false",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{`boolean` = false},
+                expected = λ`_`."false"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "zero",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{number = 0},
+                expected = λ`_`."0"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "positive integer",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{number = 42},
+                expected = λ`_`."42"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "negative integer",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{number = -17},
+                expected = λ`_`."-17"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "large integer",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{number = 1000000},
+                expected = λ`_`."1000000"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "decimal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{number = 3.14},
+                expected = λ`_`."3.14"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "negative decimal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{number = -2.5},
+                expected = λ`_`."-2.5"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "hundredth",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{number = 0.01},
+                expected = λ`_`."0.01"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "small decimal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{number = 0.001},
+                expected = λ`_`."0.001"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "decimal precision",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "tiny exponent",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{number = 1.0e-20},
+                expected = λ`_`."1.0e-20"}},
+            description = none,
+            tags = [Tag{"scaleDistinct"}],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "huge exponent",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{
+                        number = 100000000000000000000},
+                expected = λ`_`."100000000000000000000"}},
+            description = none,
+            tags = [Tag{"scaleDistinct"}],
+            provisions = []}]},
+      TestGroup{
+        name = "strings",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{`string` = ""},
+                expected = λ`_`."\"\""}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "simple string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{`string` = "hello"},
+                expected = λ`_`."\"hello\""}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string with spaces",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{`string` = "hello world"},
+                expected = λ`_`."\"hello world\""}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string with double quote",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{`string` = "say \"hi\""},
+                expected = λ`_`."\"say \\\"hi\\\"\""}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string with backslash",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{`string` = "path\\to\\file"},
+                expected = λ`_`."\"path\\\\to\\\\file\""}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string with newline",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{`string` = "line1\nline2"},
+                expected = λ`_`."\"line1\\nline2\""}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string with carriage return",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{`string` = "line1\rline2"},
+                expected = λ`_`."\"line1\\rline2\""}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string with tab",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{`string` = "col1\tcol2"},
+                expected = λ`_`."\"col1\\tcol2\""}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string with mixed escapes",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{`string` = "a\"b\\c\nd"},
+                expected = λ`_`."\"a\\\"b\\\\c\\nd\""}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "arrays",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty array",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{array = []},
+                expected = λ`_`."[]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "single element",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{array = [Value{number = 1}]},
+                expected = λ`_`."[1]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple numbers",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{
+                        array = [Value{number = 1}, Value{number = 2}, Value{number = 3}]},
+                expected = λ`_`."[1, 2, 3]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple strings",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{
+                        array = [Value{`string` = "a"}, Value{`string` = "b"}]},
+                expected = λ`_`."[\"a\", \"b\"]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mixed types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{
+                        array = [Value{number = 1}, Value{`string` = "two"}, Value{`boolean` = true}, Value{null}]},
+                expected = λ`_`."[1, \"two\", true, null]"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "objects",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty object",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson Value{object = []},
+                expected = λ`_`."{}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "single key-value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{
+                        object = [("name", Value{`string` = "Alice"})]},
+                expected = λ`_`."{\"name\": \"Alice\"}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple keys",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{
+                        object = [("a", Value{number = 1}), ("b", Value{number = 2})]},
+                expected = λ`_`."{\"a\": 1, \"b\": 2}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mixed value types",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{
+                        object = [("count", Value{number = 42}), ("name", Value{`string` = "test"}), ("active", Value{`boolean` = true})]},
+                expected = λ`_`."{\"count\": 42, \"name\": \"test\", \"active\": true}"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "nested structures",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "nested arrays",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{
+                        array = [Value{array = [Value{number = 1}, Value{number = 2}]}, Value{array = [Value{number = 3}, Value{number = 4}]}]},
+                expected = λ`_`."[[1, 2], [3, 4]]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "object with array",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{
+                        object = [("items", Value{array = [Value{number = 1}, Value{number = 2}]})]},
+                expected = λ`_`."{\"items\": [1, 2]}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "array of objects",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{
+                        array = [Value{object = [("id", Value{number = 1})]}, Value{object = [("id", Value{number = 2})]}]},
+                expected = λ`_`."[{\"id\": 1}, {\"id\": 2}]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested object",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJson
+                      Value{
+                        object = [("user", Value{object = [("name", Value{`string` = "Bob"})]})]},
+                expected = λ`_`."{\"user\": {\"name\": \"Bob\"}}"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "layout options",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "default options match printJson: nested object with array",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJsonWith
+                      defaultJsonWriterOptions
+                      Value{
+                        object = [("items", Value{array = [Value{number = 1}, Value{number = 2}]})]},
+                expected = λ`_`."{\"items\": [1, 2]}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "compact: empty array",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJsonWith
+                      JsonWriterOptions{
+                        compact = true,
+                        indent = "  ",
+                        maxLineWidth = 120:int32,
+                        maxIndentDepth = none}
+                      Value{array = []},
+                expected = λ`_`."[]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "compact: empty object",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJsonWith
+                      JsonWriterOptions{
+                        compact = true,
+                        indent = "  ",
+                        maxLineWidth = 120:int32,
+                        maxIndentDepth = none}
+                      Value{object = []},
+                expected = λ`_`."{}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "compact: array",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJsonWith
+                      JsonWriterOptions{
+                        compact = true,
+                        indent = "  ",
+                        maxLineWidth = 120:int32,
+                        maxIndentDepth = none}
+                      Value{
+                        array = [Value{number = 1}, Value{number = 2}, Value{number = 3}]},
+                expected = λ`_`."[1,2,3]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "compact: object",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJsonWith
+                      JsonWriterOptions{
+                        compact = true,
+                        indent = "  ",
+                        maxLineWidth = 120:int32,
+                        maxIndentDepth = none}
+                      Value{
+                        object = [("a", Value{number = 1}), ("b", Value{number = 2})]},
+                expected = λ`_`."{\"a\":1,\"b\":2}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "compact: nested",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJsonWith
+                      JsonWriterOptions{
+                        compact = true,
+                        indent = "  ",
+                        maxLineWidth = 120:int32,
+                        maxIndentDepth = none}
+                      Value{
+                        object = [("items", Value{array = [Value{number = 1}, Value{number = 2}]})]},
+                expected = λ`_`."{\"items\":[1,2]}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "narrow line width forces block layout",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJsonWith
+                      JsonWriterOptions{
+                        compact = false,
+                        indent = "  ",
+                        maxLineWidth = 5:int32,
+                        maxIndentDepth = none}
+                      Value{
+                        array = [Value{number = 1}, Value{number = 2}, Value{number = 3}]},
+                expected = λ`_`."[\n  1,\n  2,\n  3]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "custom indent string, forced block",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJsonWith
+                      JsonWriterOptions{
+                        compact = false,
+                        indent = "    ",
+                        maxLineWidth = 5:int32,
+                        maxIndentDepth = none}
+                      Value{
+                        object = [("items", Value{array = [Value{number = 1}, Value{number = 2}]})]},
+                expected = λ`_`."{\n    \"items\": [\n        1,\n        2]}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "maxIndentDepth 0 forces top-level inline",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJsonWith
+                      JsonWriterOptions{
+                        compact = false,
+                        indent = "  ",
+                        maxLineWidth = 5:int32,
+                        maxIndentDepth = given(0:int32)}
+                      Value{
+                        object = [("items", Value{array = [Value{number = 1}, Value{number = 2}]})]},
+                expected = λ`_`."{\"items\": [1, 2]}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "maxIndentDepth 1 forces children inline under a narrow width",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printJsonWith
+                      JsonWriterOptions{
+                        compact = false,
+                        indent = "  ",
+                        maxLineWidth = 10:int32,
+                        maxIndentDepth = given(1:int32)}
+                      Value{
+                        object = [("items", Value{array = [Value{number = 1}, Value{number = 2}]})]},
+                expected = λ`_`."{\n  \"items\": [1, 2]}"}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}
