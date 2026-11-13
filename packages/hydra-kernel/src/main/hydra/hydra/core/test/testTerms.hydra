@@ -1,0 +1,47 @@
+## Term definitions for the test suite
+module hydra.core.test.testTerms
+
+import hydra.core.lib.maps
+import hydra.core.model
+import hydra.core.test.testTypes
+
+term latlonRecord =
+  λlat,lon.Term{
+      `record` = Record{
+        typeName = testTypeLatLonName,
+        fields = [
+          Field{name = Name{"lat"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = lat}}}},
+          Field{name = Name{"lon"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = lon}}}}]}}
+
+term testDataArthur =
+  Term{
+    `record` = Record{
+      typeName = testTypePersonName,
+      fields = [
+        Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Arthur"}}},
+        Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Dent"}}},
+        Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}]}}
+
+term testElementArthur =
+  Binding{
+    name = Name{"firstName"},
+    `term` = testDataArthur,
+    typeScheme = given(TypeScheme{
+        variables = [],
+        body = Type{variable = testTypePersonName},
+        constraints = empty})}
+
+term testElementFirstName =
+  Binding{
+    name = Name{"firstName"},
+    `term` = Term{`project` = Projection{typeName = testTypePersonName, fieldName = Name{"firstName"}}},
+    typeScheme = given(TypeScheme{
+        variables = [],
+        body = Type{
+          function = FunctionType{
+            domain = Type{
+              variable = testTypePersonName},
+            codomain = Type{
+              literal = LiteralType{
+                `string`}}}},
+        constraints = empty})}

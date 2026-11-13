@@ -1,0 +1,56 @@
+## A module defining the graph used in the test suite.
+module hydra.core.test.testGraph
+
+import hydra.core.lib.maps
+import hydra.core.model
+import hydra.core.packaging
+import hydra.core.test.testEnv as testEnv
+import hydra.core.test.testTerms
+import hydra.core.test.testTypes
+
+term testTerms = fromList [(Name{"testDataArthur"}, testDataArthur)]
+
+term testTypes =
+  fromList
+    [
+      (
+        Name{"hydra.core.error.file.FileError"},
+        Type{
+          `union` = [
+            FieldType{name = Name{"invalidPath"}, `type` = Type{literal = LiteralType{`string`}}},
+            FieldType{name = Name{"notFound"}, `type` = Type{variable = Name{"hydra.core.file.FilePath"}}},
+            FieldType{name = Name{"other"}, `type` = Type{literal = LiteralType{`string`}}},
+            FieldType{name = Name{"permissionDenied"}, `type` = Type{variable = Name{"hydra.core.file.FilePath"}}}]}),
+      (Name{"hydra.core.file.FilePath"}, Type{`wrap` = Type{literal = LiteralType{`string`}}}),
+      (testTypeBuddyListAName, testTypeBuddyListA),
+      (testTypeBuddyListBName, testTypeBuddyListB),
+      (testTypeComparisonName, testTypeComparison),
+      (testTypeEitherName, testTypeEither),
+      (testTypeHydraLiteralTypeName, testTypeHydraLiteralType),
+      (testTypeHydraTypeName, testTypeHydraType),
+      (testTypeIntListName, testTypeIntList),
+      (testTypeLatLonName, testTypeLatLon),
+      (testTypeLatLonPolyName, testTypeLatLonPoly),
+      (testTypeListName, testTypeList),
+      (testTypeNumberName, testTypeNumber),
+      (testTypePersonName, testTypePerson),
+      (testTypePersonOrSomethingName, testTypePersonOrSomething),
+      (testTypePointName, testTypePoint),
+      (testTypePolymorphicWrapperName, testTypePolymorphicWrapper),
+      (testTypeSimpleNumberName, testTypeSimpleNumber),
+      (testTypeStringAliasName, testTypeStringAlias),
+      (testTypeSymmetricTripleName, testTypeSymmetricTriple),
+      (testTypeTimestampName, testTypeTimestamp),
+      (testTypeTripleName, testTypeTriple),
+      (testTypeUnionMonomorphicName, testTypeUnionMonomorphic),
+      (testTypeUnionPolymorphicRecursiveName, testTypeUnionPolymorphicRecursive),
+      (testTypeUnionPolymorphicRecursiveListWrappedName, testTypeUnionPolymorphicRecursiveListWrapped),
+      (testTypeUnitName, testTypeUnit)]
+
+term testModuleName = ModuleName{"testGraph"}
+
+term testSchemaModuleName = ModuleName{"testSchemaGraph"}
+
+term testGraph = testEnv.testGraph testTypes testTerms
+
+term testContext = testEnv.testContext

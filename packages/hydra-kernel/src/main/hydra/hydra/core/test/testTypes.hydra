@@ -1,0 +1,345 @@
+## Type definitions for the test suite
+module hydra.core.test.testTypes
+
+import hydra.core.model
+
+term compareStringsType =
+  Type{
+    function = FunctionType{
+      domain = Type{literal = LiteralType{`string`}},
+      codomain = Type{literal = LiteralType{`string`}}}}@{firstClassType=true}
+
+term concatType =
+  Type{
+    function = FunctionType{
+      domain = Type{literal = LiteralType{`string`}},
+      codomain = Type{
+        function = FunctionType{
+          domain = Type{literal = LiteralType{`string`}},
+          codomain = Type{
+            literal = LiteralType{
+              `string`}}}}}}@{firstClassType=true}
+
+term eitherStringOrInt8Type =
+  Type{
+    `union` = [
+      FieldType{name = Name{"left"}, `type` = Type{literal = LiteralType{`string`}}},
+      FieldType{name = Name{"right"}, `type` = Type{literal = LiteralType{integer = IntegerType{`int8`}}}}]}@{firstClassType=true}
+
+term eitherStringOrInt8TypeName = Name{"EitherStringOrInt8"}
+
+term exampleProjectionType =
+  Type{
+    function = FunctionType{
+      domain = Type{variable = testTypePersonName},
+      codomain = Type{literal = LiteralType{`string`}}}}@{firstClassType=true}
+
+term listOfInt16sType = Type{`list` = Type{literal = LiteralType{integer = IntegerType{`int16`}}}}@{firstClassType=true}
+
+term listOfInt8sType = Type{`list` = Type{literal = LiteralType{integer = IntegerType{`int8`}}}}@{firstClassType=true}
+
+term listOfListsOfStringsType =
+  Type{`list` = Type{`list` = Type{literal = LiteralType{`string`}}}}@{firstClassType=true}
+
+term listOfSetOfStringsType = Type{`list` = Type{`set` = Type{literal = LiteralType{`string`}}}}@{firstClassType=true}
+
+term listOfStringsType = Type{`list` = Type{literal = LiteralType{`string`}}}@{firstClassType=true}
+
+term mapOfStringsToIntsType =
+  Type{
+    `map` = MapType{
+      keys = Type{literal = LiteralType{`string`}},
+      values = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}@{firstClassType=true}
+
+term optionalInt16Type =
+  Type{`optional` = Type{literal = LiteralType{integer = IntegerType{`int16`}}}}@{firstClassType=true}
+
+term optionalInt8Type =
+  Type{`optional` = Type{literal = LiteralType{integer = IntegerType{`int8`}}}}@{firstClassType=true}
+
+term optionalStringType = Type{`optional` = Type{literal = LiteralType{`string`}}}@{firstClassType=true}
+
+term setOfStringsType = Type{`set` = Type{literal = LiteralType{`string`}}}@{firstClassType=true}
+
+term stringOrIntName = Name{"StringOrInt"}
+
+term stringOrIntType =
+  Type{
+    `union` = [
+      FieldType{name = Name{"left"}, `type` = Type{literal = LiteralType{`string`}}},
+      FieldType{name = Name{"right"}, `type` = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}]}@{firstClassType=true}
+
+term testTypeBuddyListA =
+  Type{
+    `forall` = ForallType{
+      parameter = Name{"a"},
+      body = Type{
+        `record` = [
+          FieldType{name = Name{"head"}, `type` = Type{variable = Name{"a"}}},
+          FieldType{
+            name = Name{"tail"},
+            `type` = Type{
+              `optional` = Type{
+                application = ApplicationType{
+                  function = Type{
+                    variable = testTypeBuddyListBName},
+                  argument = Type{variable = Name{"a"}}}}}}]}}}@{firstClassType=true}
+
+term testTypeBuddyListAName = Name{"BuddyListA"}
+
+term testTypeBuddyListB =
+  Type{
+    `forall` = ForallType{
+      parameter = Name{"a"},
+      body = Type{
+        `record` = [
+          FieldType{name = Name{"head"}, `type` = Type{variable = Name{"a"}}},
+          FieldType{
+            name = Name{"tail"},
+            `type` = Type{
+              `optional` = Type{
+                application = ApplicationType{
+                  function = Type{
+                    variable = testTypeBuddyListAName},
+                  argument = Type{variable = Name{"a"}}}}}}]}}}@{firstClassType=true}
+
+term testTypeBuddyListBName = Name{"BuddyListB"}
+
+term testTypeComparison =
+  Type{
+    `union` = [
+      FieldType{name = Name{"lessThan"}, `type` = Type{`unit`}},
+      FieldType{name = Name{"equalTo"}, `type` = Type{`unit`}},
+      FieldType{name = Name{"greaterThan"}, `type` = Type{`unit`}}]}@{firstClassType=true}
+
+term testTypeComparisonName = Name{"Comparison"}
+
+term testTypeEither =
+  Type{
+    `forall` = ForallType{
+      parameter = Name{"a"},
+      body = Type{
+        `forall` = ForallType{
+          parameter = Name{"b"},
+          body = Type{
+            `union` = [
+              FieldType{name = Name{"left"}, `type` = Type{variable = Name{"a"}}},
+              FieldType{name = Name{"right"}, `type` = Type{variable = Name{"b"}}}]}}}}}@{firstClassType=true}
+
+term testTypeEitherName = Name{"Either"}
+
+term testTypeHydraLiteralType =
+  Type{
+    `union` = [
+      FieldType{name = Name{"boolean"}, `type` = Type{literal = LiteralType{`boolean`}}},
+      FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}}]}@{firstClassType=true}
+
+term testTypeHydraLiteralTypeName = Name{"HydraLiteralType"}
+
+term testTypeHydraType =
+  Type{
+    `union` = [
+      FieldType{name = Name{"literal"}, `type` = Type{variable = testTypeHydraLiteralTypeName}},
+      FieldType{name = Name{"list"}, `type` = Type{variable = testTypeHydraTypeName}}]}@{firstClassType=true}
+
+term testTypeHydraTypeName = Name{"HydraType"}
+
+term testTypeIntList =
+  Type{
+    `record` = [
+      FieldType{name = Name{"head"}, `type` = Type{literal = LiteralType{integer = IntegerType{`int32`}}}},
+      FieldType{name = Name{"tail"}, `type` = Type{`optional` = Type{variable = testTypeIntListName}}}]}@{firstClassType=true}
+
+term testTypeIntListName = Name{"IntList"}
+
+term testTypeLatLon =
+  Type{
+    `record` = [
+      FieldType{name = Name{"lat"}, `type` = Type{literal = LiteralType{float = FloatType{`float32`}}}},
+      FieldType{name = Name{"lon"}, `type` = Type{literal = LiteralType{float = FloatType{`float32`}}}}]}@{firstClassType=true}
+
+term testTypeLatLonName = Name{"LatLon"}
+
+term testTypeLatLonPoly =
+  Type{
+    `forall` = ForallType{
+      parameter = Name{"a"},
+      body = Type{
+        `record` = [
+          FieldType{name = Name{"lat"}, `type` = Type{variable = Name{"a"}}},
+          FieldType{name = Name{"lon"}, `type` = Type{variable = Name{"a"}}}]}}}@{firstClassType=true}
+
+term testTypeLatLonPolyName = Name{"LatLonPoly"}
+
+term testTypeList =
+  Type{
+    `forall` = ForallType{
+      parameter = Name{"a"},
+      body = Type{
+        `record` = [
+          FieldType{name = Name{"head"}, `type` = Type{variable = Name{"a"}}},
+          FieldType{
+            name = Name{"tail"},
+            `type` = Type{
+              `optional` = Type{
+                application = ApplicationType{
+                  function = Type{
+                    variable = testTypeListName},
+                  argument = Type{variable = Name{"a"}}}}}}]}}}@{firstClassType=true}
+
+term testTypeListName = Name{"List"}
+
+term testTypeName = Name{"Test"}
+
+term testTypeNumber =
+  Type{
+    `union` = [
+      FieldType{name = Name{"int"}, `type` = Type{literal = LiteralType{integer = IntegerType{`int32`}}}},
+      FieldType{name = Name{"float"}, `type` = Type{literal = LiteralType{float = FloatType{`float32`}}}}]}@{firstClassType=true}
+
+term testTypeNumberName = Name{"Number"}
+
+term testTypePerson =
+  Type{
+    `record` = [
+      FieldType{name = Name{"firstName"}, `type` = Type{literal = LiteralType{`string`}}},
+      FieldType{name = Name{"lastName"}, `type` = Type{literal = LiteralType{`string`}}},
+      FieldType{name = Name{"age"}, `type` = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}]}@{firstClassType=true}
+
+term testTypePersonName = Name{"Person"}
+
+term testTypePersonOrSomething =
+  Type{
+    `forall` = ForallType{
+      parameter = Name{"a"},
+      body = Type{
+        `union` = [
+          FieldType{name = Name{"person"}, `type` = Type{variable = testTypePersonName}},
+          FieldType{name = Name{"other"}, `type` = Type{variable = Name{"a"}}}]}}}@{firstClassType=true}
+
+term testTypePersonOrSomethingName = Name{"PersonOrSomething"}
+
+term testTypePoint =
+  Type{
+    `record` = [
+      FieldType{name = Name{"x"}, `type` = Type{literal = LiteralType{integer = IntegerType{`int32`}}}},
+      FieldType{name = Name{"y"}, `type` = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}]}@{firstClassType=true}
+
+term testTypePointName = Name{"Point"}
+
+term testTypePolymorphicWrapper =
+  Type{`forall` = ForallType{parameter = Name{"a"}, body = Type{`wrap` = Type{`list` = Type{variable = Name{"a"}}}}}}@{firstClassType=true}
+
+term testTypePolymorphicWrapperName = Name{"PolymorphicWrapper"}
+
+term testTypeSimpleNumber =
+  Type{
+    `union` = [
+      FieldType{name = Name{"int"}, `type` = Type{literal = LiteralType{integer = IntegerType{`int32`}}}},
+      FieldType{name = Name{"float"}, `type` = Type{literal = LiteralType{float = FloatType{`float32`}}}}]}@{firstClassType=true}
+
+term testTypeSimpleNumberName = Name{"SimpleNumber"}
+
+term testTypeStringAlias = Type{`wrap` = Type{literal = LiteralType{`string`}}}@{firstClassType=true}
+
+term testTypeStringAliasName = Name{"StringAlias"}
+
+term testTypeSymmetricTriple =
+  Type{
+    `forall` = ForallType{
+      parameter = Name{"v"},
+      body = Type{
+        `forall` = ForallType{
+          parameter = Name{"e"},
+          body = Type{
+            `wrap` = Type{
+              application = ApplicationType{
+                function = Type{
+                  application = ApplicationType{
+                    function = Type{
+                      application = ApplicationType{
+                        function = Type{
+                          variable = testTypeTripleName},
+                        argument = Type{
+                          variable = Name{"v"}}}},
+                    argument = Type{
+                      variable = Name{"e"}}}},
+                argument = Type{
+                  variable = Name{"v"}}}}}}}}}@{firstClassType=true}
+
+term testTypeSymmetricTripleName = Name{"SymmetricTriple"}
+
+term testTypeTimestamp =
+  Type{
+    `union` = [
+      FieldType{name = Name{"unixTimeMillis"}, `type` = Type{literal = LiteralType{integer = IntegerType{`uint64`}}}},
+      FieldType{name = Name{"date"}, `type` = Type{literal = LiteralType{`string`}}}]}@{firstClassType=true}
+
+term testTypeTimestampName = Name{"Timestamp"}
+
+term testTypeTriple =
+  Type{
+    `forall` = ForallType{
+      parameter = Name{"a"},
+      body = Type{
+        `forall` = ForallType{
+          parameter = Name{"b"},
+          body = Type{
+            `forall` = ForallType{
+              parameter = Name{"c"},
+              body = Type{
+                `record` = [
+                  FieldType{name = Name{"first"}, `type` = Type{variable = Name{"a"}}},
+                  FieldType{name = Name{"second"}, `type` = Type{variable = Name{"b"}}},
+                  FieldType{name = Name{"third"}, `type` = Type{variable = Name{"c"}}}]}}}}}}}@{firstClassType=true}
+
+term testTypeTripleName = Name{"Triple"}
+
+term testTypeUnionMonomorphic =
+  Type{
+    `union` = [
+      FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+      FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}},
+      FieldType{name = Name{"unit"}, `type` = Type{`unit`}}]}@{firstClassType=true}
+
+term testTypeUnionMonomorphicName = Name{"UnionMonomorphic"}
+
+term testTypeUnionPolymorphicRecursive =
+  Type{
+    `forall` = ForallType{
+      parameter = Name{"a"},
+      body = Type{
+        `union` = [
+          FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+          FieldType{name = Name{"value"}, `type` = Type{variable = Name{"a"}}},
+          FieldType{
+            name = Name{"other"},
+            `type` = Type{
+              application = ApplicationType{
+                function = Type{
+                  variable = testTypeUnionPolymorphicRecursiveName},
+                argument = Type{variable = Name{"a"}}}}}]}}}@{firstClassType=true}
+
+term testTypeUnionPolymorphicRecursiveListWrapped =
+  Type{
+    `forall` = ForallType{
+      parameter = Name{"a"},
+      body = Type{
+        `union` = [
+          FieldType{name = Name{"single"}, `type` = Type{variable = Name{"a"}}},
+          FieldType{
+            name = Name{"multiple"},
+            `type` = Type{
+              `list` = Type{
+                application = ApplicationType{
+                  function = Type{
+                    variable = testTypeUnionPolymorphicRecursiveListWrappedName},
+                  argument = Type{variable = Name{"a"}}}}}}]}}}@{firstClassType=true}
+
+term testTypeUnionPolymorphicRecursiveListWrappedName = Name{"UnionPolymorphicRecursiveListWrapped"}
+
+term testTypeUnionPolymorphicRecursiveName = Name{"UnionPolymorphicRecursive"}
+
+term testTypeUnit = Type{`record` = []}@{firstClassType=true}
+
+term testTypeUnitName = Name{"Unit"}

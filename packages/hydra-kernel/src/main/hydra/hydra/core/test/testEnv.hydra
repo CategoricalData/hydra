@@ -1,0 +1,8 @@
+## Type-level declarations for the hand-written Hydra.Core.Test.TestEnv module.
+module hydra.core.test.testEnv
+
+import hydra.core.lexical
+
+term testContext = emptyInferenceContext
+
+term testGraph = λtys,tms.emptyGraph

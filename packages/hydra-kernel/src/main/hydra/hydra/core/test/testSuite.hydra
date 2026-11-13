@@ -1,0 +1,104 @@
+## Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass.
+module hydra.core.test.testSuite
+
+import hydra.core.test.annotations as annotations
+import hydra.core.test.checking.all as checking.all
+import hydra.core.test.dependencies as dependencies
+import hydra.core.test.differentiation as differentiation
+import hydra.core.test.etaExpansion as etaExpansion
+import hydra.core.test.formatting as formatting
+import hydra.core.test.generation as generation
+import hydra.core.test.hoisting.all as hoisting.all
+import hydra.core.test.inference.all as inference.all
+import hydra.core.test.json.parser as parser
+import hydra.core.test.json.roundtrip as roundtrip
+import hydra.core.test.json.writer as writer
+import hydra.core.test.json.yaml as yaml
+import hydra.core.test.lib.chars as chars
+import hydra.core.test.lib.effects as effects
+import hydra.core.test.lib.eithers as eithers
+import hydra.core.test.lib.equality as equality
+import hydra.core.test.lib.files as files
+import hydra.core.test.lib.functions as functions
+import hydra.core.test.lib.hashing as hashing
+import hydra.core.test.lib.lists as lists
+import hydra.core.test.lib.literals as literals
+import hydra.core.test.lib.logic as logic
+import hydra.core.test.lib.maps as maps
+import hydra.core.test.lib.math as math
+import hydra.core.test.lib.optionals as optionals
+import hydra.core.test.lib.ordering as lib.ordering
+import hydra.core.test.lib.pairs as pairs
+import hydra.core.test.lib.regex as regex
+import hydra.core.test.lib.sets as sets
+import hydra.core.test.lib.strings as strings
+import hydra.core.test.lib.system as system
+import hydra.core.test.lib.text as text
+import hydra.core.test.names as names
+import hydra.core.test.ordering as ordering
+import hydra.core.test.reduction as reduction
+import hydra.core.test.rewriting as rewriting
+import hydra.core.test.serialization as serialization
+import hydra.core.test.sorting as sorting
+import hydra.core.test.strip as strip
+import hydra.core.test.substitution as substitution
+import hydra.core.test.subterms as subterms
+import hydra.core.test.syntax as syntax
+import hydra.core.test.unification as unification
+import hydra.core.test.validate.all as validate.all
+import hydra.core.test.variables as variables
+import hydra.core.testing
+
+## The group of all common tests
+term allTests =
+  TestGroup{
+    name = "common",
+    description = none,
+    subgroups = [
+      chars.allTests,
+      effects.allTests,
+      eithers.allTests,
+      equality.allTests,
+      files.allTests,
+      functions.allTests,
+      hashing.allTests,
+      lists.allTests,
+      literals.allTests,
+      logic.allTests,
+      maps.allTests,
+      math.allTests,
+      optionals.allTests,
+      lib.ordering.allTests,
+      pairs.allTests,
+      regex.allTests,
+      sets.allTests,
+      strings.allTests,
+      system.allTests,
+      text.allTests,
+      annotations.allTests,
+      checking.all.allTests,
+      dependencies.allTests,
+      differentiation.allTests,
+      etaExpansion.allTests,
+      formatting.allTests,
+      generation.allTests,
+      hoisting.all.allTests,
+      inference.all.allTests,
+      parser.allTests,
+      roundtrip.allTests,
+      writer.allTests,
+      yaml.allTests,
+      names.allTests,
+      ordering.allTests,
+      reduction.allTests,
+      rewriting.allTests,
+      serialization.allTests,
+      sorting.allTests,
+      strip.allTests,
+      subterms.allTests,
+      substitution.allTests,
+      syntax.allTests,
+      unification.allTests,
+      validate.all.allTests,
+      variables.allTests],
+    `cases` = []}
