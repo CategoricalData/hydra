@@ -1,0 +1,536 @@
+## Test cases for type and term substitution operations
+module hydra.core.test.substitution
+
+import hydra.core.lib.maps
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.substitution
+import hydra.core.testing
+import hydra.core.typing
+
+## Test cases for type and term substitution operations
+term allTests =
+  TestGroup{
+    name = "substitution",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "substInType",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty substitution returns type unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList []}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}),
+                expected = λ`_`.`type`
+                      Type{
+                        literal = LiteralType{
+                          `string`}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "substitute type variable with int32",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList
+                          [(Name{"a"}, Type{literal = LiteralType{integer = IntegerType{`int32`}}})]}
+                        Type{variable = Name{"a"}}),
+                expected = λ`_`.`type`
+                      Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "non-matching variable unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList
+                          [(Name{"a"}, Type{literal = LiteralType{integer = IntegerType{`int32`}}})]}
+                        Type{variable = Name{"b"}}),
+                expected = λ`_`.`type` Type{variable = Name{"b"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "substitute in function domain",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList
+                          [(Name{"a"}, Type{literal = LiteralType{integer = IntegerType{`int32`}}})]}
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              variable = Name{"a"}},
+                            codomain = Type{
+                              literal = LiteralType{
+                                `string`}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        function = FunctionType{
+                          domain = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}},
+                          codomain = Type{
+                            literal = LiteralType{
+                              `string`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "substitute in function codomain",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList
+                          [(Name{"a"}, Type{literal = LiteralType{`string`}})]}
+                        Type{
+                          function = FunctionType{
+                            domain = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            codomain = Type{
+                              variable = Name{"a"}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        function = FunctionType{
+                          domain = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}},
+                          codomain = Type{
+                            literal = LiteralType{
+                              `string`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "substitute in list element type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList
+                          [(Name{"a"}, Type{literal = LiteralType{integer = IntegerType{`int32`}}})]}
+                        Type{
+                          `list` = Type{
+                            variable = Name{"a"}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `list` = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "substitute in optional type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList
+                          [(Name{"a"}, Type{literal = LiteralType{`string`}})]}
+                        Type{
+                          `optional` = Type{
+                            variable = Name{"a"}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `optional` = Type{
+                          literal = LiteralType{
+                            `string`}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "substitute in pair type both sides",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList
+                          [(Name{"a"}, Type{literal = LiteralType{integer = IntegerType{`int32`}}})]}
+                        Type{
+                          pair = PairType{
+                            first = Type{
+                              variable = Name{"a"}},
+                            second = Type{
+                              variable = Name{"a"}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        pair = PairType{
+                          first = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}},
+                          second = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "substitute in either type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList
+                          [(Name{"a"}, Type{literal = LiteralType{`string`}})]}
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              variable = Name{"a"}},
+                            `right` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `either` = EitherType{
+                          `left` = Type{
+                            literal = LiteralType{
+                              `string`}},
+                          `right` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "substitute in map key type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList
+                          [(Name{"k"}, Type{literal = LiteralType{`string`}})]}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              variable = Name{"k"}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `map` = MapType{
+                          keys = Type{
+                            literal = LiteralType{
+                              `string`}},
+                          values = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "substitute in set type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList
+                          [(Name{"a"}, Type{literal = LiteralType{integer = IntegerType{`int32`}}})]}
+                        Type{
+                          `set` = Type{
+                            variable = Name{"a"}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `set` = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested substitution in list of pairs",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList
+                          [(Name{"a"}, Type{literal = LiteralType{integer = IntegerType{`int32`}}})]}
+                        Type{
+                          `list` = Type{
+                            pair = PairType{
+                              first = Type{
+                                variable = Name{"a"}},
+                              second = Type{
+                                literal = LiteralType{
+                                  `string`}}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `list` = Type{
+                          pair = PairType{
+                            first = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}},
+                            second = Type{
+                              literal = LiteralType{
+                                `string`}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple substitutions",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList
+                          [
+                            (Name{"a"}, Type{literal = LiteralType{integer = IntegerType{`int32`}}}),
+                            (Name{"b"}, Type{literal = LiteralType{`string`}})]}
+                        Type{
+                          pair = PairType{
+                            first = Type{
+                              variable = Name{"a"}},
+                            second = Type{
+                              variable = Name{"b"}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        pair = PairType{
+                          first = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}},
+                          second = Type{
+                            literal = LiteralType{
+                              `string`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "forAll bound variable not substituted",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList
+                          [(Name{"a"}, Type{literal = LiteralType{integer = IntegerType{`int32`}}})]}
+                        Type{
+                          `forall` = ForallType{
+                            parameter = Name{"a"},
+                            body = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  variable = Name{"a"}},
+                                codomain = Type{
+                                  variable = Name{"a"}}}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `forall` = ForallType{
+                          parameter = Name{"a"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"a"}},
+                              codomain = Type{
+                                variable = Name{"a"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "forAll free variable substituted",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (substInType
+                        TypeSubst{fromList
+                          [(Name{"b"}, Type{literal = LiteralType{`string`}})]}
+                        Type{
+                          `forall` = ForallType{
+                            parameter = Name{"a"},
+                            body = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  variable = Name{"a"}},
+                                codomain = Type{
+                                  variable = Name{"b"}}}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `forall` = ForallType{
+                          parameter = Name{"a"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"a"}},
+                              codomain = Type{
+                                literal = LiteralType{
+                                  `string`}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "substInTypeScheme",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "quantified variable shadows substitution",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (TypeScheme[body]
+                        (substInTypeScheme
+                          TypeSubst{fromList
+                            [(Name{"a"}, Type{literal = LiteralType{integer = IntegerType{`int32`}}})]}
+                          TypeScheme{
+                            variables = [Name{"a"}],
+                            body = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  variable = Name{"a"}},
+                                codomain = Type{
+                                  variable = Name{"a"}}}},
+                            constraints = empty})),
+                expected = λ`_`.`type`
+                      Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"a"}},
+                          codomain = Type{
+                            variable = Name{"a"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "free variable in body is substituted",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (TypeScheme[body]
+                        (substInTypeScheme
+                          TypeSubst{fromList
+                            [(Name{"b"}, Type{literal = LiteralType{`string`}})]}
+                          TypeScheme{
+                            variables = [Name{"a"}],
+                            body = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  variable = Name{"a"}},
+                                codomain = Type{
+                                  variable = Name{"b"}}}},
+                            constraints = empty})),
+                expected = λ`_`.`type`
+                      Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"a"}},
+                          codomain = Type{
+                            literal = LiteralType{
+                              `string`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mixed: free substituted, quantified shadowed",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (TypeScheme[body]
+                        (substInTypeScheme
+                          TypeSubst{fromList
+                            [
+                              (Name{"a"}, Type{literal = LiteralType{integer = IntegerType{`int32`}}}),
+                              (Name{"b"}, Type{literal = LiteralType{`string`}})]}
+                          TypeScheme{
+                            variables = [Name{"a"}],
+                            body = Type{
+                              function = FunctionType{
+                                domain = Type{
+                                  variable = Name{"a"}},
+                                codomain = Type{
+                                  variable = Name{"b"}}}},
+                            constraints = empty})),
+                expected = λ`_`.`type`
+                      Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"a"}},
+                          codomain = Type{
+                            literal = LiteralType{
+                              `string`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple quantifiers shadow substitution",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (TypeScheme[body]
+                        (substInTypeScheme
+                          TypeSubst{fromList
+                            [
+                              (Name{"a"}, Type{literal = LiteralType{integer = IntegerType{`int32`}}}),
+                              (Name{"b"}, Type{literal = LiteralType{`string`}})]}
+                          TypeScheme{
+                            variables = [Name{"a"}, Name{"b"}],
+                            body = Type{
+                              pair = PairType{
+                                first = Type{
+                                  variable = Name{"a"}},
+                                second = Type{
+                                  variable = Name{"b"}}}},
+                            constraints = empty})),
+                expected = λ`_`.`type`
+                      Type{
+                        pair = PairType{
+                          first = Type{
+                            variable = Name{"a"}},
+                          second = Type{
+                            variable = Name{"b"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "empty quantifiers: normal substitution",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`type`
+                      (TypeScheme[body]
+                        (substInTypeScheme
+                          TypeSubst{fromList
+                            [(Name{"a"}, Type{literal = LiteralType{integer = IntegerType{`int32`}}})]}
+                          TypeScheme{
+                            variables = [],
+                            body = Type{
+                              variable = Name{"a"}},
+                            constraints = empty})),
+                expected = λ`_`.`type`
+                      Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}

@@ -1,0 +1,361 @@
+## Test cases for string formatting and case conversion
+module hydra.core.test.formatting
+
+import hydra.core.formatting
+import hydra.core.model
+import hydra.core.names
+import hydra.core.testing
+import hydra.core.util
+
+## Test cases for hydra.core.formatting
+term allTests =
+  TestGroup{
+    name = "formatting",
+    description = none,
+    subgroups = [caseConversionTests, nameToUpperDashedTests],
+    `cases` = []}
+
+## Test cases for case conversion
+term caseConversionTests =
+  TestGroup{
+    name = "case conversion",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "#1 (lower_snake_case -> UPPER_SNAKE_CASE)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{lowerSnake}
+                  CaseConvention{upperSnake}
+                  "a_hello_world_42_a42_42a_b",
+            expected = λ`_`."A_HELLO_WORLD_42_A42_42A_B"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#2 (lower_snake_case -> camelCase)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{lowerSnake}
+                  CaseConvention{camel}
+                  "a_hello_world_42_a42_42a_b",
+            expected = λ`_`."aHelloWorld42A4242aB"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#3 (lower_snake_case -> PascalCase)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{lowerSnake}
+                  CaseConvention{pascal}
+                  "a_hello_world_42_a42_42a_b",
+            expected = λ`_`."AHelloWorld42A4242aB"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#4 (lower_snake_case -> lower_snake_case)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{lowerSnake}
+                  CaseConvention{lowerSnake}
+                  "a_hello_world_42_a42_42a_b",
+            expected = λ`_`."a_hello_world_42_a42_42a_b"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#17 (lower_snake_case -> UPPER-DASHED-CASE)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{lowerSnake}
+                  CaseConvention{upperDashed}
+                  "a_hello_world_42_a42_42a_b",
+            expected = λ`_`."A-HELLO-WORLD-42-A42-42A-B"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#5 (UPPER_SNAKE_CASE -> lower_snake_case)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{upperSnake}
+                  CaseConvention{lowerSnake}
+                  "A_HELLO_WORLD_42_A42_42A_B",
+            expected = λ`_`."a_hello_world_42_a42_42a_b"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#6 (UPPER_SNAKE_CASE -> camelCase)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{upperSnake}
+                  CaseConvention{camel}
+                  "A_HELLO_WORLD_42_A42_42A_B",
+            expected = λ`_`."aHelloWorld42A4242aB"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#7 (UPPER_SNAKE_CASE -> PascalCase)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{upperSnake}
+                  CaseConvention{pascal}
+                  "A_HELLO_WORLD_42_A42_42A_B",
+            expected = λ`_`."AHelloWorld42A4242aB"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#8 (UPPER_SNAKE_CASE -> UPPER_SNAKE_CASE)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{upperSnake}
+                  CaseConvention{upperSnake}
+                  "A_HELLO_WORLD_42_A42_42A_B",
+            expected = λ`_`."A_HELLO_WORLD_42_A42_42A_B"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#18 (UPPER_SNAKE_CASE -> UPPER-DASHED-CASE)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{upperSnake}
+                  CaseConvention{upperDashed}
+                  "A_HELLO_WORLD_42_A42_42A_B",
+            expected = λ`_`."A-HELLO-WORLD-42-A42-42A-B"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#9 (camelCase -> lower_snake_case)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{camel}
+                  CaseConvention{lowerSnake}
+                  "aHelloWorld42A4242aB",
+            expected = λ`_`."a_hello_world42_a4242a_b"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#10 (camelCase -> UPPER_SNAKE_CASE)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{camel}
+                  CaseConvention{upperSnake}
+                  "aHelloWorld42A4242aB",
+            expected = λ`_`."A_HELLO_WORLD42_A4242A_B"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#11 (camelCase -> PascalCase)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{camel}
+                  CaseConvention{pascal}
+                  "aHelloWorld42A4242aB",
+            expected = λ`_`."AHelloWorld42A4242aB"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#12 (camelCase -> camelCase)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{camel}
+                  CaseConvention{camel}
+                  "aHelloWorld42A4242aB",
+            expected = λ`_`."aHelloWorld42A4242aB"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#19 (camelCase -> UPPER-DASHED-CASE)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{camel}
+                  CaseConvention{upperDashed}
+                  "aHelloWorld42A4242aB",
+            expected = λ`_`."A-HELLO-WORLD42-A4242A-B"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#13 (PascalCase -> lower_snake_case)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{pascal}
+                  CaseConvention{lowerSnake}
+                  "AHelloWorld42A4242aB",
+            expected = λ`_`."a_hello_world42_a4242a_b"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#14 (PascalCase -> UPPER_SNAKE_CASE)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{pascal}
+                  CaseConvention{upperSnake}
+                  "AHelloWorld42A4242aB",
+            expected = λ`_`."A_HELLO_WORLD42_A4242A_B"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#15 (PascalCase -> camelCase)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{pascal}
+                  CaseConvention{camel}
+                  "AHelloWorld42A4242aB",
+            expected = λ`_`."aHelloWorld42A4242aB"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#16 (PascalCase -> PascalCase)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{pascal}
+                  CaseConvention{pascal}
+                  "AHelloWorld42A4242aB",
+            expected = λ`_`."AHelloWorld42A4242aB"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#20 (PascalCase -> UPPER-DASHED-CASE)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{pascal}
+                  CaseConvention{upperDashed}
+                  "AHelloWorld42A4242aB",
+            expected = λ`_`."A-HELLO-WORLD42-A4242A-B"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#21 (UPPER-DASHED-CASE -> lower_snake_case)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{upperDashed}
+                  CaseConvention{lowerSnake}
+                  "A-HELLO-WORLD-42-A42-42A-B",
+            expected = λ`_`."a_hello_world_42_a42_42a_b"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#22 (UPPER-DASHED-CASE -> UPPER_SNAKE_CASE)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{upperDashed}
+                  CaseConvention{upperSnake}
+                  "A-HELLO-WORLD-42-A42-42A-B",
+            expected = λ`_`."A_HELLO_WORLD_42_A42_42A_B"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#23 (UPPER-DASHED-CASE -> camelCase)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{upperDashed}
+                  CaseConvention{camel}
+                  "A-HELLO-WORLD-42-A42-42A-B",
+            expected = λ`_`."aHelloWorld42A4242aB"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#24 (UPPER-DASHED-CASE -> PascalCase)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{upperDashed}
+                  CaseConvention{pascal}
+                  "A-HELLO-WORLD-42-A42-42A-B",
+            expected = λ`_`."AHelloWorld42A4242aB"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#25 (UPPER-DASHED-CASE -> UPPER-DASHED-CASE)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.convertCase
+                  CaseConvention{upperDashed}
+                  CaseConvention{upperDashed}
+                  "A-HELLO-WORLD-42-A42-42A-B",
+            expected = λ`_`."A-HELLO-WORLD-42-A42-42A-B"}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Test cases for rendering a Name in UPPER-DASHED display form
+term nameToUpperDashedTests =
+  TestGroup{
+    name = "name to upper-dashed",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "#1 (hydra.core.lib.lists.concat.emptyLists)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.nameToUpperDashed
+                  Name{"hydra.core.lib.lists.concat.emptyLists"},
+            expected = λ`_`."HYDRA-CORE-LIB-LISTS-CONCAT-EMPTY-LISTS"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#2 (hydra.core.model.Name)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.nameToUpperDashed
+                  Name{"hydra.core.model.Name"},
+            expected = λ`_`."HYDRA-CORE-MODEL-NAME"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#3 (singlePart)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.nameToUpperDashed Name{"singlePart"},
+            expected = λ`_`."SINGLE-PART"}},
+        description = none,
+        tags = [],
+        provisions = []}]}
