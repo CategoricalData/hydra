@@ -7,7 +7,7 @@ Specification half of [#497](https://github.com/CategoricalData/hydra/issues/497
 This document specifies the Hydra textual notation for terms, types, literals, and type schemes:
 the presentation syntax used throughout the specification,
 produced by the `hydra.core.print.*` kernel functions and consumed by `hydra.core.parse.*`
-(term-level parsing; module- and package-level textual syntax is out of scope — see
+(term-level parsing, plus module-level syntax in §6; package-level syntax is out of scope — see
 [#497](https://github.com/CategoricalData/hydra/issues/497)).
 The grammar is unambiguous, with stated precedence, and is normative for both directions:
 a conforming printer MUST emit text matching the canonical form (§4),
@@ -557,8 +557,7 @@ primitiveDef  ::= defDoc? ['impure'] ['partial'] 'primitive' localName ':' termS
                   ['=' term]                      -- optional default implementation
 
 localName     ::= segment | '`' nameChars '`'     -- unqualified; qualified under
-                                                  -- moduleName on definition, per §6.1's
-                                                  -- own module namespace
+                                                  -- moduleName when read
 ```
 
 ### 6.2 Doc comments
@@ -635,6 +634,14 @@ This specification states the *syntax* an import line may take (§6.3) and the f
 reference may be qualified or bare; the collision-resolution and bareness-decision algorithms
 themselves are implementation details of the printer/parser pair, not part of the grammar.
 
+### 6.5 File layout
+
+A module's `.hydra` file sits at the path spelled by its namespace, with dots as directories.
+The kernel module `hydra.core.lib.regex` lives at
+`packages/hydra-kernel/src/main/hydra/hydra/core/lib/regex.hydra`.
+(The first `hydra` is the source root `src/main/hydra`; the second is the namespace's first
+segment.)
+
 ### Notes
 
 - Reserved words: `module`, `import`, `as`, `from`, `type`, `term`, `primitive`, `impure`,
@@ -645,6 +652,9 @@ themselves are implementation details of the printer/parser pair, not part of th
 - A `term`/`primitive` definition's `: termSignature` ascription is the term-signature notation
   of §3 (`∀` header, `lazy` parameters), not a plain `type`; a `type` definition's own `=`
   right-hand side is always a `typeScheme`, never a `termSignature`.
+- A `type` definition's parameters are printed as a leading `forall a, b.` in the body
+  (`type Pair = forall a, b. (a, b)`); the `∀` scheme header is accepted on input but is printed
+  only when the definition's scheme carries variables, which kernel-authored types do not.
 - **Bare-import and bare-body-reference round-trip (#805, #711, #5 — settled).** An earlier
   design (2026-10-31, Decision Desk card `711-bare-import-roundtrip`) aliased every cross-module
   import unconditionally, specifically because a single-file parser had no access to a bare

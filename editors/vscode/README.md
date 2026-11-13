@@ -97,11 +97,12 @@ Two layers:
   lines). Covers forms the kernel corpus does not exercise: suffixed/binary/decimal
   literals, `let … in`, `cases`, nominal sugar (`Name{…}` / `Name[…]`, #809), and the
   forward-looking #811 operator sugar.
-- **`tests/corpus/*.hydra` + `*.snap`** — snapshot tests run against a copy of the kernel's
-  own `.hydra` sources (`packages/hydra-kernel/src/main/hydra/`). `npm run test:corpus:refresh`
-  re-copies the sources and regenerates the snapshots; CI re-runs it and fails if they
-  drift. This is the intended coupling: a change to `syntax.md` / the kernel sources breaks
-  the grammar tests until the grammar catches up.
+- **`tests/corpus/*.hydra` + `*.snap`** — snapshot tests run against a flat copy of every
+  `.hydra` file found recursively under `packages/hydra-kernel/src/main/hydra/` (each module
+  sits at the path spelled by its namespace). `npm run test:corpus:refresh` re-copies the
+  sources and regenerates the snapshots; CI re-runs it and fails if they drift. This is the
+  intended coupling: a change to `syntax.md` / the kernel sources breaks the grammar tests
+  until the grammar catches up.
 
 The grammar is the **single source of truth** for Hydra highlighting. The IntelliJ plugin,
 the docs site (e.g. via Shiki) and a future GitHub Linguist entry can all reuse
