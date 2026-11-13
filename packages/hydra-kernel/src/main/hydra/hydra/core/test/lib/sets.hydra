@@ -1,0 +1,613 @@
+## Test cases for hydra.core.lib.sets primitives
+module hydra.core.test.lib.sets
+
+import hydra.core.lib.literals
+import hydra.core.lib.math
+import hydra.core.lib.sets as sets
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.testing
+
+## Test cases for hydra.core.lib.sets primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.sets primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "hasNoElements",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty set",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                      sets.empty,
+                expected = λ`_`.(λs.`set` (λn.printInt32 n) s) {}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.sets.empty.hasNoElements"}]}]},
+      TestGroup{
+        name = "wrapsOneElement",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "single element",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                      (sets.singleton 42:int32),
+                expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                      {42:int32}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.sets.singleton.wrapsOneElement"}]}]},
+      TestGroup{
+        name = "fromList",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "collectsDistinctElements",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "create from list",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.fromList
+                            [1:int32, 2:int32, 3:int32]),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {1:int32, 2:int32, 3:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.fromList.collectsDistinctElements"}]},
+              TestCaseWithMetadata{
+                name = "duplicates removed",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.fromList
+                            [1:int32, 2:int32, 1:int32, 3:int32]),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {1:int32, 2:int32, 3:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.fromList.collectsDistinctElements"}]}]},
+          TestGroup{
+            name = "emptyListYieldsEmptySet",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty list",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.fromList []),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s) {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.fromList.emptyListYieldsEmptySet"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "toList",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "ordersAscending",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "convert to list",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                          (sets.toList {1:int32, 2:int32, 3:int32}),
+                    expected = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                          [1:int32, 2:int32, 3:int32]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.toList.ordersAscending"}]},
+              TestCaseWithMetadata{
+                name = "unsorted input",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                          (sets.toList {1:int32, 2:int32, 3:int32}),
+                    expected = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                          [1:int32, 2:int32, 3:int32]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.toList.ordersAscending"}]}]},
+          TestGroup{
+            name = "emptySetYieldsEmptyList",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty set",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                          (sets.toList {}),
+                    expected = λ`_`.(λxs.`list` (λn.printInt32 n) xs) []}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.toList.emptySetYieldsEmptyList"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "insert",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "addsElement",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "insert new element",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.insert
+                            4:int32
+                            {1:int32, 2:int32, 3:int32}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {
+                            1:int32,
+                            2:int32,
+                            3:int32,
+                            4:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.insert.addsElement"}]},
+              TestCaseWithMetadata{
+                name = "insert into empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.insert 1:int32 {}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {1:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.insert.addsElement"}]}]},
+          TestGroup{
+            name = "noOpWhenAlreadyPresent",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "insert existing element",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.insert
+                            2:int32
+                            {1:int32, 2:int32, 3:int32}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {1:int32, 2:int32, 3:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.insert.noOpWhenAlreadyPresent"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "delete",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "removesElement",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "delete existing",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.delete
+                            2:int32
+                            {1:int32, 2:int32, 3:int32}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {1:int32, 3:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.delete.removesElement"}]}]},
+          TestGroup{
+            name = "noOpWhenAbsentOrEmpty",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "delete non-existing",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.delete
+                            4:int32
+                            {1:int32, 2:int32, 3:int32}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {1:int32, 2:int32, 3:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.delete.noOpWhenAbsentOrEmpty"}]},
+              TestCaseWithMetadata{
+                name = "delete from empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.delete 1:int32 {}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s) {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.delete.noOpWhenAbsentOrEmpty"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "member",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "testsSetMembership",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "element exists",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λb.printBoolean b)
+                          (sets.member
+                            2:int32
+                            {1:int32, 2:int32, 3:int32}),
+                    expected = λ`_`.(λb.printBoolean b) true}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.member.testsSetMembership"}]}]},
+          TestGroup{
+            name = "falseWhenAbsentOrEmpty",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "element missing",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λb.printBoolean b)
+                          (sets.member
+                            4:int32
+                            {1:int32, 2:int32, 3:int32}),
+                    expected = λ`_`.(λb.printBoolean b) false}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.member.falseWhenAbsentOrEmpty"}]},
+              TestCaseWithMetadata{
+                name = "empty set",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λb.printBoolean b)
+                          (sets.member 1:int32 {}),
+                    expected = λ`_`.(λb.printBoolean b) false}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.member.falseWhenAbsentOrEmpty"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "countsElements",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "three elements",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (sets.size {1:int32, 2:int32, 3:int32}),
+                expected = λ`_`.(λn.printInt32 n) 3:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.sets.size.countsElements"}]},
+          TestCaseWithMetadata{
+            name = "single element",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (sets.size {42:int32}),
+                expected = λ`_`.(λn.printInt32 n) 1:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.sets.size.countsElements"}]},
+          TestCaseWithMetadata{
+            name = "empty set",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n) (sets.size {}),
+                expected = λ`_`.(λn.printInt32 n) 0:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.sets.size.countsElements"}]}]},
+      TestGroup{
+        name = "testsZeroSize",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty set",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b) (sets.isEmpty {}),
+                expected = λ`_`.(λb.printBoolean b) true}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.sets.isEmpty.testsZeroSize"}]},
+          TestCaseWithMetadata{
+            name = "non-empty set",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (sets.isEmpty {1:int32, 2:int32}),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.sets.isEmpty.testsZeroSize"}]}]},
+      TestGroup{
+        name = "union",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "keepsElementsInEither",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "union two sets",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.union
+                            {1:int32, 2:int32}
+                            {2:int32, 3:int32}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {1:int32, 2:int32, 3:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.union.keepsElementsInEither"}]}]},
+          TestGroup{
+            name = "identityWhenEitherEmpty",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "union with empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.union {1:int32, 2:int32} {}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {1:int32, 2:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.union.identityWhenEitherEmpty"}]},
+              TestCaseWithMetadata{
+                name = "empty with non-empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.union {} {1:int32, 2:int32}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {1:int32, 2:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.union.identityWhenEitherEmpty"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "unions",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "keepsElementsInAny",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "union of multiple sets",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.unions
+                            [{1:int32, 2:int32}, {2:int32, 3:int32}, {3:int32, 4:int32}]),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {
+                            1:int32,
+                            2:int32,
+                            3:int32,
+                            4:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.unions.keepsElementsInAny"}]},
+              TestCaseWithMetadata{
+                name = "union with empty sets",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.unions
+                            [{1:int32, 2:int32}, {}, {3:int32}]),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {1:int32, 2:int32, 3:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.unions.keepsElementsInAny"}]},
+              TestCaseWithMetadata{
+                name = "single set",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.unions
+                            [{1:int32, 2:int32, 3:int32}]),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {1:int32, 2:int32, 3:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.unions.keepsElementsInAny"}]}]},
+          TestGroup{
+            name = "emptyListOfSetsYieldsEmptySet",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty list of sets",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.unions []),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s) {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.unions.emptyListOfSetsYieldsEmptySet"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "intersection",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "keepsElementsInBoth",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "common elements",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.intersection
+                            {1:int32, 2:int32, 3:int32}
+                            {2:int32, 3:int32, 4:int32}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {2:int32, 3:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.intersection.keepsElementsInBoth"}]}]},
+          TestGroup{
+            name = "emptyWhenNoOverlapOrEitherEmpty",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "no common elements",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.intersection
+                            {1:int32, 2:int32}
+                            {3:int32, 4:int32}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s) {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.intersection.emptyWhenNoOverlapOrEitherEmpty"}]},
+              TestCaseWithMetadata{
+                name = "intersection with empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.intersection {1:int32, 2:int32} {}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s) {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.intersection.emptyWhenNoOverlapOrEitherEmpty"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "difference",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "removesElementsOfSecondSet",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "remove elements",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.difference
+                            {1:int32, 2:int32, 3:int32}
+                            {2:int32, 4:int32}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {1:int32, 3:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.difference.removesElementsOfSecondSet"}]},
+              TestCaseWithMetadata{
+                name = "no overlap",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.difference
+                            {1:int32, 2:int32}
+                            {3:int32, 4:int32}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {1:int32, 2:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.difference.removesElementsOfSecondSet"}]}]},
+          TestGroup{
+            name = "identityWhenSecondEmpty",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "difference with empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.difference {1:int32, 2:int32} {}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {1:int32, 2:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.difference.identityWhenSecondEmpty"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "map",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "appliesFunctionToEachElement",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "map function",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.map
+                            (λx.mul x 2:int32)
+                            {1:int32, 2:int32, 3:int32}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          {2:int32, 4:int32, 6:int32}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.map.appliesFunctionToEachElement"}]}]},
+          TestGroup{
+            name = "emptyInput",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "map on empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.`set` (λn.printInt32 n) s)
+                          (sets.map (λx.mul x 2:int32) {}),
+                    expected = λ`_`.(λs.`set` (λn.printInt32 n) s) {}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.sets.map.emptyInput"}]}]}],
+        `cases` = []}],
+    `cases` = []}

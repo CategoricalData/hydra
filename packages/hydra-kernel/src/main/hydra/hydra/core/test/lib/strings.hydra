@@ -1,0 +1,1464 @@
+## Test cases for hydra.core.lib.strings primitives
+module hydra.core.test.lib.strings
+
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.lists as lists
+import hydra.core.lib.literals
+import hydra.core.lib.strings as strings
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.reduction
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## Test cases for hydra.core.lib.strings primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.strings primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "concat",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "flattensPreservingOrderAndContent",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "basic concatenation",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.concat ["one", "two", "three"]),
+                    expected = λ`_`.(λs.s) "onetwothree"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat.flattensPreservingOrderAndContent"}]},
+              TestCaseWithMetadata{
+                name = "single string",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.concat ["hello"]),
+                    expected = λ`_`.(λs.s) "hello"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat.flattensPreservingOrderAndContent"}]},
+              TestCaseWithMetadata{
+                name = "unicode strings",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.concat ["ñ", "世", "🌍"]),
+                    expected = λ`_`.(λs.s) "ñ世🌍"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat.flattensPreservingOrderAndContent"}]},
+              TestCaseWithMetadata{
+                name = "combining characters",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.concat ["e", "́"]),
+                    expected = λ`_`.(λs.s) "é"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat.flattensPreservingOrderAndContent"}]},
+              TestCaseWithMetadata{
+                name = "control characters",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.concat ["\n", "\t", "\r"]),
+                    expected = λ`_`.(λs.s) "\n\t\r"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat.flattensPreservingOrderAndContent"}]},
+              TestCaseWithMetadata{
+                name = "null character",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.concat
+                            ["hello", "\u0000", "world"]),
+                    expected = λ`_`.(λs.s) "hello\u0000world"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat.flattensPreservingOrderAndContent"}]}]},
+          TestGroup{
+            name = "emptyInputs",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty list",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.concat []),
+                    expected = λ`_`.(λs.s) ""}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat.emptyInputs"}]},
+              TestCaseWithMetadata{
+                name = "with empty strings",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.concat ["", "one", "", ""]),
+                    expected = λ`_`.(λs.s) "one"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat.emptyInputs"}]},
+              TestCaseWithMetadata{
+                name = "all empty strings",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.concat ["", "", "", ""]),
+                    expected = λ`_`.(λs.s) ""}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat.emptyInputs"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "concat2",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "appendsPreservingContent",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "basic concatenation",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.concat2 "hello" "world"),
+                    expected = λ`_`.(λs.s) "helloworld"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat2.appendsPreservingContent"}]},
+              TestCaseWithMetadata{
+                name = "unicode characters",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.concat2 "ñ" "世"),
+                    expected = λ`_`.(λs.s) "ñ世"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat2.appendsPreservingContent"}]},
+              TestCaseWithMetadata{
+                name = "special characters",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.concat2 "\n" "\t"),
+                    expected = λ`_`.(λs.s) "\n\t"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat2.appendsPreservingContent"}]},
+              TestCaseWithMetadata{
+                name = "null characters",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.concat2 "hello\u0000" "world"),
+                    expected = λ`_`.(λs.s) "hello\u0000world"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat2.appendsPreservingContent"}]}]},
+          TestGroup{
+            name = "identityOnEmpty",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty first string",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.concat2 "" "world"),
+                    expected = λ`_`.(λs.s) "world"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat2.identityOnEmpty"}]},
+              TestCaseWithMetadata{
+                name = "empty second string",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.concat2 "hello" ""),
+                    expected = λ`_`.(λs.s) "hello"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat2.identityOnEmpty"}]},
+              TestCaseWithMetadata{
+                name = "both empty strings",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.concat2 "" ""),
+                    expected = λ`_`.(λs.s) ""}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.concat2.identityOnEmpty"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "fromList",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "buildsStringFromCodePoints",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "basic ascii string",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.fromList
+                            [104:int32, 101:int32, 108:int32, 108:int32, 111:int32]),
+                    expected = λ`_`.(λs.s) "hello"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.fromList.buildsStringFromCodePoints"}]},
+              TestCaseWithMetadata{
+                name = "single character",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.fromList [97:int32]),
+                    expected = λ`_`.(λs.s) "a"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.fromList.buildsStringFromCodePoints"}]},
+              TestCaseWithMetadata{
+                name = "unicode characters",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.fromList
+                            [241:int32, 19990:int32, 127757:int32]),
+                    expected = λ`_`.(λs.s) "ñ世🌍"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.fromList.buildsStringFromCodePoints"}]},
+              TestCaseWithMetadata{
+                name = "combining character sequence",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.fromList [101:int32, 769:int32]),
+                    expected = λ`_`.(λs.s) "é"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.fromList.buildsStringFromCodePoints"}]},
+              TestCaseWithMetadata{
+                name = "special characters",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.fromList
+                            [10:int32, 9:int32, 13:int32]),
+                    expected = λ`_`.(λs.s) "\n\t\r"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.fromList.buildsStringFromCodePoints"}]},
+              TestCaseWithMetadata{
+                name = "null character",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.fromList
+                            [104:int32, 0:int32, 105:int32]),
+                    expected = λ`_`.(λs.s) "h\u0000i"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.fromList.buildsStringFromCodePoints"}]}]},
+          TestGroup{
+            name = "emptyInput",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty code point list",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.fromList []),
+                    expected = λ`_`.(λs.s) ""}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.fromList.emptyInput"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "join",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "insertsSeparatorBetweenStrings",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "comma separator",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.join "," ["one", "two", "three"]),
+                    expected = λ`_`.(λs.s) "one,two,three"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.join.insertsSeparatorBetweenStrings"}]},
+              TestCaseWithMetadata{
+                name = "empty separator",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.join "" ["a", "b", "c"]),
+                    expected = λ`_`.(λs.s) "abc"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.join.insertsSeparatorBetweenStrings"}]},
+              TestCaseWithMetadata{
+                name = "multi-character separator",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.join " | " ["A", "B", "C"]),
+                    expected = λ`_`.(λs.s) "A | B | C"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.join.insertsSeparatorBetweenStrings"}]},
+              TestCaseWithMetadata{
+                name = "empty strings in list",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.join "," ["", "a", ""]),
+                    expected = λ`_`.(λs.s) ",a,"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.join.insertsSeparatorBetweenStrings"}]},
+              TestCaseWithMetadata{
+                name = "unicode separator",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.join "🌍" ["link1", "link2"]),
+                    expected = λ`_`.(λs.s) "link1🌍link2"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.join.insertsSeparatorBetweenStrings"}]},
+              TestCaseWithMetadata{
+                name = "newline separator",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.join "\n" ["line1", "line2"]),
+                    expected = λ`_`.(λs.s) "line1\nline2"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.join.insertsSeparatorBetweenStrings"}]}]},
+          TestGroup{
+            name = "boundaryInputs",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty string list",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.join "," []),
+                    expected = λ`_`.(λs.s) ""}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.join.boundaryInputs"}]},
+              TestCaseWithMetadata{
+                name = "single item list",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.join "," ["only"]),
+                    expected = λ`_`.(λs.s) "only"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.join.boundaryInputs"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "countsCodePoints",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n) (strings.length ""),
+                expected = λ`_`.(λn.printInt32 n) 0:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.strings.length.countsCodePoints"}]},
+          TestCaseWithMetadata{
+            name = "single character",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n) (strings.length "a"),
+                expected = λ`_`.(λn.printInt32 n) 1:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.strings.length.countsCodePoints"}]},
+          TestCaseWithMetadata{
+            name = "basic word",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (strings.length "hello"),
+                expected = λ`_`.(λn.printInt32 n) 5:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.strings.length.countsCodePoints"}]},
+          TestCaseWithMetadata{
+            name = "unicode characters",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (strings.length "ñ世🌍"),
+                expected = λ`_`.(λn.printInt32 n) 3:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.strings.length.countsCodePoints"}]},
+          TestCaseWithMetadata{
+            name = "combining character sequence",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (strings.length "é"),
+                expected = λ`_`.(λn.printInt32 n) 2:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.strings.length.countsCodePoints"}]},
+          TestCaseWithMetadata{
+            name = "special characters",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (strings.length "\n\t\r"),
+                expected = λ`_`.(λn.printInt32 n) 3:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.strings.length.countsCodePoints"}]}]},
+      TestGroup{
+        name = "charAt",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "returnsCodePointAtIndex",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "first character",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.strings.charAt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 0:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 104:int32}}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.charAt.returnsCodePointAtIndex"}]},
+              TestCaseWithMetadata{
+                name = "middle character",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.strings.charAt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 2:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 108:int32}}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.charAt.returnsCodePointAtIndex"}]},
+              TestCaseWithMetadata{
+                name = "last character",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.strings.charAt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 4:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 111:int32}}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.charAt.returnsCodePointAtIndex"}]},
+              TestCaseWithMetadata{
+                name = "single character string",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.strings.charAt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 0:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 97:int32}}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.charAt.returnsCodePointAtIndex"}]},
+              TestCaseWithMetadata{
+                name = "unicode character",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.strings.charAt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 0:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "ñ"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 241:int32}}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.charAt.returnsCodePointAtIndex"}]},
+              TestCaseWithMetadata{
+                name = "multi-byte unicode",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.strings.charAt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 0:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "世"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 19990:int32}}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.charAt.returnsCodePointAtIndex"}]},
+              TestCaseWithMetadata{
+                name = "second of combining pair",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.strings.charAt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 1:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "é"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 769:int32}}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.charAt.returnsCodePointAtIndex"}]},
+              TestCaseWithMetadata{
+                name = "before an astral character",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.strings.charAt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 0:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "🌍a"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 127757:int32}}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.charAt.returnsCodePointAtIndex"}]},
+              TestCaseWithMetadata{
+                name = "after an astral character",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.strings.charAt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 1:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "🌍a"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 97:int32}}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.charAt.returnsCodePointAtIndex"}]}]},
+          TestGroup{
+            name = "noneWhenOutOfRange",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "out of bounds",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.strings.charAt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term` Term{`optional` = none}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.charAt.noneWhenOutOfRange"}]},
+              TestCaseWithMetadata{
+                name = "negative index",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.strings.charAt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = -1:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term` Term{`optional` = none}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.charAt.noneWhenOutOfRange"}]},
+              TestCaseWithMetadata{
+                name = "empty string",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.strings.charAt"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 0:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = ""}}}}),
+                    expected = λ`_`.`term` Term{`optional` = none}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.charAt.noneWhenOutOfRange"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "testsZeroLength",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (strings.isEmpty ""),
+                expected = λ`_`.(λb.printBoolean b) true}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.strings.isEmpty.testsZeroLength"}]},
+          TestCaseWithMetadata{
+            name = "single character",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (strings.isEmpty "a"),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.strings.isEmpty.testsZeroLength"}]},
+          TestCaseWithMetadata{
+            name = "space",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (strings.isEmpty " "),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.strings.isEmpty.testsZeroLength"}]},
+          TestCaseWithMetadata{
+            name = "unicode space",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (strings.isEmpty " "),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.strings.isEmpty.testsZeroLength"}]},
+          TestCaseWithMetadata{
+            name = "newline",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (strings.isEmpty "\n"),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.strings.isEmpty.testsZeroLength"}]},
+          TestCaseWithMetadata{
+            name = "null character",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (strings.isEmpty "\u0000"),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.strings.isEmpty.testsZeroLength"}]},
+          TestCaseWithMetadata{
+            name = "multi-character",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (strings.isEmpty "hello"),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.strings.isEmpty.testsZeroLength"}]}]},
+      TestGroup{
+        name = "splitOn",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "splitsOnEveryOccurrence",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "basic separator",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn "ss" "Mississippi"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["Mi", "i", "ippi"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.splitsOnEveryOccurrence"}]},
+              TestCaseWithMetadata{
+                name = "single char separator",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn " " "one two three"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["one", "two", "three"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.splitsOnEveryOccurrence"}]},
+              TestCaseWithMetadata{
+                name = "multi-char separator",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn "  " "a  b  c"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["a", "b", "c"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.splitsOnEveryOccurrence"}]},
+              TestCaseWithMetadata{
+                name = "separator at start",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn "h" "hello"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["", "ello"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.splitsOnEveryOccurrence"}]},
+              TestCaseWithMetadata{
+                name = "separator at end",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn "o" "hello"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["hell", ""]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.splitsOnEveryOccurrence"}]},
+              TestCaseWithMetadata{
+                name = "leading and trailing separator",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn " " " one two "),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["", "one", "two", ""]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.splitsOnEveryOccurrence"}]},
+              TestCaseWithMetadata{
+                name = "whole string as separator",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn
+                            "Mississippi"
+                            "Mississippi"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["", ""]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.splitsOnEveryOccurrence"}]},
+              TestCaseWithMetadata{
+                name = "consecutive separators",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn " " "a  b"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["a", "", "b"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.splitsOnEveryOccurrence"}]},
+              TestCaseWithMetadata{
+                name = "multiple occurrences",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn "l" "hello"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["he", "", "o"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.splitsOnEveryOccurrence"}]},
+              TestCaseWithMetadata{
+                name = "overlapping pattern",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn "aa" "aaa"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["", "a"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.splitsOnEveryOccurrence"}]},
+              TestCaseWithMetadata{
+                name = "single char both",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn "a" "a"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["", ""]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.splitsOnEveryOccurrence"}]},
+              TestCaseWithMetadata{
+                name = "unicode separator",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn "世" "hello世world"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["hello", "world"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.splitsOnEveryOccurrence"}]},
+              TestCaseWithMetadata{
+                name = "unicode content",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn "," "ñ,世,🌍"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["ñ", "世", "🌍"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.splitsOnEveryOccurrence"}]},
+              TestCaseWithMetadata{
+                name = "newline separator",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn
+                            "\n"
+                            "line1\nline2\nline3"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["line1", "line2", "line3"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.splitsOnEveryOccurrence"}]}]},
+          TestGroup{
+            name = "noSplitWhenAbsent",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "separator not found",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn "x" "hello"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["hello"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.noSplitWhenAbsent"}]}]},
+          TestGroup{
+            name = "emptyStringOperands",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty separator",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn "" "abc"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["", "a", "b", "c"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.emptyStringOperands"}]},
+              TestCaseWithMetadata{
+                name = "separator on empty string",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn "x" ""),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          [""]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.emptyStringOperands"}]},
+              TestCaseWithMetadata{
+                name = "both empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn "" ""),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          [""]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.emptyStringOperands"}]},
+              TestCaseWithMetadata{
+                name = "empty separator with astral character",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.printString (strings.join ", " xs))
+                          (strings.splitOn "" "a🌍b"),
+                    expected = λ`_`.(λxs.printString (strings.join ", " xs))
+                          ["", "a", "🌍", "b"]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.splitOn.emptyStringOperands"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "toList",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "decomposesIntoCodePoints",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "single character",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.strings.join
+                            ", "
+                            (lists.map (λn.printInt32 n) xs))
+                          (strings.toList "a"),
+                    expected = λ`_`.(λxs.strings.join
+                            ", "
+                            (lists.map (λn.printInt32 n) xs))
+                          [97:int32]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toList.decomposesIntoCodePoints"}]},
+              TestCaseWithMetadata{
+                name = "basic word",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.strings.join
+                            ", "
+                            (lists.map (λn.printInt32 n) xs))
+                          (strings.toList "hello"),
+                    expected = λ`_`.(λxs.strings.join
+                            ", "
+                            (lists.map (λn.printInt32 n) xs))
+                          [104:int32, 101:int32, 108:int32, 108:int32, 111:int32]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toList.decomposesIntoCodePoints"}]},
+              TestCaseWithMetadata{
+                name = "unicode characters",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.strings.join
+                            ", "
+                            (lists.map (λn.printInt32 n) xs))
+                          (strings.toList "ñ世🌍"),
+                    expected = λ`_`.(λxs.strings.join
+                            ", "
+                            (lists.map (λn.printInt32 n) xs))
+                          [241:int32, 19990:int32, 127757:int32]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toList.decomposesIntoCodePoints"}]},
+              TestCaseWithMetadata{
+                name = "combining character sequence",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.strings.join
+                            ", "
+                            (lists.map (λn.printInt32 n) xs))
+                          (strings.toList "é"),
+                    expected = λ`_`.(λxs.strings.join
+                            ", "
+                            (lists.map (λn.printInt32 n) xs))
+                          [101:int32, 769:int32]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toList.decomposesIntoCodePoints"}]},
+              TestCaseWithMetadata{
+                name = "control characters",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.strings.join
+                            ", "
+                            (lists.map (λn.printInt32 n) xs))
+                          (strings.toList "\n\t\r"),
+                    expected = λ`_`.(λxs.strings.join
+                            ", "
+                            (lists.map (λn.printInt32 n) xs))
+                          [10:int32, 9:int32, 13:int32]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toList.decomposesIntoCodePoints"}]},
+              TestCaseWithMetadata{
+                name = "null character",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.strings.join
+                            ", "
+                            (lists.map (λn.printInt32 n) xs))
+                          (strings.toList "h\u0000i"),
+                    expected = λ`_`.(λxs.strings.join
+                            ", "
+                            (lists.map (λn.printInt32 n) xs))
+                          [104:int32, 0:int32, 105:int32]}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toList.decomposesIntoCodePoints"}]}]},
+          TestGroup{
+            name = "emptyInput",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty string",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λxs.strings.join
+                            ", "
+                            (lists.map (λn.printInt32 n) xs))
+                          (strings.toList ""),
+                    expected = λ`_`.(λxs.strings.join
+                            ", "
+                            (lists.map (λn.printInt32 n) xs))
+                          []}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toList.emptyInput"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "toLower",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "appliesSimpleLowercaseMapping",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "mixed case",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toLower "Hello World"),
+                    expected = λ`_`.(λs.s) "hello world"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toLower.appliesSimpleLowercaseMapping"}]},
+              TestCaseWithMetadata{
+                name = "all uppercase",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toLower "HELLO"),
+                    expected = λ`_`.(λs.s) "hello"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toLower.appliesSimpleLowercaseMapping"}]},
+              TestCaseWithMetadata{
+                name = "all lowercase",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toLower "hello"),
+                    expected = λ`_`.(λs.s) "hello"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toLower.appliesSimpleLowercaseMapping"}]},
+              TestCaseWithMetadata{
+                name = "empty string",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toLower ""),
+                    expected = λ`_`.(λs.s) ""}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toLower.appliesSimpleLowercaseMapping"}]},
+              TestCaseWithMetadata{
+                name = "with numbers and punctuation",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.toLower "Abc123, XYZ!"),
+                    expected = λ`_`.(λs.s) "abc123, xyz!"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toLower.appliesSimpleLowercaseMapping"}]},
+              TestCaseWithMetadata{
+                name = "control characters",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toLower "\n\t\r"),
+                    expected = λ`_`.(λs.s) "\n\t\r"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toLower.appliesSimpleLowercaseMapping"}]},
+              TestCaseWithMetadata{
+                name = "unicode accented chars",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toLower "ÑÁÉÍÓÚ"),
+                    expected = λ`_`.(λs.s) "ñáéíóú"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toLower.appliesSimpleLowercaseMapping"}]}]},
+          TestGroup{
+            name = "noFullCaseFoldingExpansion",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "dotted capital I has a simple, single-codepoint mapping",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toLower "İ"),
+                    expected = λ`_`.(λs.s) "i"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toLower.noFullCaseFoldingExpansion"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "toUpper",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "appliesSimpleUppercaseMapping",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "mixed case",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toUpper "hello World"),
+                    expected = λ`_`.(λs.s) "HELLO WORLD"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toUpper.appliesSimpleUppercaseMapping"}]},
+              TestCaseWithMetadata{
+                name = "all lowercase",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toUpper "hello"),
+                    expected = λ`_`.(λs.s) "HELLO"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toUpper.appliesSimpleUppercaseMapping"}]},
+              TestCaseWithMetadata{
+                name = "all uppercase",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toUpper "HELLO"),
+                    expected = λ`_`.(λs.s) "HELLO"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toUpper.appliesSimpleUppercaseMapping"}]},
+              TestCaseWithMetadata{
+                name = "empty string",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toUpper ""),
+                    expected = λ`_`.(λs.s) ""}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toUpper.appliesSimpleUppercaseMapping"}]},
+              TestCaseWithMetadata{
+                name = "with numbers and punctuation",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s)
+                          (strings.toUpper "abc123, xyz!"),
+                    expected = λ`_`.(λs.s) "ABC123, XYZ!"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toUpper.appliesSimpleUppercaseMapping"}]},
+              TestCaseWithMetadata{
+                name = "control characters",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toUpper "\n\t\r"),
+                    expected = λ`_`.(λs.s) "\n\t\r"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toUpper.appliesSimpleUppercaseMapping"}]},
+              TestCaseWithMetadata{
+                name = "unicode accented chars",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toUpper "ñáéíóú"),
+                    expected = λ`_`.(λs.s) "ÑÁÉÍÓÚ"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toUpper.appliesSimpleUppercaseMapping"}]}]},
+          TestGroup{
+            name = "noFullCaseFoldingExpansion",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "sharp s is not expanded to SS",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toUpper "straße"),
+                    expected = λ`_`.(λs.s) "STRAßE"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toUpper.noFullCaseFoldingExpansion"}]},
+              TestCaseWithMetadata{
+                name = "n preceded by apostrophe is unchanged",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toUpper "ŉ"),
+                    expected = λ`_`.(λs.s) "ŉ"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toUpper.noFullCaseFoldingExpansion"}]},
+              TestCaseWithMetadata{
+                name = "greek alpha with psili and ypogegrammeni",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.(λs.s) (strings.toUpper "ᾀ"),
+                    expected = λ`_`.(λs.s) "ᾈ"}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.strings.toUpper.noFullCaseFoldingExpansion"}]}]}],
+        `cases` = []}],
+    `cases` = []}

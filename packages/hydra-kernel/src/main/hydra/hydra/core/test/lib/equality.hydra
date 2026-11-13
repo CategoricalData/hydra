@@ -1,0 +1,1424 @@
+## Test cases for hydra.core.lib.equality primitives
+module hydra.core.test.lib.equality
+
+import hydra.core.lib.eithers as eithers
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.reduction
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## Test cases for hydra.core.lib.equality primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.equality primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "structuralEquivalence",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "equal integers",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 5:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]},
+          TestCaseWithMetadata{
+            name = "unequal integers",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 3:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]}]},
+      TestGroup{
+        name = "decimalScaleSensitive",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "same value, same scale",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.1}}}},
+                            argument = Term{
+                              literal = Literal{
+                                `decimal` = 1.1}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.decimalScaleSensitive"}]},
+          TestCaseWithMetadata{
+            name = "same value, different scale",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.1}}}},
+                            argument = Term{
+                              literal = Literal{
+                                `decimal` = 1.10}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [Tag{"scaleDistinct"}],
+            provisions = [Name{"hydra.core.lib.equality.equal.decimalScaleSensitive"}]},
+          TestCaseWithMetadata{
+            name = "different value, same scale",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `decimal` = 1.1}}}},
+                            argument = Term{
+                              literal = Literal{
+                                `decimal` = 1.2}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.decimalScaleSensitive"}]}]},
+      TestGroup{
+        name = "collectionContentsCompared",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "non-empty maps with different contents",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{`string` = "k1"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}}},
+                            argument = Term{
+                              `map` = {
+                                Term{literal = Literal{`string` = "k1"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 99:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.collectionContentsCompared"}]},
+          TestCaseWithMetadata{
+            name = "non-empty maps with same contents",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{`string` = "k1"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}}},
+                            argument = Term{
+                              `map` = {
+                                Term{literal = Literal{`string` = "k1"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.collectionContentsCompared"}]},
+          TestCaseWithMetadata{
+            name = "decimal nested in a map value, different scale",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{`string` = "k"}}=Term{literal = Literal{`decimal` = 1.1}}}}}},
+                            argument = Term{
+                              `map` = {
+                                Term{literal = Literal{`string` = "k"}}=Term{literal = Literal{`decimal` = 1.10}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.collectionContentsCompared"}]},
+          TestCaseWithMetadata{
+            name = "decimal nested in a map value, same scale",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{`string` = "k"}}=Term{literal = Literal{`decimal` = 1.1}}}}}},
+                            argument = Term{
+                              `map` = {
+                                Term{literal = Literal{`string` = "k"}}=Term{literal = Literal{`decimal` = 1.1}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.collectionContentsCompared"}]}]},
+      TestGroup{
+        name = "ieee754ExtendedFloatSemantics",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "NaN equal to itself",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = NaN:float64}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float64` = NaN:float64}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.ieee754ExtendedFloatSemantics"}]},
+          TestCaseWithMetadata{
+            name = "negative zero unequal to positive zero",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = -0.0:float64}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float64` = 0.0:float64}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.ieee754ExtendedFloatSemantics"}]},
+          TestCaseWithMetadata{
+            name = "positive zero equal to itself",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 0.0:float64}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float64` = 0.0:float64}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.ieee754ExtendedFloatSemantics"}]},
+          TestCaseWithMetadata{
+            name = "ordinary equal values",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.5:float64}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float64` = 1.5:float64}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.ieee754ExtendedFloatSemantics"}]},
+          TestCaseWithMetadata{
+            name = "ordinary unequal values",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.5:float64}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float64` = 2.5:float64}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.ieee754ExtendedFloatSemantics"}]}]},
+      TestGroup{
+        name = "structuralEquivalence",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "equal lists",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}},
+                            argument = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]},
+          TestCaseWithMetadata{
+            name = "different elements (lists)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}},
+                            argument = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 4:int32}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]},
+          TestCaseWithMetadata{
+            name = "different length (prefix)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}},
+                            argument = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]},
+          TestCaseWithMetadata{
+            name = "same elements, different order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}},
+                            argument = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]},
+          TestCaseWithMetadata{
+            name = "nested lists, equal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{
+                                      `list` = [
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]},
+                                    Term{`list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}]}}},
+                            argument = Term{
+                              `list` = [
+                                Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]},
+                                Term{`list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]},
+          TestCaseWithMetadata{
+            name = "nested lists, unequal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{
+                                      `list` = [
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]},
+                                    Term{`list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}]}}},
+                            argument = Term{
+                              `list` = [
+                                Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]},
+                                Term{`list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 4:int32}}}]}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]}]},
+      TestGroup{
+        name = "structuralEquivalence",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "equal sets, same construction order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `set` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}},
+                            argument = Term{
+                              `set` = {
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]},
+          TestCaseWithMetadata{
+            name = "equal sets, different construction order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `set` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}},
+                            argument = Term{
+                              `set` = {
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]},
+          TestCaseWithMetadata{
+            name = "different elements (sets)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `set` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}},
+                            argument = Term{
+                              `set` = {
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 4:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]},
+          TestCaseWithMetadata{
+            name = "subset, not equal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `set` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}},
+                            argument = Term{
+                              `set` = {
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]}]},
+      TestGroup{
+        name = "structuralEquivalence",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "equal maps, same insertion order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
+                            argument = Term{
+                              `map` = {
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]},
+          TestCaseWithMetadata{
+            name = "equal maps, different insertion order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
+                            argument = Term{
+                              `map` = {
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]},
+          TestCaseWithMetadata{
+            name = "missing key",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}},
+                            argument = Term{
+                              `map` = {
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]},
+          TestCaseWithMetadata{
+            name = "value mismatch",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
+                            argument = Term{
+                              `map` = {
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 21:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]},
+          TestCaseWithMetadata{
+            name = "nested map value, equal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{
+                                      `map` = {
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}}},
+                            argument = Term{
+                              `map` = {
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{
+                                  `map` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]},
+          TestCaseWithMetadata{
+            name = "nested map value, unequal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.equal"}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{
+                                      `map` = {
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}}},
+                            argument = Term{
+                              `map` = {
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{
+                                  `map` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 21:int32}}}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.equal.structuralEquivalence"}]}]},
+      TestGroup{
+        name = "negatesEqual",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "equal integers",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.notEqual"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 5:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.notEqual.negatesEqual"}]},
+          TestCaseWithMetadata{
+            name = "unequal integers",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.notEqual"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 3:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.notEqual.negatesEqual"}]},
+          TestCaseWithMetadata{
+            name = "equal strings",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.notEqual"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "a"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.notEqual.negatesEqual"}]},
+          TestCaseWithMetadata{
+            name = "unequal strings",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.notEqual"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "b"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.notEqual.negatesEqual"}]},
+          TestCaseWithMetadata{
+            name = "equal floats",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.notEqual"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.5:float64}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float64` = 1.5:float64}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.notEqual.negatesEqual"}]},
+          TestCaseWithMetadata{
+            name = "unequal floats",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.notEqual"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float64` = 1.5:float64}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float64` = 2.5:float64}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.notEqual.negatesEqual"}]}]},
+      TestGroup{
+        name = "negatesEqualOnCollections",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "equal lists",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.notEqual"}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}},
+                            argument = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.notEqual.negatesEqualOnCollections"}]},
+          TestCaseWithMetadata{
+            name = "unequal lists (order)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.notEqual"}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}},
+                            argument = Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}]}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.notEqual.negatesEqualOnCollections"}]},
+          TestCaseWithMetadata{
+            name = "equal sets, different order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.notEqual"}},
+                                argument = Term{
+                                  `set` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}},
+                            argument = Term{
+                              `set` = {
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.notEqual.negatesEqualOnCollections"}]},
+          TestCaseWithMetadata{
+            name = "unequal sets",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.notEqual"}},
+                                argument = Term{
+                                  `set` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}}}}},
+                            argument = Term{
+                              `set` = {
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 4:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.notEqual.negatesEqualOnCollections"}]},
+          TestCaseWithMetadata{
+            name = "equal maps, different insertion order",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.notEqual"}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
+                            argument = Term{
+                              `map` = {
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.notEqual.negatesEqualOnCollections"}]},
+          TestCaseWithMetadata{
+            name = "unequal maps",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.equality.notEqual"}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}},
+                            argument = Term{
+                              `map` = {
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.equality.notEqual.negatesEqualOnCollections"}]}]}],
+    `cases` = []}
