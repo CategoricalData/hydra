@@ -644,18 +644,21 @@ moduleWithUniverseRoundtripTest testName m universeEntries = universalCase testN
     actual = Eithers.either
       (Phantoms.lambda "e" $ Phantoms.var "e")
       (Phantoms.lambda "mod2" $ moduleFingerprint (Phantoms.var "mod2"))
-      (ParsePackaging.parseModuleWith @@ universeMap @@ printed)
+      (ParsePackaging.parseModuleWith @@ universeMap @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ printed)
     expected = moduleFingerprint m
 
--- | Staging's counterexample (2026-11-11): module A imports 'logic' (referencing only
--- 'logic.ifElse') and 'foo' (an UNRELATED import, never referenced at all, but which happens to
--- ALSO declare a local name 'ifElse'). Under a naive "is the REFERENCED name unique" rule the
--- printer would emit bare 'ifElse' (no collision among what A actually references) -- but the
--- parser, resolving against the imports' FULL declared sets as it must, would then find TWO
--- modules declaring 'ifElse' and hard-error as ambiguous, breaking 'module -> print -> parse'
--- identity. The fix (per staging/Josh, 'option 2' + the universe-symmetric printer) requires the
--- FULL declared set of 'foo' to be known and checked, not just what A references -- so 'ifElse'
--- must print qualified ('logic.ifElse'), even though A itself never touches 'foo.ifElse'.
+-- | Staging's original counterexample (2026-11-11) argued that module A importing 'logic'
+-- (referencing only 'logic.ifElse') and 'foo' (an UNRELATED, never-referenced import that also
+-- declares a local name 'ifElse') should force 'ifElse' to print qualified, since the FULL
+-- declared set of every DECLARED import -- not just what A references -- was the collision scope
+-- at the time. That scope was later found to break round-trip IDEMPOTENCE on real kernel modules
+-- (print(m) != print(parse(print(m))), since a module's full DECLARED dependency list is not
+-- recoverable from the printed text -- only its ACTUALLY-REFERENCED imports are, because those
+-- are exactly what gets a printed import line). The collision scope is now exactly the
+-- actually-referenced module set ('nssAsList'), so an import that is declared but never
+-- referenced -- like 'foo' here -- can never appear in the printed text and so poses no real
+-- collision risk; 'ifElse' now correctly prints BARE. This test is kept to document and lock in
+-- that narrowing (2026-11-12), not to assert the original qualified-output claim.
 ambiguousOwnerCounterexampleModule :: TypedTerm Module
 ambiguousOwnerCounterexampleModule = testModule "hydra.example.ambiguous"
   ["hydra.logic", "hydra.foo"]
@@ -668,19 +671,19 @@ ambiguousOwnerCounterexampleUniverse = [
 
 ambiguousOwnerCounterexamplePrintTest :: TypedTerm TestCaseWithMetadata
 ambiguousOwnerCounterexamplePrintTest = moduleWithUniversePrintTest
-  "staging's counterexample: 'ifElse' stays qualified because an UNREFERENCED import also declares it"
+  "an UNREFERENCED import's declared name never forces qualification (collision scope = referenced modules only, 2026-11-12)"
   ambiguousOwnerCounterexampleModule
   ambiguousOwnerCounterexampleUniverse
   (L.intercalate "\n" [
     "module hydra.example.ambiguous",
     "",
-    "import hydra.logic as logic",
+    "import hydra.logic",
     "",
-    "type UsesIfElse = logic.ifElse"])
+    "type UsesIfElse = ifElse"])
 
 ambiguousOwnerCounterexampleRoundtripTest :: TypedTerm TestCaseWithMetadata
 ambiguousOwnerCounterexampleRoundtripTest = moduleWithUniverseRoundtripTest
-  "staging's counterexample round-trips (module->print->parse with the same universe)"
+  "the unreferenced-import case round-trips (module->print->parse with the same universe)"
   ambiguousOwnerCounterexampleModule
   ambiguousOwnerCounterexampleUniverse
 
@@ -755,12 +758,105 @@ unimportedCollisionRoundtripTest = moduleWithUniverseRoundtripTest
   unimportedCollisionModule
   unimportedCollisionUniverse
 
+-- | Verify PRINT->PARSE->PRINT idempotence (the printed TEXT is stable under a second
+-- parse+print pass, not just that the printed text parses back to a module with the same
+-- fingerprint, which 'moduleWithUniverseRoundtripTest'/'moduleFingerprint' check and which is NOT
+-- sufficient to catch a collision-scope asymmetry between the original in-memory 'Module' and the
+-- one 'parseModuleWith' reconstructs from text, per 2026-11-12's bug: using 'moduleDependencies'
+-- (a module's full DECLARED dependency list, which can include entries never referenced, and so
+-- never recoverable from the printed text) in the printer's collision scope let a FIRST print see
+-- a collision the SECOND print (of the reparsed module, whose 'moduleDependencies' is reconstructed
+-- from only the printed import lines) no longer sees, so the two printed strings differed.
+moduleWithUniverseIdempotenceTest :: String -> TypedTerm Module -> [(TypedTerm ModuleName, TypedTerm (S.Set Name))] -> TypedTerm TestCaseWithMetadata
+moduleWithUniverseIdempotenceTest testName m universeEntries = universalCase testName actual expected
+  where
+    universeMap = Maps.fromList $ Phantoms.list [Phantoms.pair k v | (k, v) <- universeEntries]
+    printed1 = PrintPackaging.moduleDefinitionWith @@ universeMap @@ m
+    actual = Eithers.either
+      (Phantoms.lambda "e" $ Phantoms.var "e")
+      (Phantoms.lambda "mod2" $ PrintPackaging.moduleDefinitionWith @@ universeMap @@ (Phantoms.var "mod2"))
+      (ParsePackaging.parseModuleWith @@ universeMap @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ printed1)
+    expected = printed1
+
+-- | A module whose DECLARED dependency list ('moduleDependencies', via 'testModule's explicit
+-- deps) includes a module ('hydra.unreferencedclash') that is never actually referenced in the
+-- body, and which happens to declare the same local name ('shared') as a module that IS
+-- referenced ('hydra.used'). Mirrors the real-kernel shape that broke idempotence (a blanket-style
+-- declared-but-unreferenced dependency colliding with a referenced one): the collision scope must
+-- be exactly the actually-referenced module set, or the first print (seeing the full declared
+-- list) could alias 'used' while the reparsed module's narrower, text-recovered dependency list no
+-- longer does, differing from the first print.
+idempotenceClashModule :: TypedTerm Module
+idempotenceClashModule = testModule "hydra.example.idempotenceclash"
+  ["hydra.used", "hydra.unreferencedclash"]
+  [("UsesShared", monoScheme (T.variable "hydra.used.shared"))]
+
+idempotenceClashUniverse :: [(TypedTerm ModuleName, TypedTerm (S.Set Name))]
+idempotenceClashUniverse = [
+  universeEntry "hydra.used" ["shared", "other"],
+  universeEntry "hydra.unreferencedclash" ["shared", "unrelated"]]
+
+idempotenceClashIdempotenceTest :: TypedTerm TestCaseWithMetadata
+idempotenceClashIdempotenceTest = moduleWithUniverseIdempotenceTest
+  "a declared-but-unreferenced dependency colliding with a referenced one does not break print->parse->print idempotence (2026-11-12)"
+  idempotenceClashModule
+  idempotenceClashUniverse
+
+-- | A module whose term body constructs a one-field record/injection-sugar term over a type
+-- defined in ANOTHER module ('hydra.shapes.Shape', a union). 'correctInjectionsInTerm' (run inside
+-- the base 'parseModule', before any universe is in play) only sees THIS module's own type
+-- definitions, so it cannot tell that 'shapes.Shape{circle}' is an injection, not a record, without
+-- cross-module type-shape info (#5/#837). Verifies both that the printed text round-trips AND that
+-- the reparsed term is actually a 'Term.inject' (not a 'Term.record' that merely happens to print
+-- the same way), by fingerprinting the term's own constructor tag alongside its field.
+crossModuleInjectionModule :: TypedTerm Module
+crossModuleInjectionModule = Packaging.module_
+  (Packaging.moduleName2 $ Phantoms.string "hydra.example.crossmoduleinject")
+  nothing
+  (Phantoms.list [Packaging.moduleDependency (Packaging.moduleName2 $ Phantoms.string "hydra.shapes") nothing])
+  (Phantoms.list [
+    Packaging.definitionTerm (Packaging.termDefinition (nm "hydra.example.crossmoduleinject.makeCircle") nothing nothing
+      (Core.termRecord (Core.record (nm "hydra.shapes.Shape") (Phantoms.list [unitFld "circle"]))))])
+
+crossModuleInjectionUniverse :: [(TypedTerm ModuleName, TypedTerm (S.Set Name))]
+crossModuleInjectionUniverse = [universeEntry "hydra.shapes" ["Shape"]]
+
+crossModuleInjectionUnionNames :: TypedTerm (S.Set Name)
+crossModuleInjectionUnionNames = Sets.fromList (Phantoms.list [nm "hydra.shapes.Shape"])
+
+-- | Verify the cross-module injection correction directly: parse a one-field
+-- 'hydra.shapes.Shape{circle}' construct against the union-names set and confirm the resulting
+-- term is actually a 'Term.inject', not a 'Term.record' (the grammar prints both identically, so
+-- only the parsed AST's own shape distinguishes them).
+crossModuleInjectionCorrectionTest :: TypedTerm TestCaseWithMetadata
+crossModuleInjectionCorrectionTest = universalCase
+  "a cross-module one-field construct over a KNOWN union type name parses as an injection, not a record (#5/#837)"
+  actual
+  expected
+  where
+    printed = PrintPackaging.moduleDefinitionWith @@ (Maps.fromList $ Phantoms.list [Phantoms.pair k v | (k, v) <- crossModuleInjectionUniverse]) @@ crossModuleInjectionModule
+    universeMap = Maps.fromList $ Phantoms.list [Phantoms.pair k v | (k, v) <- crossModuleInjectionUniverse]
+    actual = Eithers.either
+      (Phantoms.lambda "e" $ Phantoms.var "e")
+      (Phantoms.lambda "mod2" $ isInjectBodyOfFirstTermDef (Phantoms.var "mod2"))
+      (ParsePackaging.parseModuleWith @@ universeMap @@ crossModuleInjectionUnionNames @@ printed)
+    expected = Phantoms.string "inject"
+    isInjectBodyOfFirstTermDef m = Optionals.match
+      (Lists.head (Packaging.moduleDefinitions m))
+      (Phantoms.string "no-definitions")
+      ("d" ~> Phantoms.match _Definition (Phantoms.var "d") (Just $ Phantoms.string "not-a-term") [
+        _Definition_term>>: "td" ~> Phantoms.match _Term (Packaging.termDefinitionBody (Phantoms.var "td")) (Just $ Phantoms.string "not-record-or-inject") [
+          _Term_record>>: constant $ Phantoms.string "record",
+          _Term_inject>>: constant $ Phantoms.string "inject"]])
+
 unqualifiedNamesGroup :: TypedTermDefinition TestGroup
 unqualifiedNamesGroup = define "unqualifiedNamesGroup" $
   doc "Unqualified (bare) cross-module name printing when provably safe, and the universe-aware parser resolution that makes it round-trip (#5/#711)" $
   Testing.testGroup (string "unqualified names") nothing (list ([] :: [TypedTerm TestGroup])) (list [
     ambiguousOwnerCounterexamplePrintTest,
     ambiguousOwnerCounterexampleRoundtripTest,
+    crossModuleInjectionCorrectionTest,
+    idempotenceClashIdempotenceTest,
     ownNameCollisionPrintTest,
     ownNameCollisionRoundtripTest,
     unimportedCollisionPrintTest,
