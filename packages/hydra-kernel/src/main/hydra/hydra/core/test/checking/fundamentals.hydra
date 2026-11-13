@@ -1,0 +1,4524 @@
+## Fundamental type checking test cases: literals, variables, lambdas, applications, let terms, and primitives
+module hydra.core.test.checking.fundamentals
+
+import hydra.core.inference
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.pairs
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.scoping
+import hydra.core.test.testGraph
+import hydra.core.test.testTypes
+import hydra.core.testing
+
+term allTests =
+  TestGroup{
+    name = "Fundamentals",
+    description = none,
+    subgroups = [literalsTests, variablesTests, lambdasTests, applicationsTests, letTermsTests, primitivesTests],
+    `cases` = []}
+
+term applicationsTests =
+  TestGroup{
+    name = "Applications",
+    description = none,
+    subgroups = [
+      simpleFunctionApplicationsTests,
+      partialApplicationsTests,
+      higherOrderApplicationsTests,
+      polymorphicApplicationsTests,
+      applicationsInComplexContextsTests,
+      applicationsWithComplexArgumentsTests],
+    `cases` = []}
+
+term simpleFunctionApplicationsTests =
+  TestGroup{
+    name = "Simple function applications",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "identity application",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      application = Application{
+                        function = Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}},
+                        argument = Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "primitive application",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      application = Application{
+                        function = Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.math.add"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 10:int32}}}}},
+                        argument = Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 20:int32}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "string concatenation",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      application = Application{
+                        function = Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.strings.concat2"}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "hello"}}}},
+                        argument = Term{
+                          literal = Literal{
+                            `string` = "world"}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      `string`}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term partialApplicationsTests =
+  TestGroup{
+    name = "Partial applications",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "partially applied add",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      application = Application{
+                        function = Term{
+                          variable = Name{"hydra.core.lib.math.add"}},
+                        argument = Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 5:int32}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    function = FunctionType{
+                      domain = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}},
+                      codomain = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "partially applied string cat",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      application = Application{
+                        function = Term{
+                          variable = Name{"hydra.core.lib.strings.concat2"}},
+                        argument = Term{
+                          literal = Literal{
+                            `string` = "prefix"}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    function = FunctionType{
+                      domain = Type{
+                        literal = LiteralType{
+                          `string`}},
+                      codomain = Type{
+                        literal = LiteralType{
+                          `string`}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term higherOrderApplicationsTests =
+  TestGroup{
+    name = "Higher-order applications",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "apply function to function",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"apply"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"f"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"f"}},
+                                        argument = Term{
+                                          variable = Name{"x"}}}}}}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"double"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"n"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.math.mul"}},
+                                        argument = Term{
+                                          variable = Name{"n"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 2:int32}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"apply"}},
+                                argument = Term{
+                                  variable = Name{"double"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 5:int32}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "function composition",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"compose"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"f"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"g"},
+                                    domain = none,
+                                    body = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"x"},
+                                        domain = none,
+                                        body = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"f"}},
+                                            argument = Term{
+                                              application = Application{
+                                                function = Term{
+                                                  variable = Name{"g"}},
+                                                argument = Term{
+                                                  variable = Name{"x"}}}}}}}}}}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"add1"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"n"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.math.add"}},
+                                        argument = Term{
+                                          variable = Name{"n"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 1:int32}}}}}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"mul2"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"n"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.math.mul"}},
+                                        argument = Term{
+                                          variable = Name{"n"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 2:int32}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"compose"}},
+                                    argument = Term{
+                                      variable = Name{"add1"}}}},
+                                argument = Term{
+                                  variable = Name{"mul2"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 3:int32}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term polymorphicApplicationsTests =
+  TestGroup{
+    name = "Polymorphic applications",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "polymorphic identity",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"id"},
+                            `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          pair = (
+                              Term{
+                                application = Application{
+                                  function = Term{variable = Name{"id"}},
+                                  argument = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}},
+                              Term{
+                                application = Application{
+                                  function = Term{variable = Name{"id"}},
+                                  argument = Term{literal = Literal{`string` = "hello"}}}})}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    pair = PairType{
+                      first = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}},
+                      second = Type{
+                        literal = LiteralType{
+                          `string`}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "polymorphic const",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"const"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"y"},
+                                    domain = none,
+                                    body = Term{variable = Name{"x"}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"const"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "keep"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 999:int32}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      `string`}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "polymorphic flip",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"flip"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"f"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"y"},
+                                        domain = none,
+                                        body = Term{
+                                          application = Application{
+                                            function = Term{
+                                              application = Application{
+                                                function = Term{
+                                                  variable = Name{"f"}},
+                                                argument = Term{
+                                                  variable = Name{"y"}}}},
+                                            argument = Term{
+                                              variable = Name{"x"}}}}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"flip"}},
+                                    argument = Term{
+                                      variable = Name{"hydra.core.lib.strings.concat2"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "world"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "hello"}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      `string`}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term applicationsInComplexContextsTests =
+  TestGroup{
+    name = "Applications in complex contexts",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "application in tuple",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      pair = (
+                          Term{
+                            application = Application{
+                              function = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"hydra.core.lib.math.add"}},
+                                  argument = Term{
+                                    literal = Literal{
+                                      integer = IntegerValue{
+                                        `int32` = 1:int32}}}}},
+                              argument = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}}},
+                          Term{
+                            application = Application{
+                              function = Term{
+                                application = Application{
+                                  function = Term{
+                                    variable = Name{"hydra.core.lib.strings.concat2"}},
+                                  argument = Term{
+                                    literal = Literal{
+                                      `string` = "a"}}}},
+                              argument = Term{literal = Literal{`string` = "b"}}}})}),
+            expected = λ`_`.`type`
+                  Type{
+                    pair = PairType{
+                      first = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}},
+                      second = Type{
+                        literal = LiteralType{
+                          `string`}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "application in record",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `record` = Record{
+                        typeName = testTypePersonName,
+                        fields = [
+                          Field{
+                            name = Name{"firstName"},
+                            `term` = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.strings.concat2"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "John"}}}},
+                                argument = Term{literal = Literal{`string` = "ny"}}}}},
+                          Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Doe"}}},
+                          Field{
+                            name = Name{"age"},
+                            `term` = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.math.add"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 20:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}}]}}),
+            expected = λ`_`.`type`
+                  Type{
+                    variable = testTypePersonName}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "application in let binding",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"result"},
+                            `term` = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.math.mul"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 6:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 7:int32}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          variable = Name{"result"}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "nested applications",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      application = Application{
+                        function = Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.math.add"}},
+                            argument = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.math.mul"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 3:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 4:int32}}}}}}},
+                        argument = Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.add"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 1:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 2:int32}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term applicationsWithComplexArgumentsTests =
+  TestGroup{
+    name = "Applications with complex arguments",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "application with record argument",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"getName"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"person"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      `project` = Projection{
+                                        typeName = testTypePersonName,
+                                        fieldName = Name{"firstName"}}},
+                                    argument = Term{
+                                      variable = Name{"person"}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"getName"}},
+                            argument = Term{
+                              `record` = Record{
+                                typeName = testTypePersonName,
+                                fields = [
+                                  Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                                  Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                                  Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 25:int32}}}}]}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      `string`}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "application with list argument",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"maybeHead"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"xs"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.lists.head"}},
+                                    argument = Term{variable = Name{"xs"}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"maybeHead"}},
+                            argument = Term{
+                              `list` = [Term{literal = Literal{`string` = "first"}}, Term{literal = Literal{`string` = "second"}}]}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `optional` = Type{
+                      literal = LiteralType{
+                        `string`}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term lambdasTests =
+  TestGroup{
+    name = "Lambdas",
+    description = none,
+    subgroups = [
+      simpleLambdasTests,
+      multiParameterLambdasTests,
+      lambdasWithOperationsTests,
+      nestedLambdasTests,
+      lambdasInComplexContextsTests,
+      higherOrderLambdasTests],
+    `cases` = []}
+
+term simpleLambdasTests =
+  TestGroup{
+    name = "Simple lambdas",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "identity function",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          variable = Name{"x"}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            variable = Name{"t0"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "constant function",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term multiParameterLambdasTests =
+  TestGroup{
+    name = "Multi-parameter lambdas",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "two parameters",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"y"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"t0"}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t1"}},
+                                  codomain = Type{
+                                    variable = Name{"t0"}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "three parameters",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"y"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"z"},
+                                domain = none,
+                                body = Term{
+                                  variable = Name{"y"}}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            `forall` = ForallType{
+                              parameter = Name{"t2"},
+                              body = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t0"}},
+                                  codomain = Type{
+                                    function = FunctionType{
+                                      domain = Type{
+                                        variable = Name{"t1"}},
+                                      codomain = Type{
+                                        function = FunctionType{
+                                          domain = Type{
+                                            variable = Name{"t2"}},
+                                          codomain = Type{
+                                            variable = Name{"t1"}}}}}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "parameter reuse",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"y"},
+                            domain = none,
+                            body = Term{
+                              pair = (Term{variable = Name{"x"}}, Term{pair = (Term{variable = Name{"x"}}, Term{variable = Name{"y"}})})}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"t0"}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t1"}},
+                                  codomain = Type{
+                                    pair = PairType{
+                                      first = Type{
+                                        variable = Name{"t0"}},
+                                      second = Type{
+                                        pair = PairType{
+                                          first = Type{
+                                            variable = Name{"t0"}},
+                                          second = Type{
+                                            variable = Name{"t1"}}}}}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term lambdasWithOperationsTests =
+  TestGroup{
+    name = "Lambdas with operations",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "lambda with primitive",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.add"}},
+                                argument = Term{
+                                  variable = Name{"x"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 1:int32}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    function = FunctionType{
+                      domain = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}},
+                      codomain = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "lambda with application",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"f"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"f"}},
+                                argument = Term{
+                                  variable = Name{"x"}}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t0"}},
+                                  codomain = Type{
+                                    variable = Name{"t1"}}}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t0"}},
+                                  codomain = Type{
+                                    variable = Name{"t1"}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "lambda with construction",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"y"},
+                            domain = none,
+                            body = Term{
+                              pair = (Term{variable = Name{"x"}}, Term{variable = Name{"y"}})}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"t0"}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t1"}},
+                                  codomain = Type{
+                                    pair = PairType{
+                                      first = Type{
+                                        variable = Name{"t0"}},
+                                      second = Type{
+                                        variable = Name{"t1"}}}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term nestedLambdasTests =
+  TestGroup{
+    name = "Nested lambdas",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "lambda returning lambda",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"y"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"z"},
+                                domain = none,
+                                body = Term{
+                                  variable = Name{"x"}}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            `forall` = ForallType{
+                              parameter = Name{"t2"},
+                              body = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t0"}},
+                                  codomain = Type{
+                                    function = FunctionType{
+                                      domain = Type{
+                                        variable = Name{"t1"}},
+                                      codomain = Type{
+                                        function = FunctionType{
+                                          domain = Type{
+                                            variable = Name{"t2"}},
+                                          codomain = Type{
+                                            variable = Name{"t0"}}}}}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "lambda with let binding",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          `let` = Let{
+                            bindings = [Binding{name = Name{"y"}, `term` = Term{variable = Name{"x"}}, typeScheme = none}],
+                            body = Term{
+                              variable = Name{"y"}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            variable = Name{"t0"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "lambda with inner lambda",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"outer"},
+                        domain = none,
+                        body = Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"inner"},
+                                `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                                typeScheme = none}],
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"inner"}},
+                                argument = Term{
+                                  variable = Name{"outer"}}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            variable = Name{"t0"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term lambdasInComplexContextsTests =
+  TestGroup{
+    name = "Lambdas in complex contexts",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "lambda in tuple",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      pair = (
+                          Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}})}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        pair = PairType{
+                          first = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"t0"}},
+                              codomain = Type{
+                                variable = Name{"t0"}}}},
+                          second = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "lambda in list",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `list` = [
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.math.add"}},
+                                    argument = Term{
+                                      variable = Name{"x"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 1:int32}}}}}}},
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"y"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.math.mul"}},
+                                    argument = Term{
+                                      variable = Name{"y"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 2:int32}}}}}}}]}),
+            expected = λ`_`.`type`
+                  Type{
+                    `list` = Type{
+                      function = FunctionType{
+                        domain = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}},
+                        codomain = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "lambda in record",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"name"},
+                        domain = none,
+                        body = Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{variable = Name{"name"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Doe"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    function = FunctionType{
+                      domain = Type{
+                        literal = LiteralType{
+                          `string`}},
+                      codomain = Type{
+                        variable = testTypePersonName}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term higherOrderLambdasTests =
+  TestGroup{
+    name = "Higher-order lambdas",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "function composition",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"f"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"g"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"f"}},
+                                    argument = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"g"}},
+                                        argument = Term{
+                                          variable = Name{"x"}}}}}}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            `forall` = ForallType{
+                              parameter = Name{"t2"},
+                              body = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    function = FunctionType{
+                                      domain = Type{
+                                        variable = Name{"t0"}},
+                                      codomain = Type{
+                                        variable = Name{"t1"}}}},
+                                  codomain = Type{
+                                    function = FunctionType{
+                                      domain = Type{
+                                        function = FunctionType{
+                                          domain = Type{
+                                            variable = Name{"t2"}},
+                                          codomain = Type{
+                                            variable = Name{"t0"}}}},
+                                      codomain = Type{
+                                        function = FunctionType{
+                                          domain = Type{
+                                            variable = Name{"t2"}},
+                                          codomain = Type{
+                                            variable = Name{"t1"}}}}}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "function application",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"f"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"f"}},
+                                argument = Term{
+                                  variable = Name{"x"}}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t0"}},
+                                  codomain = Type{
+                                    variable = Name{"t1"}}}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t0"}},
+                                  codomain = Type{
+                                    variable = Name{"t1"}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "curried function",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"y"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"z"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"hydra.core.lib.logic.ifElse"}},
+                                            argument = Term{
+                                              variable = Name{"x"}}}},
+                                        argument = Term{
+                                          variable = Name{"y"}}}},
+                                    argument = Term{
+                                      variable = Name{"z"}}}}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            literal = LiteralType{
+                              `boolean`}},
+                          codomain = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"t0"}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t0"}},
+                                  codomain = Type{
+                                    variable = Name{"t0"}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term letTermsTests =
+  TestGroup{
+    name = "Let terms",
+    description = none,
+    subgroups = [
+      simpleLetBindingsTests,
+      letTermsWithShadowingTests,
+      recursiveBindingsTests,
+      mutualRecursionTests,
+      nestedLetTermsTests,
+      letWithComplexExpressionsTests],
+    `cases` = []}
+
+term simpleLetBindingsTests =
+  TestGroup{
+    name = "Simple let bindings",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "single binding",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"x"},
+                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                            typeScheme = none}],
+                        body = Term{
+                          variable = Name{"x"}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "multiple bindings",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"x"},
+                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                            typeScheme = none},
+                          Binding{name = Name{"y"}, `term` = Term{literal = Literal{`string` = "hello"}}, typeScheme = none}],
+                        body = Term{
+                          pair = (Term{variable = Name{"x"}}, Term{variable = Name{"y"}})}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    pair = PairType{
+                      first = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}},
+                      second = Type{
+                        literal = LiteralType{
+                          `string`}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term letTermsWithShadowingTests =
+  TestGroup{
+    name = "Let terms with shadowing",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "lambda parameter shadowing let binding",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"x"},
+                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                            typeScheme = none}],
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            variable = Name{"t0"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "nested lambda shadowing",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          `let` = Let{
+                            bindings = [Binding{name = Name{"y"}, `term` = Term{variable = Name{"x"}}, typeScheme = none}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  pair = (Term{variable = Name{"x"}}, Term{variable = Name{"y"}})}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"t0"}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t1"}},
+                                  codomain = Type{
+                                    pair = PairType{
+                                      first = Type{
+                                        variable = Name{"t1"}},
+                                      second = Type{
+                                        variable = Name{"t0"}}}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "multiple levels of let shadowing",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"x"},
+                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                            typeScheme = none}],
+                        body = Term{
+                          `let` = Let{
+                            bindings = [Binding{name = Name{"x"}, `term` = Term{literal = Literal{`string` = "second"}}, typeScheme = none}],
+                            body = Term{
+                              `let` = Let{
+                                bindings = [Binding{name = Name{"x"}, `term` = Term{literal = Literal{`boolean` = true}}, typeScheme = none}],
+                                body = Term{
+                                  variable = Name{"x"}}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      `boolean`}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "let shadowing with lambda and reference to outer binding",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"x"},
+                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"y"},
+                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}},
+                            typeScheme = none}],
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `let` = Let{
+                                bindings = [Binding{name = Name{"z"}, `term` = Term{variable = Name{"y"}}, typeScheme = none}],
+                                body = Term{
+                                  pair = (Term{variable = Name{"x"}}, Term{variable = Name{"z"}})}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            pair = PairType{
+                              first = Type{
+                                variable = Name{"t0"}},
+                              second = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term recursiveBindingsTests =
+  TestGroup{
+    name = "Recursive bindings",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "simple arithmetic recursion",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"double"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"n"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.math.add"}},
+                                        argument = Term{
+                                          variable = Name{"n"}}}},
+                                    argument = Term{variable = Name{"n"}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"double"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 5:int32}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term mutualRecursionTests =
+  TestGroup{
+    name = "Mutual recursion",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "mutually recursive data",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"listA"},
+                            `term` = Term{
+                              `record` = Record{
+                                typeName = testTypeBuddyListAName,
+                                fields = [
+                                  Field{name = Name{"head"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}},
+                                  Field{name = Name{"tail"}, `term` = Term{`optional` = given(Term{variable = Name{"listB"}})}}]}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"listB"},
+                            `term` = Term{
+                              `record` = Record{
+                                typeName = testTypeBuddyListBName,
+                                fields = [
+                                  Field{name = Name{"head"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}},
+                                  Field{name = Name{"tail"}, `term` = Term{`optional` = none}}]}},
+                            typeScheme = none}],
+                        body = Term{
+                          variable = Name{"listA"}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    application = ApplicationType{
+                      function = Type{
+                        variable = testTypeBuddyListAName},
+                      argument = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "(monomorphic) mutually recursive functions",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"f"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{variable = Name{"g"}},
+                                    argument = Term{variable = Name{"x"}}}}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"g"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.math.add"}},
+                                        argument = Term{
+                                          variable = Name{"y"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 1:int32}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"f"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 5:int32}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term nestedLetTermsTests =
+  TestGroup{
+    name = "Nested let terms",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "monomorphic nesting",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"x"},
+                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                            typeScheme = none}],
+                        body = Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"y"},
+                                `term` = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.math.add"}},
+                                        argument = Term{
+                                          variable = Name{"x"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 2:int32}}}}},
+                                typeScheme = none}],
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"z"},
+                                    `term` = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"hydra.core.lib.math.mul"}},
+                                            argument = Term{
+                                              variable = Name{"y"}}}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            integer = IntegerValue{
+                                              `int32` = 3:int32}}}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  variable = Name{"z"}}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "polymorphic nesting",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"id"},
+                            `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"apply"},
+                                `term` = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"f"},
+                                    domain = none,
+                                    body = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"x"},
+                                        domain = none,
+                                        body = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"f"}},
+                                            argument = Term{
+                                              variable = Name{"x"}}}}}}}},
+                                typeScheme = none}],
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"apply"}},
+                                    argument = Term{
+                                      variable = Name{"id"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "test"}}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      `string`}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "variable capture avoidance",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"x"},
+                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                            typeScheme = none}],
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `let` = Let{
+                                bindings = [Binding{name = Name{"y"}, `term` = Term{variable = Name{"x"}}, typeScheme = none}],
+                                body = Term{
+                                  variable = Name{"y"}}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            variable = Name{"t0"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "simple let in lambda",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"z"},
+                        domain = none,
+                        body = Term{
+                          `let` = Let{
+                            bindings = [Binding{name = Name{"y"}, `term` = Term{variable = Name{"z"}}, typeScheme = none}],
+                            body = Term{
+                              variable = Name{"y"}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            variable = Name{"t0"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term letWithComplexExpressionsTests =
+  TestGroup{
+    name = "Let with complex expressions",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "let in record",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `record` = Record{
+                        typeName = testTypePersonName,
+                        fields = [
+                          Field{
+                            name = Name{"firstName"},
+                            `term` = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{name = Name{"first"}, `term` = Term{literal = Literal{`string` = "John"}}, typeScheme = none},
+                                  Binding{name = Name{"middle"}, `term` = Term{literal = Literal{`string` = "Q"}}, typeScheme = none}],
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.strings.concat2"}},
+                                        argument = Term{
+                                          variable = Name{"first"}}}},
+                                    argument = Term{variable = Name{"middle"}}}}}}},
+                          Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Doe"}}},
+                          Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}),
+            expected = λ`_`.`type`
+                  Type{
+                    variable = testTypePersonName}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "let in function application",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"x"},
+                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 5:int32}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"y"},
+                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}},
+                            typeScheme = none}],
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.math.add"}},
+                                argument = Term{
+                                  variable = Name{"x"}}}},
+                            argument = Term{
+                              variable = Name{"y"}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "polymorphic let binding",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"id"},
+                            `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          pair = (
+                              Term{
+                                application = Application{
+                                  function = Term{variable = Name{"id"}},
+                                  argument = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}},
+                              Term{
+                                application = Application{
+                                  function = Term{variable = Name{"id"}},
+                                  argument = Term{literal = Literal{`string` = "hello"}}}})}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    pair = PairType{
+                      first = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}},
+                      second = Type{
+                        literal = LiteralType{
+                          `string`}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "composition",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"compose"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"f"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"g"},
+                                    domain = none,
+                                    body = Term{
+                                      lambda = Lambda{
+                                        parameter = Name{"x"},
+                                        domain = none,
+                                        body = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"f"}},
+                                            argument = Term{
+                                              application = Application{
+                                                function = Term{
+                                                  variable = Name{"g"}},
+                                                argument = Term{
+                                                  variable = Name{"x"}}}}}}}}}}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"add1"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"n"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.math.add"}},
+                                        argument = Term{
+                                          variable = Name{"n"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 1:int32}}}}}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"double"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"n"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.math.mul"}},
+                                        argument = Term{
+                                          variable = Name{"n"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 2:int32}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"compose"}},
+                                    argument = Term{
+                                      variable = Name{"add1"}}}},
+                                argument = Term{
+                                  variable = Name{"double"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 5:int32}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term literalsTests =
+  TestGroup{
+    name = "Literals",
+    description = none,
+    subgroups = [
+      booleanLiteralsTests,
+      stringLiteralsTests,
+      integerLiteralsTests,
+      floatLiteralsTests,
+      binaryLiteralsTests,
+      literalsInComplexContextsTests],
+    `cases` = []}
+
+term booleanLiteralsTests =
+  TestGroup{
+    name = "Boolean literals",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "true",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        `boolean` = true}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      `boolean`}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "false",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        `boolean` = false}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      `boolean`}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term stringLiteralsTests =
+  TestGroup{
+    name = "String literals",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "simple string",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        `string` = "hello"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      `string`}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "empty string",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        `string` = ""}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      `string`}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "unicode string",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        `string` = "café"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      `string`}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term integerLiteralsTests =
+  TestGroup{
+    name = "Integer literals",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "bigint",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        integer = IntegerValue{
+                          `bigint` = 42:bigint}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `bigint`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "int8",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        integer = IntegerValue{
+                          `int8` = 127:int8}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int8`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "int16",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        integer = IntegerValue{
+                          `int16` = 32767:int16}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int16`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "int32",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        integer = IntegerValue{
+                          `int32` = 2147483647:int32}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "int64",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        integer = IntegerValue{
+                          `int64` = 9223372036854775807:int64}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int64`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "uint8",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        integer = IntegerValue{
+                          `uint8` = 255:uint8}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `uint8`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "uint16",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        integer = IntegerValue{
+                          `uint16` = 65535:uint16}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `uint16`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "uint32",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        integer = IntegerValue{
+                          `uint32` = 4294967295:uint32}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `uint32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "uint64",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        integer = IntegerValue{
+                          `uint64` = 18446744073709551615:uint64}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `uint64`}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term floatLiteralsTests =
+  TestGroup{
+    name = "Float literals",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "float32",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        float = FloatValue{
+                          `float32` = 2.71828:float32}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      float = FloatType{
+                        `float32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "float64",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        float = FloatValue{
+                          `float64` = 1.41421:float64}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      float = FloatType{
+                        `float64`}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term binaryLiteralsTests =
+  TestGroup{
+    name = "Binary literals",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "binary",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      literal = Literal{
+                        `binary` = "SGVsbG8gV29ybGQ=":binary}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      `binary`}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term literalsInComplexContextsTests =
+  TestGroup{
+    name = "Literals in complex contexts",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "literals in tuple",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      pair = (
+                          Term{literal = Literal{`boolean` = true}},
+                          Term{
+                            pair = (
+                                Term{literal = Literal{`string` = "test"}},
+                                Term{
+                                  pair = (
+                                      Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                                      Term{literal = Literal{float = FloatValue{`float32` = 3.14:float32}}})})})}),
+            expected = λ`_`.`type`
+                  Type{
+                    pair = PairType{
+                      first = Type{
+                        literal = LiteralType{
+                          `boolean`}},
+                      second = Type{
+                        pair = PairType{
+                          first = Type{
+                            literal = LiteralType{
+                              `string`}},
+                          second = Type{
+                            pair = PairType{
+                              first = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}},
+                              second = Type{
+                                literal = LiteralType{
+                                  float = FloatType{
+                                    `float32`}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "literals in list",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `list` = [
+                        Term{literal = Literal{`string` = "one"}},
+                        Term{literal = Literal{`string` = "two"}},
+                        Term{literal = Literal{`string` = "three"}}]}),
+            expected = λ`_`.`type`
+                  Type{
+                    `list` = Type{
+                      literal = LiteralType{
+                        `string`}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term primitivesTests =
+  TestGroup{
+    name = "Primitives",
+    description = none,
+    subgroups = [
+      nullaryPrimitivesTests,
+      unaryPrimitivesTests,
+      binaryPrimitivesTests,
+      ternaryPrimitivesTests,
+      monomorphicVsPolymorphicTests,
+      higherOrderPrimitivesTests,
+      primitivesInComplexContextsTests],
+    `cases` = []}
+
+term nullaryPrimitivesTests =
+  TestGroup{
+    name = "Nullary primitives",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "empty map",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.maps.empty"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            `map` = MapType{
+                              keys = Type{
+                                variable = Name{"t0"}},
+                              values = Type{
+                                variable = Name{"t1"}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "empty set",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.sets.empty"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `set` = Type{
+                          variable = Name{"t0"}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term unaryPrimitivesTests =
+  TestGroup{
+    name = "Unary primitives",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "lists maybeHead",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.lists.head"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            `list` = Type{
+                              variable = Name{"t0"}}},
+                          codomain = Type{
+                            `optional` = Type{
+                              variable = Name{"t0"}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "math neg",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.math.negate"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            variable = Name{"t0"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "logic not",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.logic.not"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    function = FunctionType{
+                      domain = Type{
+                        literal = LiteralType{
+                          `boolean`}},
+                      codomain = Type{
+                        literal = LiteralType{
+                          `boolean`}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term binaryPrimitivesTests =
+  TestGroup{
+    name = "Binary primitives",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "math add",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.math.add"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"t0"}},
+                              codomain = Type{
+                                variable = Name{"t0"}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "lists cons",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.lists.cons"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                `list` = Type{
+                                  variable = Name{"t0"}}},
+                              codomain = Type{
+                                `list` = Type{
+                                  variable = Name{"t0"}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "maps insert",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.maps.insert"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"t0"}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t1"}},
+                                  codomain = Type{
+                                    function = FunctionType{
+                                      domain = Type{
+                                        `map` = MapType{
+                                          keys = Type{
+                                            variable = Name{"t0"}},
+                                          values = Type{
+                                            variable = Name{"t1"}}}},
+                                      codomain = Type{
+                                        `map` = MapType{
+                                          keys = Type{
+                                            variable = Name{"t0"}},
+                                          values = Type{
+                                            variable = Name{"t1"}}}}}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term ternaryPrimitivesTests =
+  TestGroup{
+    name = "Ternary primitives",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "logic ifElse",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.logic.ifElse"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            literal = LiteralType{
+                              `boolean`}},
+                          codomain = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"t0"}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t0"}},
+                                  codomain = Type{
+                                    variable = Name{"t0"}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "lists foldl",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.lists.foldl"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t0"}},
+                                  codomain = Type{
+                                    function = FunctionType{
+                                      domain = Type{
+                                        variable = Name{"t1"}},
+                                      codomain = Type{
+                                        variable = Name{"t0"}}}}}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t0"}},
+                                  codomain = Type{
+                                    function = FunctionType{
+                                      domain = Type{
+                                        `list` = Type{
+                                          variable = Name{"t1"}}},
+                                      codomain = Type{
+                                        variable = Name{"t0"}}}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term monomorphicVsPolymorphicTests =
+  TestGroup{
+    name = "Monomorphic vs polymorphic",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "monomorphic math",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.math.sqrt"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    function = FunctionType{
+                      domain = Type{
+                        literal = LiteralType{
+                          float = FloatType{
+                            `float64`}}},
+                      codomain = Type{
+                        literal = LiteralType{
+                          float = FloatType{
+                            `float64`}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "polymorphic identity",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.functions.identity"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            variable = Name{"t0"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "polymorphic map",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.lists.map"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t0"}},
+                                  codomain = Type{
+                                    variable = Name{"t1"}}}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    `list` = Type{
+                                      variable = Name{"t0"}}},
+                                  codomain = Type{
+                                    `list` = Type{
+                                      variable = Name{"t1"}}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term higherOrderPrimitivesTests =
+  TestGroup{
+    name = "Higher-order primitives",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "lists map function",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      application = Application{
+                        function = Term{
+                          variable = Name{"hydra.core.lib.lists.map"}},
+                        argument = Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.math.add"}},
+                                    argument = Term{
+                                      variable = Name{"x"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 1:int32}}}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    function = FunctionType{
+                      domain = Type{
+                        `list` = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}},
+                      codomain = Type{
+                        `list` = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "lists filter",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.lists.filter"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"t0"}},
+                              codomain = Type{
+                                literal = LiteralType{
+                                  `boolean`}}}},
+                          codomain = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                `list` = Type{
+                                  variable = Name{"t0"}}},
+                              codomain = Type{
+                                `list` = Type{
+                                  variable = Name{"t0"}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "optionals cases",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.optionals.match"}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                `optional` = Type{
+                                  variable = Name{"t0"}}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t1"}},
+                                  codomain = Type{
+                                    function = FunctionType{
+                                      domain = Type{
+                                        function = FunctionType{
+                                          domain = Type{
+                                            variable = Name{"t0"}},
+                                          codomain = Type{
+                                            variable = Name{"t1"}}}},
+                                      codomain = Type{
+                                        variable = Name{"t1"}}}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term primitivesInComplexContextsTests =
+  TestGroup{
+    name = "Primitives in complex contexts",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "primitive composition",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"double"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.math.mul"}},
+                                        argument = Term{
+                                          variable = Name{"x"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 2:int32}}}}}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"increment"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.math.add"}},
+                                        argument = Term{
+                                          variable = Name{"x"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 1:int32}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.lists.map"}},
+                                argument = Term{
+                                  variable = Name{"double"}}}},
+                            argument = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.lists.map"}},
+                                    argument = Term{
+                                      variable = Name{"increment"}}}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `list` = Type{
+                      literal = LiteralType{
+                        integer = IntegerType{
+                          `int32`}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "nested higher-order",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      application = Application{
+                        function = Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.lists.map"}},
+                            argument = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.lists.map"}},
+                                argument = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.math.add"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 1:int32}}}}}}}}},
+                        argument = Term{
+                          `list` = [
+                            Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]},
+                            Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 4:int32}}}]}]}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `list` = Type{
+                      `list` = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term variablesTests =
+  TestGroup{
+    name = "Variables",
+    description = none,
+    subgroups = [
+      simpleVariableLookupTests,
+      variableScopingTests,
+      polymorphicVariablesTests,
+      variablesInComplexContextsTests,
+      recursiveVariablesTests],
+    `cases` = []}
+
+term simpleVariableLookupTests =
+  TestGroup{
+    name = "Simple variable lookup",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "int variable",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          variable = Name{"x"}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            variable = Name{"t0"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "variable in let binding",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"x"},
+                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                            typeScheme = none}],
+                        body = Term{
+                          variable = Name{"x"}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "multiple variables",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{name = Name{"x"}, `term` = Term{literal = Literal{`string` = "hello"}}, typeScheme = none},
+                          Binding{
+                            name = Name{"y"},
+                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}},
+                            typeScheme = none}],
+                        body = Term{
+                          pair = (Term{variable = Name{"x"}}, Term{variable = Name{"y"}})}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    pair = PairType{
+                      first = Type{
+                        literal = LiteralType{
+                          `string`}},
+                      second = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term variableScopingTests =
+  TestGroup{
+    name = "Variable scoping",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "lambda parameter",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"y"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"t0"}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t1"}},
+                                  codomain = Type{
+                                    variable = Name{"t0"}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "let binding scope",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"x"},
+                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                            typeScheme = none}],
+                        body = Term{
+                          `let` = Let{
+                            bindings = [Binding{name = Name{"y"}, `term` = Term{literal = Literal{`string` = "hello"}}, typeScheme = none}],
+                            body = Term{
+                              variable = Name{"x"}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    literal = LiteralType{
+                      integer = IntegerType{
+                        `int32`}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "variable shadowing",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"x"},
+                            `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                            typeScheme = none}],
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            variable = Name{"t0"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "nested scoping",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          `let` = Let{
+                            bindings = [Binding{name = Name{"y"}, `term` = Term{variable = Name{"x"}}, typeScheme = none}],
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"z"},
+                                domain = none,
+                                body = Term{
+                                  pair = (Term{variable = Name{"x"}}, Term{pair = (Term{variable = Name{"y"}}, Term{variable = Name{"z"}})})}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"t0"}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t1"}},
+                                  codomain = Type{
+                                    pair = PairType{
+                                      first = Type{
+                                        variable = Name{"t0"}},
+                                      second = Type{
+                                        pair = PairType{
+                                          first = Type{
+                                            variable = Name{"t0"}},
+                                          second = Type{
+                                            variable = Name{"t1"}}}}}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term polymorphicVariablesTests =
+  TestGroup{
+    name = "Polymorphic variables",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "polymorphic function",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"id"},
+                            `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          variable = Name{"id"}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            variable = Name{"t0"}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "polymorphic application",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"id"},
+                            `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          pair = (
+                              Term{
+                                application = Application{
+                                  function = Term{variable = Name{"id"}},
+                                  argument = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}},
+                              Term{
+                                application = Application{
+                                  function = Term{variable = Name{"id"}},
+                                  argument = Term{literal = Literal{`string` = "test"}}}})}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    pair = PairType{
+                      first = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}},
+                      second = Type{
+                        literal = LiteralType{
+                          `string`}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "higher order polymorphic",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"apply"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"f"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"f"}},
+                                        argument = Term{
+                                          variable = Name{"x"}}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          variable = Name{"apply"}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t0"}},
+                                  codomain = Type{
+                                    variable = Name{"t1"}}}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t0"}},
+                                  codomain = Type{
+                                    variable = Name{"t1"}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term variablesInComplexContextsTests =
+  TestGroup{
+    name = "Variables in complex contexts",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "variable in record",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"name"},
+                        domain = none,
+                        body = Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{variable = Name{"name"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Doe"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 25:int32}}}}]}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    function = FunctionType{
+                      domain = Type{
+                        literal = LiteralType{
+                          `string`}},
+                      codomain = Type{
+                        variable = testTypePersonName}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "variable in list",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          `list` = [Term{variable = Name{"x"}}, Term{variable = Name{"x"}}]}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            `list` = Type{
+                              variable = Name{"t0"}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "variable in map",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"key"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"value"},
+                            domain = none,
+                            body = Term{
+                              `map` = {
+                                Term{variable = Name{"key"}}=Term{variable = Name{"value"}}}}}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t1"},
+                          body = Type{
+                            function = FunctionType{
+                              domain = Type{
+                                variable = Name{"t0"}},
+                              codomain = Type{
+                                function = FunctionType{
+                                  domain = Type{
+                                    variable = Name{"t1"}},
+                                  codomain = Type{
+                                    `map` = MapType{
+                                      keys = Type{
+                                        variable = Name{"t0"}},
+                                      values = Type{
+                                        variable = Name{"t1"}}}}}}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "variable in optional",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          `optional` = given(Term{
+                              variable = Name{"x"}})}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    `forall` = ForallType{
+                      parameter = Name{"t0"},
+                      body = Type{
+                        function = FunctionType{
+                          domain = Type{
+                            variable = Name{"t0"}},
+                          codomain = Type{
+                            `optional` = Type{
+                              variable = Name{"t0"}}}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term recursiveVariablesTests =
+  TestGroup{
+    name = "Recursive variables",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "simple recursion",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"f"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.math.add"}},
+                                        argument = Term{
+                                          variable = Name{"x"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 1:int32}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          variable = Name{"f"}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    function = FunctionType{
+                      domain = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}},
+                      codomain = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "mutual recursion",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe."<<inference error>>")
+                  (λresult.`type`
+                      (typeSchemeToFType
+                        (second (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"f"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{variable = Name{"g"}},
+                                    argument = Term{variable = Name{"x"}}}}}},
+                            typeScheme = none},
+                          Binding{
+                            name = Name{"g"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.math.add"}},
+                                        argument = Term{
+                                          variable = Name{"y"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 1:int32}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          variable = Name{"f"}}}}),
+            expected = λ`_`.`type`
+                  Type{
+                    function = FunctionType{
+                      domain = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}},
+                      codomain = Type{
+                        literal = LiteralType{
+                          integer = IntegerType{
+                            `int32`}}}}}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
