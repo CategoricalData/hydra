@@ -53,13 +53,45 @@
 # JSON string without bloating the digest file.
 #
 # See #347 (Merkle cache invalidation) and #370 (external versioned hosts).
+# Identity of the coder copy the ACTIVE generator host actually executes (#831). component_identity
+# fingerprints the coder's *authoring* source (e.g. coder.py), but a non-native generator host runs the
+# coder compiled from the generated tree dist/<gen_host>/<coder-pkg> (e.g. the Java copy of the Python coder
+# generates dist/python). Without this component, a python-only sync after a coder.py edit changes the
+# source identity, regenerates with the STALE Java copy, and records that stale output as fresh under the
+# new stamp; refreshing the Java copy later changes nothing the stamp sees. Hashing the copy makes the
+# later java sync invalidate the dependent target. Absent copy (published-host mode) hashes as "absent".
+generator_coder_copy_identity() {
+    local coder_pkg="$1" gen_host
+    gen_host="${GENERATOR_HOST:-$(generator_config '.default')}"
+    [ -n "$gen_host" ] || { echo "generator_coder_copy_identity: no generator host" >&2; return 1; }
+    local dir="$HYDRA_ROOT_DIR/dist/$gen_host/$coder_pkg/src/main"
+    if [ ! -d "$dir" ]; then
+        printf 'absent'
+        return
+    fi
+    find "$dir" -type f 2>/dev/null | LC_ALL=C sort | xargs cat 2>/dev/null | shasum -a 256 | awk '{print $1}'
+}
+
+# Loudly warn when the generator host's compiled copy of <coder-pkg> is older than the coder's current
+# input digest (the python-only-sync-after-coder-edit case, #831): output generated now would use a stale coder.
+warn_if_generator_coder_stale() {
+    local coder_pkg="$1" gen_host
+    gen_host="${GENERATOR_HOST:-$(generator_config '.default')}"
+    local in_digest="$HYDRA_ROOT_DIR/dist/json/$coder_pkg/build/main/digest.json"
+    local copy_digest="$HYDRA_ROOT_DIR/dist/$gen_host/$coder_pkg/build/main/digest.json"
+    if [ -f "$in_digest" ] && [ -f "$copy_digest" ] && [ "$in_digest" -nt "$copy_digest" ]; then
+        echo "WARNING: the $gen_host copy of $coder_pkg (dist/$gen_host/$coder_pkg) is older than its source;" >&2
+        echo "         generation will run a STALE coder. Run: bin/sync.sh --hosts $gen_host --targets $gen_host (#831)" >&2
+    fi
+}
+
 compute_generator_stamp() {
     local lang="$1"
     # #559: coder package is consumer config (languages.<lang>.coderPackage), not a hardcoded
     # case — lisp dialects declare "hydra-lisp" as data, a novel host declares its own.
     local coder_pkg
     coder_pkg="$(language_config "$lang" coderPackage)"
-    local kernel_id coder_id
+    local kernel_id coder_id copy_id
     # Assigned separately (not inline in printf) so a component_identity
     # failure — e.g. an empty DSL-source fingerprint set (#562) — actually
     # trips `set -e` in the caller, instead of silently hashing an empty
@@ -67,9 +99,11 @@ compute_generator_stamp() {
     # failing $(cmd) under set -e; a plain assignment does.
     kernel_id="$(component_identity hydra-kernel)"
     coder_id="$(component_identity "$coder_pkg")"
+    copy_id="$(generator_coder_copy_identity "$coder_pkg")"
     {
         printf 'kernel:%s\n'  "$kernel_id"
         printf 'coder:%s\n'   "$coder_id"
+        printf 'coder-copy:%s\n' "$copy_id"
         printf 'runtime:%s\n' "$(runtime_identity "$lang")"
         printf 'driver:%s\n'  "$(driver_identity)"
     } | shasum -a 256 | awk '{print substr($1,1,16)}'

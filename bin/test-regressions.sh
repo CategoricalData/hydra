@@ -62,6 +62,7 @@ SCRIPTS=(
     "test-digest-conformance.sh"
     "test-build-host-independence.sh"
     "test-generator-config-conformance.sh"
+    "test-generator-stamp-coder-copy.sh"
     "test-decimal-scale-conformance.sh"
     "test-inference-cost-guard.sh"
 )
