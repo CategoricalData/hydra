@@ -96,6 +96,8 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Parsers for hydra.core.packaging types")}
   where
    definitions = [
+     toDefinition correctCrossModuleInjectionsInDefinition,
+     toDefinition correctCrossModuleInjectionsInTerm,
      toDefinition correctInjectionsInDefinition,
      toDefinition correctInjectionsInTerm,
      toDefinition definitionParser,
@@ -750,8 +752,11 @@ resolveNameRefsInTermWith = define "resolveNameRefsInTermWith" $
     _Term_pair>>: "p" ~> Eithers.bind (var "recurse" @@ var "bound" @@ (Pairs.first $ var "p"))
       ("f" ~> Eithers.map ("s" ~> Core.termPair $ pair (var "f") (var "s")) (var "recurse" @@ var "bound" @@ (Pairs.second $ var "p"))),
     _Term_project>>: "p" ~>
-      "tn" <<~ var "resolveN" @@ (Core.projectionTypeName $ var "p") $
-      Eithers.map ("fn" ~> Core.termProject $ Core.projection (var "tn") (var "fn")) (var "resolveN" @@ (Core.projectionFieldName $ var "p")),
+      -- The field name is a row-type field label, not a module-level reference (unlike the type
+      -- name) -- it must be left untouched, mirroring 'expandAliasesInTerm's own (pre-existing)
+      -- bug-for-bug-compatible-but-harmless handling there; here it would hard-error instead of
+      -- silently no-oping, so the fix is load-bearing.
+      Eithers.map ("tn" ~> Core.termProject $ Core.projection (var "tn") (Core.projectionFieldName $ var "p")) (var "resolveN" @@ (Core.projectionTypeName $ var "p")),
     _Term_record>>: "r" ~>
       "tn" <<~ var "resolveN" @@ (Core.recordTypeName $ var "r") $
       Eithers.map
@@ -840,7 +845,12 @@ resolveNameRefsInTermSignatureWith :: TypedTermDefinition (ModuleName -> S.Set S
 resolveNameRefsInTermSignatureWith = define "resolveNameRefsInTermSignatureWith" $
   doc "Resolve bare name references inside a term signature's parameter and result types against the printer's universe" $
   "modName" ~> "ownNames" ~> "universe" ~> "sig" ~>
-  "resolveT" <~ (resolveNameRefsInTypeWith @@ var "modName" @@ var "ownNames" @@ var "universe" @@ (Sets.empty :: TypedTerm (S.Set String))) $
+  -- The signature's own '∀'-bound type parameters (e.g. 'bimap : ∀a,b,c,d. ...') are in scope
+  -- throughout its parameter/result types -- seeded here, mirroring 'resolveNameRefsInDefinitionWith's
+  -- 'resolveScheme' handling of a type definition's 'TypeScheme.variables' the same way. Leaving this
+  -- empty (the pre-fix bug) treated every type parameter as an unresolvable nominal reference.
+  "boundNames" <~ Sets.fromList (Lists.map ("tp" ~> Core.unName (Typing.typeParameterName $ var "tp")) (Typing.termSignatureTypeParameters $ var "sig")) $
+  "resolveT" <~ (resolveNameRefsInTypeWith @@ var "modName" @@ var "ownNames" @@ var "universe" @@ (var "boundNames" :: TypedTerm (S.Set String))) $
   "mapParam" <~ ("p" ~> Eithers.map
     ("t" ~> Typing.parameter (Typing.parameterName $ var "p") (Typing.parameterDescription $ var "p") (var "t") (Typing.parameterIsLazy $ var "p"))
     (var "resolveT" @@ (Typing.parameterType $ var "p"))) $
@@ -906,10 +916,21 @@ resolveNameRefsInDefinitionWith = define "resolveNameRefsInDefinitionWith" $
 -- caller to separately narrow 'universe' down to "the original module's own imports" out of band
 -- (that context only exists while a non-textual source of truth is still around; after '.hydra'
 -- ingestion lands, there is no "original module" to ask -- only this file's own text).
-parseModuleWith :: TypedTermDefinition (M.Map ModuleName (S.Set Name) -> String -> Either String Module)
+-- | 'parseModuleWith', additionally given the set of every fully-qualified UNION type name across
+-- the whole universe (#5/#837), so a cross-module one-field construct (e.g.
+-- 'variants.LiteralVariant{binary}', a union defined in ANOTHER module) parses as an injection
+-- rather than a mis-parsed record. 'correctInjectionsInTerm' (run inside 'parseModule', before this
+-- function ever sees the parsed 'Module') only has the printed module's OWN type definitions to
+-- consult, so it cannot tell a cross-module union from a cross-module record; this pass runs AFTER
+-- bare-name resolution (so every type name reaching it is already fully qualified) and corrects
+-- exactly the cases 'correctInjectionsInTerm' could not -- an own-module union was already
+-- corrected by the first pass and is a no-op here (its one-field record is already an injection).
+-- An empty 'unionTypeNames' set is a no-op, matching 'parseModuleWith's own empty-universe
+-- degenerate case.
+parseModuleWith :: TypedTermDefinition (M.Map ModuleName (S.Set Name) -> S.Set Name -> String -> Either String Module)
 parseModuleWith = define "parseModuleWith" $
-  doc "Parse a complete module from a string, resolving bare name references against the file's own recovered imports, using the given universe only to look up each import's declared names (#5/#711)" $
-  "universe" ~> "input" ~>
+  doc "Parse a complete module from a string, resolving bare name references and cross-module union injections against the universe (#5/#711/#837)" $
+  "universe" ~> "unionTypeNames" ~> "input" ~>
   "parsed" <<~ parseModule @@ var "input" $
   "modName" <~ Packaging.moduleName (var "parsed") $
   "ownNames" <~ Sets.fromList (Lists.map
@@ -926,7 +947,8 @@ parseModuleWith = define "parseModuleWith" $
     ("nm" ~> Optionals.map ("declared" ~> pair (var "nm") (var "declared")) (Maps.lookup (var "nm") (var "universe" :: TypedTerm (M.Map ModuleName (S.Set Name)))))
     (var "declaredImportModNames"))) $
   "rdefs" <<~ Eithers.mapList (resolveNameRefsInDefinitionWith @@ var "modName" @@ var "ownNames" @@ (var "scopedUniverse" :: TypedTerm (M.Map ModuleName (S.Set Name)))) (Packaging.moduleDefinitions $ var "parsed") $
-  right (Packaging.module_ (var "modName") (Packaging.moduleMetadata $ var "parsed") (Packaging.moduleDependencies $ var "parsed") (var "rdefs"))
+  "cdefs" <~ Lists.map (correctCrossModuleInjectionsInDefinition @@ (var "unionTypeNames" :: TypedTerm (S.Set Name))) (var "rdefs") $
+  right (Packaging.module_ (var "modName") (Packaging.moduleMetadata $ var "parsed") (Packaging.moduleDependencies $ var "parsed") (var "cdefs"))
 
 -- | True iff a type, once stripped of its 'forall' quantifiers and annotations, is a union type
 -- (#809). Used to decide whether a one-field record-style construct over this type name is actually
@@ -991,6 +1013,54 @@ correctInjectionsInDefinition = define "correctInjectionsInDefinition" $
   doc "Apply the record->injection correction to a definition's term bodies, per the type env (#809)" $
   "env" ~> "def" ~>
   "correct" <~ (correctInjectionsInTerm @@ (var "env" :: TypedTerm (M.Map Name Type))) $
+  match _Definition (var "def") Nothing [
+    _Definition_type>>: constant $ var "def",
+    _Definition_term>>: "td" ~> Packaging.definitionTerm (Packaging.termDefinition
+      (Packaging.termDefinitionName $ var "td") (Packaging.termDefinitionMetadata $ var "td")
+      (Packaging.termDefinitionSignature $ var "td")
+      (var "correct" @@ (Packaging.termDefinitionBody $ var "td"))),
+    _Definition_primitive>>: "pd" ~> Packaging.definitionPrimitive (Packaging.primitiveDefinition
+      (Packaging.primitiveDefinitionName $ var "pd") (Packaging.primitiveDefinitionMetadata $ var "pd")
+      (Packaging.primitiveDefinitionSignature $ var "pd")
+      (Packaging.primitiveDefinitionIsPure $ var "pd") (Packaging.primitiveDefinitionIsTotal $ var "pd")
+      (Optionals.map (var "correct") (Packaging.primitiveDefinitionDefaultImplementation $ var "pd")))]
+
+-- | Rewrite a one-field 'Term.record' whose type name is a KNOWN UNION NAME (from the given set of
+-- fully-qualified union type names, #5/#837) into a 'Term.inject' -- the cross-module counterpart
+-- of 'correctInjectionsInTerm', which only sees the printed module's OWN type definitions and so
+-- cannot tell a cross-module union from a cross-module record (a bare one-field
+-- 'variants.LiteralVariant{binary}' construct stays a mis-parsed record forever without this).
+-- Compares the (already fully-qualified, post-alias-expansion) type name directly against the set
+-- -- no local-name stripping, since by the time 'parseModuleWith' runs this pass every name in the
+-- term is already fully qualified (own-module bare references were left bare on purpose and so
+-- never match a cross-module union's fully-qualified name here, which is correct: a bare reference
+-- can only mean an OWN definition or an unqualified import, never literally match a dotted name).
+correctCrossModuleInjectionsInTerm :: TypedTermDefinition (S.Set Name -> Term -> Term)
+correctCrossModuleInjectionsInTerm = define "correctCrossModuleInjectionsInTerm" $
+  doc "Rewrite a one-field record over a KNOWN cross-module union type name into an injection (#5/#837)" $
+  "unionNames" ~> "t0" ~>
+  "rewrite" <~ ("recurse" ~> "term" ~>
+    match _Term (var "term")
+      (Just $ var "recurse" @@ var "term") [
+      _Term_record>>: "r" ~>
+        "tname" <~ Core.recordTypeName (var "r") $
+        "flds" <~ Core.recordFields (var "r") $
+        Logic.ifElse
+          (Logic.and (Sets.member (var "tname" :: TypedTerm Name) (var "unionNames" :: TypedTerm (S.Set Name)))
+            (Equality.equal (Lists.length $ var "flds") (int32 1)))
+          (Optionals.match (Lists.head $ var "flds")
+            (var "recurse" @@ var "term")
+            ("f" ~> var "recurse" @@ (Core.termInject (Core.injection (var "tname") (var "f")))))
+          (var "recurse" @@ var "term")]) $
+  Rewriting.rewriteTerm @@ var "rewrite" @@ var "t0"
+
+-- | Apply 'correctCrossModuleInjectionsInTerm' to a definition's term-bearing bodies, mirroring
+-- 'correctInjectionsInDefinition' (#5/#837).
+correctCrossModuleInjectionsInDefinition :: TypedTermDefinition (S.Set Name -> Definition -> Definition)
+correctCrossModuleInjectionsInDefinition = define "correctCrossModuleInjectionsInDefinition" $
+  doc "Apply the cross-module record->injection correction to a definition's term bodies (#5/#837)" $
+  "unionNames" ~> "def" ~>
+  "correct" <~ (correctCrossModuleInjectionsInTerm @@ (var "unionNames" :: TypedTerm (S.Set Name))) $
   match _Definition (var "def") Nothing [
     _Definition_type>>: constant $ var "def",
     _Definition_term>>: "td" ~> Packaging.definitionTerm (Packaging.termDefinition

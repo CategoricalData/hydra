@@ -205,11 +205,33 @@ lexeme = define "lexeme" $
     P.bind @@ P.markTokenEnd @@ (constant $
       P.bind @@ whitespace @@ (constant $ P.pure @@ var "x")))
 
--- | Parse a specific keyword as a lexeme.
+-- | Parse a specific keyword as a lexeme, requiring a word boundary for WORD-shaped keywords
+-- (ones whose own last character is itself a bare-name-segment character, e.g. "unit", "wrap",
+-- "left" -- as opposed to PUNCTUATION keywords like "(", "{", "," used as delimiters, which carry
+-- no such ambiguity and must NOT be boundary-checked, since the character immediately following a
+-- delimiter is routinely alphanumeric, e.g. the 'e' of "example" right after "wrap("'s own "("
+-- keyword). Without the word-boundary check on WORD keywords, matching the literal string "unit"
+-- against input "unitVariant" succeeds (consuming just "unit"), leaving "Variant" as leftover
+-- input that the surrounding grammar then tries to parse as a SEPARATE term/argument -- a real
+-- bug caught by #5/#837's cross-module injection work (a term calling 'unitVariant' silently
+-- mis-tokenized into 'unit' applied to a bare 'Variant' reference, which then failed to resolve).
+-- 'P.optional (P.satisfy bareNameSegmentChar)' peeks at the next character; if present (and 'kw'
+-- is word-shaped), the whole keyword parser fails (even though the keyword string itself matched)
+-- so the caller's surrounding 'P.try' backtracks to the 'name' fallback, which correctly reads
+-- "unitVariant" as one greedy token (mirrors 'isReservedWord's own EXACT-match philosophy: a
+-- keyword only counts as a keyword in isolation, never as a prefix of a longer identifier).
 termKeyword :: TypedTermDefinition (String -> Parser String)
 termKeyword = define "termKeyword" $
-  doc "Parse a specific keyword, followed by optional trailing whitespace/comments" $
-  "kw" ~> lexeme @@ (P.string_ @@ var "kw")
+  doc "Parse a specific keyword, followed by optional trailing whitespace/comments, requiring a word boundary for word-shaped keywords (#5/#837)" $
+  "kw" ~> lexeme @@ (
+    P.bind @@ (P.string_ @@ var "kw") @@ ("s" ~>
+      "kwIsWordShaped" <~ Optionals.match (Lists.last (Strings.toList $ var "kw")) false (asTerm bareNameSegmentChar) $
+      Logic.ifElse (Logic.not $ var "kwIsWordShaped")
+        (P.pure @@ var "s")
+        (P.bind @@ (P.optional @@ (asTerm (P.satisfy @@ (asTerm bareNameSegmentChar)))) @@ ("mc" ~>
+          Optionals.match (var "mc")
+            (P.pure @@ var "s")
+            (constant $ P.fail @@ (Strings.concat2 (string "keyword not at a word boundary: ") (var "kw")))))))
 
 -- | Alias of 'termKeyword' for use in type-grammar productions; same parser, named for
 -- readability at type-parser call sites.
