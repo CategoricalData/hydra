@@ -345,6 +345,49 @@ runtime_identity() {
     } | shasum -a 256 | awk '{print $1}'
 }
 
+# Make sure the on-disk input digest reflects the current dist/json content (#839).
+# The input digest is a gitignored build cache under dist/json/<pkg>/build/<set>/,
+# so git operations (rebase, merge, checkout, pull) change the tracked sources
+# without touching it; a stale digest would still match the recorded output digest
+# and the assembler would wrongly report "unchanged".
+# A digest that is already current is NEVER rewritten: Phase 1's writers record a
+# richer shape (DSL/encode/decode keys, Merkle namespace hashes, the test-inference
+# universe hash) that the Haskell-side caches compare exactly, and the bash writer
+# cannot reproduce it. Only a digest that is genuinely out of date is replaced
+# (by `digest.sh refresh-input`), which Phase 1 would have had to rewrite anyway.
+# No-op when the path is not of the form <root>/<pkg>/build/<set>/digest.json.
+_assemble_input_digest_parts() {   # sets pkg, root, set_name; returns 1 if the path is not recognized
+    local set_dir pkg_dir
+    set_dir="$(dirname "$1")"                     # <root>/<pkg>/build/<set>
+    set_name="$(basename "$set_dir")"
+    pkg_dir="$(dirname "$(dirname "$set_dir")")"  # <root>/<pkg>
+    [ "$(basename "$(dirname "$set_dir")")" = "build" ] || return 1
+    case "$set_name" in main|test) ;; *) return 1 ;; esac
+    pkg="$(basename "$pkg_dir")"
+    root="$(dirname "$pkg_dir")"
+}
+
+# Predicate: is the input digest consistent with dist/json? True for unrecognized paths.
+assemble_input_digest_current() {
+    local pkg root set_name
+    [ -f "$1" ] || return 0
+    _assemble_input_digest_parts "$1" || return 0
+    "$HYDRA_ROOT_DIR/bin/digest.sh" input-current \
+        --package "$pkg" --dist-json-root "$root" --source-set "$set_name"
+}
+
+assemble_refresh_input_digest() {
+    local input_digest="$1" pkg root set_name
+    [ -f "$input_digest" ] || return 0
+    _assemble_input_digest_parts "$input_digest" || return 0
+    if ! "$HYDRA_ROOT_DIR/bin/digest.sh" input-current \
+            --package "$pkg" --dist-json-root "$root" --source-set "$set_name"; then
+        echo "  assemble: input digest for $pkg/$set_name is stale vs dist/json; refreshing (#839)" >&2
+        "$HYDRA_ROOT_DIR/bin/digest.sh" refresh-input \
+            --package "$pkg" --dist-json-root "$root" --source-set "$set_name" >&2
+    fi
+}
+
 # Predicate: is the per-source-set output up to date with respect to its
 # input digest? Returns 0 (fresh — skip the rebuild) or non-zero (not
 # fresh — do the rebuild). Always called as an `if` condition, never bare,
@@ -366,6 +409,9 @@ runtime_identity() {
 # swallowed as a hit — the safe direction.
 assemble_check_fresh() {
     local input_digest="$1" output_dir="$2" output_digest="$3" keep_manifest="${4:-}"
+    # Refresh a stale input digest first, even when there is no output digest yet, so a cold
+    # first build is stamped against current content (#839).
+    assemble_refresh_input_digest "$input_digest"
     # First-build / missing-artifact fast path: provably not fresh.
     if [ ! -f "$input_digest" ] || [ ! -f "$output_digest" ]; then
         return 1
@@ -404,6 +450,8 @@ assemble_check_fresh_readonly() {
     if [ ! -f "$input_digest" ] || [ ! -f "$output_digest" ]; then
         return 1
     fi
+    # A probe must not mutate: a stale input digest simply means "not fresh" (#839).
+    assemble_input_digest_current "$input_digest" || return 1
     "$HYDRA_ROOT_DIR/bin/digest.sh" fresh \
         --inputs "$input_digest" \
         --output-dir "$output_dir" \

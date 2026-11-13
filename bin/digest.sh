@@ -8,6 +8,7 @@
 #                           [--keep-paths-from <manifest>] [--check-only]
 #   digest.sh refresh       --inputs <file> --output-dir <dir> --output-digest <file>
 #   digest.sh refresh-input --package <pkg> --dist-json-root <dir> [--source-set main|test]
+#   digest.sh input-current --package <pkg> --dist-json-root <dir> [--source-set main|test]
 #
 # `refresh-input` rewrites a package's INPUT digest from current on-disk state:
 # it scans the package's source files, extracts each declared namespace via a
@@ -647,7 +648,7 @@ do_refresh_input() {
     {digestFormatVersion:$dfv, moduleFormatVersion:$mfv}
     + (if $self != "" then {selfHash:$self} else {} end)
     + {dependencyHashes:$deps[0], moduleHashes:$modules[0]}
-  ' > "$dpath"
+  ' > "$dpath.tmp.$$" && mv -f "$dpath.tmp.$$" "$dpath"
 
   local nsrc njson
   nsrc="${#src_hash[@]}"
@@ -709,10 +710,47 @@ do_refresh_input_test() {
     --slurpfile modules "$tmpd/modules.json" '
     {digestFormatVersion:$dfv, moduleFormatVersion:$mfv,
      dependencyHashes:[], moduleHashes:$modules[0]}
-  ' > "$dpath"
+  ' > "$dpath.tmp.$$" && mv -f "$dpath.tmp.$$" "$dpath"
 
   local n; n="$(jq 'length' "$tmpd/modules.json")"
   echo "  digest.sh refresh-input: wrote $dpath ($n test-json entries, test source set)"
+}
+
+# input-current: exit 0 iff the on-disk input digest is consistent with the current
+# dist/json content, WITHOUT rewriting it (#839). Git operations change tracked
+# dist/json sources but never the gitignored build/ digests, so a stale digest can
+# otherwise match a stale output digest. The digest's shape is owned by whichever
+# writer produced it (Phase 1's Haskell/Java writers record more than bash can
+# reproduce), so we only ever compare what every writer agrees on:
+#   - digest has jsonContent:<rel> entries -> they must equal the hashes of the
+#     current JSON files exactly (content-based; immune to mtime churn);
+#   - otherwise (e.g. the Phase-1 test digest, keyed by universe namespaces) -> the
+#     digest file must be newer than every JSON file in the source set.
+# A missing digest is not current.
+do_input_current() {
+  local pkg="$1" dist_json_root="$2" set="$3"
+  local dpath="$dist_json_root/$pkg/build/$set/digest.json"
+  local json_root="$dist_json_root/$pkg/src/$set/json"
+  [ -f "$dpath" ] || return 1
+  local recorded
+  recorded="$(jq -r '(.moduleHashes // [])[] | select(.key | startswith("jsonContent:")) | "\(.key)\t\(.value)"' \
+              "$dpath" 2>/dev/null | LC_ALL=C sort)" || return 1
+  if [ -n "$recorded" ]; then
+    local current
+    if [ "$set" = "main" ]; then
+      current="$(hash_package_json_content "$dist_json_root" "$pkg" | LC_ALL=C sort)"
+    else
+      current="$(if [ -d "$json_root" ]; then
+        find "$json_root" -type f -name '*.json' -not -path '*/.*' | LC_ALL=C sort | while IFS= read -r f; do
+          printf 'jsonContent:%s\t%s\n' "$(make_relative_to "$json_root" "$f")" "$(hash_file "$f")"
+        done | LC_ALL=C sort
+      fi)"
+    fi
+    [ "$recorded" = "$current" ]
+    return
+  fi
+  [ -d "$json_root" ] || return 0
+  [ -z "$(find "$json_root" -type f -name '*.json' -not -path '*/.*' -newer "$dpath" -print -quit)" ]
 }
 
 # ---------------------------------------------------------------------------
@@ -742,13 +780,13 @@ main() {
       fi
       if [ -z "$output_dir" ]; then err "--output-dir is required"; exit 1; fi
       ;;
-    refresh-input)
+    refresh-input|input-current)
       if [ -z "$package" ] || [ -z "$dist_json_root" ]; then
-        err "refresh-input requires --package and --dist-json-root"; exit 1
+        err "$cmd requires --package and --dist-json-root"; exit 1
       fi
       case "$source_set" in
         main|test) ;;
-        *) err "refresh-input --source-set must be 'main' or 'test'"; exit 1 ;;
+        *) err "$cmd --source-set must be 'main' or 'test'"; exit 1 ;;
       esac
       ;;
   esac
@@ -763,6 +801,7 @@ main() {
         do_refresh_input "$package" "$dist_json_root"
       fi
       ;;
+    input-current) do_input_current "$package" "$dist_json_root" "$source_set" ;;
     *) err "unknown subcommand: $cmd"; usage; exit 1 ;;
   esac
 }
