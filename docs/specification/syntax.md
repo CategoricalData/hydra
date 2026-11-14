@@ -192,6 +192,9 @@ next definition's keyword as an argument.
 
 Validation SHOULD reject reserved names in positions that quoting cannot rescue,
 in particular `_` as a user field or variant name (it would collide with the case-default wildcard).
+Because `_` is reserved, the canonical printer always writes a `cases` default branch's field name
+backticked (`` `_` = t ``, never a bare `_ = t`); a bare `_` is rejected in that position for the
+same reason any other reserved word is.
 
 ## 3. Grammar
 
@@ -224,10 +227,10 @@ term          ::= annotatedTerm | applicationTerm | caseTerm | doTerm | eitherTe
                 | operatorTerm   -- SUGAR, RESERVED (#811), not yet implemented
 
 annotatedTerm ::= term annot
-annot         ::= '@' term        -- postfix; payload parsed at tightest level,
-                                  -- parenthesize larger payloads: t @(f x);
-                                  -- common case: t @{description = "..."}.
-                                  -- Chains left: x @m1 @m2 =
+annot         ::= '@' term        -- postfix, abutting the left term (no space); payload
+                                  -- parsed at tightest level, parenthesize larger
+                                  -- payloads: t@(f x); common case: t@{description = "..."}.
+                                  -- Chains left: x@m1@m2 =
                                   -- annotated(annotated(x, m1), m2)
 applicationTerm ::= term term     -- adjacency; left-associative: add 1 2
 caseTerm      ::= 'cases' '(' name ')' termFields   -- default handler, if present,
@@ -498,8 +501,31 @@ and confirmed by the cross-host formatting tests.
 - Canonical output is minimally parenthesized under the precedence table of §3.
   Parenthesization beyond the minimum is grammatically valid input but is not canonical.
 - Canonical spacing: a single space around `:=`, `=`, `→`, `⇒`, and between adjacent
-  applications (`f x`); a space after `,`; no space around `:`, `.`, `@`, `⟨⟩`,
-  or inside brackets.
+  applications (`f x`); a space after `,` everywhere, including inside a `λ`/`Λ`/`∀`
+  binder list (`λa, b.`, `Λa, b.`, `∀x, y.`); no space after `λ`/`Λ`/`∀` before the first
+  binder, or after the final binder's `.` before the body (`λa, b.body`); no space
+  around `:`, `.`, `@`, `⟨⟩`, or inside brackets, except the space after `,` noted above.
+
+  `=` is spaced everywhere a field/entry separator can occur — record and injection
+  fields (`Person{age = 30:int32}`), map entries and `cases` branches (`cases(T){a = x,
+  `_` = y}`), and annotation maps (`x@{tag = "t"}`) are all written the same way.
+- **Layout.** The module printer aims for a 120-column budget
+  (`hydra.core.serialization.maxLineWidth`).
+  A `term` definition whose body does not fit after `term name =` breaks after `=` and
+  indents the body by two spaces.
+  Within a body, long applications, `let` bindings, and `cases` branches break onto
+  indented continuation lines; each `let` binding gets its own line.
+  A `primitive` definition is printed on one line, never broken.
+  Line breaks are whitespace, so layout never affects the round trip (§2.1); the exact
+  break positions are not significant. Some printed lines still exceed 120 columns
+  (a long `##` doc comment, or an atom that cannot itself be broken), so this is a
+  target, not a guarantee.
+- When a record or union type has at least one field with its own `##` doc comment,
+  every field is preceded by a blank line — including the first, right after the
+  opening `{` — so each comment visually groups with the field it describes; the
+  closing `}` sits on the last field's own line with no blank line before it. A
+  record/union with no commented fields uses the ordinary one-blank-line-between-
+  entries layout instead.
 - The canonical printer backtick-escapes a name if and only if
   one of the three interference cases of §2.4 holds.
 - **[HYDRA-SYN-CANONICAL-NOMINAL-SUGAR]** The canonical printer emits the nominal sugar (#809), not
@@ -652,6 +678,9 @@ segment.)
 - A `term`/`primitive` definition's `: termSignature` ascription is the term-signature notation
   of §3 (`∀` header, `lazy` parameters), not a plain `type`; a `type` definition's own `=`
   right-hand side is always a `typeScheme`, never a `termSignature`.
+- The printer emits a `term` definition's `: termSignature` only when the definition carries one
+  and relies on inference otherwise; none of the kernel's own `.hydra` term definitions do, so
+  every printed `term name = ...` in the corpus omits the ascription.
 - A `type` definition's parameters are printed as a leading `forall a, b.` in the body
   (`type Pair = forall a, b. (a, b)`); the `∀` scheme header is accepted on input but is printed
   only when the definition's scheme carries variables, which kernel-authored types do not.
@@ -674,16 +703,23 @@ segment.)
   reference the printer judged safe, and a context-free caller (no universe supplied) gets the
   fully-conservative pre-#5 behavior — every import aliased, nothing printed bare — as the exact
   `Map.empty` degenerate case of the same functions, not a separate code path.
-- **Doc-comment description placement, by definition kind (#711).** A `type` definition's
-  description is carried as a trailing `@{description=...}` annotation on the type scheme's
-  BODY in the DSL source; a `term` definition's is carried the same way, as a trailing
-  `@{description=...}` annotation on the term BODY. In both cases the printer peels that one
-  annotation entry off the body and emits it as a leading `## ...` line instead, so the printed
-  form never shows the trailing suffix for a definition-level description (a `type`'s or
-  `term`'s own `##`, as opposed to a record/union *field*'s inline `##`, which is not peeled from
-  anything — fields have no separate annotation path). For a `term`, any OTHER annotation keys
-  alongside `description` are left in a (still-present) trailing `@{...}` suffix; only
-  `description` is hoisted. The parser reconstructs `EntityMetadata` from a leading `##` block
+- **Doc-comment description placement, by definition kind (#711).** In printed `.hydra` files, a
+  definition's description is always a leading `##` block; a trailing `@{description=...}` never
+  appears on a `type`'s or `term`'s own definition body. (A `@{description=...}` on a nested
+  subterm — not the definition body itself — is unaffected and still prints inline, e.g. `term
+  wrapped = f x@{description = "inner desc"}`.) Internally: a `type` definition's description is
+  carried as a trailing `@{description=...}` annotation on the type scheme's BODY in the DSL
+  source; a `term` definition's is carried the same way, as a trailing `@{description=...}`
+  annotation on the term BODY. In both cases the printer peels that one annotation entry off the
+  body and emits it as a leading `## ...` line instead, so the printed form never shows the
+  trailing suffix for a definition-level description (a `type`'s or `term`'s own `##`, as opposed
+  to a record/union *field*'s inline `##`, which is not peeled from anything — fields have no
+  separate annotation path). For a `term`, any OTHER annotation keys alongside `description` are
+  left in a (still-present) trailing `@{...}` suffix; only `description` is hoisted (e.g. `term
+  charAt = impl@{availableSince = "0.17.6"}`). The parser still accepts a trailing
+  `@{description=...}` on a definition body as general annotation syntax (§13) — that acceptance
+  is not removed, only never produced by the canonical printer. The parser reconstructs
+  `EntityMetadata` from a leading `##` block
   (§6.2) for the module header and every `type`/`term`/`primitive` definition, storing it on the
   definition's own `EntityMetadata` field rather than re-attaching it to the body as an
   annotation — a parsed-then-reprinted module therefore reproduces the identical `##` text via a
