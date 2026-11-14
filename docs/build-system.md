@@ -997,7 +997,8 @@ bullet above cannot even compile the driver, let alone run it. The two resolutio
   genuinely cold checkout: the local build needs `dist/java/hydra-kernel`, which is downstream of the
   seed step this driver performs.
 
-Neither resolution is available purely from configuration on a cold tree mid-rename; see
+Neither resolution is available purely from configuration on a cold tree mid-rename (so CI's cold-seed jobs are expected red until
+the post-rename host is published; see [release workflow](release-workflow.md#migration-shims-retire-after-publishing-never-before)); see
 [Migration shims](recipes/migration-shims.md) for the shim lifecycle this falls under. This is a
 dormant gap — it does not affect additive or field-shape changes, only a future repo-wide rename of
 `hydra.core.*`'s own package/class structure — tracked for a real fix (e.g. decoupling the driver

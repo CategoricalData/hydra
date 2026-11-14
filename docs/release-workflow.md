@@ -202,6 +202,17 @@ fails — the shim failing is the shim doing its job. A concrete 0.17.7 example:
 `decimal_variant_methods` to the Python DSL wrapper, which published 0.17.6 does not have, so a
 published-0.17.6 host regenerating 0.17.7 source raises `AttributeError` (`6f38d1a50e`).
 
+**Repo-wide renames: publish, then bump, with CI red in between ([#768](https://github.com/CategoricalData/hydra/issues/768)).**
+A rename of `hydra.core.*`'s own package or class shape (e.g. #729) is the one breaking change that no shim can keep green on a *cold* checkout.
+The cold-seed driver classes in `heads/java/src/main/java/hydra/` import the renamed types, so they cannot compile against the
+previous published host, and the `hostOverrides[java]=local` fallback needs `dist/java`, which is the seed step's own output.
+Pinning the driver sources to the previous release tag does not help either: that release's coder still emits the old module names.
+For such a batch, treat the cold-seed CI jobs ("Haskell tests (JSON build + consistency check)" and "Cold-clone Haskell sync")
+as **expected red from the landing until the new host is published**, then bump `hostVersion` and drop `hostOverrides` in one commit.
+In #729 this cleared on the next run after the 0.18.0 bump.
+The failing run is slow to report: the doomed compile can thrash for 2.5-3 hours and end in a Gradle out-of-memory error
+rather than surfacing the compile error, so check the log for `package hydra.core... does not exist` instead of waiting for a verdict.
+
 **The trap to avoid:** reading `hostVersion: "0.17.6"` alongside published 0.17.6 artifacts and
 concluding the override is a stale leftover. *Existing* is not the same as
 *sufficient-to-build-the-next-release*. That is precisely what a breaking batch means, and it is
