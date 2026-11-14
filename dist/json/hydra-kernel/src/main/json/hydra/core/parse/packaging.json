@@ -4964,48 +4964,69 @@
                                     "domain": {
                                       "application": {"function": {"variable": "hydra.core.parsing.ParseSuccess"}, "argument": {"variable": "hydra.core.packaging.Module"}}},
                                     "body": {
-                                      "application": {
-                                        "function": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "remainder",
+                                            "term": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                    "type": {"variable": "hydra.core.packaging.Module"}}},
+                                                "argument": {"variable": "s"}}},
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.parsing.ParseInput"}, "constraints": []}}],
+                                        "body": {
                                           "application": {
                                             "function": {
                                               "application": {
                                                 "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.core.lib.logic.ifElse"},
-                                                    "type": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.core.packaging.Module"}}}}},
-                                                "argument": {
                                                   "application": {
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.isEmpty"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.core.lib.logic.ifElse"},
+                                                        "type": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.core.packaging.Module"}}}}},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "codepoints"}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.isEmpty"}, "type": {"literal": {"integer": "int32"}}}},
                                                         "argument": {
                                                           "application": {
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "remainder"}},
-                                                                "type": {"variable": "hydra.core.packaging.Module"}}},
-                                                            "argument": {"variable": "s"}}}}}}}}},
+                                                            "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "codepoints"}},
+                                                            "argument": {"variable": "remainder"}}}}}}},
+                                                "argument": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "either": {
+                                                            "right": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
+                                                                    "type": {"variable": "hydra.core.packaging.Module"}}},
+                                                                "argument": {"variable": "s"}}}}},
+                                                        "type": {"literal": "string"}}},
+                                                    "type": {"variable": "hydra.core.packaging.Module"}}}}},
                                             "argument": {
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "right": {
+                                                        "left": {
                                                           "application": {
                                                             "function": {
-                                                              "typeApplication": {
-                                                                "body": {"project": {"typeName": "hydra.core.parsing.ParseSuccess", "fieldName": "value"}},
-                                                                "type": {"variable": "hydra.core.packaging.Module"}}},
-                                                            "argument": {"variable": "s"}}}}},
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {"function": {"variable": "hydra.core.positions.formatParseFailure"}, "argument": {"variable": "input"}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "offset"}},
+                                                                    "argument": {"variable": "remainder"}}}}},
+                                                            "argument": {"literal": {"string": "trailing input after module"}}}}}},
                                                     "type": {"literal": "string"}}},
-                                                "type": {"variable": "hydra.core.packaging.Module"}}}}},
-                                        "argument": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {"body": {"either": {"left": {"literal": {"string": "trailing input after module"}}}}, "type": {"literal": "string"}}},
-                                            "type": {"variable": "hydra.core.packaging.Module"}}}}}}}},
+                                                "type": {"variable": "hydra.core.packaging.Module"}}}}}}}}}},
                               {
                                 "name": "failure",
                                 "handler": {
@@ -5020,8 +5041,21 @@
                                               "either": {
                                                 "left": {
                                                   "application": {
-                                                    "function": {"project": {"typeName": "hydra.core.parsing.ParseError", "fieldName": "message"}},
-                                                    "argument": {"variable": "e"}}}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {"function": {"variable": "hydra.core.positions.formatParseFailure"}, "argument": {"variable": "input"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"project": {"typeName": "hydra.core.parsing.ParseInput", "fieldName": "offset"}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {"project": {"typeName": "hydra.core.parsing.ParseError", "fieldName": "remainder"}},
+                                                                "argument": {"variable": "e"}}}}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"project": {"typeName": "hydra.core.parsing.ParseError", "fieldName": "message"}},
+                                                        "argument": {"variable": "e"}}}}}}},
                                             "type": {"literal": "string"}}},
                                         "type": {"variable": "hydra.core.packaging.Module"}}}}}}]}},
                         "type": {"variable": "hydra.core.packaging.Module"}}},
@@ -5766,7 +5800,15 @@
                                                     "argument": {"variable": "ownNames"}}}}},
                                             "argument": {
                                               "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"either": {"right": {"variable": "n"}}}, "type": {"literal": "string"}}},
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "either": {
+                                                        "right": {
+                                                          "application": {
+                                                            "function": {"application": {"function": {"variable": "hydra.core.names.qname"}, "argument": {"variable": "modName"}}},
+                                                            "argument": {"variable": "s"}}}}},
+                                                    "type": {"literal": "string"}}},
                                                 "type": {"variable": "hydra.core.model.Name"}}}}},
                                         "argument": {
                                           "let": {
@@ -5998,7 +6040,7 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {
-                      "string": "Resolve a single bare name reference against the printer's universe: own-definitions first, then the unique owning import, hard error on zero or multiple owners (#5/#711)"}}}]}}}}},
+                      "string": "Resolve a single bare name reference against the printer's universe: own-definitions first (qualified with modName), then the unique owning import, hard error on zero or multiple owners (#5/#711/#837)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.parse.packaging.resolveNameRefsInDefinitionWith",

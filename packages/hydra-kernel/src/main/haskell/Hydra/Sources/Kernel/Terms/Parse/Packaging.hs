@@ -610,9 +610,12 @@ expandAliasesInTypeSelfAware = define "expandAliasesInTypeSelfAware" $
 -- through 'expandAliasedName' (so a genuinely aliased prefix is already expanded) and are not
 -- currently in-scope bound variables ('bound', checked by the caller before reaching here).
 -- Resolution order, exactly mirroring the spec: (1) if the bare local name is one of 'ownNames'
--- (the module's own declared definitions), it is ALREADY correct as a same-module reference and
--- is returned unchanged -- no qualification needed, since a same-module reference is round-trip-
--- safe without one (#711/#803); (2) otherwise, look it up in 'universe' (every OTHER module's
+-- (the module's own declared definitions), it is qualified with 'modName' -- the PRINTED surface
+-- stays bare either way (the printer's own-module alias is always "", #711/#803), but the in-
+-- memory 'Name' must be fully qualified so the inference environment (keyed by qualified name)
+-- can actually find the binding (#837: a same-module reference left bare parsed fine but then
+-- failed inference with "no such binding", since nothing in the global environment is keyed by
+-- the bare local form); (2) otherwise, look it up in 'universe' (every OTHER module's
 -- full declared-name set, excluding this module's own namespace) and require EXACTLY one owner --
 -- zero or two-or-more owners is a hard error (never guess, per the spec); (3) a dotted (already
 -- multi-segment) name reaching here was neither a bound variable nor an own-name nor an
@@ -621,13 +624,13 @@ expandAliasesInTypeSelfAware = define "expandAliasesInTypeSelfAware" $
 -- function's problem to solve further).
 resolveNameRefWith :: TypedTermDefinition (ModuleName -> S.Set String -> M.Map ModuleName (S.Set Name) -> Name -> Either String Name)
 resolveNameRefWith = define "resolveNameRefWith" $
-  doc "Resolve a single bare name reference against the printer's universe: own-definitions first, then the unique owning import, hard error on zero or multiple owners (#5/#711)" $
+  doc "Resolve a single bare name reference against the printer's universe: own-definitions first (qualified with modName), then the unique owning import, hard error on zero or multiple owners (#5/#711/#837)" $
   "modName" ~> "ownNames" ~> "universe" ~> "n" ~>
   "s" <~ Core.unName (var "n") $
   Logic.ifElse (Logic.not (Equality.equal (Lists.length (Strings.splitOn (string ".") (var "s"))) (int32 1)))
     (right (var "n"))
     (Logic.ifElse (Sets.member (var "s") (var "ownNames" :: TypedTerm (S.Set String)))
-      (right (var "n"))
+      (right (Names.qname @@ var "modName" @@ var "s"))
       ("owners" <~ Lists.filter
           ("entry" ~> Logic.and
             (Logic.not (Equality.equal (Pairs.first $ var "entry") (var "modName")))
@@ -1245,7 +1248,8 @@ parseModule = define "parseModule" $
   "input" ~>
   match _ParseResult (P.runParser @@ (P.bind @@ whitespace @@ (constant $ asTerm moduleParser)) @@ var "input") Nothing [
     _ParseResult_success>>: "s" ~>
-      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ Parsing.parseSuccessRemainder $ var "s"))
+      "remainder" <~ Parsing.parseSuccessRemainder (var "s") $
+      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ var "remainder"))
         (right (Parsing.parseSuccessValue (var "s")))
-        (left (string "trailing input after module")),
-    _ParseResult_failure>>: "e" ~> left (Parsing.parseErrorMessage (var "e"))]
+        (left (Positions.formatParseFailure @@ var "input" @@ (Parsing.parseInputOffset $ var "remainder") @@ string "trailing input after module")),
+    _ParseResult_failure>>: "e" ~> left (Positions.formatParseFailure @@ var "input" @@ (Parsing.parseInputOffset $ Parsing.parseErrorRemainder $ var "e") @@ (Parsing.parseErrorMessage $ var "e"))]
