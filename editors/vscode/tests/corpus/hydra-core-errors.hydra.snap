@@ -29,11 +29,11 @@
 >type DecodingError = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
-#                     ^^^^ source.hydra keyword.control.hydra
+#                     ^^^^ source.hydra support.type.hydra
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
 #                                ^^ source.hydra
@@ -44,7 +44,7 @@
 >type EmptyListError = unit
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
@@ -56,7 +56,7 @@
 >type Error = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^ source.hydra entity.name.type.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -234,7 +234,7 @@
 >type ExtractionError = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -324,7 +324,7 @@
 >type InferenceError = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
@@ -370,11 +370,11 @@
 >type MultipleBindingsError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
-#                             ^^^^^^ source.hydra keyword.control.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
 #                                   ^^ source.hydra
 >  ## The binding name which was duplicated
 #^^ source.hydra
@@ -394,11 +394,11 @@
 >type MultipleFieldsError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
-#                           ^^^^^^ source.hydra keyword.control.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
 #                                 ^^ source.hydra
 >  ## The field name which appeared more than once
 #^^ source.hydra
@@ -418,11 +418,11 @@
 >type NoMatchingFieldError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
 #                           ^ source.hydra
-#                            ^^^^^^ source.hydra keyword.control.hydra
+#                            ^^^^^^ source.hydra support.type.hydra
 #                                  ^^ source.hydra
 >  ## The field name which was not found
 #^^ source.hydra
@@ -442,11 +442,11 @@
 >type NoSuchBindingError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^ source.hydra
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
-#                          ^^^^^^ source.hydra keyword.control.hydra
+#                          ^^^^^^ source.hydra support.type.hydra
 #                                ^^ source.hydra
 >  ## The binding name which was not found
 #^^ source.hydra
@@ -466,11 +466,11 @@
 >type NoSuchPrimitiveError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
 #                           ^ source.hydra
-#                            ^^^^^^ source.hydra keyword.control.hydra
+#                            ^^^^^^ source.hydra support.type.hydra
 #                                  ^^ source.hydra
 >  ## The primitive name which was not found
 #^^ source.hydra
@@ -490,7 +490,7 @@
 >type NotEnoughCasesError = unit
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -502,11 +502,11 @@
 >type OtherError = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
-#                  ^^^^ source.hydra keyword.control.hydra
+#                  ^^^^ source.hydra support.type.hydra
 #                      ^ source.hydra
 #                       ^^^^^^ source.hydra support.type.hydra
 #                             ^^ source.hydra
@@ -517,11 +517,11 @@
 >type OtherInferenceError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
-#                           ^^^^^^ source.hydra keyword.control.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
 #                                 ^^ source.hydra
 >  ## The subterm path at which the error was observed
 #^^ source.hydra
@@ -552,11 +552,11 @@
 >type OtherResolutionError = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
 #                           ^ source.hydra
-#                            ^^^^ source.hydra keyword.control.hydra
+#                            ^^^^ source.hydra support.type.hydra
 #                                ^ source.hydra
 #                                 ^^^^^^ source.hydra support.type.hydra
 #                                       ^^ source.hydra
@@ -567,7 +567,7 @@
 >type ResolutionError = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -635,11 +635,11 @@
 >type UnexpectedShapeError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
 #                           ^ source.hydra
-#                            ^^^^^^ source.hydra keyword.control.hydra
+#                            ^^^^^^ source.hydra support.type.hydra
 #                                  ^^ source.hydra
 >  ## A description of the expected shape
 #^^ source.hydra
@@ -670,11 +670,11 @@
 >type UnificationError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
-#                        ^^^^^^ source.hydra keyword.control.hydra
+#                        ^^^^^^ source.hydra support.type.hydra
 #                              ^^ source.hydra
 >  ## The left-hand type in the unification
 #^^ source.hydra
@@ -716,11 +716,11 @@
 >type UnificationInferenceError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^ source.hydra
 #                               ^ source.hydra keyword.operator.equals.hydra
 #                                ^ source.hydra
-#                                 ^^^^^^ source.hydra keyword.control.hydra
+#                                 ^^^^^^ source.hydra support.type.hydra
 #                                       ^^ source.hydra
 >  ## The subterm path at which the unification failure was observed
 #^^ source.hydra

@@ -12,7 +12,7 @@
 >type LiteralVariant = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
@@ -75,7 +75,7 @@
 >type TermVariant = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -261,7 +261,7 @@
 >type TypeVariant = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra

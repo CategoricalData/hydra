@@ -17,7 +17,7 @@
 >type CaseConvention = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
@@ -65,7 +65,7 @@
 >type Comparison = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -99,7 +99,7 @@
 >type ModuleNames = forall n. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -108,7 +108,7 @@
 #                          ^ source.hydra variable.parameter.hydra
 #                           ^ source.hydra punctuation.separator.binder.hydra
 #                            ^ source.hydra
-#                             ^^^^^^ source.hydra keyword.control.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
 #                                   ^^ source.hydra
 >  ## The module name in focus, together with its associated value
 #^^ source.hydra
@@ -146,7 +146,7 @@
 >type Precision = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
@@ -181,11 +181,11 @@
 >type QualifiedName = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
-#                     ^^^^^^ source.hydra keyword.control.hydra
+#                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
 >  ## The optional module name
 #^^ source.hydra

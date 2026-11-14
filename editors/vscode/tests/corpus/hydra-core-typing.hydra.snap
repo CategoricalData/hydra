@@ -21,7 +21,7 @@
 >type FunctionStructure = forall env. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^ source.hydra
@@ -30,7 +30,7 @@
 #                                ^^^ source.hydra variable.parameter.hydra
 #                                   ^ source.hydra punctuation.separator.binder.hydra
 #                                    ^ source.hydra
-#                                     ^^^^^^ source.hydra keyword.control.hydra
+#                                     ^^^^^^ source.hydra support.type.hydra
 #                                           ^^ source.hydra
 >  ## Type parameters (from type lambdas)
 #^^ source.hydra
@@ -131,11 +131,11 @@
 >type InferenceContext = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
-#                        ^^^^^^ source.hydra keyword.control.hydra
+#                        ^^^^^^ source.hydra support.type.hydra
 #                              ^^ source.hydra
 >  ## Counter used to generate distinct fresh type variables during inference
 #^^ source.hydra
@@ -169,11 +169,11 @@
 >type InferenceResult = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
-#                       ^^^^^^ source.hydra keyword.control.hydra
+#                       ^^^^^^ source.hydra support.type.hydra
 #                             ^^ source.hydra
 >  ## The term which was inferred
 #^^ source.hydra
@@ -246,11 +246,11 @@
 >type Parameter = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
-#                 ^^^^^^ source.hydra keyword.control.hydra
+#                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
 >  ## The name of the parameter
 #^^ source.hydra
@@ -308,11 +308,11 @@
 >type Result = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^ source.hydra entity.name.type.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
 #             ^ source.hydra
-#              ^^^^^^ source.hydra keyword.control.hydra
+#              ^^^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
 >  ## An optional human-readable description of the result
 #^^ source.hydra
@@ -348,11 +348,11 @@
 >type TermSignature = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
-#                     ^^^^^^ source.hydra keyword.control.hydra
+#                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
 >  ## The type parameters of the term, in order
 #^^ source.hydra
@@ -400,11 +400,11 @@
 >type TermSubst = wrap(map<Name, Term>)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
-#                 ^^^^ source.hydra keyword.control.hydra
+#                 ^^^^ source.hydra support.type.hydra
 #                     ^ source.hydra
 #                      ^^^ source.hydra support.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
@@ -420,11 +420,11 @@
 >type TypeClass = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
-#                 ^^^^^^ source.hydra keyword.control.hydra
+#                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
 >  ## A human-readable description of the type class
 #^^ source.hydra
@@ -444,11 +444,11 @@
 >type TypeConstraint = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
-#                      ^^^^^^ source.hydra keyword.control.hydra
+#                      ^^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
 >  ## The left-hand side of the constraint
 #^^ source.hydra
@@ -494,11 +494,11 @@
 >type TypeParameter = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
-#                     ^^^^^^ source.hydra keyword.control.hydra
+#                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
 >  ## The name of the type parameter
 #^^ source.hydra
@@ -532,11 +532,11 @@
 >type TypeSubst = wrap(map<Name, Type>)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
-#                 ^^^^ source.hydra keyword.control.hydra
+#                 ^^^^ source.hydra support.type.hydra
 #                     ^ source.hydra
 #                      ^^^ source.hydra support.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.begin.hydra

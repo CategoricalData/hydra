@@ -17,11 +17,11 @@
 >type EffectfulTestCase = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^ source.hydra
-#                         ^^^^^^ source.hydra keyword.control.hydra
+#                         ^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
 >  ## A thunk producing the effect to be interpreted by the test runner. The thunk defers construction of the effect until the runner forces it.
 #^^ source.hydra
@@ -63,11 +63,11 @@
 >type Tag = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^ source.hydra entity.name.function.hydra
+#     ^^^ source.hydra entity.name.type.hydra
 #        ^ source.hydra
 #         ^ source.hydra keyword.operator.equals.hydra
 #          ^ source.hydra
-#           ^^^^ source.hydra keyword.control.hydra
+#           ^^^^ source.hydra support.type.hydra
 #               ^ source.hydra
 #                ^^^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
@@ -78,7 +78,7 @@
 >type TestCase = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^ source.hydra entity.name.type.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
@@ -113,11 +113,11 @@
 >type TestCaseWithMetadata = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
 #                           ^ source.hydra
-#                            ^^^^^^ source.hydra keyword.control.hydra
+#                            ^^^^^^ source.hydra support.type.hydra
 #                                  ^^ source.hydra
 >  ## A short name for the test case
 #^^ source.hydra
@@ -190,11 +190,11 @@
 >type TestGroup = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
-#                 ^^^^^^ source.hydra keyword.control.hydra
+#                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
 >  ## A short name for the test group
 #^^ source.hydra
@@ -258,11 +258,11 @@
 >type UniversalTestCase = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^ source.hydra
-#                         ^^^^^^ source.hydra keyword.control.hydra
+#                         ^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
 >  ## A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time.
 #^^ source.hydra

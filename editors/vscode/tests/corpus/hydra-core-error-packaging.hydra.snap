@@ -25,11 +25,11 @@
 >type ConflictingModuleNameError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra
 #                                ^ source.hydra keyword.operator.equals.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra keyword.control.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
 >  ## The first module name
 #^^ source.hydra
@@ -60,11 +60,11 @@
 >type ConflictingVariantNameError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                ^ source.hydra
 #                                 ^ source.hydra keyword.operator.equals.hydra
 #                                  ^ source.hydra
-#                                   ^^^^^^ source.hydra keyword.control.hydra
+#                                   ^^^^^^ source.hydra support.type.hydra
 #                                         ^^ source.hydra
 >  ## The name of the module containing the conflict
 #^^ source.hydra
@@ -117,11 +117,11 @@
 >type DefinitionNotInModuleNameError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                   ^ source.hydra
 #                                    ^ source.hydra keyword.operator.equals.hydra
 #                                     ^ source.hydra
-#                                      ^^^^^^ source.hydra keyword.control.hydra
+#                                      ^^^^^^ source.hydra support.type.hydra
 #                                            ^^ source.hydra
 >  ## The name of the module
 #^^ source.hydra
@@ -152,11 +152,11 @@
 >type DefinitionsOutOfOrderError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra
 #                                ^ source.hydra keyword.operator.equals.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra keyword.control.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
 >  ## The name of the module containing the misordered definitions
 #^^ source.hydra
@@ -198,11 +198,11 @@
 >type DuplicateDefinitionNameError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                 ^ source.hydra
 #                                  ^ source.hydra keyword.operator.equals.hydra
 #                                   ^ source.hydra
-#                                    ^^^^^^ source.hydra keyword.control.hydra
+#                                    ^^^^^^ source.hydra support.type.hydra
 #                                          ^^ source.hydra
 >  ## The name of the module containing the duplicates
 #^^ source.hydra
@@ -233,11 +233,11 @@
 >type DuplicateModuleNameError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
-#                                ^^^^^^ source.hydra keyword.control.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^^ source.hydra
 >  ## The duplicated module name
 #^^ source.hydra
@@ -257,11 +257,11 @@
 >type InvalidDefinitionNameError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra
 #                                ^ source.hydra keyword.operator.equals.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra keyword.control.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
 >  ## The name of the module containing the definition
 #^^ source.hydra
@@ -303,7 +303,7 @@
 >type InvalidModuleError = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^ source.hydra
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
@@ -393,11 +393,11 @@
 >type InvalidModuleNameConventionError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                     ^ source.hydra
 #                                      ^ source.hydra keyword.operator.equals.hydra
 #                                       ^ source.hydra
-#                                        ^^^^^^ source.hydra keyword.control.hydra
+#                                        ^^^^^^ source.hydra support.type.hydra
 #                                              ^^ source.hydra
 >  ## The module name that violates the convention
 #^^ source.hydra
@@ -417,7 +417,7 @@
 >type InvalidPackageError = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -507,11 +507,11 @@
 >type InvalidPackageNameError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
-#                               ^^^^^^ source.hydra keyword.control.hydra
+#                               ^^^^^^ source.hydra support.type.hydra
 #                                     ^^ source.hydra
 >  ## The package name that violates the convention
 #^^ source.hydra
@@ -531,11 +531,11 @@
 >type MissingDocumentationError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^ source.hydra
 #                               ^ source.hydra keyword.operator.equals.hydra
 #                                ^ source.hydra
-#                                 ^^^^^^ source.hydra keyword.control.hydra
+#                                 ^^^^^^ source.hydra support.type.hydra
 #                                       ^^ source.hydra
 >  ## The name of the module containing the undocumented definition
 #^^ source.hydra
@@ -566,11 +566,11 @@
 >type ModuleInMultiplePackagesError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                  ^ source.hydra
 #                                   ^ source.hydra keyword.operator.equals.hydra
 #                                    ^ source.hydra
-#                                     ^^^^^^ source.hydra keyword.control.hydra
+#                                     ^^^^^^ source.hydra support.type.hydra
 #                                           ^^ source.hydra
 >  ## The module namespace declared by more than one package
 #^^ source.hydra
@@ -612,11 +612,11 @@
 >type NestedModuleNameError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
-#                             ^^^^^^ source.hydra keyword.control.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
 #                                   ^^ source.hydra
 >  ## The shorter namespace, a strict dotted-prefix of the inner namespace
 #^^ source.hydra
@@ -647,11 +647,11 @@
 >type UndeclaredDependencyError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^ source.hydra
 #                               ^ source.hydra keyword.operator.equals.hydra
 #                                ^ source.hydra
-#                                 ^^^^^^ source.hydra keyword.control.hydra
+#                                 ^^^^^^ source.hydra support.type.hydra
 #                                       ^^ source.hydra
 >  ## The name of the module containing the undeclared reference
 #^^ source.hydra

@@ -12,11 +12,11 @@
 >type JsonWriterOptions = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^ source.hydra
-#                         ^^^^^^ source.hydra keyword.control.hydra
+#                         ^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
 >  ## Whether to omit all insignificant whitespace. When true, the value is rendered on a single line with no space after ':' or ',' and the indent, maxLineWidth, and maxIndentDepth fields are ignored.
 #^^ source.hydra
@@ -72,7 +72,7 @@
 >type Value = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^ source.hydra entity.name.type.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra

@@ -17,7 +17,7 @@
 >type TypedBinding = forall a. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                 ^ source.hydra
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^ source.hydra
@@ -26,7 +26,7 @@
 #                           ^ source.hydra variable.parameter.hydra
 #                            ^ source.hydra punctuation.separator.binder.hydra
 #                             ^ source.hydra
-#                              ^^^^^^ source.hydra keyword.control.hydra
+#                              ^^^^^^ source.hydra support.type.hydra
 #                                    ^^ source.hydra
 >  ## The name of the term
 #^^ source.hydra
@@ -61,7 +61,7 @@
 >type TypedName = forall a. wrap(Name)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
@@ -70,7 +70,7 @@
 #                        ^ source.hydra variable.parameter.hydra
 #                         ^ source.hydra punctuation.separator.binder.hydra
 #                          ^ source.hydra
-#                           ^^^^ source.hydra keyword.control.hydra
+#                           ^^^^ source.hydra support.type.hydra
 #                               ^ source.hydra
 #                                ^^^^ source.hydra variable.other.hydra
 #                                    ^^ source.hydra
@@ -81,7 +81,7 @@
 >type TypedTerm = forall a. wrap(Term)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
@@ -90,7 +90,7 @@
 #                        ^ source.hydra variable.parameter.hydra
 #                         ^ source.hydra punctuation.separator.binder.hydra
 #                          ^ source.hydra
-#                           ^^^^ source.hydra keyword.control.hydra
+#                           ^^^^ source.hydra support.type.hydra
 #                               ^ source.hydra
 #                                ^^^^ source.hydra variable.other.hydra
 #                                    ^^ source.hydra
@@ -101,7 +101,7 @@
 >type TypedTermDefinition = forall a. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -110,7 +110,7 @@
 #                                  ^ source.hydra variable.parameter.hydra
 #                                   ^ source.hydra punctuation.separator.binder.hydra
 #                                    ^ source.hydra
-#                                     ^^^^^^ source.hydra keyword.control.hydra
+#                                     ^^^^^^ source.hydra support.type.hydra
 #                                           ^^ source.hydra
 >  ## The name of the term
 #^^ source.hydra

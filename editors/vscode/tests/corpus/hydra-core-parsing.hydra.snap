@@ -12,11 +12,11 @@
 >type ParseError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
-#                  ^^^^^^ source.hydra keyword.control.hydra
+#                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
 >  ## An error message
 #^^ source.hydra
@@ -47,11 +47,11 @@
 >type ParseInput = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
-#                  ^^^^^^ source.hydra keyword.control.hydra
+#                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
 >  ## The number of codepoints consumed so far, i.e. the absolute offset of the first remaining codepoint
 #^^ source.hydra
@@ -96,7 +96,7 @@
 >type ParseResult = forall a. union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -138,7 +138,7 @@
 >type ParseSuccess = forall a. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                 ^ source.hydra
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^ source.hydra
@@ -147,7 +147,7 @@
 #                           ^ source.hydra variable.parameter.hydra
 #                            ^ source.hydra punctuation.separator.binder.hydra
 #                             ^ source.hydra
-#                              ^^^^^^ source.hydra keyword.control.hydra
+#                              ^^^^^^ source.hydra support.type.hydra
 #                                    ^^ source.hydra
 >  ## The parsed value
 #^^ source.hydra
@@ -178,7 +178,7 @@
 >type Parser = forall a. wrap(ParseInput → ParseResult a)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^ source.hydra entity.name.type.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
 #             ^ source.hydra
@@ -187,7 +187,7 @@
 #                     ^ source.hydra variable.parameter.hydra
 #                      ^ source.hydra punctuation.separator.binder.hydra
 #                       ^ source.hydra
-#                        ^^^^ source.hydra keyword.control.hydra
+#                        ^^^^ source.hydra support.type.hydra
 #                            ^ source.hydra
 #                             ^^^^^^^^^^ source.hydra variable.other.hydra
 #                                       ^ source.hydra
@@ -204,11 +204,11 @@
 >type SourcePosition = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
-#                      ^^^^^^ source.hydra keyword.control.hydra
+#                      ^^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
 >  ## The zero-based line number. Lines are terminated by LF, CR, or CR LF
 #^^ source.hydra
@@ -239,11 +239,11 @@
 >type SourceSpan = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
-#                  ^^^^^^ source.hydra keyword.control.hydra
+#                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
 >  ## The offset of the first codepoint of the span
 #^^ source.hydra

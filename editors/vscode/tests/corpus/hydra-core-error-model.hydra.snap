@@ -25,11 +25,11 @@
 >type ConstantConditionError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
-#                              ^^^^^^ source.hydra keyword.control.hydra
+#                              ^^^^^^ source.hydra support.type.hydra
 #                                    ^^ source.hydra
 >  ## The path to the constant condition within the term
 #^^ source.hydra
@@ -60,11 +60,11 @@
 >type DuplicateBindingError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
-#                             ^^^^^^ source.hydra keyword.control.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
 #                                   ^^ source.hydra
 >  ## The path to the duplicate binding within the term
 #^^ source.hydra
@@ -95,11 +95,11 @@
 >type DuplicateFieldError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
-#                           ^^^^^^ source.hydra keyword.control.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
 #                                 ^^ source.hydra
 >  ## The path to the duplicate field within the term
 #^^ source.hydra
@@ -130,11 +130,11 @@
 >type DuplicateRecordTypeFieldNamesError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                       ^ source.hydra
 #                                        ^ source.hydra keyword.operator.equals.hydra
 #                                         ^ source.hydra
-#                                          ^^^^^^ source.hydra keyword.control.hydra
+#                                          ^^^^^^ source.hydra support.type.hydra
 #                                                ^^ source.hydra
 >  ## The path to the record type with duplicate fields
 #^^ source.hydra
@@ -165,11 +165,11 @@
 >type DuplicateUnionTypeFieldNamesError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                      ^ source.hydra
 #                                       ^ source.hydra keyword.operator.equals.hydra
 #                                        ^ source.hydra
-#                                         ^^^^^^ source.hydra keyword.control.hydra
+#                                         ^^^^^^ source.hydra support.type.hydra
 #                                               ^^ source.hydra
 >  ## The path to the union type with duplicate fields
 #^^ source.hydra
@@ -200,11 +200,11 @@
 >type EmptyCaseStatementError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
-#                               ^^^^^^ source.hydra keyword.control.hydra
+#                               ^^^^^^ source.hydra support.type.hydra
 #                                     ^^ source.hydra
 >  ## The path to the empty case statement within the term
 #^^ source.hydra
@@ -235,11 +235,11 @@
 >type EmptyLetBindingsError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
-#                             ^^^^^^ source.hydra keyword.control.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
 #                                   ^^ source.hydra
 >  ## The path to the empty let expression within the term
 #^^ source.hydra
@@ -259,11 +259,11 @@
 >type EmptyRecordTypeError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
 #                           ^ source.hydra
-#                            ^^^^^^ source.hydra keyword.control.hydra
+#                            ^^^^^^ source.hydra support.type.hydra
 #                                  ^^ source.hydra
 >  ## The path to the empty record type
 #^^ source.hydra
@@ -283,11 +283,11 @@
 >type EmptyTermAnnotationError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
-#                                ^^^^^^ source.hydra keyword.control.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^^ source.hydra
 >  ## The path to the empty annotation within the term
 #^^ source.hydra
@@ -307,11 +307,11 @@
 >type EmptyTypeAnnotationError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
-#                                ^^^^^^ source.hydra keyword.control.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^^ source.hydra
 >  ## The path to the empty annotation
 #^^ source.hydra
@@ -331,11 +331,11 @@
 >type EmptyTypeNameInTermError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
-#                                ^^^^^^ source.hydra keyword.control.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^^ source.hydra
 >  ## The path to the term with the empty type name
 #^^ source.hydra
@@ -355,11 +355,11 @@
 >type EmptyUnionTypeError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
-#                           ^^^^^^ source.hydra keyword.control.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
 #                                 ^^ source.hydra
 >  ## The path to the empty union type
 #^^ source.hydra
@@ -379,11 +379,11 @@
 >type ExtraRecordFieldsError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
-#                              ^^^^^^ source.hydra keyword.control.hydra
+#                              ^^^^^^ source.hydra support.type.hydra
 #                                    ^^ source.hydra
 >  ## The path to the record term within the term
 #^^ source.hydra
@@ -428,11 +428,11 @@
 >type InvalidForallParameterNameError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                    ^ source.hydra
 #                                     ^ source.hydra keyword.operator.equals.hydra
 #                                      ^ source.hydra
-#                                       ^^^^^^ source.hydra keyword.control.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
 #                                             ^^ source.hydra
 >  ## The path to the forall type
 #^^ source.hydra
@@ -463,11 +463,11 @@
 >type InvalidLambdaParameterNameError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                    ^ source.hydra
 #                                     ^ source.hydra keyword.operator.equals.hydra
 #                                      ^ source.hydra
-#                                       ^^^^^^ source.hydra keyword.control.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
 #                                             ^^ source.hydra
 >  ## The path to the lambda within the term
 #^^ source.hydra
@@ -498,11 +498,11 @@
 >type InvalidLetBindingNameError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra
 #                                ^ source.hydra keyword.operator.equals.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra keyword.control.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
 >  ## The path to the binding within the term
 #^^ source.hydra
@@ -533,7 +533,7 @@
 >type InvalidLiteralError = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -557,7 +557,7 @@
 >type InvalidTermError = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
@@ -900,7 +900,7 @@
 >type InvalidTypeError = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
@@ -1067,11 +1067,11 @@
 >type InvalidTypeLambdaParameterNameError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                        ^ source.hydra
 #                                         ^ source.hydra keyword.operator.equals.hydra
 #                                          ^ source.hydra
-#                                           ^^^^^^ source.hydra keyword.control.hydra
+#                                           ^^^^^^ source.hydra support.type.hydra
 #                                                 ^^ source.hydra
 >  ## The path to the type lambda within the term
 #^^ source.hydra
@@ -1102,11 +1102,11 @@
 >type InvalidTypeSchemeVariableNameError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                       ^ source.hydra
 #                                        ^ source.hydra keyword.operator.equals.hydra
 #                                         ^ source.hydra
-#                                          ^^^^^^ source.hydra keyword.control.hydra
+#                                          ^^^^^^ source.hydra support.type.hydra
 #                                                ^^ source.hydra
 >  ## The path to the type scheme
 #^^ source.hydra
@@ -1137,11 +1137,11 @@
 >type LiteralTypeMismatchError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
-#                                ^^^^^^ source.hydra keyword.control.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^^ source.hydra
 >  ## The expected literal type
 #^^ source.hydra
@@ -1172,11 +1172,11 @@
 >type MissingCaseBranchesError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
-#                                ^^^^^^ source.hydra keyword.control.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^^ source.hydra
 >  ## The path to the case statement within the term
 #^^ source.hydra
@@ -1221,11 +1221,11 @@
 >type MissingRecordFieldsError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
-#                                ^^^^^^ source.hydra keyword.control.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^^ source.hydra
 >  ## The path to the record term within the term
 #^^ source.hydra
@@ -1270,11 +1270,11 @@
 >type NestedTermAnnotationError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^ source.hydra
 #                               ^ source.hydra keyword.operator.equals.hydra
 #                                ^ source.hydra
-#                                 ^^^^^^ source.hydra keyword.control.hydra
+#                                 ^^^^^^ source.hydra support.type.hydra
 #                                       ^^ source.hydra
 >  ## The path to the outer annotation within the term
 #^^ source.hydra
@@ -1294,11 +1294,11 @@
 >type NestedTypeAnnotationError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^ source.hydra
 #                               ^ source.hydra keyword.operator.equals.hydra
 #                                ^ source.hydra
-#                                 ^^^^^^ source.hydra keyword.control.hydra
+#                                 ^^^^^^ source.hydra support.type.hydra
 #                                       ^^ source.hydra
 >  ## The path to the outer annotation
 #^^ source.hydra
@@ -1318,11 +1318,11 @@
 >type NominalTypeKindMismatchError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                 ^ source.hydra
 #                                  ^ source.hydra keyword.operator.equals.hydra
 #                                   ^ source.hydra
-#                                    ^^^^^^ source.hydra keyword.control.hydra
+#                                    ^^^^^^ source.hydra support.type.hydra
 #                                          ^^ source.hydra
 >  ## The path to the term with the mismatched nominal type reference
 #^^ source.hydra
@@ -1375,11 +1375,11 @@
 >type NonComparableMapKeyTypeError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                 ^ source.hydra
 #                                  ^ source.hydra keyword.operator.equals.hydra
 #                                   ^ source.hydra
-#                                    ^^^^^^ source.hydra keyword.control.hydra
+#                                    ^^^^^^ source.hydra support.type.hydra
 #                                          ^^ source.hydra
 >  ## The path to the map type
 #^^ source.hydra
@@ -1410,11 +1410,11 @@
 >type NonComparableSetElementTypeError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                     ^ source.hydra
 #                                      ^ source.hydra keyword.operator.equals.hydra
 #                                       ^ source.hydra
-#                                        ^^^^^^ source.hydra keyword.control.hydra
+#                                        ^^^^^^ source.hydra support.type.hydra
 #                                              ^^ source.hydra
 >  ## The path to the set type
 #^^ source.hydra
@@ -1445,11 +1445,11 @@
 >type RedundantWrapUnwrapError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
-#                                ^^^^^^ source.hydra keyword.control.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^^ source.hydra
 >  ## The path to the redundant wrap/unwrap within the term
 #^^ source.hydra
@@ -1480,11 +1480,11 @@
 >type SelfApplicationError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
 #                           ^ source.hydra
-#                            ^^^^^^ source.hydra keyword.control.hydra
+#                            ^^^^^^ source.hydra support.type.hydra
 #                                  ^^ source.hydra
 >  ## The path to the self-application within the term
 #^^ source.hydra
@@ -1515,11 +1515,11 @@
 >type SingleVariantUnionError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
-#                               ^^^^^^ source.hydra keyword.control.hydra
+#                               ^^^^^^ source.hydra support.type.hydra
 #                                     ^^ source.hydra
 >  ## The path to the single-variant union type
 #^^ source.hydra
@@ -1550,11 +1550,11 @@
 >type TermVariableShadowingError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra
 #                                ^ source.hydra keyword.operator.equals.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra keyword.control.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
 >  ## The path to the shadowing binding within the term
 #^^ source.hydra
@@ -1585,11 +1585,11 @@
 >type TypeVariableShadowingInForallError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                       ^ source.hydra
 #                                        ^ source.hydra keyword.operator.equals.hydra
 #                                         ^ source.hydra
-#                                          ^^^^^^ source.hydra keyword.control.hydra
+#                                          ^^^^^^ source.hydra support.type.hydra
 #                                                ^^ source.hydra
 >  ## The path to the shadowing forall type
 #^^ source.hydra
@@ -1620,11 +1620,11 @@
 >type TypeVariableShadowingInTypeLambdaError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                           ^ source.hydra
 #                                            ^ source.hydra keyword.operator.equals.hydra
 #                                             ^ source.hydra
-#                                              ^^^^^^ source.hydra keyword.control.hydra
+#                                              ^^^^^^ source.hydra support.type.hydra
 #                                                    ^^ source.hydra
 >  ## The path to the type lambda within the term
 #^^ source.hydra
@@ -1655,11 +1655,11 @@
 >type UndeclaredVariantError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
-#                              ^^^^^^ source.hydra keyword.control.hydra
+#                              ^^^^^^ source.hydra support.type.hydra
 #                                    ^^ source.hydra
 >  ## The path to the injection within the term
 #^^ source.hydra
@@ -1701,11 +1701,11 @@
 >type UndefinedFieldError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
-#                           ^^^^^^ source.hydra keyword.control.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
 #                                 ^^ source.hydra
 >  ## The name of the undefined field
 #^^ source.hydra
@@ -1736,11 +1736,11 @@
 >type UndefinedTermVariableError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra
 #                                ^ source.hydra keyword.operator.equals.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra keyword.control.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
 >  ## The path to the undefined variable within the term
 #^^ source.hydra
@@ -1771,11 +1771,11 @@
 >type UndefinedTypeVariableError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra
 #                                ^ source.hydra keyword.operator.equals.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra keyword.control.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
 >  ## The path to the undefined type variable
 #^^ source.hydra
@@ -1806,11 +1806,11 @@
 >type UndefinedTypeVariableInBindingTypeError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                            ^ source.hydra
 #                                             ^ source.hydra keyword.operator.equals.hydra
 #                                              ^ source.hydra
-#                                               ^^^^^^ source.hydra keyword.control.hydra
+#                                               ^^^^^^ source.hydra support.type.hydra
 #                                                     ^^ source.hydra
 >  ## The path to the binding within the term
 #^^ source.hydra
@@ -1841,11 +1841,11 @@
 >type UndefinedTypeVariableInLambdaDomainError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                             ^ source.hydra
 #                                              ^ source.hydra keyword.operator.equals.hydra
 #                                               ^ source.hydra
-#                                                ^^^^^^ source.hydra keyword.control.hydra
+#                                                ^^^^^^ source.hydra support.type.hydra
 #                                                      ^^ source.hydra
 >  ## The path to the lambda within the term
 #^^ source.hydra
@@ -1876,11 +1876,11 @@
 >type UndefinedTypeVariableInTypeApplicationError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                ^ source.hydra
 #                                                 ^ source.hydra keyword.operator.equals.hydra
 #                                                  ^ source.hydra
-#                                                   ^^^^^^ source.hydra keyword.control.hydra
+#                                                   ^^^^^^ source.hydra support.type.hydra
 #                                                         ^^ source.hydra
 >  ## The path to the type application within the term
 #^^ source.hydra
@@ -1911,11 +1911,11 @@
 >type UnexpectedTermVariantError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra
 #                                ^ source.hydra keyword.operator.equals.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra keyword.control.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
 >  ## The expected term variant
 #^^ source.hydra
@@ -1946,11 +1946,11 @@
 >type UnexpectedTypeVariantError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra
 #                                ^ source.hydra keyword.operator.equals.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra keyword.control.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
 >  ## The expected type variant
 #^^ source.hydra
@@ -1981,11 +1981,11 @@
 >type UnknownCaseAlternativeError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                ^ source.hydra
 #                                 ^ source.hydra keyword.operator.equals.hydra
 #                                  ^ source.hydra
-#                                   ^^^^^^ source.hydra keyword.control.hydra
+#                                   ^^^^^^ source.hydra support.type.hydra
 #                                         ^^ source.hydra
 >  ## The path to the case statement within the term
 #^^ source.hydra
@@ -2027,11 +2027,11 @@
 >type UnknownPrimitiveNameError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^ source.hydra
 #                               ^ source.hydra keyword.operator.equals.hydra
 #                                ^ source.hydra
-#                                 ^^^^^^ source.hydra keyword.control.hydra
+#                                 ^^^^^^ source.hydra support.type.hydra
 #                                       ^^ source.hydra
 >  ## The path to the primitive reference within the term
 #^^ source.hydra
@@ -2062,11 +2062,11 @@
 >type UnknownProjectedFieldError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra
 #                                ^ source.hydra keyword.operator.equals.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra keyword.control.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
 >  ## The path to the projection within the term
 #^^ source.hydra
@@ -2108,11 +2108,11 @@
 >type UnnecessaryIdentityApplicationError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                        ^ source.hydra
 #                                         ^ source.hydra keyword.operator.equals.hydra
 #                                          ^ source.hydra
-#                                           ^^^^^^ source.hydra keyword.control.hydra
+#                                           ^^^^^^ source.hydra support.type.hydra
 #                                                 ^^ source.hydra
 >  ## The path to the identity application within the term
 #^^ source.hydra
@@ -2132,11 +2132,11 @@
 >type UnresolvedNominalTypeError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra
 #                                ^ source.hydra keyword.operator.equals.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra keyword.control.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
 >  ## The path to the term with the unresolved nominal type reference
 #^^ source.hydra
@@ -2167,11 +2167,11 @@
 >type UntypedTermVariableError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
-#                                ^^^^^^ source.hydra keyword.control.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^^ source.hydra
 >  ## The path to the untyped variable within the term
 #^^ source.hydra
@@ -2202,11 +2202,11 @@
 >type VoidInNonBottomPositionError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                 ^ source.hydra
 #                                  ^ source.hydra keyword.operator.equals.hydra
 #                                   ^ source.hydra
-#                                    ^^^^^^ source.hydra keyword.control.hydra
+#                                    ^^^^^^ source.hydra support.type.hydra
 #                                          ^^ source.hydra
 >  ## The path to the void type in a non-bottom position
 #^^ source.hydra

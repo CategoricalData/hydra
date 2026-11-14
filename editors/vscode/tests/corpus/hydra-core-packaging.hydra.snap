@@ -21,7 +21,7 @@
 >type Definition = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -73,7 +73,7 @@
 >type DefinitionReference = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -125,7 +125,7 @@
 >type DependencyScope = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -182,11 +182,11 @@
 >type EntityMetadata = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
-#                      ^^^^^^ source.hydra keyword.control.hydra
+#                      ^^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
 >  ## An optional, concise one-line human-readable summary of the entity.
 #^^ source.hydra
@@ -265,7 +265,7 @@
 >type EntityReference = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -335,11 +335,11 @@
 >type LifecycleInfo = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
-#                     ^^^^^^ source.hydra keyword.control.hydra
+#                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
 >  ## The version in which the entity was introduced, if known.
 #^^ source.hydra
@@ -376,11 +376,11 @@
 >type Module = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^ source.hydra entity.name.type.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
 #             ^ source.hydra
-#              ^^^^^^ source.hydra keyword.control.hydra
+#              ^^^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
 >  ## The name of the module, which is also the common prefix for all element names in the module
 #^^ source.hydra
@@ -442,11 +442,11 @@
 >type ModuleDependency = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
-#                        ^^^^^^ source.hydra keyword.control.hydra
+#                        ^^^^^^ source.hydra support.type.hydra
 #                              ^^ source.hydra
 >  ## The name of the depended-on module
 #^^ source.hydra
@@ -482,11 +482,11 @@
 >type ModuleName = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
-#                  ^^^^ source.hydra keyword.control.hydra
+#                  ^^^^ source.hydra support.type.hydra
 #                      ^ source.hydra
 #                       ^^^^^^ source.hydra support.type.hydra
 #                             ^^ source.hydra
@@ -497,11 +497,11 @@
 >type Package = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^ source.hydra entity.name.type.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
-#               ^^^^^^ source.hydra keyword.control.hydra
+#               ^^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
 >  ## The name of the package
 #^^ source.hydra
@@ -563,11 +563,11 @@
 >type PackageDependency = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^ source.hydra
-#                         ^^^^^^ source.hydra keyword.control.hydra
+#                         ^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
 >  ## The name of the depended-on package
 #^^ source.hydra
@@ -612,11 +612,11 @@
 >type PackageName = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
-#                   ^^^^ source.hydra keyword.control.hydra
+#                   ^^^^ source.hydra support.type.hydra
 #                       ^ source.hydra
 #                        ^^^^^^ source.hydra support.type.hydra
 #                              ^^ source.hydra
@@ -627,11 +627,11 @@
 >type PrimitiveDefinition = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
-#                           ^^^^^^ source.hydra keyword.control.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
 #                                 ^^ source.hydra
 >  ## The name of the primitive
 #^^ source.hydra
@@ -712,11 +712,11 @@
 >type Provision = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
-#                 ^^^^^^ source.hydra keyword.control.hydra
+#                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
 >  ## The fully-qualified name of the provision: the enclosing entity's name extended by one segment (e.g. hydra.core.lib.lists.concat.emptyLists). Composed at definition time by a helper that prefixes the entity's name, exactly as a definition's name is composed from its module's name -- so the author writes only the final segment, but the stored value is the full name.
 #^^ source.hydra
@@ -758,7 +758,7 @@
 >type ProvisionKind = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
@@ -793,11 +793,11 @@
 >type TermDefinition = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
-#                      ^^^^^^ source.hydra keyword.control.hydra
+#                      ^^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
 >  ## The name of the term
 #^^ source.hydra
@@ -856,11 +856,11 @@
 >type TypeDefinition = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
-#                      ^^^^^^ source.hydra keyword.control.hydra
+#                      ^^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
 >  ## The name of the type
 #^^ source.hydra
@@ -905,11 +905,11 @@
 >type Version = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^ source.hydra entity.name.type.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
-#               ^^^^ source.hydra keyword.control.hydra
+#               ^^^^ source.hydra support.type.hydra
 #                   ^ source.hydra
 #                    ^^^^^^ source.hydra support.type.hydra
 #                          ^^ source.hydra
@@ -920,11 +920,11 @@
 >type VersionRange = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                 ^ source.hydra
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^ source.hydra
-#                    ^^^^^^ source.hydra keyword.control.hydra
+#                    ^^^^^^ source.hydra support.type.hydra
 #                          ^^ source.hydra
 >  ## The inclusive lower bound, if any (the minimum acceptable version).
 #^^ source.hydra
@@ -961,7 +961,7 @@
 >type VersionSpecifier = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra

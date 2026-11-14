@@ -15,10 +15,19 @@ import hydra.core.lists as lists from hydra-core
 
 type MyList = ∀t.list<t>
 #^^^ keyword.other.definition.hydra
-#    ^^^^^^ entity.name.function.hydra
+#    ^^^^^^ entity.name.type.hydra
 #             ^ keyword.operator.forall-scheme.hydra
 #              ^ variable.parameter.hydra
 #                ^^^^ support.type.hydra
+
+type Rec = record{x: int32}
+#          ^^^^^^ support.type.hydra
+
+type Wrapped = wrap(int32)
+#              ^^^^ support.type.hydra
+
+type U = union{a: unit, b: string}
+#        ^^^^^ support.type.hydra
 
 type Pair2 = ∀.map<string, int32>
 #            ^ keyword.operator.forall-scheme.hydra

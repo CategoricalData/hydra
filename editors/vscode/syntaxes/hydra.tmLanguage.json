@@ -139,8 +139,16 @@
       "comment": "§6.1: definition kinds and their modifiers. 'type'/'term'/'primitive' with optional 'impure'/'partial' prefixes. These are also in the §2.7 reserved list; captured here at line start to additionally mark the defined name.",
       "patterns": [
         {
-          "comment": "A definition line: [impure] [partial] (type|term|primitive) <localName>. localName captured as the defined entity.",
-          "match": "^\\s*(?:(impure)\\s+)?(?:(partial)\\s+)?(type|term|primitive)\\s+(`(?:[^`\\\\]|\\\\.)*`|[A-Za-z_][A-Za-z0-9_]*)",
+          "comment": "A 'type' definition line: 'type <localName> = …' (§6.1). The defined name is a TYPE entity, so it is scoped entity.name.type (distinct from term/primitive names below, which are entity.name.function).",
+          "match": "^\\s*(type)\\s+(`(?:[^`\\\\]|\\\\.)*`|[A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.other.definition.hydra" },
+            "2": { "name": "entity.name.type.hydra" }
+          }
+        },
+        {
+          "comment": "A 'term'/'primitive' definition line: '[impure] [partial] (term|primitive) <localName>' (§6.1). The defined name is a term/function entity.",
+          "match": "^\\s*(?:(impure)\\s+)?(?:(partial)\\s+)?(term|primitive)\\s+(`(?:[^`\\\\]|\\\\.)*`|[A-Za-z_][A-Za-z0-9_]*)",
           "captures": {
             "1": { "name": "storage.modifier.impure.hydra" },
             "2": { "name": "storage.modifier.partial.hydra" },
@@ -231,13 +239,13 @@
       "comment": "§2.7 reserved words, reserved in all positions. Split by role for richer highlighting. A reserved word is NOT highlighted as such when backtick-escaped — the #backtick-name rule consumes those first.",
       "patterns": [
         {
-          "comment": "Type-constructor and type-level keywords (§3 types + literal type names).",
-          "match": "\\b(bigint|binary|boolean|decimal|effect|either|float32|float64|forall|int8|int16|int32|int64|list|map|optional|set|string|uint8|uint16|uint32|uint64|union|unit|void)\\b",
+          "comment": "Type-constructor and type-level keywords (§3 types + literal type names). Includes record/union/wrap: these are the reserved constructors that BUILD types (type X = record{…}/union{…}/wrap(…)); they share one scope with their siblings list/map/set/optional/either/effect rather than being split off as control keywords. (record/wrap also appear as term constructors, e.g. record(Name){…}; a TextMate grammar cannot cheaply distinguish the two positions, so they carry the type-constructor scope uniformly.)",
+          "match": "\\b(bigint|binary|boolean|decimal|effect|either|float32|float64|forall|int8|int16|int32|int64|list|map|optional|record|set|string|uint8|uint16|uint32|uint64|union|unit|void|wrap)\\b",
           "name": "support.type.hydra"
         },
         {
-          "comment": "Term-level keywords: binders, eliminators, constructors, let (§3).",
-          "match": "\\b(as|cases|from|given|import|in|inject|lazy|left|let|module|none|partial|primitive|project|record|right|term|type|unwrap|wrap|impure)\\b",
+          "comment": "Term-level keywords: binders, eliminators, let, module/definition keywords (§3, §6). (record/union/wrap are type constructors, scoped above.)",
+          "match": "\\b(as|cases|from|given|import|in|inject|lazy|left|let|module|none|partial|primitive|project|right|term|type|unwrap|impure)\\b",
           "name": "keyword.control.hydra"
         },
         {

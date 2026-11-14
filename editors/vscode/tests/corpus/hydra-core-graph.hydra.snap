@@ -29,11 +29,11 @@
 >type Graph = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^ source.hydra entity.name.type.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
-#             ^^^^^^ source.hydra keyword.control.hydra
+#             ^^^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
 >  ## The terms bound by all term variables in scope
 #^^ source.hydra
@@ -166,11 +166,11 @@
 >type Library = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^ source.hydra entity.name.type.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
-#               ^^^^^^ source.hydra keyword.control.hydra
+#               ^^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
 >  ## A common prefix for all primitive function names in the library
 #^^ source.hydra
@@ -215,11 +215,11 @@
 >type Primitive = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
-#                 ^^^^^^ source.hydra keyword.control.hydra
+#                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
 >  ## The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation.
 #^^ source.hydra
@@ -266,7 +266,7 @@
 >type TermCoder = forall a. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
@@ -275,7 +275,7 @@
 #                        ^ source.hydra variable.parameter.hydra
 #                         ^ source.hydra punctuation.separator.binder.hydra
 #                          ^ source.hydra
-#                           ^^^^^^ source.hydra keyword.control.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
 #                                 ^^ source.hydra
 >  ## The Hydra type of encoded terms
 #^^ source.hydra

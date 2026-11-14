@@ -21,11 +21,11 @@
 >type ColumnType = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
-#                  ^^^^^^ source.hydra keyword.control.hydra
+#                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
 >  name: ColumnName,
 #^^ source.hydra
@@ -50,7 +50,7 @@
 >type DataRow = forall v. wrap(list<optional<v>>)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^ source.hydra entity.name.type.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
@@ -59,7 +59,7 @@
 #                      ^ source.hydra variable.parameter.hydra
 #                       ^ source.hydra punctuation.separator.binder.hydra
 #                        ^ source.hydra
-#                         ^^^^ source.hydra keyword.control.hydra
+#                         ^^^^ source.hydra support.type.hydra
 #                             ^ source.hydra
 #                              ^^^^ source.hydra support.type.hydra
 #                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
@@ -76,11 +76,11 @@
 >type HeaderRow = wrap(list<string>)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
-#                 ^^^^ source.hydra keyword.control.hydra
+#                 ^^^^ source.hydra support.type.hydra
 #                     ^ source.hydra
 #                      ^^^^ source.hydra support.type.hydra
 #                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
@@ -94,7 +94,7 @@
 >type Table = forall v. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^ source.hydra entity.name.type.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -103,7 +103,7 @@
 #                    ^ source.hydra variable.parameter.hydra
 #                     ^ source.hydra punctuation.separator.binder.hydra
 #                      ^ source.hydra
-#                       ^^^^^^ source.hydra keyword.control.hydra
+#                       ^^^^^^ source.hydra support.type.hydra
 #                             ^^ source.hydra
 >  ## The optional header row of the table. If present, the header must have the same number of cells as each data row.
 #^^ source.hydra
@@ -142,11 +142,11 @@
 >type TableType = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
-#                 ^^^^^^ source.hydra keyword.control.hydra
+#                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
 >  name: RelationName,
 #^^ source.hydra

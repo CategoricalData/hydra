@@ -12,7 +12,7 @@
 >type Edit = forall a, s. union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^ source.hydra entity.name.function.hydra
+#     ^^^^ source.hydra entity.name.type.hydra
 #         ^ source.hydra
 #          ^ source.hydra keyword.operator.equals.hydra
 #           ^ source.hydra
@@ -86,7 +86,7 @@
 >type Fill = forall v. union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^ source.hydra entity.name.function.hydra
+#     ^^^^ source.hydra entity.name.type.hydra
 #         ^ source.hydra
 #          ^ source.hydra keyword.operator.equals.hydra
 #           ^ source.hydra
@@ -130,7 +130,7 @@
 >type Hole = forall t, s. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^ source.hydra entity.name.function.hydra
+#     ^^^^ source.hydra entity.name.type.hydra
 #         ^ source.hydra
 #          ^ source.hydra keyword.operator.equals.hydra
 #           ^ source.hydra
@@ -142,7 +142,7 @@
 #                      ^ source.hydra variable.parameter.hydra
 #                       ^ source.hydra punctuation.separator.binder.hydra
 #                        ^ source.hydra
-#                         ^^^^^^ source.hydra keyword.control.hydra
+#                         ^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
 >  ## The value-path (sequence of steps) to the position needing a value
 #^^ source.hydra
@@ -178,7 +178,7 @@
 >type HoleFiller = forall v, s. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -190,7 +190,7 @@
 #                            ^ source.hydra variable.parameter.hydra
 #                             ^ source.hydra punctuation.separator.binder.hydra
 #                              ^ source.hydra
-#                               ^^^^^^ source.hydra keyword.control.hydra
+#                               ^^^^^^ source.hydra support.type.hydra
 #                                     ^^ source.hydra
 >  ## The path of the residual hole being supplied
 #^^ source.hydra
@@ -224,7 +224,7 @@
 >type InvalidFillError = forall t, v, s. union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
@@ -289,7 +289,7 @@
 >type MigrationError = forall t, v, s. union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
@@ -376,7 +376,7 @@
 >type MigrationPlan = forall n, t, s. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
@@ -391,7 +391,7 @@
 #                                  ^ source.hydra variable.parameter.hydra
 #                                   ^ source.hydra punctuation.separator.binder.hydra
 #                                    ^ source.hydra
-#                                     ^^^^^^ source.hydra keyword.control.hydra
+#                                     ^^^^^^ source.hydra support.type.hydra
 #                                           ^^ source.hydra
 >  ## The schema diff: an edit per changed type, keyed by type name
 #^^ source.hydra
@@ -440,7 +440,7 @@
 >type Migrator = forall t, v, s. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^ source.hydra entity.name.type.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
@@ -455,7 +455,7 @@
 #                             ^ source.hydra variable.parameter.hydra
 #                              ^ source.hydra punctuation.separator.binder.hydra
 #                               ^ source.hydra
-#                                ^^^^^^ source.hydra keyword.control.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^^ source.hydra
 >  ## Deferred holes that an enclosing context must supply when composing this migrator
 #^^ source.hydra
@@ -519,7 +519,7 @@
 >type Mistyped = forall t, v. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^ source.hydra entity.name.type.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
@@ -531,7 +531,7 @@
 #                          ^ source.hydra variable.parameter.hydra
 #                           ^ source.hydra punctuation.separator.binder.hydra
 #                            ^ source.hydra
-#                             ^^^^^^ source.hydra keyword.control.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
 #                                   ^^ source.hydra
 >  ## The offending value
 #^^ source.hydra
@@ -564,7 +564,7 @@
 >type SchemaHole = forall n, t, s. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -579,7 +579,7 @@
 #                               ^ source.hydra variable.parameter.hydra
 #                                ^ source.hydra punctuation.separator.binder.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra keyword.control.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
 >  ## The name of the type (a schema entry) containing this hole
 #^^ source.hydra
@@ -614,7 +614,7 @@
 >type StepEdit = forall a, s. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^ source.hydra entity.name.type.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
@@ -626,7 +626,7 @@
 #                          ^ source.hydra variable.parameter.hydra
 #                           ^ source.hydra punctuation.separator.binder.hydra
 #                            ^ source.hydra
-#                             ^^^^^^ source.hydra keyword.control.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
 #                                   ^^ source.hydra
 >  ## The immediate step to descend into
 #^^ source.hydra

@@ -12,7 +12,7 @@
 >type Alternation = list<RegexSequence>
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -27,7 +27,7 @@
 >type Atom = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^ source.hydra entity.name.function.hydra
+#     ^^^^ source.hydra entity.name.type.hydra
 #         ^ source.hydra
 #          ^ source.hydra keyword.operator.equals.hydra
 #           ^ source.hydra
@@ -106,11 +106,11 @@
 >type CharacterClass = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
-#                      ^^^^^^ source.hydra keyword.control.hydra
+#                      ^^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
 >  ## True for a negated class ([^ ... ]), which matches any character NOT listed.
 #^^ source.hydra
@@ -144,11 +144,11 @@
 >type CharacterRange = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
-#                      ^^^^^^ source.hydra keyword.control.hydra
+#                      ^^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
 >  ## The first character of the range (inclusive), as an int32 Unicode scalar value.
 #^^ source.hydra
@@ -181,7 +181,7 @@
 >type ClassItem = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
@@ -216,11 +216,11 @@
 >type Quantified = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
-#                  ^^^^^^ source.hydra keyword.control.hydra
+#                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
 >  ## The atom being quantified.
 #^^ source.hydra
@@ -251,7 +251,7 @@
 >type Quantifier = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -341,11 +341,11 @@
 >type QuantifierRange = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
-#                       ^^^^^^ source.hydra keyword.control.hydra
+#                       ^^^^^^ source.hydra support.type.hydra
 #                             ^^ source.hydra
 >  ## The minimum number of occurrences (inclusive).
 #^^ source.hydra
@@ -376,7 +376,7 @@
 >type Regex = Alternation
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^ source.hydra entity.name.type.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -388,7 +388,7 @@
 >type RegexSequence = list<Quantified>
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra

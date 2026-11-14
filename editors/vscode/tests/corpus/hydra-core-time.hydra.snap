@@ -12,11 +12,11 @@
 >type Timespec = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^ source.hydra entity.name.type.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
-#                ^^^^^^ source.hydra keyword.control.hydra
+#                ^^^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
 >  ## Whole seconds since the Unix Epoch; signed, so instants in the far past or distant future are representable
 #^^ source.hydra

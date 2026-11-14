@@ -17,7 +17,7 @@
 >type ComparisonConstraint = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
 #                           ^ source.hydra
@@ -72,11 +72,11 @@
 >type Edge = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^ source.hydra entity.name.function.hydra
+#     ^^^^ source.hydra entity.name.type.hydra
 #         ^ source.hydra
 #          ^ source.hydra keyword.operator.equals.hydra
 #           ^ source.hydra
-#            ^^^^^^ source.hydra keyword.control.hydra
+#            ^^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
 >  ## The name of a record type, for which the edge also specifies an out- and an in- projection
 #^^ source.hydra
@@ -128,11 +128,11 @@
 >type GraphPattern = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                 ^ source.hydra
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^ source.hydra
-#                    ^^^^^^ source.hydra keyword.control.hydra
+#                    ^^^^^^ source.hydra support.type.hydra
 #                          ^^ source.hydra
 >  ## The name of the component graph
 #^^ source.hydra
@@ -166,7 +166,7 @@
 >type Node = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^ source.hydra entity.name.function.hydra
+#     ^^^^ source.hydra entity.name.type.hydra
 #         ^ source.hydra
 #          ^ source.hydra keyword.operator.equals.hydra
 #           ^ source.hydra
@@ -214,7 +214,7 @@
 >type Path = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^ source.hydra entity.name.function.hydra
+#     ^^^^ source.hydra entity.name.type.hydra
 #         ^ source.hydra
 #          ^ source.hydra keyword.operator.equals.hydra
 #           ^ source.hydra
@@ -260,11 +260,11 @@
 >type PathEquation = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                 ^ source.hydra
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^ source.hydra
-#                    ^^^^^^ source.hydra keyword.control.hydra
+#                    ^^^^^^ source.hydra support.type.hydra
 #                          ^^ source.hydra
 >  ## The left-hand side of the equation
 #^^ source.hydra
@@ -299,7 +299,7 @@
 >type Pattern = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^ source.hydra entity.name.type.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
@@ -373,11 +373,11 @@
 >type PatternImplication = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^ source.hydra
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
-#                          ^^^^^^ source.hydra keyword.control.hydra
+#                          ^^^^^^ source.hydra support.type.hydra
 #                                ^^ source.hydra
 >  ## The pattern which, if it matches, triggers the constraint
 #^^ source.hydra
@@ -408,11 +408,11 @@
 >type Query = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^ source.hydra entity.name.type.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
-#             ^^^^^^ source.hydra keyword.control.hydra
+#             ^^^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
 >  ## The variables selected by the query
 #^^ source.hydra
@@ -449,11 +449,11 @@
 >type Range = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^ source.hydra entity.name.type.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
-#             ^^^^^^ source.hydra keyword.control.hydra
+#             ^^^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
 >  ## The minimum value (inclusive)
 #^^ source.hydra
@@ -484,7 +484,7 @@
 >type RegexQuantifier = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -574,11 +574,11 @@
 >type RegexSequence = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
-#                     ^^^^^^ source.hydra keyword.control.hydra
+#                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
 >  ## The path to which the quantifier applies
 #^^ source.hydra
@@ -609,7 +609,7 @@
 >type Step = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^ source.hydra entity.name.function.hydra
+#     ^^^^ source.hydra entity.name.type.hydra
 #         ^ source.hydra
 #          ^ source.hydra keyword.operator.equals.hydra
 #           ^ source.hydra
@@ -657,11 +657,11 @@
 >type TriplePattern = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
-#                     ^^^^^^ source.hydra keyword.control.hydra
+#                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
 >  ## The subject of the pattern
 #^^ source.hydra
@@ -703,11 +703,11 @@
 >type Variable = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^ source.hydra entity.name.type.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra keyword.control.hydra
+#                ^^^^ source.hydra support.type.hydra
 #                    ^ source.hydra
 #                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra

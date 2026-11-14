@@ -12,11 +12,11 @@
 >type ColumnName = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
-#                  ^^^^ source.hydra keyword.control.hydra
+#                  ^^^^ source.hydra support.type.hydra
 #                      ^ source.hydra
 #                       ^^^^^^ source.hydra support.type.hydra
 #                             ^^ source.hydra
@@ -27,7 +27,7 @@
 >type ColumnSchema = forall t. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                 ^ source.hydra
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^ source.hydra
@@ -36,7 +36,7 @@
 #                           ^ source.hydra variable.parameter.hydra
 #                            ^ source.hydra punctuation.separator.binder.hydra
 #                             ^ source.hydra
-#                              ^^^^^^ source.hydra keyword.control.hydra
+#                              ^^^^^^ source.hydra support.type.hydra
 #                                    ^^ source.hydra
 >  ## A unique name for the column
 #^^ source.hydra
@@ -67,11 +67,11 @@
 >type ForeignKey = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
-#                  ^^^^^^ source.hydra keyword.control.hydra
+#                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
 >  ## The name of the target relation
 #^^ source.hydra
@@ -120,11 +120,11 @@
 >type PrimaryKey = wrap(list<ColumnName>@{minLength=1:int32})
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
-#                  ^^^^ source.hydra keyword.control.hydra
+#                  ^^^^ source.hydra support.type.hydra
 #                      ^ source.hydra
 #                       ^^^^ source.hydra support.type.hydra
 #                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
@@ -145,7 +145,7 @@
 >type Relation = forall v. wrap(list<Row v>)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^ source.hydra entity.name.type.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
@@ -154,7 +154,7 @@
 #                       ^ source.hydra variable.parameter.hydra
 #                        ^ source.hydra punctuation.separator.binder.hydra
 #                         ^ source.hydra
-#                          ^^^^ source.hydra keyword.control.hydra
+#                          ^^^^ source.hydra support.type.hydra
 #                              ^ source.hydra
 #                               ^^^^ source.hydra support.type.hydra
 #                                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
@@ -170,11 +170,11 @@
 >type RelationName = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                 ^ source.hydra
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^ source.hydra
-#                    ^^^^ source.hydra keyword.control.hydra
+#                    ^^^^ source.hydra support.type.hydra
 #                        ^ source.hydra
 #                         ^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
@@ -185,7 +185,7 @@
 >type RelationSchema = forall t. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
@@ -194,7 +194,7 @@
 #                             ^ source.hydra variable.parameter.hydra
 #                              ^ source.hydra punctuation.separator.binder.hydra
 #                               ^ source.hydra
-#                                ^^^^^^ source.hydra keyword.control.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^^ source.hydra
 >  ## A unique name for the relation
 #^^ source.hydra
@@ -267,7 +267,7 @@
 >type Relationship = forall v. wrap(set<map<ColumnName, v>>)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                 ^ source.hydra
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^ source.hydra
@@ -276,7 +276,7 @@
 #                           ^ source.hydra variable.parameter.hydra
 #                            ^ source.hydra punctuation.separator.binder.hydra
 #                             ^ source.hydra
-#                              ^^^^ source.hydra keyword.control.hydra
+#                              ^^^^ source.hydra support.type.hydra
 #                                  ^ source.hydra
 #                                   ^^^ source.hydra support.type.hydra
 #                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
@@ -295,7 +295,7 @@
 >type Row = forall v. wrap(list<v>@{minLength=1:int32})
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^ source.hydra entity.name.function.hydra
+#     ^^^ source.hydra entity.name.type.hydra
 #        ^ source.hydra
 #         ^ source.hydra keyword.operator.equals.hydra
 #          ^ source.hydra
@@ -304,7 +304,7 @@
 #                  ^ source.hydra variable.parameter.hydra
 #                   ^ source.hydra punctuation.separator.binder.hydra
 #                    ^ source.hydra
-#                     ^^^^ source.hydra keyword.control.hydra
+#                     ^^^^ source.hydra support.type.hydra
 #                         ^ source.hydra
 #                          ^^^^ source.hydra support.type.hydra
 #                              ^ source.hydra punctuation.definition.typeargs.begin.hydra

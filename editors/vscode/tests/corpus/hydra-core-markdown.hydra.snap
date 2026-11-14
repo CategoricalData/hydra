@@ -12,7 +12,7 @@
 >type Block = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^ source.hydra entity.name.type.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -93,11 +93,11 @@
 >type CodeBlock = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
-#                 ^^^^^^ source.hydra keyword.control.hydra
+#                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
 >  ## The optional language tag used for syntax highlighting, e.g. "haskell"
 #^^ source.hydra
@@ -131,11 +131,11 @@
 >type Document = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^ source.hydra entity.name.type.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
-#                ^^^^^^ source.hydra keyword.control.hydra
+#                ^^^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
 >  ## The document's top-level title, rendered as an H1 heading
 #^^ source.hydra
@@ -169,11 +169,11 @@
 >type Heading = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^ source.hydra entity.name.type.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
-#               ^^^^^^ source.hydra keyword.control.hydra
+#               ^^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
 >  ## The heading level, where 1 corresponds to an H1 heading; levels increase with nesting depth
 #^^ source.hydra
@@ -221,7 +221,7 @@
 >type Inline = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^ source.hydra entity.name.type.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
 #             ^ source.hydra
@@ -295,11 +295,11 @@
 >type Link = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^ source.hydra entity.name.function.hydra
+#     ^^^^ source.hydra entity.name.type.hydra
 #         ^ source.hydra
 #          ^ source.hydra keyword.operator.equals.hydra
 #           ^ source.hydra
-#            ^^^^^^ source.hydra keyword.control.hydra
+#            ^^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
 >  ## The visible link text
 #^^ source.hydra
@@ -333,11 +333,11 @@
 >type List = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^ source.hydra entity.name.function.hydra
+#     ^^^^ source.hydra entity.name.type.hydra
 #         ^ source.hydra
 #          ^ source.hydra keyword.operator.equals.hydra
 #           ^ source.hydra
-#            ^^^^^^ source.hydra keyword.control.hydra
+#            ^^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
 >  ## Whether the list is numbered (ordered) rather than bulleted (unordered)
 #^^ source.hydra
@@ -371,11 +371,11 @@
 >type ListItem = wrap(list<Block>)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^ source.hydra entity.name.type.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra keyword.control.hydra
+#                ^^^^ source.hydra support.type.hydra
 #                    ^ source.hydra
 #                     ^^^^ source.hydra support.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
@@ -389,11 +389,11 @@
 >type Paragraph = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
-#                 ^^^^^^ source.hydra keyword.control.hydra
+#                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
 >  ## The inline content of the paragraph
 #^^ source.hydra
@@ -430,11 +430,11 @@
 >type Section = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^ source.hydra entity.name.type.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
-#               ^^^^^^ source.hydra keyword.control.hydra
+#               ^^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
 >  ## The section's heading
 #^^ source.hydra
@@ -482,11 +482,11 @@
 >type Table = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^ source.hydra entity.name.type.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
-#             ^^^^^^ source.hydra keyword.control.hydra
+#             ^^^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
 >  ## The header row of the table
 #^^ source.hydra
@@ -520,11 +520,11 @@
 >type TableCell = wrap(list<Inline>)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
-#                 ^^^^ source.hydra keyword.control.hydra
+#                 ^^^^ source.hydra support.type.hydra
 #                     ^ source.hydra
 #                      ^^^^ source.hydra support.type.hydra
 #                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
@@ -538,11 +538,11 @@
 >type TableRow = wrap(list<TableCell>)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^ source.hydra entity.name.type.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra keyword.control.hydra
+#                ^^^^ source.hydra support.type.hydra
 #                    ^ source.hydra
 #                     ^^^^ source.hydra support.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.begin.hydra

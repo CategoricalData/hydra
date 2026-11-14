@@ -17,11 +17,11 @@
 >type ValidationProfile = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^ source.hydra
-#                         ^^^^^^ source.hydra keyword.control.hydra
+#                         ^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
 >  ## The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.core.error.<package>.<UnionType>.<variant>', e.g. 'hydra.core.error.model.InvalidTermError.duplicateBinding'.
 #^^ source.hydra
@@ -80,7 +80,7 @@
 >type ValidationResult = forall e. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
@@ -89,7 +89,7 @@
 #                               ^ source.hydra variable.parameter.hydra
 #                                ^ source.hydra punctuation.separator.binder.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra keyword.control.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
 >  ## Findings classified as errors, in traversal order, bounded by the profile's maxErrors.
 #^^ source.hydra

@@ -315,7 +315,7 @@
 #                                 ^ source.hydra punctuation.separator.binder.hydra
 #                                  ^^^^^ source.hydra keyword.control.hydra
 #                                       ^ source.hydra
-#                                        ^^^^ source.hydra keyword.control.hydra
+#                                        ^^^^ source.hydra support.type.hydra
 #                                            ^ source.hydra
 #                                             ^^^^ source.hydra variable.other.hydra
 #                                                 ^^ source.hydra

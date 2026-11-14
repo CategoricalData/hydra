@@ -17,11 +17,11 @@
 >type FileExtension = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
-#                     ^^^^ source.hydra keyword.control.hydra
+#                     ^^^^ source.hydra support.type.hydra
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
 #                                ^^ source.hydra
@@ -32,11 +32,11 @@
 >type FilePath = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^ source.hydra entity.name.type.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra keyword.control.hydra
+#                ^^^^ source.hydra support.type.hydra
 #                    ^ source.hydra
 #                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
@@ -47,11 +47,11 @@
 >type FileStatus = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
-#                  ^^^^^^ source.hydra keyword.control.hydra
+#                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
 >  ## st_mode (file type bits) / the type of the file
 #^^ source.hydra
@@ -121,7 +121,7 @@
 >type FileType = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^ source.hydra entity.name.type.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra

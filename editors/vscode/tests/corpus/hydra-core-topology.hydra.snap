@@ -12,7 +12,7 @@
 >type Graph = map<Vertex, list<Vertex>>
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^ source.hydra entity.name.type.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -32,7 +32,7 @@
 >type OrderingIsomorphism = forall a. record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -41,7 +41,7 @@
 #                                  ^ source.hydra variable.parameter.hydra
 #                                   ^ source.hydra punctuation.separator.binder.hydra
 #                                    ^ source.hydra
-#                                     ^^^^^^ source.hydra keyword.control.hydra
+#                                     ^^^^^^ source.hydra support.type.hydra
 #                                           ^^ source.hydra
 >  ## Mapping from source ordering to target ordering
 #^^ source.hydra
@@ -92,11 +92,11 @@
 >type TarjanState = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
-#                   ^^^^^^ source.hydra keyword.control.hydra
+#                   ^^^^^^ source.hydra support.type.hydra
 #                         ^^ source.hydra
 >  ## Next available index for vertices in the DFS traversal
 #^^ source.hydra
@@ -193,7 +193,7 @@
 >type Vertex = int32
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^ source.hydra entity.name.type.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
 #             ^ source.hydra

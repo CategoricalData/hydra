@@ -12,7 +12,7 @@
 >type Associativity = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
@@ -59,11 +59,11 @@
 >type BlockStyle = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
-#                  ^^^^^^ source.hydra keyword.control.hydra
+#                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
 >  ## An optional indentation string
 #^^ source.hydra
@@ -108,11 +108,11 @@
 >type BracketExpr = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
-#                   ^^^^^^ source.hydra keyword.control.hydra
+#                   ^^^^^^ source.hydra support.type.hydra
 #                         ^^ source.hydra
 >  ## The bracket pair enclosing the expression
 #^^ source.hydra
@@ -154,11 +154,11 @@
 >type Brackets = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^ source.hydra entity.name.type.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
-#                ^^^^^^ source.hydra keyword.control.hydra
+#                ^^^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
 >  ## The opening bracket symbol
 #^^ source.hydra
@@ -189,7 +189,7 @@
 >type Expr = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^ source.hydra entity.name.function.hydra
+#     ^^^^ source.hydra entity.name.type.hydra
 #         ^ source.hydra
 #          ^ source.hydra keyword.operator.equals.hydra
 #           ^ source.hydra
@@ -257,7 +257,7 @@
 >type IndentStyle = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -292,11 +292,11 @@
 >type IndentedExpression = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^ source.hydra
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
-#                          ^^^^^^ source.hydra keyword.control.hydra
+#                          ^^^^^^ source.hydra support.type.hydra
 #                                ^^ source.hydra
 >  ## The indentation style
 #^^ source.hydra
@@ -327,11 +327,11 @@
 >type Op = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^ source.hydra entity.name.function.hydra
+#     ^^ source.hydra entity.name.type.hydra
 #       ^ source.hydra
 #        ^ source.hydra keyword.operator.equals.hydra
 #         ^ source.hydra
-#          ^^^^^^ source.hydra keyword.control.hydra
+#          ^^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
 >  ## The operator symbol
 #^^ source.hydra
@@ -384,11 +384,11 @@
 >type OpExpr = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^ source.hydra entity.name.type.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
 #             ^ source.hydra
-#              ^^^^^^ source.hydra keyword.control.hydra
+#              ^^^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
 >  ## The operator
 #^^ source.hydra
@@ -430,11 +430,11 @@
 >type Padding = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^ source.hydra entity.name.type.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
-#               ^^^^^^ source.hydra keyword.control.hydra
+#               ^^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
 >  ## Padding to the left of the operator
 #^^ source.hydra
@@ -469,11 +469,11 @@
 >type Precedence = wrap(int32)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
-#                  ^^^^ source.hydra keyword.control.hydra
+#                  ^^^^ source.hydra support.type.hydra
 #                      ^ source.hydra
 #                       ^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
@@ -484,11 +484,11 @@
 >type SeqExpr = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^ source.hydra entity.name.type.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
-#               ^^^^^^ source.hydra keyword.control.hydra
+#               ^^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
 >  ## The separator operator
 #^^ source.hydra
@@ -522,11 +522,11 @@
 >type Symbol = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^ source.hydra entity.name.type.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
 #             ^ source.hydra
-#              ^^^^ source.hydra keyword.control.hydra
+#              ^^^^ source.hydra support.type.hydra
 #                  ^ source.hydra
 #                   ^^^^^^ source.hydra support.type.hydra
 #                         ^^ source.hydra
@@ -537,7 +537,7 @@
 >type Ws = union{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^ source.hydra entity.name.function.hydra
+#     ^^ source.hydra entity.name.type.hydra
 #       ^ source.hydra
 #        ^ source.hydra keyword.operator.equals.hydra
 #         ^ source.hydra

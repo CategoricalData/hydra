@@ -17,11 +17,11 @@
 >type Command = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^ source.hydra entity.name.type.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
-#               ^^^^^^ source.hydra keyword.control.hydra
+#               ^^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
 >  ## The executable to run; a POSIX pathname, resolved against PATH by the host when it contains no slash (as for the execvp/execlp family). POSIX argv[0] (the program name) is supplied by the host from this field
 #^^ source.hydra
@@ -88,11 +88,11 @@
 >type EnvironmentVariable = wrap(string)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
-#                           ^^^^ source.hydra keyword.control.hydra
+#                           ^^^^ source.hydra support.type.hydra
 #                               ^ source.hydra
 #                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^^ source.hydra
@@ -103,11 +103,11 @@
 >type ProcessResult = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
-#                     ^^^^^^ source.hydra keyword.control.hydra
+#                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
 >  ## The child's exit status (POSIX WEXITSTATUS); 0 denotes success by convention
 #^^ source.hydra
@@ -149,11 +149,11 @@
 >type StatusCode = wrap(int32)
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^ source.hydra entity.name.function.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
-#                  ^^^^ source.hydra keyword.control.hydra
+#                  ^^^^ source.hydra support.type.hydra
 #                      ^ source.hydra
 #                       ^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
