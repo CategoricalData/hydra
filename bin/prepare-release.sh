@@ -439,7 +439,7 @@ fi
 cabal update >>"$SDIST_LOG" 2>&1 || true
 SDIST_WORK=""
 
-# The Hackage publish set is the SINGLE SOURCE OF TRUTH curated in
+# The Hackage publish set is the SINGLE SOURCE OF TRUTH, derived from the registry in
 # heads/haskell/bin/publish-hackage.sh (its PUBLISH_SET), consumed here via
 # `--list` so the two can never drift. That set is leaves-first and deliberately
 # EXCLUDES the experimental targets (hydra-go/coq/wasm) and hydra-bench — which is

@@ -140,7 +140,7 @@ non-blocking check). See #704. Per-registry:
 
 | Registry | What you need | Where |
 |----------|---------------|-------|
-| **Hackage** | A Hackage account that is a **maintainer** of every package in the curated Hackage publish set (`hydra-kernel`, `hydra-build`, `hydra-haskell`, `hydra-jvm`, `hydra-java`, `hydra-python`, `hydra-scala`, `hydra-lisp`, `hydra-typescript`, `hydra-rdf`, `hydra-pg`, and the `hydra` umbrella — run `heads/haskell/bin/publish-hackage.sh --list` for the authoritative list); `cabal` configured to upload (interactive login or an API token). | <https://hackage.haskell.org/> |
+| **Hackage** | A Hackage account that is a **maintainer** of every package in the Hackage publish set (`hydra-kernel`, `hydra-build`, `hydra-haskell`, `hydra-jvm`, `hydra-java`, `hydra-python`, `hydra-scala`, `hydra-lisp`, `hydra-typescript`, `hydra-rdf`, `hydra-pg`, and the `hydra` umbrella — run `heads/haskell/bin/publish-hackage.sh --list` for the authoritative list); `cabal` configured to upload (interactive login or an API token). | <https://hackage.haskell.org/> |
 | **Maven Central** | A **Sonatype Central Portal** account with publish rights for the `net.fortytwo.hydra` namespace, plus a GPG signing key. Credentials in `~/.gradle/gradle.properties` (`sonatypeUsername`/`sonatypePassword` + `signing.*`). **JDK 17+** to run Gradle (see Java releases). | <https://central.sonatype.com/> |
 | **PyPI** | An account that is **Owner or Maintainer** of every published project (`hydra-kernel`, `hydra-build`, `hydra-rdf`, `hydra-pg`, `hydra-python`), and an API token scoped to **all** of them (account-wide is simplest, and is required for a first-time publish of a not-yet-existing project such as `hydra-build`). **Preferred: put the token in `~/.pypirc` (`chmod 600`)** — `twine`/`publish-pypi.sh --upload` read it with no prompt. See the Authentication step under [Python releases](#python-releases). | <https://pypi.org/manage/projects/> (confirm you own the projects) |
 | **Maven Central (Scala/sbt)** | Same Sonatype Central Portal account as Java (publish rights for `net.fortytwo.hydra`), plus a GPG signing key. Credentials in `~/.sbt/1.0/sonatype.sbt` (`sonatypeUsername`/`sonatypePassword`) or env vars `SONATYPE_USERNAME`/`SONATYPE_PASSWORD`; GPG via sbt-pgp (reads `~/.gnupg` by default). **JDK 11+** required. | <https://central.sonatype.com/> |
@@ -343,13 +343,11 @@ and produces the upload-ready artifacts in `release-artifacts/`:
    `hydra-scala`, `hydra-pg`, `hydra-rdf`, … — and the `hydra` umbrella), rather
    than one monolithic `hydra` sdist, plus `hydra-ext` (#636 — unlike the Java/Scala/
    Python/npm channels, Hackage has no eta-expansion so hydra-ext's coder limitation
-   does not apply). The set is an **explicit curated list** in
-   `heads/haskell/bin/publish-hackage.sh` (`--list` prints it), deliberately
-   **excluding** the experimental targets (`hydra-go`, `hydra-coq`, `hydra-wasm`) and
-   the `hydra-bench` benchmarks. (#573 tracks deriving all per-registry sets
-   from registry metadata for 0.18; until then each channel keeps its own curated
-   list, and `prepare-release.sh` consumes this one via `--list` so they cannot
-   drift.) This step assembles them all (leaves first) on a
+   does not apply). The set is **derived from the registry** (`hydra-packages.py publish-set haskell`, #573)
+   by `heads/haskell/bin/publish-hackage.sh` (`--list` prints it), plus the hand-written `hydra` umbrella.
+   Packages that set `"publishable": false` in their `package.json` (the experimental targets `hydra-go`,
+   `hydra-coq`, `hydra-wasm`, `hydra-rust`, and the `hydra-bench` benchmarks) are excluded by the registry itself.
+   `prepare-release.sh` consumes the set via `--list` so they cannot drift.) This step assembles them all (leaves first) on a
    case-sensitive disk image (macOS) or plain temp dir (Linux) via
    `heads/haskell/bin/publish-hackage.sh`, extracts them into one
    `cabal.project`, and runs `cabal v2-build --dry-run` to catch GHC-28623
@@ -403,7 +401,7 @@ contains every host's sources: Haskell, Java, Python, Scala, TypeScript, Lisp):
   hard-verify against its own freshly-rebuilt `.tar`. See
   [GitHub Releases](#github-releases-not-used-yet).
 
-plus, for each package in the curated Hackage set (`publish-hackage.sh --list`),
+plus, for each package in the Hackage set (`publish-hackage.sh --list`),
 staged under `dist/haskell/` (the Haskell channel's own dist tree, NOT
 `release-artifacts/`):
 
@@ -739,19 +737,18 @@ The following are Haskell-specific release steps:
   Starting with 0.16, Hydra publishes **per-package** Hackage distributions
   rather than one monolithic `hydra` package (#418), mirroring the per-package
   layout already used for Java (Maven Central) and Python (PyPI).
-  The publish set is an **explicit curated list** in `publish-hackage.sh`
-  (`--list` prints it), mirroring the per-channel curated sets that Java (Maven),
-  Scala (Maven), Python (PyPI), and npm each keep. It began as the 0.16.0 trio
+  The publish set is **derived from the registry** by `publish-hackage.sh`
+  (`hydra-packages.py publish-set haskell`, plus the `hydra` umbrella; `--list` prints it),
+  as are the Java (Maven), Scala (sbt), Python (PyPI), and npm sets (#573). It began as the 0.16.0 trio
   (`hydra-kernel`, `hydra-haskell`, `hydra`); as of 0.17.4 it is the thirteen-package
   set covering the kernel, every **released** coder (`hydra-jvm`, `hydra-java`,
   `hydra-python`, `hydra-scala`, `hydra-lisp`, `hydra-typescript`, `hydra-rdf`,
   `hydra-pg`), `hydra-build`, `hydra-ext`, and the `hydra` umbrella. It deliberately
-  **excludes** the experimental targets (`hydra-go`, `hydra-coq`, `hydra-wasm`) and
-  the `hydra-bench` benchmarks. `hydra-ext` **is** published to Hackage (#636) even
+  **excludes** (via `"publishable": false`) the experimental targets (`hydra-go`, `hydra-coq`,
+  `hydra-wasm`, `hydra-rust`) and the `hydra-bench` benchmarks. `hydra-ext` **is** published to Hackage (#636) even
   though it is excluded from the Java/Python/Scala/npm sets — its coder limitation is
   specific to eta-expanding targets and does not affect Haskell (which uses currying,
-  no eta-expansion). (#573 tracks deriving all per-registry sets from registry
-  metadata for 0.18; until then the list is curated per channel.) The set is always
+  no eta-expansion). The set is always
   **dependency-closed** (asserted before upload).
   * `bin/prepare-release.sh` already produced the upload-ready per-package sdists
     and Haddock-for-Hackage tarballs under `release-artifacts/` (one
@@ -784,7 +781,7 @@ The following are Haskell-specific release steps:
     ```bash
     heads/haskell/bin/publish-hackage.sh --publish
     ```
-    Or upload manually in leaves-first order — the full curated set, `hydra-kernel`
+    Or upload manually in leaves-first order — the full set, `hydra-kernel`
     first and the `hydra` umbrella last (run `publish-hackage.sh --list` for the
     exact order):
     ```bash

@@ -71,35 +71,21 @@ if [ "$DO_LIST" != true ]; then
     VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 fi
 
-# Publish set in LEAVES-FIRST topological order, curated per host (the Java/Scala/
-# Python/npm channels each keep their own explicit list; Hackage does too as of
-# 0.17.1). Mirrors the Java/Scala coder set — Hackage ships the Haskell SOURCE of
-# every coder package — plus the hand-written `hydra` umbrella (which Java/Scala have
-# no analog of). Registry packages NOT published to Hackage: the experimental targets
-# hydra-go/hydra-coq/hydra-wasm ("head buds", runtime partial), and hydra-bench
-# (inference benchmarks, not a consumable library). hydra-ext IS published here — its
-# Java/Python exclusion is a coder-side eta-expansion limitation (#636) that does not
-# apply to Haskell (no eta-expansion; Haskell uses currying). Ordered deps-first;
-# Guard 1 below asserts dependency closure so any ordering/omission error is caught
-# before upload.
-# NOTE (#573): the long-term plan is to derive all per-registry sets from registry
-# metadata (with per-registry exclusions stored in the registry) to end hand-list rot;
-# targeted for 0.18. For 0.17.1 this stays an explicit, curated list like the others.
-PUBLISH_SET=(
-    hydra-kernel
-    hydra-build
-    hydra-haskell
-    hydra-jvm
-    hydra-java
-    hydra-python
-    hydra-scala
-    hydra-lisp
-    hydra-typescript
-    hydra-rdf
-    hydra-pg
-    hydra-ext
-    hydra
-)
+# Publish set in LEAVES-FIRST topological order, DERIVED from the hydra.json registry via
+# `hydra-packages.py publish-set haskell` (#573) — see publish-maven.sh for how a package
+# qualifies. Hackage ships the Haskell SOURCE of every coder package. Packages opting out
+# via "publishable": false (the head buds hydra-go/coq/wasm/rust, and hydra-bench) are
+# excluded by the registry itself; hydra-ext IS published here — its Java/Python
+# exclusion is a coder-side eta-expansion limitation (#636) that does not apply to Haskell.
+# The hand-written `hydra` umbrella is not a registry package, so it is appended last
+# (it depends on everything else). Guard 1 below asserts dependency closure, so any
+# ordering/omission error is caught before upload.
+read -ra PUBLISH_SET < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" publish-set haskell)
+if [ "${#PUBLISH_SET[@]}" -eq 0 ]; then
+    echo "ERROR: could not derive Hackage publish set from hydra.json registry" >&2
+    exit 1
+fi
+PUBLISH_SET+=(hydra)
 
 # --list: print the curated set (leaves-first, one per line) and exit, so other
 # release scripts (bin/prepare-release.sh) consume THIS set as the single source
