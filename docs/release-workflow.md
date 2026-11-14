@@ -211,7 +211,8 @@ For such a batch, treat the cold-seed CI jobs ("Haskell tests (JSON build + cons
 as **expected red from the landing until the new host is published**, then bump `hostVersion` and drop `hostOverrides` in one commit.
 In #729 this cleared on the next run after the 0.18.0 bump.
 The failing run is slow to report: the doomed compile can thrash for 2.5-3 hours and end in a Gradle out-of-memory error
-rather than surfacing the compile error, so check the log for `package hydra.core... does not exist` instead of waiting for a verdict.
+rather than surfacing the compile error, so `heads/java/bin/transform-json-to-target.sh` now fails fast: on a cold seed with no `dist/java/hydra-kernel` it exits at once with a message
+naming this cause, and any local fallback compile is bounded by `HYDRA_LOCAL_COMPILE_TIMEOUT` (default 30m).
 
 **The trap to avoid:** reading `hostVersion: "0.17.6"` alongside published 0.17.6 artifacts and
 concluding the override is a stale leftover. *Existing* is not the same as

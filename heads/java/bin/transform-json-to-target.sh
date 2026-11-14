@@ -189,12 +189,28 @@ freshen_heads_extras_deps() {
     fi
 }
 
+# #768: the local headsExtras fallback needs dist/java/hydra-kernel as input. During a cold seed that
+# directory is this step's own (not yet written) output, so the compile cannot succeed and, left alone,
+# thrashes for hours before a Gradle OOM. Fail immediately with the actual cause, and bound every local
+# compile by a timeout (HYDRA_LOCAL_COMPILE_TIMEOUT, default 30m) so a doomed one can never run for hours.
+local_heads_extras_compile() {
+    if [ "${HYDRA_COLD_SEED_IN_PROGRESS:-}" = "1" ] && [ ! -d "$HYDRA_ROOT_DIR/dist/java/hydra-kernel" ]; then
+        echo "transform-json-to-target.sh: cannot cold-seed: the published hydra-java $HYDRA_HOST_VERSION host"              "does not compile this tree's driver sources (typically a repo-wide rename not yet published),"              "and the local fallback needs dist/java/hydra-kernel, which does not exist on a cold checkout."              "Publish a post-change host and bump hostVersion (docs/release-workflow.md, #768)." >&2
+        exit 1
+    fi
+    if ! timeout "${HYDRA_LOCAL_COMPILE_TIMEOUT:-30m}" ./gradlew --quiet :hydra-java:compileHeadsExtrasJava >&2; then
+        echo "transform-json-to-target.sh: local headsExtras compile failed or timed out" \
+             "(HYDRA_LOCAL_COMPILE_TIMEOUT=${HYDRA_LOCAL_COMPILE_TIMEOUT:-30m}); see #768." >&2
+        exit 1
+    fi
+}
+
 JAVA_CP=""
 if [ "$FORCE_LOCAL" = "1" ]; then
     echo "transform-json-to-target.sh: hostOverrides[java]=local;" \
          "using local headsExtras build (published artifact may be stale, not just absent)." >&2
     freshen_heads_extras_deps
-    ./gradlew --quiet :hydra-java:compileHeadsExtrasJava >&2
+    local_heads_extras_compile
     JAVA_CP=$(./gradlew --quiet :hydra-java:printHeadsExtrasRuntimeClasspath | tail -1)
 elif ./gradlew --quiet "${GRADLE_HOST_PROP[@]}" -p target-driver classes >/dev/null 2>&1; then
     JAVA_CP=$(./gradlew --quiet "${GRADLE_HOST_PROP[@]}" -p target-driver printRuntimeClasspath | tail -1)
@@ -203,7 +219,7 @@ else
          "(target-driver); falling back to local headsExtras build" \
          "(#417 hostOverrides shim or similar — see #459)." >&2
     freshen_heads_extras_deps
-    ./gradlew --quiet :hydra-java:compileHeadsExtrasJava >&2
+    local_heads_extras_compile
     JAVA_CP=$(./gradlew --quiet :hydra-java:printHeadsExtrasRuntimeClasspath | tail -1)
 fi
 
